@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amrit Kumar · Designing trust into AI-powered workflows</title>
+<meta name="description" content="Product designer working at the edge of human judgment and machine intelligence." />
+<meta property="og:title" content="Amrit Kumar · Product Designer" />
+<meta property="og:description" content="Designing trust into AI-powered workflows, an ink-and-paper 3D portfolio." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/home-3d.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231E2AA8'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-style='italic' font-size='34' fill='%23F5F4EE' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F5F4EE;
+    --ink: #1E2AA8;      /* ballpoint blue */
+    --ink-deep: #131A6B;
+    --graphite: #17171A;
+    --muted: #6E6E74;
+    --radius: 18px;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Inter", -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+
+  body {
+    background: var(--paper);
+    color: var(--graphite);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  /* paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- WebGL canvas ---------- */
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: block;
+  }
+
+  /* ---------- Custom cursor ---------- */
+  .cursor-dot, .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 200;
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-dot { width: 7px; height: 7px; background: var(--ink); }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--ink);
+    opacity: 0.45;
+    transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  }
+  .cursor-ring.is-hover { width: 64px; height: 64px; opacity: 0.9; }
+  @media (hover: none) { .cursor-dot, .cursor-ring { display: none; } }
+
+  /* ---------- Loader ---------- */
+  #loader {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.done { opacity: 0; visibility: hidden; }
+  #loader svg { width: 130px; }
+  #loader .scribble-path {
+    stroke: var(--ink);
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: draw 1.4s ease forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  #loader p {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink);
+    font-size: 18px;
+  }
+
+  /* ---------- Layout ---------- */
+  main { position: relative; z-index: 2; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    mix-blend-mode: darken;
+  }
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 26px 40px;
+  }
+  .nav-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .nav-links { display: flex; gap: 30px; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
+  .nav-links a { position: relative; }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 100%;
+    height: 2px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* ---------- Hero ---------- */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-top: 60px;
+  }
+  .hero-kicker {
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-kicker::before {
+    content: "";
+    width: 42px; height: 2px;
+    background: var(--ink);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(52px, 9.5vw, 132px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    max-width: 12ch;
+  }
+  h1 .line { display: block; overflow: hidden; }
+  h1 .line span { display: inline-block; will-change: transform; }
+  h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+    position: relative;
+    white-space: nowrap;
+  }
+  h1 em svg {
+    position: absolute;
+    left: 0; bottom: -0.12em;
+    width: 100%;
+    height: 0.28em;
+    overflow: visible;
+  }
+  h1 em svg path {
+    stroke: var(--ink);
+    stroke-width: 4;
+    fill: none;
+    stroke-linecap: round;
+  }
+  .hero-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 56px;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-sub { max-width: 44ch; color: var(--muted); font-size: 18px; }
+  .scroll-hint {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .scroll-hint .wheel {
+    width: 22px; height: 34px;
+    border: 2px solid var(--muted);
+    border-radius: 12px;
+    position: relative;
+  }
+  .scroll-hint .wheel::after {
+    content: "";
+    position: absolute;
+    top: 6px; left: 50%;
+    width: 3px; height: 7px;
+    margin-left: -1.5px;
+    border-radius: 3px;
+    background: var(--ink);
+    animation: wheel 1.6s ease-in-out infinite;
+  }
+  @keyframes wheel { 50% { transform: translateY(9px); opacity: 0.3; } }
+
+  /* ---------- Marquee ---------- */
+  .marquee {
+    border-top: 2px solid var(--graphite);
+    border-bottom: 2px solid var(--graphite);
+    background: var(--paper);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 18px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .marquee-track {
+    display: inline-block;
+    animation: marquee 26s linear infinite;
+  }
+  .marquee span {
+    font-family: var(--font-display);
+    font-size: 26px;
+    margin-right: 56px;
+  }
+  .marquee em { font-style: italic; color: var(--ink); }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ---------- Statement ---------- */
+  #statement { padding: 26vh 0; position: relative; }
+  .statement-text {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(30px, 4.6vw, 60px);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    max-width: 26ch;
+  }
+  .statement-text .w { opacity: 0.12; display: inline-block; }
+
+  /* the kite */
+  #kite {
+    position: absolute;
+    top: 8%;
+    left: -140px;
+    width: 110px;
+    z-index: 2;
+    will-change: transform;
+  }
+  #kite path, #kite line { stroke: var(--ink); fill: none; stroke-width: 2.5; stroke-linecap: round; }
+  #kite .fill { fill: rgba(30, 42, 168, 0.08); }
+
+  /* ---------- Work ---------- */
+  #work { padding: 12vh 0 16vh; }
+  .work-label {
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .work-label::before { content: ""; width: 42px; height: 2px; background: var(--ink); }
+
+  .chapter {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 30px;
+    padding: 64px 0;
+    border-top: 2px solid var(--graphite);
+    position: relative;
+  }
+  .chapter:last-of-type { border-bottom: 2px solid var(--graphite); }
+  .chapter-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 30px;
+    color: var(--ink);
+  }
+  .chapter h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(34px, 5vw, 62px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    max-width: 16ch;
+    transition: color 0.3s ease;
+  }
+  .chapter p {
+    margin-top: 18px;
+    color: var(--muted);
+    max-width: 56ch;
+    font-size: 17px;
+  }
+  .chapter .cta {
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .chapter .cta .arrow { transition: transform 0.3s ease; }
+  .chapter:hover .cta .arrow { transform: translateX(8px); }
+  .chapter:hover h3 { color: var(--ink); }
+  .chapter-tag {
+    position: absolute;
+    top: 68px; right: 0;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Contact ---------- */
+  #contact {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+  #contact h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(44px, 8vw, 110px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  #contact h2 em { font-style: italic; font-weight: 300; color: var(--ink); }
+  .magnet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 56px auto 0;
+    padding: 22px 44px;
+    border-radius: 999px;
+    background: var(--graphite);
+    color: var(--paper);
+    font-size: 17px;
+    font-weight: 500;
+    will-change: transform;
+    transition: background 0.3s ease;
+  }
+  .magnet:hover { background: var(--ink); }
+  .contact-links {
+    margin-top: 44px;
+    display: flex;
+    justify-content: center;
+    gap: 34px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .contact-links a:hover { color: var(--ink); }
+
+  footer {
+    position: relative;
+    z-index: 2;
+    padding: 26px 40px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .to-classic {
+    position: fixed;
+    bottom: 22px; left: 22px;
+    z-index: 100;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border: 1px solid rgba(23,23,26,0.2);
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(245,244,238,0.7);
+    backdrop-filter: blur(6px);
+  }
+  .to-classic:hover { color: var(--ink); border-color: var(--ink); }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 22px; }
+    .nav-inner { padding: 20px 22px; }
+    .chapter { grid-template-columns: 1fr; gap: 8px; padding: 48px 0; }
+    .chapter-tag { position: static; margin-top: 10px; display: block; }
+    #statement { padding: 18vh 0; }
+    .hero-foot { margin-top: 40px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track, .scroll-hint .wheel::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div id="loader">
+  <svg viewBox="0 0 130 60">
+    <path class="scribble-path" d="M6 42 C 14 12, 22 12, 28 42 C 32 55, 38 55, 42 42 C 48 12, 56 12, 62 42 C 66 55, 72 55, 76 42 C 82 12, 90 12, 96 42 C 100 55, 106 52, 112 38 C 116 28, 120 24, 126 22" />
+  </svg>
+  <p>sketching…</p>
+</div>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-name" href="#hero">Amrit Kumar</a>
+    <div class="nav-links">
+      <a href="#work" data-hover>Work</a>
+      <a href="#statement" data-hover>About</a>
+      <a href="#contact" data-hover>Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <section id="hero">
+    <div class="wrap">
+      <p class="hero-kicker">Product Designer · AI Systems · B2B Enterprise</p>
+      <h1 id="hero-title">
+        <span class="line"><span>Designing</span></span>
+        <span class="line"><span><em>trust<svg viewBox="0 0 100 14" preserveAspectRatio="none"><path d="M2 10 C 20 2, 35 13, 52 7 C 70 1, 85 11, 98 5"/></svg></em> into</span></span>
+        <span class="line"><span>AI workflows.</span></span>
+      </h1>
+      <div class="hero-foot">
+        <p class="hero-sub">I design how humans and AI agents share judgment in high-stakes
+        enterprise work. Six years turning consequential workflows into interfaces people trust.</p>
+        <div class="scroll-hint"><span class="wheel"></span> Scroll</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track">
+      <span>AI/UX</span><span>·</span><span><em>Design systems</em></span><span>·</span>
+      <span>Contract intelligence</span><span>·</span><span><em>Human-in-the-loop</em></span><span>·</span>
+      <span>Enterprise</span><span>·</span><span><em>Trust &amp; provenance</em></span><span>·</span>
+    </div>
+  </div>
+
+  <section id="statement">
+    <svg id="kite" viewBox="0 0 110 130">
+      <path class="fill" d="M55 6 L96 52 L55 92 L14 52 Z" />
+      <path d="M55 6 L96 52 L55 92 L14 52 Z M55 6 L55 92 M14 52 L96 52" />
+      <path d="M55 92 C 48 106, 62 112, 55 126" />
+      <line x1="49" y1="103" x2="61" y2="99" />
+      <line x1="50" y1="116" x2="62" y2="112" />
+    </svg>
+    <div class="wrap">
+      <p class="statement-text" id="statement-text">The hardest problem in AI products isn't adding intelligence. It's earning trust. I design systems that show their reasoning, ask only when it matters, and know when to disappear.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="work-label">Selected work</p>
+
+      <a class="chapter" href="contract-understanding.html" data-hover>
+        <span class="chapter-num">01</span>
+        <div>
+          <h3>One question our system couldn't answer</h3>
+          <p>"Which amendment applies to this SOW?" Rebuilding a contract repository from
+          folders into a relationship model: the ground AI has to stand on.</p>
+          <span class="cta">Read case study <span class="arrow">→</span></span>
+        </div>
+        <span class="chapter-tag">AI/UX · CLM</span>
+      </a>
+
+      <a class="chapter" href="#contact" data-hover>
+        <span class="chapter-num">02</span>
+        <div>
+          <h3>From storage to contract understanding</h3>
+          <p>"Which amendment applies to this SOW?" Legal teams couldn't answer it. I redesigned
+          contract structure to make relationships visible, so answers become instant, not inferred.</p>
+          <span class="cta">Ask me about it <span class="arrow">→</span></span>
+        </div>
+        <span class="chapter-tag">Information architecture</span>
+      </a>
+
+      <a class="chapter" href="#contact" data-hover>
+        <span class="chapter-num">03</span>
+        <div>
+          <h3>AI that participates in decisions</h3>
+          <p>A human-in-the-loop system that makes AI decisions explainable, verifiable, and usable
+          at scale: accept, refine, or discard, with reasoning on tap.</p>
+          <span class="cta">Ask me about it <span class="arrow">→</span></span>
+        </div>
+        <span class="chapter-tag">AI/UX · Concept</span>
+      </a>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>Let's build something<br /><em>that thinks.</em></h2>
+      <a class="magnet" id="magnet" href="mailto:amritkmr08@gmail.com" data-hover>amritkmr08@gmail.com</a>
+      <div class="contact-links">
+        <a href="#" data-hover>Resume</a>
+        <a href="#" data-hover>LinkedIn</a>
+        <a href="#" data-hover>Behance</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© <span id="year"></span> Amrit Kumar</span>
+    <span>Sketched by hand, built with code</span>
+  </footer>
+
+</main>
+
+<a class="to-classic" href="index.html" data-hover>Prefer calm? Classic version →</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ============ Loader ============ */
+  var loader = document.getElementById("loader");
+  window.addEventListener("load", function () {
+    setTimeout(function () { loader.classList.add("done"); }, reduceMotion ? 100 : 1300);
+  });
+  /* safety: never trap the user on the loader */
+  setTimeout(function () { loader.classList.add("done"); }, 3500);
+
+  /* ============ Custom cursor ============ */
+  var dot = document.querySelector(".cursor-dot");
+  var ring = document.querySelector(".cursor-ring");
+  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
+  document.addEventListener("mousemove", function (e) { mx = e.clientX; my = e.clientY; });
+  (function cursorLoop() {
+    rx += (mx - rx) * 0.16;
+    ry += (my - ry) * 0.16;
+    dot.style.transform = "translate(" + mx + "px," + my + "px) translate(-50%,-50%)";
+    ring.style.transform = "translate(" + rx + "px," + ry + "px) translate(-50%,-50%)";
+    requestAnimationFrame(cursorLoop);
+  })();
+  document.querySelectorAll("[data-hover]").forEach(function (el) {
+    el.addEventListener("mouseenter", function () { ring.classList.add("is-hover"); });
+    el.addEventListener("mouseleave", function () { ring.classList.remove("is-hover"); });
+  });
+
+  /* ============ Three.js ink & paper world ============ */
+  var canvas = document.getElementById("bg");
+  var scrollProgress = 0;
+  var three = null;
+
+  try {
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
+    camera.position.z = 9;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    var dir = new THREE.DirectionalLight(0xffffff, 0.5);
+    dir.position.set(4, 6, 8);
+    scene.add(dir);
+
+    var world = new THREE.Group();
+    scene.add(world);
+
+    var INK = 0x1E2AA8;
+
+    /* centrepiece: hand-drawn ring (the ellipse in the sketch) */
+    var ring3 = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.TorusGeometry(2.6, 0.55, 10, 44)),
+      new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.35 })
+    );
+    ring3.rotation.x = 0.9;
+    world.add(ring3);
+
+    /* floating paper sheets */
+    var paperMat = new THREE.MeshStandardMaterial({ color: 0xFDFCF7, roughness: 0.95, metalness: 0 });
+    var edgeMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.55 });
+    var sheetGeo = new THREE.BoxGeometry(1.5, 2.1, 0.02);
+    var sheetEdges = new THREE.EdgesGeometry(sheetGeo);
+    var sheets = [];
+    for (var i = 0; i < 11; i++) {
+      var g = new THREE.Group();
+      var mesh = new THREE.Mesh(sheetGeo, paperMat);
+      var line = new THREE.LineSegments(sheetEdges, edgeMat);
+      g.add(mesh); g.add(line);
+      var a = (i / 11) * Math.PI * 2;
+      var rad = 4.2 + Math.sin(i * 7.3) * 1.6;
+      g.position.set(Math.cos(a) * rad, Math.sin(i * 3.1) * 2.6, Math.sin(a) * rad * 0.6 - 1);
+      g.rotation.set(Math.sin(i) * 0.7, a, Math.sin(i * 2.2) * 0.4);
+      g.userData = { speed: 0.15 + (i % 5) * 0.06, phase: i * 1.7, baseY: g.position.y };
+      world.add(g);
+      sheets.push(g);
+    }
+
+    /* ink dots */
+    var COUNT = 260;
+    var pos = new Float32Array(COUNT * 3);
+    for (var p = 0; p < COUNT; p++) {
+      pos[p * 3] = (Math.random() - 0.5) * 22;
+      pos[p * 3 + 1] = (Math.random() - 0.5) * 14;
+      pos[p * 3 + 2] = (Math.random() - 0.5) * 10 - 2;
+    }
+    var ptsGeo = new THREE.BufferGeometry();
+    ptsGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    var pts = new THREE.Points(ptsGeo, new THREE.PointsMaterial({
+      color: INK, size: 0.045, transparent: true, opacity: 0.55
+    }));
+    world.add(pts);
+
+    var tx = 0, ty = 0;
+    document.addEventListener("mousemove", function (e) {
+      tx = (e.clientX / innerWidth - 0.5);
+      ty = (e.clientY / innerHeight - 0.5);
+    });
+
+    var clock = new THREE.Clock();
+    function tick() {
+      var t = clock.getElapsedTime();
+
+      ring3.rotation.z = t * 0.12;
+      ring3.rotation.x = 0.9 + Math.sin(t * 0.3) * 0.1;
+
+      sheets.forEach(function (s) {
+        s.position.y = s.userData.baseY + Math.sin(t * s.userData.speed + s.userData.phase) * 0.45;
+        s.rotation.y += 0.0016;
+        s.rotation.z += 0.0006;
+      });
+
+      pts.rotation.y = t * 0.02;
+
+      /* scroll steers the world; mouse adds parallax */
+      var targetRotY = scrollProgress * Math.PI * 1.6 + tx * 0.35;
+      var targetRotX = ty * 0.22 + scrollProgress * 0.25;
+      world.rotation.y += (targetRotY - world.rotation.y) * 0.05;
+      world.rotation.x += (targetRotX - world.rotation.x) * 0.05;
+      camera.position.z = 9 - scrollProgress * 2.2;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    if (!reduceMotion) { tick(); } else { renderer.render(scene, camera); }
+
+    window.addEventListener("resize", function () {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    three = true;
+  } catch (err) {
+    /* WebGL unavailable, page still fully works */
+    canvas.style.display = "none";
+  }
+
+  /* ============ Scroll progress ============ */
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - innerHeight;
+    scrollProgress = max > 0 ? (scrollY / max) : 0;
+  }
+  document.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ============ GSAP scroll storytelling ============ */
+  if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* hero lines rise in */
+    gsap.from("#hero-title .line span", {
+      yPercent: 110,
+      duration: 1.1,
+      stagger: 0.12,
+      ease: "power3.out",
+      delay: 1.35
+    });
+    gsap.from(".hero-kicker, .hero-sub, .scroll-hint", {
+      opacity: 0, y: 24, duration: 0.9, stagger: 0.1, ease: "power2.out", delay: 1.6
+    });
+
+    /* statement: words ink themselves in as you scroll */
+    var st = document.getElementById("statement-text");
+    st.innerHTML = st.textContent.split(" ").map(function (w) {
+      return '<span class="w">' + w + "</span> ";
+    }).join("");
+    gsap.to("#statement-text .w", {
+      opacity: 1,
+      stagger: 0.06,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#statement",
+        start: "top 75%",
+        end: "bottom 60%",
+        scrub: true
+      }
+    });
+
+    /* kite flies across while the statement scrolls */
+    gsap.to("#kite", {
+      x: function () { return innerWidth + 300; },
+      y: -140,
+      rotation: 14,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#statement",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.2
+      }
+    });
+    gsap.to("#kite", {
+      rotation: "-=10",
+      yoyo: true,
+      repeat: -1,
+      duration: 1.8,
+      ease: "sine.inOut"
+    });
+
+    /* chapters rise in */
+    gsap.utils.toArray(".chapter").forEach(function (ch) {
+      gsap.from(ch, {
+        opacity: 0, y: 70, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: ch, start: "top 82%" }
+      });
+    });
+
+    /* contact heading */
+    gsap.from("#contact h2", {
+      opacity: 0, y: 60, duration: 1, ease: "power3.out",
+      scrollTrigger: { trigger: "#contact", start: "top 65%" }
+    });
+
+    /* subtle skew from scroll velocity */
+    var skewSetter = gsap.quickSetter("main", "skewY", "deg");
+    ScrollTrigger.create({
+      onUpdate: function (self) {
+        var skew = gsap.utils.clamp(-4, 4, self.getVelocity() / -400);
+        gsap.to({}, {
+          duration: 0.4,
+          onUpdate: function () { skewSetter(skew * (1 - this.progress())); }
+        });
+      }
+    });
+  } else {
+    /* reduced motion: everything visible */
+    document.querySelectorAll("#statement-text").forEach(function (el) { el.style.opacity = 1; });
+  }
+
+  /* ============ Magnetic button ============ */
+  var magnet = document.getElementById("magnet");
+  if (magnet && !reduceMotion) {
+    magnet.addEventListener("mousemove", function (e) {
+      var r = magnet.getBoundingClientRect();
+      var dx = e.clientX - (r.left + r.width / 2);
+      var dy = e.clientY - (r.top + r.height / 2);
+      magnet.style.transform = "translate(" + dx * 0.25 + "px," + dy * 0.35 + "px)";
+    });
+    magnet.addEventListener("mouseleave", function () {
+      magnet.style.transform = "translate(0,0)";
+      magnet.style.transition = "transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2)";
+      setTimeout(function () { magnet.style.transition = "background 0.3s ease"; }, 400);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sirion · Impact Trace — Amendment 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F2F1EE;
+  --border: #E5E3DE;
+  --border-strong: #C8C5BE;
+  --ink: #1A1916;
+  --ink-2: #4A4845;
+  --ink-3: #8A8784;
+  --ink-4: #B8B5B0;
+  --governs: #1A4F8A;
+  --governs-bg: #EEF3FA;
+  --modifies: #7A3B00;
+  --modifies-bg: #FEF5EC;
+  --supersedes: #5A1A6E;
+  --supersedes-bg: #F6EEF9;
+  --applies: #0D6B4A;
+  --applies-bg: #EBF7F3;
+  --impacts: #8A2020;
+  --impacts-bg: #FDF0F0;
+  --active: #1A7A4A;
+  --active-bg: #E8F7EF;
+  --draft: #8A6B00;
+  --draft-bg: #FDF6E3;
+  --superseded-c: #8A8784;
+  --superseded-bg: #F2F1EE;
+}
+
+html { font-size: 14px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  position: relative;
+  z-index: 200;
+}
+.topbar-back { display: flex; align-items: center; gap: 6px; color: var(--ink-3); font-size: 12px; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+.topbar-back:hover { background: var(--surface2); }
+.topbar-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
+.topbar-breadcrumb .current { color: var(--ink); font-weight: 500; }
+.topbar-divider { color: var(--border-strong); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+.btn-ghost {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px; font-size: 12px;
+  color: var(--ink-2); background: transparent;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.1s;
+}
+.btn-ghost:hover { background: var(--surface2); }
+.btn-primary {
+  padding: 5px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 5px; font-size: 12px;
+  color: var(--surface); background: var(--ink);
+  cursor: pointer; font-family: inherit;
+}
+
+/* ─── LAYOUT ─── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  height: calc(100vh - 52px);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── MAIN ─── */
+.main { overflow-y: auto; padding: 0; position: relative; }
+
+/* ─── ENTITY HEADER ─── */
+.entity-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0;
+  position: sticky; top: 0; z-index: 10;
+}
+.entity-type-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--modifies); background: var(--modifies-bg);
+  padding: 3px 8px; border-radius: 3px; margin-bottom: 10px;
+}
+.entity-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.2; }
+.entity-id { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--ink-3); margin-bottom: 12px; }
+.entity-status-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; }
+.status-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.status-active { color: var(--active); background: var(--active-bg); }
+.status-superseded { color: var(--superseded-c); background: var(--superseded-bg); }
+.meta-chip { font-size: 11px; color: var(--ink-3); display: flex; align-items: center; gap: 4px; }
+.tab-nav { display: flex; gap: 0; border-top: 1px solid var(--border); margin-top: 4px; }
+.tab { padding: 10px 16px; font-size: 12px; color: var(--ink-3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); font-weight: 500; border-bottom-color: var(--ink); }
+
+/* ─── CONTENT AREA ─── */
+.content-area { padding: 28px 32px; }
+.view-panel { display: none; }
+.view-panel.visible { display: block; }
+
+/* ─── IMPACT HEADER ─── */
+.impact-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.impact-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.impact-subtitle { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.view-toggle { display: flex; gap: 2px; background: var(--surface2); padding: 3px; border-radius: 6px; }
+.vt-btn { padding: 5px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; color: var(--ink-3); display: flex; align-items: center; gap: 5px; font-family: inherit; border: none; background: transparent; transition: all 0.15s; }
+.vt-btn.active { background: var(--surface); color: var(--ink); font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+/* ─── SUMMARY STRIP ─── */
+.summary-strip { background: var(--surface2); border-radius: 6px; padding: 12px 16px; display: flex; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+.strip-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
+.strip-dot { width: 8px; height: 8px; border-radius: 50%; }
+.strip-num { font-weight: 600; color: var(--ink); }
+
+/* ─── SOURCE NODE ─── */
+.source-node { background: var(--modifies-bg); border: 1.5px solid var(--modifies); border-radius: 8px; padding: 16px 20px; position: relative; }
+.source-node-label { font-size: 9px; font-family: 'Geist Mono', monospace; letter-spacing: 1px; text-transform: uppercase; color: var(--modifies); margin-bottom: 6px; }
+.source-node-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.source-node-meta { font-size: 11px; color: var(--ink-3); }
+.what-it-does { display: flex; gap: 8px; margin: 16px 0 0; flex-wrap: wrap; }
+.does-pill { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 500; border: 1px solid; }
+.does-modifies { color: var(--modifies); background: var(--modifies-bg); border-color: #FFBF85; }
+.does-applies { color: var(--applies); background: var(--applies-bg); border-color: #92DFC0; }
+.does-supersedes { color: var(--supersedes); background: var(--supersedes-bg); border-color: #D4A8E4; }
+
+/* ─── LANE CONNECTOR ─── */
+.lane-connector-v { width: 2px; height: 20px; background: var(--border-strong); margin-left: 24px; }
+
+/* ─── IMPACT LANES ─── */
+.impact-lanes { display: flex; flex-direction: column; gap: 2px; }
+.impact-lane { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.lane-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+.lane-header:hover { background: var(--surface2); }
+.lane-rel-type { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+.lane-modifies { color: var(--modifies); background: var(--modifies-bg); }
+.lane-applies { color: var(--applies); background: var(--applies-bg); }
+.lane-supersedes { color: var(--supersedes); background: var(--supersedes-bg); }
+.lane-count { font-size: 11px; color: var(--ink-3); margin-left: auto; }
+.lane-toggle { color: var(--ink-3); font-size: 12px; transition: transform 0.2s; display: inline-block; }
+.lane-toggle.open { transform: rotate(180deg); }
+.lane-items { display: flex; flex-direction: column; }
+.lane-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; position: relative; }
+.lane-item:last-child { border-bottom: none; }
+.lane-item:hover { background: var(--surface2); }
+.lane-item.selected { background: #EEF3FA; }
+.lane-item.mod-item { border-left: 3px solid var(--modifies); }
+.lane-item.app-item { border-left: 3px solid var(--applies); }
+.lane-item.sup-item { border-left: 3px solid var(--supersedes); }
+.li-type-badge { font-size: 9px; font-family: 'Geist Mono', monospace; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; min-width: 36px; text-align: center; }
+.li-msa { color: var(--governs); background: var(--governs-bg); }
+.li-sow { color: var(--applies); background: var(--applies-bg); }
+.li-amd { color: var(--modifies); background: var(--modifies-bg); }
+.li-content { flex: 1; min-width: 0; }
+.li-name { font-size: 12px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li-meta { font-size: 10px; color: var(--ink-3); margin-top: 1px; }
+.li-change-tag { font-size: 10px; color: var(--ink-3); background: var(--surface2); padding: 2px 6px; border-radius: 3px; flex-shrink: 0; white-space: nowrap; }
+.li-change-tag.pricing { color: var(--modifies); background: var(--modifies-bg); }
+.li-change-tag.scope { color: var(--applies); background: var(--applies-bg); }
+.li-expansion { margin: 0 16px 10px 16px; background: var(--bg); border-radius: 6px; padding: 12px 14px; border: 1px solid var(--border); display: none; }
+.li-expansion.visible { display: block; }
+.expansion-title { font-size: 10px; font-family: 'Geist Mono', monospace; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+.expansion-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; font-size: 11px; }
+.exp-label { color: var(--ink-3); min-width: 120px; flex-shrink: 0; }
+.exp-value { color: var(--ink); font-weight: 500; }
+.exp-value.highlight { color: var(--modifies); }
+
+/* ─── WHAT CHANGED ─── */
+.what-changed { margin-top: 32px; }
+.wc-section-label { font-size: 10px; font-family: 'Geist Mono', monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.wc-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.change-cards { display: flex; flex-direction: column; gap: 8px; }
+.change-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.cc-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.cc-clause { font-size: 11px; font-family: 'Geist Mono', monospace; color: var(--ink-2); font-weight: 500; }
+.cc-type { font-size: 10px; padding: 2px 7px; border-radius: 3px; }
+.cc-modified { background: var(--modifies-bg); color: var(--modifies); }
+.cc-added { background: var(--applies-bg); color: var(--applies); }
+.cc-applies-to { margin-left: auto; font-size: 10px; color: var(--ink-3); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.cc-applies-sow { font-family: 'Geist Mono', monospace; font-size: 9px; padding: 2px 5px; background: var(--applies-bg); color: var(--applies); border-radius: 3px; }
+.cc-body { padding: 12px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cc-label { font-size: 9px; font-family: 'Geist Mono', monospace; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.cc-before .cc-label { color: var(--impacts); }
+.cc-after .cc-label { color: var(--applies); }
+.cc-text-before { color: var(--ink-2); background: #FFF5F5; padding: 8px 10px; border-radius: 4px; border-left: 2px solid #FFA9A9; font-size: 11px; line-height: 1.7; }
+.cc-text-after { color: var(--ink); background: #F0FAF5; padding: 8px 10px; border-radius: 4px; border-left: 2px solid #7DCCA8; font-size: 11px; line-height: 1.7; }
+
+/* ─── RIGHT PANEL ─── */
+.right-panel { border-left: 1px solid var(--border); background: var(--surface); overflow-y: auto; display: flex; flex-direction: column; }
+.panel-section { padding: 20px; border-bottom: 1px solid var(--border); }
+.panel-section:last-child { border-bottom: none; }
+.panel-label { font-size: 9px; font-family: 'Geist Mono', monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+.panel-field { margin-bottom: 12px; }
+.pf-label { font-size: 10px; color: var(--ink-3); margin-bottom: 3px; }
+.pf-value { font-size: 12px; color: var(--ink); font-weight: 500; }
+.pf-value.mono { font-family: 'Geist Mono', monospace; font-size: 11px; }
+.rel-list { display: flex; flex-direction: column; gap: 6px; }
+.rel-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; transition: all 0.1s; }
+.rel-item:hover { border-color: var(--border-strong); background: var(--surface2); }
+.rel-type-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot-modifies { background: var(--modifies); }
+.dot-applies { background: var(--applies); }
+.dot-supersedes { background: var(--supersedes); }
+.dot-governs { background: var(--governs); }
+.rel-type-text { font-size: 10px; color: var(--ink-3); min-width: 70px; }
+.rel-target-text { font-size: 11px; color: var(--ink); font-weight: 500; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.impact-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.is-card { background: var(--surface2); border-radius: 6px; padding: 12px 10px; text-align: center; }
+.is-num { font-size: 22px; font-weight: 700; color: var(--ink); display: block; line-height: 1; margin-bottom: 4px; }
+.is-label { font-size: 10px; color: var(--ink-3); line-height: 1.3; }
+.evidence-list { display: flex; flex-direction: column; gap: 6px; }
+.evidence-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: background 0.1s; }
+.evidence-item:hover { background: var(--surface2); }
+.ev-icon { font-size: 16px; flex-shrink: 0; }
+.ev-name { font-size: 11px; font-weight: 500; color: var(--ink); flex: 1; }
+.ev-tag { font-size: 9px; padding: 2px 6px; border-radius: 3px; background: var(--active-bg); color: var(--active); }
+
+/* ──────────────────────────────────────────────
+   ASK SIRION BUTTON (in right panel)
+   ────────────────────────────────────────────── */
+.ask-trigger-btn {
+  width: 100%;
+  background: var(--ink);
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: opacity 0.15s;
+}
+.ask-trigger-btn:hover { opacity: 0.88; }
+.ask-trigger-icon {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.ask-trigger-text { text-align: left; }
+.ask-trigger-title { font-size: 12px; font-weight: 600; color: #fff; display: block; }
+.ask-trigger-sub { font-size: 10px; color: rgba(255,255,255,0.45); display: block; margin-top: 2px; }
+
+/* ──────────────────────────────────────────────
+   ASK SIRION PANEL (slide-in from right)
+   ────────────────────────────────────────────── */
+.ask-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,25,22,0.3);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(2px);
+}
+.ask-overlay.open { opacity: 1; pointer-events: all; }
+
+.ask-panel {
+  position: fixed;
+  top: 52px; right: 0; bottom: 0;
+  width: 480px;
+  background: var(--ink);
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.25);
+}
+.ask-panel.open { transform: translateX(0); }
+
+/* Panel header */
+.ask-panel-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.ask-panel-icon {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.ask-panel-title-area { flex: 1; }
+.ask-panel-title { font-size: 14px; font-weight: 600; color: #fff; display: block; }
+.ask-panel-context {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-top: 3px;
+}
+.ask-close-btn {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.07);
+  border: none; border-radius: 5px;
+  color: rgba(255,255,255,0.5);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.1s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.ask-close-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+/* Suggested questions */
+.ask-suggestions {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ask-suggestions-label {
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 10px;
+}
+.ask-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ask-chip {
+  padding: 6px 11px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.ask-chip:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Chat messages area */
+.ask-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+/* Empty state */
+.ask-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  color: rgba(255,255,255,0.2);
+}
+.ask-empty-icon { font-size: 36px; margin-bottom: 16px; opacity: 0.4; }
+.ask-empty-text { font-size: 13px; line-height: 1.7; }
+
+/* Message bubbles */
+.msg { display: flex; flex-direction: column; gap: 4px; }
+
+.msg-user {
+  align-items: flex-end;
+}
+.msg-user .msg-bubble {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+  padding: 10px 14px;
+  border-radius: 12px 12px 2px 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 90%;
+  align-self: flex-end;
+}
+
+.msg-ai { align-items: flex-start; }
+.msg-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 6px;
+}
+.msg-ai-avatar {
+  width: 22px; height: 22px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.msg-ai-name { font-size: 10px; color: rgba(255,255,255,0.3); font-family: 'Geist Mono', monospace; letter-spacing: 0.5px; }
+.msg-ai .msg-bubble {
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 100%;
+}
+
+/* AI response components */
+.ai-text { margin-bottom: 12px; }
+.ai-text:last-child { margin-bottom: 0; }
+
+/* Answer card — highlighted key fact */
+.ai-answer-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 10px 0;
+}
+.ai-answer-card-label {
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 8px;
+}
+.ai-answer-card-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.4;
+}
+.ai-answer-card-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 4px;
+}
+
+/* Citation inline */
+.ai-citation {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.1s;
+  white-space: nowrap;
+}
+.ai-citation:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+.ai-citation::before { content: '↗'; font-size: 8px; }
+
+/* Relationship trace in response */
+.ai-rel-trace {
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.ai-rel-trace-label {
+  font-size: 9px;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 10px;
+}
+.ai-rel-trace-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.ai-rel-trace-row:last-child { margin-bottom: 0; }
+.art-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.art-dot-modifies { background: #FFBF85; }
+.art-dot-applies { background: #7DCCA8; }
+.art-dot-supersedes { background: #D4A8E4; }
+.art-rel { font-size: 9px; color: rgba(255,255,255,0.3); min-width: 70px; font-family: 'Geist Mono', monospace; }
+.art-target { color: rgba(255,255,255,0.75); font-weight: 500; flex: 1; }
+.art-tag {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.4);
+}
+
+/* Impact list in AI response */
+.ai-impact-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.ai-impact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.ai-impact-item:hover { background: rgba(255,255,255,0.09); }
+.aii-badge {
+  font-size: 8px;
+  font-family: 'Geist Mono', monospace;
+  padding: 2px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.aii-sow { background: rgba(13,107,74,0.3); color: #7DCCA8; }
+.aii-msa { background: rgba(26,79,138,0.3); color: #85AEDE; }
+.aii-content { flex: 1; min-width: 0; }
+.aii-name { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aii-detail { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+.aii-arrow { font-size: 10px; color: rgba(255,255,255,0.2); }
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+}
+.typing-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  animation: typingPulse 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingPulse { 0%, 60%, 100% { opacity: 0.25; transform: scale(1); } 30% { opacity: 1; transform: scale(1.2); } }
+
+/* Input area */
+.ask-input-area {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+}
+.ask-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: border-color 0.15s;
+}
+.ask-input-row:focus-within { border-color: rgba(255,255,255,0.25); }
+.ask-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  resize: none;
+  max-height: 120px;
+  line-height: 1.5;
+  min-height: 20px;
+}
+.ask-textarea::placeholder { color: rgba(255,255,255,0.25); }
+.ask-send-btn {
+  width: 30px; height: 30px;
+  background: rgba(255,255,255,0.12);
+  border: none; border-radius: 6px;
+  color: rgba(255,255,255,0.6);
+  font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.ask-send-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.ask-send-btn.active { background: #fff; color: var(--ink); }
+
+.ask-input-hint {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 8px;
+  text-align: center;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* ──────────────────────────────────────────────
+   MAP VIEW — Canvas
+   ────────────────────────────────────────────── */
+.map-view-container {
+  height: calc(100vh - 52px - 148px);
+  min-height: 500px;
+  position: relative;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* Map controls */
+.map-controls {
+  position: absolute;
+  top: 16px; left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 20;
+}
+.map-ctrl-btn {
+  width: 32px; height: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer;
+  color: var(--ink-2);
+  transition: background 0.1s;
+  font-family: inherit;
+}
+.map-ctrl-btn:hover { background: var(--surface2); }
+
+.map-legend {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.ml-line {
+  width: 24px; height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+.ml-modifies { background: var(--modifies); }
+.ml-applies { background: var(--applies); }
+.ml-supersedes { background: var(--supersedes); }
+.ml-governs { background: var(--governs); }
+
+.map-info-label {
+  position: absolute;
+  bottom: 16px; right: 16px;
+  font-size: 10px;
+  color: var(--ink-3);
+  font-family: 'Geist Mono', monospace;
+  background: var(--surface);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 20;
+}
+
+/* SVG canvas */
+.map-canvas { width: 100%; height: 100%; }
+
+/* Node tooltip */
+.map-node-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--ink);
+  color: rgba(255,255,255,0.9);
+  font-size: 11px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 30;
+  display: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  min-width: 180px;
+}
+.map-node-tooltip.visible { display: block; }
+.mnt-title { font-weight: 600; margin-bottom: 3px; }
+.mnt-meta { color: rgba(255,255,255,0.45); font-size: 10px; font-family: 'Geist Mono', monospace; }
+.mnt-rel { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-back">← Back</div>
+  <div class="topbar-breadcrumb">
+    <span>CO0234 · MSA</span>
+    <span class="topbar-divider">/</span>
+    <span>Amendments</span>
+    <span class="topbar-divider">/</span>
+    <span class="current">Amendment 4</span>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-ghost">⟳ Timeline</button>
+    <button class="btn-ghost">↗ Share</button>
+    <button class="btn-primary">+ Create child</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- MAIN -->
+  <div class="main">
+    <!-- ENTITY HEADER -->
+    <div class="entity-header">
+      <div class="entity-type-badge">✦ Amendment</div>
+      <div class="entity-title">Service Enhancement — Pricing &amp; Scope Update</div>
+      <div class="entity-id">CO9142 · Amendment 4</div>
+      <div class="entity-status-row">
+        <span class="status-pill status-active">Active</span>
+        <span class="meta-chip">Effective: 02 Feb 2024</span>
+        <span class="meta-chip">·</span>
+        <span class="meta-chip">Signed: 28 Jan 2024</span>
+        <span class="meta-chip">·</span>
+        <span class="meta-chip">Eversholt Rail ↔ MNTC Corp</span>
+      </div>
+      <div class="tab-nav">
+        <div class="tab">Overview</div>
+        <div class="tab active">Impact &amp; Relationships</div>
+        <div class="tab">What Changed</div>
+        <div class="tab">Evidence</div>
+        <div class="tab">Activity</div>
+      </div>
+    </div>
+
+    <!-- CONTENT AREA -->
+    <div class="content-area">
+
+      <!-- IMPACT HEADER + VIEW TOGGLE -->
+      <div class="impact-header">
+        <div>
+          <div class="impact-title">Where Amendment 4 reaches</div>
+          <div class="impact-subtitle">Every agreement, clause, and obligation this amendment modifies, applies to, or supersedes</div>
+        </div>
+        <div class="view-toggle">
+          <button class="vt-btn active" onclick="switchView('trace', this)">≡ Trace view</button>
+          <button class="vt-btn" onclick="switchView('map', this)">⊙ Map view</button>
+        </div>
+      </div>
+
+      <!-- SUMMARY STRIP -->
+      <div class="summary-strip">
+        <div class="strip-item"><span class="strip-dot" style="background:var(--modifies)"></span>Modifies <span class="strip-num">1 MSA</span></div>
+        <div class="strip-item"><span class="strip-dot" style="background:var(--applies)"></span>Applies to <span class="strip-num">5 SOWs</span></div>
+        <div class="strip-item"><span class="strip-dot" style="background:var(--supersedes)"></span>Supersedes <span class="strip-num">2 Amendments</span></div>
+        <div class="strip-item"><span class="strip-dot" style="background:var(--impacts)"></span>Impacts <span class="strip-num">12 clauses</span></div>
+        <div class="strip-item"><span class="strip-dot" style="background:var(--ink-3)"></span>Touches <span class="strip-num">3 geographies</span></div>
+      </div>
+
+      <!-- ═══ TRACE VIEW ═══ -->
+      <div class="view-panel visible" id="view-trace">
+        <div class="source-node">
+          <div class="source-node-label">Origin · This amendment</div>
+          <div class="source-node-title">Amendment 4 — Service Enhancement</div>
+          <div class="source-node-meta">CO9142 · Active · Effective 02 Feb 2024</div>
+          <div class="what-it-does">
+            <div class="does-pill does-modifies">⤷ Modifies MSA terms</div>
+            <div class="does-pill does-applies">→ Applies to 5 SOWs</div>
+            <div class="does-pill does-supersedes">⊘ Supersedes 2 amendments</div>
+          </div>
+        </div>
+
+        <div class="lane-connector-v"></div>
+
+        <div class="impact-lanes">
+          <!-- MODIFIES lane -->
+          <div class="impact-lane">
+            <div class="lane-header" onclick="toggleLane(this)">
+              <div class="lane-rel-type lane-modifies">⤷ Modifies</div>
+              <span style="font-size:11px;color:var(--ink-2)">Changes terms, clauses, or conditions</span>
+              <span class="lane-count">1 agreement</span>
+              <span class="lane-toggle open">▾</span>
+            </div>
+            <div class="lane-items">
+              <div class="lane-item mod-item" onclick="toggleExpansion(this)">
+                <span class="li-type-badge li-msa">MSA</span>
+                <div class="li-content">
+                  <div class="li-name">CO0234 · Master Service Agreement</div>
+                  <div class="li-meta">Active · Effective 01 Jan 2024 · Governs 540 SOWs</div>
+                </div>
+                <span class="li-change-tag pricing">Pricing · Payment terms</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+              <div class="li-expansion">
+                <div class="expansion-title">What changed in this MSA</div>
+                <div class="expansion-row"><span class="exp-label">Section 4.2 — Pricing</span><span class="exp-value highlight">Rate cap raised $180 → $210/hr for Managed Services</span></div>
+                <div class="expansion-row"><span class="exp-label">Section 7.1 — Payment</span><span class="exp-value highlight">Net-45 → Net-30 for invoices above $500K</span></div>
+                <div class="expansion-row"><span class="exp-label">Schedule A — Scope</span><span class="exp-value">Cloud Support services added globally</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- APPLIES TO lane -->
+          <div class="impact-lane">
+            <div class="lane-header" onclick="toggleLane(this)">
+              <div class="lane-rel-type lane-applies">→ Applies to</div>
+              <span style="font-size:11px;color:var(--ink-2)">SOWs where terms of this amendment are in effect</span>
+              <span class="lane-count">5 SOWs</span>
+              <span class="lane-toggle open">▾</span>
+            </div>
+            <div class="lane-items">
+              <div class="lane-item app-item" onclick="toggleExpansion(this)">
+                <span class="li-type-badge li-sow">SOW</span>
+                <div class="li-content">
+                  <div class="li-name">CO9143 · SOW Boston Mobile Platform Modernization</div>
+                  <div class="li-meta">Active · Aug 2024 – Jul 2025 · North America · TCV $1.0M</div>
+                </div>
+                <span class="li-change-tag pricing">Pricing affected</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+              <div class="li-expansion">
+                <div class="expansion-title">How Amendment 4 affects this SOW</div>
+                <div class="expansion-row"><span class="exp-label">Rate impact</span><span class="exp-value highlight">6 resources repriced at $210/hr (+$30/hr)</span></div>
+                <div class="expansion-row"><span class="exp-label">Payment</span><span class="exp-value">Now on Net-30 (exceeds $500K threshold)</span></div>
+                <div class="expansion-row"><span class="exp-label">Scope</span><span class="exp-value">No scope change for this SOW</span></div>
+              </div>
+              <div class="lane-item app-item" onclick="toggleExpansion(this)">
+                <span class="li-type-badge li-sow">SOW</span>
+                <div class="li-content">
+                  <div class="li-name">CO9144 · SOW New York Data Integration Project</div>
+                  <div class="li-meta">Active · Sep 2024 – May 2025 · North America · TCV $750K</div>
+                </div>
+                <span class="li-change-tag pricing">Pricing affected</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+              <div class="li-expansion">
+                <div class="expansion-title">How Amendment 4 affects this SOW</div>
+                <div class="expansion-row"><span class="exp-label">Rate impact</span><span class="exp-value highlight">4 resources repriced at $210/hr</span></div>
+                <div class="expansion-row"><span class="exp-label">Payment</span><span class="exp-value">Below $500K threshold — Net-45 unchanged</span></div>
+              </div>
+              <div class="lane-item app-item" onclick="toggleExpansion(this)">
+                <span class="li-type-badge li-sow">SOW</span>
+                <div class="li-content">
+                  <div class="li-name">CO9145 · SOW Chicago Cloud Migration Initiative</div>
+                  <div class="li-meta">Active · Oct 2024 – Mar 2025 · North America · TCV $1.2M</div>
+                </div>
+                <span class="li-change-tag scope">Scope expanded</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+              <div class="li-expansion">
+                <div class="expansion-title">How Amendment 4 affects this SOW</div>
+                <div class="expansion-row"><span class="exp-label">Scope change</span><span class="exp-value highlight">Cloud Support services now included</span></div>
+                <div class="expansion-row"><span class="exp-label">Rate impact</span><span class="exp-value">Cloud Support resources billed at $210/hr</span></div>
+                <div class="expansion-row"><span class="exp-label">Payment</span><span class="exp-value">Net-30 (TCV exceeds $500K)</span></div>
+              </div>
+              <div class="lane-item app-item">
+                <span class="li-type-badge li-sow">SOW</span>
+                <div class="li-content">
+                  <div class="li-name">CO9146 · SOW Tokyo Infrastructure Services</div>
+                  <div class="li-meta">Active · Jan 2024 – Dec 2024 · APAC · TCV $620K</div>
+                </div>
+                <span class="li-change-tag pricing">Pricing affected</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+              <div class="lane-item app-item">
+                <span class="li-type-badge li-sow">SOW</span>
+                <div class="li-content">
+                  <div class="li-name">CO9147 · SOW Singapore Platform Support</div>
+                  <div class="li-meta">Active · Mar 2024 – Feb 2025 · APAC · TCV $430K</div>
+                </div>
+                <span class="li-change-tag pricing">Pricing affected</span>
+                <span class="status-pill status-active" style="font-size:10px">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUPERSEDES lane -->
+          <div class="impact-lane">
+            <div class="lane-header" onclick="toggleLane(this)">
+              <div class="lane-rel-type lane-supersedes">⊘ Supersedes</div>
+              <span style="font-size:11px;color:var(--ink-2)">No longer in effect due to Amendment 4</span>
+              <span class="lane-count">2 amendments</span>
+              <span class="lane-toggle open">▾</span>
+            </div>
+            <div class="lane-items">
+              <div class="lane-item sup-item">
+                <span class="li-type-badge li-amd">Amdt</span>
+                <div class="li-content">
+                  <div class="li-name">CO9138 · Amendment 2 — Initial Service Pricing</div>
+                  <div class="li-meta">Superseded 02 Feb 2024 · Was: $180/hr rate cap</div>
+                </div>
+                <span class="status-pill status-superseded" style="font-size:10px">Superseded</span>
+              </div>
+              <div class="lane-item sup-item">
+                <span class="li-type-badge li-amd">Amdt</span>
+                <div class="li-content">
+                  <div class="li-name">CO9139 · Amendment 3 — Payment Terms Update</div>
+                  <div class="li-meta">Superseded 02 Feb 2024 · Was: Net-45 universal</div>
+                </div>
+                <span class="status-pill status-superseded" style="font-size:10px">Superseded</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- /impact-lanes -->
+
+        <!-- WHAT CHANGED -->
+        <div class="what-changed">
+          <div class="wc-section-label">What this amendment changes · Clause level</div>
+          <div class="change-cards">
+            <div class="change-card">
+              <div class="cc-header">
+                <span class="cc-clause">Section 4.2 — Pricing Schedule</span>
+                <span class="cc-type cc-modified">Modified</span>
+                <span class="cc-applies-to">Applies to: <span class="cc-applies-sow">All 5 SOWs</span></span>
+              </div>
+              <div class="cc-body">
+                <div class="cc-before"><span class="cc-label">Before · Amendment 3</span><div class="cc-text-before">Managed Services hourly rate capped at <strong>$180/hr</strong> for all geographies.</div></div>
+                <div class="cc-after"><span class="cc-label">After · Amendment 4</span><div class="cc-text-after">Managed Services hourly rate revised to <strong>$210/hr</strong>. Cloud Support added to scope at same rate.</div></div>
+              </div>
+            </div>
+            <div class="change-card">
+              <div class="cc-header">
+                <span class="cc-clause">Section 7.1 — Payment Terms</span>
+                <span class="cc-type cc-modified">Modified</span>
+                <span class="cc-applies-to">Applies to: <span class="cc-applies-sow">Boston SOW</span><span class="cc-applies-sow">Chicago SOW</span></span>
+              </div>
+              <div class="cc-body">
+                <div class="cc-before"><span class="cc-label">Before · Amendment 3</span><div class="cc-text-before">All invoices due within <strong>Net-45</strong> regardless of amount.</div></div>
+                <div class="cc-after"><span class="cc-label">After · Amendment 4</span><div class="cc-text-after">Invoices <strong>$500K+</strong> now due within <strong>Net-30</strong>. Below $500K stays Net-45.</div></div>
+              </div>
+            </div>
+            <div class="change-card">
+              <div class="cc-header">
+                <span class="cc-clause">Schedule A — Service Scope</span>
+                <span class="cc-type cc-added">Added</span>
+                <span class="cc-applies-to">Applies to: <span class="cc-applies-sow">Chicago SOW only</span></span>
+              </div>
+              <div class="cc-body">
+                <div class="cc-before"><span class="cc-label">Before</span><div class="cc-text-before">Cloud Support services not covered under MSA scope.</div></div>
+                <div class="cc-after"><span class="cc-label">After · Amendment 4</span><div class="cc-text-after"><strong>Cloud Support added globally.</strong> Chicago SOW extended to include Cloud Support work.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /trace view -->
+
+      <!-- ═══ MAP VIEW ═══ -->
+      <div class="view-panel" id="view-map">
+        <div class="map-view-container">
+          <!-- Controls -->
+          <div class="map-controls">
+            <button class="map-ctrl-btn" onclick="mapZoom(1.15)" title="Zoom in">+</button>
+            <button class="map-ctrl-btn" onclick="mapZoom(0.85)" title="Zoom out">−</button>
+            <button class="map-ctrl-btn" onclick="mapReset()" title="Reset">⊙</button>
+          </div>
+
+          <!-- Legend -->
+          <div class="map-legend">
+            <div class="map-legend-item"><div class="ml-line ml-modifies"></div>Modifies</div>
+            <div class="map-legend-item"><div class="ml-line ml-applies"></div>Applies to</div>
+            <div class="map-legend-item"><div class="ml-line ml-supersedes" style="border-top: 2px dashed var(--supersedes);background:transparent"></div>Supersedes</div>
+            <div class="map-legend-item"><div class="ml-line ml-governs"></div>Governed by</div>
+          </div>
+
+          <div class="map-info-label">Scroll to zoom · Drag to pan · Click node to inspect</div>
+
+          <!-- Tooltip -->
+          <div class="map-node-tooltip" id="mapTooltip">
+            <div class="mnt-title" id="tooltipTitle"></div>
+            <div class="mnt-meta" id="tooltipMeta"></div>
+            <div class="mnt-rel" id="tooltipRel"></div>
+          </div>
+
+          <!-- SVG canvas -->
+          <svg class="map-canvas" id="mapCanvas" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div><!-- /map view -->
+
+    </div><!-- /content-area -->
+  </div><!-- /main -->
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="panel-section">
+      <div class="panel-label">Impact summary</div>
+      <div class="impact-summary-grid">
+        <div class="is-card"><span class="is-num">1</span><span class="is-label">MSA modified</span></div>
+        <div class="is-card"><span class="is-num">5</span><span class="is-label">SOWs affected</span></div>
+        <div class="is-card"><span class="is-num">2</span><span class="is-label">Superseded</span></div>
+        <div class="is-card"><span class="is-num">12</span><span class="is-label">Clauses changed</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Identity</div>
+      <div class="panel-field"><div class="pf-label">Contract ID</div><div class="pf-value mono">CO9142</div></div>
+      <div class="panel-field"><div class="pf-label">Status</div><div class="pf-value"><span class="status-pill status-active">Active</span></div></div>
+      <div class="panel-field"><div class="pf-label">Effective date</div><div class="pf-value">02 February 2024</div></div>
+      <div class="panel-field"><div class="pf-label">Signed</div><div class="pf-value">28 January 2024</div></div>
+      <div class="panel-field"><div class="pf-label">Parties</div><div class="pf-value">Eversholt Rail ↔ MNTC Corp</div></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Relationships</div>
+      <div class="rel-list">
+        <div class="rel-item"><div class="rel-type-dot dot-governs"></div><span class="rel-type-text">Governed by</span><span class="rel-target-text">CO0234 · MSA</span></div>
+        <div class="rel-item"><div class="rel-type-dot dot-modifies"></div><span class="rel-type-text">Modifies</span><span class="rel-target-text">CO0234 · MSA</span></div>
+        <div class="rel-item"><div class="rel-type-dot dot-applies"></div><span class="rel-type-text">Applies to</span><span class="rel-target-text">5 SOWs →</span></div>
+        <div class="rel-item"><div class="rel-type-dot dot-supersedes"></div><span class="rel-type-text">Supersedes</span><span class="rel-target-text">Amendment 2, 3</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Evidence</div>
+      <div class="evidence-list">
+        <div class="evidence-item"><span class="ev-icon">📄</span><span class="ev-name">Amendment_4_Executed.pdf</span><span class="ev-tag">Executed</span></div>
+        <div class="evidence-item"><span class="ev-icon">📋</span><span class="ev-name">Pricing_Schedule_v4.xlsx</span><span class="ev-tag">Supporting</span></div>
+        <div class="evidence-item"><span class="ev-icon">✉️</span><span class="ev-name">Countersign_email_chain.pdf</span><span class="ev-tag">Supporting</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Query with AI</div>
+      <button class="ask-trigger-btn" onclick="openAsk()">
+        <div class="ask-trigger-icon">✦</div>
+        <div class="ask-trigger-text">
+          <span class="ask-trigger-title">Ask about Amendment 4</span>
+          <span class="ask-trigger-sub">Query relationships, changes, and impact</span>
+        </div>
+      </button>
+    </div>
+  </div><!-- /right-panel -->
+</div><!-- /layout -->
+
+<!-- ═══ ASK SIRION PANEL ═══ -->
+<div class="ask-overlay" id="askOverlay" onclick="closeAsk()"></div>
+<div class="ask-panel" id="askPanel">
+  <!-- Header -->
+  <div class="ask-panel-header">
+    <div class="ask-panel-icon">✦</div>
+    <div class="ask-panel-title-area">
+      <span class="ask-panel-title">AskSirion</span>
+      <span class="ask-panel-context">Context: CO9142 · Amendment 4 · Service Enhancement</span>
+    </div>
+    <button class="ask-close-btn" onclick="closeAsk()">×</button>
+  </div>
+
+  <!-- Suggested chips -->
+  <div class="ask-suggestions">
+    <div class="ask-suggestions-label">Suggested questions</div>
+    <div class="ask-chips">
+      <button class="ask-chip" onclick="sendChip(this)">Which SOWs pay more after this?</button>
+      <button class="ask-chip" onclick="sendChip(this)">What did Amendment 3 say?</button>
+      <button class="ask-chip" onclick="sendChip(this)">Is Boston SOW on new payment terms?</button>
+      <button class="ask-chip" onclick="sendChip(this)">What did this supersede?</button>
+      <button class="ask-chip" onclick="sendChip(this)">Show all impacted agreements</button>
+      <button class="ask-chip" onclick="sendChip(this)">What changed in Section 4.2?</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="ask-messages" id="askMessages">
+    <div class="ask-empty" id="askEmpty">
+      <div class="ask-empty-icon">✦</div>
+      <div class="ask-empty-text">Ask anything about Amendment 4.<br>I'll trace the relationships and explain what changed.</div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="ask-input-area">
+    <div class="ask-input-row">
+      <textarea class="ask-textarea" id="askInput" placeholder="Ask about relationships, clauses, impact…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="ask-send-btn" id="askSendBtn" onclick="sendMessage()">↑</button>
+    </div>
+    <div class="ask-input-hint">Answers are grounded in the contract relationship graph</div>
+  </div>
+</div>
+
+<script>
+// ─── VIEW SWITCH ───
+function switchView(view, btn) {
+  document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('view-' + view).classList.add('visible');
+  if (view === 'map') initMap();
+}
+
+// ─── TRACE INTERACTIONS ───
+function toggleLane(header) {
+  const items = header.nextElementSibling;
+  const toggle = header.querySelector('.lane-toggle');
+  const isOpen = toggle.classList.contains('open');
+  items.style.display = isOpen ? 'none' : 'flex';
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function toggleExpansion(item) {
+  const next = item.nextElementSibling;
+  if (!next || !next.classList.contains('li-expansion')) return;
+  const isVisible = next.classList.contains('visible');
+  document.querySelectorAll('.li-expansion.visible').forEach(e => e.classList.remove('visible'));
+  document.querySelectorAll('.lane-item.selected').forEach(e => e.classList.remove('selected'));
+  if (!isVisible) { next.classList.add('visible'); item.classList.add('selected'); }
+}
+
+// ─── MAP VIEW ───
+let mapScale = 1, mapOffsetX = 0, mapOffsetY = 0;
+let isDragging = false, dragStart = {x:0,y:0};
+let mapInitialized = false;
+
+const nodes = [
+  { id: 'msa',  label: 'CO0234', sub: 'Master Service Agreement', type: 'MSA',  status: 'active', x: 0.5, y: 0.12, w: 180, h: 56, color: '#1A4F8A', bg: '#EEF3FA' },
+  { id: 'a4',   label: 'CO9142 · Amendment 4', sub: 'Service Enhancement', type: 'AMDT', status: 'active', x: 0.5, y: 0.38, w: 200, h: 56, color: '#7A3B00', bg: '#FEF5EC', isOrigin: true },
+  { id: 'a2',   label: 'CO9138 · Amendment 2', sub: 'Initial Service Pricing', type: 'AMDT', status: 'superseded', x: 0.22, y: 0.62, w: 170, h: 48, color: '#8A8784', bg: '#F2F1EE' },
+  { id: 'a3',   label: 'CO9139 · Amendment 3', sub: 'Payment Terms Update', type: 'AMDT', status: 'superseded', x: 0.4, y: 0.62, w: 170, h: 48, color: '#8A8784', bg: '#F2F1EE' },
+  { id: 'sow1', label: 'CO9143 · SOW Boston', sub: 'Mobile Platform · $1.0M', type: 'SOW', status: 'active', x: 0.62, y: 0.62, w: 160, h: 48, color: '#0D6B4A', bg: '#EBF7F3' },
+  { id: 'sow2', label: 'CO9144 · SOW New York', sub: 'Data Integration · $750K', type: 'SOW', status: 'active', x: 0.78, y: 0.62, w: 160, h: 48, color: '#0D6B4A', bg: '#EBF7F3' },
+  { id: 'sow3', label: 'CO9145 · SOW Chicago', sub: 'Cloud Migration · $1.2M', type: 'SOW', status: 'active', x: 0.62, y: 0.82, w: 160, h: 48, color: '#0D6B4A', bg: '#EBF7F3' },
+  { id: 'sow4', label: 'CO9146 · SOW Tokyo', sub: 'Infrastructure · $620K', type: 'SOW', status: 'active', x: 0.78, y: 0.82, w: 160, h: 48, color: '#0D6B4A', bg: '#EBF7F3' },
+  { id: 'sow5', label: 'CO9147 · SOW Singapore', sub: 'Platform Support · $430K', type: 'SOW', status: 'active', x: 0.94, y: 0.72, w: 160, h: 48, color: '#0D6B4A', bg: '#EBF7F3' },
+];
+
+const edges = [
+  { from: 'msa', to: 'a4', type: 'governs', label: 'governs', color: '#1A4F8A', dash: false },
+  { from: 'a4', to: 'msa', type: 'modifies', label: 'modifies', color: '#7A3B00', dash: false },
+  { from: 'a4', to: 'a2', type: 'supersedes', label: 'supersedes', color: '#5A1A6E', dash: true },
+  { from: 'a4', to: 'a3', type: 'supersedes', label: 'supersedes', color: '#5A1A6E', dash: true },
+  { from: 'a4', to: 'sow1', type: 'applies', label: 'applies to', color: '#0D6B4A', dash: false },
+  { from: 'a4', to: 'sow2', type: 'applies', label: 'applies to', color: '#0D6B4A', dash: false },
+  { from: 'a4', to: 'sow3', type: 'applies', label: 'applies to', color: '#0D6B4A', dash: false },
+  { from: 'a4', to: 'sow4', type: 'applies', label: 'applies to', color: '#0D6B4A', dash: false },
+  { from: 'a4', to: 'sow5', type: 'applies', label: 'applies to', color: '#0D6B4A', dash: false },
+];
+
+function initMap() {
+  if (mapInitialized) return;
+  mapInitialized = true;
+  const svg = document.getElementById('mapCanvas');
+  renderMap(svg);
+  setupMapDrag(svg);
+}
+
+function getNodeCenter(n, W, H) {
+  return { x: n.x * W, y: n.y * H };
+}
+
+function renderMap(svg) {
+  const W = svg.clientWidth || 800;
+  const H = svg.clientHeight || 560;
+
+  svg.innerHTML = '';
+
+  // defs
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  ['modifies','applies','supersedes','governs'].forEach(t => {
+    const colors = {modifies:'#7A3B00',applies:'#0D6B4A',supersedes:'#5A1A6E',governs:'#1A4F8A'};
+    const m = document.createElementNS('http://www.w3.org/2000/svg','marker');
+    m.setAttribute('id','arrow-'+t);
+    m.setAttribute('viewBox','0 0 10 10');
+    m.setAttribute('refX','8');
+    m.setAttribute('refY','5');
+    m.setAttribute('markerWidth','6');
+    m.setAttribute('markerHeight','6');
+    m.setAttribute('orient','auto-start-reverse');
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M 0 0 L 10 5 L 0 10 z');
+    p.setAttribute('fill', colors[t]);
+    m.appendChild(p);
+    defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('id','mapGroup');
+  g.setAttribute('transform', `translate(${mapOffsetX},${mapOffsetY}) scale(${mapScale})`);
+  svg.appendChild(g);
+
+  // Draw edges first
+  edges.forEach(e => {
+    const fn = nodes.find(n=>n.id===e.from);
+    const tn = nodes.find(n=>n.id===e.to);
+    if (!fn||!tn) return;
+    const fc = getNodeCenter(fn, W, H);
+    const tc = getNodeCenter(tn, W, H);
+
+    // Slight curve
+    const mx = (fc.x + tc.x) / 2 + (tc.y - fc.y) * 0.1;
+    const my = (fc.y + tc.y) / 2 - (tc.x - fc.x) * 0.1;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    const d = `M ${fc.x} ${fc.y} Q ${mx} ${my} ${tc.x} ${tc.y}`;
+    path.setAttribute('d', d);
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke', e.color);
+    path.setAttribute('stroke-width', e.type==='modifies'?2.5:1.8);
+    path.setAttribute('stroke-opacity', e.type==='supersedes'?0.5:0.7);
+    if (e.dash) path.setAttribute('stroke-dasharray','5,4');
+    path.setAttribute('marker-end', `url(#arrow-${e.type})`);
+    g.appendChild(path);
+
+    // Edge label
+    const lx = (fc.x*0.45 + mx*0.1 + tc.x*0.45);
+    const ly = (fc.y*0.45 + my*0.1 + tc.y*0.45) - 6;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', lx - 24); rect.setAttribute('y', ly - 9);
+    rect.setAttribute('width', 48); rect.setAttribute('height', 14);
+    rect.setAttribute('rx', 3); rect.setAttribute('fill','white');
+    rect.setAttribute('fill-opacity','0.85');
+    g.appendChild(rect);
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('x', lx); lbl.setAttribute('y', ly+2);
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('font-size','8');
+    lbl.setAttribute('font-family','Geist Mono,monospace');
+    lbl.setAttribute('fill', e.color);
+    lbl.textContent = e.label;
+    g.appendChild(lbl);
+  });
+
+  // Draw nodes
+  nodes.forEach(n => {
+    const cx = getNodeCenter(n, W, H);
+    const x = cx.x - n.w/2;
+    const y = cx.y - n.h/2;
+
+    const ng = document.createElementNS('http://www.w3.org/2000/svg','g');
+    ng.setAttribute('class','map-node');
+    ng.setAttribute('cursor','pointer');
+    ng.dataset = n.id;
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', y);
+    rect.setAttribute('width', n.w); rect.setAttribute('height', n.h);
+    rect.setAttribute('rx', 8);
+    rect.setAttribute('fill', n.isOrigin ? n.color : n.bg);
+    rect.setAttribute('stroke', n.color);
+    rect.setAttribute('stroke-width', n.isOrigin ? 2.5 : 1.5);
+    rect.setAttribute('stroke-opacity', n.status==='superseded' ? 0.4 : 1);
+    rect.setAttribute('fill-opacity', n.status==='superseded' ? 0.6 : 1);
+    ng.appendChild(rect);
+
+    // Type badge
+    const badge = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    badge.setAttribute('x', x+8); badge.setAttribute('y', y+8);
+    badge.setAttribute('width', 28); badge.setAttribute('height', 13);
+    badge.setAttribute('rx', 3);
+    badge.setAttribute('fill', n.isOrigin ? 'rgba(255,255,255,0.15)' : n.color);
+    badge.setAttribute('fill-opacity', n.isOrigin ? 1 : 0.12);
+    ng.appendChild(badge);
+
+    const badgeTxt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    badgeTxt.setAttribute('x', x+22); badgeTxt.setAttribute('y', y+19);
+    badgeTxt.setAttribute('text-anchor','middle');
+    badgeTxt.setAttribute('font-size','7.5');
+    badgeTxt.setAttribute('font-family','Geist Mono,monospace');
+    badgeTxt.setAttribute('fill', n.isOrigin ? 'rgba(255,255,255,0.8)' : n.color);
+    badgeTxt.textContent = n.type;
+    ng.appendChild(badgeTxt);
+
+    // Main label
+    const labelEl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    labelEl.setAttribute('x', x+42); labelEl.setAttribute('y', y+20);
+    labelEl.setAttribute('font-size','11');
+    labelEl.setAttribute('font-family','Geist,sans-serif');
+    labelEl.setAttribute('font-weight','600');
+    labelEl.setAttribute('fill', n.isOrigin ? '#fff' : '#1A1916');
+    labelEl.setAttribute('fill-opacity', n.status==='superseded' ? 0.5 : 1);
+    const labelStr = n.label.length > 22 ? n.label.substring(0,22)+'…' : n.label;
+    labelEl.textContent = labelStr;
+    ng.appendChild(labelEl);
+
+    // Sub label
+    const subEl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    subEl.setAttribute('x', x+42); subEl.setAttribute('y', y+34);
+    subEl.setAttribute('font-size','9');
+    subEl.setAttribute('font-family','Geist,sans-serif');
+    const subStr = n.sub.length > 26 ? n.sub.substring(0,26)+'…' : n.sub;
+    subEl.textContent = subStr;
+    subEl.setAttribute('fill', n.isOrigin ? 'rgba(255,255,255,0.6)' : '#8A8784');
+    ng.appendChild(subEl);
+
+    // Status dot
+    if (n.status === 'active') {
+      const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.setAttribute('cx', x+n.w-12); dot.setAttribute('cy', y+12);
+      dot.setAttribute('r', 4);
+      dot.setAttribute('fill', '#1A7A4A');
+      ng.appendChild(dot);
+    }
+
+    // Hover events
+    ng.addEventListener('mouseenter', (e) => showTooltip(e, n, svg));
+    ng.addEventListener('mousemove', (e) => moveTooltip(e, svg));
+    ng.addEventListener('mouseleave', () => hideTooltip());
+    g.appendChild(ng);
+  });
+}
+
+function showTooltip(evt, node, svg) {
+  const t = document.getElementById('mapTooltip');
+  document.getElementById('tooltipTitle').textContent = node.label;
+  document.getElementById('tooltipMeta').textContent = node.sub + ' · ' + (node.status==='active'?'Active':'Superseded');
+  const relEdges = edges.filter(e=>e.from===node.id||e.to===node.id);
+  document.getElementById('tooltipRel').textContent = relEdges.map(e=>
+    e.from===node.id ? `→ ${e.label}: ${nodes.find(n=>n.id===e.to)?.label||''}` :
+    `← ${e.label} by: ${nodes.find(n=>n.id===e.from)?.label||''}`
+  ).join(' · ');
+  t.classList.add('visible');
+  moveTooltip(evt, svg);
+}
+
+function moveTooltip(evt, svg) {
+  const t = document.getElementById('mapTooltip');
+  const r = svg.getBoundingClientRect();
+  const container = svg.closest('.map-view-container').getBoundingClientRect();
+  const x = evt.clientX - container.left + 14;
+  const y = evt.clientY - container.top - 20;
+  t.style.left = Math.min(x, container.width - 200) + 'px';
+  t.style.top = Math.max(y, 8) + 'px';
+}
+
+function hideTooltip() {
+  document.getElementById('mapTooltip').classList.remove('visible');
+}
+
+function mapZoom(factor) {
+  mapScale = Math.min(Math.max(mapScale * factor, 0.4), 2.5);
+  const g = document.getElementById('mapGroup');
+  if (g) g.setAttribute('transform', `translate(${mapOffsetX},${mapOffsetY}) scale(${mapScale})`);
+}
+
+function mapReset() {
+  mapScale = 1; mapOffsetX = 0; mapOffsetY = 0;
+  const g = document.getElementById('mapGroup');
+  if (g) g.setAttribute('transform', `translate(0,0) scale(1)`);
+}
+
+function setupMapDrag(svg) {
+  svg.addEventListener('mousedown', e => {
+    isDragging = true;
+    dragStart = { x: e.clientX - mapOffsetX, y: e.clientY - mapOffsetY };
+    svg.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    mapOffsetX = e.clientX - dragStart.x;
+    mapOffsetY = e.clientY - dragStart.y;
+    const g = document.getElementById('mapGroup');
+    if (g) g.setAttribute('transform', `translate(${mapOffsetX},${mapOffsetY}) scale(${mapScale})`);
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; svg.style.cursor = 'default'; });
+  svg.addEventListener('wheel', e => {
+    e.preventDefault();
+    mapZoom(e.deltaY < 0 ? 1.1 : 0.9);
+  }, { passive: false });
+}
+
+// ─── ASK PANEL ───
+function openAsk() {
+  document.getElementById('askOverlay').classList.add('open');
+  document.getElementById('askPanel').classList.add('open');
+  setTimeout(() => document.getElementById('askInput').focus(), 320);
+}
+
+function closeAsk() {
+  document.getElementById('askOverlay').classList.remove('open');
+  document.getElementById('askPanel').classList.remove('open');
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+}
+
+function sendChip(btn) {
+  const q = btn.textContent;
+  document.getElementById('askInput').value = q;
+  sendMessage();
+}
+
+const aiResponses = {
+  'Which SOWs pay more after this?': {
+    intro: "Based on the relationship graph, Amendment 4 applies to 5 SOWs and raises the managed services rate from $180 to $210/hr. Here's the impact breakdown:",
+    card: { label: 'Rate change', value: '$180/hr → $210/hr (+$30)', sub: 'Managed Services · All 5 SOWs · Effective 02 Feb 2024' },
+    trace: [
+      { rel: 'modifies', target: 'Section 4.2 of CO0234 MSA', tag: 'pricing', dot: 'art-dot-modifies' },
+      { rel: 'applies to', target: 'CO9143 Boston SOW · $1.0M TCV', tag: '+$30/hr on 6 resources', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9144 New York SOW · $750K TCV', tag: '+$30/hr on 4 resources', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9145 Chicago SOW · $1.2M TCV', tag: 'scope expanded + repriced', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9146 Tokyo SOW · $620K TCV', tag: '+$30/hr affected', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9147 Singapore SOW · $430K TCV', tag: '+$30/hr affected', dot: 'art-dot-applies' },
+    ],
+    outro: 'The Boston and Chicago SOWs also trigger the new Net-30 payment term since their TCV exceeds $500K.'
+  },
+  'What did Amendment 3 say?': {
+    intro: "Amendment 3 (CO9139) was the previous payment terms update, now superseded by Amendment 4 as of 02 Feb 2024. Here's what it established:",
+    card: { label: 'Amendment 3 status', value: 'Superseded — no longer in effect', sub: 'CO9139 · Superseded by CO9142 (Amendment 4) on 02 Feb 2024' },
+    trace: [
+      { rel: 'superseded by', target: 'CO9142 · Amendment 4', tag: 'as of 02 Feb 2024', dot: 'art-dot-modifies' },
+      { rel: 'modified', target: 'Section 7.1 — Payment Terms', tag: 'was: Net-45 universal', dot: 'art-dot-applies' },
+      { rel: 'applied to', target: 'All SOWs under CO0234 MSA', tag: 'historical', dot: 'art-dot-applies' },
+    ],
+    outro: 'Amendment 3 set Net-45 as the universal payment term. Amendment 4 replaced this with a threshold model: Net-30 for invoices above $500K, Net-45 below. The old Amendment 3 terms are no longer legally binding.'
+  },
+  'Is Boston SOW on new payment terms?': {
+    intro: "Yes. The Boston SOW (CO9143) is on Net-30 payment terms following Amendment 4. Here's the relationship path:",
+    card: { label: 'Boston SOW · Payment terms', value: 'Net-30 for invoices $500K+', sub: 'CO9143 · TCV $1.0M · Threshold exceeded — Net-30 applies' },
+    trace: [
+      { rel: 'governed by', target: 'CO0234 · MSA', tag: 'authority chain', dot: 'art-dot-applies' },
+      { rel: 'amendment applies', target: 'CO9142 · Amendment 4', tag: 'effective 02 Feb 2024', dot: 'art-dot-modifies' },
+      { rel: 'modified clause', target: 'Section 7.1 — Payment', tag: 'Net-45 → Net-30', dot: 'art-dot-modifies' },
+      { rel: 'threshold check', target: 'TCV $1.0M > $500K limit', tag: '✓ Net-30 triggered', dot: 'art-dot-applies' },
+    ],
+    outro: 'The New York SOW ($750K TCV) is also above the threshold. Tokyo ($620K) and Singapore ($430K) are also above. Only check if any individual invoices under these SOWs exceed $500K.'
+  },
+  'What did this supersede?': {
+    intro: "Amendment 4 supersedes two earlier amendments, both of which are now legally inactive:",
+    card: { label: 'Superseded agreements', value: 'Amendment 2 + Amendment 3', sub: 'Both inactive as of 02 Feb 2024 · Terms replaced by Amendment 4' },
+    trace: [
+      { rel: 'supersedes', target: 'CO9138 · Amendment 2', tag: 'pricing $180/hr — inactive', dot: 'art-dot-modifies' },
+      { rel: 'supersedes', target: 'CO9139 · Amendment 3', tag: 'payment Net-45 — inactive', dot: 'art-dot-modifies' },
+    ],
+    outro: 'Amendment 2 established the original $180/hr rate cap. Amendment 3 set Net-45 payment terms. Both are superseded. Any obligations or clauses in those amendments are now governed by Amendment 4 terms.'
+  },
+  'Show all impacted agreements': {
+    intro: "Amendment 4 reaches across 8 agreements in total. Here's the complete impact picture:",
+    card: { label: 'Total reach', value: '8 agreements impacted', sub: '1 MSA modified · 5 SOWs applied · 2 amendments superseded' },
+    trace: [
+      { rel: 'modifies', target: 'CO0234 · Master Service Agreement', tag: 'pricing + payment + scope', dot: 'art-dot-modifies' },
+      { rel: 'applies to', target: 'CO9143 · Boston SOW', tag: 'pricing + payment', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9144 · New York SOW', tag: 'pricing', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9145 · Chicago SOW', tag: 'scope + pricing + payment', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9146 · Tokyo SOW', tag: 'pricing', dot: 'art-dot-applies' },
+      { rel: 'applies to', target: 'CO9147 · Singapore SOW', tag: 'pricing', dot: 'art-dot-applies' },
+      { rel: 'supersedes', target: 'CO9138 · Amendment 2', tag: 'inactive', dot: 'art-dot-modifies' },
+      { rel: 'supersedes', target: 'CO9139 · Amendment 3', tag: 'inactive', dot: 'art-dot-modifies' },
+    ],
+    outro: null
+  },
+  'What changed in Section 4.2?': {
+    intro: "Section 4.2 covers the Pricing Schedule. Amendment 4 made one specific change to it:",
+    card: { label: 'Section 4.2 · Pricing Schedule', value: '$180/hr raised to $210/hr', sub: 'Managed Services · Global · Effective 02 Feb 2024' },
+    trace: [
+      { rel: 'modified in', target: 'CO0234 MSA — Section 4.2', tag: 'rate cap revised', dot: 'art-dot-modifies' },
+      { rel: 'previous rate', target: 'CO9138 Amendment 2 set $180/hr', tag: 'now superseded', dot: 'art-dot-modifies' },
+      { rel: 'applies globally', target: 'All 5 SOWs under this MSA', tag: 'no geography carve-out', dot: 'art-dot-applies' },
+      { rel: 'also added', target: 'Cloud Support to in-scope services', tag: 'same $210/hr rate applies', dot: 'art-dot-applies' },
+    ],
+    outro: 'This is the primary commercial change in Amendment 4. The rate applies to all managed service resources across all 5 active SOWs. Cloud Support was not previously in scope — its addition means new billable work categories now exist.'
+  }
+};
+
+function sendMessage() {
+  const input = document.getElementById('askInput');
+  const q = input.value.trim();
+  if (!q) return;
+
+  // Hide empty state
+  document.getElementById('askEmpty').style.display = 'none';
+
+  // Add user message
+  addUserMsg(q);
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Show typing
+  const typingId = addTyping();
+
+  // Find response
+  const responseKey = Object.keys(aiResponses).find(k =>
+    q.toLowerCase().includes(k.toLowerCase().split(' ').slice(0,3).join(' ').toLowerCase()) || k === q
+  );
+  const response = aiResponses[responseKey] || aiResponses['Show all impacted agreements'];
+
+  setTimeout(() => {
+    removeTyping(typingId);
+    addAIMsg(response);
+  }, 1100 + Math.random() * 600);
+}
+
+function addUserMsg(text) {
+  const msgs = document.getElementById('askMessages');
+  const d = document.createElement('div');
+  d.className = 'msg msg-user';
+  d.innerHTML = `<div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addTyping() {
+  const msgs = document.getElementById('askMessages');
+  const id = 'typing-' + Date.now();
+  const d = document.createElement('div');
+  d.className = 'msg msg-ai'; d.id = id;
+  d.innerHTML = `
+    <div class="msg-ai-header"><div class="msg-ai-avatar">✦</div><span class="msg-ai-name">AskSirion</span></div>
+    <div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function addAIMsg(resp) {
+  const msgs = document.getElementById('askMessages');
+  const d = document.createElement('div');
+  d.className = 'msg msg-ai';
+
+  let traceHTML = resp.trace.map(t => `
+    <div class="ai-rel-trace-row">
+      <div class="art-dot ${t.dot}"></div>
+      <span class="art-rel">${t.rel}</span>
+      <span class="art-target">${t.target}</span>
+      <span class="art-tag">${t.tag}</span>
+    </div>`).join('');
+
+  let outroHTML = resp.outro ? `<div class="ai-text" style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.55);line-height:1.75">${resp.outro}</div>` : '';
+
+  d.innerHTML = `
+    <div class="msg-ai-header"><div class="msg-ai-avatar">✦</div><span class="msg-ai-name">AskSirion · grounded in relationship graph</span></div>
+    <div class="msg-bubble">
+      <div class="ai-text">${resp.intro}</div>
+      <div class="ai-answer-card">
+        <div class="ai-answer-card-label">${resp.card.label}</div>
+        <div class="ai-answer-card-value">${resp.card.value}</div>
+        <div class="ai-answer-card-sub">${resp.card.sub}</div>
+      </div>
+      <div class="ai-rel-trace">
+        <div class="ai-rel-trace-label">Relationship path</div>
+        ${traceHTML}
+      </div>
+      ${outroHTML}
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px">
+        <span style="font-size:10px;color:rgba(255,255,255,0.25);font-family:'Geist Mono',monospace">Source:</span>
+        <span class="ai-citation">CO9142 · Amendment 4</span>
+        <span class="ai-citation">CO0234 · MSA</span>
+        <span style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.2)">View in structure →</span>
+      </div>
+    </div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+</body>
+</html>

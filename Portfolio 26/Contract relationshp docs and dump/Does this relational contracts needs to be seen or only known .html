@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sirion · Designing Relational Intelligence — The Designer's Argument</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #16161f;
+  --border: rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.14);
+  --text: #e8e6e0;
+  --text-muted: rgba(232,230,224,0.45);
+  --text-dim: rgba(232,230,224,0.25);
+  --accent: #4f7cff;
+  --accent-warm: #ff6b35;
+  --accent-green: #2dd4a4;
+  --accent-amber: #f5a623;
+  --serif: 'IBM Plex Serif', Georgia, serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAVIGATION */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,10,15,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-brand span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 80px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(79,124,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: 200px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(45,212,164,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content { max-width: 820px; position: relative; z-index: 1; }
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 32px;
+  color: var(--text);
+}
+
+.hero-title strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-thesis {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.9;
+  margin-bottom: 48px;
+  font-family: var(--serif);
+  font-weight: 300;
+}
+
+.hero-tension {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+  max-width: 640px;
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+}
+
+.tension-side {
+  padding: 20px 24px;
+}
+
+.tension-side.a { background: rgba(255,107,53,0.06); }
+.tension-side.b { background: rgba(79,124,255,0.06); }
+
+.tension-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.tension-statement {
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tension-vs {
+  padding: 20px 16px;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  background: var(--surface);
+}
+
+/* SECTION LAYOUT */
+.section {
+  padding: 100px 80px;
+  border-top: 1px solid var(--border);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 300;
+  line-height: 1.15;
+  margin-bottom: 48px;
+}
+
+.section-title strong { font-weight: 700; }
+.section-title em { font-style: italic; color: var(--accent); }
+
+/* PROSE */
+.prose {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(232,230,224,0.8);
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+.prose strong { font-weight: 600; color: var(--text); }
+
+/* THE CORE QUESTION — BIG DISPLAY */
+.big-question {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  padding: 60px 80px;
+  margin: 60px -80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.big-question::before {
+  content: '"';
+  position: absolute;
+  top: -40px; left: 40px;
+  font-family: var(--serif);
+  font-size: 240px;
+  color: rgba(79,124,255,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.bq-text {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 760px;
+  position: relative;
+  z-index: 1;
+}
+
+.bq-answer {
+  margin-top: 32px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* SPECTRUM CHART */
+.spectrum {
+  margin: 60px 0;
+  position: relative;
+}
+
+.spectrum-axis {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+}
+
+.spectrum-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+  padding: 0 16px;
+}
+
+.spectrum-bar {
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent-warm), var(--accent), var(--accent-green));
+  border-radius: 2px;
+  position: relative;
+}
+
+.spectrum-items {
+  display: flex;
+  gap: 2px;
+}
+
+.spectrum-item {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px 16px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.spectrum-item:hover { border-color: var(--border-strong); }
+
+.spectrum-item.highlighted {
+  border-color: var(--accent);
+  background: rgba(79,124,255,0.06);
+}
+
+.spectrum-item.highlighted::before {
+  content: '← Sirion today';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.spectrum-item.highlighted2 {
+  border-color: var(--accent-green);
+  background: rgba(45,212,164,0.06);
+}
+
+.spectrum-item.highlighted2::before {
+  content: '← Opportunity';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--accent-green);
+  letter-spacing: 1px;
+}
+
+.sp-number {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.spectrum-item.highlighted .sp-number { color: var(--accent); }
+.spectrum-item.highlighted2 .sp-number { color: var(--accent-green); }
+
+.sp-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.sp-desc {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* SCENARIO CARDS */
+.scenarios {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 48px 0;
+}
+
+.scenario {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.scenario:hover { border-color: var(--border-strong); }
+
+.scenario-header {
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.scenario-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.scenario-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.scenario-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+.tag-backend { background: rgba(245,166,35,0.12); color: var(--accent-amber); }
+.tag-surface { background: rgba(79,124,255,0.12); color: var(--accent); }
+.tag-both { background: rgba(45,212,164,0.12); color: var(--accent-green); }
+.tag-future { background: rgba(255,107,53,0.12); color: var(--accent-warm); }
+
+.scenario-body {
+  padding: 0 28px 28px 96px;
+  border-top: 1px solid var(--border);
+}
+
+.sc-world {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.sc-world-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+
+.sc-world-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sc-world-content {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.sc-verdict {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(79,124,255,0.06);
+  border-left: 3px solid var(--accent);
+  font-family: var(--serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.sc-verdict.green { background: rgba(45,212,164,0.06); border-color: var(--accent-green); }
+.sc-verdict.amber { background: rgba(245,166,35,0.06); border-color: var(--accent-amber); }
+
+/* DESIGN PRINCIPLE BLOCKS */
+.principles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 48px 0;
+  background: var(--border);
+}
+
+.principle {
+  background: var(--bg);
+  padding: 36px 32px;
+}
+
+.principle-marker {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.principle-marker span {
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+  display: inline-block;
+}
+
+.principle-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.principle-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.principle-example {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border-left: 2px solid var(--accent);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* THE THREE FUTURES */
+.futures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin: 48px 0;
+}
+
+.future-card {
+  background: var(--bg);
+  padding: 40px 28px;
+  position: relative;
+}
+
+.future-card.active-future {
+  background: var(--surface);
+  border-top: 2px solid var(--accent);
+}
+
+.future-year {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.future-card.active-future .future-year { color: var(--accent); }
+
+.future-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.future-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.future-design-role {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.future-design-role strong {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+/* WHAT TO BUILD TABLE */
+.build-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 48px 0;
+}
+
+.build-table thead th {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 12px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.build-table tbody td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: top;
+  line-height: 1.7;
+}
+
+.build-table tbody tr:hover td { background: var(--surface); }
+
+.build-layer {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.layer-ui { background: rgba(79,124,255,0.12); color: var(--accent); }
+.layer-backend { background: rgba(245,166,35,0.12); color: var(--accent-amber); }
+.layer-both { background: rgba(45,212,164,0.12); color: var(--accent-green); }
+
+.priority-high { color: var(--accent-warm); font-weight: 600; }
+.priority-med { color: var(--accent-amber); }
+.priority-low { color: var(--text-dim); }
+
+/* ANSWER BOX */
+.answer-box {
+  border: 1px solid var(--border-strong);
+  padding: 48px 60px;
+  margin: 60px 0;
+  position: relative;
+  background: var(--surface);
+}
+
+.answer-box::before {
+  content: 'THE ANSWER';
+  position: absolute;
+  top: -1px;
+  left: 40px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 0 12px;
+  transform: translateY(-50%);
+}
+
+.answer-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.answer-points {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.answer-point {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.ap-marker {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 7px;
+}
+
+.ap-text {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.ap-text strong { font-weight: 600; color: #fff; }
+
+/* AGENTIC VISION */
+.agentic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  margin: 48px 0;
+}
+
+.ag-card {
+  background: var(--bg);
+  padding: 32px 24px;
+}
+
+.ag-icon {
+  font-size: 24px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.ag-title {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.ag-scenario {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border-left: 2px solid var(--border-strong);
+}
+
+.ag-design-response {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.ag-design-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+/* PHILOSOPHY CLOSER */
+.philosophy {
+  padding: 120px 80px;
+  text-align: center;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.philosophy::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  border: 1px solid rgba(79,124,255,0.08);
+}
+
+.philosophy::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  border: 1px solid rgba(79,124,255,0.05);
+}
+
+.philosophy-text {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 720px;
+  margin: 0 auto 32px;
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+}
+
+.philosophy-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* FOOTNOTE */
+.footnote-section {
+  padding: 40px 80px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* INLINE HIGHLIGHT */
+mark {
+  background: rgba(79,124,255,0.15);
+  color: var(--accent);
+  padding: 1px 4px;
+  font-style: normal;
+}
+
+/* DIVIDER */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 48px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand"><span>Sirion</span> · Relational Intelligence Design</div>
+  <ul class="nav-links">
+    <li><a href="#question">The Question</a></li>
+    <li><a href="#spectrum">Spectrum</a></li>
+    <li><a href="#scenarios">Scenarios</a></li>
+    <li><a href="#build">What to Build</a></li>
+    <li><a href="#futures">Futures</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="question">
+  <div class="hero-content">
+    <div class="hero-label">Design thinking · Sirion as an agentic platform</div>
+    <h1 class="hero-title">
+      Does relational intelligence<br>
+      need to be <em>seen</em>,<br>
+      or only <strong>known?</strong>
+    </h1>
+    <p class="hero-thesis">
+      The central design question for Sirion's next evolution. If AI can answer every contract question through natural language — which amendment, which MSA, which SOW — does the relationship graph need a visual surface at all? Or is it enough that the structure exists beneath, powering reliable answers?
+    </p>
+    <div class="hero-tension">
+      <div class="tension-side a">
+        <div class="tension-label">Position A</div>
+        <div class="tension-statement">The graph is backend infrastructure. Users ask, AI answers. No need to expose the structure visually.</div>
+      </div>
+      <div class="tension-vs">vs</div>
+      <div class="tension-side b">
+        <div class="tension-label">Position B</div>
+        <div class="tension-statement">Users need to see, verify, edit, and trust the structure. Invisible intelligence is unaccountable intelligence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: THE CORE ARGUMENT -->
+<div class="section">
+  <div class="section-label">01 · The argument</div>
+  <h2 class="section-title">
+    The answer is <em>both</em> —<br>
+    but <strong>why matters enormously</strong>
+  </h2>
+
+  <p class="prose">
+    The question "should we expose the relationship graph or keep it backend?" is actually the wrong frame. The right frame is: <strong>what does the user need to do that requires seeing structure?</strong> And conversely: what is better handled by intelligence that works silently?
+  </p>
+
+  <p class="prose">
+    Here is the honest answer: in a fully mature agentic system — one where AI is reliable, fast, and trusted — many structural questions disappear as UI problems. You don't need to see a graph of which amendment applies to this SOW if you can just ask and get a correct, cited, confident answer in 2 seconds. 
+  </p>
+
+  <p class="prose">
+    But we are not there yet. And even when we get there, <strong>three categories of users will always need the visual surface:</strong> those who need to verify, those who need to edit, and those who need to govern. This is not a transitional design decision — it is a permanent one.
+  </p>
+
+  <div class="big-question">
+    <div class="bq-text">
+      "When a legal team member is about to sign off on an obligation that depends on knowing which amendment applies — do they trust an AI answer, or do they need to see the relationship themselves?"
+    </div>
+    <div class="bq-answer">→ They need to see it. Accountability requires visibility. AI answers require evidence.</div>
+  </div>
+
+  <p class="prose">
+    The insight that resolves this debate: <strong>AI answers need to be backed by visible structure, not instead of visible structure.</strong> When AskSirion says "Amendment 4 applies to your Boston SOW," the user's next action is to click through and verify that relationship in the structure view. The UI is the citation. The structure view is the footnote to every AI answer.
+  </p>
+</div>
+
+<!-- SECTION: SPECTRUM -->
+<div class="section" id="spectrum">
+  <div class="section-label">02 · Exposure spectrum</div>
+  <h2 class="section-title">
+    The spectrum of<br>
+    <em>how much</em> to surface
+  </h2>
+
+  <p class="prose">
+    There is no binary choice between "show the graph" and "hide it." There is a spectrum of exposure. Where Sirion sits on that spectrum — and where it should move toward — is a product design decision with real consequences.
+  </p>
+
+  <div class="spectrum" style="margin-top:48px">
+    <div class="spectrum-axis">
+      <div class="spectrum-label">Pure Backend</div>
+      <div class="spectrum-bar"></div>
+      <div class="spectrum-label">Fully Visual</div>
+    </div>
+    <div class="spectrum-items">
+      <div class="spectrum-item">
+        <span class="sp-number">1</span>
+        <div class="sp-title">Invisible Graph</div>
+        <div class="sp-desc">Structure exists in database only. AI queries it. User never sees it. ChatGPT model. Works when AI is 100% trusted.</div>
+      </div>
+      <div class="spectrum-item">
+        <span class="sp-number">2</span>
+        <div class="sp-title">Answer with Citation</div>
+        <div class="sp-desc">AI answers, adds source reference: "Based on MSA CO234 → Amendment 4." User can click through but often won't.</div>
+      </div>
+      <div class="spectrum-item highlighted">
+        <span class="sp-number">3</span>
+        <div class="sp-title">Structured List View</div>
+        <div class="sp-desc">Current Sirion redesign direction. Accordion sections, relationship chips, entity metadata panel. Structure visible, scannable.</div>
+      </div>
+      <div class="spectrum-item">
+        <span class="sp-number">4</span>
+        <div class="sp-title">Relationship Panel</div>
+        <div class="sp-desc">Right panel shows typed relationships for any selected entity. "Governed by, modifies, applies to." Relationships explicit but not graph-visual.</div>
+      </div>
+      <div class="spectrum-item highlighted2">
+        <span class="sp-number">5</span>
+        <div class="sp-title">Graph Canvas</div>
+        <div class="sp-desc">Interactive node-edge visualization of the contract family. Users see the actual graph. Powerful for power users, complex to implement well.</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="prose" style="margin-top:40px">
+    The current redesign (Level 3) is the right starting point. <strong>Level 4 — relationship panel per entity — should be the next layer.</strong> Level 5 (graph canvas) is powerful but should be an optional "expert mode" or "contract family map" view, not the primary interface. Most users will never need it. But some will need it desperately.
+  </p>
+</div>
+
+<!-- SECTION: SCENARIOS -->
+<div class="section" id="scenarios">
+  <div class="section-label">03 · Future scenarios</div>
+  <h2 class="section-title">
+    Imagining Sirion as a<br>
+    <strong>fully agentic platform</strong> —<br>
+    <em>what changes?</em>
+  </h2>
+
+  <p class="prose">
+    Imagine it is 2027. Sirion's AI is highly reliable. An agent can read, interpret, and reason about any contract in your portfolio. It can autonomously detect that Amendment 4 has been superseded, that a SOW is about to expire, that a counterparty's obligation is being breached. What does the product look like? And where does the visual relationship structure fit?
+  </p>
+
+  <div class="scenarios">
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 01</span>
+        <span class="scenario-name">The Autonomous Risk Alert</span>
+        <span class="scenario-tag tag-both">Both layers</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The agentic moment</div>
+            <div class="sc-world-content">Sirion agent monitors portfolio. Detects: Amendment 5 was executed last week. It supersedes Amendment 3. Three SOWs were still referencing Amendment 3 terms in open obligation tracking. Agent fires alert: "Amendment 3 is superseded. 3 obligations may be calculated incorrectly."</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">What the user needs to do</div>
+            <div class="sc-world-content">User receives alert. Wants to verify before acting. Clicks through to contract structure. Sees: Amendment 5 node, "Supersedes: Amendment 3" relationship, "Applies to: SOW Boston, SOW Tokyo, SOW Chicago" relationships highlighted. Then confirms the fix.</div>
+          </div>
+        </div>
+        <div class="sc-verdict green">
+          The agent does the detection. The structure view does the verification. <strong>Both are required. Neither replaces the other.</strong> The relationship graph is the audit trail for agentic decisions.
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 02</span>
+        <span class="scenario-name">The "Ask Anything" Contract Query</span>
+        <span class="scenario-tag tag-backend">Backend only — mostly</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The agentic moment</div>
+            <div class="sc-world-content">User types: "Which amendments have been applied to the APAC SOWs in the last 6 months, and what did each one change?" Agent traverses relationship graph, pulls amendment nodes with "applies to" APAC SOWs, reads each amendment's scope metadata, returns a structured answer with citations.</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">Does UI structure help here?</div>
+            <div class="sc-world-content">Mostly no — the AI answer is faster and better formatted than the user navigating structure themselves. But the answer includes deep links to each amendment node. User who wants to verify opens the structure view for that specific amendment. The graph is available, not forced.</div>
+          </div>
+        </div>
+        <div class="sc-verdict amber">
+          For query-and-retrieve tasks: <strong>backend intelligence is primary. Visual structure is the verification layer.</strong> Design implication: AI answers should always cite the relationship they traversed, with a one-click path to view it.
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 03</span>
+        <span class="scenario-name">Relationship Conflict Detection</span>
+        <span class="scenario-tag tag-surface">UI surface required</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The agentic moment</div>
+            <div class="sc-world-content">Agent detects: Two amendments both claim to "modify pricing Section 4.2" of the MSA. Amendment 6 and Amendment 7 have overlapping scope. Neither supersedes the other. There is a genuine legal ambiguity. Agent cannot resolve this — it flags it.</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">What the user must do</div>
+            <div class="sc-world-content">This is a legal decision. A human must review both amendments, understand the overlap, decide which governs, and update the relationship model to reflect the resolution. The user <em>must</em> see the relationship structure here. AI can surface the conflict, but cannot resolve it.</div>
+          </div>
+        </div>
+        <div class="sc-verdict">
+          <strong>AI detects. Human decides. Structure is the workspace for the decision.</strong> The relationship UI is the place where legal humans exercise their judgment. It cannot be a backend-only concern.
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 04</span>
+        <span class="scenario-name">New Contract Ingestion — Relationship Assignment</span>
+        <span class="scenario-tag tag-both">Both layers</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The agentic moment</div>
+            <div class="sc-world-content">A new Amendment PDF is uploaded. Sirion agent reads it, extracts: parties match MSA CO234, references "Section 3.4 of the Master Service Agreement," effective date is after Amendment 5. Agent suggests: "This appears to modify CO234 MSA, superseding Amendment 5. Confidence: 91%."</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">What the user needs to do</div>
+            <div class="sc-world-content">User sees suggested relationship in structure view with a "System suggested — confirm?" state. Reviews the relationship. Clicks confirm. Or reassigns. Or marks as "relates to" instead of "modifies." The structure view is the confirmation interface for AI relationship suggestions.</div>
+          </div>
+        </div>
+        <div class="sc-verdict green">
+          <strong>This is the most important design scenario.</strong> AI suggests relationships. Humans confirm or correct. The visual structure is the interface for relationship governance — human oversight of machine inference. This is non-negotiable.
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 05</span>
+        <span class="scenario-name">Portfolio-Level Relationship Map</span>
+        <span class="scenario-tag tag-surface">UI surface required</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The scenario</div>
+            <div class="sc-world-content">A General Counsel needs to understand: across all 12 suppliers in the APAC region, which MSAs are expiring in Q2, how many SOWs depend on each, and whether any of those SOWs have amendments in draft state? This is a portfolio governance question, not a single-contract question.</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">What the design must provide</div>
+            <div class="sc-world-content">A graph or structured visual that surfaces the full relationship picture across the portfolio. Not a table of contracts. Not a folder list. A visual that shows the dependency web — which entities are anchored to which, what is at risk if an MSA expires, what is pending.</div>
+          </div>
+        </div>
+        <div class="sc-verdict">
+          <strong>AI cannot replace a strategic overview visualization.</strong> A GC does not want to ask 20 queries. They want to see the portfolio relationship map and make a decision. The graph canvas (Level 5) exists precisely for this user. Design it as the "command center" view.
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <span class="scenario-num">S — 06</span>
+        <span class="scenario-name">Agentic Negotiation Support</span>
+        <span class="scenario-tag tag-future">Near-future agentic</span>
+      </div>
+      <div class="scenario-body">
+        <div class="sc-world">
+          <div class="sc-world-box">
+            <div class="sc-world-label">The 2027 scenario</div>
+            <div class="sc-world-content">A procurement team is renegotiating with a supplier. An agent briefs them before the call: "Current MSA CO234 governs 540 SOWs. 3 amendments are active. Amendment 5 introduced a pricing cap that expires in 90 days. The supplier's proposed new amendment conflicts with Amendment 3's exclusivity clause." This briefing is entirely AI-generated from relationship data.</div>
+          </div>
+          <div class="sc-world-box">
+            <div class="sc-world-label">The design requirement</div>
+            <div class="sc-world-content">The briefing document itself must be relationship-structured, not just prose. Each claim must be clickable to its source relationship node. During negotiation, the user should be able to pull up the relationship structure to verify a specific clause's authority chain. The structure view serves as a negotiation reference.</div>
+          </div>
+        </div>
+        <div class="sc-verdict green">
+          <strong>The relationship structure becomes a live reference during high-stakes moments.</strong> Not just for historical analysis — for real-time decision support. Design implication: structure must be accessible in 1 click from anywhere, including AI-generated briefings.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION: WHAT TO BUILD -->
+<div class="section" id="build">
+  <div class="section-label">04 · Design prescription</div>
+  <h2 class="section-title">
+    What to build —<br>
+    <em>specifically</em>
+  </h2>
+
+  <div class="answer-box">
+    <div class="answer-title">The relational graph must be exposed — but at the right fidelity, in the right moments, for the right users.</div>
+    <div class="answer-points">
+      <div class="answer-point">
+        <div class="ap-marker"></div>
+        <div class="ap-text"><strong>Layer 1 (Build now):</strong> Structured list view with relationship chips and authority-first accordion. This is the current redesign. Ship it. It solves the daily user problem immediately.</div>
+      </div>
+      <div class="answer-point">
+        <div class="ap-marker"></div>
+        <div class="ap-text"><strong>Layer 2 (Build next):</strong> Relationship confirmation UI — the interface for humans to verify, correct, and govern AI-suggested relationships. This is not a nice-to-have. It is the accountability layer.</div>
+      </div>
+      <div class="answer-point">
+        <div class="ap-marker"></div>
+        <div class="ap-text"><strong>Layer 3 (Build after):</strong> AI answer citations with deep-link to structure. Every AskSirion answer should show which relationship it traversed, with one click to see it in context. Trust requires traceability.</div>
+      </div>
+      <div class="answer-point">
+        <div class="ap-marker"></div>
+        <div class="ap-text"><strong>Layer 4 (Build for power users):</strong> Graph canvas / contract family map. An expert-mode visual for GCs and legal ops leads who need to see the full portfolio dependency graph. Not the primary UI — an optional view mode.</div>
+      </div>
+    </div>
+  </div>
+
+  <table class="build-table">
+    <thead>
+      <tr>
+        <th>What to Build</th>
+        <th>Layer</th>
+        <th>User</th>
+        <th>Why It Exists</th>
+        <th>Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Authority-first accordion with relationship chips</strong><br><span style="color:var(--text-dim);font-size:11px">Governing Agreement → Amendments → Execution Agreements → Work Orders</span></td>
+        <td><span class="build-layer layer-ui">UI Surface</span></td>
+        <td>All legal ops users</td>
+        <td>Makes the mental model visible. Replaces folder browsing with meaning-first scanning.</td>
+        <td><span class="priority-high">Now</span></td>
+      </tr>
+      <tr>
+        <td><strong>Relationship type panel per entity</strong><br><span style="color:var(--text-dim);font-size:11px">Each node shows: governs, governed by, modifies, applies to, supersedes — as typed, clickable relationships</span></td>
+        <td><span class="build-layer layer-ui">UI Surface</span></td>
+        <td>Legal, procurement</td>
+        <td>Explicitly surfaces what was previously implied. Users can navigate the graph from any node.</td>
+        <td><span class="priority-high">Now</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI relationship suggestion + confirmation UI</strong><br><span style="color:var(--text-dim);font-size:11px">"System suggested: This modifies CO234 MSA — Confirm / Reassign / Reject"</span></td>
+        <td><span class="build-layer layer-both">Both</span></td>
+        <td>Legal ops, contract admin</td>
+        <td>Accountability layer for AI inference. Humans govern what AI suggests. Critical for enterprise trust.</td>
+        <td><span class="priority-high">Next</span></td>
+      </tr>
+      <tr>
+        <td><strong>AskSirion citation with structure deep-link</strong><br><span style="color:var(--text-dim);font-size:11px">Every AI answer shows the relationship traversed, with 1-click to view in structure</span></td>
+        <td><span class="build-layer layer-both">Both</span></td>
+        <td>All users of AI assistant</td>
+        <td>Makes AI trustworthy. Citations are the proof. Users can verify any answer.</td>
+        <td><span class="priority-high">Next</span></td>
+      </tr>
+      <tr>
+        <td><strong>Relationship conflict / ambiguity state</strong><br><span style="color:var(--text-dim);font-size:11px">Visual flag when two nodes have conflicting relationship claims. Triggers human review workflow.</span></td>
+        <td><span class="build-layer layer-ui">UI Surface</span></td>
+        <td>Legal, compliance</td>
+        <td>AI cannot resolve legal conflicts. Human must. The UI is the workspace for conflict resolution.</td>
+        <td><span class="priority-med">Soon</span></td>
+      </tr>
+      <tr>
+        <td><strong>Contract family map (graph canvas)</strong><br><span style="color:var(--text-dim);font-size:11px">Optional expert view. Full node-edge visual of the contract family. Filterable by party, status, type.</span></td>
+        <td><span class="build-layer layer-ui">UI Surface</span></td>
+        <td>GC, legal ops lead</td>
+        <td>Portfolio-level oversight requires a visual. AI queries don't replace strategic overview.</td>
+        <td><span class="priority-med">Later</span></td>
+      </tr>
+      <tr>
+        <td><strong>Relationship-grounded AI briefings</strong><br><span style="color:var(--text-dim);font-size:11px">Pre-negotiation / pre-review briefing documents generated from the relationship graph, with citations</span></td>
+        <td><span class="build-layer layer-backend">Backend + AI</span></td>
+        <td>Procurement, legal</td>
+        <td>High-value AI output that saves hours. Graph structure is what makes the briefing accurate.</td>
+        <td><span class="priority-med">Later</span></td>
+      </tr>
+      <tr>
+        <td><strong>Agentic relationship monitoring</strong><br><span style="color:var(--text-dim);font-size:11px">Background agent watches for supersession events, expiry triggers, obligation conflicts. Surfaces alerts with relationship context.</span></td>
+        <td><span class="build-layer layer-backend">Backend + AI</span></td>
+        <td>Legal ops, compliance</td>
+        <td>Proactive intelligence. The graph enables event detection across the contract family.</td>
+        <td><span class="priority-low">Future</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION: DESIGN PRINCIPLES -->
+<div class="section">
+  <div class="section-label">05 · Design principles</div>
+  <h2 class="section-title">
+    The principles that govern<br>
+    <em>how</em> to expose this
+  </h2>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 01</div>
+      <div class="principle-title">Intelligence must be accountable</div>
+      <div class="principle-body">Every AI answer about contract relationships must be traceable to the relationship data that produced it. Never let AI make a structural claim without a visible citation. The structure view is the accountability layer — it is not optional, it is the audit trail.</div>
+      <div class="principle-example">When AskSirion says "Amendment 4 applies to this SOW" → show: "Based on: CO9142 SOW → Applied Amendments → Amendment 4 (Effective Feb 2024)" with a click to verify.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 02</div>
+      <div class="principle-title">AI suggests. Humans govern.</div>
+      <div class="principle-body">The system infers relationships from document content, metadata, party matching, and date sequences. But the legal authority for what a relationship means — whether Amendment 5 truly supersedes Amendment 3 — belongs to humans. Design for this transfer of authority explicitly. Never make it implicit.</div>
+      <div class="principle-example">New contract uploaded → Agent suggests relationship → User sees "System suggested (91% confidence)" → One-action confirm or reassign. The confirmation is recorded in audit log.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 03</div>
+      <div class="principle-title">Structure answers "what is true." AI answers "tell me about it."</div>
+      <div class="principle-body">These are complementary surfaces, not competing ones. The structure view is for when a user needs to verify, navigate, or govern. The AI assistant is for when a user needs to query, summarize, or be briefed. Design them to reinforce each other, not replace each other.</div>
+      <div class="principle-example">Structure view answers: "Show me all amendments to this MSA." AI assistant answers: "Summarize what changed across all amendments to this MSA." Both use the same graph. Different interface for different intent.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 04</div>
+      <div class="principle-title">Complexity on demand, not by default</div>
+      <div class="principle-body">A contract manager reviewing a single SOW does not need to see the full graph canvas. They need to see that SOW's governing MSA and applied amendments. A GC doing portfolio governance needs the full picture. Design for progressive disclosure — simple first, complex on demand. Never front-load the graph.</div>
+      <div class="principle-example">Default view: structured list with relationship chips. Click "View family map" → graph canvas opens in a panel or overlay. Power users find it. Casual users never need it.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 05</div>
+      <div class="principle-title">The graph is the product, not a feature</div>
+      <div class="principle-body">Every piece of Sirion — obligations tracking, risk scoring, negotiation support, compliance monitoring — should be able to query the relationship graph. The graph is not a UI component on one screen. It is the central data model that powers everything. Design decisions about how to expose it should treat it with that gravity.</div>
+      <div class="principle-example">Obligation tracking knows "this obligation is in SOW Boston, which is governed by MSA CO234, which has Amendment 5 active, which modifies payment terms." Without the graph, obligation tracking is a list of clauses. With it, it is contextual intelligence.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-marker"><span></span> Principle 06</div>
+      <div class="principle-title">Agentic actions must be stoppable</div>
+      <div class="principle-body">As Sirion becomes more agentic — automatically detecting supersessions, filing alerts, suggesting changes — the UI must give humans a clear way to review and reverse any agentic action that touched the relationship model. The graph is a legal record. Agents can read it freely. Writing to it requires human confirmation.</div>
+      <div class="principle-example">"Agent proposed: Mark Amendment 3 as superseded by Amendment 6. Review and confirm?" Not: "Amendment 3 has been marked superseded." Always ask before writing to legal structure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: THREE FUTURES -->
+<div class="section" id="futures">
+  <div class="section-label">06 · Time horizon</div>
+  <h2 class="section-title">
+    What the platform looks like<br>
+    across <em>three futures</em>
+  </h2>
+
+  <p class="prose">
+    The role of the visual relationship surface changes as the platform evolves. Understanding these three states helps prioritize what to build now versus what to design toward.
+  </p>
+
+  <div class="futures">
+    <div class="future-card active-future">
+      <div class="future-year">Now → 2026 · Sirion Today</div>
+      <div class="future-title">The Meaning Layer</div>
+      <div class="future-desc">
+        The primary design job is replacing folder metaphors with relationship-first structure. Users actively navigate the contract family. The UI carries most of the intelligence. AI is a query assistant that benefits from but does not drive the structure.
+        <br><br>
+        The relationship graph is the primary UI. Most user value comes from being able to see it and scan it correctly.
+      </div>
+      <div class="future-design-role">
+        <strong>Designer's job now</strong>
+        Build the authority-first accordion. Relationship chips. Entity metadata panel. Relationship confirmation UI. Make the structure visible and scannable. This is the foundation everything else stands on.
+      </div>
+    </div>
+    <div class="future-card">
+      <div class="future-year">2026 → 2028 · Transitional Agentic</div>
+      <div class="future-title">The Verification Layer</div>
+      <div class="future-desc">
+        AI is answering many questions correctly and fast. Users are increasingly trusting AI for first-pass queries. But the structure view becomes the verification and governance layer — where users go to confirm, correct, and audit what AI has inferred or acted on.
+        <br><br>
+        The graph is still exposed but it is increasingly the exception not the default interaction. AskSirion is often the entry point; structure view is the depth dive.
+      </div>
+      <div class="future-design-role">
+        <strong>Designer's job then</strong>
+        AI-to-structure citation design. Relationship governance workflows. Conflict resolution UI. Agentic action confirmation patterns. The human oversight layer for an increasingly autonomous system.
+      </div>
+    </div>
+    <div class="future-card">
+      <div class="future-year">2028+ · Mature Agentic Platform</div>
+      <div class="future-title">The Command Layer</div>
+      <div class="future-desc">
+        The platform is genuinely agentic. Agents monitor, detect, suggest, and execute. Most daily questions are answered by AI with high confidence and full citations. The visual structure surface is used primarily by power users, governance roles, and for high-stakes decisions.
+        <br><br>
+        The graph becomes a command center for portfolio governance — not navigation for individual contracts.
+      </div>
+      <div class="future-design-role">
+        <strong>Designer's job then</strong>
+        Portfolio intelligence visualization. Cross-portfolio relationship maps. Agentic workflow monitoring UIs. Strategic overview for GCs and CLOs. The graph canvas as a command center, not a navigation tool.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: AGENTIC SCENARIOS -->
+<div class="section">
+  <div class="section-label">07 · Agentic design patterns</div>
+  <h2 class="section-title">
+    Specific design patterns<br>
+    <em>for the agentic era</em>
+  </h2>
+
+  <p class="prose">These are the new UI patterns that do not exist in today's enterprise software but will be table stakes for an agentic contract platform. These are the things to design toward.</p>
+
+  <div class="agentic-grid">
+    <div class="ag-card">
+      <span class="ag-icon">🔍</span>
+      <div class="ag-title">Relationship Citation in AI Answers</div>
+      <div class="ag-scenario">"Which amendment applies to SOW Boston?"<br>→ "Amendment 4 (CO9142). [Based on: SOW Boston → Applied Amendments → Amendment 4, confirmed by user Priya on 14 Jan 2025]"</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">Every AI answer shows the graph path it traversed. Clicking the citation opens the specific relationship in structure view, highlighted. The citation is not just a source link — it is a graph path visualization.</div>
+    </div>
+
+    <div class="ag-card">
+      <span class="ag-icon">⚡</span>
+      <div class="ag-title">Relationship Suggestion Card</div>
+      <div class="ag-scenario">New document uploaded → agent reads → suggests: "This appears to be an amendment to CO234 MSA, superseding Amendment 5. Confidence: 91%. Reason: Party match + date sequence + reference to Section 4.2."</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">A specialized card in the structure view shows pending relationship suggestions from the agent. Each has confidence score, reasoning, and three actions: Confirm / Reassign / Reject. Confirmed suggestions update the graph. This card is the human-AI handoff zone.</div>
+    </div>
+
+    <div class="ag-card">
+      <span class="ag-icon">⚠️</span>
+      <div class="ag-title">Relationship Conflict Flag</div>
+      <div class="ag-scenario">Agent detects: Amendment 6 and Amendment 7 both claim to modify pricing Section 4.2. Neither supersedes the other. Legal ambiguity detected. Human decision required.</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">A conflict state appears on both amendment nodes in the structure view. A conflict resolution panel opens showing both amendments side by side, the overlapping scope, and options: "Set Amendment 7 as primary / Mark as coexisting / Escalate for legal review." Agent cannot close this — only a human can.</div>
+    </div>
+
+    <div class="ag-card">
+      <span class="ag-icon">🗺️</span>
+      <div class="ag-title">Contract Family Map</div>
+      <div class="ag-scenario">GC opens portfolio view for APAC supplier relationships before board meeting. Needs to see: which MSAs expire in Q2, how many SOWs depend on each, amendment activity in last 90 days.</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">A graph canvas view showing the contract family as a node-edge map. Nodes are sized by TCV. Edges are colored by relationship type. Expiry status shown as visual urgency. One click from any node opens the structured list view for that entity. This is the GC's morning dashboard.</div>
+    </div>
+
+    <div class="ag-card">
+      <span class="ag-icon">📋</span>
+      <div class="ag-title">Agentic Action Log</div>
+      <div class="ag-scenario">Agent flagged Amendment 3 as superseded, updated 3 SOW obligation calculations, and sent alerts to 2 contract managers — all overnight. User needs to understand and review what changed.</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">A relationship timeline view shows every change to the graph — who/what changed it, when, and why. Human-confirmed changes and agent-suggested changes are distinguished. Any agentic change can be rolled back. The timeline is the auditability surface for an agentic system.</div>
+    </div>
+
+    <div class="ag-card">
+      <span class="ag-icon">📖</span>
+      <div class="ag-title">Pre-Negotiation Briefing</div>
+      <div class="ag-scenario">Procurement team has a call with supplier in 2 hours. Agent generates: current governing structure, active amendments, expiring terms, known disputes, counterparty's history across all contracts.</div>
+      <div class="ag-design-label">Design pattern</div>
+      <div class="ag-design-response">A briefing document generated from the relationship graph. Each section cites the node it came from. Users can click any claim to see the underlying contract node. During the call, the structure view is accessible as a sidebar reference. The briefing is dynamic — linked to live data, not a static export.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSER PHILOSOPHY -->
+<div class="philosophy" id="philosophy">
+  <div class="philosophy-text">
+    "The question is not whether to expose the relationship graph. The question is: at which moments does a human need to see it, verify it, govern it, or override it? Design for those moments — and make everything else invisible."
+  </div>
+  <div class="philosophy-sub">— The design direction for Sirion's relational intelligence layer</div>
+</div>
+
+<div class="footnote-section">
+  <span>Sirion CLM · Contract Relational Intelligence · Design Direction 2025–2028</span>
+  <span>Structure enables AI. AI explains structure. Neither replaces the other.</span>
+</div>
+
+</body>
+</html>

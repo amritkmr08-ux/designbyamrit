@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>An AI extracts 128 fields. A lawyer still checks them. · Amrit Kumar</title>
+<meta name="description" content="Three interface generations for verifying AI-extracted contract data, and what the retention curve did afterwards. A case study in designing for review rather than for speed." />
+<meta property="og:title" content="An AI extracts 128 fields. A lawyer still checks them. · Amrit Kumar" />
+<meta property="og:description" content="Inline annotations, hover cards, assist bars. Three attempts at making an AI's work checkable, and the retention data that followed." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/auto-extraction.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F7F7F5;
+    --ink: #191A18;
+    --muted: #5F625C;
+    --faint: #8B8D87;
+    --line: #E3E3DF;
+    --soft: #EDEDEA;
+    --accent: #3D5A45;
+    --warn: #9A4A38;
+    --radius: 3px;
+    --font-display: "Poppins", -apple-system, sans-serif;
+    --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 17px; font-weight: 400; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 720px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  h1, h2, h3, h4, blockquote, .lede { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* reading progress */
+  #bar {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+    background: var(--accent); z-index: 30; transition: width 0.1s linear;
+  }
+
+  /* ---------- persistent sidebar ---------- */
+  .rail {
+    position: fixed; top: 0; left: 0; width: 238px; height: 100vh;
+    padding: 44px 32px; border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; background: var(--bg); z-index: 30;
+  }
+  .rail .mark {
+    display: block; font-family: var(--font-display); font-size: 16px;
+    font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 38px; }
+  .rail .back:hover { color: var(--ink); }
+  .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
+  .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
+  .rail .toc a:hover { color: var(--ink); }
+  .rail .toc a.on { color: var(--ink); font-weight: 500; }
+  .rail .toc .lead {
+    font-family: var(--font-display); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 12px; font-weight: 400;
+  }
+  .rail .foot { margin-top: auto; font-size: 12px; color: var(--faint); line-height: 1.9; }
+  .rail .foot a:hover { color: var(--ink); }
+
+  .shell { margin-left: 238px; }
+
+  @media (max-width: 1080px) {
+    .rail {
+      position: sticky; width: auto; height: auto; flex-direction: row;
+      align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-right: none; border-bottom: 1px solid var(--line);
+      background: rgba(247,247,245,0.94); backdrop-filter: blur(10px);
+    }
+    .rail .mark, .rail .back { margin-bottom: 0; }
+    .rail > div { display: flex; align-items: baseline; gap: 16px; }
+    .rail .toc, .rail .foot { display: none; }
+    .shell { margin-left: 0; }
+  }
+
+  header { padding: 110px 0 72px; }
+  .kicker {
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(32px, 4.6vw, 54px); line-height: 1.18;
+    letter-spacing: -0.02em; max-width: 19ch;
+  }
+  h1 em { color: var(--accent); font-style: normal; }
+  .hero-sub { margin-top: 28px; font-size: 19px; color: var(--muted); max-width: 58ch; }
+
+  .snapshot {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 32px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px 32px; margin-top: 48px;
+  }
+  .snapshot div p:first-child {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3px;
+  }
+  .snapshot div p:last-child { font-size: 15.5px; line-height: 1.45; }
+
+  section { padding: 76px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--font-display); font-weight: 400; font-size: 31px; line-height: 1.3;
+    letter-spacing: -0.02em; margin-bottom: 28px; max-width: 26ch;
+  }
+  h3 { font-family: var(--font-display); font-weight: 500; font-size: 20px; line-height: 1.35; }
+  .body-text p { margin-bottom: 20px; }
+  .body-text p:last-child { margin-bottom: 0; }
+  .lede { font-size: 20px; }
+
+  blockquote {
+    font-family: var(--font-display); font-size: 26px; line-height: 1.4;
+    border-left: 2px solid var(--accent);
+    padding-left: 28px; margin: 48px 0; max-width: 32ch;
+  }
+
+  /* figure plate */
+  figure { margin: 44px 0 0; }
+  .plate {
+    background: #FBFBFA; border: 1px solid var(--line); border-radius: 6px;
+    padding: 20px; overflow: hidden;
+  }
+  .plate img {
+    width: 100%; height: auto; border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba(25, 26, 24, 0.08), 0 1px 2px rgba(25, 26, 24, 0.04);
+  }
+  figcaption {
+    margin-top: 14px; font-size: 14px; color: var(--muted); line-height: 1.55;
+    display: flex; gap: 14px; align-items: baseline;
+  }
+  figcaption b {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); font-weight: 400; white-space: nowrap;
+  }
+
+  /* principles */
+  .prin { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  .prin div { border-top: 2px solid var(--ink); padding-top: 16px; }
+  .prin h3 { margin-bottom: 8px; }
+  .prin p { color: var(--muted); font-size: 15.5px; }
+  @media (max-width: 760px) { .prin { grid-template-columns: 1fr; } }
+
+  /* iteration blocks */
+  .iter { margin-top: 52px; }
+  .iter + .iter { margin-top: 72px; padding-top: 72px; border-top: 1px solid var(--line); }
+  .iter-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 10px; }
+  .iter-head .n {
+    font-family: var(--font-display); font-size: 38px; font-weight: 400;
+    color: var(--accent); line-height: 1; letter-spacing: -0.03em;
+  }
+  .iter-head h3 { font-size: 26px; font-weight: 400; }
+  .iter-grid {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 44px;
+    align-items: start; margin-top: 28px;
+  }
+  .iter-grid figure { margin: 0; }
+  .iter p { color: var(--muted); }
+  .verdict { margin-top: 26px; }
+  .verdict div {
+    display: grid; grid-template-columns: 74px 1fr; gap: 14px;
+    padding: 12px 0; border-top: 1px solid var(--line); align-items: baseline;
+  }
+  .verdict .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .verdict .won .tag { color: var(--accent); }
+  .verdict .cost .tag { color: var(--warn); }
+  .verdict p { font-size: 15.5px; color: var(--ink); }
+  .killed {
+    margin-top: 24px; padding: 18px 22px; background: var(--soft);
+    border-radius: var(--radius); font-size: 15.5px; color: var(--ink);
+  }
+  .killed b { font-weight: 500; }
+  @media (max-width: 860px) { .iter-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* two-option compare */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 40px; }
+  .compare figure { margin: 0; }
+  .opt-lbl {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 12px;
+  }
+  .compare h3 { margin-bottom: 16px; font-size: 19px; }
+  .compare ul { margin-top: 16px; padding-left: 0; list-style: none; }
+  .compare li {
+    font-size: 15px; color: var(--muted); padding: 7px 0 7px 20px;
+    position: relative; line-height: 1.5;
+  }
+  .compare li::before {
+    content: ""; position: absolute; left: 0; top: 15px;
+    width: 8px; height: 1px; background: var(--faint);
+  }
+  .compare li.up::before { background: var(--accent); }
+  .compare li.down::before { background: var(--warn); }
+  @media (max-width: 760px) { .compare { grid-template-columns: 1fr; gap: 44px; } }
+
+  /* retention table */
+  .ret { margin-top: 40px; overflow-x: auto; }
+  .ret table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+  .ret th, .ret td {
+    padding: 13px 10px; text-align: right; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums;
+  }
+  .ret th:first-child, .ret td:first-child { text-align: left; }
+  .ret thead th {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); font-weight: 400;
+    border-bottom: 1px solid var(--ink);
+  }
+  .ret tbody th { font-weight: 400; color: var(--muted); font-size: 14.5px; }
+  .ret .after td { color: var(--accent); font-weight: 500; }
+  .ret .delta td { color: var(--ink); font-family: var(--mono); font-size: 13px; }
+  .ret .delta th { color: var(--faint); font-size: 13px; }
+
+  .headline-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 8px; }
+  .headline-nums div { border-top: 2px solid var(--ink); padding-top: 18px; }
+  .headline-nums .v {
+    font-family: var(--font-display); font-size: clamp(34px, 4.6vw, 52px);
+    font-weight: 400; line-height: 1; letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+  }
+  .headline-nums .l { font-size: 14.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+  @media (max-width: 760px) { .headline-nums { grid-template-columns: 1fr; gap: 24px; } }
+
+  .note {
+    border: 1px dashed var(--line); border-radius: var(--radius);
+    padding: 24px 28px; color: var(--muted); font-size: 15.5px; margin-top: 36px;
+  }
+  .note b { color: var(--ink); font-weight: 500; }
+
+  .learned { margin-top: 40px; }
+  .learned > div {
+    display: grid; grid-template-columns: 42px 1fr; gap: 20px;
+    padding: 26px 0; border-top: 1px solid var(--line);
+  }
+  .learned .n {
+    font-family: var(--mono); font-size: 12px; color: var(--faint); padding-top: 7px; margin: 0;
+  }
+  .learned h3 { margin-bottom: 8px; }
+  .learned p { color: var(--muted); font-size: 16px; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .end-cta { text-align: center; padding: 120px 0; }
+  .end-cta h2 { margin: 0 auto 24px; }
+  .btn {
+    display: inline-block; padding: 14px 28px; border-radius: 999px;
+    font-size: 15px; font-weight: 500; background: var(--ink); color: var(--bg);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover { background: var(--accent); transform: translateY(-2px); }
+  footer { border-top: 1px solid var(--line); padding: 32px 0; }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 20px; font-size: 14px; color: var(--muted); flex-wrap: wrap;
+  }
+
+  @media (max-width: 760px) {
+    header { padding: 72px 0 56px; }
+    section { padding: 56px 0; }
+    .snapshot { grid-template-columns: 1fr 1fr; padding: 22px; }
+    blockquote { font-size: 22px; }
+    .wrap { padding: 0 22px; }
+    .iter-head .n { font-size: 30px; }
+    .iter-head h3 { font-size: 22px; }
+  }
+
+  @media print {
+    nav, #bar, .end-cta, .reveal { position: static; }
+    .reveal { opacity: 1; transform: none; }
+    body { font-size: 11pt; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<aside class="rail">
+  <div>
+    <a class="mark" href="index.html">Amrit Kumar</a>
+    <a class="back" href="index.html#work">&larr; Back to work</a>
+  </div>
+  <nav class="toc">
+    <p class="lead">Case study</p>
+    <a href="#problem">The task nobody can skip</a>
+    <a href="#principles">What lawyers asked for</a>
+    <a href="#origin">Where the shape came from</a>
+    <a href="#iterations">Three attempts</a>
+    <a href="#colour">Colour was not enough</a>
+    <a href="#uncertainty">The number we did not show</a>
+    <a href="#wrong">When it is wrong</a>
+    <a href="#scale">Then the count grew</a>
+    <a href="#impact">What happened after</a>
+    <a href="#learned">What I took from it</a>
+  </nav>
+  <div class="foot">
+    <a href="contract-understanding.html">Contract relationships</a><br />
+    <a href="intent-model.html">The intent model</a><br />
+    <a href="mailto:amritkmr08@gmail.com">Email me</a>
+  </div>
+</aside>
+
+<div class="shell">
+
+<header>
+  <div class="wrap">
+    <p class="kicker reveal">Case study · AI review interface · 14 min read</p>
+    <h1 class="reveal">An AI can extract 128 fields. A lawyer still has to <em>check every one</em>.</h1>
+    <p class="hero-sub reveal">Three generations of interface for verifying machine-extracted
+    contract data. I built all three. This is the story of what the first two got wrong, and what
+    the retention curve did once the third one shipped.</p>
+
+    <div class="snapshot reveal">
+      <div><p>Product</p><p>Auto Extraction, the AI review module in an enterprise contract platform</p></div>
+      <div><p>My role</p><p>Led end to end UX: research synthesis, journey mapping, wireframes, UI, interaction</p></div>
+      <div><p>Team</p><p>Partnered with engineering, AI, and legal subject-matter experts</p></div>
+      <div><p>Period</p><p>Aug 2024 to Jan 2025</p></div>
+      <div><p>Status</p><p>Shipped. First phase of review assist delivered</p></div>
+      <div><p>Measured after</p><p>18% gain in review efficiency, 15% fewer errors, month-four retention up from 5% to 23%</p></div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap narrow">
+    <h2 class="reveal">The task nobody can skip</h2>
+    <div class="body-text reveal">
+      <p class="lede">Thousands of contracts, each running to hundreds of pages, have to be read
+      closely enough to pin down every risky clause, position, numeric value and date. Miss one and
+      it costs the company money or exposes it legally. So nobody skims. The work is slow because
+      the consequences of speed are expensive.</p>
+      <p>An AI model can read those pages in seconds and pull out the values. That was already
+      working. The model was not the problem.</p>
+      <p>The problem was the second half of the job. Once the machine has proposed 128 answers, a
+      lawyer has to agree with each one, and until they do, none of the speed counts. If verifying
+      the machine takes as long as reading the contract, the AI has moved the work rather than
+      removed it.</p>
+    </div>
+
+    <blockquote class="reveal">The extraction was fast. The verification was not. Everything
+    I designed here lives in that gap.</blockquote>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-review-screen.webp" type="image/webp" />
+          <img src="ae-review-screen.jpg" width="1800" height="1132"
+               alt="The Auto Extraction review screen: contract text on the left, a panel of extracted fields on the right with accept and edit controls." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 01 · The screen</b>
+      <span>Contract on the left, the machine's 128 proposed answers on the right. Every one of them
+      needs a human to accept, correct or reject it.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap narrow">
+    <h2 class="reveal">What lawyers actually asked for</h2>
+    <div class="body-text reveal">
+      <p>The instinct with an AI feature is to design for speed. Sitting with reviewers, that turned
+      out to be the wrong target. They did not want the tool to be faster at telling them things.
+      They wanted to be able to see <em>why</em> it had said them, without leaving the sentence they
+      were reading.</p>
+      <p>Three principles came out of that, and every decision below was settled against them.</p>
+    </div>
+
+    <div class="prin reveal">
+      <div>
+        <h3>Transparency over speed</h3>
+        <p>A reviewer needs to see why a clause was flagged. An answer they cannot trace is an
+        answer they have to redo themselves.</p>
+      </div>
+      <div>
+        <h3>Human control at the centre</h3>
+        <p>Assistance, never substitution. The machine proposes. The person accountable for the
+        contract decides.</p>
+      </div>
+      <div>
+        <h3>Continuity of flow</h3>
+        <p>Breaking focus reduces accuracy. Anything that pulls a reader out of the document has to
+        earn its interruption.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-matrix.webp" type="image/webp" />
+          <img src="ae-matrix.jpg" width="1800" height="1054"
+               alt="A two-by-two prioritisation board mapping pain points against business impact and difficulty to execute, covered in sticky notes." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 02 · Prioritisation</b>
+      <span>Pain points mapped against business impact and difficulty to execute, so the argument
+      about what to build first happened once rather than every week.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="origin">
+  <div class="wrap narrow">
+    <h2 class="reveal">Where the shape came from</h2>
+    <div class="body-text reveal">
+      <p class="lede">Before designing anything I went looking for what reviewing already looks
+      like when nobody has built a tool for it.</p>
+      <p>People review things constantly. Someone turns a packet over in a shop and runs a finger
+      down the nutrition panel, checking a few values against what they care about. A rent agreement
+      comes back from a tenant with a highlighter through the clauses that matter, the marks sitting
+      directly on the sentences rather than in a summary somewhere else.</p>
+      <p>Both share a property worth copying: <b>the annotation stays on the source.</b> Nobody
+      transcribes the numbers into a separate sheet to check them. The mark is made where the
+      evidence is, so the evidence and the judgment about it never come apart.</p>
+      <p>That gave the first version its shape, and it turned out to be the constraint that survived
+      all three. What changed across the iterations was how much could sit on the page at once
+      without breaking the reading. What did not change was the rule that a reviewer should never
+      have to leave the sentence to check the claim about it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="iterations">
+  <div class="wrap narrow">
+    <h2 class="reveal">Three attempts at showing the machine's work</h2>
+    <div class="body-text reveal">
+      <p>What follows is the honest sequence. Each version solved the complaint about the one before
+      it and introduced a new one. I am including the two I replaced because the reason each failed
+      is the actual finding.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="iter reveal">
+      <div class="iter-head">
+        <span class="n">01</span>
+        <h3>Inline annotations</h3>
+      </div>
+      <div class="iter-grid">
+        <figure>
+          <div class="plate">
+            <picture>
+              <source srcset="ae-iter-1-ui.webp" type="image/webp" />
+              <img src="ae-iter-1-ui.jpg" width="1500" height="1664"
+                   alt="Contract text with AI-extracted values highlighted directly in the paragraphs in green, blue and red." loading="lazy" />
+            </picture>
+          </div>
+        </figure>
+        <div>
+          <p>Highlight the extracted values directly in the text, where the lawyer is already
+          looking. No panel, no navigation, no second place to look. The most literal reading of
+          "keep them in the document".</p>
+          <div class="verdict">
+            <div class="won"><span class="tag">Worked</span><p>Fast to scan. The value stayed
+            attached to the sentence that produced it.</p></div>
+            <div class="cost"><span class="tag">Cost</span><p>Detail was hidden behind a hover.
+            Reading stopped every time someone needed to check what a highlight meant.</p></div>
+          </div>
+          <div class="killed"><b>Why I replaced it.</b> Efficient for spotting things, too shallow
+          for deciding about them. Detection is not verification.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iter reveal">
+      <div class="iter-head">
+        <span class="n">02</span>
+        <h3>Hover cards</h3>
+      </div>
+      <div class="iter-grid">
+        <figure>
+          <div class="plate">
+            <picture>
+              <source srcset="ae-iter-2-ui.webp" type="image/webp" />
+              <img src="ae-iter-2-ui.jpg" width="1370" height="1475"
+                   alt="The same contract text, with a small card floating above a highlighted passage showing the extracted field name and its value." loading="lazy" />
+            </picture>
+          </div>
+        </figure>
+        <div>
+          <p>Expand the highlight into a card that shows the extracted value alongside the text, so
+          a reviewer gets the context without losing their place. This fixed the depth problem
+          directly.</p>
+          <div class="verdict">
+            <div class="won"><span class="tag">Worked</span><p>Richer detail at a glance. Less
+            guesswork, and validating a single value became quick.</p></div>
+            <div class="cost"><span class="tag">Cost</span><p>Every check still required a
+            deliberate mouse movement. Across a long document that is hundreds of small
+            interruptions.</p></div>
+          </div>
+          <div class="killed"><b>Why I replaced it.</b> It solved one lookup well and a hundred
+          lookups badly. The unit of work was never one value; it was a whole contract.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iter reveal">
+      <div class="iter-head">
+        <span class="n">03</span>
+        <h3>Assist bars</h3>
+      </div>
+      <div class="iter-grid">
+        <figure>
+          <div class="plate">
+            <picture>
+              <source srcset="ae-iter-3-ui.webp" type="image/webp" />
+              <img src="ae-iter-3-ui.jpg" width="1500" height="1427"
+                   alt="Contract text with labelled bars aligned in the right margin, each naming an extracted field beside the passage it came from." loading="lazy" />
+            </picture>
+          </div>
+        </figure>
+        <div>
+          <p>Stop hiding the labels. Put them in the margin, aligned with the passage each value came
+          from, permanently visible. Names, dates and clauses become a sequence a reviewer can work
+          down rather than a set of things to go hunting for.</p>
+          <div class="verdict">
+            <div class="won"><span class="tag">Worked</span><p>Sequential and structured. Review
+            became one continuous pass instead of constant context switching.</p></div>
+            <div class="cost"><span class="tag">Cost</span><p>An extra layer of interface, and a
+            real learning curve for people opening it for the first time.</p></div>
+          </div>
+          <div class="killed"><b>Why this one stayed.</b> It turned scattered highlights into a
+          guided path through the document. It costs new users something on day one and pays it back
+          on every document after.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="colour">
+  <div class="wrap narrow">
+    <h2 class="reveal">Colour was not enough on its own</h2>
+    <div class="body-text reveal">
+      <p>Four kinds of thing get extracted, and a reviewer has to tell them apart at a glance:
+      metadata, clauses, obligations and service levels. The obvious answer is four colours. The
+      obvious answer excludes colour-blind reviewers, and this is software people use for six hours
+      a day.</p>
+      <p>So each type carries a shape as well as a colour. A circle, a square, a triangle, a
+      diamond. The distinction survives without colour, and it costs nothing to anyone who can see
+      it.</p>
+    </div>
+
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-legend.webp" type="image/webp" />
+          <img src="ae-legend.jpg" width="1800" height="1008"
+               alt="A legend showing four extraction types, each with a distinct coloured geometric shape: metadata, clause, obligation and service levels." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 03 · The four types</b>
+      <span>Shape carries the meaning, colour reinforces it. Simple geometry turned out to be enough
+      for both jobs.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="uncertainty">
+  <div class="wrap narrow">
+    <h2 class="reveal">The number we decided not to show</h2>
+    <div class="body-text reveal">
+      <p class="lede">Every AI feature reaches the same fork: the model has some sense of how sure
+      it is, so do you put that on screen? The default answer is a confidence score. We tried it
+      and took it out.</p>
+      <p>A lawyer cannot act on 0.82. It tells them the machine is somewhat sure, which they already
+      assumed, and it gives them nothing to check. Worse, a high number invites people to skip the
+      check, and a low one tells them to look without telling them where. Either way the score
+      substitutes for the evidence rather than pointing at it.</p>
+      <p>What reviewers were actually doing was reading <b>where</b> the value came from. If the
+      party name was pulled from the preamble it was almost certainly right. If it came from a
+      recital halfway down page nine, it needed a second look. The position of a value in a contract
+      carries meaning, and lawyers already know how to read that. So the interface shows the
+      provenance instead of a probability.</p>
+    </div>
+
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-card-anatomy.webp" type="image/webp" />
+          <img src="ae-card-anatomy.jpg" width="1500" height="805"
+               alt="The review card broken into its parts: multi-value navigation, the field title and extracted value, the model's reasoning in plain language, numbered references back into the document, and the accept, edit and delete actions." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 04 · The card</b>
+      <span>Four bands, in the order a reviewer needs them: what was found, why, where from, and
+      what to do about it.</span></figcaption>
+    </figure>
+
+    <div class="body-text reveal">
+      <p>The card went through its own revision on the way here. An earlier version pasted the
+      surrounding sentence from the contract and gave a page number, which was honest but left the
+      reviewer to work out why that passage was the relevant one. Replacing the excerpt with the
+      model's reasoning, and the page number with jumpable references, kept the provenance and added
+      the argument.</p>
+      <p>Two of those bands do the work a score would have done, and do it better.</p>
+      <p><b>The reasoning band states the case in words.</b> "Based on the last 12 documents, the
+      standard term used for this document type is Master Service Agreement." That is checkable. A
+      reviewer can disagree with the reasoning itself, which they cannot do with a number.</p>
+      <p><b>The references band cites positions in the contract.</b> Selecting one scrolls the
+      document to the passage the value was taken from, so the reviewer is looking at the source
+      rather than at a claim about it. Verification becomes reading, which is the job lawyers were
+      trained to do, rather than trusting a metric they have no way to audit.</p>
+    </div>
+  </div>
+</section>
+
+<section id="wrong">
+  <div class="wrap narrow">
+    <h2 class="reveal">What happens when it is wrong</h2>
+    <div class="body-text reveal">
+      <p>Extraction gets things wrong, and a review tool that only designs the agreeing path is
+      not a review tool. Every proposed value has three exits, not one.</p>
+      <p><b>Accept</b> confirms it and moves to the next value, so agreement costs a single click
+      and the reviewer keeps their place.</p>
+      <p><b>Edit</b> corrects the value in place. The field becomes editable where it already sits,
+      rather than opening a form somewhere else.</p>
+      <p><b>Re-tag</b> is the one that matters. If the machine took the value from the wrong part of
+      the document, the reviewer selects the correct passage in the contract itself and the value is
+      rebound to it. The correction is made against the evidence rather than typed over the top of
+      it, so the record keeps a defensible source rather than an unexplained override.</p>
+    </div>
+
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-inline-edit.webp" type="image/webp" />
+          <img src="ae-inline-edit.jpg" width="778" height="348"
+               alt="A party value being corrected in place: an editable field reading SailPoint Technologies with done and cancel controls beneath it." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 05 · Correcting in place</b>
+      <span>The correction happens on the card, next to the passage it came from.</span></figcaption>
+    </figure>
+
+    <div class="body-text reveal">
+      <p>Values are presented one at a time rather than as a wall of 128. That was a deliberate
+      trade: it costs a reviewer some sense of the whole, and it buys a sequence they can work down
+      without deciding what to look at next. On a hundred-page agreement, removing that decision
+      repeatedly is worth more than the overview.</p>
+
+      <h3 style="margin-top:44px">Where a rejection goes</h3>
+      <p>Rejecting a value removes it from the reviewer's view, which is what they want, but it is
+      the most informative thing that happens all day and throwing it away would be a waste. Every
+      correction becomes a labelled example on the training side of the product, sorted by <b>what
+      kind of mistake it was</b>: a value the model missed entirely, a value it captured
+      incorrectly, or one a person tagged by hand.</p>
+      <p>That distinction matters, because a miss and a wrong answer are different failures and a
+      single "incorrect" bucket would hide which one the model is actually getting worse at.</p>
+    </div>
+
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-train.webp" type="image/webp" />
+          <img src="ae-train.jpg" width="1500" height="230"
+               alt="The training screen for one field category, showing counts of all selected data, user-tagged data, missed values, incorrectly captured values and uploaded data, with a note that a minimum of twenty data points is required before a model can be trained." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 06 · Corrections, sorted</b>
+      <span>Failures counted by type rather than lumped together. Design exploration; the row
+      content is placeholder text.</span></figcaption>
+    </figure>
+
+    <div class="body-text reveal">
+      <p>Two decisions in that screen are the ones I would defend hardest.</p>
+      <p><b>A person chooses what the model learns from.</b> Each example has a toggle and a
+      validation state, so corrections are curated rather than swept in automatically. A reviewer
+      having a bad afternoon should not be able to teach the model something wrong, and a
+      duplicate should not count twice.</p>
+      <p><b>Training has a floor.</b> The model cannot be retrained until there are at least twenty
+      data points. It is a small rule that stops someone reacting to a single bad extraction by
+      retraining on it, which is exactly the instinct people have when they are annoyed.</p>
+      <p>The loop only closes because the review interface captures why something was wrong rather
+      than only that it was. The two screens were designed as one system, and that is the part I
+      would want to talk through rather than write down.</p>
+    </div>
+  </div>
+</section>
+
+<section id="scale">
+  <div class="wrap narrow">
+    <h2 class="reveal">Then the field count grew</h2>
+    <div class="body-text reveal">
+      <p>Assist bars worked. Then contracts arrived with a hundred and twenty-eight extracted
+      fields, and the thing that had made review continuous started making it crowded. Clarity at
+      forty fields is clutter at a hundred and twenty-eight.</p>
+      <p>Three questions had to be answered together: how does a reviewer switch between the four
+      types, where does filtering live, and how much can be visible before visibility becomes
+      noise.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="compare reveal">
+      <div>
+        <p class="opt-lbl">Option 1</p>
+        <h3>Chips across the top</h3>
+        <figure>
+          <div class="plate">
+            <picture>
+              <source srcset="ae-filter-chips.webp" type="image/webp" />
+              <img src="ae-filter-chips.jpg" width="920" height="830"
+                   alt="A filter row of coloured chips showing counts for metadata, clauses, obligations, service levels and other categories." loading="lazy" />
+            </picture>
+          </div>
+        </figure>
+        <ul>
+          <li class="up">Extraction status readable at a glance, counts included</li>
+          <li class="up">One click to move between categories</li>
+          <li class="down">Visually cluttered once expanded</li>
+          <li class="down">Fell apart past a hundred fields</li>
+        </ul>
+      </div>
+      <div>
+        <p class="opt-lbl">Option 2</p>
+        <h3>Grouped dropdown</h3>
+        <figure>
+          <div class="plate">
+            <picture>
+              <source srcset="ae-filter-dropdown.webp" type="image/webp" />
+              <img src="ae-filter-dropdown.jpg" width="940" height="810"
+                   alt="A dropdown filter listing extraction categories with counts, expanded over the field list." loading="lazy" />
+            </picture>
+          </div>
+        </figure>
+        <ul>
+          <li class="up">Compact, and a familiar interaction to reach for</li>
+          <li class="up">Start broad, then go deeper into a category</li>
+          <li class="up">Holds up as the dataset grows</li>
+          <li class="down">More clicks than chips, and easy to overlook if underplayed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap narrow">
+    <div class="body-text reveal" style="margin-top:52px">
+      <p>The dropdown won on scale, so I took it and fixed the thing it was bad at. Fields were
+      grouped into meaningful categories rather than listed flat, and the groups were nested, so
+      128 fields reads as 64 performance review, then 34 obligations inside it. The filter stops
+      being a list of everything and becomes a way of narrowing down.</p>
+    </div>
+
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="ae-final-filter.webp" type="image/webp" />
+          <img src="ae-final-filter.jpg" width="1400" height="1379"
+               alt="The final filter: a dropdown with fields grouped into named categories and counts, nested under a performance review heading." loading="lazy" />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 07 · Where it landed</b>
+      <span>Grouped and hierarchical. Clutter removed without hiding anything a reviewer needs to
+      reach.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="wrap">
+    <h2 class="reveal">What happened after it shipped</h2>
+
+    <div class="headline-nums reveal">
+      <div>
+        <p class="v">18%</p>
+        <p class="l">gain in review efficiency, measured after launch</p>
+      </div>
+      <div>
+        <p class="v">15%</p>
+        <p class="l">reduction in error rates</p>
+      </div>
+      <div>
+        <p class="v">5% &rarr; 23%</p>
+        <p class="l">of users still returning in month four</p>
+      </div>
+    </div>
+
+    <div class="wrap narrow" style="padding:0; margin-top:52px">
+      <div class="body-text reveal">
+        <p>The third number is the one I care about, and it is worth reading carefully rather than
+        as a headline. This is the share of users still coming back to the module each month, for
+        the eight months before the redesign and the eight months after.</p>
+      </div>
+    </div>
+
+    <div class="ret reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Cohort</th><th>Users</th>
+            <th>Month 0</th><th>1</th><th>2</th><th>3</th><th>4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Before, Sep 2023 to Jun 2024</th>
+            <td>860</td><td>79.8%</td><td>30.5%</td><td>22.7%</td><td>14.8%</td><td>5%</td>
+          </tr>
+          <tr class="after">
+            <th>After, Sep 2024 to Jun 2025</th>
+            <td>2,380</td><td>74.8%</td><td>29.7%</td><td>23%</td><td>22.3%</td><td>23.1%</td>
+          </tr>
+          <tr class="delta">
+            <th>Change</th>
+            <td>+1,520</td><td>-5.0</td><td>-0.8</td><td>+0.3</td><td>+7.5</td><td>+18.1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wrap narrow" style="padding:0">
+      <div class="body-text reveal" style="margin-top:44px">
+        <p>Months zero, one and two barely move. Slightly fewer people tried it, in fact. If the
+        redesign had made the module more appealing, that is where it would show, and it doesn't.</p>
+        <p>The change is entirely at the back end of the curve. Before, month three was 14.8% and
+        month four fell off a cliff to 5%: people tried it, worked with it for a while, and went
+        back to doing it by hand. After, month three holds at 22.3% and month four holds at 23.1%.
+        The decay stops.</p>
+        <p><strong>The redesign did not win more users. It stopped losing the ones who
+        arrived.</strong> For a tool that has to be trusted before it can be useful, that is the
+        distinction that matters, and it is the only reason I believe the efficiency number rather
+        than just reporting it.</p>
+      </div>
+
+      <figure class="reveal">
+        <div class="plate">
+          <picture>
+            <source srcset="ae-retention.webp" type="image/webp" />
+            <img src="ae-retention.jpg" width="1800" height="814"
+                 alt="Two analytics tables from Heap showing month-over-month return rates for the module before and after the revamp." loading="lazy" />
+          </picture>
+        </div>
+        <figcaption><b>Fig. 08 · The source</b>
+        <span>Product analytics, captured 16 June 2025. Both windows are eight months, same module,
+        same measure.</span></figcaption>
+      </figure>
+
+      <div class="note reveal">
+        <b>What this data cannot tell you.</b> The cohort nearly tripled between the two windows,
+        from 860 users to 2,380, so the population is not identical and some of the improvement will
+        belong to a different customer mix rather than to the interface. The AI model was also being
+        improved over the same period. Retention is a rate rather than a count, which makes the
+        comparison a fair one, but I would not claim the redesign is the sole cause. What I do claim is
+        narrower: the curve stopped decaying at the point the redesign landed, and the shape of the
+        change, flat at the front and wide at the back, is what a usability fix looks like rather
+        than a better model or a bigger sales year.
+      </div>
+
+      <div class="body-text reveal" style="margin-top:40px">
+        <p>Alongside the numbers, the module went out in soft releases to customers including IBM
+        and EY, and the response back was that it had become noticeably easier to work with. That is
+        qualitative and I treat it as such, but it came from the accounts where being wrong is most
+        expensive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="learned">
+  <div class="wrap narrow">
+    <h2 class="reveal">What I took from it</h2>
+
+    <div class="learned reveal">
+      <div>
+        <p class="n">01</p>
+        <div>
+          <h3>Faster extraction is not faster review</h3>
+          <p>The model was never the bottleneck. Almost all of the time a reviewer spends is spent
+          agreeing or disagreeing with the machine, and that is an interface problem, not a model
+          problem. Teams building AI features consistently invest in the half that was already
+          working.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">02</p>
+        <div>
+          <h3>Design for the hundredth interaction</h3>
+          <p>Hover cards tested beautifully on a single value and failed on a whole contract. I now
+          look at any interaction and ask what it costs when it happens a hundred times in an hour,
+          because that is the real usage and it is not what a demo shows you.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">03</p>
+        <div>
+          <h3>Retention is the honest metric for trust</h3>
+          <p>Efficiency percentages are easy to produce and easy to argue with. Whether people are
+          still using the thing four months later is much harder to explain away, and for AI
+          features, where the real question is whether anyone believes the output, it is closer to
+          what you actually wanted to know.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">04</p>
+        <div>
+          <h3>Two of the three designs here are mine and failed</h3>
+          <p>Inline annotations and hover cards were not someone else's bad ideas that I fixed. I
+          made them, watched them fall short, and replaced them. The sequence is the work. A case
+          study that shows only the third one is describing a different job than the one I did.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="end-cta">
+  <div class="wrap">
+    <h2 class="reveal">This is the same argument as the contract graph, one layer down.</h2>
+    <p class="reveal" style="color:var(--muted); max-width:52ch; margin:0 auto 32px">
+      That case study is about giving the AI ground worth reasoning over. This one is about what a
+      person does with the answer once it has reasoned.</p>
+    <a class="btn reveal" href="contract-understanding.html">Read that case study &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>&copy; <span id="year"></span> Amrit Kumar</span>
+    <a href="intent-model.html">Next: The intent model &rarr;</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var bar = document.getElementById('bar');
+  function progress() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', progress, { passive: true });
+  progress();
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  var links = [].slice.call(document.querySelectorAll('.rail .toc a'));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function (a, j) { a.classList.toggle('on', j === i); });
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(function (s) { if (s) spy.observe(s); });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Human-Guided AI for Contract Onboarding — Case Study · Amrit Kumar</title>
+<meta name="description" content="Case study: designing human-guided AI that turns messy legacy contracts into a trusted system of record." />
+<meta property="og:title" content="Human-Guided AI for Contract Onboarding — Amrit Kumar" />
+<meta property="og:description" content="Legal teams don't lack data — they struggle to trust it. A case study in agent autonomy, evidence, and the act-or-ask framework." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23161513'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-style='italic' font-size='34' fill='%23FAF9F6' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #FAF9F6;
+    --ink: #161513;
+    --muted: #6E6A63;
+    --line: #E7E4DE;
+    --accent: #A0522B;
+    --radius: 14px;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 720px; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250, 249, 246, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .nav-name { font-family: var(--font-display); font-size: 19px; font-weight: 500; }
+  .back-link { font-size: 15px; color: var(--muted); transition: color 0.2s ease; }
+  .back-link:hover { color: var(--ink); }
+
+  /* ---------- Hero ---------- */
+  header { padding: 110px 0 72px; }
+  .kicker {
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 6.5vw, 72px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    max-width: 20ch;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { margin-top: 28px; font-size: 19px; color: var(--muted); max-width: 56ch; }
+
+  .meta-strip {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+  .meta-label {
+    font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+  }
+  .meta-value { font-size: 16px; }
+
+  /* ---------- Content ---------- */
+  section { padding: 72px 0; }
+  section + section { border-top: 1px solid var(--line); }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+    max-width: 26ch;
+  }
+  .body-text p { margin-bottom: 20px; }
+  .body-text p:last-child { margin-bottom: 0; }
+  .lede { font-size: 20px; }
+  .muted { color: var(--muted); }
+
+  blockquote {
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1.4;
+    font-style: italic;
+    color: var(--ink);
+    border-left: 2px solid var(--accent);
+    padding-left: 28px;
+    margin: 48px 0;
+    max-width: 32ch;
+  }
+
+  /* ---------- Stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+  }
+  .stat { border-top: 1px solid var(--line); padding-top: 20px; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .stat-label { margin-top: 10px; font-size: 15px; color: var(--muted); }
+
+  /* ---------- Impact cards ---------- */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .impact h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 14ch;
+  }
+  .impact p { color: var(--muted); font-size: 16px; }
+
+  /* ---------- Decisions / steps ---------- */
+  .decision { display: grid; grid-template-columns: 72px 1fr; gap: 24px; margin-bottom: 56px; }
+  .decision:last-child { margin-bottom: 0; }
+  .decision-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--accent);
+  }
+  .decision h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 23px;
+    margin-bottom: 12px;
+  }
+  .decision p { color: var(--muted); max-width: 60ch; }
+  .decision p strong { color: var(--ink); font-weight: 500; }
+  .decision .q {
+    font-style: italic;
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 18px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .caption { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+
+  /* ---------- Snapshot ---------- */
+  .snapshot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 32px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-top: 40px;
+  }
+  .snapshot div p:first-child {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3px;
+  }
+  .snapshot div p:last-child { font-size: 15.5px; line-height: 1.45; }
+  @media (max-width: 640px) { .snapshot { grid-template-columns: 1fr 1fr; padding: 22px; } }
+
+  /* ---------- System states ---------- */
+  .states { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 36px; }
+  .state {
+    border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px; background: #fff;
+  }
+  .state .s-name {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 5px;
+  }
+  .state p { font-size: 15px; color: var(--muted); }
+  .state p b { color: var(--ink); font-weight: 500; }
+  @media (max-width: 640px) { .states { grid-template-columns: 1fr; } }
+
+  /* ---------- Rejected explorations ---------- */
+  .rejects { margin-top: 36px; border-top: 1px solid var(--line); }
+  .reject { padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .reject h4 {
+    font-family: var(--font-display); font-weight: 500; font-size: 19px; margin-bottom: 6px;
+  }
+  .reject h4 s { color: var(--muted); text-decoration-thickness: 1px; }
+  .reject p { color: var(--muted); font-size: 15.5px; }
+  .reject .why { color: var(--ink); font-weight: 500; }
+
+  /* ---------- Act-or-ask framework ---------- */
+  .fw {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .fw-cell {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    background: #fff;
+  }
+  .fw-cell h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+  .fw-cell p { color: var(--muted); font-size: 15px; }
+  .fw-tag {
+    display: inline-block;
+    font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: 999px; padding: 4px 12px;
+    margin-bottom: 12px;
+  }
+  .fw-act { background: #E8F1E9; color: #2F6B3C; }
+  .fw-flag { background: #FBEEE4; color: #A0522B; }
+  .fw-ask { background: #F6E9E7; color: #A03A2B; }
+  .fw-axes { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 640px) { .fw { grid-template-columns: 1fr; } }
+
+  /* ---------- Product-screen figures ---------- */
+  .shot {
+    margin: 44px 0 12px;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    box-shadow: 0 24px 60px -30px rgba(23, 23, 26, 0.25);
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .shot-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #EEECE7;
+    background: #FAFAF8;
+  }
+  .shot-bar i { width: 9px; height: 9px; border-radius: 50%; background: #E3E0DA; }
+  .shot-bar span {
+    margin-left: 10px; font-size: 12px; color: #9B978F;
+    background: #F1EFEA; border-radius: 6px; padding: 3px 12px;
+  }
+  .shot-body { padding: 22px 24px 26px; }
+  .ui-title { font-weight: 600; font-size: 15px; color: #1C1B1A; }
+  .ui-sub { color: #8A867E; font-size: 12.5px; margin-top: 2px; }
+  .ui-tabs { display: flex; gap: 18px; margin: 16px 0 0; border-bottom: 1px solid #EEECE7; }
+  .ui-tab { padding: 8px 2px; color: #8A867E; font-size: 13px; }
+  .ui-tab.on { color: #1C1B1A; font-weight: 600; border-bottom: 2px solid var(--accent); }
+  .ui-row {
+    display: grid; grid-template-columns: 1.2fr 1.4fr 1.4fr 0.8fr;
+    gap: 12px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid #F2F0EB;
+  }
+  .ui-row.head { color: #9B978F; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ui-chip {
+    display: inline-block; font-size: 11.5px; font-weight: 600;
+    border-radius: 999px; padding: 3px 10px;
+  }
+  .chip-ok { background: #E8F1E9; color: #2F6B3C; }
+  .chip-warn { background: #FBEEE4; color: #A0522B; }
+  .chip-flag { background: #F6E9E7; color: #A03A2B; }
+  .ui-strong { font-weight: 600; color: #1C1B1A; }
+  .ui-dim { color: #8A867E; }
+
+  .ui-steps { display: flex; gap: 0; margin-bottom: 22px; }
+  .ui-step { flex: 1; text-align: center; position: relative; padding-top: 4px; }
+  .ui-step::before {
+    content: ""; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px; background: #EEECE7;
+  }
+  .ui-step:last-child::before { display: none; }
+  .ui-dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    margin: 0 auto 8px; position: relative; z-index: 1;
+    background: #EEECE7; color: #8A867E;
+    font-size: 11px; font-weight: 600; line-height: 24px;
+  }
+  .ui-step.on .ui-dot { background: var(--accent); color: #fff; }
+  .ui-step p { font-size: 12px; color: #8A867E; }
+  .ui-step.on p { color: #1C1B1A; font-weight: 600; }
+  .ui-card {
+    border: 1px solid #EEECE7; border-radius: 10px; padding: 16px 18px; margin-top: 12px;
+  }
+  .ui-merge { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; gap: 8px; margin-top: 10px; }
+  .ui-entity { background: #FAFAF8; border: 1px solid #EEECE7; border-radius: 8px; padding: 10px 12px; }
+  .ui-arrow { text-align: center; color: var(--accent); font-size: 16px; }
+  .ui-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .ui-btn {
+    font-size: 12.5px; font-weight: 600; border-radius: 8px; padding: 8px 16px;
+  }
+  .ui-btn.primary { background: #1C1B1A; color: #fff; }
+  .ui-btn.ghost { border: 1px solid #E3E0DA; color: #1C1B1A; }
+
+  .ui-evidence { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; }
+  .ui-clause {
+    background: #FAFAF8; border: 1px solid #EEECE7; border-radius: 10px;
+    padding: 16px 18px; font-size: 12.5px; color: #55524C; line-height: 1.7;
+  }
+  .ui-clause mark { background: #FBEEE4; color: #A0522B; padding: 1px 3px; border-radius: 3px; }
+  .ui-lineage { margin-top: 14px; font-size: 12px; color: #8A867E; }
+  .ui-lineage b { color: #1C1B1A; }
+
+  @media (max-width: 640px) {
+    .ui-row { grid-template-columns: 1fr 1fr; }
+    .ui-row .hide-m { display: none; }
+    .ui-evidence { grid-template-columns: 1fr; }
+  }
+
+  .note {
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    color: var(--muted);
+    font-size: 15.5px;
+    margin-top: 32px;
+  }
+
+  /* ---------- Cost list ---------- */
+  .cost-list { margin-top: 8px; }
+  .cost-list p {
+    font-family: var(--font-display);
+    font-size: 22px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cost-list p:first-child { border-top: 1px solid var(--line); }
+
+  /* ---------- Footer CTA ---------- */
+  .end-cta { text-align: center; padding: 120px 0; }
+  .end-cta h2 { margin: 0 auto 24px; }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--ink);
+    color: var(--bg);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover { background: var(--accent); transform: translateY(-2px); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0; }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: var(--muted);
+  }
+
+  /* ---------- Reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 760px) {
+    header { padding: 72px 0 56px; }
+    section { padding: 56px 0; }
+    .meta-strip { grid-template-columns: 1fr 1fr; }
+    .stats, .impact-grid { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr; gap: 8px; }
+    blockquote { font-size: 22px; }
+    .wrap { padding: 0 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-name" href="index.html">Amrit Kumar</a>
+    <a class="back-link" href="index.html#work">← Back to work</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <p class="kicker reveal">Case study · System design · SirionLabs</p>
+    <h1 class="reveal">Designing human-guided AI for <em>contract onboarding</em>.</h1>
+    <p class="hero-sub reveal">Legal teams don't lack data — they struggle to trust it. At scale,
+    small onboarding errors compound into broken relationships and unreliable systems. So the
+    design question isn't how AI replaces the humans; it's where their judgment actually belongs.</p>
+
+    <div class="meta-strip reveal">
+      <div>
+        <p class="meta-label">Role</p>
+        <p class="meta-value">Led design end-to-end</p>
+      </div>
+      <div>
+        <p class="meta-label">Company</p>
+        <p class="meta-value">SirionLabs</p>
+      </div>
+      <div>
+        <p class="meta-label">Focus</p>
+        <p class="meta-value">AI/UX · Trust &amp; provenance</p>
+      </div>
+      <div>
+        <p class="meta-label">Year</p>
+        <p class="meta-value">2026</p>
+      </div>
+    </div>
+
+    <div class="snapshot reveal">
+      <div><p>What I did</p><p>Designed the onboarding system where AI agents reconstruct legacy contract portfolios and humans resolve only what's undecidable</p></div>
+      <div><p>Team</p><p>Sole designer with PM, ML and platform engineering</p></div>
+      <div><p>Scope</p><p>End-to-end: problem framing, IA, interaction, states, prototype</p></div>
+      <div><p>Scale</p><p>Portfolios of 500–1,300+ agreements per ingestion</p></div>
+      <div><p>Status</p><p>Pre-launch — direction validated in executive design review</p></div>
+      <div><p>What carried further</p><p>The act-or-ask rule became a shared reference for agent autonomy beyond this project</p></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">We don't start from clean systems. We inherit chaos.</h2>
+    <div class="body-text reveal">
+      <p class="lede">Ingesting legacy contracts isn't extraction — it's reconstructing history from
+      fragments. Every batch arrives as mismatched entities and broken hierarchies.</p>
+    </div>
+    <div class="stats">
+      <div class="stat reveal">
+        <p class="stat-num">48%</p>
+        <p class="stat-label">Entity mismatches in incoming batches</p>
+      </div>
+      <div class="stat reveal">
+        <p class="stat-num">34%</p>
+        <p class="stat-label">Duplicate documents</p>
+      </div>
+      <div class="stat reveal">
+        <p class="stat-num">56%</p>
+        <p class="stat-label">Hierarchy issues between agreements</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="reveal">What that chaos cost the business</h2>
+    <div class="impact-grid">
+      <div class="impact reveal">
+        <h3>Manual validation slows legal teams</h3>
+        <p>Legal engineers were spending 60% of their billable hours manually cross-referencing CSV
+        exports against PDF scans to verify basic details.</p>
+      </div>
+      <div class="impact reveal">
+        <h3>Relationship mapping is error-prone</h3>
+        <p>Understanding which Master Services Agreement linked to which Statement of Work was a
+        cognitive nightmare.</p>
+      </div>
+      <div class="impact reveal">
+        <h3>Work spills into spreadsheets</h3>
+        <p>Because internal tools were brittle, teams reverted to external spreadsheets — creating a
+        dangerous "shadow" data layer.</p>
+      </div>
+    </div>
+    <blockquote class="reveal">The cost of poor onboarding isn't immediate. It compounds.</blockquote>
+    <div class="cost-list reveal">
+      <p>Onboarding delayed by weeks</p>
+      <p>Increased operational cost</p>
+      <p>High risk of incorrect data</p>
+      <p>Skilled teams doing repetitive work</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">Humans in the loop, agents in the flow</h2>
+    <div class="body-text reveal">
+      <p>Agents do the reconstruction. People answer three questions, in order:</p>
+    </div>
+
+    <div class="decision reveal" style="margin-top: 48px;">
+      <div class="decision-num">01</div>
+      <div>
+        <h3>Identify</h3>
+        <p><span class="q">"Who is this?"</span>
+        Resolving legal entity names from fuzzy strings into a single source of truth.</p>
+      </div>
+    </div>
+
+    <div class="decision reveal">
+      <div class="decision-num">02</div>
+      <div>
+        <h3>Validate</h3>
+        <p><span class="q">"What's connected to it?"</span>
+        Mapping parent–child hierarchies between agreements automatically — MSAs, SOWs, amendments,
+        rate cards — so relationships are explicit, not inferred.</p>
+      </div>
+    </div>
+
+    <div class="decision reveal">
+      <div class="decision-num">03</div>
+      <div>
+        <h3>Verify</h3>
+        <p><span class="q">"Can I trust this?"</span>
+        Presenting AI evidence to humans for final, high-confidence approval.</p>
+      </div>
+    </div>
+
+    <div class="shot reveal">
+      <div class="shot-bar"><i></i><i></i><i></i><span>sirion · auto extraction — counterparty mapping</span></div>
+      <div class="shot-body">
+        <p class="ui-title">Assessment Docs</p>
+        <p class="ui-sub">10,000+ documents · batch 14</p>
+        <div class="ui-tabs">
+          <span class="ui-tab">Review Extraction</span>
+          <span class="ui-tab on">Counterparty Mapping</span>
+          <span class="ui-tab">Review Families</span>
+        </div>
+        <div class="ui-row head">
+          <span>Documents</span><span>Normalized counterparty</span><span class="hide-m">System counterparty</span><span>Status</span>
+        </div>
+        <div class="ui-row">
+          <span class="ui-dim">9 documents</span><span class="ui-strong">IBM Functions Pvt Ltd</span>
+          <span class="hide-m ui-dim">IBM Functions Pvt Ltd</span><span><span class="ui-chip chip-ok">Matched</span></span>
+        </div>
+        <div class="ui-row">
+          <span class="ui-dim">7 documents</span><span class="ui-strong">Heroku Inc.</span>
+          <span class="hide-m ui-dim">Heroku</span><span><span class="ui-chip chip-warn">Needs review</span></span>
+        </div>
+        <div class="ui-row">
+          <span class="ui-dim">18 documents</span><span class="ui-strong">Linode LLC</span>
+          <span class="hide-m ui-dim">—</span><span><span class="ui-chip chip-flag">Unmapped</span></span>
+        </div>
+      </div>
+    </div>
+    <p class="caption reveal">Counterparty mapping — agents resolve entities in bulk; only ambiguous rows ask for judgment. (Recreated screen, illustrative data.)</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">Design principles that made trust possible</h2>
+
+    <div class="decision reveal" style="margin-top: 48px;">
+      <div class="decision-num">A</div>
+      <div>
+        <h3>Agents surface ambiguity instead of hiding it</h3>
+        <p>Low-confidence extractions are flagged with distinct visual markers, prompting human
+        audit exactly where it's needed — the system never pretends to be more certain than it is.</p>
+      </div>
+    </div>
+
+    <div class="decision reveal">
+      <div class="decision-num">B</div>
+      <div>
+        <h3>Reasoning is one click away</h3>
+        <p>Every data point links directly back to the original PDF clause for immediate
+        verification. Trust isn't asked for — it's inspectable.</p>
+      </div>
+    </div>
+
+    <div class="decision reveal">
+      <div class="decision-num">C</div>
+      <div>
+        <h3>Confidence comes from traceability</h3>
+        <p>Data lineage is preserved at every step, creating a permanent audit trail from source
+        document to system of record.</p>
+      </div>
+    </div>
+
+    <div class="shot reveal">
+      <div class="shot-bar"><i></i><i></i><i></i><span>sirion · human review — step 1 of 3</span></div>
+      <div class="shot-body">
+        <div class="ui-steps">
+          <div class="ui-step on"><div class="ui-dot">1</div><p>Identify</p></div>
+          <div class="ui-step"><div class="ui-dot">2</div><p>Validate</p></div>
+          <div class="ui-step"><div class="ui-dot">3</div><p>Verify</p></div>
+        </div>
+        <p class="ui-title">Possible entity match <span class="ui-chip chip-warn" style="margin-left:8px">Confidence: medium</span></p>
+        <div class="ui-merge">
+          <div class="ui-entity"><span class="ui-dim">Extracted</span><br /><span class="ui-strong">"I.B.M. Functions Private Ltd."</span></div>
+          <div class="ui-arrow">→</div>
+          <div class="ui-entity"><span class="ui-dim">System of record</span><br /><span class="ui-strong">IBM Functions Pvt Ltd</span></div>
+        </div>
+        <div class="ui-actions">
+          <span class="ui-btn primary">Confirm match</span>
+          <span class="ui-btn ghost">Different entity</span>
+          <span class="ui-btn ghost">View evidence</span>
+        </div>
+      </div>
+    </div>
+    <p class="caption reveal">Disambiguation asks one clear question at a time — with the agent's suggestion and an exit to evidence. (Recreated screen, illustrative data.)</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">The hardest call: when should the agent act, and when should it ask?</h2>
+    <div class="body-text reveal">
+      <p class="lede">Too eager, and the agent silently writes errors into a legal record. Too
+      cautious, and you've rebuilt the manual queue with extra steps. The rule set turns on two
+      questions: how confident is the agent, and how costly is being wrong?</p>
+    </div>
+    <div class="fw">
+      <div class="fw-cell reveal">
+        <span class="fw-tag fw-act">Act</span>
+        <h4>Confident + reversible</h4>
+        <p>The agent resolves it and moves on. The action lands in the work log — visible if you
+        look, silent if you don't.</p>
+      </div>
+      <div class="fw-cell reveal">
+        <span class="fw-tag fw-flag">Act, then flag</span>
+        <h4>Confident + consequential</h4>
+        <p>The agent acts but surfaces the decision for spot-checking, with evidence one click away.</p>
+      </div>
+      <div class="fw-cell reveal">
+        <span class="fw-tag fw-flag">Flag for audit</span>
+        <h4>Uncertain + reversible</h4>
+        <p>Low-confidence extractions get distinct visual markers and queue for batch review — they
+        don't block the pipeline.</p>
+      </div>
+      <div class="fw-cell reveal">
+        <span class="fw-tag fw-ask">Ask</span>
+        <h4>Uncertain + consequential</h4>
+        <p>The agent stops and asks one clear question — like the entity match above — with its
+        suggestion and reasoning attached.</p>
+      </div>
+    </div>
+    <p class="fw-axes reveal">Axes: agent confidence × cost of being wrong. Asking is the exception,
+    not the default — that's what keeps humans in the loop without putting them back on the assembly line.</p>
+    <div class="body-text reveal" style="margin-top:32px">
+      <p>One distinction does most of the work, and I later wrote it into the platform's
+      <a href="intent-model.html" style="border-bottom:1px solid var(--accent)">design direction</a>:
+      <strong>confidence is not permission</strong>. Certainty belongs to the model; authority
+      belongs to the relationship. So the checkpoint sits at the irreversible step, and only there.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">Designing the states nobody demos</h2>
+    <div class="body-text reveal">
+      <p>A pipeline that only works when everything goes right isn't a pipeline. Most of the design
+      time went here — and this is where trust is actually won or lost.</p>
+    </div>
+
+    <div class="states">
+      <div class="state reveal">
+        <p class="s-name">Working</p>
+        <p>Live counters name the document being processed (<b>"07_WO1_under_SOW1.pdf"</b>), not a
+        spinner. Progress you can read is progress you believe.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Low confidence</p>
+        <p>Distinct visual marking, never a silent pass. Flagged fields <b>queue for batch review
+        rather than blocking</b> the pipeline.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Partial success</p>
+        <p>The common case. A batch can be <b>84% clean and still useful</b> — the ready set
+        activates while the rest stays held.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Held</p>
+        <p>A first-class state, not an error. Held items stay searchable and counted; every headline
+        number <b>reconciles live</b> as decisions land.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Missing dependency</p>
+        <p>An amendment whose parent isn't in the batch is marked <b>awaiting-parent</b> and
+        auto-links later when the parent arrives — no rework.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Skipped</p>
+        <p>Skipping review is allowed, but recorded as a caveat that <b>travels with the data</b>
+        downstream. Convenience never erases the record.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Inherited</p>
+        <p>Values pulled from a parent agreement are labelled <b>inherited</b>, not presented as if
+        they were read from the document.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Undo &amp; audit</p>
+        <p>Every accepted value keeps its lineage — source clause, extraction version, approver — so
+        any decision can be <b>traced and reversed</b>.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Disagreement</p>
+        <p>Users can reject the agent's framing outright with <b>"this question is wrong"</b>. A
+        system that can't be contradicted can't be trusted.</p>
+      </div>
+      <div class="state reveal">
+        <p class="s-name">Bulk action</p>
+        <p>Where one cause holds many contracts, the verb is plural — <b>merge, map, inherit
+        all</b> — so clearing a pattern is one decision, not fifty.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">What I rejected</h2>
+    <div class="rejects">
+      <div class="reject reveal">
+        <h4><s>A confidence percentage on every field</s></h4>
+        <p>Showing "87%" beside each value felt transparent and tested badly — people either ignored
+        the numbers or over-trusted them, and nobody could say what 87% meant for their decision.
+        <span class="why">Replaced with three states tied to what the user should do: accept,
+        check, decide.</span></p>
+      </div>
+      <div class="reject reveal">
+        <h4><s>A single review queue</s></h4>
+        <p>The obvious model — one list of everything needing attention. It reproduced the manual
+        process it was meant to replace and got longer the better the AI got at finding problems.
+        <span class="why">Replaced with pattern-first triage: resolve the cause, clear every
+        contract under it.</span></p>
+      </div>
+      <div class="reject reveal">
+        <h4><s>Blocking activation until the portfolio was clean</s></h4>
+        <p>Intuitively correct, operationally fatal — a handful of ambiguous documents would hold an
+        entire portfolio hostage for weeks. <span class="why">Replaced with partial activation:
+        ready contracts go live, held ones stay visible and keep working in the
+        background.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2 class="reveal">What I learned</h2>
+    <div class="body-text reveal">
+      <p>The hardest part wasn't the AI. It was deciding when the system should <strong>explain,
+      recommend, act, or disappear</strong>. Early versions over-showed their work, and users felt
+      like they were watching software perform rather than delegating to an operator. The fix: show
+      reasoning while trust is being earned, then collapse to exceptions once it is.</p>
+    </div>
+    <div class="shot reveal">
+      <div class="shot-bar"><i></i><i></i><i></i><span>sirion · evidence panel</span></div>
+      <div class="shot-body">
+        <div class="ui-evidence">
+          <div>
+            <p class="ui-title">Expiry date</p>
+            <p class="ui-sub">Extracted value</p>
+            <div class="ui-card">
+              <span class="ui-strong" style="font-size:17px">Jan 12, 2027</span>
+              <span class="ui-chip chip-ok" style="margin-left:10px">Confidence: high</span>
+            </div>
+            <p class="ui-lineage">Lineage: <b>MSA_IBM_2024.pdf</b> · page 14 · §9.2 → extraction v3 → approved by <b>you</b></p>
+          </div>
+          <div class="ui-clause">
+            <span class="ui-dim" style="font-size:11px; text-transform:uppercase; letter-spacing:0.06em">Source clause · §9.2 Term</span><br /><br />
+            "…this Agreement shall commence on the Effective Date and remain in force until
+            <mark>the 12th day of January 2027</mark>, unless earlier terminated in accordance
+            with Section 11…"
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption reveal">Every value carries its receipt — source clause, lineage, and who approved it. (Recreated screen, illustrative data.)</p>
+    <div class="note reveal">
+      <strong>Where it stands:</strong> this onboarding work is pre-launch, so shipped metrics
+      aren't in yet. The response I was proudest of on the earlier review redesign wasn't a number
+      anyway — it was a reviewer saying "the auto extraction module feels so simple now."
+      What's validated: the direction survived executive design review, and the act-or-ask framework
+      outlived this project — it became a reference point for how agent autonomy is handled across
+      the wider platform. Measured outcomes (validation hours, onboarding time per batch) will be
+      added post-launch.
+    </div>
+  </div>
+</section>
+
+<section class="end-cta">
+  <div class="wrap">
+    <h2 class="reveal">Want the full walkthrough?</h2>
+    <a class="btn reveal" href="mailto:amritkmr08@gmail.com">Get in touch</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Amrit Kumar</span>
+    <a href="contract-understanding.html">Next: From storage to contract understanding →</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(function (el, i) {
+    el.style.transitionDelay = (i % 4) * 60 + "ms";
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contract Hierarchy · Graph</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@300;400;500&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root { --panel-w: 292px; }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  font-family: 'Instrument Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #111;
+}
+
+.topbar {
+  position: fixed;
+  top: 0; left: 0;
+  right: 0;
+  height: 48px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 14px;
+  z-index: 200;
+}
+
+.view-toggle {
+  display: flex;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.vt {
+  padding: 4px 13px;
+  font-size: 12px;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  background: #fafafa;
+  transition: all 0.12s;
+}
+.vt.active { background: #111; color: #fff; }
+.vt:not(.active):hover { color: #111; }
+
+.tb-title { font-size: 13px; color: #333; font-weight: 500; }
+.tb-meta  { font-size: 11px; color: #bbb; font-family: 'DM Mono', monospace; }
+.tb-sp    { flex: 1; }
+
+.focus-badge {
+  font-size: 11px;
+  color: #666;
+  background: #f3f3f0;
+  border: 1px solid #e8e8e4;
+  border-radius: 4px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+  display: none;
+}
+.focus-badge.on { display: block; }
+.focus-badge:hover { color: #111; border-color: #ccc; }
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.leg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: #bbb;
+}
+.lline { width: 18px; height: 1px; background: #bbb; }
+.lline.d { background: repeating-linear-gradient(90deg,#bbb 0,#bbb 3px,transparent 3px,transparent 7px); }
+
+#canvas {
+  position: fixed;
+  top: 48px; left: 0;
+  right: 0;
+  bottom: 0;
+  width: calc(100vw);
+  height: calc(100vh - 48px);
+  cursor: grab;
+  background: #fff;
+  display: block;
+}
+#canvas:active { cursor: grabbing; }
+
+/* Panel */
+.panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: var(--panel-w);
+  height: 100vh;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-left: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  z-index: 150;
+}
+
+.ph {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+.ph-type {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #bbb;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 5px;
+}
+.ph-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+.ph-sub { font-size: 12px; color: #888; }
+
+.pb {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 0 0 32px;
+}
+.pb::-webkit-scrollbar { display: none; }
+
+.ps {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0f0ee;
+}
+.ps-lbl {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ccc;
+  margin-bottom: 8px;
+}
+.ps-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+.ps-k { color: #888; }
+.ps-v { color: #111; font-weight: 500; text-align: right; max-width: 56%; }
+.ps-v.w { color: #c05621; }
+.ps-v.r { color: #b91c1c; }
+.ps-v.g { color: #166534; }
+
+.pnl {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+.pnr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.1s;
+  border: 1px solid #f0f0ee;
+}
+.pnr:hover { background: #f8f8f6; color: #111; border-color: #e4e4e0; }
+.pnd { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.pnl-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pnl-rel { font-size: 10px; color: #bbb; font-family: 'DM Mono', monospace; flex-shrink: 0; }
+
+.p-action {
+  margin: 14px 20px 0;
+  padding: 8px 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 12.5px;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.12s;
+  text-align: center;
+  display: block;
+}
+.p-action:hover { opacity: 0.82; }
+
+.tooltip {
+  position: fixed;
+  background: #111;
+  color: #fff;
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 11.5px;
+  font-family: 'Instrument Sans', sans-serif;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+  z-index: 500;
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tooltip.on { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="view-toggle">
+    <button class="vt">List</button>
+    <button class="vt active">Graph</button>
+  </div>
+  <span class="tb-title">IBM Master Services Agreement</span>
+  <span class="tb-meta">42 agreements · $42.8M TCV</span>
+  <div class="tb-sp"></div>
+  <div class="focus-badge" id="fb" onclick="goMSA()">↩ Show full network</div>
+  <div class="legend">
+    <div class="leg"><div class="lline"></div>governs</div>
+    <div class="leg"><div class="lline d"></div>amends</div>
+  </div>
+</div>
+
+<svg id="canvas" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"></svg>
+
+<div class="panel">
+  <div class="ph">
+    <div class="ph-type" id="pType">MSA</div>
+    <div class="ph-title" id="pTitle">IBM Master Services Agreement</div>
+    <div class="ph-sub" id="pSub">Jan 2024 · Expires Jan 2027</div>
+  </div>
+  <div class="pb" id="pBody"></div>
+  <button class="p-action">Open full record</button>
+</div>
+
+<div class="tooltip" id="tip"></div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+
+// ── node type styles ──
+const T = {
+  MSA:       { fill:'#111',    stroke:'#0d9488', tc:'#fff',                 dot:'#0d9488' },
+  Amendment: { fill:'#1e1e1e', stroke:'#1e1e1e', tc:'#fff',                 dot:'#f59e0b' },
+  Draft:     { fill:'#f4f4f2', stroke:'#d8d8d4', tc:'#555',                 dot:'#d97706' },
+  SOW:       { fill:'#1e1e1e', stroke:'#1e1e1e', tc:'rgba(255,255,255,0.9)',dot:'#818cf8' },
+  WorkOrder: { fill:'#282828', stroke:'#282828', tc:'rgba(255,255,255,0.75)',dot:'#a78bfa' },
+  PriceBook: { fill:'#1e1e1e', stroke:'#1e1e1e', tc:'#fff',                 dot:'#fb7185' },
+};
+
+function nsize(type) {
+  return type==='MSA'       ? {w:158,h:54}
+       : type==='Amendment' ? {w:130,h:46}
+       : type==='Draft'     ? {w:130,h:46}
+       : type==='SOW'       ? {w:106,h:40}
+       : type==='PriceBook' ? {w:116,h:42}
+       :                      {w:92, h:36};
+}
+
+// ── Build data ──
+const nodes = [], edges = [], nmap = {};
+
+const sowNames = [
+  'Accenture Cloud Support','Berlin Infrastructure','Tokyo Cloud Support',
+  'Singapore Dev Services','Austin Platform','Dubai Analytics',
+  'Chicago Data Center','London Compliance','Sydney Operations',
+  'Mumbai DevOps','Paris Security','Seoul Analytics',
+  'Toronto Cloud Migration','São Paulo Platform','Cairo Integration',
+  'Warsaw Monitoring','Oslo Data Services','Athens Helpdesk',
+  'Bangkok Infrastructure','Lagos Cloud','Helsinki DevOps',
+  'Dublin Compliance','Nairobi Platform','Cairo Security',
+  'Boston Analytics','Denver Operations','Phoenix Cloud',
+  'Miami Integration','Seattle DevOps','Portland Platform',
+];
+
+const amendNames = [
+  ['amend-01','Amendment 01','Liability Clause','Active · Conflict'],
+  ['amend-02','Amendment 02','SLA Terms Update','Active'],
+  ['amend-03','Amendment 03','Payment Terms','Draft · Unsigned'],
+  ['amend-04','Amendment 04','Pricing Update','Active'],
+  ['amend-05','Amendment 05','Service Enhancement','Active'],
+];
+
+// MSA
+const msaNode = {
+  id:'msa', label:'IBM MSA', fullLabel:'IBM Master Services Agreement',
+  type:'MSA', date:'Jan 2024', expiry:'Jan 2027', value:'$42.8M TCV', status:'Active',
+  detail:{'Parties':'Boeing ↔ IBM Corp','Gov. law':'Delaware, USA','Auto-renew':'No','Notice':'90 days','Amendments':'5 active','SOWs':'30 governed','Price books':'2 attached'}
+};
+nodes.push(msaNode);
+
+// Amendments
+amendNames.forEach(([id,label,scope,status]) => {
+  const isDraft = status.includes('Draft');
+  const n = { id, label, fullLabel:`${label} — ${scope}`, type:isDraft?'Draft':'Amendment',
+    date:isDraft?'Pending':'Feb 2024', expiry:'—', value:'$0', status,
+    detail:{'Scope':scope,'Status':status,'Affects': `${5 - amendNames.indexOf([id,label,scope,status])} SOWs`} };
+  nodes.push(n);
+  edges.push({ s:'msa', t:id, type:'amends', label:'Amends' });
+});
+
+// Price books
+[['pb-1','Rate Card v4.2','May 2026','Current','24 line items'],
+ ['pb-2','Rate Card v3.1','Jan 2025','Superseded','Archived']].forEach(([id,lbl,date,expiry,val]) => {
+  nodes.push({ id, label:lbl, fullLabel:lbl, type:'PriceBook', date, expiry, value:val, status:expiry,
+    detail:{'SOWs affected':expiry==='Current'?'8 SOWs':'Archived','Net impact':expiry==='Current'?'+$18K':'—'} });
+  edges.push({ s:'msa', t:id, type:'governs', label:'Applies to' });
+});
+
+// SOWs + Work Orders
+const sowAmend = [0,0,0,1,1,1,2,2,3,3,4,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2];
+const statuses = ['Active','Active','Active','Active · Renewal','SLA Breach','Active'];
+sowNames.forEach((name, i) => {
+  const sid = `sow-${String(i+1).padStart(2,'0')}`;
+  const yr = 2022 + (i%3);
+  const expYr = 2025 + (i%2) + 1;
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'][i%10];
+  nodes.push({
+    id:sid, label:`SOW-${String(i+1).padStart(3,'0')}`, fullLabel:`${name} SOW`,
+    type:'SOW', date:`${mo} ${yr}`, expiry:`${mo} ${expYr}`, value:`$${(0.6+i*0.13).toFixed(1)}M ACV`,
+    status:statuses[i%6],
+    detail:{'Governed by':'IBM MSA','Amendment':amendNames[sowAmend[i]][1],'Payment':['Net-30','Net-45','Net-60'][i%3],'SLA':`${[99.5,99.9,99.95][i%3]}% uptime`}
+  });
+  edges.push({ s:'msa', t:sid, type:'governs', label:'Governs' });
+  edges.push({ s:amendNames[sowAmend[i]][0], t:sid, type:'amends', label:'Applies to' });
+
+  // 2 WOs per SOW
+  [1,2].forEach(j => {
+    const wid = `wo-${i}-${j}`;
+    const done = (i+j)%4===0;
+    nodes.push({
+      id:wid, label:`WO-${i*2+j+1000}`.slice(0,7), fullLabel:`WO-${i*2+j+1000} · ${name}`,
+      type:'WorkOrder', date:`Mar ${2024+(j%2)}`, expiry:done?'Completed':`${['May','Jun','Jul','Aug'][j%4]} 2026`,
+      value:`$${Math.round(80+i*12+j*40)}K`, status:done?'Completed':'Active',
+      detail:{'Under SOW':`SOW-${String(i+1).padStart(3,'0')}`,'Delivery':done?'Done':`${['May','Jun'][j%2]} 2026`,'Owner':['A. Kumar','P. Rao','J. Liu','S. Mitta'][i%4]}
+    });
+    edges.push({ s:sid, t:wid, type:'governs', label:'Under' });
+  });
+});
+
+nodes.forEach(n => { nmap[n.id] = n; });
+
+// ── Radial layout ──
+function layout() {
+  const cx=0, cy=0;
+  nmap['msa'].x=cx - nsize('MSA').w/2;
+  nmap['msa'].y=cy - nsize('MSA').h/2;
+
+  const R1=210, R2=460, R3=700;
+
+  // Ring 1 — amendments + price books
+  const r1 = nodes.filter(n=>['Amendment','Draft','PriceBook'].includes(n.type));
+  r1.forEach((n,i) => {
+    const a = (i/r1.length)*Math.PI*2 - Math.PI/2;
+    n.angle = a;
+    const {w,h} = nsize(n.type);
+    n.x = cx + Math.cos(a)*R1 - w/2;
+    n.y = cy + Math.sin(a)*R1 - h/2;
+  });
+
+  // Ring 2 — SOWs
+  const r2 = nodes.filter(n=>n.type==='SOW');
+  r2.forEach((n,i) => {
+    const a = (i/r2.length)*Math.PI*2 - Math.PI/2;
+    n.angle = a;
+    const {w,h} = nsize('SOW');
+    n.x = cx + Math.cos(a)*R2 - w/2;
+    n.y = cy + Math.sin(a)*R2 - h/2;
+  });
+
+  // Ring 3 — WOs clustered near parent SOW
+  nodes.filter(n=>n.type==='WorkOrder').forEach(wo => {
+    const pe = edges.find(e=>e.t===wo.id);
+    const par = pe ? nmap[pe.s] : null;
+    const {w,h} = nsize('WorkOrder');
+    if (par && par.angle!=null) {
+      const idx = nodes.filter(n=>n.type==='WorkOrder').filter(w2=>{
+        const e2=edges.find(e=>e.t===w2.id); return e2&&e2.s===pe.s;
+      }).indexOf(wo);
+      const a = par.angle + (idx-0.5)*0.055;
+      wo.x = cx + Math.cos(a)*R3 - w/2;
+      wo.y = cy + Math.sin(a)*R3 - h/2;
+    } else {
+      wo.x=(Math.random()-0.5)*600; wo.y=(Math.random()-0.5)*600;
+    }
+  });
+}
+
+layout();
+
+// ── State ──
+let selId = 'msa';
+let tx=0, ty=0, stx=0, sty=0;
+let sc=0.48, ssc=0.48;
+let dragging=false, dmx=0, dmy=0, dtx=0, dty=0;
+let raf=null;
+
+function related(id) {
+  const s = new Set([id]);
+  edges.forEach(e=>{ if(e.s===id)s.add(e.t); if(e.t===id)s.add(e.s); });
+  return s;
+}
+
+// ── Render ──
+function getWH() {
+  const svg = document.getElementById('canvas');
+  const W = svg.clientWidth  || svg.getBoundingClientRect().width  || window.innerWidth;
+  const H = svg.clientHeight || svg.getBoundingClientRect().height || (window.innerHeight - 48);
+  return {W, H};
+}
+
+function render() {
+  const svg = document.getElementById('canvas');
+  const {W, H} = getWH();
+  svg.innerHTML='';
+
+  const rel = related(selId);
+
+  const world = document.createElementNS(NS,'g');
+  world.setAttribute('transform',`translate(${W/2+tx},${H/2+ty}) scale(${sc})`);
+  svg.appendChild(world);
+
+  const eLayer = document.createElementNS(NS,'g');
+  const lLayer = document.createElementNS(NS,'g');
+  const nLayer = document.createElementNS(NS,'g');
+  world.appendChild(eLayer);
+  world.appendChild(lLayer);
+  world.appendChild(nLayer);
+
+  // Edges
+  edges.forEach(e => {
+    const sn=nmap[e.s], tn=nmap[e.t];
+    if(!sn||!tn) return;
+    const {w:sw,h:sh}=nsize(sn.type), {w:tw,h:th}=nsize(tn.type);
+    const x1=sn.x+sw, y1=sn.y+sh/2;
+    const x2=tn.x,    y2=tn.y+th/2;
+    const isRel=rel.has(e.s)&&rel.has(e.t);
+    const isConn=e.s===selId||e.t===selId;
+
+    const path=document.createElementNS(NS,'path');
+    const mx=(x1+x2)/2;
+    path.setAttribute('d',`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`);
+    path.setAttribute('fill','none');
+
+    if(!isRel) {
+      path.setAttribute('stroke','#f2f2f2');
+      path.setAttribute('stroke-width','0.6');
+    } else if(isConn) {
+      path.setAttribute('stroke',e.type==='amends'?'#444':'#888');
+      path.setAttribute('stroke-width','1.5');
+      if(e.type==='amends') path.setAttribute('stroke-dasharray','5 4');
+    } else {
+      path.setAttribute('stroke',e.type==='amends'?'#ccc':'#d8d8d8');
+      path.setAttribute('stroke-width','0.9');
+      if(e.type==='amends') path.setAttribute('stroke-dasharray','4 3');
+    }
+
+    eLayer.appendChild(path);
+
+    // pill label on selected-connected edges only
+    if(isConn) {
+      const lx=(x1+x2)/2, ly=y1+(y2-y1)*0.5;
+      const lw=e.label.length*5.6+16;
+      const pg=document.createElementNS(NS,'g');
+      const pr=document.createElementNS(NS,'rect');
+      pr.setAttribute('x',lx-lw/2); pr.setAttribute('y',ly-9);
+      pr.setAttribute('width',lw); pr.setAttribute('height',18);
+      pr.setAttribute('rx',9); pr.setAttribute('fill','#fff');
+      pr.setAttribute('stroke','#e8e8e4'); pr.setAttribute('stroke-width','1');
+      pg.appendChild(pr);
+      const pt=document.createElementNS(NS,'text');
+      pt.setAttribute('x',lx); pt.setAttribute('y',ly+1);
+      pt.setAttribute('text-anchor','middle'); pt.setAttribute('dominant-baseline','central');
+      pt.setAttribute('font-size','9'); pt.setAttribute('font-family','Instrument Sans,sans-serif');
+      pt.setAttribute('fill','#888'); pt.textContent=e.label;
+      pg.appendChild(pt);
+      lLayer.appendChild(pg);
+    }
+  });
+
+  // Nodes
+  nodes.forEach(n => {
+    const isSel=n.id===selId;
+    const isRel=rel.has(n.id);
+    const {w,h}=nsize(n.type);
+    const nt=T[n.type]||T.SOW;
+    const op=isRel?1:0.1;
+
+    const ng=document.createElementNS(NS,'g');
+    ng.style.cursor='pointer';
+    ng.setAttribute('opacity',op);
+
+    // shadow
+    if(isRel){
+      const sh=document.createElementNS(NS,'rect');
+      sh.setAttribute('x',n.x+1.5); sh.setAttribute('y',n.y+2.5);
+      sh.setAttribute('width',w); sh.setAttribute('height',h); sh.setAttribute('rx',9);
+      sh.setAttribute('fill','rgba(0,0,0,0.07)');
+      ng.appendChild(sh);
+    }
+
+    const rect=document.createElementNS(NS,'rect');
+    rect.setAttribute('x',n.x); rect.setAttribute('y',n.y);
+    rect.setAttribute('width',w); rect.setAttribute('height',h); rect.setAttribute('rx',9);
+
+    if(isSel) {
+      rect.setAttribute('fill','#fff');
+      rect.setAttribute('stroke', n.type==='MSA'?'#0d9488':'#111');
+      rect.setAttribute('stroke-width','2');
+    } else {
+      rect.setAttribute('fill',nt.fill);
+      rect.setAttribute('stroke',nt.stroke);
+      rect.setAttribute('stroke-width','1');
+    }
+
+    ng.appendChild(rect);
+
+    if(isRel){
+      // type label
+      const tt=document.createElementNS(NS,'text');
+      tt.setAttribute('x',n.x+10); tt.setAttribute('y',n.y+(n.type==='WorkOrder'?13:14));
+      tt.setAttribute('font-size','8'); tt.setAttribute('font-weight','600');
+      tt.setAttribute('letter-spacing','0.07em'); tt.setAttribute('font-family','Instrument Sans,sans-serif');
+      tt.setAttribute('fill', isSel?'#999': (nt.tc==='#fff'||nt.tc.includes('rgba')?'rgba(255,255,255,0.38)':'#bbb'));
+      tt.textContent = n.type==='WorkOrder'?'WO':n.type==='PriceBook'?'PRICE':n.type.toUpperCase().slice(0,5);
+      ng.appendChild(tt);
+
+      // name
+      const nt2=document.createElementNS(NS,'text');
+      nt2.setAttribute('x',n.x+10); nt2.setAttribute('y',n.y+h-11);
+      nt2.setAttribute('font-size', n.type==='MSA'?'13':n.type==='WorkOrder'?'10.5':'11.5');
+      nt2.setAttribute('font-weight', n.type==='MSA'?'600':'500');
+      nt2.setAttribute('font-family','Instrument Sans,sans-serif');
+      nt2.setAttribute('fill', isSel?'#111':nt.tc);
+      const ml=n.type==='MSA'?15:n.type==='Amendment'||n.type==='Draft'?16:13;
+      nt2.textContent=n.label.length>ml?n.label.slice(0,ml)+'…':n.label;
+      ng.appendChild(nt2);
+
+      // expiry far right
+      if(n.expiry&&n.expiry!=='—'){
+        const et=document.createElementNS(NS,'text');
+        et.setAttribute('x',n.x+w-9); et.setAttribute('y',n.y+h-11);
+        et.setAttribute('font-size','8'); et.setAttribute('text-anchor','end');
+        et.setAttribute('font-family','DM Mono,monospace');
+        et.setAttribute('fill', isSel?'#aaa':(nt.tc==='#fff'||nt.tc.includes('rgba')?'rgba(255,255,255,0.32)':'#bbb'));
+        et.textContent=n.expiry.replace('Completed','Done').replace('Expires ','').slice(-8);
+        ng.appendChild(et);
+      }
+    }
+
+    // events
+    ng.addEventListener('click', ev=>{ ev.stopPropagation(); selectNode(n.id); });
+    ng.addEventListener('mouseenter', ev=>showTip(ev,n.fullLabel+(n.expiry&&n.expiry!=='—'?' · '+n.expiry:'')));
+    ng.addEventListener('mousemove', moveTip);
+    ng.addEventListener('mouseleave', hideTip);
+
+    nLayer.appendChild(ng);
+  });
+}
+
+// ── Select + animate ──
+function selectNode(id) {
+  selId = id;
+  const n = nmap[id];
+  const {w,h} = nsize(n.type);
+
+  document.getElementById('fb').classList.toggle('on', id!=='msa');
+
+  const scaleMap = {MSA:0.48,Amendment:0.82,Draft:0.82,SOW:1.0,WorkOrder:1.2,PriceBook:0.82};
+  ssc = scaleMap[n.type]||0.85;
+  stx = -(n.x+w/2)*ssc;
+  sty = -(n.y+h/2)*ssc;
+
+  animTo();
+  showPanel(n);
+  render();
+}
+
+function goMSA() { selectNode('msa'); }
+
+function animTo() {
+  if(raf) cancelAnimationFrame(raf);
+  function step(){
+    const e=0.1;
+    tx+=(stx-tx)*e; ty+=(sty-ty)*e; sc+=(ssc-sc)*e;
+    render();
+    if(Math.abs(tx-stx)>0.3||Math.abs(ty-sty)>0.3||Math.abs(sc-ssc)>0.002)
+      raf=requestAnimationFrame(step);
+  }
+  raf=requestAnimationFrame(step);
+}
+
+// ── Panel ──
+function showPanel(n){
+  document.getElementById('pType').textContent = n.type==='WorkOrder'?'WORK ORDER':n.type.toUpperCase();
+  document.getElementById('pTitle').textContent = n.fullLabel;
+  document.getElementById('pSub').textContent = n.date+(n.expiry&&n.expiry!=='—'?' · Expires '+n.expiry:'');
+
+  const out=edges.filter(e=>e.s===n.id).map(e=>({node:nmap[e.t],lbl:e.label}));
+  const inc=edges.filter(e=>e.t===n.id).map(e=>({node:nmap[e.s],lbl:e.label}));
+  const all=[...inc,...out].filter(r=>r.node);
+
+  const detail=n.detail||{};
+  const drows=Object.entries(detail).map(([k,v])=>{
+    const c=(v+'').includes('Breach')||(v+'').includes('Conflict')?'r':(v+'').includes('pending')||(v+'').includes('Unsigned')?'w':'';
+    return `<div class="ps-row"><span class="ps-k">${k}</span><span class="ps-v ${c}">${v}</span></div>`;
+  }).join('');
+
+  const sc2=(n.status||'').includes('Breach')||(n.status||'').includes('Conflict')?'r':(n.status||'').includes('Draft')||(n.status||'').includes('Unsigned')?'w':'g';
+
+  const relRows = all.slice(0,9).map(r=>{
+    const nt=T[r.node.type]||T.SOW;
+    return `<div class="pnr" onclick="selectNode('${r.node.id}')">
+      <div class="pnd" style="background:${nt.dot}"></div>
+      <span class="pnl-name">${r.node.fullLabel}</span>
+      <span class="pnl-rel">${r.lbl}</span>
+    </div>`;
+  }).join('');
+
+  const more = all.length-9;
+
+  document.getElementById('pBody').innerHTML=`
+    <div class="ps">
+      <div class="ps-lbl">Identity</div>
+      <div class="ps-row"><span class="ps-k">Status</span><span class="ps-v ${sc2}">${n.status||'Active'}</span></div>
+      <div class="ps-row"><span class="ps-k">Value</span><span class="ps-v">${n.value||'—'}</span></div>
+    </div>
+    ${drows?`<div class="ps"><div class="ps-lbl">Details</div>${drows}</div>`:''}
+    <div class="ps">
+      <div class="ps-lbl">Connected · ${all.length} nodes</div>
+      <div class="pnl">${relRows}${more>0?`<div class="ps-row" style="color:#ccc;font-size:11px;padding:6px 0 0">+${more} more connections</div>`:''}</div>
+    </div>`;
+}
+
+// ── Tooltip ──
+function showTip(e,txt){
+  const t=document.getElementById('tip');
+  t.textContent=txt; t.classList.add('on'); moveTip(e);
+}
+function moveTip(e){
+  const t=document.getElementById('tip');
+  t.style.left=(e.clientX+14)+'px'; t.style.top=(e.clientY-34)+'px';
+}
+function hideTip(){ document.getElementById('tip').classList.remove('on'); }
+
+// ── Pan ──
+const cv=document.getElementById('canvas');
+cv.addEventListener('mousedown',e=>{
+  // Allow pan unless clicking directly on an interactive node (SVG text/rect inside cursor:pointer g)
+  const tgt = e.target;
+  const inNode = tgt.tagName==='rect'||tgt.tagName==='text'||tgt.tagName==='circle';
+  if(inNode) return; // clicks on node elements handled by node click listeners
+  dragging=true; dmx=e.clientX; dmy=e.clientY; dtx=tx; dty=ty;
+  if(raf){cancelAnimationFrame(raf);raf=null;}
+});
+window.addEventListener('mousemove',e=>{
+  if(!dragging)return; tx=dtx+(e.clientX-dmx); ty=dty+(e.clientY-dmy); render();
+});
+window.addEventListener('mouseup',()=>dragging=false);
+cv.addEventListener('wheel',e=>{
+  e.preventDefault();
+  if(raf){cancelAnimationFrame(raf);raf=null;}
+  const factor = e.deltaY<0?1.08:0.93;
+  const newSc = Math.max(0.18,Math.min(3.5,sc*factor));
+  // Zoom toward cursor position
+  const {W, H} = getWH();
+  const mouseX = e.clientX - W/2;
+  const mouseY = e.clientY - H/2;
+  tx = mouseX - (mouseX - tx) * (newSc/sc);
+  ty = mouseY - (mouseY - ty) * (newSc/sc);
+  sc=newSc; ssc=newSc; stx=tx; sty=ty;
+  render();
+},{passive:false});
+window.addEventListener('resize', () => { render(); });
+
+// ── Init ──
+function init() {
+  // Wait for layout to settle so clientWidth/Height are real
+  const panelW = 292;
+  tx = -panelW / 2;
+  stx = tx; sty = 0; ty = 0;
+  sc = 0.48; ssc = 0.48;
+  render();
+  showPanel(nmap['msa']);
+}
+
+window.addEventListener('load', () => {
+  // Double rAF ensures the browser has painted and dimensions are real
+  requestAnimationFrame(() => requestAnimationFrame(init));
+});
+// ── Touch support ──
+let touches = [];
+let pinchDist0 = 0;
+let pinchSc0 = 1;
+
+cv.addEventListener('touchstart', e => {
+  e.preventDefault();
+  touches = Array.from(e.touches);
+  if(touches.length === 1) {
+    dragging=true;
+    dmx=touches[0].clientX; dmy=touches[0].clientY; dtx=tx; dty=ty;
+    if(raf){cancelAnimationFrame(raf);raf=null;}
+  } else if(touches.length === 2) {
+    dragging=false;
+    const dx=touches[0].clientX-touches[1].clientX;
+    const dy=touches[0].clientY-touches[1].clientY;
+    pinchDist0=Math.sqrt(dx*dx+dy*dy);
+    pinchSc0=sc;
+  }
+},{passive:false});
+
+cv.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const ts = Array.from(e.touches);
+  if(ts.length===1 && dragging) {
+    tx=dtx+(ts[0].clientX-dmx); ty=dty+(ts[0].clientY-dmy); render();
+  } else if(ts.length===2) {
+    const dx=ts[0].clientX-ts[1].clientX;
+    const dy=ts[0].clientY-ts[1].clientY;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    sc=Math.max(0.18,Math.min(3.5,pinchSc0*(dist/pinchDist0)));
+    ssc=sc; stx=tx; sty=ty; render();
+  }
+},{passive:false});
+
+cv.addEventListener('touchend', e => {
+  dragging=false;
+  touches=[];
+},{passive:false});
+
+</script>
+</body>
+</html>

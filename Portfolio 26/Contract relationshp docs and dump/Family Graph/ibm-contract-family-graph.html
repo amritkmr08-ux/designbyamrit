@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBM Master Services Agreement · Contract Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   Sirion Admin-Portal DS — dark theme tokens (resolved from tokens.css)
+   ════════════════════════════════════════════════════════════════ */
+:root{
+  --bg-workspace:#141414;
+  --bg-primary:#1a1a19;
+  --bg-secondary:#272726;
+  --bg-secondary-hover:#444341;
+  --border-tertiary:#272726;
+  --border-secondary:#444341;
+  --border-primary:#5f5e5a;
+  --text-primary:#ffffff;
+  --text-secondary:#c3c2b8;
+  --text-tertiary:#888782;
+  --text-quaternary:#5f5e5a;
+  --text-placeholder:#6e6c68;
+  --fg-quaternary:#6e6c68;
+  --brand-500:#5e949a;
+  --brand-secondary:#357981;
+  --utility-neutral-50:#272726;
+  --utility-neutral-700:#e2e1db;
+  --utility-brand-50:#072f34;
+  --utility-brand-700:#aec9cd;
+
+  /* node type colours — utility tokens, dark values */
+  --node-agreement:#7dd3fc;   /* sky-700 */
+  --node-amendment:#86efac;   /* green-700 */
+  --node-draft:#888782;       /* neutral */
+  --node-sow:#facc15;         /* yellow-600 */
+  --node-wo:#b3b9fd;          /* lilac-700 */
+  --node-risk:#fca5a5;        /* red-700 */
+
+  --status-error:#f87171;
+  --status-warning:#facc15;
+  --status-success:#4ade80;
+
+  --radius-xs:4px; --radius-sm:6px; --radius-md:8px; --radius-lg:10px; --radius-xl:12px; --radius-full:9999px;
+  --shadow-xl:0 20px 24px -4px rgba(0,0,0,.45), 0 8px 8px -4px rgba(0,0,0,.35);
+
+  --rail-w:288px;
+  --insp-w:304px;
+  --bar-h:48px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--bg-workspace);
+  font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;color:var(--text-primary);font-size:13px;line-height:19px}
+svg{shape-rendering:geometricPrecision}
+
+/* ───────── top bar ───────── */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--bar-h);z-index:300;
+  display:flex;align-items:center;gap:12px;padding:0 16px;
+  background:var(--bg-workspace);border-bottom:1px solid var(--border-tertiary)}
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.brand svg{display:block;color:var(--text-primary)}
+.brand b{font-size:13px;font-weight:600}
+.tb-div{width:1px;height:16px;background:var(--border-secondary);flex-shrink:0}
+.crumb{font-size:12px;color:var(--text-tertiary);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden}
+.crumb i{color:var(--text-quaternary);font-style:normal}
+.crumb b{color:var(--text-secondary);font-weight:500}
+.tb-meta{font-family:"Geist Mono",monospace;font-size:11px;color:var(--text-quaternary);white-space:nowrap}
+.tb-sp{flex:1}
+.tog{display:flex;border:1px solid var(--border-tertiary);border-radius:var(--radius-md);overflow:hidden;flex-shrink:0}
+.tog button{padding:4px 13px;font-size:12px;font-family:inherit;border:none;cursor:pointer;
+  color:var(--text-tertiary);background:var(--bg-primary);transition:all .12s}
+.tog button.on{background:var(--bg-secondary);color:var(--text-primary)}
+.tog button:not(.on):hover{color:var(--text-secondary)}
+
+/* ───────── workspace ───────── */
+#stage{position:fixed;top:var(--bar-h);left:0;right:0;bottom:0;overflow:hidden}
+#canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;display:block}
+#canvas.grabbing{cursor:grabbing}
+
+/* floating panel card (DS .panel) */
+.panel{background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  border-radius:var(--radius-xl);box-shadow:var(--shadow-xl)}
+
+/* ───────── left rail · All documents ───────── */
+.rail{position:fixed;left:16px;top:calc(var(--bar-h) + 16px);bottom:16px;width:var(--rail-w);
+  z-index:200;display:flex;flex-direction:column}
+.rail .panel{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 8px 8px}
+.phead{display:flex;align-items:center;gap:8px;padding:0 8px 10px;flex-shrink:0}
+.phead .t{flex:1;font-weight:600;font-size:13px;color:var(--text-primary)}
+.cbadge{min-width:16px;display:inline-flex;align-items:center;justify-content:center;
+  padding:1px 6px;border-radius:var(--radius-full);font-size:11px;line-height:14px;font-weight:500;
+  background:var(--utility-neutral-50);color:var(--utility-neutral-700)}
+.cbadge--brand{background:var(--utility-brand-50);color:var(--utility-brand-700)}
+
+.search{display:flex;align-items:center;gap:7px;margin:0 8px 10px;padding:5px 9px;flex-shrink:0;
+  background:var(--bg-workspace);border:1px solid var(--border-tertiary);border-radius:var(--radius-md);
+  color:var(--text-placeholder)}
+.search svg{width:13px;height:13px;flex-shrink:0}
+.search input{flex:1;min-width:0;border:none;background:none;outline:none;color:var(--text-primary);
+  font-family:"Geist";font-size:12.5px;line-height:18px}
+.search input::placeholder{color:var(--text-placeholder)}
+.search .qc{font-family:"Geist Mono",monospace;font-size:10px;color:var(--brand-500);display:none;white-space:nowrap}
+.search .qc.on{display:block}
+
+.docbody{flex:1;min-height:0;overflow-y:auto;padding:0 2px 4px}
+.docbody::-webkit-scrollbar{width:8px}
+.docbody::-webkit-scrollbar-thumb{background:var(--border-tertiary);border-radius:var(--radius-full)}
+.grp-h{display:flex;align-items:center;gap:8px;padding:7px 8px;margin-top:2px;cursor:pointer;
+  user-select:none;border-radius:var(--radius-xs);transition:background .1s}
+.grp-h:hover{background:var(--bg-secondary)}
+.grp-h .cv{width:9px;height:9px;color:var(--text-quaternary);flex-shrink:0;transition:transform .15s}
+.grp.cl .grp-h .cv{transform:rotate(-90deg)}
+.grp-h .dot{width:8px;height:8px;border-radius:var(--radius-full);flex-shrink:0}
+.grp-h .gl{flex:1;font-size:12px;font-weight:500;color:var(--text-secondary)}
+.grp.cl .grp-items{display:none}
+.docrow{display:flex;align-items:center;gap:8px;padding:5px 8px 5px 25px;cursor:pointer;
+  border-radius:var(--radius-xs);transition:background .1s}
+.docrow:hover{background:var(--bg-secondary)}
+.docrow.on{background:var(--bg-secondary)}
+.docrow.on .dn{color:var(--text-primary)}
+.docrow .dn{font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;max-width:100%}
+.docrow .ds{flex:1;font-size:11px;color:var(--text-quaternary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.docrow .st{width:6px;height:6px;border-radius:var(--radius-full);flex-shrink:0}
+.docrow.hide{display:none}
+.grp.hide{display:none}
+.doc-empty{padding:18px 8px;text-align:center;font-size:12px;color:var(--text-quaternary);display:none}
+
+/* ───────── right inspector · node details ───────── */
+.insp{position:fixed;right:16px;top:calc(var(--bar-h) + 16px);bottom:16px;width:var(--insp-w);
+  z-index:200;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.insp .panel{display:flex;flex-direction:column;min-height:0}
+.panel--record{flex:0 0 auto;max-height:66%;padding:14px 0 0}
+.panel--docs{flex:1 1 auto;min-height:150px;padding:13px 0 0}
+.gi-head{display:flex;align-items:flex-start;gap:8px;padding:0 14px 12px;flex-shrink:0}
+.gi-chipline{display:flex;align-items:center;gap:6px}
+.tchip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:var(--radius-xs);
+  background:var(--utility-neutral-50);font-family:"Geist Mono",monospace;font-size:9.5px;
+  letter-spacing:.07em;font-weight:500;color:var(--utility-neutral-700);white-space:nowrap}
+.tchip .dot{width:6px;height:6px;border-radius:var(--radius-full)}
+.gi-x{margin-left:auto;display:flex;gap:2px;position:relative}
+.gi-x button{width:22px;height:22px;display:grid;place-items:center;border:none;background:none;
+  border-radius:var(--radius-xs);cursor:pointer;color:var(--fg-quaternary);font-size:13px;transition:all .12s}
+.gi-x button:hover{background:var(--bg-secondary);color:var(--text-secondary)}
+.gi-title{display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0;
+  cursor:pointer;user-select:none}
+.gi-title .gt{flex:1;min-width:0}
+.gi-title h3{font-size:14px;font-weight:600;line-height:1.35;letter-spacing:-0.01em}
+.gi-title h3 .code{color:var(--text-tertiary);font-weight:500}
+.gi-title h3 .sep{color:var(--text-quaternary);font-weight:400;padding:0 2px}
+.gi-title p{font-size:11.5px;color:var(--text-tertiary);margin-top:4px;line-height:1.45}
+.gi-title p .dt{font-family:"Geist Mono",monospace;font-size:11px;color:var(--text-secondary)}
+.gi-title p .bul{color:var(--text-quaternary);padding:0 3px}
+
+/* relationship links — the "View 5 SOWs / Supersedes 1 amendment" row set */
+.rlinks{display:flex;flex-direction:column;gap:1px;padding:8px 8px 4px;margin:0 6px;
+  border-top:1px solid var(--border-tertiary)}
+.rlink{display:flex;align-items:center;gap:8px;padding:6px 6px;border-radius:var(--radius-sm);
+  cursor:pointer;transition:background .1s}
+.rlink:hover{background:var(--bg-secondary)}
+.rlink .rl{flex:1;font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rlink:hover .rl{color:var(--text-primary)}
+.rlink .rn{font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--text-quaternary);flex-shrink:0}
+.rlink .rc{width:10px;height:10px;color:var(--text-quaternary);flex-shrink:0}
+.rlink:hover .rc{color:var(--text-secondary)}
+
+/* kebab menu (DS .gi-menu) */
+.kmenu{position:absolute;top:26px;right:0;z-index:9;min-width:190px;display:none;flex-direction:column;padding:4px;
+  background:var(--bg-primary);border:1px solid var(--border-secondary);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-xl)}
+.kmenu.show{display:flex}
+.kitem{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--radius-sm);cursor:pointer;
+  color:var(--text-secondary);font-size:12.5px;white-space:nowrap}
+.kitem:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.kitem .ki{width:13px;height:13px;flex-shrink:0;opacity:.75}
+/* card collapse — DS .panel.collapsed pattern */
+.pcv{width:12px;height:12px;color:var(--text-quaternary);flex-shrink:0;transition:transform .16s,color .12s}
+.panel.collapsed .pcv{transform:rotate(-90deg)}
+.gi-title:hover .pcv,.dh:hover .pcv{color:var(--text-secondary)}
+.panel--record.collapsed .gi-body{display:none}
+.panel--record.collapsed{padding-bottom:14px}
+.panel--docs.collapsed{flex:0 0 auto;min-height:0;padding-bottom:4px}
+.panel--docs.collapsed .dbody{display:none}
+.insp.dcol .panel--record{flex:1 1 auto;max-height:100%}
+.gi-body{flex:1;min-height:0;overflow-y:auto;padding:4px 0 10px}
+.gi-body::-webkit-scrollbar{width:8px}
+.gi-body::-webkit-scrollbar-thumb{background:var(--border-tertiary);border-radius:var(--radius-full)}
+.gi-sec{padding:10px 14px 4px}
+.gi-lbl{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-quaternary);margin-bottom:4px;display:flex;justify-content:space-between;align-items:baseline}
+.gi-lbl span{font-family:"Geist Mono",monospace;font-size:10px;text-transform:none;letter-spacing:0}
+.gi-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-tertiary);font-size:12.5px}
+.gi-row:last-child{border-bottom:none}
+.gi-row .k{flex:0 0 auto;color:var(--text-secondary)}
+.gi-row .v{flex:1;min-width:0;text-align:right;color:var(--text-primary);font-weight:500;overflow-wrap:anywhere}
+.gi-row .v.err{color:var(--status-error)}
+.gi-row .v.warn{color:var(--status-warning)}
+.gi-row .v.ok{color:var(--status-success)}
+.gi-row .v.mono{font-family:"Geist Mono",monospace;font-weight:400;font-size:11.5px}
+/* risk flag */
+.gi-flag{margin:8px 14px 2px;padding:8px 10px;border-radius:var(--radius-md);font-size:12px;line-height:1.45;
+  color:var(--status-error);background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25)}
+/* connected rows */
+.cx{display:flex;align-items:center;gap:8px;padding:5px 6px;margin:0 -6px;border-radius:var(--radius-sm);
+  cursor:pointer;transition:background .1s}
+.cx:hover{background:var(--bg-secondary)}
+.cx .dot{width:7px;height:7px;border-radius:var(--radius-full);flex-shrink:0}
+.cx .cn{flex:1;font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cx:hover .cn{color:var(--text-primary)}
+.cx .cr{font-family:"Geist Mono",monospace;font-size:10px;color:var(--text-quaternary);flex-shrink:0}
+.cx-more{padding:6px 6px 2px;font-size:11.5px;color:var(--text-quaternary);cursor:pointer}
+.cx-more:hover{color:var(--text-secondary)}
+/* collapsible section (Connected) */
+.gi-lbl .n{font-family:"Geist Mono",monospace;font-size:10px;text-transform:none;letter-spacing:0;
+  color:var(--text-quaternary);margin-left:7px;font-weight:400}
+.gi-sec--coll .gi-lbl{cursor:pointer;user-select:none;align-items:center;padding:3px 0;margin-bottom:2px}
+.gi-sec--coll .gi-lbl:hover{color:var(--text-tertiary)}
+.gi-sec--coll .cv{width:10px;height:10px;color:var(--text-quaternary);flex-shrink:0;transition:transform .15s}
+.gi-sec--coll.cl .cv{transform:rotate(-90deg)}
+.gi-sec--coll.cl .gi-coll-body{display:none}
+
+/* ───────── documents card (right, below the record card) ───────── */
+.dh{display:flex;align-items:center;gap:8px;padding:0 14px 9px;flex-shrink:0;cursor:pointer;user-select:none}
+.dh .t{font-weight:600;font-size:13px;color:var(--text-primary);flex-shrink:0}
+.dh .dsub{flex:1;min-width:0;font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--text-quaternary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dbody{flex:1;min-height:0;overflow-y:auto;padding:0 6px 10px}
+.dbody::-webkit-scrollbar{width:8px}
+.dbody::-webkit-scrollbar-thumb{background:var(--border-tertiary);border-radius:var(--radius-full)}
+.frow{display:flex;gap:9px;padding:7px 8px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s}
+.frow:hover{background:var(--bg-secondary)}
+.frow.on{background:var(--bg-secondary)}
+.frow .fi{width:14px;height:16px;flex-shrink:0;margin-top:2px}
+.frow .fmain{flex:1;min-width:0}
+.frow .fnm{font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frow:hover .fnm,.frow.on .fnm{color:var(--text-primary)}
+.frow .fmeta{font-family:"Geist Mono",monospace;font-size:10px;color:var(--text-quaternary);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fpill{font-size:9.5px;line-height:14px;padding:1px 6px;border-radius:var(--radius-xs);border:1px solid;
+  white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:1px}
+.fpill.g{color:var(--status-success);border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.07)}
+.fpill.w{color:var(--status-warning);border-color:rgba(250,204,21,.25);background:rgba(250,204,21,.07)}
+.fpill.r{color:var(--status-error);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.07)}
+.fpill.n{color:var(--text-tertiary);border-color:var(--border-secondary);background:transparent}
+.fdet{display:none;padding:2px 8px 9px 31px}
+.frow.on + .fdet{display:block}
+.fdet .fr{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:3px 0;font-size:11.5px}
+.fdet .fk{color:var(--text-quaternary);flex-shrink:0}
+.fdet .fv{color:var(--text-secondary);text-align:right;overflow-wrap:anywhere}
+.fgrp{font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-quaternary);
+  padding:9px 8px 3px}
+.fgrp:first-child{padding-top:2px}
+
+/* ───────── focus badge ───────── */
+.fb{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--bar-h) + 16px);z-index:210;
+  font-size:12px;color:var(--text-secondary);background:var(--bg-primary);
+  border:1px solid var(--border-secondary);border-radius:var(--radius-full);
+  padding:5px 14px;cursor:pointer;display:none;box-shadow:var(--shadow-xl)}
+.fb.on{display:block}
+.fb:hover{border-color:var(--border-primary);color:var(--text-primary)}
+
+/* ───────── legend + zoom (bottom, between panels) ───────── */
+.legend{position:fixed;left:calc(var(--rail-w) + 32px);bottom:16px;z-index:190;
+  display:flex;align-items:center;gap:14px;padding:7px 12px}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-tertiary);white-space:nowrap}
+.leg .dot{width:7px;height:7px;border-radius:var(--radius-full)}
+.leg .ln{width:16px;height:0;border-top:1px solid var(--border-primary)}
+.leg .ln.d{border-top-style:dashed}
+.zc{position:fixed;right:16px;bottom:16px;z-index:190;display:flex;overflow:hidden;
+  background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-xl)}
+.zc > * + *{border-left:1px solid var(--border-tertiary)}
+.zc button{width:32px;height:28px;border:none;background:none;color:var(--text-tertiary);cursor:pointer;
+  font-size:14px;font-family:inherit;transition:all .12s}
+.zc button:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.zc .lvl{font-family:"Geist Mono",monospace;font-size:10px;color:var(--text-quaternary);
+  width:46px;height:28px;line-height:28px;text-align:center}
+
+/* ───────── tooltip ───────── */
+.tip{position:fixed;background:var(--bg-primary);border:1px solid var(--border-secondary);color:var(--text-primary);
+  border-radius:var(--radius-md);padding:7px 10px;font-size:11.5px;pointer-events:none;opacity:0;
+  transition:opacity .1s;z-index:500;max-width:250px;box-shadow:var(--shadow-xl)}
+.tip.on{opacity:1}
+.tip .tt{font-family:"Geist Mono",monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--text-quaternary);margin-bottom:2px}
+.tip .tm{font-family:"Geist Mono",monospace;font-size:10px;color:var(--text-tertiary);margin-top:3px}
+.tip .tm b{color:var(--status-error);font-weight:400}
+
+/* ───────── list view ───────── */
+#list{position:fixed;top:var(--bar-h);left:0;right:0;bottom:0;overflow-y:auto;display:none;
+  background:var(--bg-workspace);padding:20px 24px 60px}
+#list.on{display:block}
+.lhint{max-width:1120px;margin:0 auto 14px;font-size:12px;color:var(--text-quaternary)}
+.ltbl{width:100%;max-width:1120px;margin:0 auto;border-collapse:collapse}
+.ltbl thead th{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-quaternary);text-align:left;padding:0 10px 8px;position:sticky;top:0;background:var(--bg-workspace);z-index:2}
+.ltbl thead th.num{text-align:right}
+.lgrp td{padding:20px 10px 7px;font-size:12.5px;font-weight:600;color:var(--text-primary);
+  border-bottom:1px solid var(--border-secondary)}
+.lgrp .gm{font-family:"Geist Mono",monospace;font-size:10px;color:var(--text-quaternary);font-weight:400;margin-left:9px}
+.ltbl tbody tr.itm{border-bottom:1px solid var(--border-tertiary);cursor:pointer}
+.ltbl tbody tr.itm:hover{background:var(--bg-primary)}
+.ltbl td{padding:7px 10px;font-size:12.5px;color:var(--text-secondary);vertical-align:middle}
+.ltbl td.num{text-align:right;font-family:"Geist Mono",monospace;font-size:11px;color:var(--text-tertiary)}
+.lname{display:flex;align-items:center;gap:8px}
+.lname .dot{width:7px;height:7px;border-radius:var(--radius-full);flex-shrink:0}
+.lname b{font-weight:500;color:var(--text-primary)}
+.lname span{color:var(--text-quaternary);font-size:11.5px}
+.ltype{font-family:"Geist Mono",monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-quaternary)}
+.badge{font-size:10.5px;border-radius:var(--radius-xs);padding:1.5px 7px;border:1px solid;white-space:nowrap}
+.badge.g{color:var(--status-success);border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.07)}
+.badge.r{color:var(--status-error);border-color:rgba(248,113,113,.28);background:rgba(248,113,113,.07)}
+.badge.w{color:var(--status-warning);border-color:rgba(250,204,21,.25);background:rgba(250,204,21,.07)}
+.badge.n{color:var(--text-tertiary);border-color:var(--border-secondary);background:var(--bg-primary)}
+</style>
+</head>
+<body>
+
+<!-- ════ TOP BAR ════ -->
+<div class="topbar">
+  <div class="brand">
+    <svg width="18" height="18" viewBox="0 0 18 18">
+      <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+        <ellipse cx="9" cy="9" rx="7.4" ry="7.4" opacity=".9"/>
+        <path d="M2.6 11.4 A7.4 7.4 0 0 1 15 5.6" opacity=".55"/>
+        <ellipse cx="9" cy="9" rx="4.4" ry="4.4" opacity=".7"/>
+        <ellipse cx="9" cy="9" rx="1.7" ry="1.7" opacity=".95"/>
+      </g>
+    </svg>
+    <b>Sirion</b>
+  </div>
+  <div class="tb-div"></div>
+  <div class="crumb">Contracts <i>/</i> Boeing — IBM Corp <i>/</i> <b>IBM Master Services Agreement</b></div>
+  <span class="tb-meta" id="tbMeta"></span>
+  <div class="tb-sp"></div>
+  <div class="tog">
+    <button id="tGraph" class="on">Graph</button>
+    <button id="tList">List</button>
+  </div>
+</div>
+
+<!-- ════ CANVAS ════ -->
+<div id="stage"><svg id="canvas" xmlns="http://www.w3.org/2000/svg"></svg></div>
+
+<div class="fb" id="fb">↩ Show full family</div>
+
+<!-- ════ LEFT · ALL DOCUMENTS ════ -->
+<div class="rail">
+  <div class="panel">
+    <div class="phead">
+      <span class="t">Contract family</span>
+      <span class="cbadge cbadge--brand" id="docCount"></span>
+    </div>
+    <div class="search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 L14 14"/>
+      </svg>
+      <input id="q" placeholder="Search records…" autocomplete="off" spellcheck="false">
+      <span class="qc" id="qc"></span>
+    </div>
+    <div class="docbody" id="docBody"></div>
+    <div class="doc-empty" id="docEmpty">No records match</div>
+  </div>
+</div>
+
+<!-- ════ RIGHT · DETAILS ════ -->
+<div class="insp">
+  <!-- record card -->
+  <div class="panel panel--record">
+    <div class="gi-head">
+      <span class="tchip" id="iChip"><span class="dot"></span><span id="iChipT">MSA</span></span>
+      <div class="gi-x">
+        <button id="iKebab" title="Record actions">⋮</button>
+        <button id="iClose" title="Back to family">×</button>
+        <div class="kmenu" id="kMenu">
+          <div class="kitem" data-a="focus">Focus in graph</div>
+          <div class="kitem" data-a="branch">Show only this branch</div>
+          <div class="kitem" data-a="docs">Show its documents</div>
+          <div class="kitem" data-a="list">Open in list view</div>
+        </div>
+      </div>
+    </div>
+    <div class="gi-title" id="recHead" title="Collapse this card">
+      <div class="gt">
+        <h3 id="iTitle">—</h3>
+        <p id="iSub">—</p>
+      </div>
+      <svg class="pcv" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
+    </div>
+    <div class="gi-body" id="iBody"></div>
+  </div>
+  <!-- documents card — the paper filed against the selected record -->
+  <div class="panel panel--docs">
+    <div class="dh" id="docHead" title="Collapse this card">
+      <span class="t">Documents</span>
+      <span class="dsub" id="dSub"></span>
+      <span class="cbadge" id="dCount">0</span>
+      <svg class="pcv" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
+    </div>
+    <div class="dbody" id="dBody"></div>
+  </div>
+</div>
+
+<!-- ════ LEGEND + ZOOM ════ -->
+<div class="legend panel" id="legend"></div>
+<div class="zc">
+  <button id="zOut" title="Zoom out">−</button>
+  <button id="zIn" title="Zoom in">+</button>
+  <div class="lvl" id="zLvl">48%</div>
+  <button id="zFit" title="Fit to view">⤢</button>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<!-- ════ LIST VIEW ════ -->
+<div id="list">
+  <div class="lhint">Every record in this contract family — click any row to open it in the graph.</div>
+  <table class="ltbl">
+    <thead><tr>
+      <th style="width:34%">Record</th><th style="width:11%">Type</th><th style="width:15%">Status</th>
+      <th style="width:12%">Governed by</th><th class="num" style="width:9%">Value</th>
+      <th class="num" style="width:9%">Start</th><th class="num" style="width:10%">Expiry</th>
+    </tr></thead>
+    <tbody id="listBody"></tbody>
+  </table>
+</div>
+
+<script>
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+
+/* ══════════════════════════════════════════════
+   1 · TYPE SYSTEM — colours mirror the admin-portal DS utility tokens
+   ══════════════════════════════════════════════ */
+const CSS = getComputedStyle(document.documentElement);
+const cv = n => CSS.getPropertyValue(n).trim();
+const T={
+  Agreement:{c:cv('--node-agreement'), r:23,  k:'Master Agreement',  short:'MASTER AGREEMENT'},
+  Amendment:{c:cv('--node-amendment'), r:11,  k:'Amendment',        short:'AMENDMENT'},
+  Draft:    {c:cv('--node-draft'),     r:11,  k:'Draft amendment',  short:'DRAFT'},
+  SOW:      {c:cv('--node-sow'),       r:13,  k:'Statement of work',short:'SOW'},
+  WorkOrder:{c:cv('--node-wo'),        r:7.5, k:'Work order',       short:'WORK ORDER'},
+};
+const RISK=cv('--node-risk');
+const isRisk = n => /Breach|Conflict|Unsigned/.test(n.status||'');
+const isDue  = n => /Renewal/.test(n.status||'');
+
+/* ══════════════════════════════════════════════
+   2 · DATA — IBM MSA family (dataset from the relationship-graph file)
+   ══════════════════════════════════════════════ */
+const OWNERS=['A. Kumar','P. Rao','J. Liu','S. Mitta'];
+
+function autoWos(sow,i){
+  return [1,2].map(j=>{
+    const done=(i+j)%4===0, code='WO-'+(1000+i*2+j);
+    return {id:sow.id+'-w'+j, label:code, full:code+' · '+sow.name,
+      date:'Mar '+(2024+(j%2)),
+      expiry: done?'Completed':['May 2027','Jun 2027','Jul 2027','Aug 2027'][(i+j)%4],
+      value:'$'+(80+i*12+j*40)+'K', status: done?'Completed':'Active',
+      detail:{'Under SOW':sow.label,'Delivery':done?'Delivered':['May 2027','Jun 2027'][j%2],
+              'Owner':OWNERS[i%4],'Milestones':(2+((i+j)%3))+' of '+(3+((i+j)%3))}};
+  });
+}
+const sowDetail=(am,pay,sla)=>({'Governed by':'IBM MSA','Amendment':am,'Payment':pay,'SLA':sla+'% uptime'});
+
+const F4rows=[
+  ['msa-s01','SOW-001','Accenture Cloud Support','Jan 2023','Jan 2027','$4.2M ACV','Active','Amendment 01','Net-30','99.9'],
+  ['msa-s02','SOW-003','Tokyo Cloud Support','Mar 2023','Mar 2026','$2.8M ACV','Active · Renewal','Amendment 01','Net-45','99.5'],
+  ['msa-s03','SOW-004','Singapore Dev Services','Apr 2022','Apr 2026','$1.9M ACV','Active','Amendment 02','Net-30','99.9'],
+  ['msa-s04','SOW-006','Dubai Analytics','Jun 2024','Jun 2027','$3.4M ACV','Active','Amendment 02','Net-60','99.95'],
+  ['msa-s05','SOW-007','Chicago Data Center','Jul 2022','Jul 2026','$5.1M ACV','SLA Breach','Amendment 01','Net-30','99.95'],
+  ['msa-s06','SOW-009','Sydney Operations','Sep 2023','Sep 2026','$2.2M ACV','Active','Amendment 03','Net-45','99.5'],
+  ['msa-s07','SOW-010','Mumbai DevOps','Oct 2024','Oct 2027','$1.6M ACV','Active','Amendment 04','Net-30','99.9'],
+  ['msa-s08','SOW-012','Seoul Analytics','Feb 2023','Feb 2026','$2.9M ACV','Active · Renewal','Amendment 04','Net-60','99.9'],
+  ['msa-s09','SOW-013','Toronto Cloud Migration','Mar 2024','Mar 2027','$3.8M ACV','Active','Amendment 05','Net-30','99.95'],
+  ['msa-s10','SOW-014','São Paulo Platform','Apr 2023','Apr 2026','$1.4M ACV','Active','Amendment 05','Net-45','99.5'],
+  ['msa-s11','SOW-025','Boston Analytics','May 2024','May 2027','$2.6M ACV','Active','Amendment 02','Net-30','99.9'],
+  ['msa-s12','SOW-029','Seattle DevOps','Aug 2022','Aug 2026','$2.1M ACV','SLA Breach','Amendment 03','Net-60','99.5'],
+];
+const F4sows=F4rows.map(([id,label,name,d,e,v,st,am,pay,sla],i)=>{
+  const s={id,label,name,full:name+' SOW',date:d,expiry:e,value:v,status:st,detail:sowDetail(am,pay,sla)};
+  return {...s, wos:autoWos(s,i+1)};
+});
+const F4amend=[
+  ['msa-a1','Amendment 01','Liability Clause','Active · Conflict','5 SOWs','Conflicts with §14.2 of Amendment 04'],
+  ['msa-a2','Amendment 02','SLA Terms Update','Active','4 SOWs',''],
+  ['msa-a3','Amendment 03','Payment Terms','Draft · Unsigned','2 SOWs',''],
+  ['msa-a4','Amendment 04','Pricing Update','Active','2 SOWs',''],
+  ['msa-a5','Amendment 05','Service Enhancement','Active','2 SOWs',''],
+];
+const FAM={
+  id:'msa', name:'IBM Master Services Agreement', code:'MSA-2024-IBM', tcv:'$42.8M TCV',
+  root:{id:'msa',type:'Agreement',label:'IBM MSA',full:'IBM Master Services Agreement',
+    date:'Jan 2024',expiry:'Jan 2027',value:'$42.8M TCV',status:'Active',
+    detail:{'Parties':'Boeing — IBM Corp','Gov. law':'Delaware, USA','Auto-renew':'No','Notice':'90 days',
+            'Amendments':'4 active · 1 draft','SOWs':'12 governed'}},
+  inner:F4amend.map(([id,label,scope,status,affects,note])=>({
+    id,type:status.includes('Draft')?'Draft':'Amendment',label,full:label+' — '+scope,
+    date:status.includes('Draft')?'Pending':'Feb 2024',expiry:status.includes('Draft')?'—':'Jan 2027',
+    value:'$0',status,
+    /* how many SOWs it affects is derived from the graph, never stored twice */
+    detail:Object.assign({'Scope':scope},
+      status.includes('Draft')?{'Drafted':'22 Jul 2026','Awaiting':'Finance + counterparty'}:{'Signed':'Feb 2024'},
+      note?{'Flag':note}:{})})),
+  sows:F4sows,
+  links:[['msa-a1','msa-s01'],['msa-a1','msa-s02'],['msa-a1','msa-s05'],
+         ['msa-a2','msa-s03'],['msa-a2','msa-s04'],['msa-a2','msa-s11'],
+         ['msa-a3','msa-s06'],['msa-a3','msa-s12'],
+         ['msa-a4','msa-s07'],['msa-a4','msa-s08'],
+         ['msa-a5','msa-s09'],['msa-a5','msa-s10']]
+};
+
+/* build node/edge lists */
+const nodes=[],edges=[],NMAP={};
+(function build(spec){
+  const root={...spec.root};
+  nodes.push(root);
+  spec.inner.forEach(n=>{ nodes.push({...n});
+    edges.push({s:root.id,t:n.id,type:'amends',label:'Amends'}); });
+  spec.sows.forEach(s=>{
+    const {wos=[],...sn}=s;
+    nodes.push({...sn,type:'SOW'});
+    edges.push({s:root.id,t:sn.id,type:'governs',label:'Governs'});
+    wos.forEach(w=>{ nodes.push({...w,type:'WorkOrder'});
+      edges.push({s:sn.id,t:w.id,type:'governs',label:'Under'}); });
+  });
+  spec.links.forEach(([a,b])=>edges.push({s:a,t:b,type:'amends',label:'Applies to',soft:true}));
+})(FAM);
+nodes.forEach(n=>NMAP[n.id]=n);
+
+/* ══════════════════════════════════════════════
+   2b · DOCUMENTS — the paper filed against each record.
+   A node is one contract record; several documents can sit under it
+   (the executed paper, its exhibits, the drafts it came from, and the
+   correspondence filed against it).
+   ══════════════════════════════════════════════ */
+const DTYPE={
+  executed:{label:'Executed',       c:'--status-success'},
+  exhibit :{label:'Exhibit',        c:'--node-sow'},
+  draft   :{label:'Draft / redline',c:'--node-draft'},
+  corr    :{label:'Correspondence', c:'--node-wo'},
+};
+const DORDER=['executed','exhibit','draft','corr'];
+const PILL={Signed:'g',Current:'g','Part of agreement':'n','Part of SOW':'n',Filed:'n',
+  Superseded:'n',Unsigned:'w','In review':'w',Pending:'w',Action:'r'};
+
+function doc(n,t,m,s,extra){ return Object.assign({n,t,m,s},extra||{}); }
+
+/* MSA root */
+NMAP['msa'].docs=[
+  doc('IBM MSA — Executed.pdf','executed','v1 · 64 pp · 12 Jan 2024','Signed',
+      {by:'S. Mitta',src:'DocuSign envelope 8841-A',lang:'English (US)'}),
+  doc('Exhibit A — Service Catalogue.pdf','exhibit','v1 · 22 pp','Part of agreement',{by:'IBM Corp',src:'Attached at signature'}),
+  doc('Exhibit B — Security & Data Addendum.pdf','exhibit','v2 · 14 pp','Part of agreement',{by:'Boeing Legal',src:'Replaced v1 at signature'}),
+  doc('Exhibit C — Insurance Certificates.pdf','exhibit','v1 · 6 pp','Part of agreement',{by:'IBM Risk',src:'Annual refresh due Jan 2027'}),
+  doc('MSA v7 — Boeing markup.docx','draft','v7 · 61 pp · 04 Dec 2023','Superseded',{by:'A. Kumar',src:'Final negotiation round'}),
+  doc('GC approval — sign-off thread.eml','corr','3 messages · 09 Jan 2024','Filed',{by:'P. Rao',src:'Outlook, legal@boeing'}),
+];
+
+/* amendments */
+FAM.inner.forEach((a,i)=>{
+  const nd=NMAP[a.id], isDraft=nd.type==='Draft';
+  if(isDraft){
+    nd.docs=[
+      doc(a.label+' — Draft v3.docx','draft','v3 · 8 pp · 22 Jul 2026','Unsigned',{by:'A. Kumar',src:'Authored from MSA template'}),
+      doc('Boeing markup — payment terms.docx','draft','v2 · 14 comments','In review',{by:'Boeing Legal',src:'Received 29 Jul 2026'}),
+      doc('Finance approval request.eml','corr','1 message · awaiting reply','Pending',{by:'P. Rao',src:'Sent to controller 01 Aug 2026'}),
+    ];
+  }else{
+    nd.docs=[
+      doc(a.label+' — Executed.pdf','executed','v1 · '+(6+i)+' pp · Feb 2024','Signed',{by:'S. Mitta',src:'DocuSign envelope 90'+(12+i)+'-C'}),
+      doc(a.label+' — Redline vs MSA.docx','draft','v3 · Jan 2024','Superseded',{by:'A. Kumar',src:'Negotiation round 3'}),
+      doc('Counterparty approval.eml','corr','2 messages · Feb 2024','Filed',{by:'IBM Contracts',src:'Outlook'}),
+    ];
+    if(/Conflict/.test(a.status))
+      nd.docs.push(doc('Legal note — §14.2 conflict review.pdf','corr','2 pp · 14 Jun 2026','Action',
+        {by:'P. Rao',src:'Raised against Amendment 04'}));
+  }
+});
+
+/* SOWs */
+FAM.sows.forEach((s,i)=>{
+  const nd=NMAP[s.id];
+  nd.docs=[
+    doc(s.label+' — Executed.pdf','executed','v1 · '+(12+i)+' pp · '+s.date,'Signed',
+        {by:OWNERS[i%4],src:'DocuSign envelope 77'+(20+i)+'-B'}),
+    doc('Annexure 1 — Rate card.xlsx','exhibit','v4.2 · 38 line items','Current',{by:'IBM Pricing',src:'Superseded Rate card v3.1'}),
+    doc('Annexure 2 — Resource plan.pdf','exhibit','v1 · 5 pp','Part of SOW',{by:OWNERS[(i+1)%4],src:'Attached at signature'}),
+  ];
+  if(/Breach/.test(s.status)){
+    nd.docs.push(doc('SLA credit letter — Q2 2026.pdf','corr','2 pp · issued 08 Jul 2026','Action',
+      {by:'IBM Service Delivery',src:'Against '+s.detail.SLA+' commitment'}));
+    nd.docs.push(doc('Service credit calculation.xlsx','corr','updated 31 Jul 2026','Filed',{by:'P. Rao',src:'Finance workbook'}));
+  }
+  if(/Renewal/.test(s.status))
+    nd.docs.push(doc('Renewal notice — 90 day.pdf','corr','1 p · due '+s.expiry,'Action',
+      {by:OWNERS[i%4],src:'Notice window opens 90 days before expiry'}));
+  if(i%4===1) nd.docs.push(doc('Change note 01 — scope.pdf','exhibit','v1 · 3 pp','Part of SOW',{by:OWNERS[i%4],src:'Signed variation'}));
+});
+
+/* work orders */
+nodes.filter(n=>n.type==='WorkOrder').forEach((w,i)=>{
+  const done=/Completed/.test(w.status);
+  w.docs=[
+    doc(w.label+' — Work order.pdf','executed','v1 · 4 pp · '+w.date,'Signed',{by:w.detail.Owner,src:'Issued under '+w.detail['Under SOW']}),
+    done ? doc('Delivery acceptance note.pdf','corr','signed off '+w.detail.Delivery,'Filed',{by:w.detail.Owner,src:'Closes the work order'})
+         : doc('Milestone report — latest.pdf','corr',w.detail.Milestones+' milestones','Filed',{by:w.detail.Owner,src:'Monthly delivery pack'}),
+  ];
+});
+nodes.forEach(n=>{ if(!n.docs) n.docs=[]; });
+const DOCTOTAL=nodes.reduce((a,n)=>a+n.docs.length,0);
+
+/* ══════════════════════════════════════════════
+   2c · RECORD IDENTITY — system code, effective date, one-line summary.
+   Amendment 04 supersedes Amendment 01, which is what the §14.2 flag is about.
+   ══════════════════════════════════════════════ */
+NMAP['msa-a4'].supersedes='msa-a1';
+nodes.forEach(n=>{ if(n.supersedes) NMAP[n.supersedes].supersededBy=n.id; });
+
+const SUMMARY={'Liability Clause':'Liability cap revised','SLA Terms Update':'Service levels tightened',
+  'Payment Terms':'Payment terms under negotiation','Pricing Update':'Rate card v4.2 applied',
+  'Service Enhancement':'Expanded service scope'};
+const DAYS=[2,5,9,12,14,18,21,24,27,3,7,11];
+function effDate(v,i){
+  if(!v||v==='Pending'||v==='—') return null;
+  const p=v.split(' ');
+  return p.length===2 ? DAYS[i%DAYS.length]+' '+p[0]+' '+p[1] : v;
+}
+nodes.forEach((n,i)=>{
+  n.eff = effDate(n.date,i);
+  if(n.type==='Agreement'){ n.code=FAM.code; n.title='IBM Master Services Agreement';
+    n.summary='Master terms for global IT services'; }
+  else if(n.type==='Amendment'||n.type==='Draft'){
+    n.code='CO91'+(40+FAM.inner.findIndex(a=>a.id===n.id));
+    n.title=n.label+' — '+n.detail.Scope;
+    n.summary=SUMMARY[n.detail.Scope]||n.detail.Scope;
+  }
+  else if(n.type==='SOW'){ n.code=n.label; n.title=n.full;
+    n.summary=n.detail.Payment+' · '+n.detail.SLA; }
+  else { n.code=n.label; n.title=n.full.split(' · ')[1]||n.full;
+    n.summary=n.detail.Milestones+' milestones · '+n.detail.Owner; }
+});
+
+/* ══════════════════════════════════════════════
+   3 · RADIAL LAYOUT
+   ══════════════════════════════════════════════ */
+(function layout(){
+  const inner=nodes.filter(n=>['Amendment','Draft'].includes(n.type));
+  const sows =nodes.filter(n=>n.type==='SOW');
+  const wos  =nodes.filter(n=>n.type==='WorkOrder');
+  const root =nodes[0];
+  root.lx=0; root.ly=0;
+
+  const R1 = inner.length<=3 ? 132 : 96+inner.length*17;
+  const R2 = Math.max(R1+150, 182+sows.length*16);
+  const WOR = 62;
+
+  inner.forEach((n,i)=>{
+    const a=(i/inner.length)*Math.PI*2 - Math.PI/2 + 0.22;
+    n.ang=a; n.lx=Math.cos(a)*R1; n.ly=Math.sin(a)*R1;
+  });
+  sows.forEach((n,i)=>{
+    const a=(i/sows.length)*Math.PI*2 - Math.PI/2;
+    n.ang=a; n.lx=Math.cos(a)*R2; n.ly=Math.sin(a)*R2;
+  });
+  const byParent={};
+  wos.forEach(w=>{
+    const pe=edges.find(e=>e.t===w.id&&!e.soft);
+    (byParent[pe.s]=byParent[pe.s]||[]).push(w);
+  });
+  Object.keys(byParent).forEach(pid=>{
+    const par=NMAP[pid], list=byParent[pid], fan=0.98;
+    list.forEach((w,k)=>{
+      const a=par.ang + (k-(list.length-1)/2)*fan;
+      w.ang=par.ang; w.wk=k;
+      w.lx=par.lx+Math.cos(a)*WOR; w.ly=par.ly+Math.sin(a)*WOR;
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════
+   4 · STATE + CAMERA
+   ══════════════════════════════════════════════ */
+const S={ sel:null, hover:null, q:'', view:'graph', subset:null,
+  tx:0,ty:0,sc:.42, ttx:0,tty:0,tsc:.42, raf:null };
+const inSub = n => !S.subset || S.subset.ids.has(n.id);
+const svg=document.getElementById('canvas'), stage=document.getElementById('stage');
+const RAIL=()=>288+32, INSP=()=>304+32;   /* panel widths + margins */
+
+const matches = n => !S.q || (n.full+' '+n.label+' '+(n.status||'')).toLowerCase().includes(S.q);
+function neighbours(id){
+  const s=new Set([id]);
+  edges.forEach(e=>{ if(e.s===id)s.add(e.t); if(e.t===id)s.add(e.s); });
+  return s;
+}
+function wh(){ return {W:stage.clientWidth||window.innerWidth, H:stage.clientHeight||window.innerHeight-48}; }
+const camShift=()=>(RAIL()-INSP())/2;
+
+function fitTo(list,pad){
+  if(!list||!list.length) return fit(pad);
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  list.forEach(n=>{ const r=T[n.type].r+52;
+    x0=Math.min(x0,n.lx-r); x1=Math.max(x1,n.lx+r);
+    y0=Math.min(y0,n.ly-r); y1=Math.max(y1,n.ly+r); });
+  const {W,H}=wh();
+  const s=Math.min((W-RAIL()-INSP()-40)/(x1-x0), (H-70)/(y1-y0))*(pad||.92);
+  S.tsc=Math.max(.12,Math.min(1.4,s));
+  S.ttx=-(x0+x1)/2*S.tsc+camShift(); S.tty=-(y0+y1)/2*S.tsc;
+  kick();
+}
+function fit(pad){
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  nodes.forEach(n=>{ const r=T[n.type].r+30;
+    x0=Math.min(x0,n.lx-r); x1=Math.max(x1,n.lx+r);
+    y0=Math.min(y0,n.ly-r); y1=Math.max(y1,n.ly+r); });
+  const {W,H}=wh();
+  const availW=W-RAIL()-INSP()-40, availH=H-70;
+  const s=Math.min(availW/(x1-x0), availH/(y1-y0))*(pad||.96);
+  S.tsc=Math.max(.12,Math.min(1.2,s));
+  S.ttx=-(x0+x1)/2*S.tsc+camShift(); S.tty=-(y0+y1)/2*S.tsc;
+  kick();
+}
+function focusNode(n){
+  const sMap={Agreement:.5,Amendment:.95,Draft:.95,SOW:1.0,WorkOrder:1.3};
+  S.tsc=sMap[n.type]||.9;
+  S.ttx=-n.lx*S.tsc+camShift(); S.tty=-n.ly*S.tsc;
+  kick();
+}
+function kick(){ if(!S.raf) S.raf=requestAnimationFrame(frame); }
+function frame(){
+  S.raf=null;
+  let busy=false;
+  if(Math.abs(S.tx-S.ttx)>.4||Math.abs(S.ty-S.tty)>.4||Math.abs(S.sc-S.tsc)>.002){
+    const k=.16; S.tx+=(S.ttx-S.tx)*k; S.ty+=(S.tty-S.ty)*k; S.sc+=(S.tsc-S.sc)*k; busy=true;
+  }else{ S.tx=S.ttx; S.ty=S.tty; S.sc=S.tsc; }
+  render();
+  if(busy) kick();
+}
+
+/* ══════════════════════════════════════════════
+   5 · GRAPH RENDER
+   ══════════════════════════════════════════════ */
+const WORKSPACE=cv('--bg-workspace');
+function render(){
+  const {W,H}=wh();
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+
+  /* while a subset is showing, the canvas answers "which records" rather than "this one" */
+  const focus=S.subset?null:S.sel, rel=focus?neighbours(focus):null;
+  const world=document.createElementNS(NS,'g');
+  world.setAttribute('transform',`translate(${W/2+S.tx},${H/2+S.ty}) scale(${S.sc})`);
+  svg.appendChild(world);
+  const gEdge=document.createElementNS(NS,'g'),
+        gCap =document.createElementNS(NS,'g'),
+        gNode=document.createElementNS(NS,'g'),
+        gLbl =document.createElementNS(NS,'g');
+  world.append(gEdge,gCap,gNode,gLbl);
+
+  /* — edges — */
+  edges.forEach(e=>{
+    const a=NMAP[e.s], b=NMAP[e.t];
+    const x1=a.lx,y1=a.ly,x2=b.lx,y2=b.ly;
+    const conn = focus && (e.s===focus||e.t===focus);
+    const near = (!focus || (rel.has(e.s)&&rel.has(e.t)))
+              && (!S.subset || (inSub(a)&&inSub(b)) || a.type==='Agreement' || b.type==='Agreement');
+    const p=document.createElementNS(NS,'path');
+    const mx=(x1+x2)/2, my=(y1+y2)/2, dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy)||1;
+    const bow=(e.soft?0.13:0.055)*L;
+    p.setAttribute('d',`M${x1},${y1} Q${mx-dy/L*bow},${my+dx/L*bow} ${x2},${y2}`);
+    p.setAttribute('fill','none');
+    if(conn){
+      p.setAttribute('stroke', e.type==='amends'?'rgba(134,239,172,.6)':'rgba(195,194,184,.55)');
+      p.setAttribute('stroke-width','1.6');
+      if(e.type==='amends') p.setAttribute('stroke-dasharray','5 4');
+    }else if(near){
+      p.setAttribute('stroke','rgba(255,255,255,.09)');
+      p.setAttribute('stroke-width','0.8');
+      if(e.type==='amends') p.setAttribute('stroke-dasharray','4 3');
+    }else{
+      p.setAttribute('stroke','rgba(255,255,255,.035)');
+      p.setAttribute('stroke-width','0.6');
+    }
+    gEdge.appendChild(p);
+
+    /* relationship pill on the focused node's own edges */
+    if(conn && S.sc>0.45 && rel.size<=9){
+      const k=1/S.sc;
+      const lx=mx-dy/L*bow*0.55, ly=my+dx/L*bow*0.55;
+      const w=(e.label.length*5.6+14)*k, h=16*k;
+      const g=document.createElementNS(NS,'g');
+      const r=document.createElementNS(NS,'rect');
+      r.setAttribute('x',lx-w/2); r.setAttribute('y',ly-h/2);
+      r.setAttribute('width',w); r.setAttribute('height',h); r.setAttribute('rx',h/2);
+      r.setAttribute('fill','#1a1a19'); r.setAttribute('stroke','#444341');
+      r.setAttribute('stroke-width',k);
+      g.appendChild(r);
+      g.appendChild(txt(e.label,lx,ly+3.4*k,{size:8.6*k,fill:'#888782',anchor:'middle'}));
+      gCap.appendChild(g);
+    }
+  });
+
+  /* — nodes — */
+  nodes.forEach(n=>{
+    const t=T[n.type], sel=n.id===S.sel;
+    const inRel = !focus || rel.has(n.id);
+    const hit = matches(n);
+    let op=1;
+    if(focus && !inRel) op=(sel?.5:.14);
+    if(!hit) op=Math.min(op,.1);
+    if(S.subset && !inSub(n)) op=Math.min(op, n.type==='Agreement'?.34:.07);
+
+    const r=t.r, x=n.lx, y=n.ly;
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('opacity',op);
+    g.style.cursor='pointer';
+
+    /* soft halo */
+    const halo=document.createElementNS(NS,'circle');
+    halo.setAttribute('cx',x); halo.setAttribute('cy',y);
+    halo.setAttribute('r', r*(sel?2.4:1.9));
+    halo.setAttribute('fill',t.c);
+    halo.setAttribute('opacity', sel?.18:(n.type==='Agreement'?.13:.09));
+    g.appendChild(halo);
+
+    /* attention rings */
+    if(isRisk(n)&&op>.3){
+      const rr=document.createElementNS(NS,'circle');
+      rr.setAttribute('cx',x); rr.setAttribute('cy',y); rr.setAttribute('r',r+5.5);
+      rr.setAttribute('fill','none'); rr.setAttribute('stroke',RISK);
+      rr.setAttribute('stroke-width','1.8'); rr.setAttribute('opacity','.95');
+      g.appendChild(rr);
+    }else if(isDue(n)&&op>.3){
+      const rr=document.createElementNS(NS,'circle');
+      rr.setAttribute('cx',x); rr.setAttribute('cy',y); rr.setAttribute('r',r+4.5);
+      rr.setAttribute('fill','none'); rr.setAttribute('stroke',cv('--status-warning'));
+      rr.setAttribute('stroke-width','1.1'); rr.setAttribute('opacity','.55');
+      rr.setAttribute('stroke-dasharray','3 3');
+      g.appendChild(rr);
+    }
+
+    /* selection / hub ring — DS .gnode.sel */
+    if(sel||n.type==='Agreement'){
+      const hr=document.createElementNS(NS,'circle');
+      hr.setAttribute('cx',x); hr.setAttribute('cy',y);
+      hr.setAttribute('r', r+(sel?7:2.6));
+      hr.setAttribute('fill','none');
+      hr.setAttribute('stroke','#ffffff');
+      hr.setAttribute('stroke-width', sel?1.8:1.1);
+      hr.setAttribute('opacity', sel?.95:.5);
+      g.appendChild(hr);
+    }
+
+    /* search hit ring */
+    if(S.q && hit){
+      const hr=document.createElementNS(NS,'circle');
+      hr.setAttribute('cx',x); hr.setAttribute('cy',y); hr.setAttribute('r',r+8.5);
+      hr.setAttribute('fill','none'); hr.setAttribute('stroke',cv('--brand-500'));
+      hr.setAttribute('stroke-width','1.2'); hr.setAttribute('opacity','.85');
+      g.appendChild(hr);
+    }
+
+    /* core */
+    const c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',r);
+    c.setAttribute('fill',t.c);
+    if(n.type==='Draft'){ c.setAttribute('fill','#1a1a19'); c.setAttribute('stroke',t.c);
+      c.setAttribute('stroke-width','1.4'); c.setAttribute('stroke-dasharray','3.2 2.6'); }
+    g.appendChild(c);
+
+    /* label — constant on-screen size, revealed by zoom */
+    const big = n.type==='Agreement';
+    const gate = big?0 : n.type==='SOW'?0.30 : n.type==='WorkOrder'?0.72 : 0.46;
+    const showLbl = big || sel || S.sc>gate || (focus&&rel.has(n.id)) || (S.subset&&inSub(n));
+    if(showLbl && op>.2){
+      const k=1/S.sc;
+      const fs=(big?11.5:(n.type==='SOW'?10:8.8))*k;
+      const lines=wrap(n.label, big?15:16);
+      const stagger=(n.type==='WorkOrder' && n.wk%2===1)?fs*1.15:0;
+      lines.forEach((ln,i)=>{
+        gLbl.appendChild(txt(ln,x,y+r+4*k+fs*0.9+stagger+i*fs*1.08,{
+          size:fs, weight:big?600:500, anchor:'middle', halo:3.2*k,
+          fill: big?'#ffffff':(sel?'#ffffff':'#a6a69c')
+        }));
+      });
+    }
+
+    g.addEventListener('click',ev=>{ev.stopPropagation();selectNode(n.id);});
+    g.addEventListener('mouseenter',ev=>{S.hover=n.id;showTip(ev,n);});
+    g.addEventListener('mousemove',moveTip);
+    g.addEventListener('mouseleave',()=>{S.hover=null;hideTip();});
+    gNode.appendChild(g);
+  });
+
+  document.getElementById('zLvl').textContent=Math.round(S.sc*100)+'%';
+}
+
+function txt(s,x,y,o){
+  const t=document.createElementNS(NS,'text');
+  t.setAttribute('x',x); t.setAttribute('y',y);
+  t.setAttribute('font-size',o.size);
+  t.setAttribute('font-weight',o.weight||400);
+  t.setAttribute('fill',o.fill||'#fff');
+  t.setAttribute('font-family',o.mono?"'Geist Mono',monospace":"'Geist',sans-serif");
+  if(o.anchor) t.setAttribute('text-anchor',o.anchor);
+  if(o.halo){ t.setAttribute('stroke',WORKSPACE); t.setAttribute('stroke-width',o.halo);
+              t.setAttribute('paint-order','stroke'); t.setAttribute('stroke-linejoin','round'); }
+  t.setAttribute('pointer-events','none');
+  t.textContent=s;
+  return t;
+}
+function wrap(s,max){
+  if(s.length<=max) return [s];
+  const w=s.split(' '), out=[]; let cur='';
+  w.forEach(x=>{ if((cur+' '+x).trim().length>max){ if(cur)out.push(cur); cur=x; } else cur=(cur+' '+x).trim(); });
+  if(cur)out.push(cur);
+  return out.slice(0,2);
+}
+
+/* ══════════════════════════════════════════════
+   6 · ALL DOCUMENTS PANEL (left)
+   ══════════════════════════════════════════════ */
+const GROUPS=[
+  {key:'Agreement', label:'Master Agreement',  types:['Agreement']},
+  {key:'Amendment', label:'Amendments', types:['Amendment','Draft']},
+  {key:'SOW',       label:'Statements of work', types:['SOW']},
+  {key:'WorkOrder', label:'Work orders',types:['WorkOrder']},
+];
+const openGroups=new Set(['Agreement','Amendment','SOW']);
+
+function statusDot(n){
+  if(isRisk(n)) return cv('--status-error');
+  if(isDue(n))  return cv('--status-warning');
+  if(/Completed/.test(n.status||'')) return cv('--text-quaternary');
+  return null;
+}
+function renderDocs(){
+  const body=document.getElementById('docBody');
+  body.innerHTML='';
+  let shownCount=0, total=0;
+  GROUPS.forEach(gr=>{
+    const items=nodes.filter(n=>gr.types.includes(n.type));
+    total+=items.length;
+    const hits=items.filter(matches);
+    const g=document.createElement('div');
+    g.className='grp'+(openGroups.has(gr.key)?'':' cl')+(S.q&&!hits.length?' hide':'');
+    const dot=T[gr.types[0]].c;
+    g.innerHTML=`<div class="grp-h">
+        <svg class="cv" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
+        <span class="dot" style="background:${dot}"></span>
+        <span class="gl">${gr.label}</span>
+        <span class="cbadge">${S.q?hits.length:items.length}</span>
+      </div><div class="grp-items"></div>`;
+    g.querySelector('.grp-h').addEventListener('click',()=>{
+      openGroups.has(gr.key)?openGroups.delete(gr.key):openGroups.add(gr.key);
+      g.classList.toggle('cl');
+    });
+    const wrap=g.querySelector('.grp-items');
+    items.forEach(n=>{
+      const hit=matches(n);
+      if(hit) shownCount++;
+      const row=document.createElement('div');
+      row.className='docrow'+(n.id===S.sel?' on':'')+(S.q&&!hit?' hide':'');
+      row.dataset.id=n.id;
+      const sd=statusDot(n);
+      row.innerHTML=`<span class="dn">${n.label}</span><span class="ds">${n.type==='Agreement'?FAM.code:(n.full.replace(n.label,'').replace(/^[\s·—-]+/,'')||n.status||'')}</span>${sd?`<span class="st" style="background:${sd}"></span>`:''}`;
+      row.addEventListener('click',()=>selectNode(n.id));
+      wrap.appendChild(row);
+    });
+    body.appendChild(g);
+  });
+  document.getElementById('docCount').textContent=total;
+  document.getElementById('docEmpty').style.display=(S.q&&shownCount===0)?'block':'none';
+  const qc=document.getElementById('qc');
+  qc.classList.toggle('on',!!S.q);
+  qc.textContent=shownCount+' hit'+(shownCount===1?'':'s');
+}
+
+/* ══════════════════════════════════════════════
+   7 · DETAILS PANEL (right)
+   ══════════════════════════════════════════════ */
+let cxExpanded=false, cxOpen=false;
+function showDetails(id){
+  const n=NMAP[id], t=T[n.type];
+  document.querySelector('#iChip .dot').style.background=t.c;
+  document.getElementById('iChipT').textContent=t.short;
+  /* header — system code · record name, then "Effective <date> • <summary>" */
+  document.getElementById('iTitle').innerHTML=
+    `<span class="code">${n.code}</span><span class="sep">·</span>${n.title}`;
+  document.getElementById('iSub').innerHTML = n.eff
+    ? `Effective <span class="dt">${n.eff}</span><span class="bul">•</span>${n.summary}`
+    : `Pending signature<span class="bul">•</span>${n.summary}`;
+
+  const body=document.getElementById('iBody');
+  const sc=(n.status||'').match(/Breach|Conflict/)?'err':(n.status||'').match(/Draft|Unsigned|Renewal/)?'warn':'ok';
+
+  /* relationship links — counted, and each one acts on the graph */
+  const chev='<svg class="rc" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4.5 2.5 L8 6 L4.5 9.5"/></svg>';
+  let html=`<div class="rlinks">${relLinks(n).map((L,i)=>
+    `<div class="rlink" data-i="${i}"><span class="rl">${L.t}</span>${L.n?`<span class="rn">${L.n}</span>`:''}${chev}</div>`).join('')}</div>`;
+
+  const kv=(k,v,cls)=>`<div class="gi-row"><span class="k">${k}</span><span class="v ${cls||''}">${v}</span></div>`;
+  const detail=n.detail||{};
+  const flag=detail['Flag'];
+  /* key facts only — anything already said in the header line is not repeated */
+  const skip=new Set(['Flag','Scope','Status','Signed','Payment','SLA','Milestones','Owner',
+    'Amendments','SOWs','Under SOW','Governed by','Amendment','Affects']);
+  const facts=kv('Status',n.status||'Active',sc)
+    + (n.value&&n.value!=='$0'?kv('Value',n.value):'')
+    + (n.expiry&&n.expiry!=='—'?kv('Expiry',n.expiry,'mono'):'')
+    + Object.entries(detail).filter(([k])=>!skip.has(k)).map(([k,v])=>{
+        const cls=(v+'').match(/Breach|Conflict/)?'err':(v+'').match(/Unsigned|Pending|Draft/)?'warn':'';
+        return kv(k,v,cls);
+      }).join('');
+  html+='<div class="gi-sec"><div class="gi-lbl">Key facts</div>'+facts+'</div>';
+  if(flag) html+=`<div class="gi-flag">⚠ ${flag}</div>`;
+
+  /* connected records */
+  const out=edges.filter(e=>e.s===n.id).map(e=>({n:NMAP[e.t],l:e.label}));
+  const inc=edges.filter(e=>e.t===n.id).map(e=>({n:NMAP[e.s],l:e.l||invLabel(e)}));
+  const all=[...inc,...out];
+  const cap=cxExpanded?all.length:8;
+  const rows=all.slice(0,cap).map(r=>`
+    <div class="cx" data-id="${r.n.id}">
+      <span class="dot" style="background:${T[r.n.type].c}"></span>
+      <span class="cn">${r.n.full}</span>
+      <span class="cr">${r.l}</span>
+    </div>`).join('');
+  const more=all.length-cap;
+  /* Connected is collapsed by default — it is reference, not the headline */
+  html+=`<div class="gi-sec gi-sec--coll${cxOpen?'':' cl'}" id="cxSec">
+      <div class="gi-lbl" id="cxHead">
+        <span>Connected<span class="n">${all.length} records</span></span>
+        <svg class="cv" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
+      </div>
+      <div class="gi-coll-body">${rows}
+        ${more>0?`<div class="cx-more" id="cxMore">+${more} more connections</div>`:''}</div>
+    </div>`;
+
+  body.innerHTML=html;
+  const links=relLinks(n);
+  body.querySelectorAll('.rlink').forEach(el=>el.addEventListener('click',()=>{
+    const L=links[+el.dataset.i];
+    if(L.go) selectNode(L.go);
+    else if(L.ids&&L.ids.length) setSubset(L.ids, L.t.replace(/^View /,''), n);
+  }));
+  body.querySelectorAll('.cx').forEach(el=>el.addEventListener('click',()=>selectNode(el.dataset.id)));
+  const cm=document.getElementById('cxMore');
+  if(cm) cm.addEventListener('click',e=>{e.stopPropagation();cxExpanded=true;showDetails(S.sel||'msa');});
+  document.getElementById('cxHead').addEventListener('click',()=>{
+    cxOpen=!cxOpen;
+    document.getElementById('cxSec').classList.toggle('cl',!cxOpen);
+  });
+
+  renderDocuments(n);
+}
+
+/* ── relationship links per record type — counted, and each one acts on the graph ── */
+function relLinks(n){
+  const L=[], kids=t=>edges.filter(e=>e.s===n.id&&!e.soft&&NMAP[e.t].type===t).map(e=>e.t);
+  if(n.type==='Agreement'){
+    const sows=kids('SOW'), ams=edges.filter(e=>e.s===n.id&&!e.soft&&['Amendment','Draft'].includes(NMAP[e.t].type)).map(e=>e.t);
+    const wos=nodes.filter(x=>x.type==='WorkOrder').map(x=>x.id);
+    L.push({t:`View ${sows.length} SOWs`,ids:sows});
+    L.push({t:`View ${ams.length} amendments`,ids:ams});
+    L.push({t:`View ${wos.length} work orders`,ids:wos});
+  }else if(n.type==='Amendment'||n.type==='Draft'){
+    const sows=edges.filter(e=>e.s===n.id&&e.soft).map(e=>e.t);
+    if(sows.length) L.push({t:`View ${sows.length} SOW${sows.length===1?'':'s'} affected`,ids:sows});
+    if(n.supersedes)   L.push({t:'Supersedes '+NMAP[n.supersedes].label,     go:n.supersedes});
+    if(n.supersededBy) L.push({t:'Superseded by '+NMAP[n.supersededBy].label,go:n.supersededBy});
+    L.push({t:'Amends IBM MSA',go:'msa'});
+  }else if(n.type==='SOW'){
+    const wos=kids('WorkOrder');
+    if(wos.length) L.push({t:`View ${wos.length} work orders`,ids:wos});
+    const am=edges.find(e=>e.t===n.id&&e.soft);
+    if(am) L.push({t:'Amended by '+NMAP[am.s].label,go:am.s});
+    L.push({t:'Governed by IBM MSA',go:'msa'});
+  }else{
+    const pe=edges.find(e=>e.t===n.id&&!e.soft);
+    if(pe) L.push({t:'Issued under '+NMAP[pe.s].label,go:pe.s});
+    L.push({t:'Governed by IBM MSA',go:'msa'});
+  }
+  return L;
+}
+
+/* ── subset highlight — "View 5 SOWs" narrows the canvas to just those records ── */
+function setSubset(ids,label,from){
+  S.subset={ids:new Set(ids),label:label,from:from?from.label:null};
+  const fb=document.getElementById('fb');
+  fb.textContent='↩ '+label[0].toUpperCase()+label.slice(1)+(from?' under '+from.label:'')+' — show full family';
+  fb.classList.add('on');
+  fitTo(ids.map(i=>NMAP[i]));
+  render();
+}
+function clearSubset(){
+  S.subset=null;
+  document.getElementById('fb').textContent='↩ Show full family';
+  document.getElementById('fb').classList.remove('on');
+  render();
+}
+
+/* ── documents card — grouped by document type, click a file for its provenance ── */
+let openFile=null;
+function renderDocuments(n){
+  document.getElementById('dSub').textContent='on '+n.label;
+  document.getElementById('dCount').textContent=n.docs.length;
+  const body=document.getElementById('dBody');
+  if(!n.docs.length){ body.innerHTML='<div class="fgrp" style="letter-spacing:0;text-transform:none;font-weight:400">No documents filed against this record.</div>'; return; }
+  let html='';
+  DORDER.forEach(tk=>{
+    const list=n.docs.filter(d=>d.t===tk);
+    if(!list.length) return;
+    html+=`<div class="fgrp">${DTYPE[tk].label}</div>`;
+    list.forEach(d=>{
+      const key=n.id+'|'+d.n;
+      const col=cv(DTYPE[tk].c);
+      html+=`<div class="frow${openFile===key?' on':''}" data-k="${key.replace(/"/g,'&quot;')}">
+        <svg class="fi" viewBox="0 0 14 16" fill="none" stroke="${col}" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M2 1.6 h6.2 L12 5.2 V14.4 H2 Z"/><path d="M8.2 1.6 V5.2 H12" opacity=".7"/>
+        </svg>
+        <div class="fmain">
+          <div class="fnm">${d.n}</div>
+          <div class="fmeta">${d.m}</div>
+        </div>
+        <span class="fpill ${PILL[d.s]||'n'}">${d.s}</span>
+      </div>
+      <div class="fdet">
+        <div class="fr"><span class="fk">Type</span><span class="fv">${DTYPE[tk].label}</span></div>
+        <div class="fr"><span class="fk">Filed against</span><span class="fv">${n.full}</span></div>
+        ${d.by?`<div class="fr"><span class="fk">Added by</span><span class="fv">${d.by}</span></div>`:''}
+        ${d.src?`<div class="fr"><span class="fk">Source</span><span class="fv">${d.src}</span></div>`:''}
+        ${d.lang?`<div class="fr"><span class="fk">Language</span><span class="fv">${d.lang}</span></div>`:''}
+      </div>`;
+    });
+  });
+  body.innerHTML=html;
+  body.querySelectorAll('.frow').forEach(el=>el.addEventListener('click',()=>{
+    const k=el.dataset.k;
+    openFile = (openFile===k) ? null : k;
+    renderDocuments(n);
+    if(openFile){
+      const now=body.querySelector('.frow.on');
+      if(now) now.scrollIntoView({block:'nearest'});
+      const det=now&&now.nextElementSibling;
+      if(det) det.scrollIntoView({block:'nearest'});
+    }
+  }));
+}
+function invLabel(e){ return e.label==='Amends'?'Amended by':e.label==='Governs'?'Governed by':e.label==='Under'?'Governs':'Applied by'; }
+
+/* ══════════════════════════════════════════════
+   8 · SELECTION + SEARCH + VIEWS
+   ══════════════════════════════════════════════ */
+function selectNode(id){
+  if(S.sel!==id) openFile=null;
+  if(S.subset){ S.subset=null; document.getElementById('fb').textContent='↩ Show full family'; }
+  S.sel=id; cxExpanded=false;
+  document.getElementById('fb').classList.toggle('on', id!=='msa');
+  /* make sure the group holding this doc is open, then highlight its row */
+  const n=NMAP[id];
+  const gr=GROUPS.find(g=>g.types.includes(n.type));
+  if(gr) openGroups.add(gr.key);
+  renderDocs();
+  const row=document.querySelector(`.docrow[data-id="${CSS_escape(id)}"]`);
+  if(row) row.scrollIntoView({block:'nearest'});
+  showDetails(id);
+  focusNode(n);
+  if(S.view==='list') setView('graph');
+  render();
+}
+function CSS_escape(s){ return s.replace(/["\\]/g,'\\$&'); }
+function clearSel(){
+  S.sel=null; cxExpanded=false;
+  document.getElementById('fb').classList.remove('on');
+  renderDocs(); showDetails('msa'); fit();
+}
+
+/* card accordion — collapse either card to give the other the full column */
+const recPanel=document.querySelector('.panel--record'),
+      docPanel=document.querySelector('.panel--docs'),
+      rcol=document.querySelector('.insp');
+document.getElementById('recHead').addEventListener('click',()=>{
+  const c=recPanel.classList.toggle('collapsed');
+  document.getElementById('recHead').title=c?'Expand this card':'Collapse this card';
+});
+document.getElementById('docHead').addEventListener('click',()=>{
+  const c=docPanel.classList.toggle('collapsed');
+  rcol.classList.toggle('dcol',c);
+  document.getElementById('docHead').title=c?'Expand this card':'Collapse this card';
+});
+
+document.getElementById('fb').addEventListener('click',()=>{
+  if(S.subset){ clearSubset(); fit(); selectNode('msa'); }
+  else { selectNode('msa'); fit(); }
+});
+document.getElementById('iClose').addEventListener('click',clearSel);
+
+/* kebab — record actions */
+const kMenu=document.getElementById('kMenu');
+document.getElementById('iKebab').addEventListener('click',e=>{
+  e.stopPropagation(); kMenu.classList.toggle('show');
+});
+document.addEventListener('click',e=>{ if(!kMenu.contains(e.target)) kMenu.classList.remove('show'); });
+kMenu.querySelectorAll('.kitem').forEach(it=>it.addEventListener('click',()=>{
+  const n=NMAP[S.sel||'msa'];
+  kMenu.classList.remove('show');
+  switch(it.dataset.a){
+    case 'focus':  focusNode(n); break;
+    case 'branch': setSubset([...neighbours(n.id)],'branch of '+n.label); break;
+    case 'docs':   docPanel.classList.remove('collapsed'); rcol.classList.remove('dcol');
+                   recPanel.classList.add('collapsed'); break;
+    case 'list':   setView('list');
+                   const row=document.querySelector(`tr.itm[data-id="${n.id}"]`);
+                   if(row) row.scrollIntoView({block:'center'});
+                   break;
+  }
+}));
+svg.addEventListener('click',()=>{ if(S.subset) clearSubset(); else if(S.sel) clearSel(); });
+
+/* search */
+document.getElementById('q').addEventListener('input',e=>{
+  S.q=e.target.value.trim().toLowerCase();
+  renderDocs(); render();
+});
+
+/* view toggle */
+function setView(v){
+  S.view=v;
+  document.getElementById('tGraph').classList.toggle('on',v==='graph');
+  document.getElementById('tList').classList.toggle('on',v==='list');
+  document.getElementById('list').classList.toggle('on',v==='list');
+  document.querySelector('.rail').style.display=v==='graph'?'flex':'none';
+  document.querySelector('.insp').style.display=v==='graph'?'flex':'none';
+  document.getElementById('legend').style.display=v==='graph'?'flex':'none';
+  document.querySelector('.zc').style.display=v==='graph'?'flex':'none';
+  document.getElementById('fb').classList.toggle('on', v==='graph'&&S.sel&&S.sel!=='msa');
+}
+document.getElementById('tGraph').addEventListener('click',()=>setView('graph'));
+document.getElementById('tList').addEventListener('click',()=>setView('list'));
+
+/* ══════════════════════════════════════════════
+   9 · LIST VIEW
+   ══════════════════════════════════════════════ */
+function badgeCls(st){
+  return /Breach|Conflict/.test(st)?'r':/Draft|Unsigned|Renewal/.test(st)?'w':/Completed/.test(st)?'n':'g';
+}
+function govOf(n){
+  const pe=edges.find(e=>e.t===n.id&&!e.soft);
+  return pe?NMAP[pe.s].label:'—';
+}
+(function renderList(){
+  const tb=document.getElementById('listBody');
+  let html='';
+  GROUPS.forEach(gr=>{
+    const items=nodes.filter(n=>gr.types.includes(n.type));
+    html+=`<tr class="lgrp"><td colspan="7">${gr.label}<span class="gm">${items.length} record${items.length===1?'':'s'}</span></td></tr>`;
+    items.forEach(n=>{
+      html+=`<tr class="itm" data-id="${n.id}">
+        <td><div class="lname"><span class="dot" style="background:${T[n.type].c}"></span><b>${n.label}</b><span>${n.full!==n.label?n.full.replace(n.label,'').replace(/^[\s·—-]+/,''):''}</span></div></td>
+        <td class="ltype">${T[n.type].short}</td>
+        <td><span class="badge ${badgeCls(n.status||'')}">${n.status||'Active'}</span></td>
+        <td class="ltype">${govOf(n)}</td>
+        <td class="num">${n.value&&n.value!=='$0'?n.value:'—'}</td>
+        <td class="num">${n.date}</td>
+        <td class="num">${n.expiry||'—'}</td>
+      </tr>`;
+    });
+  });
+  tb.innerHTML=html;
+  tb.querySelectorAll('tr.itm').forEach(tr=>tr.addEventListener('click',()=>selectNode(tr.dataset.id)));
+})();
+
+/* ══════════════════════════════════════════════
+   10 · TOOLTIP, PAN, ZOOM
+   ══════════════════════════════════════════════ */
+const tip=document.getElementById('tip');
+function showTip(ev,n){
+  tip.innerHTML=`<div class="tt">${T[n.type].short}</div>${n.full}
+    <div class="tm">${n.date}${n.expiry&&n.expiry!=='—'?' → '+n.expiry:''}${isRisk(n)?` · <b>${n.status}</b>`:''}</div>
+    <div class="tm">${n.docs.length} document${n.docs.length===1?'':'s'}</div>`;
+  tip.classList.add('on'); moveTip(ev);
+}
+function moveTip(ev){
+  const pad=12, r=tip.getBoundingClientRect();
+  let x=ev.clientX+14, y=ev.clientY-r.height-10;
+  if(x+r.width>window.innerWidth-pad) x=ev.clientX-r.width-14;
+  if(y<pad) y=ev.clientY+18;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTip(){ tip.classList.remove('on'); }
+
+let drag=null;
+svg.addEventListener('mousedown',e=>{
+  drag={x:e.clientX,y:e.clientY,tx:S.tx,ty:S.ty,moved:false};
+  svg.classList.add('grabbing');
+});
+window.addEventListener('mousemove',e=>{
+  if(!drag) return;
+  const dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+  if(Math.abs(dx)+Math.abs(dy)>3) drag.moved=true;
+  S.tx=S.ttx=drag.tx+dx; S.ty=S.tty=drag.ty+dy;
+  render();
+});
+window.addEventListener('mouseup',()=>{ svg.classList.remove('grabbing'); setTimeout(()=>drag=null,0); });
+svg.addEventListener('click',e=>{ if(drag&&drag.moved) e.stopImmediatePropagation(); },true);
+
+stage.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const f=e.deltaY<0?1.09:0.92;
+  const ns=Math.max(.12,Math.min(2.4,S.sc*f));
+  const {W,H}=wh();
+  const mx=e.clientX-W/2, my=e.clientY-48-H/2 + H/2 - (H/2); /* stage-relative */
+  const px=e.clientX - W/2, py=(e.clientY-48) - H/2;
+  S.tx=px-(px-S.tx)*(ns/S.sc); S.ty=py-(py-S.ty)*(ns/S.sc);
+  S.sc=ns; S.ttx=S.tx; S.tty=S.ty; S.tsc=S.sc;
+  render();
+},{passive:false});
+
+document.getElementById('zIn').addEventListener('click',()=>{S.tsc=Math.min(2.4,S.tsc*1.25);kick();});
+document.getElementById('zOut').addEventListener('click',()=>{S.tsc=Math.max(.12,S.tsc*0.8);kick();});
+document.getElementById('zFit').addEventListener('click',()=>fit());
+window.addEventListener('resize',()=>{ if(!S.sel) fit(); else render(); });
+
+/* keyboard: Esc backs out */
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ if(S.subset){ clearSubset(); fit(); } else if(S.sel) clearSel(); }
+});
+
+/* ══════════════════════════════════════════════
+   11 · LEGEND + INIT
+   ══════════════════════════════════════════════ */
+(function legend(){
+  const el=document.getElementById('legend');
+  el.innerHTML=Object.values(T).map(t=>`<span class="leg"><span class="dot" style="background:${t.c}"></span>${t.k}</span>`).join('')+
+    `<span class="leg"><span class="ln"></span>governs</span><span class="leg"><span class="ln d"></span>amends</span>`;
+})();
+
+document.getElementById('tbMeta').textContent=nodes.length+' records · '+DOCTOTAL+' documents · '+FAM.tcv;
+renderDocs();
+showDetails('msa');
+fit();
+render();
+</script>
+</body>
+</html>

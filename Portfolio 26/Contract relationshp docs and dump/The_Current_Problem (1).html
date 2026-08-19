@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sirion · The Current Problem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #0d0d0d;
+    --paper:  #f5f2eb;
+    --dim:    #e8e4da;
+    --accent: #c8421b;
+    --muted:  #4a4540;   /* darkened: was #6b6560, now passes AA on --paper */
+    --rule:   #c8c3b8;
+    --blue:   #1c3f6e;
+    --signal: #155c30;   /* darkened for AA on light */
+    --gold:   #8a6e1e;   /* darkened for AA on light */
+    --hi:     #fffbf0;
+    /* On-dark text tokens — always ≥ 0.7 opacity for WCAG AA */
+    --on-dark-primary:   rgba(255,255,255,0.95);
+    --on-dark-secondary: rgba(255,255,255,0.75);
+    --on-dark-tertiary:  rgba(255,255,255,0.55);
+    --on-dark-label:     rgba(255,255,255,0.70);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;           /* was 13px */
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── OPENING ──────────────────────────────────────── */
+  .opening {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 72px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .opening::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg,  transparent, transparent 79px, rgba(255,255,255,0.02) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.02) 80px);
+    pointer-events: none;
+  }
+
+  .o-top {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--on-dark-tertiary);
+    position: relative; z-index: 1;
+  }
+
+  .o-mid {
+    position: relative; z-index: 1;
+  }
+
+  .o-context {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 10px */
+    color: var(--on-dark-label);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .o-context::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+
+  .o-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5.5vw, 76px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--on-dark-primary);
+    line-height: 1.1;
+    max-width: 840px;
+    margin-bottom: 48px;
+  }
+
+  .o-question em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .o-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;           /* was 11px */
+    color: var(--on-dark-secondary);
+    letter-spacing: 0.5px;
+    border-left: 2px solid rgba(255,255,255,0.2);
+    padding-left: 20px;
+    max-width: 540px;
+    line-height: 1.8;
+  }
+
+  .o-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 28px;
+  }
+
+  .o-bottom-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    color: var(--on-dark-tertiary);
+    letter-spacing: 1px;
+  }
+
+  .o-scroll {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    color: var(--on-dark-tertiary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .o-scroll::after { content: '↓'; }
+
+  /* ─── SECTIONS ──────────────────────────────────────── */
+  .section {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 96px 80px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .s-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .s-tag::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+  .s-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 3.6vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 40px;
+  }
+  .s-title em { color: var(--accent); font-style: italic; }
+  .s-title .faded { color: var(--rule); }
+
+  .prose {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;           /* was 17px */
+    font-weight: 400;
+    line-height: 1.85;
+    color: #2a2721;            /* darkened for contrast */
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+  .prose strong { color: var(--ink); font-weight: 700; }
+
+  /* ─── FOLDER TREE MOCK ──────────────────────────────── */
+  .system-demo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--rule);
+    margin: 56px 0;
+  }
+
+  .demo-pane { background: var(--paper); }
+  .demo-pane.dark { background: #1a1a1a; }
+
+  .pane-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .demo-pane.dark .pane-header { border-color: rgba(255,255,255,0.1); }
+
+  .pane-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+  .demo-pane.dark .pane-dot { background: rgba(255,255,255,0.2); }
+
+  .pane-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .demo-pane.dark .pane-label { color: var(--on-dark-label); }
+
+  .pane-body { padding: 24px 20px; }
+
+  /* folder tree */
+  .ftree { list-style: none; }
+  .ftree li {
+    padding: 6px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 11px */
+    color: var(--muted);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .ftree .icon { flex-shrink: 0; margin-top: 1px; }
+  .ftree .folder { color: var(--gold); }
+  .ftree .file   { color: var(--muted); }
+  .ftree .indent1 { padding-left: 20px; }
+  .ftree .indent2 { padding-left: 40px; }
+  .ftree .indent3 { padding-left: 60px; }
+  .ftree .active  { color: var(--ink); font-weight: 500; }
+  .ftree .question {
+    color: var(--accent);
+    font-style: italic;
+    font-size: 13px;           /* was 10px */
+    padding-left: 60px;
+    margin-top: 8px;
+  }
+
+  /* relationship view */
+  .rel-view { display: flex; flex-direction: column; gap: 2px; }
+
+  .rel-entity {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 18px 20px;
+  }
+
+  .rel-entity.anchor {
+    border-color: rgba(200,66,27,0.5);
+    background: rgba(200,66,27,0.08);
+  }
+
+  .re-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--on-dark-label);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .re-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;           /* was 13px */
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .re-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--on-dark-secondary);
+    border-radius: 2px;
+  }
+
+  .chip.active-chip {
+    border-color: var(--accent);
+    color: #f0956e;            /* lighter for AA on dark */
+    background: rgba(200,66,27,0.12);
+  }
+
+  .chip.dim-chip { opacity: 0.5; }
+
+  /* ─── WORKAROUNDS ───────────────────────────────────── */
+  .workarounds {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--rule);
+    margin: 56px 0;
+  }
+
+  .wa-card {
+    background: var(--paper);
+    padding: 36px 32px;
+  }
+
+  .wa-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .wa-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;           /* was 15px */
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .wa-observed {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 10px */
+    color: var(--muted);
+    padding: 14px 16px;
+    background: var(--dim);
+    border-left: 3px solid var(--rule);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .wa-signal {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 10px */
+    color: #a83315;            /* slightly lighter accent for readability, still passes AA */
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* ─── THE GAP ───────────────────────────────────────── */
+  .gap-block {
+    background: var(--ink);
+    padding: 80px;
+    margin: 60px -80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-block::before {
+    content: '?';
+    position: absolute;
+    right: 40px; bottom: -40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 320px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .gb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f0956e;            /* lighter for AA on dark */
+    margin-bottom: 28px;
+    position: relative; z-index: 1;
+    font-weight: 500;
+  }
+
+  .gb-statement {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 2.8vw, 38px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--on-dark-primary);
+    max-width: 780px;
+    line-height: 1.45;
+    margin-bottom: 40px;
+    position: relative; z-index: 1;
+  }
+
+  .gb-statement em {
+    color: #f0956e;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .gb-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(255,255,255,0.08);
+    position: relative; z-index: 1;
+    max-width: 780px;
+  }
+
+  .gbp-cell {
+    padding: 24px 28px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .gbp-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--on-dark-label);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .gbp-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;           /* was 15px */
+    color: var(--on-dark-secondary);
+    line-height: 1.55;
+  }
+
+  .gbp-text em { color: #fff; font-style: normal; }
+
+  /* ─── REDESIGN PREVIEW ──────────────────────────────── */
+  .redesign {
+    margin: 56px 0;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .redesign-header {
+    padding: 18px 24px;
+    background: var(--dim);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rh-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .rh-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 8px */
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--signal);
+    border: 1px solid var(--signal);
+    padding: 5px 12px;
+    font-weight: 500;
+  }
+
+  .redesign-body { padding: 32px 24px; }
+
+  .r-entity-row {
+    border: 1px solid var(--rule);
+    margin-bottom: 2px;
+    overflow: hidden;
+  }
+
+  .r-entity-header {
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--hi);
+  }
+
+  .r-entity-header.primary { background: var(--ink); }
+
+  .reh-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .r-entity-header.primary .reh-meta { color: var(--on-dark-label); }
+
+  .reh-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;           /* was 14px */
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .r-entity-header.primary .reh-name { color: #fff; }
+
+  .reh-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .r-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    padding: 5px 12px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  .r-chip.governs { background: rgba(21,92,48,0.12);  color: var(--signal); }
+  .r-chip.amend   { background: rgba(138,110,30,0.12); color: var(--gold); }
+  .r-chip.active  { background: rgba(28,63,110,0.12);  color: var(--blue); }
+  .r-chip.count   { background: var(--dim); color: var(--muted); }
+
+  .reh-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;           /* was 9px */
+    letter-spacing: 1px;
+    color: var(--signal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .r-entity-header.primary .reh-status { color: var(--on-dark-label); }
+
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  .r-entity-sub {
+    padding: 14px 22px;
+    border-top: 1px solid var(--rule);
+    background: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 10px */
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .r-answer { color: var(--ink); font-weight: 600; }
+
+  /* ─── WHY AI ────────────────────────────────────────── */
+  .ai-block { margin: 56px 0; }
+
+  .ai-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    background: var(--rule);
+    margin: 48px 0;
+    gap: 1px;
+  }
+
+  .aif-col {
+    background: var(--paper);
+    padding: 40px 32px;
+  }
+
+  .aif-col.ai-col { background: var(--ink); }
+
+  .aif-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .ai-col .aif-label { color: var(--on-dark-label); }
+  .aif-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  .ai-col .aif-label::after { background: rgba(255,255,255,0.12); }
+
+  .aif-scenario {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 11px */
+    color: var(--muted);
+    line-height: 1.8;
+    padding: 16px 18px;
+    background: var(--dim);
+    border-left: 3px solid var(--rule);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .ai-col .aif-scenario {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.15);
+    color: var(--on-dark-secondary);
+  }
+
+  .aif-result {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;           /* was 15px */
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  .aif-result em { color: var(--accent); font-style: normal; font-weight: 700; }
+  .ai-col .aif-result { color: var(--on-dark-secondary); }
+  .ai-col .aif-result em { color: #f0956e; }
+
+  .aif-note {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 10px */
+    color: var(--accent);
+    line-height: 1.6;
+    display: flex;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .ai-col .aif-note { color: #f0956e; }
+
+  .aif-arrow {
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 28px;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* ─── THREE OPENS ───────────────────────────────────── */
+  .three-opens {
+    background: var(--ink);
+    padding: 100px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .to-top {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--on-dark-tertiary);
+    margin-bottom: 60px;
+    font-weight: 500;
+  }
+
+  .to-intro {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    max-width: 640px;
+    margin-bottom: 64px;
+  }
+
+  .to-intro em { color: #f0956e; font-style: italic; }
+
+  .opens-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .open-card {
+    background: var(--ink);
+    padding: 40px 32px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .oc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 2px;
+    color: #f0956e;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+  }
+
+  .oc-num::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+  .oc-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;           /* was 18px */
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+
+  .oc-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;           /* was 10px */
+    color: var(--on-dark-secondary);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+
+  .oc-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f0956e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .oc-link::after { content: '→'; }
+
+  /* ─── FOOTNOTE ──────────────────────────────────────── */
+  .footnote {
+    padding: 28px 80px;
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;           /* was 9px */
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     OPENING
+═══════════════════════════════════════════════ -->
+<section class="opening">
+  <div class="o-top">Sirion · Design · Internal · May 2026</div>
+
+  <div class="o-mid">
+    <div class="o-context">One question. Our system can't answer it.</div>
+    <h1 class="o-question">
+      Which <em>amendment</em><br>applies to this SOW?
+    </h1>
+    <p class="o-note">
+      A question any legal team asks dozens of times a week.<br>
+      A question that requires folder navigation, file name reading,<br>
+      notes checking, and eventually — asking someone who knows.
+    </p>
+  </div>
+
+  <div class="o-bottom">
+    <div class="o-bottom-text">Amrit Kumar · Product Design</div>
+    <div class="o-scroll">What happens next</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     01 · WHAT THE SYSTEM SHOWS THEM
+═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">01 · What the system shows</div>
+  <h2 class="s-title">A folder tree.<br>
+    <span class="faded">Not an answer.</span>
+  </h2>
+
+  <p class="prose">
+    A user opens Sirion and navigates to the contract. What they find is a tree of folders and files. The structure tells them where things are stored. It tells them nothing about what anything means.
+  </p>
+
+  <div class="system-demo">
+
+    <!-- LEFT: current folder tree -->
+    <div class="demo-pane">
+      <div class="pane-header">
+        <div class="pane-dot"></div>
+        <div class="pane-label">Current · Folder view</div>
+      </div>
+      <div class="pane-body">
+        <ul class="ftree">
+          <li><span class="icon folder">▼</span><span>Maarten Services Corporation</span></li>
+          <li class="indent1"><span class="icon folder">▼</span><span>Master Core Documents</span></li>
+          <li class="indent2"><span class="icon file">▪</span><span>MSA Contract.pdf</span></li>
+          <li class="indent2"><span class="icon file">▪</span><span>NDA Agreement.pdf</span></li>
+          <li class="indent2"><span class="icon file">▪</span><span>Service Level Agreement.pdf</span></li>
+          <li class="indent1"><span class="icon folder">▼</span><span>General Contract Terms</span></li>
+          <li class="indent2"><span class="icon file">▪</span><span>Generic Contract Terms Amendment.pdf</span></li>
+          <li class="indent2"><span class="icon folder">▼</span><span class="active">Contract Terms Amendment 2024</span></li>
+          <li class="indent3"><span class="icon file">▪</span><span>Terms Amendment 2024.pdf</span></li>
+          <li class="indent1"><span class="icon folder">▶</span><span>Amendments</span></li>
+          <li class="indent1"><span class="icon folder">▶</span><span>SOWs</span></li>
+          <li class="indent1"><span class="icon folder">▶</span><span>Work Orders</span></li>
+          <li class="question">↳ which of these applies to SOW Boston?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT: what it should show -->
+    <div class="demo-pane dark">
+      <div class="pane-header">
+        <div class="pane-dot"></div>
+        <div class="pane-label">What the user actually needs</div>
+      </div>
+      <div class="pane-body">
+        <div class="rel-view">
+          <div class="rel-entity anchor">
+            <div class="re-label">SOW in question</div>
+            <div class="re-name">CO9142 · SOW Boston Mobile Platform</div>
+            <div class="re-chips">
+              <span class="chip active-chip">Governing MSA →</span>
+              <span class="chip active-chip">Applied Amendments →</span>
+              <span class="chip dim-chip">Work Orders</span>
+            </div>
+          </div>
+          <div class="rel-entity">
+            <div class="re-label">Governing agreement</div>
+            <div class="re-name">CO0234 · Master Service Agreement</div>
+            <div class="re-chips">
+              <span class="chip">Active · Jan 2024</span>
+              <span class="chip">Governs 540 SOWs</span>
+              <span class="chip">5 Amendments</span>
+            </div>
+          </div>
+          <div class="rel-entity">
+            <div class="re-label">Amendment applied to this SOW</div>
+            <div class="re-name">CO3432 · Amendment 4</div>
+            <div class="re-chips">
+              <span class="chip">Modifies: Section 4.2</span>
+              <span class="chip">Supersedes: Amendment 2</span>
+              <span class="chip">Effective: Feb 2024</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="prose">
+    The folder tree is not wrong. It stores what was put in it correctly. But it was designed to answer the question "where is this file?" The question users actually ask is "what governs this contract?" These are different questions. Right now, the system answers only the first one.
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     02 · WHAT USERS DO INSTEAD
+═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">02 · What users do instead</div>
+  <h2 class="s-title">
+    They build the<br>
+    relationship model <em>themselves.</em>
+  </h2>
+
+  <p class="prose">
+    When a system doesn't give users what they need, they don't stop needing it. They build it with whatever they have. These four patterns show up repeatedly across enterprise legal teams using Sirion today.
+  </p>
+
+  <div class="workarounds">
+
+    <div class="wa-card">
+      <div class="wa-num">Observed · 01</div>
+      <div class="wa-title">The file name becomes the data model</div>
+      <div class="wa-observed">
+        "MSA_v3_FINAL_governs_SOW-Boston_supersedes_Amend2_EXECUTED.pdf"
+      </div>
+      <div class="wa-signal">→ The user needed to track the governing relationship, which SOW it applies to, and which amendment it supersedes. The system had no field for this. So it went into the file name.</div>
+    </div>
+
+    <div class="wa-card">
+      <div class="wa-num">Observed · 02</div>
+      <div class="wa-title">The relationship map lives in Notion</div>
+      <div class="wa-observed">
+        Confluence pages titled "Contract Family Structure." Excel sheets showing parent-child relationships. Visio diagrams of which MSA governs which SOWs.
+      </div>
+      <div class="wa-signal">→ The model users need exists. They built it. It just isn't in Sirion — it sits alongside it, maintained separately, going stale.</div>
+    </div>
+
+    <div class="wa-card">
+      <div class="wa-num">Observed · 03</div>
+      <div class="wa-title">Structure lives in one person's memory</div>
+      <div class="wa-observed">
+        When a legal ops manager left Morgan Stanley, her knowledge of "which amendment applies to which SOW" left with her. The new person needed weeks of handover.
+      </div>
+      <div class="wa-signal">→ The knowledge exists. It's just stored in a person, not the system. When they leave, it leaves too.</div>
+    </div>
+
+    <div class="wa-card">
+      <div class="wa-num">Observed · 04</div>
+      <div class="wa-title">Amendment hunting consumes review time</div>
+      <div class="wa-observed">
+        Legal ops teams report 15–45 minutes per contract review spent locating applicable amendments, cross-referencing dates, confirming what is currently in force.
+      </div>
+      <div class="wa-signal">→ A question the system should answer in seconds takes an expert half an hour. Every time.</div>
+    </div>
+
+  </div>
+
+  <!-- SOURCE REFS -->
+  <p class="prose" style="font-size:15px; color: var(--muted);">
+    Sources: Sirion PER-3956, PER-4715, PER-4787 · SC Feedback rows 19, 52 · Shared by Madhur Lakhanpal, Morgan Stanley session
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     THE GAP STATEMENT
+═══════════════════════════════════════════════ -->
+<div class="section" style="padding-bottom: 0; border-bottom: none;">
+  <div class="gap-block">
+    <div class="gb-label">What this reveals</div>
+    <p class="gb-statement">
+      Folders model <em>location.</em><br>
+      Contracts have <em>meaning.</em><br>
+      Location and meaning are not the same thing.
+    </p>
+    <div class="gb-pair">
+      <div class="gbp-cell">
+        <div class="gbp-label">A folder can tell you</div>
+        <div class="gbp-text">Where <em>Amendment 4</em> is stored.</div>
+      </div>
+      <div class="gbp-cell">
+        <div class="gbp-label">It cannot tell you</div>
+        <div class="gbp-text">That <em>Amendment 4 governs the Boston SOW</em>, supersedes Amendment 2, and modifies Section 4.2 of the MSA.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     03 · WHAT CHANGES WHEN STRUCTURE CHANGES
+═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">03 · When the structure changes</div>
+  <h2 class="s-title">
+    Same question.<br>
+    <em>Instant answer.</em>
+  </h2>
+
+  <p class="prose">
+    The redesign doesn't change what data is in Sirion. It changes what the system <strong>understands</strong> about that data. Contracts become entities with explicit relationships — governs, modifies, applies to, supersedes. Documents become evidence attached to those relationships, not the relationships themselves.
+  </p>
+
+  <div class="redesign">
+    <div class="redesign-header">
+      <div class="rh-label">Redesigned view · Relationship-first</div>
+      <div class="rh-tag">After</div>
+    </div>
+    <div class="redesign-body">
+
+      <div class="r-entity-row">
+        <div class="r-entity-header primary">
+          <div>
+            <div class="reh-meta">Primary Agreement · 1 Governing Agreement</div>
+            <div class="reh-name">CO0234 · Master Service Agreement</div>
+          </div>
+          <div class="reh-chips">
+            <span class="r-chip governs">Governs 540 SOWs</span>
+            <span class="r-chip amend">5 Amendments</span>
+          </div>
+          <div class="reh-status"><span class="status-dot"></span>Active · Expiring 238 days</div>
+        </div>
+      </div>
+
+      <div class="r-entity-row">
+        <div class="r-entity-header">
+          <div>
+            <div class="reh-meta">Amendments · Updates that modify this agreement</div>
+            <div class="reh-name">5 Amendments</div>
+          </div>
+          <div class="reh-chips">
+            <span class="r-chip active">4 Active</span>
+            <span class="r-chip count">1 Superseded</span>
+          </div>
+          <div class="reh-status" style="color: var(--muted); font-size:13px;">Collapsed</div>
+        </div>
+      </div>
+
+      <div class="r-entity-row">
+        <div class="r-entity-header">
+          <div>
+            <div class="reh-meta">Execution Agreements · SOWs under this MSA</div>
+            <div class="reh-name">CO9142 · SOW Boston Mobile Platform Modernization</div>
+          </div>
+          <div class="reh-chips">
+            <span class="r-chip active">Active · Aug 2024 – Jul 2025</span>
+            <span class="r-chip governs">North America</span>
+          </div>
+          <div class="reh-status"><span class="status-dot"></span>Active</div>
+        </div>
+        <div class="r-entity-sub">
+          <span class="r-answer">Governing MSA: CO0234 · MSA Service Agreement &nbsp;|&nbsp; Applied Amendment: CO3432 · Amendment 4</span>
+          <span style="color: var(--signal); font-family: 'DM Mono', monospace; font-size: 13px; font-weight:600;">↳ Direct answer</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="prose">
+    The question "which amendment applies to this SOW?" goes from a 30-minute search to a single glance. Not because the data changed — because the <strong>structure</strong> changed. Relationships are now explicit, typed, and surfaced. The system knows what it knows.
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     04 · WHY AI LANDS HERE
+═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="s-tag">04 · Why this matters beyond navigation</div>
+  <h2 class="s-title">
+    Every AI experience<br>
+    <em>reads this structure.</em>
+  </h2>
+
+  <p class="prose">
+    The relationship model is not just a better navigation UI. It is the substrate that every AI capability in Sirion reads from. When AskSirion answers a contract question, it is traversing this structure — or trying to guess at it from document text. The quality of the answer depends entirely on the quality of the structure underneath.
+  </p>
+
+  <div class="ai-flow">
+
+    <div class="aif-col">
+      <div class="aif-label">Without relationship structure</div>
+      <div class="aif-scenario">
+        "Which amendment applies to the Boston SOW?"
+      </div>
+      <div class="aif-result">
+        AI reads all documents. Searches for mentions of "Boston" and "amendment" across 540 files. Returns a <em>probabilistic answer</em> based on text proximity. Might be right. Might not be.
+      </div>
+      <div class="aif-note">→ User can't verify it. Can't trust it. Stops using it.</div>
+    </div>
+
+    <div class="aif-arrow">
+      <div style="color: var(--accent); font-size: 20px;">→</div>
+      <div style="font-size: 13px; letter-spacing: 1px; text-transform: uppercase; writing-mode: vertical-rl; color: var(--muted);">same question</div>
+    </div>
+
+    <div class="aif-col ai-col">
+      <div class="aif-label">With relationship structure</div>
+      <div class="aif-scenario" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+        "Which amendment applies to the Boston SOW?"
+      </div>
+      <div class="aif-result">
+        AI traverses: SOW Boston node → "Applied Amendments" edge → Amendment 4 node. Returns: <em>"Amendment 4 (CO3432). Applied Feb 2024. Supersedes Amendment 2. Confirmed by Priya on 14 Jan."</em>
+      </div>
+      <div class="aif-note">→ Deterministic. Auditable. Cited. Trustworthy.</div>
+    </div>
+
+  </div>
+
+  <p class="prose">
+    The same AI model. The same question. Completely different reliability. The relationship structure is not a UI feature that sits on top of AI — it is the ground the AI stands on. <strong>If the ground is folders, the AI is guessing. If the ground is relationships, the AI is reasoning.</strong>
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     THREE QUESTIONS THAT FOLLOW
+═══════════════════════════════════════════════ -->
+<div class="three-opens">
+  <div class="to-top">Where this leads · Three open questions</div>
+  <h2 class="to-intro">
+    This surfaces<br>
+    <em>three questions</em><br>
+    worth sitting with.
+  </h2>
+
+  <div class="opens-grid">
+
+    <div class="open-card">
+      <div class="oc-num">Question 01</div>
+      <div class="oc-question">
+        Is this intelligence, or just better records?
+      </div>
+      <div class="oc-desc">
+        The folder-to-relationship shift changes what the system knows. Does that make it a smarter repository — or does it become something categorically different? What is the right frame for what Sirion is becoming?
+      </div>
+      <div class="oc-link">Is relationship-driven design the future</div>
+    </div>
+
+    <div class="open-card">
+      <div class="oc-num">Question 02</div>
+      <div class="oc-question">
+        Does this need to be on the UI — or just underneath it?
+      </div>
+      <div class="oc-desc">
+        If AI can answer "which amendment applies?" reliably, does the user ever need to see the relationship graph? Or is it enough that the structure exists in the backend, powering answers invisibly?
+      </div>
+      <div class="oc-link">Does relational intelligence need to be seen or only known</div>
+    </div>
+
+    <div class="open-card">
+      <div class="oc-num">Question 03</div>
+      <div class="oc-question">
+        When it surfaces — what does that actually look like?
+      </div>
+      <div class="oc-desc">
+        Take the amendment question. A user asks in natural language. The AI traverses the relationship graph. Where does that answer land — and what does the user see, touch, verify? A glimpse of one scenario, designed out.
+      </div>
+      <div class="oc-link">How it will be curated in interaction</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footnote">
+  <span>Sirion · Product Design · Internal discussion document · May 2026</span>
+  <span>Amrit Kumar</span>
+</div>
+
+</body>
+</html>

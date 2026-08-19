@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.designamrit.com/sitemap.xml

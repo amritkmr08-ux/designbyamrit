@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amrit Kumar · Product Designer, AI systems</title>
+<meta name="description" content="I design how humans and AI agents share judgment in enterprise work where decisions are hard and being wrong is expensive. Thirteen years in design, six in product." />
+<meta property="og:title" content="Amrit Kumar · Product Designer" />
+<meta property="og:description" content="Designing trust into AI-powered workflows. Case studies in human-guided AI for enterprise contract software." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F7F7F5;
+    --ink: #191A18;
+    --muted: #5F625C;
+    --faint: #8B8D87;
+    --line: #E3E3DF;
+    --soft: #EDEDEA;
+    --mark: #DCE5D3;
+    --accent: #3D5A45;
+    --dark: #0B0C0E;
+    --display: "Poppins", -apple-system, sans-serif;
+    --font: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mark); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+
+  .wrap  { max-width: 700px;  margin: 0 auto; padding: 0 40px; }
+  .wide  { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .rule  { width: 44px; height: 1px; background: #C9CAC4; margin: 96px auto; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--faint); font-weight: 400;
+  }
+  .sec-head { text-align: center; margin-bottom: 64px; }
+  .sec-head .eyebrow { display: block; }
+
+  /* ================= Nav ================= */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(247, 247, 245, 0.92);
+    backdrop-filter: blur(10px);
+  }
+  .nav-inner {
+    display: flex; justify-content: center; gap: 40px;
+    padding: 34px 20px 28px;
+    font-size: 13.5px; color: var(--muted); font-weight: 400;
+  }
+  .nav-inner a { transition: color 0.25s ease; }
+  .nav-inner a:hover { color: var(--ink); }
+  @media (max-width: 560px) { .nav-inner { gap: 22px; flex-wrap: wrap; } }
+
+  /* ================= Hero ================= */
+  header { padding: 96px 0 0; }
+  header .wide { max-width: 1180px; }
+  header .eyebrow { margin-bottom: 38px; display: block; }
+  header h1 {
+    font-family: var(--display);
+    font-size: clamp(42px, 8.2vw, 104px);
+    font-weight: 400; line-height: 0.98;
+    letter-spacing: -0.045em; max-width: 13ch;
+  }
+  header h1 b { font-weight: 500; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  .hero-foot {
+    display: grid; grid-template-columns: 1fr auto; gap: 40px;
+    align-items: end; margin-top: 54px;
+    border-top: 1px solid var(--line); padding-top: 26px;
+  }
+  .hero-foot .sub {
+    font-size: 17.5px; color: var(--muted); max-width: 44ch; line-height: 1.7;
+  }
+  .avail {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 13px; color: var(--accent); white-space: nowrap;
+  }
+  .avail i {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
+  @media (max-width: 700px) {
+    .hero-foot { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+  }
+
+  /* ================= Credibility marquee ================= */
+  .creds {
+    margin-top: 68px;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    overflow: hidden; padding: 15px 0; white-space: nowrap;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .creds-track { display: inline-block; animation: slide 46s linear infinite; }
+  .creds span {
+    font-family: var(--display); font-size: 13px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-right: 40px;
+  }
+  .creds span.hi { color: var(--ink); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* ================= Featured band (dark) ================= */
+  .band {
+    background: var(--dark); color: #E6E7EA;
+    padding: 88px 0 0; overflow: hidden;
+  }
+  .band .blbl {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #6E747E; margin-bottom: 22px;
+  }
+  .band h2 {
+    font-family: var(--display); color: #F4F5F7;
+    font-size: clamp(26px, 3.6vw, 46px); font-weight: 400;
+    line-height: 1.14; letter-spacing: -0.03em; max-width: 20ch;
+  }
+  .band .bsub {
+    color: #9AA0AA; font-size: 16.5px; max-width: 52ch;
+    margin-top: 22px; line-height: 1.7;
+  }
+  .bgo {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 26px; font-size: 15px; color: #8FA88A;
+  }
+  .bgo span { transition: transform 0.3s ease; display: inline-block; }
+  .band a:hover .bgo span { transform: translateX(7px); }
+  .bshot {
+    margin-top: 54px; border-radius: 4px 4px 0 0; overflow: hidden;
+    border: 1px solid #23262B; border-bottom: none;
+    box-shadow: 0 -20px 70px -30px rgba(0, 0, 0, 0.9);
+  }
+  .bshot img { width: 100%; height: auto; display: block; will-change: transform; }
+
+  /* ================= Numbers ================= */
+  #nums { padding: 104px 0 0; }
+  .nums {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+    max-width: 1180px; margin: 0 auto; padding: 0 40px;
+  }
+  .num-i { border-top: 1px solid var(--line); padding-top: 20px; }
+  .num-i .v {
+    font-family: var(--display);
+    font-size: clamp(32px, 4.4vw, 56px); font-weight: 400;
+    line-height: 0.98; letter-spacing: -0.04em; font-variant-numeric: tabular-nums;
+  }
+  .num-i .l { font-size: 14px; color: var(--muted); margin-top: 13px; line-height: 1.5; }
+  @media (max-width: 760px) { .nums { grid-template-columns: 1fr 1fr; gap: 28px; } }
+
+
+  /* ================= Influence ================= */
+  #influence { padding: 0; }
+  .infl-wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .infl-lbl {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 52px;
+  }
+  .infl-scope {
+    font-size: 14px; color: var(--muted); line-height: 1.7;
+    margin: -34px 0 52px; padding-bottom: 0;
+  }
+  .infl-scope b { color: var(--ink); font-weight: 500; }
+  .infl {
+    display: grid; grid-template-columns: 300px 1fr; gap: 64px; align-items: start;
+  }
+  .infl + .infl { margin-top: 64px; padding-top: 64px; border-top: 1px solid var(--line); }
+  .infl .claim {
+    font-family: var(--display); font-size: 21px; line-height: 1.35;
+    letter-spacing: -0.015em; font-weight: 400;
+  }
+  .infl .claim-n {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.16em;
+    color: var(--faint); display: block; margin-bottom: 14px;
+  }
+  .infl-body p { font-size: 17px; line-height: 1.7; margin-bottom: 20px; }
+  .infl-body p:last-of-type { margin-bottom: 0; }
+  .infl-body .against {
+    border-left: 2px solid var(--mark); padding: 2px 0 2px 22px;
+    color: var(--muted); font-size: 16px; margin: 26px 0;
+  }
+  .infl-body b { font-weight: 500; }
+  .infl-go {
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-top: 28px; font-size: 15px; color: var(--accent);
+    border-top: 1px solid var(--line); padding-top: 22px;
+  }
+  .infl-go span { transition: transform 0.3s ease; display: inline-block; }
+  .infl-go:hover span { transform: translateX(6px); }
+  @media (max-width: 860px) {
+    .infl { grid-template-columns: 1fr; gap: 28px; }
+    .infl .claim { font-size: 19px; }
+  }
+
+  /* ================= Process ================= */
+  #process { text-align: center; }
+  #process .statement {
+    font-family: var(--display);
+    font-size: clamp(24px, 3vw, 34px); font-weight: 400;
+    line-height: 1.32; letter-spacing: -0.02em; max-width: 20ch; margin: 0 auto;
+  }
+  #process .pnote {
+    font-size: 16px; color: var(--muted); max-width: 46ch;
+    margin: 28px auto 0; line-height: 1.7;
+  }
+  .photo { margin: 58px auto 0; max-width: 1180px; padding: 0 40px; }
+  .photo img { width: 100%; height: auto; display: block; border-radius: 3px; background: #E9EAE6; }
+  .photo figcaption {
+    margin-top: 16px; font-size: 13.5px; color: var(--faint);
+    text-align: center; line-height: 1.7;
+  }
+
+  /* ================= Work ================= */
+  #work { padding: 0 0 30px; }
+  .work-list { border-top: 1px solid var(--line); }
+  .item {
+    display: grid; grid-template-columns: 380px 1fr; gap: 52px; align-items: start;
+    padding: 46px 0; border-bottom: 1px solid var(--line);
+  }
+  /* artwork presented on a surface, so screenshots and diagrams read alike */
+  .thumb {
+    aspect-ratio: 16 / 11; border-radius: 4px; overflow: hidden;
+    background: #EDEDE9; padding: 20px 20px 0;
+    display: flex; align-items: flex-end;
+    transition: background 0.4s ease;
+  }
+  .item:hover .thumb { background: #E7E8E2; }
+  .thumb .plate {
+    width: 100%; overflow: hidden;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid rgba(25, 26, 24, 0.10); border-bottom: none;
+    background: #fff;
+    box-shadow: 0 14px 30px -18px rgba(25, 26, 24, 0.35);
+    transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .item:hover .thumb .plate { transform: translateY(-6px); }
+  .thumb img, .thumb svg { width: 100%; height: auto; display: block; }
+  .th-lbl { font-size: 9px;   fill: #A2A39D; letter-spacing: 0.12em; font-family: var(--font); }
+  .th-nm  { font-size: 11px;  fill: #191A18; font-weight: 500;      font-family: var(--font); }
+  .th-sm  { font-size: 9.5px; fill: #6E6F6A;                        font-family: var(--font); }
+  .th-box { fill: #fff; stroke: #E3E3DF; }
+  .item-top { display: flex; align-items: baseline; gap: 18px; margin-bottom: 13px; }
+  .item .n   { font-size: 12px; color: var(--faint); letter-spacing: 0.14em; }
+  .item .cat { font-size: 12.5px; color: var(--faint); }
+  .item h3 {
+    font-family: var(--display);
+    font-size: clamp(21px, 2.4vw, 27px); font-weight: 400;
+    letter-spacing: -0.02em; line-height: 1.3; max-width: 24ch;
+    transition: color 0.25s ease;
+  }
+  .item p {
+    font-size: 15.5px; color: var(--muted); line-height: 1.7;
+    max-width: 56ch; margin-top: 13px;
+  }
+  .item .go {
+    display: inline-block; margin-top: 18px;
+    font-size: 14px; color: var(--accent);
+  }
+  .item .go span { display: inline-block; transition: transform 0.3s ease; }
+  .item:hover h3 { color: var(--accent); }
+  .item:hover .go span { transform: translateX(6px); }
+  @media (max-width: 820px) { .item { grid-template-columns: 1fr; gap: 20px; } }
+
+  /* ================= Dark quote band ================= */
+  .qband { background: #191A18; padding: 120px 0; text-align: center; }
+  .qband blockquote {
+    font-family: var(--display);
+    font-size: clamp(26px, 4.2vw, 52px); font-weight: 400;
+    line-height: 1.2; letter-spacing: -0.035em;
+    max-width: 20ch; margin: 0 auto; color: #F4F5F7;
+    text-wrap: balance;
+  }
+  .qband cite {
+    display: block; font-style: normal; margin-top: 32px;
+    font-size: 13.5px; color: #8B8D87;
+  }
+
+  /* ================= How I work ================= */
+  #how .intro {
+    font-family: var(--display);
+    max-width: 24ch; font-size: clamp(23px, 2.8vw, 33px);
+    font-weight: 400; line-height: 1.3; letter-spacing: -0.02em;
+  }
+  #how .intro em { font-style: normal; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  .steps { margin-top: 66px; border-top: 1px solid var(--line); }
+  .step {
+    display: grid; grid-template-columns: 190px 1fr 300px; gap: 44px;
+    padding: 40px 0; border-bottom: 1px solid var(--line); align-items: start;
+  }
+  .step .k {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint);
+    display: flex; gap: 12px; align-items: baseline;
+  }
+  .step .k b { color: var(--accent); font-weight: 400; }
+  .step h3 {
+    font-family: var(--display); font-size: clamp(19px, 2.1vw, 24px);
+    font-weight: 400; letter-spacing: -0.02em; line-height: 1.28; margin-bottom: 10px;
+  }
+  .step p { font-size: 15.5px; color: var(--muted); line-height: 1.65; }
+  .step .aside { align-self: start; }
+
+  /* mono file list */
+  .files {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--muted); line-height: 2;
+  }
+  .files div { display: flex; justify-content: space-between; gap: 14px; }
+  .files span { color: var(--faint); }
+
+  /* prototype: file + the question it settled */
+  .proto { border-top: 1px solid var(--line); }
+  .proto li { list-style: none; border-bottom: 1px solid var(--line); padding: 13px 0; }
+  .proto .fn {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--muted); display: block;
+  }
+  .proto .q {
+    font-size: 14.5px; color: var(--ink); line-height: 1.45; margin-top: 5px; display: block;
+  }
+
+  /* measured comparison */
+  .mini { font-size: 12.5px; }
+  .mini-row {
+    display: grid; grid-template-columns: 1fr 62px; gap: 10px;
+    align-items: baseline; padding: 5px 0;
+  }
+  .mini-row .lb { color: var(--muted); }
+  .mini-row .vl {
+    text-align: right; font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .mini-row.bad .vl { color: #9A4A38; }
+  .mini-row.good .vl { color: var(--accent); }
+  .mini-cap {
+    font-size: 11.5px; color: var(--faint); margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--soft); line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .step { grid-template-columns: 1fr; gap: 14px; padding: 32px 0; }
+    .step .aside { margin-top: 6px; }
+  }
+
+  /* ================= Thinking ================= */
+  #thinking { padding: 30px 0; }
+  .manifesto { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .manifesto .lbl {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 40px;
+  }
+  .manifesto blockquote {
+    font-family: var(--display);
+    font-size: clamp(34px, 6.4vw, 86px); font-weight: 400;
+    line-height: 1.02; letter-spacing: -0.045em; max-width: 15ch;
+  }
+  .manifesto blockquote em {
+    font-style: normal; box-shadow: inset 0 -0.12em 0 var(--mark);
+  }
+  .manifesto .after {
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end;
+    margin-top: 48px; border-top: 1px solid var(--line); padding-top: 24px;
+  }
+  .manifesto .after p { font-size: 16.5px; color: var(--muted); max-width: 50ch; }
+  .manifesto .after a { font-size: 14.5px; color: var(--accent); white-space: nowrap; }
+  .manifesto .after a span { display: inline-block; transition: transform 0.3s ease; }
+  .manifesto .after a:hover span { transform: translateX(6px); }
+  @media (max-width: 700px) {
+    .manifesto .after { grid-template-columns: 1fr; gap: 18px; align-items: start; }
+  }
+
+
+  /* ================= About ================= */
+  .portrait {
+    width: 260px; margin-bottom: 40px;
+    border-radius: 3px; overflow: hidden; background: #E9EAE6;
+  }
+  .portrait img { width: 100%; height: auto; display: block; }
+  @media (max-width: 700px) { .portrait { width: 180px; margin-bottom: 30px; } }
+  #about p { margin-bottom: 22px; }
+  #about p:last-of-type { margin-bottom: 0; }
+  #about b { font-weight: 500; }
+  .facts { margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 40px; }
+  .fact { border-top: 1px solid var(--line); padding-top: 14px; }
+  .fact p:first-child {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 5px;
+  }
+  .fact p:last-child { font-size: 15px; line-height: 1.55; }
+  @media (max-width: 640px) { .facts { grid-template-columns: 1fr; gap: 22px; } }
+
+  /* ================= Contact ================= */
+  #contact { text-align: center; padding: 0 0 30px; }
+  #contact h2 {
+    font-family: var(--display);
+    font-size: clamp(26px, 3vw, 35px); font-weight: 400;
+    line-height: 1.28; letter-spacing: -0.02em; max-width: 18ch; margin: 0 auto;
+  }
+  .copybtn {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 40px; padding: 15px 30px; border: none; cursor: pointer;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font); font-size: 15.5px; font-weight: 500;
+    border-radius: 999px; transition: background 0.25s ease, transform 0.2s ease;
+  }
+  .copybtn:hover { background: var(--accent); transform: translateY(-2px); }
+  .copybtn.ok { background: var(--accent); }
+  .mailalt { display: block; margin-top: 18px; font-size: 13.5px; color: var(--faint); }
+  .mailalt a { border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+  .mailalt a:hover { color: var(--ink); border-color: var(--ink); }
+  .links {
+    margin-top: 42px; display: flex; justify-content: center; gap: 30px;
+    font-size: 13.5px; color: var(--muted); flex-wrap: wrap;
+  }
+  .links a { transition: color 0.25s ease; }
+  .links a:hover { color: var(--ink); }
+
+  footer { text-align: center; padding: 100px 0 56px; font-size: 12.5px; color: var(--faint); }
+  footer .credit { margin-top: 8px; }
+
+  /* ================= Reveal + motion prefs ================= */
+  .r { opacity: 0; transform: translateY(18px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .r.on { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .r { opacity: 1; transform: none; transition: none; }
+    .creds-track, .avail i { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 700px) {
+    .wrap, .wide, .photo { padding-left: 24px; padding-right: 24px; }
+    header { padding: 64px 0 0; }
+    .rule { margin: 68px auto; }
+    .sec-head { margin-bottom: 44px; }
+    #nums { padding: 72px 0 0; }
+    .qband { padding: 84px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="nav-inner">
+    <a href="#work">Work</a>
+    <a href="#how">How I work</a>
+    <a href="#thinking">Thinking</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wide">
+    <span class="eyebrow r">Amrit Kumar · Product Designer</span>
+    <h1 class="r">Designing <b>trust</b> into AI-powered workflows.</h1>
+    <div class="hero-foot r">
+      <p class="sub">I design how humans and AI agents share judgment in enterprise work,
+      especially where decisions are hard and being wrong is expensive.</p>
+      <span class="avail"><i></i> Open to Staff &amp; Lead roles</span>
+    </div>
+  </div>
+</header>
+
+<div class="creds" aria-hidden="true">
+  <div class="creds-track">
+    <span class="hi">SirionLabs</span><span class="hi">Bharti Airtel</span><span class="hi">NIFT</span><span class="hi">XLRI</span><span>UX India 2023</span><span>Design Up 2025</span><span class="hi">SirionLabs</span><span class="hi">Bharti Airtel</span><span class="hi">NIFT</span><span class="hi">XLRI</span><span>UX India 2023</span><span>Design Up 2025</span>
+  </div>
+</div>
+
+<section class="band">
+  <a href="contract-understanding.html">
+    <div class="wide">
+      <p class="blbl r">01 &nbsp;·&nbsp; Featured &nbsp;·&nbsp; System design</p>
+      <h2 class="r">If the ground is folders, the AI is guessing. If the ground is
+      relationships, the AI is reasoning.</h2>
+      <p class="bsub r">A contract repository rebuilt from a storage hierarchy into a relationship
+      model, so "which amendment applies to this SOW?" becomes something you read, not something
+      you reconstruct.</p>
+      <span class="bgo r">Read the case study <span>→</span></span>
+      <div class="bshot r">
+        <picture>
+          <source srcset="ui-graph-next.webp" type="image/webp" />
+          <img id="bandshot" src="ui-graph-next.jpg" width="1600" height="916" decoding="async"
+               alt="A contract family rendered as branching columns: agreement, status groups, records, amendments and work orders, with a detail panel." />
+        </picture>
+      </div>
+    </div>
+  </a>
+</section>
+
+
+<section id="work">
+  <div class="wide">
+    <div class="sec-head r"><span class="eyebrow">More work</span></div>
+
+    <div class="work-list">
+
+      <a class="item r" href="auto-extraction.html">
+        <div class="thumb">
+          <div class="plate">
+            <picture>
+              <source srcset="thumb-ae.webp" type="image/webp" />
+              <img src="thumb-ae.jpg" width="1000" height="658" loading="lazy"
+                   alt="The Auto Extraction review screen: a contract on the left, a panel of 128 machine-extracted fields on the right." />
+            </picture>
+          </div>
+        </div>
+        <div>
+          <div class="item-top">
+            <span class="n">02</span>
+            <span class="cat">Shipped · AI review interface</span>
+          </div>
+          <h3>An AI extracts 128 fields. A lawyer still checks them.</h3>
+          <p>Three generations of review interface, two of them mine and replaced. Month-four
+          retention went from 5% to 23%, which says more than the efficiency number does.</p>
+          <span class="go">Read the case study <span>&rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="item r" href="intent-model.html">
+        <div class="thumb">
+          <div class="plate"><svg viewBox="0 0 320 210" role="img" aria-label="Illustration: four intent states, with work migrating toward the system knowing first.">
+            <rect width="320" height="210" fill="#FFFFFF"/>
+            <text class="th-lbl" x="20" y="26">FOUR STATES OF MIND</text>
+            <rect class="th-box" x="20" y="40" width="132" height="46" rx="3"/>
+            <text class="th-nm" x="32" y="60">"I know"</text><text class="th-sm" x="32" y="74">they ask</text>
+            <rect x="168" y="40" width="132" height="46" rx="3" fill="#F3F6F1" stroke="#3D5A45"/>
+            <text class="th-nm" x="180" y="60" fill="#31492F">"It knows"</text><text class="th-sm" x="180" y="74" fill="#31492F">we reach them</text>
+            <rect class="th-box" x="20" y="94" width="132" height="46" rx="3"/>
+            <text class="th-nm" x="32" y="114">"I'm looking"</text><text class="th-sm" x="32" y="128">browsing</text>
+            <rect class="th-box" x="168" y="94" width="132" height="46" rx="3"/>
+            <text class="th-nm" x="180" y="114">"World moved"</text><text class="th-sm" x="180" y="128">across the book</text>
+            <path d="M150 168 L200 168" stroke="#3D5A45" stroke-width="1.5" fill="none"/>
+            <polygon points="200,164 210,168 200,172" fill="#3D5A45"/>
+            <text class="th-sm" x="20" y="172">work migrates</text>
+          </svg>
+        </div></div>
+        <div>
+          <div class="item-top">
+            <span class="n">03</span>
+            <span class="cat">Product strategy · Design direction</span>
+          </div>
+          <h3>The intent model</h3>
+          <p>When should an agent explain, suggest, act, or stay out of the way? A framework
+          written for and presented to executive stakeholders as platform-wide direction.</p>
+          <span class="go">Read the direction <span>→</span></span>
+        </div>
+      </a>
+
+      <a class="item r" href="airtel-self-serve.html">
+        <div class="thumb">
+          <div class="plate"><svg viewBox="0 0 320 210" role="img" aria-label="Illustration: a bar chart of support call drivers, with 4G speed dwarfing the rest at 4.25 million calls.">
+            <rect width="320" height="210" fill="#FFFFFF"/>
+            <text class="th-lbl" x="20" y="26">WHY PEOPLE CALLED</text>
+            <text class="th-sm" x="20" y="48">4G speed</text><text class="th-nm" x="262" y="48">4.25M</text>
+            <rect x="20" y="54" width="280" height="7" rx="3.5" fill="#3D5A45"/>
+            <text class="th-sm" x="20" y="80">Recharge schemes</text><text class="th-sm" x="268" y="80">1.95M</text>
+            <rect x="20" y="86" width="129" height="7" rx="3.5" fill="#C9CAC4"/>
+            <text class="th-sm" x="20" y="112">Balance &amp; validity</text><text class="th-sm" x="268" y="112">1.87M</text>
+            <rect x="20" y="118" width="123" height="7" rx="3.5" fill="#C9CAC4"/>
+            <text class="th-sm" x="20" y="144">SIM exchange</text><text class="th-sm" x="268" y="144">1.80M</text>
+            <rect x="20" y="150" width="118" height="7" rx="3.5" fill="#D8D6D0"/>
+            <text class="th-sm" x="20" y="180">One issue drove four million calls a year.</text>
+          </svg>
+        </div></div>
+        <div>
+          <div class="item-top">
+            <span class="n">04</span>
+            <span class="cat">Shipped · Consumer scale</span>
+          </div>
+          <h3>Support that answers before you ask</h3>
+          <p>Four million calls a year about a single issue. Redesigning self-service in a telecom
+          app used by millions, predicting the question from behaviour instead of offering a menu.</p>
+          <span class="go">Read case study <span>→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="nums">
+  <div class="nums">
+    <div class="num-i r"><p class="v">13</p><p class="l">years in design,<br />six of them in product</p></div>
+    <div class="num-i r"><p class="v">3</p><p class="l">years designing<br />AI-native experiences</p></div>
+    <div class="num-i r"><p class="v">Millions</p><p class="l">of users on work<br />that shipped</p></div>
+    <div class="num-i r"><p class="v" style="font-size:clamp(26px,3.4vw,42px)">5&rarr;23%</p><p class="l">of users still returning to an AI review tool four months in, after I redesigned it</p></div>
+  </div>
+</section>
+
+
+<div class="rule"></div>
+
+<section id="influence">
+  <div class="infl-wrap">
+    <p class="infl-lbl r">Where I changed the direction</p>
+    <p class="infl-scope r">Both arguments were made across a working group of roughly
+    <b>3 to 4 designers, 2 to 3 product managers and 4 to 5 engineers</b>, plus legal
+    subject-matter experts. Neither was mine to decide.</p>
+
+    <div class="infl">
+      <div class="r">
+        <p class="claim"><span class="claim-n">01</span>The product modelled where documents sit.
+        I argued it had to model how contracts relate.</p>
+      </div>
+      <div class="infl-body">
+        <p class="r">The established direction was to keep representing contracts as a parent
+        document with children beneath it. It was familiar to customers, already embedded in the
+        product, and similar models exist across the category. Continuing it was the safe call.</p>
+
+        <p class="r">My objection was that we were modelling <b>where documents are stored</b>, not
+        <b>how contracts legally relate</b>. Parent and child holds for some relationships and
+        breaks for others. An amendment can govern several agreements at once. A record can inherit
+        from more than one instrument. Those are many to many, and a tree cannot express them.</p>
+
+        <p class="against r">What moved the discussion was not a visual argument. It was the
+        consequence of getting the model wrong.</p>
+
+        <p class="r">If the product encodes the wrong relationship, a user can misread their own
+        contractual position, and any AI reasoning built on that structure inherits the error and
+        states it confidently. That reframed a preference question into a risk question.</p>
+
+        <p class="r">I prototyped the relationship model and several ways of representing it at
+        realistic volume, so the argument could be tested rather than debated. The position was
+        accepted. Instead of improving the folder hierarchy, the direction moved to
+        <b>separating navigation from the underlying relationship model</b>: a flat list on the left
+        rail to move around in, nodes and explicit relationships underneath.</p>
+
+        <p class="r">It won because the question changed. Not "what hierarchy is easiest to
+        navigate", but <b>"what representation is actually true to the contract"</b>.</p>
+
+        <a class="infl-go r" href="contract-understanding.html">The full argument, and how it was
+        made <span>&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="infl">
+      <div class="r">
+        <p class="claim"><span class="claim-n">02</span>A team was designing surfaces one at a
+        time. I gave them a shared language, and it changed what they built.</p>
+      </div>
+      <div class="infl-body">
+        <p class="r">On the next-generation platform, each surface was being treated as its own
+        problem: design the chat, design the listing, design the procedure page. The question nobody
+        could settle was which to build first, because there was no shared account of how the pieces
+        related to each other.</p>
+
+        <p class="r">I wrote a model of intent instead. Not what each surface <em>is</em>, but three
+        questions about how a person gets to it: <b>who starts the interaction, what the person is
+        trying to do, and which surface should carry it.</b> Presented to executives as design
+        direction.</p>
+
+        <p class="against r">The most useful thing it killed was the assumption that chat is where
+        AI goes by default.</p>
+
+        <p class="r">Two things followed. The listing and procedure surfaces were reclassified from
+        places an agent acts on you into <b>discovery</b> surfaces, places you go looking, which
+        answered the sequencing question that had been stuck. And other designers began using the
+        same three questions on work I was not on, including the homepage.</p>
+
+        <p class="r">To keep that language from drifting, I wrote and maintain the team's glossary
+        for agentic contract work: around sixty defined terms across intent, triggering, surfaces,
+        surface properties and journeys, versioned and dated. It exists so that a disagreement in a
+        meeting is about the decision rather than about what the words mean.</p>
+
+        <a class="infl-go r" href="intent-model.html">The model, and the argument for it
+        <span>&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="process">
+  <div class="wrap">
+    <p class="statement r">This is where most of my design starts.</p>
+    <p class="pnote r">Messy thinking before clean interfaces. Most of the hard decisions on a
+    project are settled on a wall like this, weeks before anyone opens a design tool.</p>
+  </div>
+  <figure class="photo r">
+    <picture>
+      <source srcset="process-whiteboard.webp" type="image/webp" />
+      <img src="process-whiteboard.jpg" width="1900" height="1255" loading="lazy" decoding="async"
+           alt="Amrit at a whiteboard mapping smart data capture for real-world contracts: upload and OCR, extraction, key attributes, an AI engine, reasoning that explains why a value was extracted, human-in-the-loop review with confidence scores, repository, integrations and continuous learning, all radiating from a single starting point." />
+    </picture>
+    <figcaption>Mapping the whole domain (extraction, reasoning, confidence, human review)
+    before a single screen exists.</figcaption>
+  </figure>
+</section>
+
+
+<section class="qband">
+  <div class="wide">
+    <blockquote class="r">"The auto extraction module feels so simple now."</blockquote>
+    <cite class="r">A legal reviewer, after the workflow redesign, the response I was proudest of</cite>
+  </div>
+</section>
+
+<section id="how" style="padding-top:100px">
+  <div class="wide">
+    <div class="sec-head r" style="text-align:left;margin-bottom:40px"><span class="eyebrow">How I work</span></div>
+    <p class="intro r">I design AI products, and I <em>build with AI</em>. Not as a novelty.
+    It changes what a designer can put in front of stakeholders.</p>
+
+    <div class="steps">
+
+      <div class="step r">
+        <p class="k"><b>01</b> Prototype</p>
+        <div>
+          <h3>Arguments you can click</h3>
+          <p>I build working prototypes in HTML rather than clickable mockups. A branching graph
+          holding 340 records either survives real volume or it doesn't, and you only find that
+          out in a browser, not in a frame.</p>
+        </div>
+        <div class="aside">
+          <ul class="proto">
+            <li>
+              <span class="fn">family-graph-at-scale.html</span>
+              <span class="q">Does a many-to-many web stay readable at full volume?</span>
+            </li>
+            <li>
+              <span class="fn">node-language-concept.html</span>
+              <span class="q">Can relationships replace folders as the storage model?</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step r">
+        <p class="k"><b>02</b> Measure</p>
+        <div>
+          <h3>Killing my own ideas with data</h3>
+          <p>My first relationship layout was radial. It looked like a relationship map should
+          look. So I instrumented it at real volume, and the numbers ended the argument faster
+          than any opinion could.</p>
+        </div>
+        <div class="aside">
+          <div class="mini">
+            <div class="mini-row bad"><span class="lb">Nodes drawn</span><span class="vl">606</span></div>
+            <div class="mini-row bad"><span class="lb">Zoom to fit</span><span class="vl">12%</span></div>
+            <div class="mini-row bad"><span class="lb">Labels legible</span><span class="vl">0</span></div>
+            <div class="mini-row bad"><span class="lb">Frame time</span><span class="vl">39.4ms</span></div>
+            <div class="mini-row good"><span class="lb">After redesign</span><span class="vl">all</span></div>
+            <p class="mini-cap">Everything was on screen. Nothing was readable.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step r">
+        <p class="k"><b>03</b> Explore</p>
+        <div>
+          <h3>More directions, sooner</h3>
+          <p>Generating several structural options in an afternoon means the one I bring to a
+          review is the survivor of a set, not the first thing I thought of.</p>
+        </div>
+        <div class="aside">
+          <div class="files">
+            <div><span>tried</span> radial</div>
+            <div><span>tried</span> node-link graph</div>
+            <div><span>tried</span> nested tree</div>
+            <div><span>kept</span> branching columns</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step r">
+        <p class="k"><b>04</b> Judge</p>
+        <div>
+          <h3>The taste is still mine</h3>
+          <p>AI is fast at producing plausible things. Deciding which are actually right (what to
+          cut, what to defend, what's dishonest) is the part that doesn't transfer.</p>
+        </div>
+        <div class="aside">
+          <p class="mini-cap" style="border:none;padding:0;margin:0">
+            Every number on this site is one I can defend in a room. The ones I couldn't, I removed.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="thinking">
+  <div class="manifesto">
+    <p class="lbl r">What I keep coming back to</p>
+    <blockquote class="r">I design the line where AI stops and <em>a person decides</em>.</blockquote>
+    <div class="after">
+      <p class="r">An agent can be completely sure what the answer is and still not be entitled to
+      act on it. Certainty belongs to the model; authority belongs to the person accountable for
+      the outcome. Almost everything I design comes back to that distinction.</p>
+      <a class="r" href="intent-model.html">Where this came from <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head r" style="text-align:left;margin-bottom:36px"><span class="eyebrow">About</span></div>
+
+    <div class="portrait r">
+      <picture>
+        <source srcset="about-desk.webp" type="image/webp" />
+        <img src="about-desk.jpg" width="1100" height="1236" loading="lazy" decoding="async"
+             alt="Amrit Kumar at his desk in the SirionLabs office, working on a laptop." />
+      </picture>
+    </div>
+
+
+    <p class="r">My mission at Sirion has been simple: <b>make complexity feel calm.</b> Legal teams
+    carry the weight of precision, and they don't have time to figure out an interface.</p>
+
+    <p class="r">I came to product design the long way round: years in brand, creative direction
+    and co-founding a denim label before moving into digital products. That history shows up in the
+    work: I care as much about how something reads as how it functions. And I prototype in code, so
+    ideas prove themselves in a browser rather than in a deck.</p>
+
+    <p class="r">Design is personal for me. Being a father changed how I see it. I watch how
+    naturally my daughter explores, where she gets confused, how she delights in small wins. That's
+    the same lens I bring to work. When design steps back and lets someone move forward with
+    confidence, that's when it's working.</p>
+
+    <div class="facts">
+      <div class="fact r"><p>Currently</p><p>Product Designer, SirionLabs, 5 years</p></div>
+      <div class="fact r"><p>Experience</p><p>13 years in design · 6+ in product</p></div>
+      <div class="fact r"><p>Focus</p><p>AI-native UX · Design systems</p></div>
+      <div class="fact r"><p>Recognition</p><p>Lightning Talk, UX India 2023 · Best AI-Driven Design Concept, Sirion 2024</p></div>
+      <div class="fact r"><p>Coursework</p><p>Design Thinking: From Insights to Viability, Stanford Graduate School of Business (online)</p></div>
+      <div class="fact r"><p>Community</p><p>Design Futures Collaboratory workshop, Design Up 2025</p></div>
+      <div class="fact r"><p>Based in</p><p>Noida, India</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="contact">
+  <div class="wrap">
+    <h2 class="r">Let's build something that thinks.</h2>
+    <button class="copybtn r" id="copymail" type="button" aria-live="polite">
+      <span id="copytxt">Copy my email</span>
+    </button>
+    <span class="mailalt r">or write directly:
+      <a href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a></span>
+    <div class="links r">
+      <a href="#" target="_blank" rel="noopener" title="Link coming soon">Resume</a>
+      <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.behance.net/amritkmr08" target="_blank" rel="noopener">Behance</a>
+      <a href="home-3d.html">3D experiment</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> Amrit Kumar</div>
+  <div class="credit">Designed and written by me. Coded with Claude.</div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".r").forEach(function (el, i) {
+    el.style.transitionDelay = (i % 3) * 60 + "ms";
+    io.observe(el);
+  });
+
+  /* gentle parallax on featured shot */
+  var shot = document.getElementById("bandshot");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (shot && !reduce) {
+    var band = shot.closest(".band");
+    var ticking = false;
+    var park = function () {
+      var r = band.getBoundingClientRect();
+      var seen = Math.min(Math.max((innerHeight - r.top) / (innerHeight + r.height), 0), 1);
+      shot.style.transform = "translateY(" + (seen * -24) + "px) scale(1.03)";
+      ticking = false;
+    };
+    document.addEventListener("scroll", function () {
+      if (!ticking) { requestAnimationFrame(park); ticking = true; }
+    }, { passive: true });
+    park();
+  }
+
+  /* copy email */
+  var btn = document.getElementById("copymail");
+  var txt = document.getElementById("copytxt");
+  var EMAIL = "amritkmr08@gmail.com";
+  var timer = null;
+  btn.addEventListener("click", function () {
+    function done(ok) {
+      txt.textContent = ok ? "Copied, talk soon" : EMAIL;
+      btn.classList.add("ok");
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        txt.textContent = "Copy my email";
+        btn.classList.remove("ok");
+      }, 2200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(function () { done(true); },
+        function () { done(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = EMAIL;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      done(ok);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

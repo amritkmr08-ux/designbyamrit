@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Directions D–F — geometric sans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Poppins", sans-serif; background:#111; }
+  a { text-decoration:none; color:inherit; }
+
+  .label {
+    position:sticky; top:0; z-index:50;
+    background:#111; color:#fff; padding:14px 28px;
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    font-family:"IBM Plex Mono", monospace;
+  }
+  .label b { font-weight:600; }
+  .label span { color:#888; text-transform:none; letter-spacing:0; font-size:12.5px; text-align:right; }
+
+  /* ======================================================
+     D — SIGNAL   light, electric indigo, soft geometry
+     ====================================================== */
+  .D { background:#FBFBFD; color:#0E1015; padding:0; }
+  .D .bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:24px 44px; font-size:14px; font-weight:500;
+  }
+  .D .bar .logo { font-weight:600; font-size:17px; letter-spacing:-0.01em; }
+  .D .bar .nav { display:flex; gap:28px; color:#5B6070; }
+  .D .bar .cta {
+    background:#3B2BE8; color:#fff; padding:9px 20px; border-radius:100px;
+    font-size:13.5px; font-weight:500;
+  }
+  .D .hero { padding:70px 44px 60px; }
+  .D .pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#EEEDFE; color:#3B2BE8; border-radius:100px;
+    padding:7px 16px; font-size:13px; font-weight:500; margin-bottom:30px;
+  }
+  .D .pill i { width:7px; height:7px; border-radius:50%; background:#3B2BE8; display:block; }
+  .D h1 {
+    font-size:clamp(38px,6.2vw,80px); font-weight:600; line-height:1.06;
+    letter-spacing:-0.035em; max-width:16ch;
+  }
+  .D h1 span { color:#3B2BE8; }
+  .D .sub {
+    font-size:18px; color:#5B6070; max-width:52ch; margin-top:26px;
+    font-weight:400; line-height:1.6;
+  }
+  .D .stats { display:flex; gap:52px; margin-top:44px; flex-wrap:wrap; }
+  .D .stats div b { display:block; font-size:34px; font-weight:600; letter-spacing:-0.03em; }
+  .D .stats div p { font-size:13.5px; color:#8A8F9C; margin-top:2px; }
+  .D .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; padding:0 44px 60px; }
+  .D .c {
+    background:#fff; border:1px solid #EAEAF0; border-radius:22px;
+    padding:28px 26px 30px; transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .D .c:hover { transform:translateY(-4px); box-shadow:0 18px 40px -22px rgba(20,20,60,.28); }
+  .D .c .tag {
+    font-size:12px; font-weight:500; color:#3B2BE8;
+    background:#EEEDFE; border-radius:100px; padding:4px 12px; display:inline-block;
+  }
+  .D .c h3 { font-size:21px; font-weight:600; line-height:1.22; margin:16px 0 8px; letter-spacing:-0.02em; }
+  .D .c p { font-size:14.5px; color:#6B7080; line-height:1.55; }
+  .D .c .go { margin-top:18px; font-size:14px; font-weight:500; color:#3B2BE8; }
+
+  /* ======================================================
+     E — BLACKOUT   pure black, huge type, acid accent
+     ====================================================== */
+  .E { background:#050505; color:#fff; padding:0; }
+  .E .bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 40px; font-size:13px; font-weight:500; color:#7A7A7A;
+    border-bottom:1px solid #1A1A1A;
+  }
+  .E .bar .logo { color:#fff; font-weight:600; font-size:16px; }
+  .E .bar .nav { display:flex; gap:26px; }
+  .E .hero { padding:80px 40px 56px; }
+  .E h1 {
+    font-size:clamp(42px,8.4vw,112px); font-weight:600; line-height:0.94;
+    letter-spacing:-0.05em; max-width:13ch;
+  }
+  .E h1 span {
+    color:#050505; background:#D6FF3F; padding:0 .12em;
+    border-radius:6px; display:inline-block; line-height:1;
+  }
+  .E .sub {
+    font-size:17px; color:#9A9A9A; max-width:50ch; margin-top:34px;
+    font-weight:300; line-height:1.65;
+  }
+  .E .avail {
+    margin-top:36px; display:inline-flex; align-items:center; gap:10px;
+    border:1px solid #2A2A2A; border-radius:100px; padding:9px 18px;
+    font-size:13px; color:#D6FF3F; font-weight:400;
+  }
+  .E .avail i { width:7px; height:7px; border-radius:50%; background:#D6FF3F; display:block; }
+  .E .work { border-top:1px solid #1A1A1A; }
+  .E .w {
+    display:grid; grid-template-columns:64px 1fr 200px; gap:24px; align-items:center;
+    padding:30px 40px; border-bottom:1px solid #1A1A1A; transition:background .2s ease;
+  }
+  .E .w:hover { background:#0F0F0F; }
+  .E .w:hover h3 { color:#D6FF3F; }
+  .E .w .n { color:#4A4A4A; font-size:14px; font-weight:500; }
+  .E .w h3 {
+    font-size:clamp(20px,2.5vw,30px); font-weight:500; letter-spacing:-0.03em;
+    transition:color .2s ease;
+  }
+  .E .w .t { color:#6A6A6A; font-size:13px; text-align:right; }
+
+  /* ======================================================
+     F — BLUEPRINT   pale, gridded, systematic
+     ====================================================== */
+  .F {
+    background:#F0F2F5; color:#131722; padding:0;
+    background-image:linear-gradient(#DDE1E8 1px, transparent 1px), linear-gradient(90deg,#DDE1E8 1px, transparent 1px);
+    background-size:64px 64px;
+  }
+  .F .inner { background:transparent; }
+  .F .bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 40px; border-bottom:1px solid #C9CFDA; background:#F7F8FA;
+    font-family:"IBM Plex Mono",monospace; font-size:12px; color:#5C6472; letter-spacing:0.04em;
+  }
+  .F .bar .logo { font-family:"Poppins",sans-serif; font-weight:600; font-size:16px; color:#131722; letter-spacing:-0.01em; }
+  .F .bar .nav { display:flex; gap:22px; }
+  .F .hero { padding:64px 40px 52px; max-width:1100px; }
+  .F .idx {
+    font-family:"IBM Plex Mono",monospace; font-size:12px; color:#7A8394;
+    letter-spacing:0.08em; margin-bottom:20px;
+  }
+  .F h1 {
+    font-size:clamp(36px,5.8vw,72px); font-weight:600; line-height:1.05;
+    letter-spacing:-0.035em; max-width:17ch;
+  }
+  .F h1 u {
+    text-decoration:none; box-shadow:inset 0 -0.34em 0 #FFD84D;
+  }
+  .F .sub { font-size:17px; color:#4E5666; max-width:54ch; margin-top:24px; line-height:1.6; font-weight:400; }
+  .F .specs {
+    margin-top:44px; display:grid; grid-template-columns:repeat(4,1fr);
+    border:1px solid #C9CFDA; background:#fff;
+  }
+  .F .spec { padding:16px 18px; border-right:1px solid #C9CFDA; }
+  .F .spec:last-child { border-right:none; }
+  .F .spec p:first-child {
+    font-family:"IBM Plex Mono",monospace; font-size:11px; color:#7A8394;
+    letter-spacing:0.06em; margin-bottom:5px;
+  }
+  .F .spec p:last-child { font-size:15px; font-weight:500; }
+  .F .work { padding:0 40px 64px; max-width:1100px; }
+  .F .wh {
+    font-family:"IBM Plex Mono",monospace; font-size:12px; color:#7A8394;
+    letter-spacing:0.08em; margin:0 0 14px;
+  }
+  .F .w {
+    background:#fff; border:1px solid #C9CFDA; padding:22px 24px; margin-bottom:-1px;
+    display:grid; grid-template-columns:1fr 150px; gap:20px; align-items:center;
+    transition:border-color .2s ease;
+  }
+  .F .w:hover { border-color:#131722; position:relative; z-index:1; }
+  .F .w h3 { font-size:20px; font-weight:600; letter-spacing:-0.02em; }
+  .F .w p { font-size:14px; color:#5C6472; margin-top:4px; }
+  .F .w .st {
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:0.06em;
+    justify-self:end; padding:4px 10px; border-radius:3px;
+  }
+  .F .ok { background:#E4F3E8; color:#2C6B3F; }
+  .F .pend { background:#FFF3D4; color:#8A6A00; }
+
+  @media (max-width:860px) {
+    .D .cards { grid-template-columns:1fr; padding:0 22px 44px; }
+    .D .hero, .E .hero, .F .hero { padding-left:22px; padding-right:22px; }
+    .D .bar, .E .bar, .F .bar { padding-left:22px; padding-right:22px; }
+    .D .bar .nav, .E .bar .nav, .F .bar .nav { display:none; }
+    .E .w { grid-template-columns:1fr; gap:8px; padding:22px; }
+    .E .w .t { text-align:left; }
+    .F .specs { grid-template-columns:1fr 1fr; }
+    .F .w { grid-template-columns:1fr; }
+    .F .w .st { justify-self:start; }
+    .F .work { padding:0 22px 44px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ D ============ -->
+<div class="label">
+  <b>D — Signal</b>
+  <span>Light, electric indigo, soft rounded geometry. Modern product feel — approachable and confident.</span>
+</div>
+<div class="D">
+  <div class="bar">
+    <span class="logo">Amrit Kumar</span>
+    <span class="nav"><a href="#">Work</a><a href="#">Thinking</a><a href="#">About</a></span>
+    <span class="cta">Get in touch</span>
+  </div>
+  <div class="hero">
+    <span class="pill"><i></i> Open to Staff &amp; Lead roles</span>
+    <h1>Designing trust into <span>AI-powered</span> workflows</h1>
+    <p class="sub">I design how humans and AI agents share judgment — in enterprise work where
+    decisions are hard and being wrong is expensive.</p>
+    <div class="stats">
+      <div><b>13</b><p>Years in design</p></div>
+      <div><b>06</b><p>In product</p></div>
+      <div><b>05</b><p>At SirionLabs</p></div>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="c">
+      <span class="tag">AI/UX · CLM</span>
+      <h3>Human-guided AI for contract onboarding</h3>
+      <p>Agents reconstruct messy legacy contracts. People decide only what can't be inferred.</p>
+      <p class="go">Read case study →</p>
+    </div>
+    <div class="c">
+      <span class="tag">Architecture</span>
+      <h3>The system that refuses to guess</h3>
+      <p>Two clauses disagree, neither says which wins — so it asks instead of assuming.</p>
+      <p class="go">Read case study →</p>
+    </div>
+    <div class="c">
+      <span class="tag">Strategy</span>
+      <h3>The intent model</h3>
+      <p>When should an agent act, ask, or stay quiet? A platform-wide rule set.</p>
+      <p class="go">Read the direction →</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ E ============ -->
+<div class="label">
+  <b>E — Blackout</b>
+  <span>Pure black, oversized type, one acid highlight. Bold and unmistakable in a stack of portfolios.</span>
+</div>
+<div class="E">
+  <div class="bar">
+    <span class="logo">Amrit Kumar</span>
+    <span class="nav"><a href="#">Work</a><a href="#">Thinking</a><a href="#">About</a><a href="#">Contact</a></span>
+  </div>
+  <div class="hero">
+    <h1>Designing <span>trust</span> into AI-powered workflows</h1>
+    <p class="sub">I design how humans and AI agents share judgment — in enterprise work where
+    decisions are hard and being wrong is expensive. Thirteen years in design, six in product.</p>
+    <span class="avail"><i></i> Available for Staff &amp; Lead roles</span>
+  </div>
+  <div class="work">
+    <div class="w"><span class="n">01</span><h3>Human-guided AI for contract onboarding</h3><span class="t">AI/UX · CLM</span></div>
+    <div class="w"><span class="n">02</span><h3>The system that refuses to guess</h3><span class="t">Architecture</span></div>
+    <div class="w"><span class="n">03</span><h3>The intent model</h3><span class="t">Product strategy</span></div>
+    <div class="w"><span class="n">04</span><h3>Support that answers before you ask</h3><span class="t">Shipped · Consumer</span></div>
+  </div>
+</div>
+
+<!-- ============ F ============ -->
+<div class="label">
+  <b>F — Blueprint</b>
+  <span>Gridded, systematic, mono labels. Looks like a design system doc — proves systems thinking.</span>
+</div>
+<div class="F">
+  <div class="bar">
+    <span class="logo">Amrit Kumar</span>
+    <span class="nav"><a href="#">WORK</a><a href="#">THINKING</a><a href="#">ABOUT</a></span>
+  </div>
+  <div class="hero">
+    <p class="idx">PRODUCT DESIGNER — AI SYSTEMS / B2B ENTERPRISE</p>
+    <h1>Designing <u>trust</u> into AI-powered workflows</h1>
+    <p class="sub">I work on problems where structure is unclear, decisions are hard, and systems
+    need to think — not just display.</p>
+    <div class="specs">
+      <div class="spec"><p>EXPERIENCE</p><p>13 yrs · 6 in product</p></div>
+      <div class="spec"><p>DOMAIN</p><p>Contract &amp; legal AI</p></div>
+      <div class="spec"><p>CURRENT</p><p>SirionLabs · 5 yrs</p></div>
+      <div class="spec"><p>LOCATION</p><p>Noida, India</p></div>
+    </div>
+  </div>
+  <div class="work">
+    <p class="wh">SELECTED WORK — 04 ENTRIES</p>
+    <div class="w">
+      <div><h3>Human-guided AI for contract onboarding</h3><p>Agents reconstruct; people decide what can't be inferred.</p></div>
+      <span class="st pend">PRE-LAUNCH</span>
+    </div>
+    <div class="w">
+      <div><h3>The system that refuses to guess</h3><p>When two clauses disagree and neither wins, it asks.</p></div>
+      <span class="st pend">PRE-LAUNCH</span>
+    </div>
+    <div class="w">
+      <div><h3>The intent model</h3><p>Platform-wide rules for when an agent acts, asks, or stays quiet.</p></div>
+      <span class="st ok">ADOPTED</span>
+    </div>
+    <div class="w">
+      <div><h3>Support that answers before you ask</h3><p>Self-service for millions of telecom users.</p></div>
+      <span class="st ok">SHIPPED</span>
+    </div>
+  </div>
+</div>
+
+<div class="label" style="justify-content:center">
+  <span style="color:#fff">Same typeface. Three different personalities.</span>
+</div>
+
+</body>
+</html>
