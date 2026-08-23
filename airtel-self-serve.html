@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Support That Answers Before You Ask · Airtel Thanks · Amrit Kumar</title>
+<meta name="description" content="Redesigning the help journey in a consumer app used by millions: fewer support calls, higher daily engagement." />
+<meta property="og:title" content="Support That Answers Before You Ask · Amrit Kumar" />
+<meta property="og:description" content="Consumer-scale self-service design: behaviour-driven query routing in the Airtel Thanks app." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/airtel-self-serve.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F7F7F5; --ink: #191A18; --muted: #5F625C; --line: #E3E3DF;
+    --accent: #3D5A45; --radius: 3px;
+    --font-display: "Poppins", -apple-system, sans-serif;
+    --font-body: "Inter", -apple-system, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--font-body);
+    font-size: 17px; font-weight: 400; line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 720px; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3, h4, blockquote, .lede { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* ---------- persistent sidebar ---------- */
+  .rail {
+    position: fixed; top: 0; left: 0; width: 238px; height: 100vh;
+    padding: 44px 32px; border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; background: var(--bg); z-index: 30;
+  }
+  .rail .mark {
+    display: block; font-family: var(--font-display); font-size: 16px;
+    font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+  .rail .back { display: block; font-size: 13px; color: var(--muted); margin-bottom: 38px; }
+  .rail .back:hover { color: var(--ink); }
+  .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
+  .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
+  .rail .toc a:hover { color: var(--ink); }
+  .rail .toc a.on { color: var(--ink); font-weight: 500; }
+  .rail .toc .lead {
+    font-family: var(--font-display); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 12px; font-weight: 400;
+  }
+  .rail .foot { margin-top: auto; font-size: 12px; color: var(--muted); line-height: 1.9; }
+  .rail .foot a:hover { color: var(--ink); }
+
+  .shell { margin-left: 238px; }
+
+  @media (max-width: 1080px) {
+    .rail {
+      position: sticky; width: auto; height: auto; flex-direction: row;
+      align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-right: none; border-bottom: 1px solid var(--line);
+      background: rgba(247,247,245,0.94); backdrop-filter: blur(10px);
+    }
+    .rail .mark, .rail .back { margin-bottom: 0; }
+    .rail > div { display: flex; align-items: baseline; gap: 16px; }
+    .rail .toc, .rail .foot { display: none; }
+    .shell { margin-left: 0; }
+  }
+
+  header { padding: 110px 0 72px; }
+  .kicker {
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(32px, 4.6vw, 52px); line-height: 1.24;
+    letter-spacing: -0.015em; max-width: 20ch;
+  }
+  h1 em { color: var(--accent); }
+  .hero-sub { margin-top: 28px; font-size: 19px; color: var(--muted); max-width: 56ch; }
+
+  .snapshot {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 32px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px 32px; margin-top: 48px;
+  }
+  .snapshot div p:first-child {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3px;
+  }
+  .snapshot div p:last-child { font-size: 15.5px; line-height: 1.45; }
+
+  section { padding: 72px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--font-display); font-weight: 400; font-size: 31px; line-height:1.3;
+    letter-spacing: -0.02em; margin-bottom: 28px; max-width: 26ch;
+  }
+  .body-text p { margin-bottom: 20px; }
+  .body-text p:last-child { margin-bottom: 0; }
+  .lede { font-size: 20px; }
+
+  blockquote {
+    font-family: var(--font-display); font-size: 26px; line-height: 1.4;
+    border-left: 2px solid var(--accent);
+    padding-left: 28px; margin: 44px 0; max-width: 30ch;
+  }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 44px; }
+  .stat { border-top: 1px solid var(--line); padding-top: 20px; }
+  .stat-num { font-family: var(--font-display); font-size: 52px; line-height: 1; color: var(--accent); }
+  .stat-label { margin-top: 10px; font-size: 15px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: 72px 1fr; gap: 24px; margin-bottom: 48px; }
+  .decision:last-child { margin-bottom: 0; }
+  .decision-num { font-family: var(--font-display); font-size: 28px; color: var(--accent); }
+  .decision h3 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin-bottom: 10px; }
+  .decision p { color: var(--muted); max-width: 60ch; }
+  .decision p strong { color: var(--ink); font-weight: 500; }
+
+  .note {
+    border: 1px dashed var(--line); border-radius: var(--radius);
+    padding: 24px 28px; color: var(--muted); font-size: 15.5px; margin-top: 32px;
+  }
+
+  /* call drivers */
+  .drivers { margin-top: 40px; }
+  .driver {
+    display: grid; grid-template-columns: 1fr 90px;
+    gap: 16px; align-items: center; padding: 9px 0;
+  }
+  .driver .label { font-size: 15px; }
+  .driver .track { grid-column: 1 / -1; height: 7px; background: #EEECE7; border-radius: 4px; overflow: hidden; }
+  .driver .fill { height: 100%; background: var(--accent); border-radius: 4px; }
+  .driver .val {
+    text-align: right; font-family: var(--font-display); font-size: 16px; color: var(--muted);
+  }
+  .driver.dim .fill { background: #C9BFAE; }
+
+  /* pain points */
+  .pains { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
+  .pain { border: 1px solid var(--line); border-radius: 3px; padding: 20px 22px; background: #fff; }
+  .pain .quote {
+    font-family: var(--font-display); font-size: 17px;
+    margin-bottom: 10px; line-height: 1.4;
+  }
+  .pain .tag {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+  }
+  .pain p:last-child { color: var(--muted); font-size: 14.5px; }
+  @media (max-width: 700px) { .pains { grid-template-columns: 1fr; } }
+
+  /* answer map */
+  .map { margin-top: 36px; border-top: 1px solid var(--line); }
+  .map-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    padding: 18px 0; border-bottom: 1px solid var(--line);
+  }
+  .map-row.head { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .map-row b { font-weight: 500; }
+  .map-row .ans { color: var(--muted); }
+  @media (max-width: 700px) {
+    .map-row { grid-template-columns: 1fr; gap: 4px; }
+    .map-row.head { display: none; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .end-cta { text-align: center; padding: 110px 0; }
+  .end-cta h2 { margin: 0 auto 24px; }
+  .btn {
+    display: inline-block; padding: 14px 28px; border-radius: 999px;
+    font-size: 15px; font-weight: 500; background: var(--ink); color: var(--bg);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover { background: var(--accent); transform: translateY(-2px); }
+  footer { border-top: 1px solid var(--line); padding: 32px 0; }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    header { padding: 72px 0 56px; }
+    section { padding: 56px 0; }
+    .snapshot { grid-template-columns: 1fr 1fr; padding: 22px; }
+    .stats { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr; gap: 8px; }
+    blockquote { font-size: 22px; }
+    .wrap { padding: 0 22px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="rail">
+  <div>
+    <a class="mark" href="index.html">Amrit Kumar</a>
+    <a class="back" href="index.html#work">&larr; Back to work</a>
+  </div>
+  <nav class="toc">
+    <p class="lead">Case study</p>
+    <a href="#question">The question we started from</a>
+    <a href="#why">Why people were calling</a>
+    <a href="#voices">What users told us</a>
+    <a href="#redesign">Answer before they ask</a>
+    <a href="#result">What happened</a>
+  </nav>
+  <div class="foot">
+    <a href="contract-understanding.html">Contract relationships</a><br />
+    <a href="auto-extraction.html">Verifying 128 fields</a><br />
+    <a href="mailto:amritkmr08@gmail.com">Email me</a>
+  </div>
+</aside>
+
+<div class="shell">
+
+<header>
+  <div class="wrap">
+    <p class="kicker reveal">Shipped · Consumer scale · Bharti Airtel · 4 min read</p>
+    <h1 class="reveal">Support that answers <em>before you ask</em>.</h1>
+    <p class="hero-sub reveal">In a telecom app used by millions, the help section was a wall of
+    articles nobody read, so people called instead. I redesigned the journey around what each
+    person was probably there to do, using real behavioural signals rather than a menu.</p>
+
+    <div class="snapshot reveal">
+      <div><p>What I did</p><p>Redesigned the help and self-service journey in the Airtel Thanks app</p></div>
+      <div><p>Role</p><p>UX Designer, in-house product team</p></div>
+      <div><p>Scale</p><p>Consumer app, millions of active users</p></div>
+      <div><p>Status</p><p>Shipped to production</p></div>
+      <div><p>Period</p><p>2019 – 2021</p></div>
+      <div><p>Why it's here</p><p>The counterweight to my enterprise work: it shipped, at scale, and moved measured numbers</p></div>
+    </div>
+  </div>
+</header>
+
+<section id="question">
+  <div class="wrap narrow">
+    <h2 class="reveal">The question we started from</h2>
+    <div class="body-text reveal">
+      <p class="lede">How might we reduce calls to customer care and make Help &amp; Support
+      actually cater to the user's problem, saving call-centre cost and cutting the time it takes
+      someone to get unstuck?</p>
+      <p>Self-service help is usually a library: categories, articles, a search box. That assumes
+      the user knows what their problem is called. Most don't. They know their internet stopped
+      working, or that money left their account and the balance looks wrong.</p>
+    </div>
+    <blockquote class="reveal">Telecom is an essential service. Disruption isn't an inconvenience. It's stressful.</blockquote>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap narrow">
+    <h2 class="reveal">Why people were calling</h2>
+    <div class="body-text reveal">
+      <p>We started with the call-centre data instead of guessing. The reasons were concentrated:
+      4G speed alone drove over four million calls.</p>
+    </div>
+
+    <div class="drivers">
+      <div class="driver reveal">
+        <span class="label">4G speed issue</span><span class="val">4.25M</span>
+        <span class="track"><span class="fill" style="width:100%"></span></span>
+      </div>
+      <div class="driver reveal">
+        <span class="label">Recharge schemes</span><span class="val">1.95M</span>
+        <span class="track"><span class="fill" style="width:46%"></span></span>
+      </div>
+      <div class="driver reveal">
+        <span class="label">Balance &amp; validity</span><span class="val">1.87M</span>
+        <span class="track"><span class="fill" style="width:44%"></span></span>
+      </div>
+      <div class="driver reveal">
+        <span class="label">SIM exchange</span><span class="val">1.80M</span>
+        <span class="track"><span class="fill" style="width:42%"></span></span>
+      </div>
+      <div class="driver reveal dim">
+        <span class="label">Recharge transaction confirmation</span><span class="val">1.39M</span>
+        <span class="track"><span class="fill" style="width:33%"></span></span>
+      </div>
+      <div class="driver reveal dim">
+        <span class="label">4G connectivity</span><span class="val">1.07M</span>
+        <span class="track"><span class="fill" style="width:25%"></span></span>
+      </div>
+      <div class="driver reveal dim">
+        <span class="label">Usage &amp; charges</span><span class="val">1.01M</span>
+        <span class="track"><span class="fill" style="width:24%"></span></span>
+      </div>
+    </div>
+    <p class="caption reveal" style="margin-top:18px">Top call drivers from the internal analysis at
+    the time. The shape of this chart set the whole design brief: solve the top few well and the
+    rest largely takes care of itself.</p>
+
+    <div class="body-text reveal" style="margin-top:36px">
+      <p>Alongside the numbers we ran interviews and mapped the experience of a service outage:
+      not just what people do, but how they feel at each step. That curve mattered: people arrive
+      at Help &amp; Support already frustrated, so any friction lands at the worst possible moment.</p>
+    </div>
+  </div>
+</section>
+
+<section id="voices">
+  <div class="wrap narrow">
+    <h2 class="reveal">Four things users told us, and what each one meant</h2>
+    <div class="pains">
+      <div class="pain reveal">
+        <p class="quote">"Recently paid money but the validity credited is wrong."</p>
+        <p class="tag">Relevance to recent activity</p>
+        <p>Most queries come from something that just happened: a recharge, a payment, a plan
+        change. The page should already know what that was.</p>
+      </div>
+      <div class="pain reveal">
+        <p class="quote">"I don't like browsing through topics, it's complicated."</p>
+        <p class="tag">Anxiety</p>
+        <p>Their mind is already loaded with frustration. Making them browse to find the right
+        topic is asking for patience they don't have.</p>
+      </div>
+      <div class="pain reveal">
+        <p class="quote">"I usually prefer to call customer care, it's one-to-one."</p>
+        <p class="tag">Lack of personalisation</p>
+        <p>People call because a human acknowledges them. A screen that speaks to you directly
+        gets closer to that than a menu ever will.</p>
+      </div>
+      <div class="pain reveal">
+        <p class="quote">"Status of my complaint isn't visible. I don't know when it'll be resolved."</p>
+        <p class="tag">Visibility of progress</p>
+        <p>Half of what a support call buys is reassurance that something is happening. That can
+        be designed instead of staffed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="redesign">
+  <div class="wrap narrow">
+    <h2 class="reveal">The redesign: answer before they ask</h2>
+    <div class="body-text reveal">
+      <p>Instead of a directory, the page opens with what this person is probably here about, and
+      where possible, with the answer already given.</p>
+    </div>
+
+    <div class="map">
+      <div class="map-row head"><span>What the user brought</span><span>What the page does about it</span></div>
+      <div class="map-row reveal">
+        <b>Arrives frustrated, service seems broken</b>
+        <span class="ans">Opens with a personal line and a network status for their area:
+        "Hi Amrit, network is good in your area." Often that alone is the answer.</span>
+      </div>
+      <div class="map-row reveal">
+        <b>Something just happened: a payment, a recharge</b>
+        <span class="ans">Bill amount, due date and data usage sit at the top with a direct
+        "get help with this bill" route.</span>
+      </div>
+      <div class="map-row reveal">
+        <b>Already raised a complaint</b>
+        <span class="ans">Open service requests surface with live status, before anything else.
+        No hunting for a reference number.</span>
+      </div>
+      <div class="map-row reveal">
+        <b>Doesn't know what their problem is called</b>
+        <span class="ans">"Get help with" cards lead with the likeliest issues in plain words:
+        unable to use internet, slow speed, extra charges, instead of category names.</span>
+      </div>
+      <div class="map-row reveal">
+        <b>Genuinely needs something unusual</b>
+        <span class="ans">Full topic browse and search stay one tap away. Reordering what's
+        prominent is fair; hiding what someone needs is not.</span>
+      </div>
+    </div>
+
+    <div class="body-text reveal" style="margin-top:36px">
+      <p>Behind it, smart query routing used real-time behaviour to send people down the shortest
+      path to resolution: a direct action where one existed, an explanation where it didn't, and a
+      human when the issue genuinely needed one. <strong>The goal was never zero calls. It was zero
+      unnecessary ones.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="result">
+  <div class="wrap narrow">
+    <h2 class="reveal">What happened</h2>
+    <div class="stats">
+      <div class="stat reveal">
+        <p class="stat-num">9%</p>
+        <p class="stat-label">Reduction in care-centre call volume</p>
+      </div>
+      <div class="stat reveal">
+        <p class="stat-num">15%</p>
+        <p class="stat-label">Increase in daily engagement</p>
+      </div>
+      <div class="stat reveal">
+        <p class="stat-num">Millions</p>
+        <p class="stat-label">Of users on the shipped experience</p>
+      </div>
+    </div>
+    <div class="body-text reveal" style="margin-top:40px">
+      <p>Six years later I'm designing agents for contract software, and this is the project they
+      keep rhyming with. <strong>Predicting intent from behaviour and putting the likely answer
+      first is the same idea as an agent that reaches people rather than waiting to be visited</strong>,
+      and the same restraint applies. Reordering what's prominent is helpful; hiding what someone
+      might need is not. That rule survived intact into the
+      <a href="intent-model.html" style="border-bottom:1px solid var(--accent)">intent model</a> I
+      wrote this year.</p>
+    </div>
+    <div class="note reveal">
+      Outcome figures are as reported internally at the time; I no longer have access to the
+      underlying dashboards to re-verify them. Call-driver volumes come from the internal analysis
+      that informed the brief. Fuller process documentation:
+      <a href="https://www.behance.net/gallery/99160091/Ux-project-Help-and-support-" target="_blank" rel="noopener" style="border-bottom:1px solid var(--accent)">research, empathy mapping, experience map and design exploration</a>
+      is on Behance.
+    </div>
+  </div>
+</section>
+
+<section class="end-cta">
+  <div class="wrap">
+    <h2 class="reveal">Want the full walkthrough?</h2>
+    <a class="btn reveal" href="mailto:amritkmr08@gmail.com">Get in touch</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Amrit Kumar</span>
+    <a href="index.html#work">Back to all work →</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(function (el, i) {
+    el.style.transitionDelay = (i % 4) * 60 + "ms";
+    observer.observe(el);
+  });
+
+  var _links = [].slice.call(document.querySelectorAll('.rail .toc a'));
+  var _secs = _links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var _spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var i = _secs.indexOf(e.target);
+      _links.forEach(function (a, j) { a.classList.toggle('on', j === i); });
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  _secs.forEach(function (s) { if (s) _spy.observe(s); });
+</script>
+
+</body>
+</html>
