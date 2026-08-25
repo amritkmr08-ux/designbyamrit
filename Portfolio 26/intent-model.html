@@ -115,6 +115,19 @@
   .body-text p:last-child { margin-bottom: 0; }
   .lede { font-size: 20px; }
 
+  .shot { margin: 44px 0 8px; }
+  .shot img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line); border-radius: 6px; background: #0d0f12;
+  }
+  .shot figcaption { margin-top: 14px; font-size: 13.5px; color: var(--muted); line-height: 1.65; max-width: 66ch; }
+  .journey { border-top: 1px solid var(--line); margin-top: 40px; }
+  .journey div { display: grid; grid-template-columns: 150px 1fr; gap: 22px; padding: 15px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .journey .jk { font-family: var(--font-display); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .journey p { font-size: 15.5px; color: var(--muted); }
+  .journey p b { color: var(--ink); font-weight: 500; }
+  @media (max-width: 700px) { .journey div { grid-template-columns: 1fr; gap: 4px; } }
+
   blockquote {
     font-family: var(--font-display); font-size: 27px; line-height: 1.4;
     border-left: 2px solid var(--accent);
@@ -274,6 +287,13 @@
     <a href="#personalisation">Personalisation that cannot lie</a>
     <a href="#measures">Measures hard to fake</a>
     <a href="#failure">Showing the failure case</a>
+    <p class="lead" style="margin-top:22px">The first build</p>
+    <a href="#surface">Nine months to a surface</a>
+    <a href="#lens">A question becomes the page</a>
+    <a href="#readback">Showing its reading</a>
+    <a href="#pin">Pinning is the arrow</a>
+    <a href="#component">One component underneath</a>
+    <a href="#status">Where it stands</a>
     <a href="#oneline">In one line</a>
   </nav>
   <div class="foot">
@@ -287,7 +307,7 @@
 
 <header>
   <div class="wrap">
-    <p class="kicker reveal">Design direction · Product strategy · 6 min read</p>
+    <p class="kicker reveal">Design direction · Product strategy · 9 min read</p>
     <h1 class="reveal">The intent model: when should an agent <em>act, ask, or stay quiet?</em></h1>
     <p class="hero-sub reveal">A framework for deciding, on any screen in the product, whether the
     agent should explain, suggest, act, or get out of the way. Written for and presented to
@@ -299,7 +319,7 @@
       <div><p>My role</p><p>Authored the framework and the argument; ran the sessions it came out of</p></div>
       <div><p>Scope</p><p>Platform-wide: entry points, personalisation, agent autonomy, success measures</p></div>
       <div><p>Year</p><p>2026</p></div>
-      <div><p>Status</p><p>Adopted as design direction; roadmap specifics withheld here</p></div>
+      <div><p>Status</p><p>Adopted as direction; first surface moving into build</p></div>
     </div>
   </div>
 </header>
@@ -661,6 +681,162 @@
   </div>
 </section>
 
+<section id="surface">
+  <div class="wrap narrow">
+    <h2 class="reveal">Nine months from a deck to a surface</h2>
+    <div class="body-text reveal">
+      <p class="lede">A framework that never touches a screen is a deck. This one got its first
+      test on the least glamorous page in the product: the contract listing.</p>
+      <p>It went first because of the model, not despite it. Ten thousand records, and nobody
+      arrives knowing which one they need — the listing is where "I'm looking" and "the world
+      moved" live. If the migration thesis works anywhere, it has to work here.</p>
+      <p>The route from the framework to a build ticket took nine months, and none of it was a
+      straight line.</p>
+    </div>
+    <div class="journey reveal">
+      <div><span class="jk">Direction</span><p><b>The framework above,</b> presented to executive stakeholders and adopted.</p></div>
+      <div><span class="jk">Exploration</span><p>A Figma wall of query studies, references and two bulk flows — <b>around forty full screens</b> — testing where an agent belongs on a listing.</p></div>
+      <div><span class="jk">Integration doc</span><p>A written argument for embedding: reusable tasks over typed prompts, disposable chat, insights that chain into one command.</p></div>
+      <div><span class="jk">Prototype</span><p><b>Working HTML, real interaction</b> — the screens below are it, running on invented data.</p></div>
+      <div><span class="jk">Build</span><p>Agreed as direction. Moving into build.</p></div>
+    </div>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-evolution.webp" type="image/webp" />
+        <img src="im-evolution.jpg" width="1900" height="544" loading="lazy"
+             alt="A five-step spectrum drawn during the programme: plain UI, an AI layer, AI handling page-level context, task-level agents, and an AI-centric UI-light interface." />
+      </picture>
+      <figcaption>The spectrum drawn early in the programme. Most AI features stop at the second
+      step. The listing work aims at the fourth: agents on tasks, inside the page people already
+      use.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="lens">
+  <div class="wrap narrow">
+    <h2 class="reveal">A question becomes the page</h2>
+    <div class="body-text reveal">
+      <p>There is an ask bar, but it isn't a chat. Type "supplier renewals above £1M this quarter"
+      and nothing answers you in a paragraph. The page becomes the result: retitled, filtered,
+      counted, with a save button.</p>
+      <p>No transcript to scroll back through. Conversations here are disposable on purpose —
+      <strong>the view is the thing worth keeping.</strong></p>
+    </div>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-ask.webp" type="image/webp" />
+        <img src="im-ask.jpg" width="1900" height="1121" loading="lazy"
+             alt="The prototype after a typed request: the listing retitled to 'Supplier renewals — this quarter, 66 contracts', with a Save view button and the new view already in the sidebar." />
+      </picture>
+      <figcaption>The prototype answering "supplier renewals above £1M this quarter". The reply
+      is the page itself: 66 contracts, ready to save as a view.</figcaption>
+    </figure>
+    <div class="body-text reveal" style="margin-top:36px">
+      <p>Individual insights can also chain. Pick two cards — expiring contracts, on-hold
+      contracts above a threshold — and put one instruction to the set, instead of retyping the
+      context that produced them.</p>
+    </div>
+  </div>
+</section>
+
+<section id="readback">
+  <div class="wrap narrow">
+    <h2 class="reveal">It shows its reading before you trust a row</h2>
+    <div class="body-text reveal">
+      <p>An agent that filters ten thousand records on one sentence has interpreted that
+      sentence, and its interpretation can be wrong in ways a fluent reply hides. So the
+      interpretation is the interface. Under the request sits one line — <strong>"Phoenix read
+      that as"</strong> — followed by chips: <em>Active. Customer &amp; supplier paper. DPA in
+      family. Breach notification column. Against our 72-hour policy.</em> Remove one and the set
+      updates.</p>
+      <p>This is the piece I would defend hardest. You aren't debugging the agent's understanding
+      from its output. You're editing it directly.</p>
+      <p>It nearly didn't survive its siblings. Early agent answers played out as animated
+      reasoning, step by step, like a short film — and a stakeholder review midway through called
+      it what it was: theatre. Watching software perform, not delegating work to it. The rule that
+      came out of that review shaped everything after — <strong>reasoning belongs before you trust
+      an agent, not once you do</strong> — and it's why the readback outlived every showier idea.
+      It was never the agent explaining itself. It's the part you check.</p>
+    </div>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-chips.webp" type="image/webp" />
+        <img src="im-chips.jpg" width="1900" height="414" loading="lazy"
+             alt="Detail of the readback strip: the typed request restated as five removable chips, above the families table." />
+      </picture>
+      <figcaption>The reading, as objects. Each chip is one clause of the interpretation, and
+      each is removable.</figcaption>
+    </figure>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-readback.webp" type="image/webp" />
+        <img src="im-readback.jpg" width="1900" height="1121" loading="lazy"
+             alt="The resolved view: 63 contract families with a generated Breach notification column whose per-row values include 72 hours, 5 business days, Conflicting terms · 3, and Not found." />
+      </picture>
+      <figcaption>The generated column keeps its uncertainty visible per row: 72 hours, 5 business
+      days, <em>Conflicting terms · 3</em>, <em>Not found</em>. On a contract, "we found nothing"
+      and "there is nothing" are different facts, and the interface keeps them different.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="pin">
+  <div class="wrap narrow">
+    <h2 class="reveal">Pinning is the migration arrow, as a button</h2>
+    <div class="body-text reveal">
+      <p>Earlier I claimed work should migrate from "the world moved" toward "it knows", and that
+      every arrow needs a designed action behind it. <strong>Pin is that action.</strong> A one-off
+      sweep — anything slower than our 72-hour policy? — becomes a standing view in the sidebar,
+      watching as records change. The same need has moved from state 4 to state 2, and nobody
+      built a feature for it. Someone asked once, and kept the answer.</p>
+    </div>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-listing.webp" type="image/webp" />
+        <img src="im-listing.jpg" width="1900" height="1121" loading="lazy"
+             alt="The listing at rest: pinned counterparties and a sidebar of standing views — supplier renewals above £1M, breach notice above 24 hours, IBM liability above standard, UK addendum missing." />
+      </picture>
+      <figcaption>The sidebar after a while: every entry under Views began as a typed question.
+      "Breach notice above 24 hours" and "UK addendum missing" are standing checks now, not
+      searches someone has to remember to run.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="component">
+  <div class="wrap narrow">
+    <h2 class="reveal">One component underneath</h2>
+    <div class="body-text reveal">
+      <p>None of this survives a real product unless the table itself can hold it. So the column
+      header became a single component with a fixed anatomy — label, pin, exception badge, sort —
+      whether the column is a stored field, a live question, or a rule. Reordering works from the
+      keyboard, not only by drag. Unglamorous, and it is the reason a question sits next to a
+      database column without the page splitting into two products.</p>
+    </div>
+    <figure class="shot reveal">
+      <picture>
+        <source srcset="im-colspec.webp" type="image/webp" />
+        <img src="im-colspec.jpg" width="1900" height="1069" loading="lazy"
+             alt="The column header cell spec: a live demo table and a fixed anatomy — label always, pin when pinned, exception badge on live questions only, sort arrow on the sort key only." />
+      </picture>
+      <figcaption>The header-cell spec, written as a working page. The exception badge appears on
+      live questions only, and only when something needs a person.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap narrow">
+    <h2 class="reveal">Where it stands</h2>
+    <div class="body-text reveal">
+      <p>Agreed as direction, moving into build. No outcome numbers yet, and none invented
+      here. When they exist, they'll be the four measures above — chosen, before the build,
+      because they're hard to fake.</p>
+    </div>
+  </div>
+</section>
+
 <section id="oneline">
   <div class="wrap narrow">
     <h2 class="reveal">In one line</h2>
@@ -674,10 +850,10 @@
       model becomes a graph you can read at scale, see
       <a href="contract-understanding.html" style="border-bottom:1px solid var(--accent)">"One question our system couldn't answer"</a>.
       <br /><br />
-      <strong>A note on what's shown:</strong> this piece covers the framework and the reasoning
-      behind it. Roadmap specifics, unreleased screens and the open decisions put to stakeholders are
-      deliberately withheld. The working prototypes behind this direction are walked through live in
-      interviews.
+      <strong>A note on what's shown:</strong> the screens above are my working prototypes,
+      running on invented data — no customer records, and no shipped product UI. Roadmap
+      specifics and the open decisions put to stakeholders stay withheld. The prototypes are
+      walked through live in interviews.
     </div>
   </div>
 </section>

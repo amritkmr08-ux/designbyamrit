@@ -4,9 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Amrit Kumar · Product Designer, AI systems</title>
-<meta name="description" content="I design how humans and AI agents share judgment in enterprise work where decisions are hard and being wrong is expensive. Thirteen years in design, six in product." />
+<meta name="description" content="AI can answer. A person still has to sign. I design how humans and AI agents share judgment in enterprise contract work. Thirteen years in design, six in product." />
 <meta property="og:title" content="Amrit Kumar · Product Designer" />
-<meta property="og:description" content="Designing trust into AI-powered workflows. Case studies in human-guided AI for enterprise contract software." />
+<meta property="og:description" content="AI can answer. A person still has to sign. Case studies in human-guided AI for enterprise contract software." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/Portfolio%2026/og-image.jpg" />
@@ -274,7 +274,7 @@
   #work { padding: 110px 0 30px; }
   .work-list { border-top: 1px solid var(--line); }
   .item {
-    display: grid; grid-template-columns: 380px 1fr; gap: 52px; align-items: start;
+    display: grid; grid-template-columns: 480px 1fr; gap: 64px; align-items: center;
     padding: 54px 0; border-bottom: 1px solid var(--line);
   }
   /* artwork presented on a surface, so screenshots and diagrams read alike */
@@ -301,7 +301,7 @@
   .th-box { fill: #fff; stroke: #E3E3DF; }
 
   /* one card breaks the rhythm */
-  .item.wideitem { grid-template-columns: 1fr; gap: 34px; padding: 72px 0 76px; }
+  .item.wideitem { grid-template-columns: 1fr; gap: 34px; padding: 72px 0 76px; align-items: start; }
   .item.wideitem .item-body { max-width: 62ch; }
   .item.wideitem h3 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -0.03em; }
   .item.wideitem p { font-size: 17.5px; max-width: 56ch; }
@@ -432,24 +432,24 @@
   }
 
   /* ================= Thinking ================= */
-  #thinking { padding: 120px 0 30px; }
+  #thinking { padding: 130px 0 140px; background: var(--dark); }
   .manifesto { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
   .manifesto .lbl {
     font-family: var(--display); font-size: 12px; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--faint); margin-bottom: 40px;
+    text-transform: uppercase; color: #6E747E; margin-bottom: 40px;
   }
   .manifesto blockquote {
-    font-family: var(--display);
+    font-family: var(--display); color: #F4F5F7;
     font-size: clamp(34px, 6.4vw, 86px); font-weight: 400;
     line-height: 1.02; letter-spacing: -0.045em; max-width: 15ch;
   }
   .manifesto blockquote em {
-    font-style: normal; box-shadow: inset 0 -0.12em 0 var(--mark);
+    font-style: normal; color: #AFC8A8; box-shadow: inset 0 -0.12em 0 #2C4032;
   }
   .manifesto .after {
-    margin-top: 48px; border-top: 1px solid var(--line); padding-top: 24px;
+    margin-top: 48px; border-top: 1px solid #23262B; padding-top: 24px;
   }
-  .manifesto .after p { font-size: 16.5px; color: var(--muted); max-width: 50ch; }
+  .manifesto .after p { font-size: 16.5px; color: #9AA0AA; max-width: 50ch; }
   .manifesto .after a { font-size: 14.5px; color: var(--accent); white-space: nowrap; }
   .manifesto .after a span { display: inline-block; transition: transform 0.3s ease; }
   .manifesto .after a:hover span { transform: translateX(6px); }
@@ -496,20 +496,30 @@
   #contact h2 {
     font-family: var(--display);
     font-size: clamp(26px, 3vw, 35px); font-weight: 400;
-    line-height: 1.28; letter-spacing: -0.02em; max-width: 18ch; margin: 0 auto;
+    line-height: 1.28; letter-spacing: -0.02em; max-width: 24ch; margin: 0 auto;
   }
+  #contact h2 em { font-style: normal; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  #contact h2 .q { display: block; color: var(--muted); font-size: 0.72em; margin-top: 12px; }
   .copybtn {
     display: inline-flex; align-items: center; gap: 10px;
-    margin-top: 40px; padding: 15px 30px; border: none; cursor: pointer;
+    margin-top: 40px; padding: 15px 32px; border: none; cursor: pointer;
     background: var(--ink); color: var(--paper);
     font-family: var(--font); font-size: 15.5px; font-weight: 500;
     border-radius: 999px; transition: background 0.25s ease, transform 0.2s ease;
   }
   .copybtn:hover { background: var(--accent); transform: translateY(-2px); }
-  .copybtn.ok { background: var(--accent); }
-  .mailalt { display: block; margin-top: 18px; font-size: 13.5px; color: var(--faint); }
-  .mailalt a { border-bottom: 1px solid var(--line); padding-bottom: 1px; }
-  .mailalt a:hover { color: var(--ink); border-color: var(--ink); }
+  .mailalt {
+    display: flex; justify-content: center; align-items: baseline; gap: 10px;
+    margin-top: 20px; font-size: 13.5px; color: var(--faint); flex-wrap: wrap;
+  }
+  .copylink {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-family: var(--font); font-size: 13.5px; color: var(--faint);
+    border-bottom: 1px solid var(--line);
+  }
+  .copylink:hover { color: var(--ink); border-color: var(--ink); }
+  .copylink.ok { color: var(--accent); border-color: var(--accent); }
+  .avail-foot { display: block; margin-top: 34px; font-size: 13px; color: var(--faint); }
   .links {
     margin-top: 42px; display: flex; justify-content: center; gap: 30px;
     font-size: 13.5px; color: var(--muted); flex-wrap: wrap;
@@ -519,6 +529,8 @@
 
   footer { text-align: center; padding: 100px 0 56px; font-size: 12.5px; color: var(--faint); }
   footer .credit { margin-top: 8px; }
+  footer .floot { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: color 0.25s ease; }
+  footer .floot:hover { color: var(--ink); border-color: var(--ink); }
 
   /* ================= Reveal + motion prefs ================= */
   .r { opacity: 0; transform: translateY(12px); transition: opacity 0.72s ease, transform 0.72s ease; }
@@ -556,7 +568,7 @@
     .infl + .infl { margin-top: 44px; padding-top: 44px; }
     .qband { padding-top: 64px; }
     #how { padding-top: 72px !important; }
-    #thinking { padding: 80px 0 24px; }
+    #thinking { padding: 84px 0 92px; }
   }
 </style>
 </head>
@@ -579,7 +591,7 @@
 <header id="top">
   <div class="wide">
     <span class="eyebrow r">Amrit Kumar · Product Designer</span>
-    <h1 class="r">Designing <b>trust</b> into AI-powered workflows.</h1>
+    <h1 class="r">AI can answer. A person still has to <b>sign</b>.</h1>
     <div class="hero-foot r">
       <p class="sub">I design how humans and AI agents share judgment in enterprise work,
       especially where decisions are hard and being wrong is expensive.</p>
@@ -594,11 +606,11 @@
   <div class="wide">
     <a class="btext" href="contract-understanding.html">
       <p class="blbl r">01 &nbsp;·&nbsp; Featured &nbsp;·&nbsp; System design</p>
-      <h2 class="r">If the ground is folders, the AI is guessing. If the ground is
-      relationships, the AI is reasoning.</h2>
-      <p class="bsub r">A contract repository rebuilt from a storage hierarchy into a relationship
-      model, so "which amendment applies to this SOW?" becomes something you read, not something
-      you reconstruct.</p>
+      <h2 class="r">A folder tells you where an amendment sits. Not what it
+      changes.</h2>
+      <p class="bsub r">A contract repository rebuilt from a folder tree into explicit relationships
+      between records. "Does this still apply?" becomes something a reviewer reads, not something
+      they reconstruct.</p>
       <span class="bgo r">Read the case study <span>&rarr;</span></span>
     </a>
     <div class="bshot r" id="bandshot">
@@ -621,7 +633,7 @@
           <div class="plate">
             <picture>
               <source srcset="ae-hero.webp" type="image/webp" />
-              <img src="ae-hero.jpg" width="1900" height="1072" loading="lazy"
+              <img src="ae-hero.jpg" width="1900" height="1257" loading="lazy"
                    alt="The Auto Extraction review screen on a laptop: the contract on the left, a panel of 128 machine-extracted fields on the right, each waiting to be accepted, edited or rejected." />
             </picture>
           </div>
@@ -640,58 +652,44 @@
 
       <a class="item r" href="intent-model.html">
         <div class="thumb">
-          <div class="plate"><svg viewBox="0 0 320 210" role="img" aria-label="Illustration: four intent states, with work migrating toward the system knowing first.">
-            <rect width="320" height="210" fill="#FFFFFF"/>
-            <text class="th-lbl" x="20" y="26">FOUR STATES OF MIND</text>
-            <rect class="th-box" x="20" y="40" width="132" height="46" rx="3"/>
-            <text class="th-nm" x="32" y="60">"I know"</text><text class="th-sm" x="32" y="74">they ask</text>
-            <rect x="168" y="40" width="132" height="46" rx="3" fill="#F3F6F1" stroke="#3D5A45"/>
-            <text class="th-nm" x="180" y="60" fill="#31492F">"It knows"</text><text class="th-sm" x="180" y="74" fill="#31492F">we reach them</text>
-            <rect class="th-box" x="20" y="94" width="132" height="46" rx="3"/>
-            <text class="th-nm" x="32" y="114">"I'm looking"</text><text class="th-sm" x="32" y="128">browsing</text>
-            <rect class="th-box" x="168" y="94" width="132" height="46" rx="3"/>
-            <text class="th-nm" x="180" y="114">"World moved"</text><text class="th-sm" x="180" y="128">across the book</text>
-            <path d="M150 168 L200 168" stroke="#3D5A45" stroke-width="1.5" fill="none"/>
-            <polygon points="200,164 210,168 200,172" fill="#3D5A45"/>
-            <text class="th-sm" x="20" y="172">work migrates</text>
-          </svg>
-        </div></div>
+          <div class="plate">
+            <picture>
+              <source srcset="thumb-intent.webp" type="image/webp" />
+              <img src="thumb-intent.jpg" width="1600" height="1100" loading="lazy"
+                   alt="The Phoenix listing prototype: a typed request restated as removable chips above 63 contract families, with a generated breach-notification column." />
+            </picture>
+          </div></div>
         <div>
           <div class="item-top">
             <span class="n">03</span>
-            <span class="cat">Product strategy · Design direction</span>
+            <span class="cat">Design direction · Entering build</span>
           </div>
           <h3>The intent model</h3>
           <p>When should an agent explain, suggest, act, or stay out of the way? A framework
-          written for and presented to executive stakeholders as platform-wide direction.</p>
+          I wrote for executive stakeholders — and the contract listing rebuilt on it, where a
+          typed question becomes the page and can be pinned as a standing check.</p>
           <span class="go">Read the direction <span>→</span></span>
         </div>
       </a>
 
       <a class="item r" href="airtel-self-serve.html">
         <div class="thumb">
-          <div class="plate"><svg viewBox="0 0 320 210" role="img" aria-label="Illustration: a bar chart of support call drivers, with the 4G speed issue dwarfing the rest at 4.25 million calls.">
-            <rect width="320" height="210" fill="#FFFFFF"/>
-            <text class="th-lbl" x="20" y="26">WHY PEOPLE CALLED</text>
-            <text class="th-sm" x="20" y="48">4G speed</text><text class="th-nm" x="262" y="48">4.25M</text>
-            <rect x="20" y="54" width="280" height="7" rx="3.5" fill="#3D5A45"/>
-            <text class="th-sm" x="20" y="80">Recharge schemes</text><text class="th-sm" x="268" y="80">1.95M</text>
-            <rect x="20" y="86" width="129" height="7" rx="3.5" fill="#C9CAC4"/>
-            <text class="th-sm" x="20" y="112">Balance &amp; validity</text><text class="th-sm" x="268" y="112">1.87M</text>
-            <rect x="20" y="118" width="123" height="7" rx="3.5" fill="#C9CAC4"/>
-            <text class="th-sm" x="20" y="144">SIM exchange</text><text class="th-sm" x="268" y="144">1.80M</text>
-            <rect x="20" y="150" width="118" height="7" rx="3.5" fill="#D8D6D0"/>
-            <text class="th-sm" x="20" y="180">One issue drove over four million calls.</text>
-          </svg>
-        </div></div>
+          <div class="plate">
+            <picture>
+              <source srcset="thumb-airtel.webp" type="image/webp" />
+              <img src="thumb-airtel.jpg" width="1600" height="1100" loading="lazy"
+                   alt="The redesigned Airtel self-service screen on a phone: a search field, the user's recent orders, an open service request, and help topics grouped by Internet and Calling." />
+            </picture>
+          </div></div>
         <div>
           <div class="item-top">
             <span class="n">04</span>
             <span class="cat">Shipped · Consumer scale</span>
           </div>
           <h3>Support that answers before you ask</h3>
-          <p>One issue drove over four million support calls. Redesigning self-service in a telecom
-          app used by millions, predicting the question from behaviour instead of offering a menu.</p>
+          <p>One issue drove over four million support calls. I redesigned self-service in a
+          telecom app used by millions so it read what the person had just done and guessed the
+          question, instead of handing them a menu and hoping.</p>
           <span class="go">Read case study <span>→</span></span>
         </div>
       </a>
@@ -705,8 +703,8 @@
     <div class="num-hero r">
       <p class="v">5&rarr;23%</p>
       <p class="l">of users still returning to an AI review tool four months in, after I redesigned
-      it. Early-month numbers barely moved, so the change was in retention rather than in how many
-      people tried it.</p>
+      it. The early months barely moved. People weren't arriving in bigger numbers. They were
+      staying.</p>
       <p class="src">Product analytics, two eight-month windows, captured June 2025.</p>
     </div>
     <div class="num-rest">
@@ -721,9 +719,9 @@
 <section id="influence">
   <div class="infl-wrap">
     <p class="infl-lbl r">Two decisions I helped change</p>
-    <p class="infl-scope r">Both of these were worked through with a group of roughly
-    <b>3 to 4 designers, 2 to 3 product managers and 4 to 5 engineers</b>, plus legal
-    subject-matter experts. Neither was a decision I could make on my own.</p>
+    <p class="infl-scope r">Both of these were worked out with roughly <b>3 to 4 designers,
+    2 to 3 product managers and 4 to 5 engineers</b>, plus legal subject-matter experts.
+    Neither was mine to decide alone.</p>
 
     <div class="infl">
       <div class="r">
@@ -739,9 +737,9 @@
           one instrument. Those relationships are <b>many to many</b>, which a tree structure cannot
           represent.</p></div>
         <div class="beat key r"><span class="bk">Why it mattered</span>
-          <p>If the model is wrong, a user can misread their contractual position, and any AI
-          reasoning built on that structure inherits the same error. Framing it that way moved the
-          conversation from preference to risk, which is what changed people's minds.</p></div>
+          <p>Get the model wrong and a user can misread their own contractual position. Any AI
+          reasoning built on top of it inherits that error. Once this was a risk question rather
+          than a preference, the argument got much shorter.</p></div>
         <div class="beat r"><span class="bk">Outcome</span>
           <p>Navigation separated from the relationship model: a flat list to move around in,
           explicit typed relationships underneath.</p></div>
@@ -752,19 +750,19 @@
 
     <div class="infl">
       <div class="r">
-        <p class="claim"><span class="claim-n">02</span>A team was designing surfaces one at a
-        time. I gave them a shared language, and it changed what they built.</p>
+        <p class="claim"><span class="claim-n">02</span>The team was designing one surface at a
+        time. I handed them three questions instead, and it changed the order they built in.</p>
       </div>
       <div class="infl-body">
         <div class="beat r"><span class="bk">Context</span>
           <p>Each surface treated as its own problem: design the chat, design the listing, design
           the procedure page. Nobody could settle which to build first.</p></div>
-        <div class="beat r"><span class="bk">The problem</span>
-          <p>I proposed three questions to ask of any surface instead: who starts the interaction,
-          what the person is trying to do, and which surface should carry it.</p></div>
+        <div class="beat r"><span class="bk">What I proposed</span>
+          <p>Three questions to ask of any surface instead: who starts the interaction, what the
+          person is trying to do, and which surface should carry it.</p></div>
         <div class="beat key r"><span class="bk">Why it mattered</span>
-          <p>It replaced the default assumption that AI belongs in a chat window, which is where
-          most of these features end up by habit rather than by decision.</p></div>
+          <p>Most AI features end up in a chat window out of habit, not because anyone decided
+          they should. These questions made that a decision again.</p></div>
         <div class="beat r"><span class="bk">Outcome</span>
           <p>Listing and procedure were reclassified as <b>discovery</b>, which settled which to
           build first. Other designers then asked the same three questions of the listing,
@@ -795,9 +793,8 @@
 <section id="how" style="padding-top:100px">
   <div class="wide">
     <div class="sec-head r" style="text-align:left;margin-bottom:40px"><span class="eyebrow">How I work</span></div>
-    <p class="intro r">I design AI products, and I use AI in the work itself, mostly to explore
-    more directions than I otherwise could and to get something running in a browser early enough
-    for it to be useful.</p>
+    <p class="intro r">I design AI products, and I use AI to make them. Mostly so I can try more
+    directions, and get something running in a browser while it is still early enough to change.</p>
 
     <figure class="photo r">
       <picture>
@@ -814,10 +811,10 @@
       <div class="step r">
         <p class="k"><b>01</b> Prototype</p>
         <div>
-          <h3>Prototypes instead of mockups</h3>
+          <h3>Prototypes, not mockups</h3>
           <p>I build in HTML rather than linking static frames together. A branching graph holding
-          340 records behaves very differently at full volume than it does in a design tool, and the
-          only way to find out is to load the data and look.</p>
+          340 records behaves nothing like it does in a design tool. The only way to find out is to
+          load the data and look at it.</p>
         </div>
         <div class="aside">
           <ul class="proto">
@@ -836,10 +833,10 @@
       <div class="step r">
         <p class="k"><b>02</b> Measure</p>
         <div>
-          <h3>Measuring before arguing</h3>
-          <p>My first relationship layout was radial, which is what these usually look like. Rather
-          than argue about whether it worked, I instrumented it and ran it at full volume. The
-          measurements settled it quickly.</p>
+          <h3>Measure it, don't argue about it</h3>
+          <p>My first relationship layout was radial, because that is what these always look
+          like. I didn't argue for it. I instrumented it, ran it at full volume, and let the frame
+          times end the discussion.</p>
         </div>
         <div class="aside">
           <div class="mini">
@@ -856,10 +853,10 @@
       <div class="step r">
         <p class="k"><b>03</b> Explore</p>
         <div>
-          <h3>Exploring more options</h3>
-          <p>Being able to build several structural options in an afternoon means the one I take
-          into a review has been compared against alternatives, rather than being the first idea that
-          seemed reasonable.</p>
+          <h3>Four options in the same afternoon</h3>
+          <p>If I can build four structural options in an afternoon, the one I bring into a
+          review has already beaten three others. Not just the first idea that seemed
+          reasonable.</p>
         </div>
         <div class="aside">
           <div class="files">
@@ -874,10 +871,9 @@
       <div class="step r">
         <p class="k"><b>04</b> Judge</p>
         <div>
-          <h3>Deciding what is right</h3>
-          <p>AI produces plausible options quickly. Working out which of them are actually correct,
-          what to cut, and what I would not be comfortable defending, is still the part I have to do
-          myself.</p>
+          <h3>The part AI can't do</h3>
+          <p>Plausible is cheap now. Which of them is actually right, what to cut, what I would
+          not want to stand behind in a review: that part is still mine.</p>
         </div>
         <div class="aside">
           <p class="mini-cap" style="border:none;padding:0;margin:0">
@@ -892,18 +888,16 @@
 <section id="thinking">
   <div class="manifesto">
     <p class="lbl r">What I keep coming back to</p>
-    <blockquote class="r">I design the line where AI stops and <em>a person decides</em>.</blockquote>
+    <blockquote class="r">Being sure and being <em>allowed</em> are two different things.</blockquote>
     <div class="after">
-      <p class="r">An agent can be completely sure what the answer is and still not be entitled to
-      act on it. Certainty belongs to the model; authority belongs to the person accountable for
-      the outcome. Almost everything I design comes back to that distinction.</p>
+      <p class="r">An agent can be completely sure of the answer and still have no business acting
+      on it. The model owns the confidence. Somebody else owns the consequences. Most of what I
+      design sits in the gap between those two.</p>
     </div>
   </div>
 </section>
 
-<div class="rule"></div>
-
-<section id="about">
+<section id="about" style="padding-top:110px">
   <div class="wrap">
     <div class="sec-head r" style="text-align:left;margin-bottom:36px"><span class="eyebrow">About</span></div>
 
@@ -918,18 +912,19 @@
 
 
     <div class="about-text">
-    <p class="r">My mission at Sirion has been simple: <b>make complexity feel calm.</b> Legal teams
-    carry the weight of precision, and they don't have time to figure out an interface.</p>
+    <p class="r">What I have been trying to do at Sirion is <b>make complexity feel calm.</b> Legal
+    teams already carry the weight of getting things exactly right. They shouldn't have to work out
+    an interface on top of that.</p>
 
-    <p class="r">I came to product design the long way round: years in brand, creative direction
-    and co-founding a denim label before moving into digital products. That history shows up in the
-    work: I care as much about how something reads as how it functions. And I prototype in code, so
-    ideas prove themselves in a browser rather than in a deck.</p>
+    <p class="r">I came to product design the long way round. Years in brand and creative
+    direction, and I co-founded a denim label before moving into digital products. It shows up in
+    the work. I care about how something reads as much as how it functions, and I would rather
+    prove an idea in a browser than in a deck.</p>
 
-    <p class="r">Design is personal for me. Being a father changed how I see it. I watch how
-    naturally my daughter explores, where she gets confused, how she delights in small wins. That's
-    the same lens I bring to work. When design steps back and lets someone move forward with
-    confidence, that's when it's working.</p>
+    <p class="r">Being a father changed how I look at this. I watch my daughter work out how
+    something new behaves. Where she gets stuck, what she tries next. That is the same thing I am
+    watching for at work. Design is doing its job when it gets out of the way and the person just
+    carries on.</p>
     </div>
     </div>
 
@@ -950,23 +945,25 @@
 
 <section id="contact">
   <div class="wrap">
-    <h2 class="r">Let's build something that thinks.</h2>
-    <button class="copybtn r" id="copymail" type="button" aria-live="polite">
-      <span id="copytxt">Copy my email</span>
-    </button>
-    <span class="mailalt r">or write directly:
-      <a href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a></span>
+    <h2 class="r">Open to <em>Lead roles</em>.
+      <span class="q">More interested in the problem than the title.</span></h2>
+    <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
+    <span class="mailalt r">amritkmr08@gmail.com
+      <button class="copylink" id="copymail" type="button" aria-live="polite"><span id="copytxt">copy</span></button></span>
+    <span class="avail-foot r">Currently at SirionLabs, Noida</span>
     <div class="links r">
       <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
       <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://www.behance.net/amritkmr08" target="_blank" rel="noopener">Behance</a>
-      <a href="home-3d.html">3D experiment</a>
+      <a href="https://www.behance.net/amritkmr" target="_blank" rel="noopener">Behance</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <div>© <span id="year"></span> Amrit Kumar</div>
+  <div>© <span id="year"></span> Amrit Kumar
+    &nbsp;·&nbsp; <a class="floot" href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    &nbsp;·&nbsp; <a class="floot" href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
   <div class="credit">Designed and written by me. Coded with Claude.</div>
 </footer>
 
@@ -994,13 +991,13 @@
   var timer = null;
   btn.addEventListener("click", function () {
     function done(ok) {
-      txt.textContent = ok ? "Copied, talk soon" : EMAIL;
+      txt.textContent = ok ? "copied" : "select it above";
       btn.classList.add("ok");
       clearTimeout(timer);
       timer = setTimeout(function () {
-        txt.textContent = "Copy my email";
+        txt.textContent = "copy";
         btn.classList.remove("ok");
-      }, 2200);
+      }, 2000);
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(EMAIL).then(function () { done(true); },
