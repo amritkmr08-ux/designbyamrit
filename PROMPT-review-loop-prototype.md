@@ -114,6 +114,15 @@ learn what the screen can do without touching anything. Interleave demonstration
 Caption chip bottom-left: "Prototype, playing a recorded sequence · hover a highlight, or
 click Accept".
 
+## Embedding — the screenshot-density rule
+
+The prototype must sit beside real product screenshots in the case study without reading as a
+different product. A real screenshot is a ~1900px screen compressed into the figure; an iframe
+rendering CSS pixels 1:1 at the same width looks like the same UI zoomed to 140% — chunky,
+toy-like. So the case study embeds it scaled: the iframe renders at ~138% of the frame's size
+and is compressed with `transform: scale(0.72); transform-origin: 0 0`. Judge all type and
+component sizes at that final scale, next to a real screenshot — never at 1:1.
+
 ## Data rules
 
 - Invented parties only — currently "Halcyon Systems, Inc." and "Northbridge Retail".

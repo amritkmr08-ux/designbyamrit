@@ -149,7 +149,12 @@
       radial-gradient(circle 3.5px at 33px 15px, #D3D4CE 100%, transparent 100%),
       radial-gradient(circle 3.5px at 49px 15px, #D3D4CE 100%, transparent 100%);
   }
-  .protoframe iframe { display: block; border: 0; width: 100%; height: 100%; background: #fff; }
+  /* render the prototype at real-desktop scale, compressed like a product screenshot */
+  .protoframe iframe {
+    display: block; border: 0; background: #fff;
+    width: 138%; height: 138%;
+    transform: scale(0.7246); transform-origin: 0 0;
+  }
   @media (max-width: 860px) { .protoframe { height: 460px; } }
   .plate {
     background: #FBFBFA; border: 1px solid var(--line); border-radius: 6px;
