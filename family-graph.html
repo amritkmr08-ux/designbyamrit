@@ -872,6 +872,18 @@ function render(){
   const {W,H}=wh();
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   while(svg.firstChild) svg.removeChild(svg.firstChild);
+
+  /* draw at the animated position; remember the target to restore afterwards.
+     A node the layout has just produced is born here and arrives as a skeleton. */
+  const NOW=performance.now(), live=new Set();
+  LAY.nodes.forEach((n,i)=>{
+    live.add(n.id);
+    let p=NPOS.get(n.id);
+    if(!p){ p={x:n.x,y:n.y,born:NOW}; NPOS.set(n.id,p);
+            LOADT=Math.max(LOADT, NOW + Math.min(i,16)*46 + 760); }
+    n._born=p.born; n._tx=n.x; n._ty=n.y; n.x=p.x; n.y=p.y;
+  });
+  for(const id of NPOS.keys()) if(!live.has(id)) NPOS.delete(id);
   const world=document.createElementNS(NS,'g');
   world.setAttribute('transform',`translate(${W/2+S.tx},${H/2+S.ty}) scale(${S.sc})`);
   svg.appendChild(world);
@@ -896,7 +908,7 @@ function render(){
   /* pulse for nodes lit from the right panel */
   const hlT = S.hl ? Math.min(1,(performance.now()-S.hlAt)/700) : 1;
 
-  LAY.nodes.forEach(n=>{
+  LAY.nodes.forEach((n,ni)=>{
     const g=document.createElementNS(NS,'g');
     g.style.cursor='pointer';
     const dimmed = n.k==='GRP' && n.grp && S.path[n.grp.lvl]!=null && n.grp.key!==S.path[n.grp.lvl];
@@ -905,6 +917,31 @@ function render(){
     if(S.hl && !isHL) op = n.k==='BAND'?.12:.18;
     g.setAttribute('opacity', op);
     const x=n.x-n.w/2, y=n.y-n.h/2;
+
+    /* a chip the layout has just asked for: it arrives empty, then fills.
+       Same shape and place as the real thing, so nothing shifts when it lands. */
+    if(n.k!=='BAND' && n.k!=='PIN'){
+      const dly=Math.min(ni,16)*46, LOADMS=420, age=NOW-(n._born||0);
+      if(age < dly+LOADMS){
+        const t=Math.max(0,Math.min(1,(age-dly)/LOADMS));
+        g.setAttribute('opacity', String(op*Math.min(1,t*2.2)));
+        const sk=document.createElementNS(NS,'rect');
+        sk.setAttribute('x',x); sk.setAttribute('y',y);
+        sk.setAttribute('width',n.w); sk.setAttribute('height',n.h);
+        sk.setAttribute('rx',Math.min(9,n.h/2)); sk.setAttribute('fill','#191918');
+        sk.setAttribute('stroke','rgba(255,255,255,.07)'); sk.setAttribute('stroke-width','1');
+        g.appendChild(sk);
+        const ph=(age%900)/900, bw=Math.max(16,(n.w-26)*(.34+.22*Math.sin(ph*Math.PI*2)));
+        const b=document.createElementNS(NS,'rect');
+        b.setAttribute('x',x+12); b.setAttribute('y',n.y-3.5);
+        b.setAttribute('width',bw); b.setAttribute('height',7); b.setAttribute('rx',3.5);
+        b.setAttribute('fill','rgba(255,255,255,'+(.055+.05*Math.sin(ph*Math.PI*2)).toFixed(3)+')');
+        g.appendChild(b);
+        gN.appendChild(g);
+        return;
+      }
+      if(age < dly+LOADMS+240) g.setAttribute('opacity', String(op*Math.min(1,(age-dly-LOADMS)/240)));
+    }
 
     if(n.k==='PIN'){
       const r2=document.createElementNS(NS,'rect');
@@ -1067,6 +1104,7 @@ function render(){
     }
   }
 
+  LAY.nodes.forEach(n=>{ if(n._tx!=null){ n.x=n._tx; n.y=n._ty; } });
   document.getElementById('zLvl').textContent=Math.round(S.sc*100)+'%';
 }
 function txt(s,x,y,o){
@@ -1096,14 +1134,28 @@ function fitNodes(list,pad){
 }
 const fit=()=>fitNodes(LAY.nodes);
 function kick(){ if(!S.raf) S.raf=requestAnimationFrame(frame); }
+
+/* Nodes hold their own animated position, so a re-cut of the ladder glides
+   instead of snapping. NPOS is the drawn position; n.x/n.y stay the target. */
+const NPOS = new Map();
+let LOADT = 0;                      /* while now < LOADT, chips are still arriving */
 function frame(){
   S.raf=null;
   let busy=false;
-  if(Math.abs(S.tx-S.ttx)>.4||Math.abs(S.ty-S.tty)>.4||Math.abs(S.sc-S.tsc)>.002){
-    const k=.12; S.tx+=(S.ttx-S.tx)*k; S.ty+=(S.tty-S.ty)*k; S.sc+=(S.tsc-S.sc)*k; busy=true;
+  /* camera: slower approach, wider settle band — reads as a glide, not a jump */
+  if(Math.abs(S.tx-S.ttx)>.25||Math.abs(S.ty-S.tty)>.25||Math.abs(S.sc-S.tsc)>.0015){
+    const k=.062; S.tx+=(S.ttx-S.tx)*k; S.ty+=(S.tty-S.ty)*k; S.sc+=(S.tsc-S.sc)*k; busy=true;
   }else{ S.tx=S.ttx; S.ty=S.tty; S.sc=S.tsc; }
-  if(S.hl && performance.now()-S.hlAt < 780) busy=true;
-  render(); if(busy) kick();
+  /* nodes: ease each one toward where the layout wants it */
+  for(const n of LAY.nodes){
+    const p=NPOS.get(n.id); if(!p) continue;
+    const dx=n.x-p.x, dy=n.y-p.y;
+    if(Math.abs(dx)>.3||Math.abs(dy)>.3){ p.x+=dx*.085; p.y+=dy*.085; busy=true; }
+    else { p.x=n.x; p.y=n.y; }
+  }
+  if(S.hl && performance.now()-S.hlAt < 900) busy=true;
+  render();
+  if(busy || performance.now() < LOADT) kick();
 }
 
 /* ══════════ 7 · INTERACTION ══════════ */
@@ -1643,42 +1695,75 @@ requestAnimationFrame(()=>{ fit();
 
   async function tap(node, hold){
     if (!node || stopped) return;
-    await glide(screenOf(node), 700);
-    await sleep(280);
+    await glide(screenOf(node), 950);
+    await sleep(420);
     await press();
     hit(node);
-    await sleep(hold || 900);
+    await sleep(hold || 1500);
   }
+
+  /* the controls are part of the story too — Group by is the whole argument */
+  async function tapEl(el, hold){
+    if (!el || stopped) return;
+    const r = el.getBoundingClientRect(), sr = host.getBoundingClientRect();
+    await glide({ x: r.left - sr.left + r.width/2, y: r.top - sr.top + r.height/2 }, 950);
+    await sleep(420);
+    await press();
+    el.click();
+    await sleep(hold || 1900);
+  }
+
+  const seg = k => document.querySelector('#dimSeg button[data-d="'+k+'"]');
 
   const find = (kind, test) =>
     (LAY.nodes||[]).find(n => n.k === kind && (!test || test(n)));
+  const findAll = (kind, test) =>
+    (LAY.nodes||[]).filter(n => n.k === kind && (!test || test(n)));
 
   function reset(){
     S.hl=null; S.sel=null; S.sat=null; S.wsat=null; S.path=[];
-    detail(MSA); refresh(true);
+    if (S.dim !== 'status') setDim('status'); else { detail(MSA); refresh(true); }
   }
 
   async function cycle(){
     reset();
     cur.style.opacity = '1';
-    await sleep(1000);
+    await sleep(1400);
 
-    /* 1 · a status worth worrying about */
-    await tap(find('GRP', n => /breach/i.test(n.grp && n.grp.key)) || find('GRP'), 1100);
+    /* ── act 1 · status: find the thing worth worrying about ── */
+    await tap(find('GRP', n => /breach/i.test(n.grp && n.grp.key)) || find('GRP'), 1700);
 
-    /* 2 · one level deeper, into a cohort */
-    await tap(find('GRP', n => n.grp && n.grp.lvl === 1), 1100);
+    /* one record out of the twelve */
+    await tap(find('SOW'), 2200);
 
-    /* 3 · a record: the panel fills with its relationships */
+    /* the amendment it sits under — every sibling on that amendment lights up */
+    await tap(find('AM'), 2400);
+
+    /* the work order below it, and the change orders that branch off */
+    await tap(find('WO'), 2400);
+    await tap(find('CO'), 2000);
+
+    /* back up to the whole family */
+    await tap(find('MSA'), 1600);
+
+    /* ── act 2 · the same 340, re-cut ── */
+    await tapEl(seg('amendment'), 2200);
+    await tap(find('GRP'), 1900);
     await tap(find('SOW'), 2000);
+    await tap(find('MSA'), 1400);
 
-    /* 4 · the amendment hanging off it */
-    await tap(find('AM'), 2000);
+    await tapEl(seg('region'), 2100);
+    await tap(findAll('GRP')[1] || find('GRP'), 1900);
+    await tap(find('SOW'), 1900);
+    await tap(find('MSA'), 1300);
 
-    /* 5 · back to the whole family */
-    await tap(find('MSA'), 1200);
+    await tapEl(seg('expiry'), 2100);
+    await tap(find('GRP'), 1800);
+
+    /* ── home ── */
+    await tapEl(seg('status'), 1600);
     cur.style.opacity = '0';
-    await sleep(500);
+    await sleep(900);
   }
 
   async function run(){
