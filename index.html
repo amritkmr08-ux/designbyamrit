@@ -222,8 +222,10 @@
     margin-top: 22px;
   }
   .num-lede b { font-weight: 500; }
+  .num-sub { font-size: 16px; color: var(--ink); line-height: 1.6; max-width: 52ch; margin-top: 10px; }
   .ret-chart { width: 100%; height: auto; display: block; margin-top: 40px; font-family: var(--font); }
-  .num-hero .src { font-size: 13px; color: var(--faint); margin-top: 20px; max-width: 78ch; line-height: 1.7; }
+  .num-hero .num-foot { font-size: 13px; color: var(--faint); margin-top: 24px; max-width: 78ch; line-height: 1.7; }
+  .num-hero .src { font-size: 13px; color: var(--faint); margin-top: 4px; max-width: 78ch; line-height: 1.7; }
   @media (max-width: 700px) { .num-lede { font-size: 21px; } }
 
 
@@ -793,24 +795,28 @@
   <div class="nums">
     <div class="num-hero r">
       <span class="eyebrow">Auto Extraction &middot; Retention</span>
-      <p class="num-lede">Retention for an AI contract review tool, before and after I
-      redesigned it. Both groups drop early. <b>Only one stops dropping.</b></p>
+      <p class="num-lede"><b>The redesign kept more users after the initial drop.</b></p>
+      <p class="num-sub">Retention held at 23% after the redesign. The old version kept
+      falling, down to 5% by month four.</p>
 
       <svg class="ret-chart" viewBox="0 0 1180 500" role="img"
            aria-label="Retention over four months for two groups. Both start near 75 to 80 percent and fall steeply after the first month. The group before the redesign keeps falling to 5 percent. The group after the redesign levels off and holds at 23 percent, an eighteen point gap by month four.">
 
+        <circle cx="70" cy="16" r="5" fill="#3D5A45"/>
+        <text x="82" y="21" font-size="14.5" fill="#191A18" font-weight="500">After redesign</text>
+        <circle cx="230" cy="16" r="5" fill="#8B8D86"/>
+        <text x="242" y="21" font-size="14.5" fill="#6F716A">Before</text>
+
         <line x1="60" y1="40"  x2="980" y2="40"  stroke="#E3E3DF" stroke-width="1"/>
         <line x1="60" y1="240" x2="980" y2="240" stroke="#E3E3DF" stroke-width="1"/>
 
-        <path d="M60 41 L290 287.5 L520 326.5 L750 366 L980 415 L980 440 L60 440 Z"
-              fill="#E6E4DE"/>
         <path d="M457 315.8 L520 325 L750 328.5 L980 324.5 L980 415 L750 366 L520 326.5 Z"
               fill="#C8DCB9"/>
 
         <line x1="60" y1="440" x2="980" y2="440" stroke="#C7C8C2" stroke-width="1"/>
 
         <polyline points="60,41 290,287.5 520,326.5 750,366 980,415"
-                  fill="none" stroke="#8B8D86" stroke-width="2"
+                  fill="none" stroke="#8B8D86" stroke-width="2" stroke-dasharray="2 6"
                   stroke-linejoin="round" stroke-linecap="round"/>
         <polyline points="60,66 290,291.5 520,325 750,328.5 980,324.5"
                   fill="none" stroke="#3D5A45" stroke-width="3.2"
@@ -825,9 +831,8 @@
         <text x="48" y="245" text-anchor="end" font-size="14" fill="#6F716A">40</text>
         <text x="48" y="445" text-anchor="end" font-size="14" fill="#6F716A">0</text>
 
-        <text x="640" y="122" font-size="21" font-weight="500" fill="#191A18"
-              font-family="Poppins, sans-serif" letter-spacing="-0.4">An 18-point gap by month four.</text>
-        <text x="640" y="150" font-size="14.5" fill="#6F716A">The green band is everyone the redesign kept.</text>
+        <text x="640" y="130" font-size="21" font-weight="500" fill="#191A18"
+              font-family="Poppins, sans-serif" letter-spacing="-0.4">18 percentage points higher by month four.</text>
 
         <text x="1005" y="316" font-size="54" font-weight="500" fill="#191A18"
               font-family="Poppins, sans-serif" letter-spacing="-2">23%</text>
@@ -843,6 +848,7 @@
         <text x="980" y="474" text-anchor="middle" font-size="14" fill="#6F716A">+4 months</text>
       </svg>
 
+      <p class="num-foot">Each line tracks a separate group of users for their first four months.</p>
       <p class="src">Monthly return rate per group. After the redesign: 2,380 users, Sep 2024 to
       Jun 2025. Before: 860 users, Sep 2023 to Jun 2024. Source: Heap analytics, captured June 2025.</p>
     </div>
