@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accept, advance, and the document moves — review loop prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --teal:#03525F;            /* primary brand, buttons + wordmark */
+    --teal-deep:#0D5F6A;       /* icons, active markers */
+    --teal-tint:#E4F1F1;       /* active nav / active rail chip */
+    --teal-pale:#F0FAFB;       /* live highlight fill */
+    --teal-rule:#2D737B;       /* live highlight underline */
+    --mint:#B0CFC9;            /* empty markers */
+    --green:#2E7D32;           /* accepted value */
+    --green-pale:#EAF5EE;
+    --ink:#1B1F1E;
+    --muted:#5F6564;
+    --faint:#8B918F;
+    --line:#E6E8E8;
+    --hair:#EFF1F1;
+    --band:#F5F6F6;
+    --grey-bar:#F9F9F9;
+    --font:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--font);
+    font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  svg{display:block}
+  #app{position:fixed;inset:0;display:flex;background:var(--paper)}
+
+  /* ─────────── left icon rail ─────────── */
+  .rail{
+    width:58px;flex:none;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0;
+    background:var(--paper)
+  }
+  .rail .ri{
+    width:38px;height:38px;border-radius:7px;display:grid;place-items:center;
+    color:var(--teal-deep)
+  }
+  .rail .ri svg{width:19px;height:19px}
+  .rail .ri.on{background:var(--teal-tint)}
+  .rail .burger{margin-bottom:12px}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+
+  /* ─────────── top bar ─────────── */
+  .topbar{
+    height:56px;flex:none;display:flex;align-items:center;
+    padding:0 18px;border-bottom:1px solid var(--line);gap:10px
+  }
+  .logo{display:flex;align-items:center;gap:8px}
+  .logo .wm{font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--teal-deep)}
+  .topbar .sp{flex:1}
+  .tb-ico{width:32px;height:32px;display:grid;place-items:center;color:#4B5352}
+  .tb-ico svg{width:17px;height:17px}
+  .tb-pill{
+    display:flex;align-items:center;gap:4px;border:1px solid var(--line);
+    border-radius:999px;padding:3px 6px
+  }
+  .avatar{
+    width:31px;height:31px;border-radius:50%;background:#99BAC1;color:#fff;
+    display:grid;place-items:center;font-size:11.5px;font-weight:600;letter-spacing:.02em
+  }
+
+  /* ─────────── document header ─────────── */
+  .dochead{
+    flex:none;display:flex;align-items:center;gap:13px;padding:14px 22px 12px
+  }
+  .pdfic{
+    width:38px;height:38px;border:1px solid var(--line);border-radius:7px;
+    display:grid;place-items:center;flex:none
+  }
+  .pdfic svg{width:19px;height:19px;color:#C7332B}
+  .dh-id{font-size:11.5px;color:var(--faint);line-height:1.3}
+  .dh-name{font-size:19px;font-weight:600;letter-spacing:-.018em;line-height:1.25}
+  .dochead .sp{flex:1}
+  .statusbtn{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;flex:none}
+  .statusbtn b{font-weight:400;font-size:13px;color:var(--ink);padding:8px 15px}
+  .statusbtn i{
+    display:grid;place-items:center;width:32px;border-left:1px solid var(--line);color:#5F6564
+  }
+  .statusbtn i svg{width:13px;height:13px}
+
+  .cols{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 372px 50px;min-height:0}
+
+  /* ─────────── document pane ─────────── */
+  .docpane{min-height:0;display:flex;flex-direction:column;padding:0 20px 0 22px}
+  .doctools{
+    flex:none;height:50px;background:var(--grey-bar);border-radius:7px;
+    display:flex;align-items:center;justify-content:flex-end;gap:4px;padding:0 12px
+  }
+  .doctools .ti{width:30px;height:30px;display:grid;place-items:center;color:#5F6564}
+  .doctools .ti svg{width:16px;height:16px}
+  .docscroll{flex:1;overflow:hidden;position:relative}
+  .docinner{padding:22px 8px 300px;max-width:720px;margin:0 auto}
+  .doc h4{font-size:15.5px;font-weight:600;margin:0 0 15px;letter-spacing:-.01em}
+  .doc h5{font-size:13.5px;font-weight:400;margin:20px 0 6px}
+  .doc p{font-size:13.5px;line-height:1.9;color:#222726;margin-bottom:12px}
+  mark{
+    background:transparent;color:inherit;padding:1px 2px;margin:0 -2px;
+    box-shadow:inset 0 0 0 0 transparent;
+    transition:background .5s ease, box-shadow .5s ease;
+  }
+  mark.live{ background:var(--teal-pale); box-shadow:inset 0 -2px 0 var(--teal-rule); }
+  mark.done{ background:var(--green-pale); }
+
+  /* ─────────── fields panel ─────────── */
+  .panel{min-height:0;display:flex;flex-direction:column;border-left:1px solid var(--hair)}
+  .panelbar{
+    height:50px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px 0 16px
+  }
+  .fcount{font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:6px}
+  .fcount svg{width:13px;height:13px;color:#5F6564}
+  .panelbar .sp{flex:1}
+  .panelbar .pi{width:28px;height:28px;display:grid;place-items:center;color:#5F6564}
+  .panelbar .pi svg{width:16px;height:16px}
+  .panelscroll{flex:1;overflow:hidden;padding:6px 16px 120px}
+
+  .fcard{
+    border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--paper);
+    overflow:hidden;transition:box-shadow .3s ease,border-color .3s ease
+  }
+  .fcard.open{border-color:#D5DBDA;box-shadow:0 1px 2px rgba(20,30,30,.04),0 6px 16px -10px rgba(20,30,30,.14)}
+  .fhead{display:flex;align-items:center;gap:12px;padding:14px 16px}
+  .mk{width:9px;height:9px;flex:none;background:var(--mint)}
+  .mk.circle{border-radius:50%}
+  .mk.on{background:var(--teal-deep)}
+  .fname{font-size:13.5px;font-weight:400;flex:1;letter-spacing:-.005em;color:var(--ink)}
+  .pager{display:none;align-items:center;gap:9px;color:#8B918F;font-size:12px}
+  .fcard.open .pager{display:flex}
+  .pager svg{width:12px;height:12px}
+  .pager b{font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .fbody{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.22,.61,.36,1)}
+  .fcard.open .fbody{max-height:200px}
+  .chipwrap{padding:2px 16px 16px}
+  .val{
+    display:inline-flex;align-items:center;gap:0;
+    border:1px solid var(--green);color:var(--green);
+    border-radius:999px;padding:8px 18px;font-size:13px;font-weight:400;background:var(--paper);
+    line-height:1.4
+  }
+  /* the tick lives after the value and occupies nothing until it is earned,
+     so an unreviewed chip has no dead space in it */
+  .tick{width:0;height:14px;flex:none;overflow:hidden;margin-left:0;
+        opacity:0;transform:scale(.4);
+        transition:width .32s cubic-bezier(.22,.61,.36,1), margin-left .32s cubic-bezier(.22,.61,.36,1),
+                   opacity .26s ease, transform .38s cubic-bezier(.34,1.56,.64,1)}
+  .val.ok .tick{width:14px;margin-left:9px;opacity:1;transform:scale(1)}
+  .tick svg{width:14px;height:14px}
+
+  .acts{display:flex;align-items:center;gap:16px;background:var(--band);
+        padding:12px 16px;border-top:1px solid var(--hair)}
+  .accept{
+    background:var(--teal);color:#fff;border:0;border-radius:6px;
+    padding:10px 24px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+    letter-spacing:.01em;transition:background .2s ease
+  }
+  .accept:hover{background:#01414B}
+  .ai{width:32px;height:32px;border-radius:6px;display:grid;place-items:center;color:#6E7473;
+      transition:background .15s ease}
+  .ai:hover,.ai.hot{background:#EBEEED}
+  .ai svg{width:16px;height:16px}
+  .acts .sp{flex:1}
+
+  /* ─────────── right icon rail ─────────── */
+  .rrail{
+    border-left:1px solid var(--hair);display:flex;flex-direction:column;
+    align-items:center;gap:12px;padding:14px 0
+  }
+  .rrail .rr{
+    width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+    display:grid;place-items:center;color:#727272;background:var(--paper)
+  }
+  .rrail .rr svg{width:15px;height:15px}
+  .rrail .rr.on{background:var(--teal-tint);border-color:#8FB6BC;color:var(--teal-deep)}
+
+  /* ─────────── overlay ─────────── */
+  #cur{
+    position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;
+    pointer-events:none;z-index:60;opacity:0;
+    background:transparent;border:2px solid rgba(3,82,95,.9);
+    box-shadow:0 0 0 3px rgba(255,255,255,.65);
+    transition:opacity .3s ease
+  }
+  #cap{
+    position:fixed;left:74px;bottom:14px;z-index:40;
+    background:rgba(255,255,255,.92);border:1px solid var(--line);
+    border-radius:6px;padding:6px 12px;font-size:11.5px;color:var(--muted);
+    backdrop-filter:blur(6px)
+  }
+  /* hover a highlight: the extracted value appears as a tooltip, no navigation */
+  #dtip{
+    position:fixed;z-index:70;min-width:210px;background:var(--paper);
+    border:1px solid var(--line);border-radius:9px;overflow:hidden;
+    box-shadow:0 2px 4px rgba(20,30,30,.05),0 14px 34px -14px rgba(20,30,30,.28);
+    opacity:0;pointer-events:none;transition:opacity .16s ease;
+  }
+  #dtip.on{opacity:1}
+  #dtip .th{display:flex;align-items:center;gap:9px;background:#F2F7F7;
+    border-bottom:1px solid var(--hair);padding:10px 13px;font-size:13px;font-weight:500}
+  #dtip .tc{padding:11px 13px}
+  #dtip .tval{display:inline-block;border:1px solid var(--green);color:var(--green);
+    border-radius:999px;padding:5px 14px;font-size:12.5px;background:var(--paper)}
+  mark{cursor:default}
+  mark.hot{background:var(--teal-pale);box-shadow:inset 0 -2px 0 var(--teal-rule)}
+
+  @media (prefers-reduced-motion: reduce){ mark,.fbody,.val,.tick{transition:none} }
+</style>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+  <g id="i-home"><path d="M3 9.2 10 3.4l7 5.8V17a.8.8 0 0 1-.8.8h-4V12H7.8v5.8h-4A.8.8 0 0 1 3 17z"/></g>
+  <g id="i-pie"><path d="M10 3.2a6.8 6.8 0 1 0 6.8 6.8H10z"/><path d="M12.4 2.4A6.8 6.8 0 0 1 17.6 7.6h-5.2z"/></g>
+  <g id="i-trend"><path d="M3 14.6 7.6 10l3 3L17 6.6"/><path d="M13.4 6.6H17V10"/></g>
+  <g id="i-doc"><rect x="4.4" y="2.8" width="11.2" height="14.4" rx="1.4"/><path d="M7.2 7h5.6M7.2 10h5.6M7.2 13h3.4"/></g>
+  <g id="i-gauge"><circle cx="10" cy="10" r="7"/><path d="M10 10 13.2 6.8"/></g>
+  <g id="i-search"><circle cx="8.6" cy="8.6" r="5.2"/><path d="M12.5 12.5 16.6 16.6"/></g>
+  <g id="i-bell"><path d="M6 8.4a4 4 0 0 1 8 0c0 3.4 1.2 4.4 1.2 4.4H4.8S6 11.8 6 8.4z"/><path d="M8.6 15.4a1.6 1.6 0 0 0 2.8 0"/></g>
+  <g id="i-card"><rect x="3" y="5" width="14" height="10" rx="1.6"/><circle cx="7.4" cy="9.4" r="1.5"/><path d="M11 9h3.2M11 12h3.2M4.8 12.6c.6-1.2 4.6-1.2 5.2 0"/></g>
+  <g id="i-chev-d"><path d="M5 8l5 4.6L15 8"/></g>
+  <g id="i-chev-l"><path d="M12.4 4.6 6.8 10l5.6 5.4"/></g>
+  <g id="i-chev-r"><path d="M7.6 4.6 13.2 10l-5.6 5.4"/></g>
+  <g id="i-kebab"><circle cx="10" cy="4.4" r="1.1"/><circle cx="10" cy="10" r="1.1"/><circle cx="10" cy="15.6" r="1.1"/></g>
+  <g id="i-pen"><path d="M13.6 3.4 16.6 6.4 7 16H4v-3z"/></g>
+  <g id="i-trash"><path d="M3.6 5.4h12.8M8 5.4V3.6h4v1.8M5.4 5.4l.8 11.2h7.6l.8-11.2"/></g>
+  <g id="i-note"><rect x="3.6" y="3.6" width="12.8" height="12.8" rx="1.6"/><path d="M6.6 7.4h6.8M6.6 10h6.8M6.6 12.6h4"/></g>
+  <g id="i-compare"><rect x="3.4" y="3.4" width="8" height="13.2" rx="1.2"/><path d="M13.4 6h3.2M13.4 10h3.2M13.4 14h3.2"/></g>
+  <g id="i-dl"><path d="M10 3.4v9.2M6.4 9.4 10 12.8l3.6-3.4M4 16.4h12"/></g>
+  <g id="i-lines"><path d="M4.6 6h10.8M4.6 10h10.8M4.6 14h7"/></g>
+  <g id="i-fields"><rect x="3.6" y="3.6" width="12.8" height="9" rx="1.4"/><path d="M6.4 7h7.2M6.4 9.8h4.6"/><circle cx="10" cy="15.4" r="1.6"/></g>
+  <g id="i-chat"><path d="M16.4 12.4a1.6 1.6 0 0 1-1.6 1.6H7l-3.4 3V5a1.6 1.6 0 0 1 1.6-1.6h9.6A1.6 1.6 0 0 1 16.4 5z"/></g>
+  <g id="i-pdf"><path d="M5 2.6h6.4L15.4 6.6V17a.8.8 0 0 1-.8.8H5a.8.8 0 0 1-.8-.8V3.4A.8.8 0 0 1 5 2.6z"/><path d="M11.2 2.8v4h4"/></g>
+  <g id="i-check"><path d="M3.4 8.6 6.8 12l6.4-6.6"/></g>
+</defs></svg>
+
+<div id="app">
+
+  <!-- left icon rail -->
+  <nav class="rail" aria-hidden="true">
+    <span class="ri burger"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h12M4 10h12M4 14h12"/></svg></span>
+    <span class="ri"><svg viewBox="0 0 20 20" fill="currentColor"><use href="#i-home"/></svg></span>
+    <span class="ri"><svg viewBox="0 0 20 20" fill="currentColor"><use href="#i-pie"/></svg></span>
+    <span class="ri"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-trend"/></svg></span>
+    <span class="ri on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><use href="#i-doc"/></svg></span>
+    <span class="ri"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#i-gauge"/></svg></span>
+  </nav>
+
+  <div class="main">
+
+    <!-- top bar -->
+    <div class="topbar">
+      <div class="logo">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#0D5F6A" stroke-width="1.5" aria-hidden="true">
+          <ellipse cx="13" cy="13" rx="9.4" ry="7.4" transform="rotate(-24 13 13)"/>
+          <ellipse cx="13" cy="13" rx="6.2" ry="4.4" transform="rotate(-24 13 13)"/>
+          <ellipse cx="13" cy="13" rx="2.8" ry="1.8" transform="rotate(-24 13 13)"/>
+        </svg>
+        <span class="wm">sirion</span>
+      </div>
+      <div class="sp"></div>
+      <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-search"/></svg></span>
+      <div class="tb-pill">
+        <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><use href="#i-bell"/></svg></span>
+        <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><use href="#i-card"/></svg></span>
+      </div>
+      <span class="avatar">SG</span>
+    </div>
+
+    <!-- document header -->
+    <div class="dochead">
+      <span class="pdfic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><use href="#i-pdf"/></svg></span>
+      <div>
+        <div class="dh-id">AE0893</div>
+        <div class="dh-name">Halcyon SaaS Agreement</div>
+      </div>
+      <div class="sp"></div>
+      <div class="statusbtn"><b>Review in Progress</b><i><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-d"/></svg></i></div>
+    </div>
+
+    <div class="cols">
+
+      <!-- document -->
+      <div class="docpane">
+        <div class="doctools">
+          <span class="ti"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><use href="#i-compare"/></svg></span>
+          <span class="ti"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-search"/></svg></span>
+          <span class="ti"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-dl"/></svg></span>
+        </div>
+        <div class="docscroll" id="docscroll">
+          <div class="docinner doc" id="docinner">
+            <h4>Halcyon SaaS agreement</h4>
+            <p>This <mark data-f="type">Software as a Service Agreement</mark> (&ldquo;Agreement&rdquo;)
+            is entered into between <mark data-f="parties">Northbridge Retail</mark> and Halcyon
+            Systems, Inc. a <mark data-f="law">Delaware</mark> corporation (&ldquo;Halcyon&rdquo;),
+            with its principal place of business at 4120 Redwood Parkway, Suite 300, Austin, Texas
+            78726. Halcyon and Northbridge Retail agree that the following terms and conditions will
+            apply to the services provided under this Agreement and Orders placed thereunder.</p>
+
+            <h5>1. DEFINITIONS</h5>
+            <p>&ldquo;Administrator User&rdquo; means <mark data-f="admin">each Northbridge Retail
+            employee designated by Northbridge Retail to serve as technical administrator of the
+            SaaS Services on Northbridge Retail&rsquo;s behalf</mark>. Each Administrator User must
+            complete training and qualification requirements reasonably required by Halcyon.</p>
+            <p>&ldquo;Customer Content&rdquo; means all data and materials provided by Northbridge
+            Retail to Halcyon for use in connection with the SaaS Services, including, without
+            limitation, customer applications, data files, and graphics.</p>
+            <p>&ldquo;Documentation&rdquo; means <mark data-f="docs">the user guides, online help,
+            release notes, training materials and other documentation provided or made available by
+            Halcyon to Northbridge Retail</mark> regarding the use or operation of the SaaS
+            Services.</p>
+            <p>&ldquo;Host&rdquo; means the computer equipment on which the Software is installed,
+            which is owned and operated by Halcyon or its subcontractors.</p>
+            <p>&ldquo;Identity Record&rdquo; means a unique collection of identity data for an
+            individual that will be granted access to and/or managed by the SaaS Services for the
+            purposes of providing single sign-on, managing passwords or certifying user access.
+            Identity data may be physically or logically maintained in a single repository or in
+            separate physical or logical repositories.</p>
+
+            <h5>2. TERM AND TERMINATION</h5>
+            <p>This Agreement commences on the Effective Date and continues for
+            <mark data-f="term">an initial term of thirty-six (36) months</mark>, and will renew
+            automatically for successive twelve (12) month periods unless either party gives written
+            notice of non-renewal.</p>
+            <p>Either party may terminate this Agreement for material breach if the breach remains
+            uncured <mark data-f="cure">thirty (30) days after written notice</mark> of the breach
+            is received by the breaching party.</p>
+
+            <h5>3. FEES AND PAYMENT</h5>
+            <p>Northbridge Retail shall pay all fees specified in each Order. Undisputed invoices are
+            payable <mark data-f="pay">within forty-five (45) days of the invoice date</mark>. Fees
+            are non-refundable except as expressly set out in this Agreement.</p>
+            <p>&ldquo;Maintenance Services&rdquo; means the support and maintenance services
+            provided by Halcyon to Northbridge Retail pursuant to this SaaS Agreement and Exhibit
+            B.</p>
+
+            <h5>4. GENERAL</h5>
+            <p>Neither party shall be liable for any failure to perform caused by circumstances
+            beyond its reasonable control, provided that a force majeure event continuing beyond
+            ninety (90) days entitles either party to terminate the affected Order.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- fields panel -->
+      <div class="panel">
+        <div class="panelbar">
+          <span class="fcount">128 Fields
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-d"/></svg>
+          </span>
+          <span class="sp"></span>
+          <span class="pi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-search"/></svg></span>
+          <span class="pi"><svg viewBox="0 0 20 20" fill="currentColor"><use href="#i-kebab"/></svg></span>
+        </div>
+        <div class="panelscroll" id="panelscroll"></div>
+      </div>
+
+      <!-- right icon rail -->
+      <div class="rrail" aria-hidden="true">
+        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-lines"/></svg></span>
+        <span class="rr on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><use href="#i-fields"/></svg></span>
+        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><use href="#i-note"/></svg></span>
+        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chat"/></svg></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="cur"></div>
+<div id="cap">Prototype, playing a recorded sequence &middot; hover a highlight, or click Accept</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* shape carries the type — circle for metadata, square for a clause */
+  var FIELDS = [
+    { k:'type',   name:'Agreement Type',     val:'Software as a Service Agreement', shape:'circle', n:1, of:1 },
+    { k:'parties',name:'Parties',            val:'Northbridge Retail',              shape:'circle', n:1, of:3 },
+    { k:'law',    name:'Governing Law',      val:'Delaware, USA',                   shape:'circle', n:1, of:1 },
+    { k:'admin',  name:'Administrator User', val:'Designated by the customer',      shape:'square', n:1, of:2 },
+    { k:'docs',   name:'Documentation',      val:'Provided by Halcyon',             shape:'square', n:1, of:1 },
+    { k:'term',   name:'Initial Term',       val:'36 months',                       shape:'circle', n:1, of:1 },
+    { k:'cure',   name:'Cure Period',        val:'30 days',                         shape:'square', n:1, of:1 },
+    { k:'pay',    name:'Payment Terms',      val:'Net 45 days',                     shape:'square', n:1, of:2 }
+  ];
+
+  var panel = document.getElementById('panelscroll');
+  var docScroll = document.getElementById('docscroll');
+  var cur = document.getElementById('cur');
+
+  function ico(id, opts){
+    opts = opts || {};
+    return '<svg viewBox="0 0 20 20" fill="' + (opts.fill || 'none') + '" stroke="'
+      + (opts.fill ? 'none' : 'currentColor') + '" stroke-width="' + (opts.w || 1.6)
+      + '" stroke-linecap="round" stroke-linejoin="round"><use href="#' + id + '"/></svg>';
+  }
+
+  FIELDS.forEach(function(f){
+    var el = document.createElement('div');
+    el.className = 'fcard';
+    el.id = 'fc-' + f.k;
+    el.innerHTML =
+      '<div class="fhead">'
+      +   '<span class="mk ' + f.shape + '"></span>'
+      +   '<span class="fname">' + f.name + '</span>'
+      +   '<span class="pager">' + ico('i-chev-l', {w:1.6})
+      +      '<b>' + f.n + '/' + f.of + '</b>' + ico('i-chev-r', {w:1.6}) + '</span>'
+      + '</div>'
+      + '<div class="fbody">'
+      +   '<div class="chipwrap"><span class="val">' + f.val
+      +      '<span class="tick">' + ico('i-check', {w:2.2}) + '</span></span></div>'
+      +   '<div class="acts">'
+      +     '<button class="accept" type="button">Accept</button>'
+      +     '<span class="ai">' + ico('i-pen', {w:1.5}) + '</span>'
+      +     '<span class="ai">' + ico('i-trash', {w:1.5}) + '</span>'
+      +     '<span class="sp"></span>'
+      +     '<span class="ai">' + ico('i-note', {w:1.4}) + '</span>'
+      +   '</div>'
+      + '</div>';
+    panel.appendChild(el);
+  });
+
+  var els = FIELDS.map(function(f){
+    return {
+      f: f,
+      card: document.getElementById('fc-' + f.k),
+      mk:   document.querySelector('#fc-' + f.k + ' .mk'),
+      val:  document.querySelector('#fc-' + f.k + ' .val'),
+      btn:  document.querySelector('#fc-' + f.k + ' .accept'),
+      mark: document.querySelector('mark[data-f="' + f.k + '"]')
+    };
+  });
+
+  /* controlled easing so the scroll matches the rest of the motion */
+  var raf = null;
+  function glideScroll(el, to, ms){
+    if (raf) cancelAnimationFrame(raf);
+    var from = el.scrollTop, t0 = performance.now();
+    return new Promise(function(res){
+      (function step(now){
+        var t = Math.min(1, (now - t0) / ms);
+        var e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+        el.scrollTop = from + (to - from) * e;
+        if (t < 1) raf = requestAnimationFrame(step); else res();
+      })(performance.now());
+    });
+  }
+  function scrollToMark(mk){
+    if (!mk) return Promise.resolve();
+    var target = mk.offsetTop - docScroll.clientHeight * 0.32;
+    var max = docScroll.scrollHeight - docScroll.clientHeight;
+    return glideScroll(docScroll, Math.max(0, Math.min(max, target)), 950);
+  }
+
+  var idx = 0, stopped = false, timers = [];
+  function sleep(ms){ return new Promise(function(r){ timers.push(setTimeout(r, ms)); }); }
+
+  function openField(i){
+    els.forEach(function(e, j){
+      e.card.classList.toggle('open', j === i);
+      if (j === i) e.mk.classList.add('on');
+      if (e.mark) e.mark.classList.toggle('live', j === i);
+    });
+  }
+
+  async function acceptCurrent(){
+    var e = els[idx];
+    e.val.classList.add('ok');            /* the tick lands only now */
+    await sleep(640);                     /* the beat a real review has */
+    if (e.mark) { e.mark.classList.remove('live'); e.mark.classList.add('done'); }
+    idx++;
+    if (idx >= els.length) return false;
+    openField(idx);
+    await scrollToMark(els[idx].mark);
+    return true;
+  }
+
+  els.forEach(function(e, i){
+    e.btn.addEventListener('click', function(){
+      stopped = true; cur.style.opacity = '0';
+      timers.forEach(clearTimeout); timers = [];
+      if (i === idx) acceptCurrent();
+    });
+  });
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function glideCursor(to, ms){
+    return new Promise(function(res){
+      var from = { x: parseFloat(cur.dataset.x || to.x), y: parseFloat(cur.dataset.y || to.y) };
+      var t0 = performance.now();
+      (function step(now){
+        if (stopped) return res();
+        var t = Math.min(1, (now - t0) / ms);
+        var e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+        var x = from.x + (to.x - from.x) * e, y = from.y + (to.y - from.y) * e;
+        cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+        cur.dataset.x = x; cur.dataset.y = y;
+        if (t < 1) requestAnimationFrame(step); else res();
+      })(performance.now());
+    });
+  }
+  async function press(){
+    cur.style.transform += ' scale(.78)';
+    await sleep(130);
+    cur.style.transform = cur.style.transform.replace(' scale(.78)', '');
+  }
+
+  function reset(){
+    idx = 0;
+    els.forEach(function(e){
+      e.card.classList.remove('open');
+      e.mk.classList.remove('on');
+      e.val.classList.remove('ok');
+      if (e.mark) e.mark.classList.remove('live', 'done');
+    });
+    docScroll.scrollTop = 0;
+    openField(0);
+  }
+
+  /* hover the passage in the contract: the value comes to the reader */
+  async function demoHover(e){
+    if (!e.mark || stopped) return;
+    var rects = e.mark.getClientRects(), r = rects[0] || e.mark.getBoundingClientRect();
+    await glideCursor({ x: r.left + Math.min(r.width, 120) * 0.5, y: r.top + r.height / 2 }, 760);
+    if (stopped) return;
+    e.mark.classList.add('hot');
+    showTip(e);
+    await sleep(1500);
+    hideTip();
+    e.mark.classList.remove('hot');
+    await sleep(240);
+  }
+
+  /* the row of things a reviewer can do instead of accepting */
+  async function demoActions(e){
+    if (stopped) return;
+    var icons = e.card.querySelectorAll('.ai');
+    for (var i = 0; i < 2 && !stopped; i++){
+      var r = icons[i].getBoundingClientRect();
+      await glideCursor({ x: r.left + r.width/2, y: r.top + r.height/2 }, 460);
+      icons[i].classList.add('hot');
+      await sleep(620);
+      icons[i].classList.remove('hot');
+    }
+    await sleep(180);
+  }
+
+  async function cycle(){
+    reset();
+    await sleep(950);
+    cur.style.opacity = '1';
+    for (var n = 0; n < els.length && !stopped; n++){
+      var e = els[idx];
+      /* every few fields, show the reader what else this screen does */
+      if (n === 0 || n === 3 || n === 6) await demoHover(e);
+      if (n === 1) await demoActions(e);
+      if (stopped) break;
+      var b = e.btn.getBoundingClientRect();
+      await glideCursor({ x: b.right - 14, y: b.bottom - 7 }, 800);
+      await sleep(380);
+      await press();
+      var more = await acceptCurrent();
+      if (!more) break;
+      await sleep(680);
+    }
+    cur.style.opacity = '0';
+    await sleep(1500);
+  }
+  async function run(){ while (!stopped) { await cycle(); } }
+
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) { stopped = true; timers.forEach(clearTimeout); timers = []; }
+    else if (stopped && !reduce) { stopped = false; run(); }
+  });
+
+  /* document hover values — the tooltip the case study describes */
+  var dtip = document.createElement('div');
+  dtip.id = 'dtip';
+  document.body.appendChild(dtip);
+  function showTip(e){
+    if (!e.mark) return;
+    dtip.innerHTML = '<div class="th"><span class="mk ' + e.f.shape
+      + ' on"></span>' + e.f.name + '</div><div class="tc"><span class="tval">'
+      + e.f.val + '</span></div>';
+    var rects = e.mark.getClientRects(), r = rects[0] || e.mark.getBoundingClientRect();
+    dtip.style.left = Math.max(8, Math.min(r.left, innerWidth - 244)) + 'px';
+    dtip.style.top = (r.bottom + 9) + 'px';
+    dtip.classList.add('on');
+  }
+  function hideTip(){ dtip.classList.remove('on'); }
+  els.forEach(function(e){
+    if (!e.mark) return;
+    e.mark.addEventListener('mouseenter', function(){ showTip(e); });
+    e.mark.addEventListener('mouseleave', hideTip);
+  });
+
+  openField(0);
+  if (reduce) {
+    document.getElementById('cap').textContent = 'Prototype — motion reduced; click Accept to step through';
+  } else {
+    addEventListener('load', function(){ setTimeout(run, 700); });
+  }
+})();
+</script>
+</body>
+</html>

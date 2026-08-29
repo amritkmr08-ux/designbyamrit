@@ -135,6 +135,22 @@
 
   /* figure plate */
   figure { margin: 44px 0 0; }
+  .protoframe {
+    position: relative; margin-top: 26px;
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    background: #fff; height: 620px; padding-top: 30px;
+    box-shadow: 0 1px 2px rgba(25,26,24,.04), 0 16px 34px -24px rgba(25,26,24,.2);
+  }
+  .protoframe::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 30px; z-index: 2;
+    background-color: #F2F2EF; border-bottom: 1px solid var(--line);
+    background-image:
+      radial-gradient(circle 3.5px at 17px 15px, #D3D4CE 100%, transparent 100%),
+      radial-gradient(circle 3.5px at 33px 15px, #D3D4CE 100%, transparent 100%),
+      radial-gradient(circle 3.5px at 49px 15px, #D3D4CE 100%, transparent 100%);
+  }
+  .protoframe iframe { display: block; border: 0; width: 100%; height: 100%; background: #fff; }
+  @media (max-width: 860px) { .protoframe { height: 460px; } }
   .plate {
     background: #FBFBFA; border: 1px solid var(--line); border-radius: 6px;
     padding: 20px; overflow: hidden;
@@ -312,6 +328,7 @@
     <a href="#principles">What lawyers asked for</a>
     <a href="#origin">Where the shape came from</a>
     <a href="#iterations">Three attempts</a>
+    <a href="#loop">The document moves</a>
     <a href="#colour">Colour was not enough</a>
     <a href="#uncertainty">The number we did not show</a>
     <a href="#wrong">When it is wrong</a>
@@ -560,6 +577,41 @@
   </div>
 </section>
 
+<section id="loop">
+  <div class="wrap narrow">
+    <h2 class="reveal">The document moves, not the reviewer</h2>
+    <div class="body-text reveal">
+      <p class="lede">The assist bars gave the review a sequence. What makes the sequence work is
+      what happens after a single click.</p>
+      <p>Accept a value and three things follow, in that order rather than all at once. The tick
+      lands on the value, because a person just decided it. A beat later the card closes and the
+      next field opens. And the contract scrolls itself to the passage that next value was taken
+      from, with the passage lit.</p>
+      <p>The beat in the middle is doing real work. If the confirmation and the change of view
+      happened in the same instant, the reviewer would lose sight of what they had just agreed to.
+      The tick gets its own moment before anything else moves.</p>
+      <p>What leaves the loop is the navigation. It used to run: read the proposed value, scroll the
+      document, find the clause, compare, scroll back, click. The reading and the deciding stay.
+      The searching is gone, because the evidence for the next decision is already on screen by the
+      time the reviewer gets there.</p>
+      <p>That is also the answer to the question this whole product turns on. You do not get a
+      lawyer to trust a machine by telling them it is accurate. You put the source in front of them
+      before they ask for it, on every value, without making them work for it.</p>
+    </div>
+
+  </div>
+
+  <div class="wrap">
+    <div class="protoframe reveal">
+      <iframe src="ae-review-loop.html" loading="lazy"
+              title="Working prototype: accepting an extracted value confirms it, advances to the next field, and scrolls the contract to the passage that value came from."></iframe>
+    </div>
+    <figcaption style="margin-top:14px"><b>Fig. 04 · The review loop</b>
+    <span>Running prototype, playing a recorded sequence. Click Accept yourself and it hands over.
+    The interaction is the real one; the contract and the party names are invented.</span></figcaption>
+  </div>
+</section>
+
 <section id="colour">
   <div class="wrap narrow">
     <h2 class="reveal">Colour was not enough on its own</h2>
@@ -614,7 +666,7 @@
                alt="The review card broken into its parts: multi-value navigation, the field title and extracted value, the model's reasoning in plain language, numbered references back into the document, and the accept, edit and delete actions." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 04 · The card</b>
+      <figcaption><b>Fig. 05 · The card</b>
       <span>Four bands, in the order a reviewer needs them: what was found, why, where from, and
       what to do about it.</span></figcaption>
     </figure>
@@ -661,7 +713,7 @@
                alt="A party value being corrected in place: an editable field reading SailPoint Technologies with done and cancel controls beneath it." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 05 · Correcting in place</b>
+      <figcaption><b>Fig. 06 · Correcting in place</b>
       <span>The correction happens on the card, next to the passage it came from.</span></figcaption>
     </figure>
 
@@ -689,7 +741,7 @@
                alt="The training screen for one field category, showing counts of all selected data, user-tagged data, missed values, incorrectly captured values and uploaded data, with a note that a minimum of twenty data points is required before a model can be trained." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 06 · Corrections, sorted</b>
+      <figcaption><b>Fig. 07 · Corrections, sorted</b>
       <span>Failures counted by type rather than lumped together. Design exploration; the row
       content is placeholder text.</span></figcaption>
     </figure>
@@ -782,7 +834,7 @@
                alt="The final filter: a dropdown with fields grouped into named categories and counts, nested under a performance review heading." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 07 · Where it landed</b>
+      <figcaption><b>Fig. 08 · Where it landed</b>
       <span>Grouped and hierarchical. Clutter removed without hiding anything a reviewer needs to
       reach.</span></figcaption>
     </figure>
@@ -863,7 +915,7 @@
                  alt="Two analytics tables from Heap showing month-over-month return rates for the module before and after the revamp." loading="lazy" />
           </picture>
         </div>
-        <figcaption><b>Fig. 08 · The source</b>
+        <figcaption><b>Fig. 09 · The source</b>
         <span>Product analytics, captured 16 June 2025. Both windows are eight months, same module,
         same measure.</span></figcaption>
       </figure>
