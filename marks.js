@@ -98,13 +98,19 @@
     }
 
     bPin.addEventListener('click', function () {
-      if (isPinned(id)) {
+      var wasPinned = isPinned(id);
+      if (wasPinned) {
         store.pins = store.pins.filter(function (x) { return x.k !== key(id); });
       } else {
         store.pins.push({ k: key(id), page: PAGE, pageTitle: PAGE_TITLE,
                           id: id, title: title.textContent.trim() });
       }
       save(); flagTools(); paint();
+      if (!wasPinned) {
+        bPin.classList.remove('pin-settle'); void bPin.offsetWidth;
+        bPin.classList.add('pin-settle');
+        setTimeout(function () { bPin.classList.remove('pin-settle'); }, 600);
+      }
     });
 
     if (bSum) bSum.addEventListener('click', function () {
@@ -189,7 +195,7 @@
     panel.classList.remove('on'); veil.classList.remove('on');
     dock.classList.remove('hidden');
     resetArm(false);
-    setTimeout(function () { panel.hidden = true; }, 300);
+    setTimeout(function () { panel.hidden = true; }, 220);
     if (opener) opener.focus();
   }
   xBtn.addEventListener('click', hide);
@@ -273,8 +279,8 @@
 
     f.innerHTML =
       '<span class="where">' +
-        (total ? 'Kept in this browser only \u2014 send it to yourself to keep it.'
-               : 'Anything you keep stays in this browser. Take the portfolio with you:') +
+        (total ? 'Pick up where you left off — email yourself what you kept. It only lives in this browser.'
+               : 'Pick this up later — email yourself a copy. It only lives in this browser.') +
       '</span>' +
       '<div class="row">' +
         '<a class="mk-send" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" ' +

@@ -48,6 +48,26 @@
 .mk-btn.on svg .fillable { fill: currentColor; }
 .mk-btn svg { pointer-events: none; }
 
+/* the one expressive beat: a section just got kept. everything else on this
+   panel stays quiet, but this specific moment — committing something to
+   memory — earns a little life. plays once, on the transition to "on" only. */
+@keyframes mk-pin-settle {
+  0%   { transform: scale(1) rotate(0deg); }
+  30%  { transform: scale(1.32) rotate(-10deg); }
+  55%  { transform: scale(0.9) rotate(6deg); }
+  78%  { transform: scale(1.08) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes mk-pin-bloom {
+  0%   { box-shadow: 0 0 0 0 var(--mk-acc-bg); }
+  100% { box-shadow: 0 0 0 9px rgba(61,90,69,0); }
+}
+.mk-btn.pin-settle svg { animation: mk-pin-settle .55s cubic-bezier(.34,1.56,.64,1); transform-origin: 50% 82%; }
+.mk-btn.pin-settle { animation: mk-pin-bloom .55s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-btn.pin-settle svg, .mk-btn.pin-settle { animation: none; }
+}
+
 /* tooltip */
 .mk-btn { position: relative; }
 .mk-btn::after {
@@ -146,11 +166,22 @@
   box-shadow: 0 24px 60px -20px rgba(25,26,24,.28), 0 4px 18px -6px rgba(25,26,24,.12);
   display: flex; flex-direction: column; overflow: hidden;
   font-family: var(--mk-font); color: var(--mk-ink);
-  transform: translateX(calc(100% + 20px));
-  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+  /* same physics as the pin settling in — one motion signature for the
+     whole feature, not a generic drawer slide. arriving gets the spring;
+     leaving is quick and gets out of the way, on purpose — asymmetric,
+     the way a real object would move. */
+  transform: translateX(calc(100% + 20px)) scale(.96);
+  opacity: 0;
+  transition: transform .22s cubic-bezier(.4,0,1,1), opacity .18s ease;
 }
-.mk-panel.on { transform: none; }
+.mk-panel.on {
+  transform: none; opacity: 1;
+  transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .28s ease;
+}
 .mk-panel[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-panel { transition: opacity .2s ease; transform: none; }
+}
 .mk-dock.hidden { opacity: 0; pointer-events: none; }
 
 /* head: eyebrow over a Poppins title, closed by a hairline — like every section on the site */
@@ -191,7 +222,7 @@
 .mk-tab.on { color: var(--mk-ink); border-bottom-color: var(--mk-ink); }
 .mk-tab .n { color: var(--mk-faint); font-weight: 400; }
 
-.mk-body { overflow-y: auto; padding: 26px 34px 40px; flex: 1; }
+.mk-body { overflow-y: auto; padding: 30px 34px 40px; flex: 1; }
 .mk-pane { display: none; }
 .mk-pane.on { display: block; }
 
