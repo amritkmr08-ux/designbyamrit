@@ -102,15 +102,14 @@
 .mk-dock {
   position: fixed; right: 24px; bottom: 24px; z-index: 50;
   width: 244px; max-width: calc(100vw - 48px);
-  padding: 13px 15px 14px;
-  background: var(--mk-bg); border: 1px solid var(--mk-line); border-radius: 3px;
-  border-top: 2px solid var(--mk-ink);
-  box-shadow: 0 10px 26px -18px rgba(25,26,24,.3);
+  padding: 15px 16px;
+  background: #fff; border: 1px solid var(--mk-line); border-radius: 16px;
+  box-shadow: 0 12px 32px -14px rgba(25,26,24,.22), 0 2px 8px -2px rgba(25,26,24,.08);
   cursor: pointer; text-align: left;
   font-family: var(--mk-font); color: var(--mk-ink);
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
-.mk-dock:hover { box-shadow: 0 14px 30px -18px rgba(25,26,24,.38); }
+.mk-dock:hover { box-shadow: 0 16px 38px -14px rgba(25,26,24,.28), 0 3px 10px -2px rgba(25,26,24,.1); transform: translateY(-1px); }
 .mk-dock .glyph { display: none; }
 .mk-dock .t {
   display: block;
@@ -122,12 +121,12 @@
   font-size: 12px; line-height: 1.5; color: var(--mk-muted);
 }
 .mk-dock .kbd {
-  position: absolute; top: 12px; right: 12px;
+  position: absolute; top: 14px; right: 14px;
   font-size: 10px; color: var(--mk-faint);
-  border: 1px solid var(--mk-line); border-radius: 3px; padding: 0 4px; line-height: 15px;
+  border: 1px solid var(--mk-line); border-radius: 6px; padding: 1px 5px; line-height: 15px;
 }
 .mk-dock .t, .mk-dock .s { padding-right: 24px; }
-.mk-dock.has { border-top-color: var(--mk-acc); }
+.mk-dock.has { border-color: var(--mk-acc-bd); }
 .mk-dock.has .s { color: var(--mk-acc); }
 
 @media (max-width: 1080px) { .mk-dock { width: auto; } .mk-dock .s, .mk-dock .kbd { display: none; } }
@@ -141,12 +140,13 @@
 .mk-veil.on { opacity: 1; pointer-events: auto; }
 
 .mk-panel {
-  position: fixed; top: 0; right: 0; height: 100vh; z-index: 51;
-  width: min(500px, 100vw);
-  background: var(--mk-bg); border-left: 1px solid var(--mk-line);
+  position: fixed; top: 10px; right: 10px; bottom: 10px; z-index: 51;
+  width: min(480px, calc(100vw - 20px)); height: calc(100vh - 20px);
+  background: #fff; border-radius: 22px;
+  box-shadow: 0 24px 60px -20px rgba(25,26,24,.28), 0 4px 18px -6px rgba(25,26,24,.12);
   display: flex; flex-direction: column; overflow: hidden;
   font-family: var(--mk-font); color: var(--mk-ink);
-  transform: translateX(100%);
+  transform: translateX(calc(100% + 20px));
   transition: transform .3s cubic-bezier(.22,.61,.36,1);
 }
 .mk-panel.on { transform: none; }
@@ -156,10 +156,10 @@
 /* head: eyebrow over a Poppins title, closed by a hairline — like every section on the site */
 .mk-head {
   display: block; position: relative;
-  padding: 30px 34px 0; flex: none;
+  padding: 32px 34px 0; flex: none;
 }
 .mk-head .glyph { display: none; }
-.mk-head .ttl { display: block; border-top: 2px solid var(--mk-ink); padding-top: 20px; }
+.mk-head .ttl { display: block; }
 .mk-head h2 {
   font-family: var(--mk-disp); font-weight: 400; font-size: 24px;
   letter-spacing: -0.025em; line-height: 1.2; margin: 0; max-width: none;
@@ -169,17 +169,17 @@
   font-size: 13.5px; line-height: 1.6; color: var(--mk-muted); max-width: 44ch;
 }
 .mk-x {
-  position: absolute; top: 52px; right: 34px;
-  background: none; border: 0; cursor: pointer;
-  font-family: var(--mk-font); font-size: 13px; color: var(--mk-faint); padding: 2px 0;
-  border-bottom: 1px solid transparent;
+  position: absolute; top: 30px; right: 30px;
+  background: var(--mk-soft); border: 0; border-radius: 8px; cursor: pointer;
+  font-family: var(--mk-font); font-size: 12.5px; color: var(--mk-muted); padding: 7px 12px;
+  transition: background .15s ease, color .15s ease;
 }
-.mk-x:hover { color: var(--mk-ink); border-bottom-color: var(--mk-line); }
+.mk-x:hover { color: var(--mk-ink); background: var(--mk-line); }
 
 /* tabs: quiet text, ink underline for the active one — nav language, not app tabs */
 .mk-tabs {
-  display: flex; gap: 24px; padding: 22px 34px 0;
-  border-bottom: 1px solid var(--mk-line); flex: none;
+  display: flex; gap: 24px; padding: 26px 34px 0;
+  flex: none;
 }
 .mk-tab {
   background: none; border: 0; cursor: pointer; padding: 0 0 12px;
@@ -196,7 +196,8 @@
 .mk-pane.on { display: block; }
 
 .mk-foot {
-  flex: none; padding: 14px 34px 18px; border-top: 1px solid var(--mk-line);
+  flex: none; padding: 18px 34px 22px; margin: 0 14px 14px; border-radius: 16px;
+  background: var(--mk-soft);
   font-size: 12px; color: var(--mk-faint);
 }
 .mk-foot .where { display: block; margin-bottom: 8px; line-height: 1.6; }
@@ -248,8 +249,8 @@
 }
 .mk-jump:hover { text-decoration: underline; text-underline-offset: 3px; }
 .mk-num {
-  display: flex; gap: 26px; flex-wrap: wrap; margin: 6px 0 4px;
-  padding: 14px 0; border-top: 1px solid var(--mk-line); border-bottom: 1px solid var(--mk-line);
+  display: flex; gap: 26px; flex-wrap: wrap; margin: 10px 0 4px;
+  padding: 16px 18px; border-radius: 14px; background: var(--mk-soft);
 }
 .mk-num div { font-size: 12.5px; color: var(--mk-muted); line-height: 1.45; }
 .mk-num b {
