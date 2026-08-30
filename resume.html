@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Résumé · Amrit Kumar</title>
+<meta name="description" content="Amrit Kumar — Product Designer, AI systems. Experience, practice and education, with links to the case studies behind the numbers." />
+<meta property="og:title" content="Résumé · Amrit Kumar" />
+<meta property="og:description" content="Product Designer, AI systems. Experience, practice and education, with links to the case studies behind the numbers." />
+<meta property="og:type" content="profile" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/resume.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#8B8D87;
+    --line:#E3E3DF;--soft:#EDEDEA;--mark:#DCE5D3;--accent:#3D5A45;
+    --measure:760px;
+    --display:"Poppins",-apple-system,sans-serif;
+    --font:"Inter","Poppins",-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--font);
+    font-size:17px;font-weight:400;line-height:1.65;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    font-feature-settings:"kern" 1,"liga" 1;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--mark)}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  .wrap{max-width:var(--measure);margin:0 auto;padding:0 40px}
+  h1,h2,h3,.lede{text-wrap:balance}
+  p{text-wrap:pretty}
+
+  /* top bar */
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:32px 0}
+  .topbar a{font-family:var(--display);font-size:12px;letter-spacing:.08em;color:var(--faint)}
+  .topbar a:hover{color:var(--ink)}
+
+  /* hero */
+  .hero{padding:20px 0 44px}
+  .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:400;margin-bottom:18px}
+  .name{font-family:var(--display);font-weight:500;letter-spacing:-.03em;line-height:.98;
+    font-size:clamp(52px,9.5vw,108px);margin-bottom:26px}
+  .name span{display:block}
+  .role{font-family:var(--display);font-size:clamp(18px,2vw,22px);color:var(--muted);font-weight:400;margin-bottom:36px}
+
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-top:28px;border-top:1px solid var(--line)}
+  .meta .lb{font-family:var(--display);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+  .meta .vl{font-size:14.5px;color:var(--ink)}
+  .meta a.vl{color:var(--accent)}
+  .meta a.vl:hover{color:var(--ink)}
+
+  .lede{font-size:19.5px;line-height:1.6;color:var(--ink);margin-top:44px;max-width:620px}
+
+  /* bracket stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+  .stat{padding:22px 8px;text-align:center;position:relative}
+  .stat .br{font-family:var(--display);font-weight:300;font-size:26px;color:var(--line);position:absolute;top:14px}
+  .stat .br.l{left:0}
+  .stat .br.r{right:0}
+  .stat .num{font-family:var(--display);font-size:clamp(26px,3.4vw,34px);font-weight:500;color:var(--accent);letter-spacing:-.01em}
+  .stat .cap{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+
+  .rule{border-top:1px solid var(--line);margin:56px 0}
+
+  /* section label */
+  .sec{padding-bottom:56px}
+  .sec .slb{font-family:var(--display);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:26px}
+
+  /* date-left / content-right rows */
+  .row{display:grid;grid-template-columns:150px 1fr;gap:28px;padding:28px 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:none}
+  .row .dt{font-family:var(--display);font-size:13px;color:var(--faint);padding-top:2px}
+  .row h3{font-family:var(--display);font-size:18px;font-weight:500;letter-spacing:-.01em;margin-bottom:6px}
+  .row .org{font-size:14.5px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+  .row .stat-line{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px}
+  .row .stat-cap{font-size:13px;color:var(--faint);margin-bottom:16px}
+  .row ul{list-style:none}
+  .row li{position:relative;padding-left:16px;font-size:15px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+  .row li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+
+  /* compact rows (earlier / education) */
+  .crow{display:grid;grid-template-columns:150px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line);align-items:baseline}
+  .crow:first-of-type{border-top:none}
+  .crow .dt{font-family:var(--display);font-size:13px;color:var(--faint)}
+  .crow .vl{font-size:15px;color:var(--ink)}
+
+  /* practice */
+  .prow{display:grid;grid-template-columns:150px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line)}
+  .prow:first-of-type{border-top:none}
+  .prow .lb{font-family:var(--display);font-size:13px;color:var(--faint)}
+  .prow .vl{font-size:15px;color:var(--muted);line-height:1.6}
+
+  .plain{font-size:15px;color:var(--muted)}
+
+  .cslinks{display:flex;flex-wrap:wrap;gap:10px 28px}
+  .cslinks a{font-family:var(--display);font-size:14.5px;color:var(--accent)}
+  .cslinks a:hover{color:var(--ink)}
+
+  footer.fin{padding:20px 0 80px}
+  footer.fin .links{display:flex;gap:26px;flex-wrap:wrap}
+  footer.fin .links a{font-family:var(--display);font-size:13px;color:var(--ink)}
+  footer.fin .links a:hover{color:var(--accent)}
+
+  @media (max-width:760px){
+    .wrap{padding:0 22px}
+    .meta{grid-template-columns:repeat(2,1fr)}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .row,.crow,.prow{grid-template-columns:1fr;gap:8px}
+    .row .dt,.crow .dt,.prow .lb{padding-top:0}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <a href="index.html">← Portfolio</a>
+    <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Download PDF ↓</a>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow">Résumé</p>
+    <h1 class="name"><span>Amrit</span><span>Kumar</span></h1>
+    <p class="role">Product Designer, AI systems</p>
+
+    <div class="meta">
+      <div><p class="lb">Location</p><p class="vl">Noida, India</p></div>
+      <div><p class="lb">Email</p><p class="vl"><a class="vl" href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a></p></div>
+      <div><p class="lb">Phone</p><p class="vl">+91 95602 55168</p></div>
+      <div><p class="lb">Portfolio</p><p class="vl"><a class="vl" href="index.html">View portfolio →</a></p></div>
+    </div>
+
+    <p class="lede">I design how humans and AI agents share judgment in enterprise work, especially where decisions are hard and being wrong is expensive.</p>
+
+    <div class="stats">
+      <div class="stat"><span class="br l">[</span><span class="br r">]</span><p class="num">23%</p><p class="cap">month-four retention, up from 5%</p></div>
+      <div class="stat"><span class="br l">[</span><span class="br r">]</span><p class="num">18%</p><p class="cap">faster review</p></div>
+      <div class="stat"><span class="br l">[</span><span class="br r">]</span><p class="num">15%</p><p class="cap">fewer errors</p></div>
+      <div class="stat"><span class="br l">[</span><span class="br r">]</span><p class="num">9%</p><p class="cap">lower call volume, Airtel</p></div>
+    </div>
+  </header>
+
+  <div class="rule"></div>
+
+  <section class="sec">
+    <p class="slb">Experience</p>
+
+    <div class="row">
+      <p class="dt">2021 to now</p>
+      <div>
+        <h3>Product Designer, Sirion.ai</h3>
+        <p class="org">Enterprise contract lifecycle management, used by global legal teams. Directions shaped with designers, product managers, engineers and legal subject-matter experts.</p>
+        <p class="stat-line">Month-four retention 5% to 23% · review 18% faster · error rate down 15%</p>
+        <p class="stat-cap">An AI review tool I redesigned. Product analytics, two eight-month windows, June 2025.</p>
+        <ul>
+          <li>Argued the contract model had to describe how contracts relate, not where documents sit, since one amendment can govern several agreements. The relationship model was approved and prioritised for build.</li>
+          <li>Wrote an intent model for when an agent should explain, suggest, act, or stay out of the way. Adopted as design direction for the next-generation platform.</li>
+          <li>Built HTML prototypes at production scale to settle structural decisions. A 340-record layout failed at zero legible labels and was replaced.</li>
+          <li>Created and maintain a sixty-term glossary for agentic contract work.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <p class="dt">2019 to 2021</p>
+      <div>
+        <h3>UX Designer, Bharti Airtel</h3>
+        <p class="org">Airtel Thanks, one of India's largest consumer apps.</p>
+        <p class="stat-line">Call volume down 9% · daily engagement up 15%</p>
+        <ul>
+          <li>Redesigned help and support around predicted intent instead of a menu. One issue was driving over four million calls.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <p class="slb">Earlier</p>
+    <div class="crow"><p class="dt">2019</p><p class="vl">UI/UX Designer, Think Matra</p></div>
+    <div class="crow"><p class="dt">2018 to 2019</p><p class="vl">Senior Creative UI Designer, Great Place to Study</p></div>
+    <div class="crow"><p class="dt">2017 to 2018</p><p class="vl">Co-founder and Creative Director, Zhero Denim</p></div>
+    <div class="crow"><p class="dt">2013 to 2017</p><p class="vl">Graphic and Product Designer, Lee Cooper</p></div>
+  </section>
+
+  <section class="sec">
+    <p class="slb">Practice</p>
+    <div class="prow"><p class="lb">Design</p><p class="vl">Interaction design, information architecture, user research, design systems</p></div>
+    <div class="prow"><p class="lb">AI product</p><p class="vl">Agentic workflows, human-in-the-loop review, provenance, uncertainty and trust</p></div>
+    <div class="prow"><p class="lb">Tools</p><p class="vl">Figma, FigJam, HTML, CSS and JavaScript, Miro, Adobe CC</p></div>
+  </section>
+
+  <section class="sec">
+    <p class="slb">Education</p>
+    <div class="crow"><p class="dt">2025 to 2026</p><p class="vl">Executive Development Program in Strategy and Leadership, XLRI Delhi-NCR</p></div>
+    <div class="crow"><p class="dt">2020</p><p class="vl">Design Thinking: From Insights to Viability, Stanford Graduate School of Business, online</p></div>
+    <div class="crow"><p class="dt">2013</p><p class="vl">Bachelor of Design, NIFT Chennai</p></div>
+    <div class="crow"><p class="dt">2011</p><p class="vl">Product Design Trainee, IIT Guwahati</p></div>
+  </section>
+
+  <section class="sec">
+    <p class="slb">Recognition</p>
+    <p class="plain">Lightning Talk, UX India 2023 · Best AI-Driven Design Concept, Sirion 2024</p>
+  </section>
+
+  <section class="sec" style="padding-bottom:0">
+    <p class="slb">Case studies</p>
+    <div class="cslinks">
+      <a href="contract-understanding.html">Contract relationships →</a>
+      <a href="auto-extraction.html">Verifying AI extraction →</a>
+      <a href="intent-model.html">The intent model →</a>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <footer class="fin">
+    <div class="links">
+      <a href="index.html">← Back to portfolio</a>
+      <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Download PDF</a>
+      <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:amritkmr08@gmail.com">Write to me</a>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
