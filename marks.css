@@ -1,0 +1,351 @@
+/* ------------------------------------------------------------------
+   Reader marks — pin a section, open its summary, leave a note.
+   Shared across every page of the portfolio. No network, no AI calls.
+   ------------------------------------------------------------------ */
+
+:root {
+  --mk-ink:   #191A18;
+  --mk-muted: #5F625C;
+  --mk-faint: #8B8D87;
+  --mk-line:  #E3E3DF;
+  --mk-soft:  #EDEDEA;
+  --mk-bg:    #F7F7F5;
+  --mk-acc:   #3D5A45;
+  --mk-acc-bd:#C4D2C8;
+  --mk-acc-bg:#F1F6F2;
+  --mk-font:  "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mk-disp:  "Poppins", -apple-system, sans-serif;
+}
+
+/* ---------- section heading row: title left, tools pinned right ---------- */
+.mk-h2 {
+  display: flex !important; align-items: flex-start; justify-content: space-between;
+  gap: 28px; max-width: none !important; width: 100%;
+}
+.mk-h2 > .mk-title { max-width: 26ch; }
+
+/* one chip, so the row reads as an object rather than three loose marks */
+.mk-tools {
+  flex: none; display: flex; align-items: center; gap: 2px;
+  margin-top: 4px; padding: 3px;
+  background: #fff; border: 1px solid var(--mk-line); border-radius: 9px;
+  box-shadow: 0 1px 2px rgba(25,26,24,.04);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.mk-tools:hover { border-color: #C9CBC4; box-shadow: 0 1px 3px rgba(25,26,24,.07); }
+.mk-tools.has { border-color: var(--mk-acc-bd); }
+
+.mk-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0;
+  background: none; border: 0; border-radius: 6px;
+  cursor: pointer; color: var(--mk-muted);
+  transition: color .16s ease, background .16s ease;
+}
+.mk-btn:hover { color: var(--mk-ink); background: var(--mk-soft); }
+.mk-btn.on { color: var(--mk-acc); background: var(--mk-acc-bg); }
+.mk-btn.on:hover { background: #E4EFE7; }
+.mk-btn.on svg .fillable { fill: currentColor; }
+.mk-btn svg { pointer-events: none; }
+
+/* tooltip */
+.mk-btn { position: relative; }
+.mk-btn::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 7px); right: 0;
+  background: var(--mk-ink); color: var(--mk-bg);
+  font-family: var(--mk-font); font-size: 11.5px; line-height: 1;
+  white-space: nowrap; padding: 6px 9px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity .16s ease;
+}
+.mk-btn:hover::after { opacity: 1; }
+.mk-tools:hover .mk-btn:not(:hover)::after { opacity: 0; }
+
+/* ---------- inline summary + note, under the heading ---------- */
+.mk-drawer {
+  overflow: hidden; max-height: 0;
+  transition: max-height .34s cubic-bezier(.22,.61,.36,1);
+}
+.mk-drawer.open { max-height: 320px; }
+.mk-drawer-in {
+  margin: 16px 0 4px; padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--mk-acc);
+}
+.mk-drawer-in p.k {
+  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mk-faint); margin: 0 0 6px;
+}
+.mk-drawer-in p.s {
+  font-family: var(--mk-disp); font-size: 16.5px; font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.5; color: var(--mk-ink); margin: 0;
+}
+.mk-note textarea {
+  display: block; width: 100%; min-height: 74px; resize: vertical;
+  font-family: var(--mk-font); font-size: 14.5px; line-height: 1.55; color: var(--mk-ink);
+  background: transparent; border: 0; padding: 0; outline: none;
+}
+.mk-note textarea::placeholder { color: var(--mk-faint); }
+.mk-note .row {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--mk-soft);
+  font-size: 12px; color: var(--mk-faint);
+}
+.mk-note .row button {
+  background: none; border: 0; cursor: pointer; padding: 0;
+  font-family: var(--mk-font); font-size: 12px; color: var(--mk-muted);
+}
+.mk-note .row button:hover { color: var(--mk-ink); }
+.mk-note .row .said { margin-left: auto; }
+
+/* ---------- reading dock: same corner on every page ---------- */
+.mk-dock {
+  position: fixed; right: 24px; bottom: 24px; z-index: 50;
+  width: 244px; max-width: calc(100vw - 48px);
+  padding: 13px 15px 14px;
+  background: var(--mk-bg); border: 1px solid var(--mk-line); border-radius: 3px;
+  border-top: 2px solid var(--mk-ink);
+  box-shadow: 0 10px 26px -18px rgba(25,26,24,.3);
+  cursor: pointer; text-align: left;
+  font-family: var(--mk-font); color: var(--mk-ink);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.mk-dock:hover { box-shadow: 0 14px 30px -18px rgba(25,26,24,.38); }
+.mk-dock .glyph { display: none; }
+.mk-dock .t {
+  display: block;
+  font-family: var(--mk-disp); font-size: 14px; font-weight: 500;
+  letter-spacing: -0.01em; line-height: 1.3;
+}
+.mk-dock .s {
+  display: block; margin-top: 3px;
+  font-size: 12px; line-height: 1.5; color: var(--mk-muted);
+}
+.mk-dock .kbd {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 10px; color: var(--mk-faint);
+  border: 1px solid var(--mk-line); border-radius: 3px; padding: 0 4px; line-height: 15px;
+}
+.mk-dock .t, .mk-dock .s { padding-right: 24px; }
+.mk-dock.has { border-top-color: var(--mk-acc); }
+.mk-dock.has .s { color: var(--mk-acc); }
+
+@media (max-width: 1080px) { .mk-dock { width: auto; } .mk-dock .s, .mk-dock .kbd { display: none; } }
+@media (max-width: 560px) { .mk-dock { right: 14px; left: auto; bottom: 14px; } }
+
+/* ---------- panel: the site's own language, not app chrome ---------- */
+.mk-veil {
+  position: fixed; inset: 0; background: rgba(25,26,24,.28);
+  opacity: 0; pointer-events: none; transition: opacity .24s ease; z-index: 49;
+}
+.mk-veil.on { opacity: 1; pointer-events: auto; }
+
+.mk-panel {
+  position: fixed; top: 0; right: 0; height: 100vh; z-index: 51;
+  width: min(500px, 100vw);
+  background: var(--mk-bg); border-left: 1px solid var(--mk-line);
+  display: flex; flex-direction: column; overflow: hidden;
+  font-family: var(--mk-font); color: var(--mk-ink);
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+}
+.mk-panel.on { transform: none; }
+.mk-panel[hidden] { display: none; }
+.mk-dock.hidden { opacity: 0; pointer-events: none; }
+
+/* head: eyebrow over a Poppins title, closed by a hairline — like every section on the site */
+.mk-head {
+  display: block; position: relative;
+  padding: 30px 34px 0; flex: none;
+}
+.mk-head .glyph { display: none; }
+.mk-head .ttl { display: block; border-top: 2px solid var(--mk-ink); padding-top: 20px; }
+.mk-head h2 {
+  font-family: var(--mk-disp); font-weight: 400; font-size: 24px;
+  letter-spacing: -0.025em; line-height: 1.2; margin: 0; max-width: none;
+}
+.mk-head .desc {
+  display: block; margin-top: 8px;
+  font-size: 13.5px; line-height: 1.6; color: var(--mk-muted); max-width: 44ch;
+}
+.mk-x {
+  position: absolute; top: 52px; right: 34px;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--mk-font); font-size: 13px; color: var(--mk-faint); padding: 2px 0;
+  border-bottom: 1px solid transparent;
+}
+.mk-x:hover { color: var(--mk-ink); border-bottom-color: var(--mk-line); }
+
+/* tabs: quiet text, ink underline for the active one — nav language, not app tabs */
+.mk-tabs {
+  display: flex; gap: 24px; padding: 22px 34px 0;
+  border-bottom: 1px solid var(--mk-line); flex: none;
+}
+.mk-tab {
+  background: none; border: 0; cursor: pointer; padding: 0 0 12px;
+  font-family: var(--mk-font); font-size: 13.5px; color: var(--mk-faint);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .18s ease;
+}
+.mk-tab:hover { color: var(--mk-ink); }
+.mk-tab.on { color: var(--mk-ink); border-bottom-color: var(--mk-ink); }
+.mk-tab .n { color: var(--mk-faint); font-weight: 400; }
+
+.mk-body { overflow-y: auto; padding: 26px 34px 40px; flex: 1; }
+.mk-pane { display: none; }
+.mk-pane.on { display: block; }
+
+.mk-foot {
+  flex: none; padding: 14px 34px 18px; border-top: 1px solid var(--mk-line);
+  font-size: 12px; color: var(--mk-faint);
+}
+.mk-foot .where { display: block; margin-bottom: 8px; line-height: 1.6; }
+.mk-foot .row { display: flex; align-items: center; gap: 18px; }
+.mk-send {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: none; border: 0; padding: 0 0 1px; cursor: pointer; text-decoration: none;
+  font-family: var(--mk-font); font-size: 13px; color: var(--mk-ink);
+  border-bottom: 1px solid var(--mk-ink);
+}
+.mk-send:hover { color: var(--mk-acc); border-bottom-color: var(--mk-acc); }
+.mk-send svg { width: 13px; height: 13px; }
+.mk-hint { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mk-muted); }
+.mk-hint kbd {
+  font-family: var(--mk-font); font-size: 10.5px; color: var(--mk-faint);
+  border: 1px solid var(--mk-line); border-radius: 3px; padding: 0 4px; line-height: 15px;
+}
+.mk-foot .reset {
+  margin-left: auto; background: none; border: 0; cursor: pointer; padding: 0;
+  font-family: var(--mk-font); font-size: 12px; color: var(--mk-faint);
+  border-bottom: 1px solid var(--mk-line);
+}
+.mk-foot .reset:hover { color: #9A4A38; border-bottom-color: #D9B4AC; }
+.mk-foot .confirm { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.mk-foot .confirm span { color: var(--mk-ink); }
+.mk-foot .confirm button {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--mk-font); font-size: 12px;
+}
+.mk-foot .confirm .yes { color: #9A4A38; font-weight: 500; }
+.mk-foot .confirm .no { color: var(--mk-muted); }
+
+/* quick-read content: the site's type scale */
+.mk-lede {
+  font-family: var(--mk-disp); font-size: 18px; font-weight: 400; line-height: 1.42;
+  letter-spacing: -0.018em; margin-bottom: 26px;
+}
+.mk-b { margin-bottom: 24px; }
+.mk-b h3 {
+  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mk-faint); margin-bottom: 7px;
+}
+.mk-b p { font-size: 14.5px; line-height: 1.65; margin: 0; color: var(--mk-ink); }
+.mk-b p + p { margin-top: 7px; }
+.mk-jump {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 8px; font-size: 13px; color: var(--mk-acc); text-decoration: none;
+}
+.mk-jump:hover { text-decoration: underline; text-underline-offset: 3px; }
+.mk-num {
+  display: flex; gap: 26px; flex-wrap: wrap; margin: 6px 0 4px;
+  padding: 14px 0; border-top: 1px solid var(--mk-line); border-bottom: 1px solid var(--mk-line);
+}
+.mk-num div { font-size: 12.5px; color: var(--mk-muted); line-height: 1.45; }
+.mk-num b {
+  display: block; font-family: var(--mk-disp); font-size: 26px; font-weight: 400;
+  color: var(--mk-ink); letter-spacing: -0.03em;
+}
+
+.mk-empty { font-size: 14px; line-height: 1.7; color: var(--mk-muted); max-width: 40ch; }
+.mk-group { margin-bottom: 24px; }
+.mk-group > p.pg {
+  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mk-faint); margin-bottom: 4px;
+}
+.mk-item {
+  position: relative; display: flex; align-items: flex-start; gap: 8px;
+  border-bottom: 1px solid var(--mk-soft);
+}
+/* the whole row navigates — that is what someone actually wants later */
+.mk-item .go {
+  flex: 1; min-width: 0; display: block; padding: 12px 8px 12px 0;
+  text-decoration: none; color: inherit;
+}
+.mk-item .go .h {
+  display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--mk-disp); font-size: 15px; font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.4; color: var(--mk-ink);
+}
+.mk-item .go:hover .h { color: var(--mk-acc); }
+.mk-item .go .h .arw {
+  flex: none; color: var(--mk-faint); opacity: 0; transform: translateX(-3px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.mk-item .go:hover .h .arw { opacity: 1; transform: none; color: var(--mk-acc); }
+.mk-item .go p {
+  margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--mk-muted);
+  white-space: pre-wrap;
+}
+
+/* overflow menu */
+.mk-morewrap { position: relative; flex: none; align-self: center; display: inline-flex; }
+.mk-more {
+  flex: none; width: 28px; height: 28px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  cursor: pointer; color: var(--mk-faint);
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.mk-more:hover, .mk-more[aria-expanded="true"] {
+  color: var(--mk-ink); background: #EFEFEC;
+}
+.mk-menu {
+  position: absolute; z-index: 5; min-width: 172px;
+  background: var(--mk-bg); border: 1px solid var(--mk-line); border-radius: 3px;
+  box-shadow: 0 14px 30px -20px rgba(25,26,24,.35);
+  padding: 5px; display: none;
+}
+.mk-menu.on { display: block; }
+.mk-menu button {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  background: none; border: 0; border-radius: 5px; padding: 8px 10px;
+  cursor: pointer; text-align: left;
+  font-family: var(--mk-font); font-size: 13px; color: var(--mk-ink);
+}
+.mk-menu button:hover { background: #EFEFEC; }
+.mk-menu button svg { flex: none; width: 13px; height: 13px; }
+.mk-menu .sep { height: 1px; background: var(--mk-line); margin: 5px 4px; }
+.mk-menu .danger { color: #9A4A38; }
+.mk-menu .danger:hover { background: #FBEFEC; }
+
+.mk-actions { display: flex; align-items: center; gap: 18px; margin-top: 20px; flex-wrap: wrap; }
+.mk-do {
+  background: none; border: 0; padding: 0 0 1px; cursor: pointer;
+  font-family: var(--mk-font); font-size: 13.5px; color: var(--mk-ink);
+  border-bottom: 1px solid var(--mk-ink);
+}
+.mk-do:hover { color: var(--mk-acc); border-bottom-color: var(--mk-acc); }
+.mk-actions { align-items: center; }
+.mk-actions .mk-morewrap { margin-left: 2px; }
+
+@media (max-width: 1080px) {
+  .mk-open { width: auto; margin: 0; }
+  .mk-open .kbd { display: none; }
+    .mk-h2 { display: block; }
+  .mk-tools { margin-top: 12px; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-panel, .mk-veil, .mk-drawer { transition: none; }
+}
+
+/* controls attached to a small label: same size, centred instead of top-aligned */
+.mk-h2.mk-small { align-items: center !important; gap: 16px; }
+.mk-h2.mk-small > .mk-title { max-width: none; }
+.mk-h2.mk-small .mk-tools { margin-top: 0; }
+.mk-h2.mk-small { gap: 16px !important; }
+
+/* case-study rail: leave room for the dock in the same corner */
+.rail .foot { padding-bottom: 86px; }
+@media (max-width: 1080px) { .rail .foot { padding-bottom: 0; } }

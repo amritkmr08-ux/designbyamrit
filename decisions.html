@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decisions · Amrit Kumar</title>
+<meta name="description" content="Twelve specific choices pulled out of four case studies — what got picked, what got dropped, and why — on one page." />
+<meta property="og:title" content="Decisions · Amrit Kumar" />
+<meta property="og:description" content="Twelve specific choices pulled out of four case studies — what got picked, what got dropped, and why — on one page." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/decisions.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#8B8D87;
+    --line:#E3E3DF;--soft:#EDEDEA;--mark:#DCE5D3;--accent:#3D5A45;
+    --measure:700px;
+    --display:"Poppins",-apple-system,sans-serif;
+    --font:"Inter","Poppins",-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--font);
+    font-size:17px;font-weight:400;line-height:1.65;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    font-feature-settings:"kern" 1,"liga" 1;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--mark)}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  .wrap{max-width:var(--measure);margin:0 auto;padding:0 40px}
+  h1,h2,h3,.lede{text-wrap:balance}
+  p{text-wrap:pretty}
+
+  header.top{padding:56px 0 44px}
+  .back{
+    display:inline-block;font-family:var(--display);font-size:12px;letter-spacing:.08em;
+    color:var(--faint);margin-bottom:28px;
+  }
+  .back:hover{color:var(--ink)}
+  .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:400;margin-bottom:16px}
+  h1{font-family:var(--display);font-size:clamp(28px,3.6vw,42px);font-weight:400;line-height:1.25;letter-spacing:-.022em;margin-bottom:18px}
+  .lede{font-size:18.5px;line-height:1.6;color:var(--muted);max-width:600px}
+
+  .group{padding:56px 0 0}
+  .group h2{
+    font-family:var(--display);font-size:13px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:10px;
+    padding-bottom:18px;border-bottom:1px solid var(--line);
+  }
+  .group h2 .go{font-size:11px;letter-spacing:.06em;text-transform:none;color:var(--faint);font-weight:400;font-family:var(--font)}
+  .group h2:hover .go{color:var(--accent)}
+
+  .steps{border-top:1px solid var(--line);margin-top:0}
+  .group .steps{border-top:none}
+  .step{
+    display:grid;grid-template-columns:120px 1fr 200px;gap:32px;
+    padding:36px 0;border-bottom:1px solid var(--line);align-items:start;
+  }
+  .step .k{
+    font-family:var(--display);font-size:11.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--faint);
+    display:flex;gap:12px;align-items:center;
+  }
+  .step .k b{color:var(--accent);font-weight:500;font-size:12.5px;
+    background:var(--mark);border-radius:8px;width:28px;height:28px;
+    display:inline-flex;align-items:center;justify-content:center;
+    letter-spacing:0}
+  .step h3{
+    font-family:var(--display);font-size:clamp(17px,1.9vw,20px);
+    font-weight:400;letter-spacing:-.01em;line-height:1.3;margin-bottom:8px;
+  }
+  .step p{font-size:15.5px;color:var(--muted);line-height:1.65}
+  .step .aside{align-self:start}
+  .step .aside a{
+    font-family:var(--display);font-size:12px;letter-spacing:.04em;color:var(--accent);
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .step .aside a:hover{color:var(--ink)}
+  .step .aside a svg{width:11px;height:11px;flex:none}
+
+  @media (max-width:820px){
+    .wrap{padding:0 22px}
+    .step{grid-template-columns:1fr;gap:10px;padding:26px 0}
+  }
+
+  footer.fin{padding:64px 0 80px}
+  footer.fin .rule{border-top:1px solid var(--line);margin-bottom:36px}
+  footer.fin p{color:var(--muted);font-size:15px;line-height:1.65;margin-bottom:20px}
+  footer.fin .links a{
+    font-family:var(--display);font-size:13px;color:var(--ink);margin-right:22px;
+  }
+  footer.fin .links a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="index.html">← All work</a>
+    <p class="eyebrow">Decisions</p>
+    <h1>The decisions, without the story wrapped around them.</h1>
+    <p class="lede">Every case study on this site is really a sequence of small, specific choices — one thing picked over another, for a stated reason. This page pulls twelve of those out on their own, in case that's a faster way to see how I think than reading four full case studies. Each one links back to where it happened.</p>
+  </header>
+
+  <section class="group">
+    <h2><a href="contract-understanding.html">Contract Understanding <span class="go">— open case study →</span></a></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="k"><b>01</b>Structure</div>
+        <div>
+          <h3>A folder tree, or a relationship model</h3>
+          <p>The agreed direction was to improve the folder hierarchy. I argued the hierarchy itself was the problem — contract relationships are many to many, and a tree can't hold that. The direction moved to separating navigation from an explicit relationship model, and it was approved for build.</p>
+        </div>
+        <div class="aside"><a href="contract-understanding.html#decision">See the argument</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>02</b>Layout</div>
+        <div>
+          <h3>A radial map, until it hit 340 contracts</h3>
+          <p>The first layout failed at real scale — zero legible labels across 340 statements of work. The replacement branches instead of encircling: each click opens one column, and no column ever holds more than about thirty records.</p>
+        </div>
+        <div class="aside"><a href="contract-understanding.html#scale">See the fix</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><a href="auto-extraction.html">Auto Extraction <span class="go">— open case study →</span></a></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="k"><b>03</b>Trust</div>
+        <div>
+          <h3>A confidence score, tried and removed</h3>
+          <p>The default answer to "how sure is the model" is a confidence score. I tried it and took it out — a lawyer can't act on 0.82. The interface shows where a value came from instead, because that's what reviewers were already reading for.</p>
+        </div>
+        <div class="aside"><a href="auto-extraction.html#uncertainty">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>04</b>Review flow</div>
+        <div>
+          <h3>One value at a time, not a wall of 128</h3>
+          <p>Values are shown one at a time instead of all at once. It costs a reviewer some sense of the whole page, and buys a sequence they can work down without deciding what to check next — worth the trade on a hundred-page agreement.</p>
+        </div>
+        <div class="aside"><a href="auto-extraction.html#wrong">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>05</b>Review flow</div>
+        <div>
+          <h3>Failures sorted by kind, not lumped together</h3>
+          <p>Corrections are counted by what kind of mistake they were, not as one error total. A value the model missed entirely and a value it got wrong are different failures, and they need different fixes.</p>
+        </div>
+        <div class="aside"><a href="auto-extraction.html#wrong">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>06</b>Iteration</div>
+        <div>
+          <h3>Hover cards, tested and dropped</h3>
+          <p>Hover cards looked clean on a single value and fell apart across a whole contract. Two of the three designs at this stage were mine, and both failed — the lesson was to test anything at the volume it will actually run at, not the volume a demo shows.</p>
+        </div>
+        <div class="aside"><a href="auto-extraction.html#learned">See it</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><a href="intent-model.html">Intent Model <span class="go">— open case study →</span></a></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="k"><b>07</b>Interface</div>
+        <div>
+          <h3>An ask bar instead of a chat reply</h3>
+          <p>Type an instruction — "supplier renewals above £1M this quarter" — and the page itself becomes the result: filtered, retitled, counted. It doesn't answer in a paragraph, because a fluent sentence can be wrong in ways that are hard to catch, and a filtered page is easy to check.</p>
+        </div>
+        <div class="aside"><a href="intent-model.html#lens">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>08</b>Honesty</div>
+        <div>
+          <h3>Showing the case where it fails, on purpose</h3>
+          <p>One of the two example journeys is a miss — the system flags nothing because nobody knew the rule mattered until that morning. It's included on purpose. A system that only demos what it already handles is hiding something.</p>
+        </div>
+        <div class="aside"><a href="intent-model.html#failure">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>09</b>Measurement</div>
+        <div>
+          <h3>Measures picked before the build</h3>
+          <p>There are no outcome numbers yet. The four measures that will judge this were chosen before the build, specifically because they're hard to fake.</p>
+        </div>
+        <div class="aside"><a href="intent-model.html#measures">See it</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><a href="airtel-self-serve.html">Airtel Self-Serve <span class="go">— open case study →</span></a></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="k"><b>10</b>Research</div>
+        <div>
+          <h3>Call-centre data instead of a guess</h3>
+          <p>The starting point was real call-centre data, not an assumption about what people needed. The reasons customers called were concentrated — 4G speed alone drove over four million calls.</p>
+        </div>
+        <div class="aside"><a href="airtel-self-serve.html#why">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>11</b>Entry point</div>
+        <div>
+          <h3>What the problem feels like, not its category name</h3>
+          <p>The page opens with what a person is probably there for, in their own words — "can't use the internet," not a category name — because most people don't know what their issue is officially called.</p>
+        </div>
+        <div class="aside"><a href="airtel-self-serve.html#redesign">See it</a></div>
+      </div>
+      <div class="step">
+        <div class="k"><b>12</b>Support cost</div>
+        <div>
+          <h3>Reassurance, designed instead of staffed</h3>
+          <p>Half of what a support call buys is reassurance that something is happening. That can be built into a screen instead of paid for with a person on the line.</p>
+        </div>
+        <div class="aside"><a href="airtel-self-serve.html#voices">See it</a></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="fin">
+    <div class="rule"></div>
+    <p>This list will grow as the other case studies get the same treatment. If you're comparing candidates and want the same view for something specific, tell me what and I'll add it.</p>
+    <div class="links">
+      <a href="index.html">← All work</a>
+      <a href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>

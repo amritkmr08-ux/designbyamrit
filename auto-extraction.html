@@ -64,7 +64,7 @@
     display: block; font-family: var(--font-display); font-size: 16px;
     font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
   }
-  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 38px; }
+  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 24px; }
   .rail .back:hover { color: var(--ink); }
   .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
   .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
@@ -280,6 +280,12 @@
   .learned h3 { margin-bottom: 8px; }
   .learned p { color: var(--muted); font-size: 16px; }
 
+  .faq-wrap { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .faq-wrap > p.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-bottom: 22px; }
+  .faq-wrap .faq-q { color: var(--ink); font-weight: 500; font-size: 16px; margin-bottom: 8px; }
+  .faq-wrap .faq-a { color: var(--muted); font-size: 16px; }
+  .faq-wrap .faq-item + .faq-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid var(--line); }
+
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) {
@@ -316,7 +322,9 @@
     .reveal { opacity: 1; transform: none; }
     body { font-size: 11pt; }
   }
+
 </style>
+<link rel="stylesheet" href="marks.css" />
 </head>
 <body>
 
@@ -325,7 +333,7 @@
 <aside class="rail">
   <div>
     <a class="mark" href="index.html">Amrit Kumar</a>
-    <a class="back" href="index.html#work">&larr; Back to work</a>
+    <a class="back" href="index.html#work">&larr; All work</a>
   </div>
   <nav class="toc">
     <p class="lead">Case study</p>
@@ -369,7 +377,7 @@
   </div>
 </header>
 
-<section id="problem">
+<section id="problem" data-mk="Thousands of contracts, hundreds of pages each, and one missed clause costs money or legal exposure. So nobody skims — the work is slow because speed is expensive.">
   <div class="wrap narrow">
     <h2 class="reveal">The task nobody can skip</h2>
     <div class="body-text reveal">
@@ -405,7 +413,7 @@
   </div>
 </section>
 
-<section id="principles">
+<section id="principles" data-mk="Sitting with reviewers, speed turned out to be the wrong target. They wanted to see why the machine said something, without leaving the sentence they were reading.">
   <div class="wrap narrow">
     <h2 class="reveal">What lawyers actually asked for</h2>
     <div class="body-text reveal">
@@ -451,7 +459,7 @@
   </div>
 </section>
 
-<section id="origin">
+<section id="origin" data-mk="People already review by marking the source itself — a finger down a nutrition panel, a highlighter through a rent agreement. The mark stays where the evidence is.">
   <div class="wrap narrow">
     <h2 class="reveal">Where the shape came from</h2>
     <div class="body-text reveal">
@@ -469,10 +477,24 @@
       without breaking the reading. What did not change was the rule that a reviewer should never
       have to leave the sentence to check the claim about it.</p>
     </div>
+    <figure class="reveal">
+      <div class="plate">
+        <picture>
+          <source srcset="wb-review-argument.webp" type="image/webp" />
+          <img src="wb-review-argument.jpg" width="1800" height="1341" loading="lazy"
+               alt="A whiteboard reading: good review requires owning the entire information into a structure personalised to me. Below it, that an AI summary giving shallow structure feels incomplete or low quality, and that in contracts reading the sources to build that ownership is expensive at a thousand pages. At the bottom, a summary of a contract and the raw contracts, with a reconstruction accelerator between them." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 03 &middot; The argument underneath</b>
+      <span>The board this work started from. A summary can be accurate and still feel incomplete,
+      because the reviewer has not built the structure themselves &mdash; and the source that would
+      let them runs to a thousand pages. Everything after this is an attempt to close that gap
+      without asking anyone to read it all.</span></figcaption>
+    </figure>
   </div>
 </section>
 
-<section id="iterations">
+<section id="iterations" data-mk="Inline annotations broke the reading. Hover cards cleaned it up and hid the evidence. The third version put contract and proposed answers side by side.">
   <div class="wrap narrow">
     <h2 class="reveal">Three attempts at showing the machine's work</h2>
     <div class="body-text reveal">
@@ -582,7 +604,7 @@
   </div>
 </section>
 
-<section id="loop">
+<section id="loop" data-mk="Accept a value and the tick lands, the next field opens, and the document scrolls itself to the passage that value came from. Reviewed passages stay marked.">
   <div class="wrap narrow">
     <h2 class="reveal">The document moves, not the reviewer</h2>
     <div class="body-text reveal">
@@ -617,7 +639,7 @@
   </div>
 </section>
 
-<section id="colour">
+<section id="colour" data-mk="Four kinds of extracted thing, four colours — which excludes colour-blind reviewers using this six hours a day. Shape carries the type as well now.">
   <div class="wrap narrow">
     <h2 class="reveal">Colour was not enough on its own</h2>
     <div class="body-text reveal">
@@ -638,14 +660,14 @@
                alt="A legend showing four extraction types, each with a distinct coloured geometric shape: metadata, clause, obligation and service levels." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 03 · The four types</b>
+      <figcaption><b>Fig. 05 · The four types</b>
       <span>Shape carries the meaning, colour reinforces it. Simple geometry turned out to be enough
       for both jobs.</span></figcaption>
     </figure>
   </div>
 </section>
 
-<section id="uncertainty">
+<section id="uncertainty" data-mk="Every AI feature reaches the same fork: show the model's confidence or not. We tried a percentage and took it out. A number that looks precise gets trusted like one.">
   <div class="wrap narrow">
     <h2 class="reveal">The number we decided not to show</h2>
     <div class="body-text reveal">
@@ -671,7 +693,7 @@
                alt="The review card broken into its parts: multi-value navigation, the field title and extracted value, the model's reasoning in plain language, numbered references back into the document, and the accept, edit and delete actions." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 05 · The card</b>
+      <figcaption><b>Fig. 06 · The card</b>
       <span>Four bands, in the order a reviewer needs them: what was found, why, where from, and
       what to do about it.</span></figcaption>
     </figure>
@@ -694,7 +716,7 @@
   </div>
 </section>
 
-<section id="wrong">
+<section id="wrong" data-mk="A review tool that only designs the agreeing path is not a review tool. Every proposed value has three exits, not one.">
   <div class="wrap narrow">
     <h2 class="reveal">What happens when it is wrong</h2>
     <div class="body-text reveal">
@@ -718,7 +740,7 @@
                alt="A party value being corrected in place: an editable field reading SailPoint Technologies with done and cancel controls beneath it." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 06 · Correcting in place</b>
+      <figcaption><b>Fig. 07 · Correcting in place</b>
       <span>The correction happens on the card, next to the passage it came from.</span></figcaption>
     </figure>
 
@@ -746,7 +768,7 @@
                alt="The training screen for one field category, showing counts of all selected data, user-tagged data, missed values, incorrectly captured values and uploaded data, with a note that a minimum of twenty data points is required before a model can be trained." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 07 · Corrections, sorted</b>
+      <figcaption><b>Fig. 08 · Corrections, sorted</b>
       <span>Failures counted by type rather than lumped together. Design exploration; the row
       content is placeholder text.</span></figcaption>
     </figure>
@@ -767,7 +789,7 @@
   </div>
 </section>
 
-<section id="scale">
+<section id="scale" data-mk="Assist bars worked at forty fields. At a hundred and twenty-eight the same design turned from clear into crowded, and grouping had to carry the load.">
   <div class="wrap narrow">
     <h2 class="reveal">Then the field count grew</h2>
     <div class="body-text reveal">
@@ -839,14 +861,14 @@
                alt="The final filter: a dropdown with fields grouped into named categories and counts, nested under a performance review heading." loading="lazy" />
         </picture>
       </div>
-      <figcaption><b>Fig. 08 · Where it landed</b>
+      <figcaption><b>Fig. 09 · Where it landed</b>
       <span>Grouped and hierarchical. Clutter removed without hiding anything a reviewer needs to
       reach.</span></figcaption>
     </figure>
   </div>
 </section>
 
-<section id="impact">
+<section id="impact" data-mk="Month-four retention went from 5% to 23%, alongside 18% faster review and 15% fewer errors. The retention number is the one that matters.">
   <div class="wrap">
     <h2 class="reveal">What happened after it shipped</h2>
 
@@ -920,7 +942,7 @@
                  alt="Two analytics tables from Heap showing month-over-month return rates for the module before and after the revamp." loading="lazy" />
           </picture>
         </div>
-        <figcaption><b>Fig. 09 · The source</b>
+        <figcaption><b>Fig. 10 · The source</b>
         <span>Product analytics, captured 16 June 2025. Both windows are eight months, same module,
         same measure.</span></figcaption>
       </figure>
@@ -946,7 +968,7 @@
   </div>
 </section>
 
-<section id="learned">
+<section id="learned" data-mk="The model was never the bottleneck. Almost all of a reviewer's time goes on agreeing or disagreeing with the machine — an interface problem, not a model problem.">
   <div class="wrap narrow">
     <h2 class="reveal">What I took from it</h2>
 
@@ -988,6 +1010,18 @@
           made them, watched them fall short, and replaced them. The sequence is the work. A case
           study that shows only the third one is describing a different job than the one I did.</p>
         </div>
+      </div>
+    </div>
+
+    <div class="faq-wrap reveal">
+      <p class="eyebrow">FAQ</p>
+      <div class="faq-item">
+        <p class="faq-q">Why include two design attempts that failed instead of just showing what shipped?</p>
+        <p class="faq-a">Because the sequence is the work. Inline annotations and hover cards weren't someone else's bad ideas I inherited and fixed — I made them, watched them fall short, and replaced them. A case study that shows only the third version is describing a different job than the one I did.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">The retention jump lines up with the AI model improving and the user base nearly tripling. How much of that can you really credit to the redesign?</p>
+        <p class="faq-a">Not all of it, and I wouldn't claim otherwise. The cohort nearly tripled between the two windows, and the model was being improved at the same time, so some of the change belongs to a different customer mix, not the interface. What I'd stand behind is narrower: the curve stopped decaying right when the redesign landed, and the shape of that change — flat at the front, wide at the back — looks like a usability fix, not a bigger sales year or a better model.</p>
       </div>
     </div>
   </div>
@@ -1043,5 +1077,35 @@
   secs.forEach(function (s) { if (s) spy.observe(s); });
 </script>
 
+
+
+<template id="mk-page-summary">
+  <p class="mk-lede">An AI pulls 128 fields out of a contract. A lawyer is still accountable for
+  every one, so the whole design problem is checking, not extracting.</p>
+  <div class="mk-b"><h3>The rule everything came from</h3>
+    <p>The mark stays on the source. A reviewer should never have to leave the sentence to verify
+    the claim about it.</p>
+    <a class="mk-jump" href="#origin">Where the shape came from &rarr;</a></div>
+  <div class="mk-b"><h3>Three versions, two of them wrong</h3>
+    <p>Inline annotations made the contract unreadable. Hover cards hid the evidence. The third
+    split the screen and connected the two halves.</p>
+    <a class="mk-jump" href="#iterations">The three attempts &rarr;</a></div>
+  <div class="mk-b"><h3>The interaction that carries it</h3>
+    <p>Accept a value and the next field opens while the document scrolls itself to the passage
+    that value came from.</p>
+    <a class="mk-jump" href="#loop">Try the working prototype &rarr;</a></div>
+  <div class="mk-b"><h3>Two decisions worth arguing about</h3>
+    <p>Colour alone excluded colour-blind reviewers, so field types carry shape too.</p>
+    <p>And we removed the confidence percentage: a number that looks precise gets trusted like one.</p>
+    <a class="mk-jump" href="#uncertainty">The number we did not show &rarr;</a></div>
+  <div class="mk-b"><h3>What happened after it shipped</h3>
+    <div class="mk-num">
+      <div><b>23%</b>month-four retention,<br />up from 5%</div>
+      <div><b>18%</b>faster review</div>
+      <div><b>15%</b>fewer errors</div>
+    </div>
+    <a class="mk-jump" href="#impact">The retention curve &rarr;</a></div>
+</template>
+<script src="marks.js" defer></script>
 </body>
 </html>

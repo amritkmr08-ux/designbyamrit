@@ -664,7 +664,10 @@
     #how { padding-top: 72px !important; }
     #thinking { padding: 84px 0 92px; }
   }
+
+  .nav-end { display: flex; align-items: center; gap: 14px; }
 </style>
+<link rel="stylesheet" href="marks.css" />
 </head>
 <body>
 
@@ -715,7 +718,7 @@
 </section>
 
 
-<section id="work">
+<section id="work" data-mk-head=".eyebrow" data-mk="Four projects: a contract repository rebuilt around relationships, an AI review interface, an agent intent framework, and self-service for a telecom app used by millions.">
   <div class="wide">
     <div class="sec-head r" style="text-align:left;margin-bottom:56px"><span class="eyebrow">More work</span></div>
 
@@ -791,7 +794,7 @@
   </div>
 </section>
 
-<section id="nums">
+<section id="nums" data-mk-head=".eyebrow" data-mk="Month-four retention for the AI review tool went from 5% to 23% after the redesign. Two separate groups of users, each tracked for their first four months.">
   <div class="nums">
     <div class="num-hero r">
       <span class="eyebrow">Auto Extraction &middot; Retention</span>
@@ -857,7 +860,7 @@
 </section>
 
 
-<section id="influence">
+<section id="influence" data-mk-head=".infl-lbl" data-mk="Two decisions I argued for and changed: showing how contracts relate rather than where they sit, and giving the team three questions to decide what an agent should do.">
   <div class="infl-wrap">
     <p class="infl-lbl r">Two decisions I helped change</p>
     <div class="infl2">
@@ -895,7 +898,7 @@
   </div>
 </section>
 
-<section id="how" style="padding-top:100px">
+<section id="how" data-mk-head=".eyebrow" data-mk="I build working HTML rather than linked frames, measure layouts instead of debating them, explore wide with AI, and keep the judgement call as my own job." style="padding-top:100px">
   <div class="wide">
     <div class="sec-head r" style="text-align:left;margin-bottom:40px"><span class="eyebrow">How I work</span></div>
     <p class="intro r">I design AI products, and I use AI to make them. It lets me explore more directions and reach working prototypes earlier.</p>
@@ -936,21 +939,25 @@
       <div class="step r">
         <p class="k"><b>02</b> Measure</p>
         <div>
-          <h3>Measure it, don't argue about it</h3>
-          <p>My first layout was radial. Instead of arguing about it, I measured it. The numbers ended the discussion.</p>
+          <h3>Measure the layout, don't argue about it</h3>
+          <p>To show how contracts link to each other, I first drew them as a circle with lines
+          fanning out from the centre. It looked right in a small mockup. So I built it at real
+          size: 606 contracts. The whole thing had to shrink to 12% to fit the screen, and not one
+          contract name was readable. That ended the debate.</p>
         </div>
         <div class="aside">
-          <p class="mini-cap" style="border:none;padding:0;margin:0">The test itself is below,
-          drawn live in this page, both ways.</p>
+          <p class="mini-cap" style="border:none;padding:0;margin:0">Both layouts are drawn live
+          below, radial and branching columns.</p>
         </div>
       </div>
 
       <div class="lab r" id="lab">
         <div class="lab-head">
           <div>
-            <p class="lab-k">The 606-node test, drawn live</p>
-            <p class="lab-sub">The same contract family, laid out both ways in this page, not a
-            screenshot. Labels render at true size, so what was unreadable stays unreadable.</p>
+            <p class="lab-k">Can 606 contracts be drawn so a person can still read them?</p>
+            <p class="lab-sub">That was the question behind the layout argument. Here is the same
+            contract family drawn both ways, live in this page. Switch between them &mdash; labels
+            render at true size, so what was unreadable stays unreadable.</p>
           </div>
           <div class="lab-toggle" role="tablist" aria-label="Layout">
             <button class="on" data-mode="radial" type="button">Radial</button>
@@ -1017,7 +1024,7 @@
   </div>
 </section>
 
-<section id="about" style="padding-top:110px">
+<section id="about" data-mk-head=".eyebrow" data-mk="Product designer at SirionLabs, Noida. Came to product through brand, creative direction and a denim label I co-founded." style="padding-top:110px">
   <div class="wrap">
     <div class="sec-head r" style="text-align:left;margin-bottom:36px"><span class="eyebrow">About</span></div>
 
@@ -1064,21 +1071,22 @@
 <section id="contact">
   <div class="wrap">
     <h2 class="r">Open to <em>Lead roles</em>.
-      <span class="q">If you're working on this kind of problem, I'd like to hear about it.</span></h2>
+      <span class="q">If you're working on how people and AI share hard decisions, I'd like to hear about it.</span></h2>
     <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
     <span class="mailalt r">amritkmr08@gmail.com
       <button class="copylink" id="copymail" type="button" aria-live="polite"><span id="copytxt">copy</span></button></span>
     <div class="links r">
-      <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a href="resume.html">Resume</a>
       <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://www.behance.net/amritkmr" target="_blank" rel="noopener">Behance</a>
+      <a href="decisions.html">Decisions</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div>© <span id="year"></span> Amrit Kumar
-    &nbsp;·&nbsp; <a class="floot" href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    &nbsp;·&nbsp; <a class="floot" href="resume.html">Resume</a>
     &nbsp;·&nbsp; <a class="floot" href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
   </div>
   <div class="credit">Designed and written by me. Coded with Claude.</div>
@@ -1235,5 +1243,32 @@
 })();
 </script>
 
+
+<template id="mk-page-summary">
+  <p class="mk-lede">Amrit Kumar — product designer. I design how people and AI agents share hard
+  decisions, in enterprise software where being wrong is expensive.</p>
+  <div class="mk-b"><h3>What I do</h3>
+    <p>Currently at SirionLabs on contract software used by legal teams. Before that, self-service
+    in a telecom app used by millions.</p></div>
+  <div class="mk-b"><h3>The work here</h3>
+    <p>A contract repository rebuilt around relationships instead of folders. An AI review interface
+    redesigned three times. A framework for when an agent should explain, suggest, act or stay out
+    of the way. And consumer-scale support design.</p>
+    <a class="mk-jump" href="#work">See the four projects &rarr;</a></div>
+  <div class="mk-b"><h3>The number worth checking</h3>
+    <div class="mk-num">
+      <div><b>23%</b>month-four retention,<br />up from 5%</div>
+    </div>
+    <p>Retention for the AI review tool, before and after the redesign.</p>
+    <a class="mk-jump" href="#nums">The full chart &rarr;</a></div>
+  <div class="mk-b"><h3>How I work</h3>
+    <p>Working prototypes in HTML, not linked frames. Layout arguments settled by measuring. The
+    judgement about what to cut stays mine.</p>
+    <a class="mk-jump" href="#how">The process &rarr;</a></div>
+  <div class="mk-b"><h3>Status</h3>
+    <p>Open to Lead roles.</p>
+    <a class="mk-jump" href="#contact">Get in touch &rarr;</a></div>
+</template>
+<script src="marks.js" defer></script>
 </body>
 </html>
