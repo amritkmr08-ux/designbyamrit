@@ -279,8 +279,8 @@
 
     f.innerHTML =
       '<span class="where">' +
-        (total ? 'Pick up where you left off — email yourself what you kept. It only lives in this browser.'
-               : 'Pick this up later — email yourself a copy. It only lives in this browser.') +
+        (total ? 'Bookmark this to pick up where you left off, or email yourself what you kept to take it beyond this browser.'
+               : 'Bookmark this to come back later, or email yourself a copy to take it beyond this browser.') +
       '</span>' +
       '<div class="row">' +
         '<a class="mk-send" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" ' +
