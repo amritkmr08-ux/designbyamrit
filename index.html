@@ -1230,12 +1230,32 @@
         color: var(--ink); letter-spacing: -0.01em; }
   .nb.cta .nwd { color: var(--accent); }
   @media (prefers-reduced-motion:reduce){ .nb, .nb .nmk, .nb .nwd { transition: none; } }
-  @media (hover: none) {
-    .nav-inner { gap: 20px; }
-    .nav-mid, .nav-end { gap: 20px; }
-    .nb { width: auto; height: auto; overflow: visible; }
-    .nb .nmk { display: none; }
-    .nb .nwd { position: static; opacity: 1; height: auto; line-height: inherit; }
+  /* ── The navigation on a phone ─────────────────────────────────────────
+     The marks only make sense to a pointer, so on touch they are already words.
+     What was missing was a plan for the row. Two things are going on here:
+
+     The class is doubled so the rule outranks the base .nav-inner, which is
+     declared later in the file on two of the three pages and was quietly
+     winning. Same for .nb.
+
+     The five words measure 363px at 13px with the gaps, and a 390 screen gives
+     the row 342. At 12.5 with 12px gaps they came to 343 and Contact wrapped to
+     a line of its own, so the type is 12 and the gaps 10, which is 323. If a
+     screen is narrower
+     still, the row wraps and both lines align right instead of overflowing.
+     Each word carries 10px above and below, so it is a 40px target, not 28. */
+  @media (hover:none){
+    .nav-inner.nav-inner{display:flex;flex-wrap:wrap;justify-content:space-between;
+        align-items:center;gap:0 10px;padding:22px 24px 16px;white-space:normal;max-width:none}
+    .nav-mid,.nav-end{display:contents}
+    .nb.nb{width:auto;height:auto;overflow:visible;flex:none;
+        font-size:12px;line-height:20px;padding:10px 0}
+    .nb .nmk{display:none}
+    .nb .nwd{position:static;opacity:1;height:auto;line-height:inherit}
+  }
+  @media (hover:none) and (max-width:360px){
+    .nav-inner.nav-inner{justify-content:flex-end;gap:0 14px}
+    .nb.nb{padding:8px 0}
   }
 
   /* ── Tab: one component, everywhere ───────────────────────────────────────

@@ -142,11 +142,32 @@
       letter-spacing:-.01em}
   .nb.cta .nwd{color:var(--accent)}
   @media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
+  /* ── The navigation on a phone ─────────────────────────────────────────
+     The marks only make sense to a pointer, so on touch they are already words.
+     What was missing was a plan for the row. Two things are going on here:
+
+     The class is doubled so the rule outranks the base .nav-inner, which is
+     declared later in the file on two of the three pages and was quietly
+     winning. Same for .nb.
+
+     The five words measure 363px at 13px with the gaps, and a 390 screen gives
+     the row 342. At 12.5 with 12px gaps they came to 343 and Contact wrapped to
+     a line of its own, so the type is 12 and the gaps 10, which is 323. If a
+     screen is narrower
+     still, the row wraps and both lines align right instead of overflowing.
+     Each word carries 10px above and below, so it is a 40px target, not 28. */
   @media (hover:none){
-    .nav-inner{gap:20px;padding:44px 24px 20px}
-    .nb{width:auto;height:auto;overflow:visible}
+    .nav-inner.nav-inner{display:flex;flex-wrap:wrap;justify-content:space-between;
+        align-items:center;gap:0 10px;padding:22px 24px 16px;white-space:normal;max-width:none}
+    .nav-mid,.nav-end{display:contents}
+    .nb.nb{width:auto;height:auto;overflow:visible;flex:none;
+        font-size:12px;line-height:20px;padding:10px 0}
     .nb .nmk{display:none}
     .nb .nwd{position:static;opacity:1;height:auto;line-height:inherit}
+  }
+  @media (hover:none) and (max-width:360px){
+    .nav-inner.nav-inner{justify-content:flex-end;gap:0 14px}
+    .nb.nb{padding:8px 0}
   }
 
 
@@ -936,6 +957,29 @@
   h1{font-size:clamp(44px,4.6vw,62px);font-weight:400;letter-spacing:-.04em;line-height:1.04}
   .lede{margin-top:28px}
   @media (max-width:700px){header{padding:128px 0 76px}}
+
+  /* ── The specimens on a phone ──────────────────────────────────────────
+     Four widths were fixed back when the column was 620: the reach block at
+     404, the pause card's wrapper at 440, and two glass cards at 472 and 548.
+     A phone column is 342. A grid track sized to a 404px child does not shrink
+     to fit, so the page scrolled 83px sideways and the right-hand edge of
+     every specimen sat off screen. Each one takes the column it is given now,
+     and the cards that hang past the text on a desktop sit flush instead. */
+  @media (max-width:700px){
+    .stage{grid-template-columns:minmax(0,1fr)}
+    .obj{min-width:0}
+    .lift,#hoDeckWrap{width:100%}
+    .glass{left:0;width:100%}
+    .glass.hscard,.glass.wkcard{left:0;top:-20px;width:100%;max-width:100%}
+    .deckwrap>.deck{left:-12px;right:-12px}
+    .apcard{left:0;width:100%}
+    #apWrap.open>.apcard{width:100%}
+    /* The region dropdown is positioned against its chip, which sits mid-row, so
+       on a small screen it opened straight off the right edge. On a phone it
+       hangs from the right of the chip instead and never exceeds the column. */
+    #regMenu.glass.gmenu{left:auto;right:-10px;width:auto;
+        min-width:min(272px, calc(100vw - 48px));max-width:calc(100vw - 48px)}
+  }
 
   /* soft until you reach for it, sharp where you are — the same as the tabs */
   /* the nav is marks now, not blurred words — a blurred block is just a smudge */
