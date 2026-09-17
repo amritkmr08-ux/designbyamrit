@@ -76,7 +76,14 @@
   .ldr-t{position:absolute;margin:0;color:#C6C7C1}
   .ldr-t i{font-style:normal;color:#C6C7C1;transition:color 400ms ease}
   .ldr-t i.on{color:var(--ink-on,var(--ink))}
-  body.ldr-on{overflow:hidden}
+  /* The loader runs for about five seconds and the page behind it stayed
+     scrollable the whole time. overflow:hidden on body alone does not hold it,
+     because html is the scrolling element, and on a phone a touch drag moves
+     the page regardless. Both are locked, and the overlay itself refuses touch
+     gestures so nothing underneath can be dragged. */
+  html.ldr-on,body.ldr-on{overflow:hidden;overscroll-behavior:none}
+  html.ldr-on{touch-action:none}
+  .ldr{touch-action:none;overscroll-behavior:none}
 
 
   /* Safari paints a solid block where a blurred element sits inside a backdrop-filtered box,
@@ -142,33 +149,74 @@
       letter-spacing:-.01em}
   .nb.cta .nwd{color:var(--accent)}
   @media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
-  /* ── The navigation on a phone ─────────────────────────────────────────
-     The marks only make sense to a pointer, so on touch they are already words.
-     What was missing was a plan for the row. Two things are going on here:
+  /* ── The navigation on a phone: a pile, not a row ──────────────────────
+     Five words will not fit a 390 column, and shrinking them to fit made the
+     bar the loudest thing on the page. On touch the marks stay marks: a tight
+     overlapping pile in the corner, the current page's mark dark and last in
+     the stack. Tap it and the pile falls open into a right-aligned column,
+     each mark with its word beside it; tap a word to go, tap anywhere else to
+     close. It is the same widening the pointer gets on a desktop, turned on
+     its side, so there is one nav on this site and not two. */
+  @media (hover:none), (max-width:760px){
+    /* !important because an earlier rule pins the bar to transparent with
+       !important of its own; this is the one screen size where it has to win. */
+    body nav{background:rgba(247,247,245,.88)!important;
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .nav-inner.nav-inner{display:flex;flex-direction:row;flex-wrap:nowrap;
+        justify-content:flex-end;align-items:center;gap:0;
+        padding:18px 24px 14px;white-space:normal;max-width:none;
+        transition:gap .30s cubic-bezier(.22,.61,.36,1)}
+    /* The two groups have to dissolve so all five marks are siblings of one
+       flex row - otherwise the overlap only applies inside each group and the
+       pile comes out in three pieces. Scoped through .nav-inner so it outranks
+       the later .nav-end{display:flex;gap:8px} that was quietly winning. */
+    .nav-inner .nav-mid,.nav-inner .nav-end{display:contents}
+    .nb.nb{position:relative;display:block;width:30px;height:30px;overflow:hidden;flex:none;
+        font-family:var(--display);font-size:13px;line-height:30px;padding:0;
+        margin-left:-30px;
+        /* declared again below at .nav-inner strength: body.nav-in .nb sets
+           transform:none for the arrival animation and was cancelling the deck */
+        transition:width .34s cubic-bezier(.22,.61,.36,1),
+                   margin .34s cubic-bezier(.22,.61,.36,1),
+                   transform .34s cubic-bezier(.22,.61,.36,1)}
+    /* Only the mark that actually starts the row loses its overlap. :first-child
+       on its own matched the first mark inside each group too, because
+       display:contents changes layout and not the tree, which is why the pile
+       came out with two seams in it. */
+    .nav-inner > .nb:first-child{margin-left:0}
+    /* Overlapping marks of the same grey fused into one slab. A ring of paper
+       around each one draws the edge of the card behind it, which is what makes
+       a pile read as a pile rather than a smear. */
+    /* Only the card in front is filled. The ones behind it are drawn as outlines
+       on the same paper, which is what keeps four stacked cards reading as four
+       clean edges instead of a grey smear with a shadow under it. */
+    .nb .nmk{display:block;position:absolute;top:0;right:0;left:auto;width:30px;height:30px;
+        opacity:1;border-radius:9px}
+    .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
+        border:1.5px solid #D3D4CF;box-shadow:none}
+    .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
+    body.nav-open .nb .nmk{box-shadow:none}
+    /* open, every card is its own row again, so they all take their real fill */
+    body.nav-open .nb.back .nmk{background:#DCDDD8!important}
+    /* No z-index games: the cards stack in the order they are written, each one
+       showing six pixels of the card behind it, and the dark one sits wherever
+       that page falls in the run. Lifting the current card to the front buried
+       three of the others behind it and the pile stopped looking like a pile. */
+    .nb .nwd{position:absolute;top:0;right:40px;left:auto;height:30px;line-height:30px;
+        white-space:nowrap;opacity:0;transition:opacity .22s ease}
 
-     The class is doubled so the rule outranks the base .nav-inner, which is
-     declared later in the file on two of the three pages and was quietly
-     winning. Same for .nb.
+    /* open: the pile falls into a column, each mark wearing its word */
+    body.nav-open .nav-inner.nav-inner{flex-direction:column;align-items:flex-end;gap:8px;
+        padding-bottom:20px}
+    .nav-inner .nb.nb{transform:translate(calc(var(--k,0) * -3px), calc(var(--k,0) * 3px))}
+    body.nav-open .nav-inner .nb.nb{transform:none}
+    body.nav-open .nb.nb{margin-left:0;width:calc(var(--w, 70px) + 44px)}
+    body.nav-open .nb .nwd{opacity:1;transition:opacity .26s ease .10s}
+    /* a 30px mark is not a 44px target; the row it sits in is */
+    body.nav-open .nb.nb{height:38px;line-height:38px}
+    body.nav-open .nb .nmk,body.nav-open .nb .nwd{top:4px}
+  }
 
-     The five words measure 363px at 13px with the gaps, and a 390 screen gives
-     the row 342. At 12.5 with 12px gaps they came to 343 and Contact wrapped to
-     a line of its own, so the type is 12 and the gaps 10, which is 323. If a
-     screen is narrower
-     still, the row wraps and both lines align right instead of overflowing.
-     Each word carries 10px above and below, so it is a 40px target, not 28. */
-  @media (hover:none){
-    .nav-inner.nav-inner{display:flex;flex-wrap:wrap;justify-content:space-between;
-        align-items:center;gap:0 10px;padding:22px 24px 16px;white-space:normal;max-width:none}
-    .nav-mid,.nav-end{display:contents}
-    .nb.nb{width:auto;height:auto;overflow:visible;flex:none;
-        font-size:12px;line-height:20px;padding:10px 0}
-    .nb .nmk{display:none}
-    .nb .nwd{position:static;opacity:1;height:auto;line-height:inherit}
-  }
-  @media (hover:none) and (max-width:360px){
-    .nav-inner.nav-inner{justify-content:flex-end;gap:0 14px}
-    .nb.nb{padding:8px 0}
-  }
 
 
   header{padding:150px 0 0}
@@ -1412,6 +1460,45 @@
 
 <footer class="wrap"><a href="index.html">&larr; Amrit Kumar</a></footer>
 
+<script>
+/* The pile. One listener: while it is closed, the first tap anywhere in the bar
+   opens it instead of following a link - otherwise a stacked mark would fire a
+   link the reader cannot even see the name of. Once open the links behave
+   normally, and a tap outside closes it. Pointer devices never run any of this. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  var bar = document.querySelector('.nav-inner');
+  if (!bar) return;
+  var open = function(on){
+    document.body.classList.toggle('nav-open', on);
+    bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+  };
+  bar.setAttribute('aria-label', 'Pages');
+  open(false);
+  /* Deal the deck. Every card sits on the same spot and is pushed back down and
+     to the left by its depth, so what you see is four corners behind one face.
+     The face is the page you are on: a collapsed pile still has to say where
+     you are, and colour alone cannot do it from under another card. Depth is
+     set once at load rather than tracking the scroll-spy, because a stack that
+     reshuffles itself while you read is a distraction, not a signal. */
+  var cards = [].slice.call(document.querySelectorAll('.nb'));
+  var front = cards.filter(function(a){ return a.classList.contains('cur'); })[0] || cards[cards.length-1];
+  var depth = 1;
+  cards.forEach(function(a){
+    var k = (a === front) ? 0 : depth++;
+    a.style.setProperty('--k', k);
+    a.style.zIndex = String(20 - k);
+    a.classList.toggle('back', k > 0);
+  });
+  bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
+  }, true);
+  document.addEventListener('click', function(e){
+    if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+})();
+</script>
 <script src="morphline.js"></script>
 <script>
 (function(){
@@ -2001,7 +2088,7 @@
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
   var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(place,150); });
 
-  el.classList.add('run'); document.body.classList.add('ldr-on');
+  el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
   var src=t.textContent.replace(/\s+/g,' ').trim();
   t.textContent='';
   src.split(/(\s+)/).forEach(function(c){
@@ -2013,7 +2100,7 @@
   ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 300+k*STEP); });
   setTimeout(function(){
     el.classList.add('gone');
-    document.body.classList.remove('ldr-on');
+    document.body.classList.remove('ldr-on'); document.documentElement.classList.remove('ldr-on');
     /* removed only once the paper is fully clear, when the sentence on it and the sentence
        under it are the same pixels */
     setTimeout(function(){
