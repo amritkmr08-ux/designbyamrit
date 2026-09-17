@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amrit Kumar · Product Designer, AI systems</title>
+<meta name="description" content="AI can answer. A person still has to decide. I design how people and AI agents work together on hard decisions in enterprise software. Thirteen years in design, six in product." />
+<meta property="og:title" content="Amrit Kumar · Product Designer" />
+<meta property="og:description" content="AI can answer. A person still has to decide. Case studies in human-guided AI for enterprise software." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/Portfolio%2026/og-image.jpg" />
+<meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/Portfolio%2026/" />
+<meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/Portfolio%2026/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F7F7F5;
+    --ink: #191A18;
+    --muted: #5F625C;
+    --faint: #6F716A;
+    --line: #E3E3DF;
+    --soft: #EDEDEA;
+    --mark: #DCE5D3;
+    --accent: #3D5A45;
+    --dark: #0B0C0E;
+    --display: "Poppins", -apple-system, sans-serif;
+    --font: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90;
+    opacity: .10; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  html { scroll-behavior: smooth; }
+  body { overflow-x: clip; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 17.5px;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mark); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+
+  .wrap  { max-width: 700px;  margin: 0 auto; padding: 0 40px; }
+  .wide  { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .rule  { width: 44px; height: 1px; background: #C9CAC4; margin: 72px auto; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--faint); font-weight: 400; opacity: .85;
+  }
+  .sec-head { text-align: center; margin-bottom: 64px; }
+  .sec-head .eyebrow { display: block; }
+
+  /* ================= Nav ================= */
+  /* Safari paints a solid block where a blurred element sits inside a backdrop-filtered box,
+     and it needs the -webkit- prefix for backdrop-filter at all. The nav has both: a frosted
+     bar, and four links each carrying filter: blur(.7px). So the frosting moves to its own
+     layer behind the links, and carries both spellings. The bar looks the same. */
+  nav { position: sticky; top: 0; z-index: 20; background: transparent; }
+  /* No frosted bar any more. The nav is four small marks in a corner, so a full-width
+     sheet of blur across the top was doing nothing but smearing the title as it scrolled
+     past underneath. The marks sit on the paper. */
+
+  /* 80px of air above the marks, so the cluster sits down from the edge rather than on it.
+     The nav is in flow, so everything below comes down with it. */
+  .nav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 44px 40px 20px;
+    display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+    font-size: 13.5px; color: var(--muted); font-weight: 400;
+  }
+  .nav-id {
+    font-family: var(--display); font-size: 16px; font-weight: 500;
+    color: var(--ink); letter-spacing: -0.01em;
+  }
+  .nav-mid { display: flex; gap: 8px; }
+  .nav-end { display: flex; gap: 8px; }
+  /* This is what was eating the marks' animation. `.nav-inner a` outranks `.nb`, so its
+     one-property transition list replaced the width, opacity and transform transitions
+     entirely — the marks were snapping open and shut with nothing running. Left over from
+     when the nav was words. */
+  .nav-inner a:hover { color: var(--ink); }
+
+  .nav-mid a.cur { color: var(--ink); }
+  .nav-end .cta { color: var(--accent); }
+  @media (max-width: 860px) {
+    /* name and Contact on the first row, section links underneath */
+    .nav-inner {
+      grid-template-columns: 1fr auto; grid-template-areas: "id end" "mid mid";
+      padding: 20px 24px 16px; row-gap: 12px;
+    }
+    .nav-id  { grid-area: id; }
+    .nav-end { grid-area: end; }
+    .nav-mid { grid-area: mid; justify-content: flex-start; gap: 20px; flex-wrap: wrap; }
+  }
+
+  /* ================= Hero ================= */
+  header { padding: 160px 0 96px; position: relative; min-height: 100vh; display: flex; align-items: center; }
+  header::before {
+    content: ""; position: absolute; pointer-events: none; z-index: -1;
+    background:
+      /* the same pastel family as the onboarding screens: sky, lilac, peach, straw. Kept faint. */
+      radial-gradient(680px 480px at 84% 12%, #CFDCE6 0%, rgba(207,220,230,0) 68%),
+      radial-gradient(600px 500px at 104% 60%, #E9D6E6 0%, rgba(233,214,230,0) 66%),
+      radial-gradient(560px 420px at 66% 98%, #F1DCC8 0%, rgba(241,220,200,0) 70%),
+      radial-gradient(460px 360px at 0% 98%, #EFE6C9 0%, rgba(239,230,201,0) 70%);
+    filter: blur(6px);
+    inset: -18% 0 -14%;
+  }
+  header .wide { position: relative; width: 100%; }
+
+  .hero-grid { display: block; }
+  .hero-copy { padding-right: 0; }
+  header .eyebrow { margin-bottom: 34px; display: block; }
+  header h1 {
+    position: relative; z-index: 2;
+    font-family: var(--display);
+    font-size: clamp(56px, 9.6vw, 132px);
+    font-weight: 400; line-height: 0.94;
+    letter-spacing: -0.05em; max-width: 13ch;
+  }
+  header h1 b { font-weight: 500; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  #about { padding: 112px 0 104px; border-bottom: 1px solid var(--line); }
+  #about .wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .ab-k { font-family: var(--display); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 0 0 26px; }
+  .ab-lede { font-family: var(--display); font-size: clamp(22px, 2.4vw, 32px); line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); max-width: 30ch; margin: 0; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 56px; max-width: 900px; }
+  .stat { padding: 22px 8px; text-align: center; position: relative; }
+  .stat .br { font-family: var(--display); font-weight: 300; font-size: 26px; color: var(--line); position: absolute; top: 14px; }
+  .stat .br.l { left: 0; } .stat .br.r { right: 0; }
+  .stat .num { font-family: var(--display); font-size: clamp(26px, 3.4vw, 34px); font-weight: 500; color: var(--accent); letter-spacing: -0.01em; margin: 0; }
+  .stat .cap { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; line-height: 1.4; }
+  @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .hero-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); max-width: 900px; }
+  .hero-facts p:first-child { font-family: var(--display); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 0 0 6px; }
+  .hero-facts p:last-child { font-size: 14.5px; color: var(--ink); line-height: 1.55; margin: 0; }
+  @media (max-width: 700px) { .hero-facts { grid-template-columns: 1fr; gap: 16px 0; } }
+  .hero-copy .role { font-family: var(--display); font-size: clamp(18px, 1.7vw, 22px); color: var(--muted); margin-top: 28px; letter-spacing: -0.01em; }
+  .hero-copy .sub {
+    font-size: 17.5px; color: var(--ink); max-width: 44ch; line-height: 1.72;
+    margin-top: 40px; border-top: 1px solid var(--line); padding-top: 28px;
+  }
+  .avail {
+    display: inline-flex; align-items: center; gap: 9px; margin-top: 26px;
+    font-size: 13px; color: var(--accent); white-space: normal;
+  }
+  .avail i {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
+
+  /* ================= Credibility line (static) ================= */
+  .creds {
+    max-width: 1180px; margin: 40px auto 0; padding: 22px 40px 26px;
+    border-top: 1px solid var(--line);
+    display: flex; gap: 56px; flex-wrap: wrap;
+    font-size: 13.5px; color: var(--muted);
+  }
+  .creds .grp { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .creds .lbl {
+    font-family: var(--display); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  .creds b { color: var(--ink); font-weight: 500; }
+  .creds .dot { color: var(--faint); }
+  @media (max-width: 700px) { .creds { padding: 18px 24px 20px; gap: 12px; flex-direction: column; } }
+
+  /* ================= Featured band (dark) ================= */
+  .band {
+    background:
+      radial-gradient(1200px 700px at 80% 8%, rgba(125,168,133,0.20), transparent 64%),
+      radial-gradient(1000px 620px at 4% 96%, rgba(96,130,158,0.12), transparent 66%),
+      linear-gradient(175deg, #121412 0%, #0A0B0C 55%),
+      var(--dark);
+    color: #E6E7EA; padding: 104px 0 96px; overflow: hidden;
+  }
+  .band .blbl {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #6E747E; margin-bottom: 22px;
+  }
+  .band h2 {
+    font-family: var(--display); color: #F4F5F7;
+    font-size: clamp(28px, 4.1vw, 54px); font-weight: 400;
+    line-height: 1.1; letter-spacing: -0.035em; max-width: 19ch;
+  }
+  .band .bsub {
+    color: #9AA0AA; font-size: 16.5px; max-width: 52ch;
+    margin-top: 22px; line-height: 1.7;
+  }
+  .bgo {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 26px; font-size: 15px; color: #8FA88A;
+  }
+  .bgo span { transition: transform 0.3s ease; display: inline-block; }
+  .band a:hover .bgo span { transform: translateX(7px); }
+  .band .wide { max-width: 1180px; }
+  .bshot {
+    margin-top: 68px; border-radius: 12px; overflow: hidden;
+    border: 1px solid #2A2D32;
+    box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45);
+    background: #0D0F12;
+  }
+  .bshot { position: relative; height: 754px; padding-top: 34px; }
+  .bshot::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 34px;
+    background-color: #17191C; border-bottom: 1px solid #24272B; z-index: 2;
+    background-image:
+      radial-gradient(circle 4.5px at 20px 17px, #34383E 100%, transparent 100%),
+      radial-gradient(circle 4.5px at 40px 17px, #34383E 100%, transparent 100%),
+      radial-gradient(circle 4.5px at 60px 17px, #34383E 100%, transparent 100%);
+  }
+  .band .btext { display: block; }
+  .bshot iframe {
+    display: block; border: 0; background: #0B0C0E; pointer-events: none;
+    width: 133.34%; height: 133.34%;
+    transform: scale(.75); transform-origin: 0 0;
+  }
+  .bposter { display: none; }
+  .bposter img { display: block; width: 100%; height: auto; }
+  .bcap {
+    position: absolute; left: 18px; bottom: 14px; z-index: 2;
+    font-size: 12px; color: #7A808A; letter-spacing: .01em;
+    background: rgba(11,12,14,.72); padding: 5px 10px; border-radius: 4px;
+    backdrop-filter: blur(4px); pointer-events: none;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .bcap .breplay {
+    pointer-events: auto; background: none; border: 1px solid #3A3E45; color: #C9CDD3;
+    font-family: var(--font); font-size: 12px; padding: 3px 10px; border-radius: 3px; cursor: pointer;
+    transition: border-color .16s ease, color .16s ease;
+  }
+  .bcap .breplay:hover, .bcap .breplay:focus-visible { border-color: #8FA88A; color: #F4F5F7; }
+  .bcap .breplay:focus-visible { outline: 2px solid #8FA88A; outline-offset: 2px; }
+  @media (max-width: 900px) { .bshot { height: 494px; } }
+  @media (max-width: 700px) {
+    /* a 1100px-wide prototype is unusable inside a phone frame: show the poster, link to the real thing */
+    .bshot { height: auto; }
+    .bshot iframe { display: none; }
+    .bposter { display: block; }
+    .bcap { display: none; }
+  }
+
+  /* ================= Numbers ================= */
+  #nums { padding: 88px 0 0; }
+  .nums { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .num-hero { border-top: 2px solid var(--ink); padding-top: 28px; }
+  .num-lede {
+    font-family: var(--display);
+    font-size: clamp(22px, 2.7vw, 33px); font-weight: 400;
+    line-height: 1.34; letter-spacing: -0.022em; max-width: 30ch;
+    margin-top: 22px;
+  }
+  .num-lede b { font-weight: 500; }
+  .num-sub { font-size: 16px; color: var(--ink); line-height: 1.6; max-width: 52ch; margin-top: 10px; }
+  .ret-chart { width: 100%; height: auto; display: block; margin-top: 40px; font-family: var(--font); }
+  .num-hero .num-quote {
+    margin: 36px 0 0; padding-left: 22px; border-left: 2px solid var(--accent);
+    font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); line-height: 1.35;
+    letter-spacing: -0.02em; color: var(--ink); max-width: 30ch; text-wrap: balance;
+  }
+  .num-hero .num-quote cite { display: block; font-style: normal; font-family: var(--font); font-size: 13.5px; color: var(--muted); margin-top: 10px; letter-spacing: 0; }
+  .num-hero .num-foot { font-size: 13px; color: var(--faint); margin-top: 24px; max-width: 78ch; line-height: 1.7; }
+  .evi-btn {
+    background: none; border: 0; padding: 0; margin-left: 10px; font: inherit; font-size: 13px;
+    color: var(--accent); cursor: pointer; border-bottom: 1px solid transparent; transition: border-color .2s ease;
+  }
+  .evi-btn:hover { border-bottom-color: var(--accent); }
+  .evi-btn span { display: inline-block; transition: transform .3s ease; }
+  .evi-btn[aria-expanded="true"] span { transform: rotate(180deg); }
+  .evi { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
+  .evi[hidden] { display: grid; }
+  .evi.open { grid-template-rows: 1fr; }
+  .evi-in { min-height: 0; overflow: hidden; }
+  .evi table { width: 100%; border-collapse: collapse; margin-top: 22px; font-size: 13.5px; }
+  .evi th { text-align: left; font-family: var(--display); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); font-weight: 400; padding: 0 10px 10px 0; border-bottom: 1px solid var(--line); }
+  .evi td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .evi td:first-child { color: var(--muted); }
+  .evi p { font-size: 13px; color: var(--faint); margin-top: 14px; max-width: 78ch; line-height: 1.7; }
+  .evi p a { color: var(--accent); }
+  @media (max-width: 700px) { .evi table { font-size: 12px; } .evi th, .evi td { padding-right: 6px; } .evi-btn { display: block; margin: 8px 0 0; } }
+  @media (max-width: 700px) { .num-lede { font-size: 21px; } }
+
+
+
+  /* ================= Influence ================= */
+  #influence { padding: 64px 0 0; }
+  .infl-wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .infl-lbl {
+    font-family: var(--display); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 28px;
+  }
+  .infl-scope {
+    font-size: 14px; color: var(--muted); line-height: 1.7;
+    margin: -34px 0 52px; padding-bottom: 0;
+  }
+  .infl-scope b { color: var(--ink); font-weight: 500; }
+  .infl2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line); }
+  .ic { padding: 30px 56px 8px 0; display: flex; flex-direction: column; }
+  .ic + .ic { border-left: 1px solid var(--line); padding-left: 56px; padding-right: 0; }
+  .ic .claim-n {
+    font-size: clamp(40px, 4.4vw, 56px); letter-spacing: -0.03em; line-height: 1;
+    color: var(--ink); margin-bottom: 26px; font-variant-numeric: tabular-nums;
+  }
+  .ic .claim { font-size: clamp(22px, 2.1vw, 27px); max-width: 26ch; }
+  .ic .why { font-size: 15.5px; color: var(--muted); line-height: 1.65; margin-top: 16px; max-width: 42ch; }
+  .ic .infl-go { border-top: none; padding-top: 0; margin-top: 22px; }
+  .ic:hover .infl-go span { transform: translateX(6px); }
+  @media (max-width: 860px) {
+    .infl2 { grid-template-columns: 1fr; }
+    .ic { padding: 28px 0 8px; }
+    .ic + .ic { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+  }
+  .infl {
+    display: grid; grid-template-columns: 300px 1fr; gap: 64px; align-items: start;
+  }
+  .infl + .infl { margin-top: 64px; padding-top: 64px; border-top: 1px solid var(--line); }
+  .infl .claim, .ic .claim {
+    font-family: var(--display); font-size: 21px; line-height: 1.35;
+    letter-spacing: -0.015em; font-weight: 400;
+  }
+  .infl .claim-n, .ic .claim-n {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.16em;
+    color: var(--faint); display: block; margin-bottom: 14px;
+  }
+  .ic .claim-n { font-size: clamp(40px, 4.4vw, 56px); letter-spacing: -0.03em; color: var(--ink); margin-bottom: 26px; }
+  .beat { display:grid; grid-template-columns:132px 1fr; gap:22px; padding:18px 0;
+          border-top:1px solid var(--line); align-items:baseline; }
+  .beat .bk { font-family:var(--display); font-size:11px; letter-spacing:.14em;
+              text-transform:uppercase; color:var(--faint); }
+  .beat p { font-size:16px; line-height:1.6; color:var(--muted); margin:0; }
+  .beat.key p { color:var(--ink); }
+  .beat.key .bk { color:var(--accent); }
+  @media (max-width:700px){ .beat{grid-template-columns:1fr; gap:6px} }
+  .infl-body p { font-size: 17px; line-height: 1.7; margin-bottom: 20px; }
+  .infl-body p:last-of-type { margin-bottom: 0; }
+  .infl-body b { font-weight: 500; }
+  .infl-go {
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-top: 28px; font-size: 15px; color: var(--accent);
+    border-top: 1px solid var(--line); padding-top: 22px;
+  }
+  .infl-go span { transition: transform 0.3s ease; display: inline-block; }
+  .infl-go:hover span { transform: translateX(6px); }
+  @media (max-width: 860px) {
+    .infl { grid-template-columns: 1fr; gap: 28px; }
+    .infl .claim { font-size: 19px; }
+  }
+
+  /* ================= Process ================= */
+  .photo { margin: 36px auto 44px; max-width: 100%; padding: 0; display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+  .photo figcaption { margin: 0 !important; padding-bottom: 6px; }
+  @media (max-width: 860px) { .photo { grid-template-columns: 1fr; gap: 14px; } }
+  .photo img { width: 100%; height: auto; display: block; border-radius: 12px; background: #E9EAE6; }
+  .photo figcaption {
+    margin-top: 16px; font-size: 13.5px; color: var(--faint);
+    line-height: 1.7; max-width: 62ch;
+  }
+
+  /* ================= Work ================= */
+  #work { padding: 84px 0 24px; }
+  .work-list { border-top: 0; }
+  .item {
+    display: grid; grid-template-columns: 440px 1fr; gap: 60px; align-items: center;
+    padding: 40px 0; border-bottom: 1px solid var(--line);
+  }
+  /* artwork presented on a surface, so screenshots and diagrams read alike */
+  .thumb {
+    aspect-ratio: 16 / 11; border-radius: 14px; overflow: hidden;
+    border: 1px solid #E2E3DE; background: #fff;
+    box-shadow: 0 1px 2px rgba(25,26,24,0.04), 0 14px 28px -22px rgba(25, 26, 24, 0.2);
+  }
+  .thumb::before {
+    content: ""; display: block; height: 30px;
+    background-color: #F3F3F0; border-bottom: 1px solid var(--line);
+    background-image:
+      radial-gradient(circle 4px at 18px 15px, #D2D3CD 100%, transparent 100%),
+      radial-gradient(circle 4px at 36px 15px, #D2D3CD 100%, transparent 100%),
+      radial-gradient(circle 4px at 54px 15px, #D2D3CD 100%, transparent 100%);
+  }
+  .thumb.dark { background: #0D0F12; border-color: #2E3136; }
+  .thumb.dark::before {
+    background-color: #17191C; border-bottom-color: #24272B;
+    background-image:
+      radial-gradient(circle 4px at 18px 15px, #34383E 100%, transparent 100%),
+      radial-gradient(circle 4px at 36px 15px, #34383E 100%, transparent 100%),
+      radial-gradient(circle 4px at 54px 15px, #34383E 100%, transparent 100%);
+  }
+  .thumb .plate { width: 100%; height: calc(100% - 30px); }
+  .thumb img, .thumb svg {
+    width: 100%; height: 100%; display: block; object-fit: cover; object-position: top;
+  }
+  .th-lbl { font-size: 9px;   fill: #A2A39D; letter-spacing: 0.12em; font-family: var(--font); }
+  .th-nm  { font-size: 11px;  fill: #191A18; font-weight: 500;      font-family: var(--font); }
+  .th-sm  { font-size: 9.5px; fill: #6E6F6A;                        font-family: var(--font); }
+  .th-box { fill: #fff; stroke: #E3E3DF; }
+
+
+  /* ---- stages: every screen sits on a soft colour field, inset, with real depth ---- */
+  .stage { position: relative; border: 0; background: #EEF0EC; aspect-ratio: 16 / 10; }
+  .stage--sky   { background: radial-gradient(120% 100% at 15% 0%, #CFDDEC 0%, #DCE6EF 50%, #E9EDF0 100%); }
+  .stage--straw { background: radial-gradient(120% 100% at 85% 0%, #EBDDBE 0%, #F0E6D0 50%, #F0EDE4 100%); }
+  .stage--peach { background: radial-gradient(120% 100% at 30% 100%, #EFD3C3 0%, #F2E2D8 50%, #F1ECE7 100%); }
+  .stage--lilac { background: radial-gradient(120% 100% at 70% 0%, #DCCFE6 0%, #E6DEEC 50%, #EDEAF0 100%); }
+  .stage .plate {
+    position: absolute; left: 7%; right: 7%; top: 7%; bottom: 7%;   /* the whole screen, centred on the field */
+    height: auto !important; border-radius: 8px; overflow: hidden; background: #fff;
+    box-shadow: 0 2px 4px rgba(25,26,24,.08), 0 40px 70px -30px rgba(25,26,24,.55), 0 16px 30px -18px rgba(25,26,24,.3);
+    border: 1px solid rgba(25,26,24,.08);
+  }
+  .stage .plate img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .stage .plate { transition: transform .18s ease-out, box-shadow .18s ease-out; }
+  .item:hover .stage .plate { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(25,26,24,.08), 0 48px 80px -32px rgba(25,26,24,.6), 0 20px 36px -18px rgba(25,26,24,.32); }
+  .item .plate img { transition: none; }
+  .item:hover .plate img { transform: none; }
+  @media (prefers-reduced-motion: reduce) { .stage .plate { transition: none; } .item:hover .stage .plate { transform: none; } }
+  .item.compact .stage { aspect-ratio: 1020 / 1100; background: none; box-shadow: none; }
+  .item.compact .stage .plate { inset: 0; border-radius: 10px; box-shadow: 0 1px 2px rgba(25,26,24,.06); border: 1px solid rgba(25,26,24,.06); }
+  .item.compact .stage .plate img { object-position: center; }
+  .item.compact .stage .plate img { object-position: center top; }
+  .item:hover .stage .plate img { transform: none; }
+
+  /* one card breaks the rhythm */
+  .item.wideitem { grid-template-columns: 1fr; gap: 48px; padding: 128px 0 136px; align-items: start; }
+  .item.wideitem .item-body { max-width: 62ch; }
+  .item.wideitem h3 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -0.03em; }
+  .item.wideitem p { font-size: 17.5px; max-width: 56ch; }
+
+  /* wide card uses a full-bleed device shot, not a cropped plate */
+  .item.wideitem .thumb {
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(25,26,24,0.04), 0 18px 36px -26px rgba(25, 26, 24, 0.22);
+  }
+  .item.wideitem .thumb:not(.stage) { aspect-ratio: auto; background: transparent; border-color: transparent; }
+  .item.wideitem .thumb .plate { height: auto; }
+  .item.wideitem .thumb img { height: auto; object-fit: unset; }
+  /* a chapter stage: the whole screen inset on a wide field */
+  .item.wideitem .thumb.stage { aspect-ratio: 1.53; border-radius: 16px; }
+  /* the whole screen, never cropped: the plate keeps the screen's proportions inside the field */
+  .item.wideitem .thumb.stage .plate { position: absolute; left: 50%; right: auto; top: 8%; bottom: auto; transform: translateX(-50%); height: 84% !important; width: auto; aspect-ratio: 16 / 10; max-width: 88%; }
+  .item.wideitem .thumb.stage .plate picture { display: block; height: 100%; }
+  .item.wideitem .thumb.stage .plate img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .item-top { display: flex; align-items: baseline; gap: 18px; margin-bottom: 13px; }
+  .item .n   { font-size: 12px; color: var(--faint); letter-spacing: 0.14em; }
+  .item .cat { font-size: 12px; color: var(--muted); letter-spacing: .01em; }
+  .item h3 {
+    font-family: var(--display);
+    font-size: clamp(21px, 2.4vw, 27px); font-weight: 400;
+    letter-spacing: -0.02em; line-height: 1.3; max-width: 24ch;
+    transition: color 0.25s ease;
+  }
+  .item p {
+    font-size: 15.5px; color: var(--muted); line-height: 1.7;
+    max-width: 56ch; margin-top: 13px;
+  }
+  .item .go {
+    display: inline-block; margin-top: 18px;
+    font-size: 14px; color: var(--accent);
+  }
+  .item .go span { display: inline-block; transition: transform 0.3s ease; }
+  .item:hover h3 { color: var(--accent); }
+  .item:hover .go span { transform: translateX(6px); }
+  /* what I changed: visible by default, roman text, a small label so it never competes with the headline */
+  .item p.changed { color: var(--ink); font-size: 15.5px; }
+  .item .changed b { display: block; font-family: var(--display); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 5px; }
+  .item p.evidence { font-size: 13.5px; color: var(--muted); margin-top: 10px; max-width: 66ch; text-wrap: balance; }
+  .item .plate img { transition: transform .5s ease; }
+  .item:hover .plate img { transform: scale(1.015); }
+  /* acknowledge the click before the page changes */
+  .item.going h3 { color: var(--accent); }
+  .item.going .go { color: var(--accent); }
+  .item.going .go::before { width: 100%; }
+  .item .go { position: relative; }
+  .item .go::before { content: ""; position: absolute; left: 0; bottom: -4px; height: 2px; width: 0; background: var(--accent); transition: width .22s ease; }
+  /* remembered: a card the reader has already opened */
+  .item .seen-tag { display: none; font-size: 11.5px; color: var(--accent); letter-spacing: .04em; }
+  .item.seen .seen-tag { display: inline; }
+  @media (max-width: 820px) { .item { grid-template-columns: 1fr; gap: 20px; } }
+  .item.compact { grid-template-columns: 200px 1fr; gap: 40px; padding: 34px 0; align-items: center; }
+  .item.compact .thumb { border-radius: 10px; }
+  .item.compact .thumb::before { height: 18px; background-image:
+      radial-gradient(circle 2.5px at 11px 9px, #D2D3CD 100%, transparent 100%),
+      radial-gradient(circle 2.5px at 22px 9px, #D2D3CD 100%, transparent 100%),
+      radial-gradient(circle 2.5px at 33px 9px, #D2D3CD 100%, transparent 100%); }
+  .item.compact .thumb .plate { height: 100%; }
+  .item.compact .thumb { aspect-ratio: 1020 / 1100; background: none; }
+  .item.compact .thumb .plate { inset: 0; border-radius: 10px; box-shadow: none; }
+  .item.compact .thumb .plate img { object-fit: cover; object-position: center; }
+  /* the screen sits on the paper with a hairline; no browser chrome on the cards (the featured prototype keeps its frame) */
+  .item .thumb::before, .item.compact .thumb::before, .item.wideitem .thumb::before { display: none; }
+  .item .thumb .plate { height: 100%; }
+  .item .thumb { border-radius: 8px; box-shadow: 0 1px 2px rgba(25,26,24,0.04); }
+  .item.compact h3 { font-size: 20px; margin-top: 8px; }
+  .item.compact p.evidence { margin-top: 6px; max-width: 70ch; }
+  .item.compact .go { margin-top: 10px; }
+  @media (max-width: 820px) { .item.compact { grid-template-columns: 1fr; } .item.compact .thumb { max-width: 260px; } }
+
+
+  /* ================= Reviewer quote ================= */
+  .qband {
+    background: #EDF2E6; padding: 88px 0; text-align: center; margin-top: 96px;
+  }
+  .qband .qmark {
+    font-family: var(--display); font-size: 84px; line-height: 0.5;
+    color: #A9C29B; display: block; height: 34px;
+  }
+  .qband .qlbl {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #77826D; margin-top: 34px;
+  }
+  .qband blockquote {
+    font-family: var(--display);
+    font-size: clamp(24px, 3vw, 38px); font-weight: 400;
+    line-height: 1.3; letter-spacing: -0.025em;
+    max-width: 24ch; text-wrap: balance; margin: 18px auto 0; color: var(--ink);
+  }
+  .qband cite {
+    display: block; font-style: normal; margin-top: 20px;
+    font-size: 14px; color: #5C6653; font-family: var(--font);
+  }
+  @media (max-width: 700px) { .qband { padding: 64px 0; margin-top: 64px; } }
+
+  /* ================= How I work ================= */
+  #how .intro {
+    font-family: var(--display);
+    max-width: 24ch; font-size: clamp(23px, 2.8vw, 33px);
+    font-weight: 400; line-height: 1.3; letter-spacing: -0.02em;
+  }
+  #how .intro em { font-style: normal; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  .steps { margin-top: 48px; border-top: 1px solid var(--line); }
+  .step {
+    display: grid; grid-template-columns: 190px 1fr 300px; gap: 44px;
+    padding: 38px 0; border-bottom: 1px solid var(--line); align-items: start;
+  }
+  .step .k {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .step .k b { color: var(--accent); font-weight: 500; font-size: 12.5px;
+    background: var(--mark); border-radius: 8px; width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    letter-spacing: 0; }
+  .step h3 {
+    font-family: var(--display); font-size: clamp(19px, 2.1vw, 24px);
+    font-weight: 400; letter-spacing: -0.02em; line-height: 1.28; margin-bottom: 10px;
+  }
+  .step p { font-size: 15.5px; color: var(--muted); line-height: 1.65; }
+  .step .aside { align-self: start; }
+
+  /* mono file list */
+  .files {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--muted); line-height: 2;
+  }
+  .files div { display: flex; justify-content: space-between; gap: 14px; }
+  .files span { color: var(--faint); }
+
+  /* prototype: file + the question it settled */
+  .proto { border-top: 1px solid var(--line); }
+  .proto li { list-style: none; border-bottom: 1px solid var(--line); padding: 13px 0; }
+  .proto .fn { font-size: 14px; color: var(--muted); display: block; font-weight: 500; }
+  .detail-link { margin-top: 28px; padding-top: 0; border-top: 0; color: var(--muted); font-size: 16px; }
+  .detail-link a { color: var(--accent); }
+  .detail-link a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .proto a.fn { color: var(--accent); text-decoration: none; transition: color .2s ease; }
+  .proto a.fn:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .proto .q {
+    font-size: 14.5px; color: var(--ink); line-height: 1.45; margin-top: 5px; display: block;
+  }
+
+  /* measured comparison */
+  .mini { font-size: 12.5px; }
+  .mini-row {
+    display: grid; grid-template-columns: 1fr 62px; gap: 10px;
+    align-items: baseline; padding: 5px 0;
+  }
+  .mini-row .lb { color: var(--muted); }
+  .mini-row .vl {
+    text-align: right; font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .mini-row.bad .vl { color: #9A4A38; }
+  .mini-row.good .vl { color: var(--accent); }
+  .mini-h {
+    font-family: var(--display); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 6px;
+  }
+  .lbar-row {
+    display: grid; grid-template-columns: 1fr 70px 48px; gap: 10px;
+    align-items: center; padding: 5px 0; font-size: 12.5px;
+  }
+  .lbar-row .lb { color: var(--muted); }
+  .lbar-row .vl { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .lbar { display: block; height: 6px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+  .lbar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+  .mini-cap {
+    font-size: 11.5px; color: var(--faint); margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--soft); line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .step { grid-template-columns: 1fr; gap: 14px; padding: 32px 0; }
+    .step .aside { margin-top: 6px; }
+  }
+
+  /* the 606-node test, drawn live */
+  .lab {
+    border: 1px solid #EAEAE6; border-radius: 16px; background: #FDFDFC;
+    padding: 28px 30px 24px; margin: 8px 0 0;
+    box-shadow: 0 1px 2px rgba(25,26,24,0.03), 0 10px 22px -16px rgba(25,26,24,0.12);
+  }
+  .lab-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+  .lab-k { font-family: var(--display); font-size: 18px; letter-spacing: -0.01em; }
+  .lab-sub { font-size: 13.5px; color: var(--muted); max-width: 52ch; margin-top: 4px; line-height: 1.6; }
+  .lab-toggle { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; flex: none; }
+  .lab-toggle button {
+    border: 0; background: transparent; cursor: pointer; padding: 8px 18px;
+    font-family: var(--font); font-size: 13px; color: var(--muted);
+  }
+  .lab-toggle button.on { background: var(--ink); color: var(--paper); }
+  #labcv { width: 100%; height: auto; display: block; margin-top: 18px; }
+  .lab-read { font-size: 13px; color: var(--muted); margin-top: 14px; border-top: 1px solid var(--soft); padding-top: 12px; }
+  .lab-read b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* tried/kept layout glyphs */
+  .glyphs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .glyph {
+    border: 1px solid #ECECE8; border-radius: 12px; padding: 10px 10px 8px; background: #FDFDFC;
+    box-shadow: 0 8px 20px -14px rgba(25,26,24,0.14);
+  }
+  .glyph svg { width: 100%; height: 44px; display: block; }
+  .glyph p { font-size: 11px; color: var(--faint); margin-top: 6px; }
+  .glyph.kept { border-color: var(--accent); }
+  .glyph.kept p { color: var(--accent); }
+
+  /* ================= Thinking ================= */
+  #thinking {
+    padding: 104px 0 96px;
+    background:
+      radial-gradient(1100px 660px at 82% 10%, rgba(125,168,133,0.26), transparent 64%),
+      radial-gradient(860px 540px at 2% 100%, rgba(96,130,158,0.14), transparent 66%),
+      var(--dark);
+  }
+  .manifesto { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .manifesto .lbl {
+    font-family: var(--display); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #6E747E; margin-bottom: 40px;
+  }
+  .manifesto blockquote {
+    font-family: var(--display); color: #F4F5F7;
+    font-size: clamp(34px, 6.4vw, 86px); font-weight: 400;
+    line-height: 1.02; letter-spacing: -0.045em; max-width: 15ch;
+  }
+  .manifesto blockquote em {
+    font-style: normal; color: #AFC8A8; box-shadow: inset 0 -0.12em 0 #2C4032;
+  }
+  .manifesto .after {
+    margin-top: 48px; border-top: 1px solid #23262B; padding-top: 24px;
+  }
+  .manifesto .after p { font-size: 16.5px; color: #9AA0AA; max-width: 50ch; }
+  .convs { margin-top: 56px; border-top: 1px solid #23262B; }
+  .conv {
+    display: grid; grid-template-columns: 1.1fr 1fr auto; gap: 32px;
+    padding: 22px 0; border-bottom: 1px solid #23262B; align-items: baseline;
+  }
+  .conv .c { font-family: var(--display); font-size: 18px; color: #F4F5F7;
+             letter-spacing: -0.01em; line-height: 1.4; }
+  .conv .rcpt { font-size: 14.5px; color: #9AA0AA; line-height: 1.6; }
+  .conv .go2 { font-size: 13.5px; color: #8FA88A; white-space: nowrap; }
+  .conv .go2 span { display: inline-block; transition: transform 0.3s ease; }
+  .conv:hover .go2 span { transform: translateX(5px); }
+  @media (max-width: 820px) { .conv { grid-template-columns: 1fr; gap: 8px; } }
+  .manifesto .after a { font-size: 14.5px; color: var(--accent); white-space: nowrap; }
+  .manifesto .after a span { display: inline-block; transition: transform 0.3s ease; }
+  .manifesto .after a:hover span { transform: translateX(6px); }
+  @media (max-width: 700px) {
+    .manifesto .after { grid-template-columns: 1fr; gap: 18px; align-items: start; }
+  }
+
+  /* ---- Care, in the interaction ---- */
+  .care { margin-top: 56px; display: block; }
+  .care-states { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-family: var(--display); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #6E747E; }
+  .care-states .on { color: #AFC8A8; }
+  .care-states .sep { width: 14px; height: 1px; background: #3A3E45; display: inline-block; }
+  .care-proto { position: relative; border-radius: 12px; height: 700px; padding: 28px;
+    background: radial-gradient(110% 90% at 15% 0%, #2B3330 0%, #1B1F1E 55%, #15181A 100%); }
+  /* the whole prototype, inside the field on every side */
+  .care-frame { position: relative; width: 100%; height: 100%; border-radius: 10px; overflow: hidden; background: #fff;
+    box-shadow: 0 30px 60px -26px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06); }
+  .care-frame iframe { display: block; border: 0; background: #fff; pointer-events: none; width: 133.34%; height: 133.34%; transform: scale(.75); transform-origin: 0 0; }
+  .care-poster { display: none; }
+  .care-poster img { display: block; width: 100%; height: auto; }
+  .care-cap { margin: 14px 0 0; font-size: 14.5px; color: #C9CDD3; line-height: 1.55; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .care-cap .care-k { font-family: var(--display); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #6E747E; flex: none; }
+  .care-replay { margin-left: auto; }
+  .care-side { display: grid; grid-template-columns: 1fr 1fr; gap: 0 44px; }
+  .care-study { display: block; color: inherit; }
+  .care-study .care-crop { border-radius: 10px; overflow: hidden; padding: 22px; transition: background .2s ease;
+    background: radial-gradient(110% 90% at 15% 0%, #2B3330 0%, #1B1F1E 55%, #15181A 100%); }
+  .care-study .care-crop picture { display: block; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 48px -22px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06); }
+  .care-study:hover .care-crop, .care-study:focus-visible .care-crop { background: radial-gradient(110% 90% at 15% 0%, #33403A 0%, #1F2523 55%, #15181A 100%); }
+  .care-study:focus-visible { outline: 2px solid #8FA88A; outline-offset: 4px; border-radius: 6px; }
+  .care-crop img { display: block; width: 100%; height: auto; }
+  /* a component shown on its own: centred on the field, natural size, room around it */
+  .care-crop--cmp { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 10; padding: 26px; }
+  .care-crop--cmp picture { display: block; height: 100%; box-shadow: 0 30px 60px -24px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.05); border-radius: 14px; }
+  .care-crop--cmp img { height: 100%; width: auto; max-width: 100%; object-fit: contain; border-radius: 14px; }
+  .care-crop--dark picture { height: auto; width: 82%; box-shadow: 0 30px 60px -24px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.08); border-radius: 16px; }
+  .care-crop--dark img { height: auto; width: 100%; border-radius: 16px; }
+  @media (max-width: 1000px) { .care-proto { height: 520px; padding: 20px; } .care-side { grid-template-columns: 1fr; gap: 34px 0; } }
+  @media (max-width: 700px) {
+    .care-proto { height: auto; padding: 14px; }
+    .care-frame { height: auto; }
+    .care-frame iframe { display: none; }
+    .care-poster { display: block; }
+    .care-replay { display: none; }
+    .care-cap { font-size: 14px; }
+  }
+
+  /* ================= About ================= */
+  #about .wrap { max-width: 1180px; }
+  .about-top {
+    display: flex; align-items: flex-start; gap: 56px;
+  }
+  .portrait {
+    flex: 0 0 200px; margin: 0;
+    border-radius: 12px; overflow: hidden; background: #E9EAE6;
+  }
+  .portrait img { width: 100%; height: auto; display: block; }
+  .about-text { flex: 1 1 auto; min-width: 0; }
+  .about-text p { margin-bottom: 20px; max-width: 58ch; }
+  .about-text p:first-child { font-size: 19.5px; line-height: 1.6; }
+  .about-text p:last-child { margin-bottom: 0; }
+  #about b { font-weight: 500; }
+  .facts {
+    margin-top: 64px; clear: both;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 34px;
+  }
+  @media (max-width: 960px) {
+    .about-top { display: block; }
+    .portrait { width: 220px; margin-bottom: 36px; }
+    .facts { grid-template-columns: 1fr 1fr; margin-top: 52px; }
+  }
+  .fact { border-top: 1px solid var(--line); padding-top: 14px; }
+  .fact p:first-child {
+    font-family: var(--display); font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 5px;
+  }
+  .fact p:last-child { font-size: 15px; line-height: 1.55; }
+  @media (max-width: 640px) { .facts { grid-template-columns: 1fr; gap: 22px; }
+    .portrait { width: 180px; margin-bottom: 30px; } }
+
+  /* ================= Contact ================= */
+  #contact { text-align: left; padding: 0 0 30px; }
+  #contact .wrap { max-width: 1180px; }
+  #contact h2 {
+    font-family: var(--display);
+    font-size: clamp(26px, 3vw, 35px); font-weight: 400;
+    line-height: 1.28; letter-spacing: -0.02em; max-width: 24ch; margin: 0;
+  }
+  #contact h2 em { font-style: normal; box-shadow: inset 0 -0.14em 0 var(--mark); }
+  #contact h2 .q {
+    display: block; color: var(--muted); font-size: 0.66em;
+    margin-top: 14px; max-width: 40ch;
+  }
+  .copybtn {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 40px; padding: 15px 32px; border: none; cursor: pointer;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font); font-size: 15.5px; font-weight: 500;
+    border-radius: 999px; transition: background 0.25s ease, transform 0.2s ease;
+  }
+  .copybtn { box-shadow: 0 8px 18px -10px rgba(25,26,24,0.3); }
+  .copybtn:hover { background: var(--accent); transform: translateY(-2px);
+    box-shadow: 0 10px 22px -12px rgba(61,90,69,0.4); }
+  .mailalt {
+    display: flex; justify-content: flex-start; align-items: baseline; gap: 10px;
+    margin-top: 20px; font-size: 13.5px; color: var(--faint); flex-wrap: wrap;
+  }
+  .copylink {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-family: var(--font); font-size: 13.5px; color: var(--faint);
+    border-bottom: 1px solid var(--line);
+  }
+  .copylink:hover { color: var(--ink); border-color: var(--ink); }
+  .copylink.ok { color: var(--accent); border-color: var(--accent); }
+  .links {
+    margin-top: 42px; display: flex; justify-content: flex-start; gap: 30px;
+    font-size: 13.5px; color: var(--muted); flex-wrap: wrap;
+  }
+  .links { gap: 44px; }
+  .links .lgrp { display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap; }
+  .links .llbl { font-family: var(--display); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+  .links a { transition: color 0.25s ease; }
+  .links a:hover { color: var(--ink); }
+
+  footer { text-align: left; max-width: 1180px; margin: 0 auto; padding: 64px 40px 44px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 12.5px; color: var(--faint); }
+  footer .credit { margin-top: 0; }
+  footer .floot { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: color 0.25s ease; }
+  footer .floot:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ================= Reveal + motion prefs ================= */
+  .r { opacity: 0; transform: translateY(12px); transition: opacity 0.72s ease, transform 0.72s ease; }
+  .r.on { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .r { opacity: 1; transform: none; transition: none; }
+    .avail i { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 700px) {
+    .wrap, .wide, .photo, .manifesto, .infl-wrap, footer { padding-left: 24px; padding-right: 24px; }
+    header { padding: 64px 0 0; }
+    .rule { margin: 68px auto; }
+    .sec-head { margin-bottom: 44px; }
+    #nums { padding: 72px 0 0; }
+  }
+
+  @media (max-width: 760px) {
+    .nav-inner { padding: 44px 24px 20px; gap: 16px; }
+    /* Five marks and five words do not fit one phone row. The two wrapper divs are the flex
+       items, so the row could only break between groups — four ragged lines. display:contents
+       hands the five links straight to the nav, which then wraps into two tidy right-aligned
+       rows instead. */
+    .nav-mid, .nav-end { display: contents; }
+    .nav-inner { flex-wrap: wrap; justify-content: flex-end; }
+    /* one size across the row, or the taller name word knocks its neighbours 3px out of line */
+    .nb .nwd, .nb.nav-id .nwd, .nb.id .nwd { font-size: 13.5px; line-height: 28px; }
+    .nb { font-size: 13.5px; line-height: 28px; }
+    .nav-mid { font-size: 13px; gap: 16px; }
+    header { padding: 72px 0 0; }
+    header h1 { font-size: clamp(56px, 17vw, 84px); }
+    /* Work and About used to be dropped here. Now that the nav is words on touch,
+       all four fit across a phone, so nothing has to be hidden. */
+    .nav-mid { display: flex; }
+    .nb.nav-id .nwd { font-size: 14px; }
+    .band { padding-top: 76px; padding-bottom: 64px; }
+    .band h2 { font-size: clamp(28px, 8.6vw, 42px); }
+    .bshot { margin-top: 44px; }
+    #work { padding-top: 76px; }
+    .item { padding: 40px 0; }
+    .item h3, .item.wideitem h3 { font-size: 24px; max-width: 20ch; }
+    .item.wideitem { padding: 40px 0 44px; gap: 24px; }
+    #nums { padding-top: 76px; }
+    .num-hero .v { font-size: clamp(46px, 15vw, 72px); }
+    .infl-wrap { padding: 0 24px; }
+    .infl + .infl { margin-top: 44px; padding-top: 44px; }
+    #how { padding-top: 72px !important; }
+    #thinking { padding: 84px 0 92px; }
+  }
+
+  .nav-end { display: flex; align-items: center; gap: 14px; }
+  /* ===== Editorial · paper, hairlines, one quiet field ===== */
+  :root { --paper:#F7F7F5; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --soft:#EDEDEA; --mark:#DCE5D3; --accent:#3D5A45; --field:#EEEFEB; }
+  body { background: var(--paper); color: var(--ink); }
+  body::after { opacity: .10; }
+  nav { background: transparent !important; border-bottom: 0 !important; }
+  header::before { background: none; }
+  header h1 b { box-shadow: inset 0 -0.14em 0 var(--mark); }
+  .creds { border-top-color: var(--line); }
+  /* featured band: paper, hairlines; the prototype keeps its own dark screen */
+  .band { background: var(--paper); color: var(--ink); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .band .blbl { color: var(--faint); } .band h2 { color: var(--ink); } .band .bsub { color: var(--muted); }
+  .band .bgo { color: var(--accent); } .band .btext { color: inherit; }
+  .bshot { border-color: var(--line); background: var(--field); box-shadow: 0 1px 2px rgba(25,26,24,.04), 0 30px 60px -34px rgba(25,26,24,.3); }
+  .bshot::before { background-color: #EDEDEA; border-bottom-color: var(--line);
+    background-image: radial-gradient(circle 4px at 18px 15px, #CFD0CA 100%, transparent 100%), radial-gradient(circle 4px at 36px 15px, #CFD0CA 100%, transparent 100%), radial-gradient(circle 4px at 54px 15px, #CFD0CA 100%, transparent 100%); }
+  .bcap { color: var(--faint); } .bcap #fgstate { color: var(--faint); background: none; padding: 0; }
+  .bcap .breplay { border-color: var(--line); color: var(--muted); } .bcap .breplay:hover, .bcap .breplay:focus-visible { border-color: var(--ink); color: var(--ink); }
+  /* every screen sits on the same quiet field */
+  /* a prototype as the card's screen: same hairline as the flat shots */
+  .item.wideitem .thumb.thumb-live { aspect-ratio: auto; background: none; border: 0; border-radius: 0; overflow: visible; box-shadow: none; }
+  .thumb-live .care-proto { height: auto; aspect-ratio: 1044 / 644; padding: 0; background: none; border-radius: 8px; }
+  .thumb-live .care-frame { border: 1px solid var(--line); border-radius: 8px; box-shadow: none; }
+  .thumb-live .care-cap { margin-top: 14px; }
+  .care-side { grid-template-columns: 1fr 1fr; }
+  /* screens sit flat on the paper: cropped to the working area, a hairline, nothing else */
+  .item.wideitem .thumb.stage { aspect-ratio: auto; background: none !important; border-radius: 0; overflow: visible; }
+  .item.wideitem .thumb.stage .plate { position: static; transform: none; height: auto !important; width: 100%; max-width: 100%; aspect-ratio: auto;
+    border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: none !important; background: #fff; }
+  .item.wideitem .thumb.stage .plate img { width: 100%; height: auto; object-fit: unset; }
+  .stage, .stage--sky, .stage--straw, .stage--peach, .stage--lilac { background: var(--field) !important; }
+  .stage .plate { box-shadow: 0 1px 2px rgba(25,26,24,.06), 0 40px 70px -34px rgba(25,26,24,.35), 0 0 0 1px rgba(25,26,24,.06); border-color: rgba(25,26,24,.06); }
+  .item.wideitem .thumb { box-shadow: none; }
+  .item, .work-list, .rule, .facts, .about-top { border-color: var(--line) !important; }
+  .item .cat, .item .n, .item p.evidence { color: var(--faint); } .item .changed b { color: var(--accent); }
+  .mailalt a { color: var(--muted); } .mailalt a:hover { color: var(--ink); }
+  #nums .num-hero { border-top: 1px solid var(--line); } #nums .num-foot a { color: var(--accent); }
+  .lab { background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 48px 48px 40px; }
+  .lab .lab-k, .lab .lab-read b { color: var(--ink) !important; } .lab .lab-sub, .lab .lab-read { color: var(--muted) !important; }
+  .lab-toggle button { background: #fff; color: var(--ink); border-color: var(--line); } .lab-toggle button.on { background: var(--ink); color: var(--paper); }
+  /* care: paper section, grey fields */
+  #thinking { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 0; }
+  .manifesto .lbl, .care-states, .care-cap .care-k { color: var(--faint); }
+  .manifesto h2, .manifesto blockquote { color: var(--ink); }
+  .manifesto blockquote em, .manifesto h2 em { color: var(--accent); box-shadow: inset 0 -0.12em 0 var(--mark); }
+  .manifesto .after, .care { border-top-color: var(--line); }
+  .manifesto .after p, .care-cap { color: var(--muted); }
+  .care-states .on { color: var(--accent); } .care-states .sep { background: var(--line); }
+  .care-proto, .care-study .care-crop { background: var(--field); }
+  .care-study:hover .care-crop, .care-study:focus-visible .care-crop { background: #E7E8E3; }
+  .care-frame { box-shadow: 0 1px 2px rgba(25,26,24,.06), 0 30px 60px -30px rgba(25,26,24,.35), 0 0 0 1px rgba(25,26,24,.06); }
+  .care-study .care-crop picture, .care-crop--cmp picture, .care-crop--dark picture { box-shadow: 0 1px 2px rgba(25,26,24,.06), 0 28px 56px -28px rgba(25,26,24,.35), 0 0 0 1px rgba(25,26,24,.06); }
+  .care-study:focus-visible { outline-color: var(--accent); }
+  .care-replay { border-color: var(--line); color: var(--muted); }
+  .portrait { background: var(--soft); } .fact p:first-child { color: var(--faint); }
+  .copybtn { background: var(--ink); color: var(--paper); } .copybtn:hover { background: var(--accent); color: #fff; }
+  footer, footer .floot, .copylink, .links a { color: var(--faint); } footer { border-color: var(--line); }
+  .avail { color: var(--accent); } .avail i { background: var(--accent); }
+  .hero-copy .sub { border-top-color: var(--line); }
+  #contact h2 em { box-shadow: inset 0 -0.14em 0 var(--mark); }
+  .qmark { color: var(--mark); }
+</style>
+</head>
+<style>
+  /* the index: text only */
+  #work { padding: 30px 0 150px; }
+  #work .wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .ix-lbl { font-family: var(--display); font-size: 14px; letter-spacing: .1em; text-transform: uppercase;
+            color: var(--faint); margin: 0 0 46px; }
+  .ixl { list-style: none; margin: 0; padding: 0; max-width: var(--col); }
+  .ix + .ix { margin-top: 80px; }
+  /* the hit area hugs the text — hovering 26px above the title used to fire the change,
+     which read as the row reacting to nothing */
+  .ix-b { position: relative; display: grid; grid-template-columns: 22px 1fr; gap: 0 15px; align-items: start;
+    width: calc(100% + 28px); margin-left: -14px; text-align: left; background: none; border: 0;
+    padding: 8px 14px 10px; border-radius: 12px; font: inherit; color: inherit; cursor: pointer;
+    transition: background .22s ease; }
+  /* no panel: the only things that change are the mark, and the line it is about */
+  .ix-b:hover, .ix-b:focus-visible { background: none; outline: none; }
+  /* the only movement is the one that means something: the mark becomes the arrow that says it leads somewhere */
+  /* The number beside a row is a label, not body copy. On About the same column is Poppins
+     14 with tracking; here it was Inter 17.5. Same job, one treatment. */
+  .ix-n { position: relative; display: block; width: 30px; height: 24px; color: var(--faint);
+        font-family: var(--display); font-size: 14px; letter-spacing: .02em; line-height: 24px; }
+  .ix-n i { position: absolute; left: 0; top: 0; font-style: normal; }
+  .ix-n .num { transition: opacity .18s ease; }
+  .ix-n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink); font-size: 17px;
+               transition: opacity .2s ease .06s, transform .34s cubic-bezier(.22,.61,.36,1) .06s; }
+  .ix-b:hover .num, .ix-b:focus-visible .num { opacity: 0; }
+  .ix-b:hover .arw, .ix-b:focus-visible .arw { opacity: 1; transform: none; }
+  .ix-t { display: block; }
+  .ix-top { display: flex; align-items: baseline; gap: 15px; flex-wrap: wrap; }
+  /* hierarchy from weight and colour only — the title and its credit line are the same size,
+     stacked tight so they read as one block, with the field between rows doing the separating */
+  /* 600 lives nowhere else on this site: everything that carries weight carries 500. The
+     specimens keep their own 600, because those are simulated product screens, not this
+     site's typography. */
+  .ix-t b { font-size: 17.5px; font-weight: 500; color: var(--ink); letter-spacing: -0.012em; line-height: 1.45; }
+  /* Sensitivity, applied to my own index: at rest the row states what the work is.
+     Touch it and that line becomes the sentence the work is about. Nothing moves but the words. */
+  .ix-sw { position: relative; display: block; margin-top: 1px; height: 56px;
+           font-size: 17.5px; line-height: 28px; max-width: 42ch; }
+  .ix-sw i.a { font-style: normal; }
+  .ix-sw i.b { font-style: normal; display: none; }   /* the second state is never in flow */
+  /* a pointer can hover for the second line; a screen reader cannot, so the row's name carries both */
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* the credit line is secondary — grey at rest; the sentence it becomes is the point, so it lands in ink */
+  .ix-sw .ml-g { color: var(--muted); }
+  .ix-sw.is-after .ml-g { color: var(--ink); }
+
+  /* the pop-up: where the story lives */
+  .ov { position: fixed; inset: 0; z-index: 90; background: rgba(222,222,218,.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
+  .ov.on { opacity: 1; visibility: visible; }
+  /* No close mark at the top any more, so the card no longer has to duck under one.
+     Escape closes it, and so does clicking the paper around it. */
+  .ov-in { display: flex; justify-content: center; padding: 40px 24px 120px; min-height: 100%; }
+  .ov-in:focus { outline: none; }
+  .md { width: 100%; max-width: 1000px; align-self: flex-start; background: var(--paper); border-radius: 18px; padding: 12px 12px 0; box-shadow: 0 0 0 1px rgba(25,26,24,.07); transform: translateY(16px); transition: transform .36s cubic-bezier(.22,.61,.36,1); }
+  .ov.on .md { transform: none; }
+  /* ── The way out of a case study on a phone ────────────────────────────
+     On a desktop the card sits in the middle of a wide backdrop, so tapping
+     beside it closes it, and Escape is there for the keyboard. On a phone the
+     card fills the screen: there is no backdrop left to tap and no Escape key,
+     which left the browser's own back gesture as the only exit. A word, pinned
+     where a thumb reaches, and only on the screens that need it. It rides
+     above the card so a long case study never has to be scrolled to get out. */
+  .ov-close { display: none; }
+  @media (hover: none), (max-width: 760px) {
+    .ov-close { display: block; position: fixed; top: 14px; right: 16px; z-index: 95;
+      font-family: var(--display); font-size: 13px; line-height: 20px; font-weight: 500;
+      color: var(--ink); background: var(--paper);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px; cursor: pointer;
+      box-shadow: 0 4px 14px -8px rgba(25,26,24,.30); }
+    .ov-close:active { background: var(--soft); }
+    /* the card starts below the button rather than under it */
+    .ov-in { padding-top: 64px; }
+  }
+  .md-shot { background: #fff; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; }
+  .md-shot img { display: block; width: 100%; height: auto; }
+  /* The prototype plays at the top of the card instead of a still of it. It is loaded only
+     when its card opens and unloaded when the card closes, so nothing runs in the background
+     and four loops never run at once. It cannot be clicked: this is the portfolio, not the
+     product. The screenshot stays underneath as the poster, and on a phone — where a
+     1300px-wide prototype is unreadable — the poster is all you get. */
+  .md-shot { position: relative; height: 580px; }
+  .md-shot picture, .md-shot img { position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover; object-position: top center; }
+  .md-shot iframe { position: absolute; inset: 0; border: 0; background: #fff;
+        width: 137.4%; height: 137.4%; transform: scale(.728); transform-origin: 0 0;
+        pointer-events: none; }
+  .md-shot.still { height: auto; }
+  .md-shot.still picture, .md-shot.still img { position: static; height: auto; object-fit: fill; }
+  @media (max-width: 1080px) { .md-shot { height: 460px; } }
+  @media (max-width: 760px) {
+    .md-shot { height: auto; }
+    .md-shot iframe { display: none; }
+    .md-shot picture, .md-shot img { position: static; height: auto; object-fit: fill; }
+  }
+  /* A wide card with a narrow column inside it: the prototype gets the full width of the
+     stage, the writing keeps a measure you can actually read. */
+  /* The title was 36px under a full-bleed dark screen and 48px above the writing — less air
+     above it than below, so it read as attached to the picture rather than as the start of
+     the piece. The gap above a title should be the largest one in the card. */
+  .md-body { padding: 76px 168px 84px; }
+  @media (max-width: 1080px) { .md-body { padding: 64px 88px 72px; } }
+  .md h2 { font-family: var(--display); font-size: 21px; font-weight: 400; letter-spacing: -0.018em; line-height: 1.25; margin: 0; color: var(--ink); }
+  .md-k { color: var(--muted); font-size: 17.5px; line-height: 26px; margin: 2px 0 0; }
+  .md hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0 48px; }
+  .md-lead { font-size: 17.5px; line-height: 26px; color: var(--muted); margin: 0 0 22px; }
+  /* 600 existed nowhere else on this site — everything that carries weight carries 500.
+     Two weights doing the same job is the scatter, not the emphasis. */
+  .md h3 { font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 26px; margin: 64px 0 6px; letter-spacing: -0.012em; }
+  .md p { font-size: 17.5px; line-height: 26px; max-width: 52ch; color: var(--muted); margin: 0 0 22px; }
+  .md p b { color: inherit; font-weight: 400; }
+  .md-ev { font-size: 14px !important; color: var(--faint) !important; margin: 66px 0 0 !important; line-height: 1.62 !important; }
+  .md-links { display: flex; gap: 26px; flex-wrap: wrap; margin: 26px 0 0 !important; }
+  .md-go { color: var(--accent); font-size: 17.5px; }
+  @media (max-width: 700px) {
+    .ov-in { padding: 24px 12px 80px; } .md-body { padding: 26px 20px 44px; } .md-lead { font-size: 17.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ov, .md { transition: none; } }
+
+  /* ---- one column, placed left of centre; the field around it is the design ---- */
+  :root { --col: 620px; --axis: max(24px, calc(50% - 550px)); }
+
+  /* ── The loader ───────────────────────────────────────────────────────────
+     A page about how attention gets spent should not open by spending none on
+     the reader. On every load the one sentence inks in, a word at a time, at
+     about the speed a person reads it, and the page arrives behind it. Nothing
+     spins and nothing counts down — the wait is the sentence.
+     It is hidden until a script turns it on, so a browser with no JavaScript
+     never meets a curtain it cannot lift, and reduced motion skips it outright. */
+  .ldr{display:none;position:fixed;inset:0;z-index:80;background:none;isolation:isolate}
+  .ldr::before{content:"";position:absolute;inset:0;z-index:-1;
+       background-color:rgba(247,247,245,1);
+       -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+       transition:background-color 1000ms cubic-bezier(.33,0,.2,1),
+                  -webkit-backdrop-filter 1000ms cubic-bezier(.33,0,.2,1),
+                  backdrop-filter 1000ms cubic-bezier(.33,0,.2,1)}
+  .ldr.gone::before{background-color:rgba(247,247,245,0);
+       -webkit-backdrop-filter:blur(0px);backdrop-filter:blur(0px)}
+  .ldr.run{display:block}
+  body.ldr-on .r{opacity:1;transform:none;transition:none}
+  .ldr.gone{pointer-events:none}
+
+  /* Landing. Nothing about the sentence changes — it is never blurred, never faded, never
+     moved. The paper it sits on is what leaves: its colour drains to nothing while the blur
+     it holds over the rest of the page drops to zero, both over a second. By the end the
+     sentence on the paper is sitting exactly on top of the real one underneath, identical,
+     so removing the paper is invisible. Everything else arrives out of focus and sharpens. */
+  .ldr-t{position:absolute;margin:0;color:#C6C7C1}
+  .ldr-t i{font-style:normal;color:#C6C7C1;transition:color 400ms ease}
+  .ldr-t i.on{color:var(--ink-on,var(--ink))}
+  /* The loader runs for about five seconds and the page behind it stayed
+     scrollable the whole time. overflow:hidden on body alone does not hold it,
+     because html is the scrolling element, and on a phone a touch drag moves
+     the page regardless. Both are locked, and the overlay itself refuses touch
+     gestures so nothing underneath can be dragged. */
+  html.ldr-on,body.ldr-on{overflow:hidden;overscroll-behavior:none}
+  html.ldr-on{touch-action:none}
+  .ldr{touch-action:none;overscroll-behavior:none}
+
+  header .wide, #work .wrap, #contact .wrap, footer, .nav-inner {
+    max-width: none; width: auto; margin: 0; padding-left: var(--axis); padding-right: max(24px, calc(50% - 550px));
+  }
+  header .wide > *, #work .wrap > *, #contact .wrap > * { max-width: var(--col); }
+  header .wide > .hero-copy > .hero-facts { max-width: var(--col); }
+  header { padding: 150px 0 0; min-height: 0; display: block; }
+  header h1 { font-size: clamp(56px, 8.2vw, 114px); line-height: 0.95; letter-spacing: -0.046em; max-width: 8ch; }
+  .hero-copy .role { font-size: 17.5px; color: var(--muted); margin-top: 22px; letter-spacing: 0; font-family: var(--font); }
+  .hero-copy .sub { font-size: 17.5px; line-height: 28px; color: var(--muted); max-width: 44ch; margin-top: 40px; border-top: 0; padding-top: 0; }
+  .avail { margin-top: 26px; font-size: 14px; }
+  /* Morphline — shared glyph layer (used by the facts tabs) */
+  .ml-probe, .ml-layer { font: inherit; line-height: inherit; letter-spacing: inherit; }
+  .ml-probe { display: block; }
+  .ml-probe .ml-w { display: inline-block; white-space: nowrap; }
+  .ml-probe .ml-c { display: inline-block; font-style: normal; white-space: pre; }
+  .ml-layer { position: absolute; inset: 0; pointer-events: none; }
+  .ml-layer .ml-g { position: absolute; display: inline-block; font-style: normal; white-space: pre;
+                    will-change: transform, opacity; }
+  .ml-layer .ml-in { opacity: 0; transform: translateY(0.32em); filter: blur(3px); }
+
+  /* the facts, as tabs: three labels, one line that morphs between them */
+  .hero-facts { display: block; margin-top: 104px; padding-top: 0; border-top: 0; }
+  .ftabs { position: relative; display: inline-flex; gap: 14px 30px; flex-wrap: wrap; margin-left: 0; }
+  /* no chip. The tabs carry their state the same way the Sensitivity framework does:
+     out of focus at rest, sharp in ink when chosen. The travelling pill Morphline seats
+     is still created, and hidden here. */
+  .ftab-pill { display: none; }
+  /* labels at rest sit slightly out of focus; the chosen one is sharp and in ink — the same
+     two states the Sensitivity framework uses */
+  .ftab { position: relative; z-index: 1; background: none; border: 0; cursor: pointer; font: inherit;
+          padding: 6px 0; border-radius: 0;
+          font-size: 14px; letter-spacing: .1em; text-transform: uppercase;
+          font-family: var(--display); color:var(--faint);font-weight:500;filter:blur(.7px); transition:color .26s ease, filter .3s ease; }
+  .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); filter: blur(0); outline: none; }
+  /* The chosen tab carries a line — the same 1.5px of accent the top navigation uses, six
+     pixels clear of the word, growing in from the left. One tab component means one selected
+     state: out of focus at rest, sharp and in ink when chosen, and a line under the chosen
+     one. Top of the page and inside it, no exceptions. */
+  .ftab::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 1.5px;
+          background: var(--accent); transition: right .3s ease; }
+  .ftab.on::after { right: .1em; }
+  @media (prefers-reduced-motion: reduce) { .ftab::after { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .ftab, .ftab-pill { transition: none; } }
+  .fval { position: relative; margin-top: 26px; height: 56px;
+          font-size: 17.5px; line-height: 28px; max-width: 46ch; }
+  .fval .ml-layer .ml-g { color: var(--muted); }
+  @media (max-width: 700px) { .fval { height: 84px; } }
+  #work { padding: 150px 0 0; }
+  .ixl { max-width: var(--col); }
+  #contact { padding: 150px 0 0; border-top: 0; }
+  .more { font-size: 15px; color: var(--faint); margin-top: 72px; max-width: var(--col); line-height: 1.7; }
+  .more a { color: var(--muted); transition: color .2s ease; }
+  .more a:hover { color: var(--ink); }
+  #contact h2 { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.32; letter-spacing: -0.024em; max-width: 22ch; }
+  /* the availability line is the door to About: at rest it says what I am open to, reached for
+     it says where I came from, and pressing it goes there. Two lines are reserved so nothing below moves. */
+  #contact h2 .q { position: relative; font-size: 17.5px; color: var(--muted); display: block; margin-top: 16px;
+                   line-height: 28px; height: 56px; max-width: 50ch; font-family: var(--font); letter-spacing: 0; cursor: pointer; }
+  #contact h2 .q i.a, #contact h2 .q i.b { font-style: normal; }
+  #contact h2 .q i.b { display: none; }
+  #contact h2 .q .ml-g { color: var(--muted); }
+  #contact h2 .q.is-after .ml-g { color: var(--ink); }
+  .copybtn { margin-top: 96px; }
+  .mailalt { font-size: 14px; display: block; margin-top: 26px; }
+  footer { margin-top: 150px; padding-top: 26px; padding-bottom: 60px; border-top: 1px solid var(--line); display: block; font-size: 14px; }
+  .rule { display: none; }
+  /* Four sizes, nothing else. 114 the name, 24 a heading, 17.5 everything you read,
+     14 the labels around it. Weight and colour do the rest. */
+  .nav-inner a { font-size: 14px; }
+  .nav-inner a.nav-id { font-size: 17.5px; }
+  /* the address is the control: no second word, it says what it did and goes back */
+  /* the address darkens on hover; no rule underneath it */
+  .copylink { font-size: 14px; color: var(--muted); border: 0; transition: color .22s ease; }
+  .copylink:hover { color: var(--ink); }
+  .copylink.ok { color: var(--accent); }
+  /* the confirmation is one word changing — the box follows the word, nothing else moves */
+  /* the glyph layer sits in the same line box as the text beside it, so the three align */
+  [data-morph-text] { position: relative; display: inline-block; height: 28px; vertical-align: top;
+                      transition: width .46s cubic-bezier(.2,.8,.2,1); }
+  .copybtn { font-size: 17.5px; }
+  .ix-n .arw { font-size: 17.5px; }
+  #contact h2, #contact h2 em { font-size: 24px; letter-spacing: -0.02em; line-height: 1.34; }
+  #contact h2 .q { font-size: 17.5px; }
+  .md h2 { font-size: 24px; font-weight: 500; letter-spacing: -0.018em; line-height: 1.32; }
+  .copybtn { font-size: 17.5px; }
+  .ix-n .arw { font-size: 17.5px; }
+  @media (max-width: 900px) {
+    :root { --axis: 24px; }
+    .ix-b { width: 100%; margin-left: 0; padding: 8px 0 10px; grid-template-columns: 20px 1fr; gap: 0 12px; }
+    .ix + .ix { margin-top: 52px; }
+    header .wide, #work .wrap, #contact .wrap, footer, .nav-inner { padding-right: 24px; }
+    header { padding-top: 108px; } #work, #contact { padding-top: 96px; } footer { margin-top: 96px; }
+  }
+
+  /* ── Room, matching the Sensitivity page ─────────────────────────────────
+     The references all give the content a small share of the canvas. These are
+     the gaps a reader actually feels: into the page, out of the hero, between
+     one piece of work and the next. Nothing is resized or moved. */
+  header{padding:72px 0 0}
+  #work{padding-top:230px}
+  #contact{padding-top:230px}
+  .ix-lbl{margin:0 0 64px}
+  .ix + .ix{margin-top:110px}
+  @media (max-width:900px){
+    header{padding-top:128px}
+    #work{padding-top:132px}
+    #contact{padding-top:132px}
+    .ix-lbl{margin:0 0 44px}
+    .ix + .ix{margin-top:68px}
+  }
+
+  /* the nav reads the same way: soft until you reach for it, sharp where you are */
+  /* the nav is marks now, not blurred words — a blurred block is just a smudge */
+  .nav-mid a, .nav-end .cta { font-weight: 500; }
+
+  /* ── Nav as four marks ────────────────────────────────────────────────────
+     The whole navigation is one cluster of four blocks in the top right corner:
+     home, Work, About, Contact. At rest none of them says anything — present,
+     unlabelled, costing nothing to look past. Reach for one and that block opens
+     into its word. The cluster is anchored to the right edge, so opening a word
+     pushes the others left and the right edge never moves.
+     Each width is measured from the word itself once the fonts have landed, so
+     nothing is hard-coded and a longer label cannot clip.
+     Where there is no hover to reach with, the words are simply there: a block
+     nobody can reach is a door with no handle. */
+  .nb { position: relative; display: block; width: 28px; height: 28px; overflow: hidden;
+        flex: none; filter: none;
+        --wd: 620ms; --we: cubic-bezier(.45,.05,.25,1); --wl: 120ms;
+        --md: 420ms; --ml: 240ms; --td: 260ms; --tl: 0ms;
+        transition: width var(--wd) var(--we) var(--wl),
+                    opacity 560ms ease var(--d, 0ms),
+                    transform 560ms cubic-bezier(.22,.61,.36,1) var(--d, 0ms); }
+  /* The marks arrive one after another once the page has settled, then the one for this
+     page darkens. Hidden only by script, so with no JavaScript they are simply there.
+     The delay is on the arrival alone — reaching for a mark still answers immediately,
+     because a pointer that waits reads as a fault, not as care. */
+  body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
+  body.nav-in .nb{opacity:1;transform:none}
+  .nb .nmk { position: absolute; inset: 0; border-radius: 8px; background: #DCDDD8;
+        transition: opacity var(--md) ease var(--ml), background-color 420ms ease; }
+  .nb .nwd { position: absolute; left: 0; top: 0; height: 28px; line-height: 28px;
+        white-space: nowrap; opacity: 0; transition: opacity var(--td) ease var(--tl); }
+  /* Reaching for a mark, and letting it go, are two different moves and are timed
+     differently. Reaching: the box opens straight away, its fill leaves quickly, and the
+     word arrives once there is room for it — so the word is never caught half-clipped.
+     Letting go: the word leaves first and fast, then the box closes and its fill returns
+     behind it. Nothing is asked to fade and travel at the same moment, which is what made
+     it feel like a snap. */
+  .nb:hover, .nb:focus-visible { width: var(--w, 28px); outline: none;
+        --wd: 520ms; --we: cubic-bezier(.22,.61,.36,1); --wl: 0ms;
+        --md: 240ms; --ml: 0ms; --td: 340ms; --tl: 190ms; }
+  .nb:hover .nmk, .nb:focus-visible .nmk { opacity: 0; }
+  /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
+  body.nav-lit .nb.cur .nmk { background: var(--ink); }
+  /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
+     path so underneath it is still just a coloured box. Same size, same greys, same dark
+     when it is the page you are on, same opening into its word. Only the outline differs,
+     because that project is the one piece of work here that is also an argument. */
+  .nb.sens .nmk{border-radius:0;clip-path:path("M14 0C15.14 0 16.39 0.69 17.42 1.22C18.46 1.76 19.24 2.64 20.23 3.21C21.22 3.78 22.37 4.01 23.36 4.64C24.34 5.28 25.55 6.01 26.12 7C26.7 7.99 26.72 9.41 26.78 10.58C26.84 11.74 26.46 12.86 26.46 14C26.46 15.14 26.84 16.26 26.78 17.42C26.72 18.59 26.7 20.01 26.12 21C25.55 21.99 24.34 22.72 23.36 23.36C22.37 23.99 21.22 24.22 20.23 24.79C19.24 25.36 18.46 26.24 17.42 26.78C16.39 27.31 15.14 28 14 28C12.86 28 11.61 27.31 10.58 26.78C9.54 26.24 8.76 25.36 7.77 24.79C6.78 24.22 5.63 23.99 4.64 23.36C3.66 22.72 2.45 21.99 1.88 21C1.3 20.01 1.28 18.59 1.22 17.42C1.16 16.26 1.54 15.14 1.54 14C1.54 12.86 1.16 11.74 1.22 10.58C1.28 9.41 1.3 7.99 1.88 7C2.45 6.01 3.66 5.28 4.64 4.64C5.63 4.01 6.78 3.78 7.77 3.21C8.76 2.64 9.54 1.76 10.58 1.22C11.61 0.69 12.86 0 14 0Z")}
+  .nb:hover .nwd, .nb:focus-visible .nwd { opacity: 1; }
+  .nb.nav-id .nwd { font-family: var(--display); font-size: 16px; font-weight: 500;
+        color: var(--ink); letter-spacing: -0.01em; }
+  .nb.cta .nwd { color: var(--accent); }
+  @media (prefers-reduced-motion:reduce){ .nb, .nb .nmk, .nb .nwd { transition: none; } }
+  /* ── The navigation on a phone: a pile, not a row ──────────────────────
+     Five words will not fit a 390 column, and shrinking them to fit made the
+     bar the loudest thing on the page. On touch the marks stay marks: a tight
+     overlapping pile in the corner, the current page's mark dark and last in
+     the stack. Tap it and the pile falls open into a right-aligned column,
+     each mark with its word beside it; tap a word to go, tap anywhere else to
+     close. It is the same widening the pointer gets on a desktop, turned on
+     its side, so there is one nav on this site and not two. */
+  @media (hover:none){
+    /* !important because an earlier rule pins the bar to transparent with
+       !important of its own; this is the one screen size where it has to win. */
+    body nav{background:rgba(247,247,245,.88)!important;
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .nav-inner.nav-inner{display:flex;flex-direction:row;flex-wrap:nowrap;
+        justify-content:flex-end;align-items:center;gap:0;
+        padding:18px 24px 14px;white-space:normal;max-width:none;
+        transition:gap .30s cubic-bezier(.22,.61,.36,1)}
+    /* The two groups have to dissolve so all five marks are siblings of one
+       flex row - otherwise the overlap only applies inside each group and the
+       pile comes out in three pieces. Scoped through .nav-inner so it outranks
+       the later .nav-end{display:flex;gap:8px} that was quietly winning. */
+    .nav-inner .nav-mid,.nav-inner .nav-end{display:contents}
+    .nb.nb{position:relative;display:block;width:30px;height:30px;overflow:hidden;flex:none;
+        font-family:var(--display);font-size:13px;line-height:30px;padding:0;
+        margin-left:-30px;
+        /* declared again below at .nav-inner strength: body.nav-in .nb sets
+           transform:none for the arrival animation and was cancelling the deck */
+        transition:width .34s cubic-bezier(.22,.61,.36,1),
+                   margin .34s cubic-bezier(.22,.61,.36,1),
+                   transform .34s cubic-bezier(.22,.61,.36,1)}
+    /* Only the mark that actually starts the row loses its overlap. :first-child
+       on its own matched the first mark inside each group too, because
+       display:contents changes layout and not the tree, which is why the pile
+       came out with two seams in it. */
+    .nav-inner > .nb:first-child{margin-left:0}
+    /* Overlapping marks of the same grey fused into one slab. A ring of paper
+       around each one draws the edge of the card behind it, which is what makes
+       a pile read as a pile rather than a smear. */
+    /* Only the card in front is filled. The ones behind it are drawn as outlines
+       on the same paper, which is what keeps four stacked cards reading as four
+       clean edges instead of a grey smear with a shadow under it. */
+    .nb .nmk{display:block;position:absolute;top:0;right:0;left:auto;width:30px;height:30px;
+        opacity:1;border-radius:9px}
+    .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
+        border:1.5px solid #D3D4CF;box-shadow:none}
+    .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
+    body.nav-open .nb .nmk{box-shadow:none}
+    /* open, every card is its own row again, so they all take their real fill */
+    body.nav-open .nb.back .nmk{background:#DCDDD8!important}
+    /* No z-index games: the cards stack in the order they are written, each one
+       showing six pixels of the card behind it, and the dark one sits wherever
+       that page falls in the run. Lifting the current card to the front buried
+       three of the others behind it and the pile stopped looking like a pile. */
+    .nb .nwd{position:absolute;top:0;right:40px;left:auto;height:30px;line-height:30px;
+        white-space:nowrap;opacity:0;transition:opacity .22s ease}
+
+    /* open: the pile falls into a column, each mark wearing its word */
+    body.nav-open .nav-inner.nav-inner{flex-direction:column;align-items:flex-end;gap:8px;
+        padding-bottom:20px}
+    .nav-inner .nb.nb{transform:translate(calc(var(--k,0) * -3px), calc(var(--k,0) * 3px))}
+    body.nav-open .nav-inner .nb.nb{transform:none}
+    body.nav-open .nb.nb{margin-left:0;width:calc(var(--w, 70px) + 44px)}
+    body.nav-open .nb .nwd{opacity:1;transition:opacity .26s ease .10s}
+    /* a 30px mark is not a 44px target; the row it sits in is */
+    body.nav-open .nb.nb{height:38px;line-height:38px}
+    body.nav-open .nb .nmk,body.nav-open .nb .nwd{top:4px}
+  }
+
+
+  /* ── Tab: one component, everywhere ───────────────────────────────────────
+     Every switch on this site reads the same way. At rest a tab is out of focus,
+     grey and a shade heavier than body text — the extra weight is what keeps a
+     blurred word legible instead of turning it into a smudge. Reached for, or
+     selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
+     no underline. Blur .7px, weight 500, the site's own grey and ink.
+     These four selectors are the same component wearing four names. */
+</style>
+<body>
+<nav aria-label="Main">
+  <div class="nav-inner">
+    <a class="nav-id nb" href="#top"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
+    <div class="nav-mid">
+      <a class="nb" href="#work"><i class="nmk" aria-hidden="true"></i><span class="nwd">Work</span></a>
+      <a class="nb sens" href="sensitivity.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
+      <a class="nb" href="about.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
+    </div>
+    <div class="nav-end">
+      <a class="cta nb" href="#contact"><i class="nmk" aria-hidden="true"></i><span class="nwd">Contact</span></a>
+    </div>
+  </div>
+</nav>
+<div class="ldr" id="ldr" aria-hidden="true" data-over=".hero-copy .sub"><p class="ldr-t">I design how humans and AI agents share judgment in enterprise work, especially where decisions are hard and being wrong is expensive.</p></div>
+
+<header id="top">
+  <div class="wide hero-grid">
+    <div class="hero-copy r">
+      <h1>Amrit<br />Kumar</h1>
+      <p class="role">Product Designer, AI systems</p>
+      <p class="sub">I design how humans and AI agents share judgment in enterprise work,
+      especially where decisions are hard and being wrong is expensive.</p>
+      <div class="hero-facts" data-morph-tabs>
+        <div class="ftabs" role="tablist" aria-label="About me">
+          <button class="ftab" type="button" data-v="Product Designer, SirionLabs &middot; 5 years">Currently</button>
+          <button class="ftab" type="button" data-v="13 years in design &middot; 6 in product &middot; 3 on AI-native products">Experience</button>
+          <button class="ftab" type="button" data-v="Noida, India">Based in</button>
+        </div>
+        <div class="fval" data-morph-value></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="work" aria-label="Selected work">
+  <div class="wrap">
+    <p class="ix-lbl r">Latest work</p>
+    <ol class="ixl">
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="0" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><i class="num">01</i><i class="arw">&#8599;</i></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Contract Relationships</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Contract systems &middot; Sirion &middot; 2025&ndash;26</i>
+              <i class="b">A folder tells you where a document sits. Not what it changes.</i>
+            </span>
+            <span class="vh">A folder tells you where a document sits. Not what it changes.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="1" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><i class="num">02</i><i class="arw">&#8599;</i></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Contract Onboarding</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">AI onboarding review &middot; Sirion &middot; Shipped</i>
+              <i class="b">The agent groups the contracts. A person decides the groups are right.</i>
+            </span>
+            <span class="vh">The agent groups the contracts. A person decides the groups are right.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="2" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><i class="num">03</i><i class="arw">&#8599;</i></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Phoenix Listing</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Agent in the contract listing &middot; Sirion &middot; In development</i>
+              <i class="b">A question reshapes the contract listing into the answer.</i>
+            </span>
+            <span class="vh">A question reshapes the contract listing into the answer.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="3" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><i class="num">04</i><i class="arw">&#8599;</i></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Auto Extraction</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">AI review interface &middot; Sirion &middot; Shipped 2024</i>
+              <i class="b">An AI can extract 128 fields. A lawyer still has to check every one.</i>
+            </span>
+            <span class="vh">An AI can extract 128 fields. A lawyer still has to check every one.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <a class="ix-b" href="sensitivity.html" data-morph-host>
+          <span class="ix-n" aria-hidden="true"><i class="num">05</i><i class="arw">&#8599;</i></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Sensitivity</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Interaction patterns &middot; 2026</i>
+              <i class="b">Any answer is cheap now. Attention is not.</i>
+            </span>
+            <span class="vh">Any answer is cheap now. Attention is not.</span>
+          </span>
+        </a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Project">
+  <button class="ov-close" id="ovClose" type="button">Close</button>
+  <div class="ov-in" id="ovin" tabindex="-1">
+    <article class="md" data-i="0" hidden>
+      <div class="md-shot" data-src="family-graph.html"><picture><img src="cr-graph.webp" width="1344" height="787" loading="lazy" decoding="async" alt="Contract Relationships &mdash; product screen." /></picture><iframe title="" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="md-body">
+        <h2>Contract Relationships</h2>
+        <p class="md-k">Contract systems &middot; Sirion &middot; 2025&ndash;26</p>
+        <hr />
+        <p class="md-lead">A folder tells you where a document sits. Not what it changes.</p>
+        <p>A legal team asks &ldquo;which amendment applies to this SOW?&rdquo; dozens of times a week. Answering took half an hour of reconstruction: open the folder, read the file names, check the notes, and hope nobody had renamed anything.</p>
+        <h3>It was never a search problem</h3>
+        <p>I tried what search offers: filters, OCR, a better index. None of it worked.</p>
+        <p>Users weren&rsquo;t searching. They were reconstructing meaning. A search result hands you a document. What they needed was a sentence: this amendment, from this date, governs this SOW, and supersedes the one before it.</p>
+        <h3>The argument I had to win</h3>
+        <p>The agreed direction was to improve the folder hierarchy: faster, safer, shippable in weeks, and defensible because the whole category works that way. It was already in the product, and customers were asking for it by name.</p>
+        <p>I argued the hierarchy was the problem. An amendment can govern several agreements at once; a record can inherit from more than one instrument. Contract relationships are many to many. A tree cannot express them.</p>
+        <p>This was not a preference between two layouts. A folder tree can only ever answer where a file is stored, so every feature built above it inherits that limit.</p>
+        <h3>Why a design argument was an AI argument</h3>
+        <p>A wrong model doesn&rsquo;t just inconvenience a user. It makes the AI answer with the superseded clause in the same confident tone it uses for the right one, because nothing in the structure tells it which one governs.</p>
+        <p>What a system can represent sets the ceiling on what any model built over it can understand. That is now the argument I make before anyone opens a design tool.</p>
+        <h3>What I designed</h3>
+        <p>Navigation and meaning became two different things. A record carries explicit relationships &mdash; governed by, amended by, applies to &mdash; and the interface reads them back in words: which agreement governs this one, which amendment currently applies, what it changed, and what it superseded.</p>
+        <p>Open a statement of work and the panel answers the question the team was asking, rather than showing you the shelf the file was on.</p>
+        <h3>And it had to survive real volume</h3>
+        <p>A relationship view is easy to draw for a family of six. Real families aren&rsquo;t six. I built it as a working prototype and ran it at 340 statements of work.</p>
+        <p>The radial layout shrank to 12% to fit and left zero legible labels. I replaced it with branching columns grouped by status rather than defend it, and settled the debate with the measurement instead of an opinion.</p>
+        <h3>What transfers</h3>
+        <p>Any system where AI reasons over stored records. If the storage model is wrong, the AI is confidently wrong. Fix the model before the interface.</p>
+        <p class="md-ev">My role: framing the problem, prototyping the alternatives, making the argument &middot; Shared decisions with designers, product managers and engineers &middot; Approved and prioritised for build; not in production, so there are no post-launch numbers here</p>
+      </div>
+    </article>
+    <article class="md" data-i="1" hidden>
+      <div class="md-shot still"><picture><img src="onb-missing.webp" width="2628" height="1538" loading="lazy" decoding="async" alt="Contract Onboarding &mdash; product screen." /></picture></div>
+      <div class="md-body">
+        <h2>Contract Onboarding</h2>
+        <p class="md-k">AI onboarding review &middot; Sirion &middot; Shipped</p>
+        <hr />
+        <p class="md-lead">The agent groups the contracts. A person decides the groups are right.</p>
+        <p>A new customer arrives with years of contracts as loose files. Before the platform can track a single renewal or obligation, every file needs two facts attached: who it is with, and which agreement it belongs under. Someone used to read each one to find out.</p>
+        <p>This is the first thing a customer ever does with the product. If it goes badly, everything built on top of it inherits the mess.</p>
+        <h3>The speed is the value and the risk</h3>
+        <p>The agent reads thousands of documents in the time a person reads one. At that speed a wrong assumption is applied thousands of times before anyone sees it.</p>
+        <p>So the checkpoints go inside the run, not after it: review what was extracted, review the counterparty mapping, review the contract families. The agent proposes at each one; a person confirms or corrects, and the run continues from there rather than starting over.</p>
+        <h3>Review by counterparty, not by document</h3>
+        <p>Three documents the agent believes are with the same company are one row that opens to its members. A wrong name gets fixed once, not three times.</p>
+        <p>It sounds like a grouping decision. It is a decision about whose time the interface spends: the reviewer&rsquo;s job becomes confirming a judgement, not repeating a correction.</p>
+        <p>The screen splits the work into what is mapped, what is missing a match, and what is orphaned, so the reviewer always knows how much is left and what kind of decision each pile needs.</p>
+        <h3>It explains itself in words, not a score</h3>
+        <p>Open the reasoning for a match and it says why two names were treated as one company, and quotes the passage it read. No percentage.</p>
+        <p>A person can check a sentence. They cannot check 0.87.</p>
+        <h3>Bulk, without losing the thread</h3>
+        <p>Confirming a group applies to every document in it, and the system offers the system records it thinks are right rather than making the reviewer search. Where nothing fits, they create the record from the same place instead of leaving the flow.</p>
+        <h3>What transfers</h3>
+        <p>Any bulk AI process a person is accountable for. Put the human checkpoints inside the run, group the work by the unit the person actually decides about, and make one correction fix everything downstream of it.</p>
+        <p class="md-ev">Only designer on it, concept to shipped screens &middot; No usage number here until I have one I trust and know how it was measured</p>
+      </div>
+    </article>
+    <article class="md" data-i="2" hidden>
+      <div class="md-shot still"><picture><img src="phx-question.webp" width="2824" height="1654" loading="lazy" decoding="async" alt="Phoenix Listing &mdash; product screen." /></picture></div>
+      <div class="md-body">
+        <h2>Phoenix Listing</h2>
+        <p class="md-k">Agent in the contract listing &middot; Sirion &middot; In development</p>
+        <hr />
+        <p class="md-lead">A question reshapes the contract listing into the answer.</p>
+        <p>Enterprise software is designed as though people will arrive at it. They don&rsquo;t.</p>
+        <p>Nobody&rsquo;s job is &ldquo;check the contract system&rdquo;. A system of record isn&rsquo;t somewhere anyone chooses to spend their morning, and designing as if they will is a large part of why this category still feels manual.</p>
+        <h3>The first question is not what the homepage shows</h3>
+        <p>If we can&rsquo;t rely on people coming to us, how does the work reach them? That reframes the surface: the listing is not a place to browse, it is where a question gets answered and a decision gets made.</p>
+        <h3>Four situations, not four features</h3>
+        <p>Not personas. States of mind. The same person moves between them hourly, and which one they are in decides whether the agent should explain, suggest, ask or act.</p>
+        <p>They already know what they want and just need it done. They don&rsquo;t know yet and need the system to bring the problem to them. They are looking for something specific. They are checking whether anything is wrong. Each one calls for a different amount of agent autonomy, and getting that wrong is what makes AI features feel either useless or alarming.</p>
+        <p>I wrote that as a rule set, argued it to executive stakeholders, and it was adopted as direction for the platform. This listing is the first surface built on it.</p>
+        <h3>What it does with a question</h3>
+        <p>You ask in the panel beside the list. The agent shows the steps it took &mdash; reading the intent, setting the criteria, finding the contracts &mdash; then reads back what it understood and answers in the same place.</p>
+        <p>Then it stops and asks what to do next: tag these for the executive dashboard, or send the summary to the accounts team. It has the answer and it still waits. Being sure and being allowed are two different things.</p>
+        <h3>Why the readback matters</h3>
+        <p>A wrong answer that arrives with its reasoning visible is recoverable. A wrong answer that arrives as a finished action is not. The panel is designed so the expensive step always happens after a person has seen the interpretation.</p>
+        <h3>What I own here</h3>
+        <p>The framework and the argument for it, the sessions with stakeholders, and the listing prototypes in HTML. Scope is platform-wide: entry points, personalisation, how much autonomy an agent gets, and how we would know it worked.</p>
+        <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
+      </div>
+    </article>
+    <article class="md" data-i="3" hidden>
+      <div class="md-shot still"><picture><img src="ae-review-loop-poster.webp" width="1400" height="820" loading="lazy" decoding="async" alt="Auto Extraction &mdash; product screen." /></picture></div>
+      <div class="md-body">
+        <h2>Auto Extraction</h2>
+        <p class="md-k">AI review interface &middot; Sirion &middot; Shipped 2024</p>
+        <hr />
+        <p class="md-lead">An AI can extract 128 fields. A lawyer still has to check every one.</p>
+        <p>The model pulled 128 values out of a contract in seconds. A lawyer then had to check every one.</p>
+        <p>If checking takes as long as reading, the AI has moved the work, not removed it. That was the whole design problem, and it is not solved by making the model better.</p>
+        <h3>Three versions, each one earning the next</h3>
+        <p>Highlights in the text: the values were findable, but review became a hunt through the document. Hover cards: closer, but the answer vanished the moment you looked away, so nothing accumulated.</p>
+        <p>Assist bars in the margin, permanently visible: 128 scattered values become one pass down the document. Each version fixed the last one&rsquo;s complaint and exposed a new one. That is the honest shape of the work.</p>
+        <h3>The decision I&rsquo;d defend hardest</h3>
+        <p>We removed the confidence score. A lawyer cannot act on 0.82.</p>
+        <p>The card shows the model&rsquo;s reasoning and the passage the value came from instead, so verification becomes reading &mdash; which is what lawyers are trained to do, and what they are paid for.</p>
+        <h3>Accept, and the document comes to you</h3>
+        <p>Accepting a value marks it and opens the next one, and the document scrolls to the passage that field was read from. The reviewer never goes looking; the work arrives in order and the position in the document is always earned by the field in hand.</p>
+        <p>Edit and reject sit beside accept, at the same weight, because disagreeing has to be as cheap as agreeing or people stop reading and start clicking.</p>
+        <h3>What happened</h3>
+        <p>Month-four retention went from 5% to 23%. The redesign didn&rsquo;t win more users. It stopped losing the ones who arrived, which is the outcome that matters for a tool people are assigned rather than choose.</p>
+        <p>Two eight-month cohorts in Heap, captured June 2025. The cohort mix and the extraction model both changed over the period, so I claim the shape of the curve, not the whole number.</p>
+        <h3>What transfers</h3>
+        <p>Wherever a model produces many answers a person is accountable for: show one at a time, put the evidence next to the claim, and spend the interface on verification rather than on presenting confidence.</p>
+        <p class="md-ev">Owned end to end, research to shipped releases &middot; Three redesigns &middot; Retention measured in Heap, June 2025</p>
+      </div>
+    </article>
+  </div>
+</div>
+<section id="contact">
+  <div class="wrap">
+    <h2 class="r">Working on difficult decisions between people and AI? Let's talk ?
+      <a class="q mline" href="about.html" data-morph data-morph-host>
+        <i class="a">Open to Staff and Lead Product Designer roles in AI and enterprise software.</i>
+        <i class="b">13 years in design, by way of brand, creative direction and a denim label I co-founded. About me &rarr;</i>
+      </a></h2>
+    <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
+    <span class="mailalt r"><button class="copylink" id="copymail" type="button" title="Copy email address"><span id="copytxt" data-morph-text>amritkmr08@gmail.com</span></button>
+      &nbsp;&middot;&nbsp; <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a> &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a></span>
+  </div>
+</section>
+<footer>
+  <div>© <span id="year"></span> Amrit Kumar</div>
+</footer>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".r").forEach(function (el, i) {
+    el.style.transitionDelay = (i % 3) * 60 + "ms";
+    io.observe(el);
+  });
+
+  /* cards: mark the click, hold a beat, then go */
+  document.querySelectorAll(".item[href]").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      e.preventDefault();
+      a.classList.add("going");
+      setTimeout(function () { location.href = a.href; }, 260);
+    });
+  });
+
+  /* evidence unfolds from the number it explains */
+  (function () {
+    var b = document.querySelector(".evi-btn"), box = document.getElementById("evi");
+    if (!b || !box) return;
+    b.addEventListener("click", function () {
+      var open = box.classList.toggle("open");
+      box.hidden = false;
+      b.setAttribute("aria-expanded", open ? "true" : "false");
+      b.firstChild.textContent = open ? "Fold it back " : "How this was measured ";
+    });
+  })();
+
+  /* nav: you are here.
+     Every mark whose link points at a section of this page takes part, including the name
+     (which points at the top) and Contact — leaving either out is how the nav ended up
+     saying Work while the reader was standing in Contact. Exactly one mark is ever open,
+     and at the top of the page that mark is the name, so the homepage marks itself the way
+     About and Sensitivity do. */
+  (function () {
+    var links = [].slice.call(document.querySelectorAll(".nb")).filter(function (a) {
+      var h = a.getAttribute("href") || "";
+      return h.charAt(0) === "#" && document.querySelector(h);
+    });
+    if (!links.length) return;
+    var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+
+    function show(i) {
+      links.forEach(function (a, j) {
+        a.classList.toggle("cur", j === i);
+        if (j === i) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+      });
+    }
+    show(0);
+
+    /* A band across the upper third of the screen. Two sections can sit in it at once while
+       one scrolls out and the next scrolls in, so the one further down the page wins — that
+       is the one being scrolled towards. */
+    var live = [];
+    var spy = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var i = secs.indexOf(e.target);
+        var at = live.indexOf(i);
+        if (e.isIntersecting) { if (at < 0) live.push(i); }
+        else if (at >= 0) live.splice(at, 1);
+      });
+      if (live.length) show(Math.max.apply(null, live));
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    secs.forEach(function (sc) { spy.observe(sc); });
+  })();
+
+  /* copy email */
+  var btn = document.getElementById("copymail");
+  var txt = document.getElementById("copytxt");
+  var EMAIL = "amritkmr08@gmail.com";
+  var timer = null;
+  btn.addEventListener("click", function () {
+    function say(word) {
+      if (window.Morphline) window.Morphline.to(txt, word);
+      else txt.textContent = word;
+    }
+    function done(ok) {
+      /* the smallest action gets the smallest response: one word changes, nothing else */
+      say(ok ? "copied" : "select it above");
+      btn.classList.add("ok");
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        say(EMAIL);
+        btn.classList.remove("ok");
+      }, 2400);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(function () { done(true); },
+        function () { done(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = EMAIL;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      done(ok);
+    }
+  });
+})();
+</script>
+<script>
+(function(){
+  var ov=document.getElementById('ov'), inn=document.getElementById('ovin'),
+      mds=[].slice.call(document.querySelectorAll('.md')), last=null, y=0;
+  function frames(){ return [].slice.call(document.querySelectorAll('.md-shot[data-src] iframe')); }
+  function open(i){
+    mds.forEach(function(m){ m.hidden = +m.dataset.i !== i; });
+    /* only the open card's prototype runs */
+    frames().forEach(function(f){ f.removeAttribute('src'); });
+    var live = document.querySelector('.md[data-i="'+i+'"] .md-shot[data-src]');
+    if (live && matchMedia('(min-width: 761px)').matches) {
+      live.querySelector('iframe').src = live.getAttribute('data-src');
+    }
+    y=window.scrollY; ov.classList.add('on'); ov.scrollTop=0;
+    document.body.style.position='fixed'; document.body.style.top=(-y)+'px'; document.body.style.width='100%';
+    inn.focus();
+  }
+  function close(){
+    if(!ov.classList.contains('on')) return;
+    ov.classList.remove('on');
+    frames().forEach(function(f){ f.removeAttribute('src'); });
+    document.body.style.position=''; document.body.style.top=''; document.body.style.width='';
+    /* The page is put back exactly where it was, without travelling there. The document
+       carries scroll-behavior: smooth for the in-page links, which turned this restore into
+       a visible scroll up the page every time a card closed. */
+    var root=document.documentElement, prev=root.style.scrollBehavior;
+    root.style.scrollBehavior='auto';
+    window.scrollTo(0,y);
+    requestAnimationFrame(function(){ root.style.scrollBehavior=prev; });
+    if(last && byKey) last.focus({preventScroll:true});
+  }
+  var byKey=false;
+  document.addEventListener('keydown',function(e){ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') byKey=true; });
+  document.addEventListener('pointerdown',function(){ byKey=false; });
+  [].slice.call(document.querySelectorAll('.ix-b[data-i]')).forEach(function(b){
+    b.addEventListener('click',function(){ last=b; open(+b.dataset.i); });
+  });
+  ov.addEventListener('click',function(e){ if(e.target===ov||e.target===inn) close(); });
+  var ovClose=document.getElementById('ovClose');
+  if(ovClose) ovClose.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+})();
+
+</script>
+<script>
+/* The pile. One listener: while it is closed, the first tap anywhere in the bar
+   opens it instead of following a link - otherwise a stacked mark would fire a
+   link the reader cannot even see the name of. Once open the links behave
+   normally, and a tap outside closes it. Pointer devices never run any of this. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: none)').matches) return;
+  var bar = document.querySelector('.nav-inner');
+  if (!bar) return;
+  var open = function(on){
+    document.body.classList.toggle('nav-open', on);
+    bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+  };
+  bar.setAttribute('aria-label', 'Pages');
+  open(false);
+  /* Deal the deck. Every card sits on the same spot and is pushed back down and
+     to the left by its depth, so what you see is four corners behind one face.
+     The face is the page you are on: a collapsed pile still has to say where
+     you are, and colour alone cannot do it from under another card. Depth is
+     set once at load rather than tracking the scroll-spy, because a stack that
+     reshuffles itself while you read is a distraction, not a signal. */
+  var cards = [].slice.call(document.querySelectorAll('.nb'));
+  var front = cards.filter(function(a){ return a.classList.contains('cur'); })[0] || cards[cards.length-1];
+  var depth = 1;
+  cards.forEach(function(a){
+    var k = (a === front) ? 0 : depth++;
+    a.style.setProperty('--k', k);
+    a.style.zIndex = String(20 - k);
+    a.classList.toggle('back', k > 0);
+  });
+  bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
+  }, true);
+  document.addEventListener('click', function(e){
+    if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+})();
+</script>
+<script src="morphline.js"></script>
+
+<script>
+/* The loader does not put the sentence somewhere of its own. It measures where that
+   exact sentence will sit once the page is up, and puts it there — same column, same
+   line, same colour. So when the paper lifts, nothing moves: the sentence stays where
+   it is and the page arrives around it. Re-measured on resize, and the type is copied
+   from the real element rather than guessed at. */
+(function(){
+  var el=document.getElementById('ldr'); if(!el) return;
+  var t=el.querySelector('.ldr-t');
+  var target=document.querySelector(el.getAttribute('data-over'));
+  if(!t||!target){ if(el.parentNode) el.parentNode.removeChild(el); return; }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.parentNode.removeChild(el); return; }
+
+  function place(){
+    var r=target.getBoundingClientRect(), cs=getComputedStyle(target);
+    t.style.top=(r.top+scrollY)+'px';
+    t.style.left=(r.left+scrollX)+'px';
+    t.style.width=r.width+'px';
+    t.style.font=cs.font;
+    t.style.letterSpacing=cs.letterSpacing;
+    t.style.setProperty('--ink-on', cs.color);
+  }
+  place();
+  target.style.visibility='hidden';
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
+  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(place,150); });
+
+  el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
+  var src=t.textContent.replace(/\s+/g,' ').trim();
+  t.textContent='';
+  src.split(/(\s+)/).forEach(function(c){
+    if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
+    else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
+  });
+  var ws=[].slice.call(t.querySelectorAll('i'));
+  var STEP=Math.max(140, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
+  ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 300+k*STEP); });
+  setTimeout(function(){
+    el.classList.add('gone');
+    document.body.classList.remove('ldr-on'); document.documentElement.classList.remove('ldr-on');
+    /* removed only once the paper is fully clear, when the sentence on it and the sentence
+       under it are the same pixels */
+    setTimeout(function(){
+      target.style.visibility='';
+      if(el.parentNode) el.parentNode.removeChild(el);
+    }, 1060);
+  }, 300 + ws.length*STEP + 700);
+})();
+</script>
+
+<script>
+/* Each mark opens to the width of its own word. Measured from the word in place,
+   after the fonts have landed, and again on resize — never guessed. */
+(function(){
+  var items=[].slice.call(document.querySelectorAll('.nb'));
+  if(!items.length) return;
+  function measure(){
+    items.forEach(function(a){
+      var w=a.querySelector('.nwd'); if(!w) return;
+      var prev=a.style.width; a.style.width='auto';
+      var px=Math.ceil(w.getBoundingClientRect().width);
+      a.style.width=prev;
+      a.style.setProperty('--w', px+'px');
+    });
+  }
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
+  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(measure,200); });
+
+  /* The block that marks this page does not arrive dark. It darkens a beat after the page
+     has settled, so the state reads as something the page did rather than something that
+     was always sitting there. */
+  document.body.classList.add('nav-arrive');
+  items.forEach(function(a,i){ a.style.setProperty('--d', (i*70)+'ms'); });
+  function arrive(){
+    document.body.classList.add('nav-in');
+    setTimeout(function(){ document.body.classList.add('nav-lit'); }, items.length*70 + 80);
+  }
+  if(!document.getElementById('ldr')) setTimeout(arrive, 180);
+  else {
+    var w = setInterval(function(){
+      if(!document.getElementById('ldr')){ clearInterval(w); setTimeout(arrive, 120); }
+    }, 100);
+  }
+})();
+</script>
+</body>
+</html>
