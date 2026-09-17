@@ -185,10 +185,20 @@
         opacity:1;border-radius:9px}
     .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
         border:1.5px solid #D3D4CF;box-shadow:none}
+    /* The page you are on is the dark card, wherever it lands in the deck. The
+       scroll-spy moves .cur as you read, and the outline styling above carries
+       !important, so without this the newly current mark went white. */
+    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    /* a way out that does not depend on guessing where the backdrop is */
+    .nav-x{display:none}
+    body:not(.nav-in) .nav-x{display:none!important}
+    body.nav-open .nav-x{display:block;order:99;margin:6px 0 0;padding:10px 0;
+        font-family:var(--display);font-size:12px;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--faint);background:none;border:0;cursor:pointer}
     /* No z-index games: the cards stack in the order they are written, each one
        showing six pixels of the card behind it, and the dark one sits wherever
        that page falls in the run. Lifting the current card to the front buried
@@ -1467,9 +1477,17 @@
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
   var bar = document.querySelector('.nav-inner');
   if (!bar) return;
+  /* The pile grows the bar from 62px to about 320px, and the browser keeps the
+     text you were reading still by moving the scroll position under it. That
+     counts as a scroll, so the baseline is taken once the bar has finished
+     opening rather than at the moment of the tap - otherwise the pile closed
+     itself a frame after it opened. */
+  var startY = 0, armed = false, arm;
   var open = function(on){
     document.body.classList.toggle('nav-open', on);
     bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+    clearTimeout(arm); armed = false;
+    if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
   };
   bar.setAttribute('aria-label', 'Pages');
   open(false);
@@ -1489,12 +1507,28 @@
     a.classList.toggle('back', k > 0);
   });
   bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-in')) { e.preventDefault(); return; }
     if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
   }, true);
   document.addEventListener('click', function(e){
     if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
   });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+
+  /* A Close of its own. Tapping the paper behind it works, but on a phone the
+     open list covers most of what there is to tap, so the way out has to be
+     inside the thing that is open. */
+  var x = document.createElement('button');
+  x.type = 'button'; x.className = 'nav-x'; x.textContent = 'Close';
+  x.addEventListener('click', function(e){ e.stopPropagation(); open(false); });
+  bar.appendChild(x);
+
+  /* Starting to read closes it. Nobody scrolls the page in order to keep a menu
+     open, and a list that sits over the page while it moves is just in the way. */
+  addEventListener('scroll', function(){
+    if (!armed || !document.body.classList.contains('nav-open')) return;
+    if (Math.abs(window.scrollY - startY) > 6) open(false);
+  }, {passive: true});
 })();
 </script>
 <script src="morphline.js"></script>

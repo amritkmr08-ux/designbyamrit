@@ -194,10 +194,20 @@
         opacity:1;border-radius:9px}
     .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
         border:1.5px solid #D3D4CF;box-shadow:none}
+    /* The page you are on is the dark card, wherever it lands in the deck. The
+       scroll-spy moves .cur as you read, and the outline styling above carries
+       !important, so without this the newly current mark went white. */
+    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    /* a way out that does not depend on guessing where the backdrop is */
+    .nav-x{display:none}
+    body:not(.nav-in) .nav-x{display:none!important}
+    body.nav-open .nav-x{display:block;order:99;margin:6px 0 0;padding:10px 0;
+        font-family:var(--display);font-size:12px;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--faint);background:none;border:0;cursor:pointer}
     /* No z-index games: the cards stack in the order they are written, each one
        showing six pixels of the card behind it, and the dark one sits wherever
        that page falls in the run. Lifting the current card to the front buried
@@ -984,7 +994,7 @@
     .wlcv{display:none}
     header{padding-top:104px}
     .stages{margin-top:64px}
-    .stage{min-height:0;padding:44px 0}
+    .stage{min-height:0;padding:44px 0 calc(44px + var(--spill,0px))}
     .plate{margin-bottom:0}
     .side{grid-template-columns:1fr;gap:18px 0}
     .md-body{padding:52px 28px 88px}
@@ -1469,9 +1479,17 @@
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
   var bar = document.querySelector('.nav-inner');
   if (!bar) return;
+  /* The pile grows the bar from 62px to about 320px, and the browser keeps the
+     text you were reading still by moving the scroll position under it. That
+     counts as a scroll, so the baseline is taken once the bar has finished
+     opening rather than at the moment of the tap - otherwise the pile closed
+     itself a frame after it opened. */
+  var startY = 0, armed = false, arm;
   var open = function(on){
     document.body.classList.toggle('nav-open', on);
     bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+    clearTimeout(arm); armed = false;
+    if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
   };
   bar.setAttribute('aria-label', 'Pages');
   open(false);
@@ -1491,12 +1509,28 @@
     a.classList.toggle('back', k > 0);
   });
   bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-in')) { e.preventDefault(); return; }
     if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
   }, true);
   document.addEventListener('click', function(e){
     if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
   });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+
+  /* A Close of its own. Tapping the paper behind it works, but on a phone the
+     open list covers most of what there is to tap, so the way out has to be
+     inside the thing that is open. */
+  var x = document.createElement('button');
+  x.type = 'button'; x.className = 'nav-x'; x.textContent = 'Close';
+  x.addEventListener('click', function(e){ e.stopPropagation(); open(false); });
+  bar.appendChild(x);
+
+  /* Starting to read closes it. Nobody scrolls the page in order to keep a menu
+     open, and a list that sits over the page while it moves is just in the way. */
+  addEventListener('scroll', function(){
+    if (!armed || !document.body.classList.contains('nav-open')) return;
+    if (Math.abs(window.scrollY - startY) > 6) open(false);
+  }, {passive: true});
 })();
 </script>
 <script src="morphline.js"></script>
@@ -2144,6 +2178,79 @@
       if(!document.getElementById('ldr')){ clearInterval(w); setTimeout(arrive, 120); }
     }, 100);
   }
+})();
+</script>
+
+<script>
+/* ── Room for an open card on a phone ───────────────────────────────────────
+   Every specimen panel is absolutely positioned, so on a desktop it hangs
+   into the margin beside the column and nothing collides. On a phone the
+   column is the whole screen and the stage below it reserves no room, so an
+   open card printed straight over the next specimen's text.
+
+   Each stage now measures how far its own visible panel reaches past the
+   stage's natural bottom and pads itself by that much. A card that opens or
+   closes changes its height, the observer fires, and the padding follows it,
+   so the page grows around an open card instead of letting it sit on top of
+   the next one. Desktop is untouched. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  var GAP = 28;
+  var rows = [].slice.call(document.querySelectorAll('.stage')).map(function(st){
+    var panels = [].slice.call(st.querySelectorAll('.glass, .apcard, .deckwrap > .deck'));
+    return panels.length ? { st: st, panels: panels, natural: 0, last: 0 } : null;
+  }).filter(Boolean);
+  if (!rows.length) return;
+
+  function shows(el){
+    var s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity) > 0.01;
+  }
+  /* Writing --spill is itself a style change inside the stage, which the observers
+     below would read as new work to do. Each stage remembers what it last wrote and
+     writes nothing when the answer has not moved, and every request is folded into
+     one pass per frame. Without both, opening the pause card spun the page forever. */
+  function apply(){
+    pending = false;
+    rows.forEach(function(r){
+      var top = r.st.getBoundingClientRect().top, need = 0;
+      r.panels.forEach(function(p){
+        if (!shows(p)) return;
+        var b = p.getBoundingClientRect();
+        if (b.height > 0) need = Math.max(need, b.bottom - top);
+      });
+      var spill = Math.max(0, Math.round(need + GAP - r.natural));
+      if (spill !== r.last){ r.last = spill; r.st.style.setProperty('--spill', spill + 'px'); }
+    });
+  }
+  var pending = false;
+  function sync(){
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(apply);
+  }
+  function remeasure(){
+    rows.forEach(function(r){ r.last = 0; r.st.style.setProperty('--spill', '0px'); });
+    rows.forEach(function(r){ r.natural = r.st.getBoundingClientRect().height; });
+    apply();
+  }
+
+  remeasure();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+  addEventListener('load', remeasure);
+  var rz; addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(remeasure, 200); });
+
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(function(){ sync(); });
+    rows.forEach(function(r){ r.panels.forEach(function(p){ ro.observe(p); }); });
+  }
+  if (window.MutationObserver){
+    var mo = new MutationObserver(function(){ sync(); });
+    rows.forEach(function(r){
+      mo.observe(r.st, {attributes:true, attributeFilter:['class','style'], subtree:true});
+    });
+  }
+  addEventListener('transitionend', sync, true);
 })();
 </script>
 </body>

@@ -997,6 +997,14 @@
      above the card so a long case study never has to be scrolled to get out. */
   .ov-close { display: none; }
   @media (hover: none), (max-width: 760px) {
+    /* No hover to hold it open, so the lit row wears the state a pointer would give it -
+       and a phone leaves :hover stuck on the last thing tapped, which left an arrow on a
+       row that had already gone back to resting. Here the arrow means one thing only:
+       this row opens on the next tap. */
+    .ix-b:hover .num { opacity: 1; }
+    .ix-b:hover .arw { opacity: 0; transform: translate(-6px, 6px); }
+    .ix-b.lit .num { opacity: 0; }
+    .ix-b.lit .arw { opacity: 1; transform: none; }
     .ov-close { display: block; position: fixed; top: 14px; right: 16px; z-index: 95;
       font-family: var(--display); font-size: 13px; line-height: 20px; font-weight: 500;
       color: var(--ink); background: var(--paper);
@@ -1300,10 +1308,20 @@
         opacity:1;border-radius:9px}
     .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
         border:1.5px solid #D3D4CF;box-shadow:none}
+    /* The page you are on is the dark card, wherever it lands in the deck. The
+       scroll-spy moves .cur as you read, and the outline styling above carries
+       !important, so without this the newly current mark went white. */
+    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    /* a way out that does not depend on guessing where the backdrop is */
+    .nav-x{display:none}
+    body:not(.nav-in) .nav-x{display:none!important}
+    body.nav-open .nav-x{display:block;order:99;margin:6px 0 0;padding:10px 0;
+        font-family:var(--display);font-size:12px;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--faint);background:none;border:0;cursor:pointer}
     /* No z-index games: the cards stack in the order they are written, each one
        showing six pixels of the card behind it, and the dark one sits wherever
        that page falls in the run. Lifting the current card to the front buried
@@ -1716,8 +1734,49 @@
   var byKey=false;
   document.addEventListener('keydown',function(e){ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') byKey=true; });
   document.addEventListener('pointerdown',function(){ byKey=false; });
-  [].slice.call(document.querySelectorAll('.ix-b[data-i]')).forEach(function(b){
-    b.addEventListener('click',function(){ last=b; open(+b.dataset.i); });
+  /* ── Two taps on a phone ──────────────────────────────────────────────
+     With a pointer these rows have two moves: reaching for one turns the
+     credit line into the sentence the work is about, and clicking opens the
+     case study. A finger has only one move, so both used to happen in the
+     same tap - the sentence appeared and the card covered it in the same
+     instant, which meant the line may as well not have been written.
+
+     The rule here is the one the row already shows you: a resting row tells
+     you what the work is, and tapping it gives you the sentence. A row that
+     is already showing its sentence has said its piece, so tapping it again
+     opens the case study. Nothing is hidden behind a gesture nobody can see:
+     the number becomes the arrow at the same moment the line changes, so the
+     row that will open on the next tap is the one wearing an arrow.
+
+     The morph itself belongs to morphline, so this asks for it the same way
+     a pointer does rather than reaching inside it. */
+  var TOUCH = window.matchMedia && matchMedia('(hover: none), (max-width: 760px)').matches;
+  var lit = null;
+  function light(b, on){
+    if (!b) return;
+    b.classList.toggle('lit', on);
+    try { b.dispatchEvent(new PointerEvent(on ? 'pointerenter' : 'pointerleave')); }
+    catch (err) {
+      var ev = document.createEvent('Event');
+      ev.initEvent(on ? 'pointerenter' : 'pointerleave', false, false);
+      b.dispatchEvent(ev);
+    }
+  }
+  function litten(b){ if (lit === b) return; light(lit, false); lit = b; light(b, true); }
+
+  [].slice.call(document.querySelectorAll('.ix-b')).forEach(function(b){
+    b.addEventListener('click', function(e){
+      if (TOUCH && lit !== b){ e.preventDefault(); litten(b); return; }
+      /* the browser sends its own pointerleave on the way out of a tap, which drops
+         the sentence a beat before the card covers it. Ask for it back. */
+      if (TOUCH) light(b, true);
+      if (!b.dataset.i) return;                  /* the last row is a link out */
+      last = b; open(+b.dataset.i);
+    });
+  });
+  /* a tap on the page behind them puts the lit row back */
+  if (TOUCH) document.addEventListener('click', function(e){
+    if (lit && !lit.contains(e.target)) litten(null);
   });
   ov.addEventListener('click',function(e){ if(e.target===ov||e.target===inn) close(); });
   var ovClose=document.getElementById('ovClose');
@@ -1735,9 +1794,17 @@
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
   var bar = document.querySelector('.nav-inner');
   if (!bar) return;
+  /* The pile grows the bar from 62px to about 320px, and the browser keeps the
+     text you were reading still by moving the scroll position under it. That
+     counts as a scroll, so the baseline is taken once the bar has finished
+     opening rather than at the moment of the tap - otherwise the pile closed
+     itself a frame after it opened. */
+  var startY = 0, armed = false, arm;
   var open = function(on){
     document.body.classList.toggle('nav-open', on);
     bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+    clearTimeout(arm); armed = false;
+    if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
   };
   bar.setAttribute('aria-label', 'Pages');
   open(false);
@@ -1757,12 +1824,28 @@
     a.classList.toggle('back', k > 0);
   });
   bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-in')) { e.preventDefault(); return; }
     if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
   }, true);
   document.addEventListener('click', function(e){
     if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
   });
   addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+
+  /* A Close of its own. Tapping the paper behind it works, but on a phone the
+     open list covers most of what there is to tap, so the way out has to be
+     inside the thing that is open. */
+  var x = document.createElement('button');
+  x.type = 'button'; x.className = 'nav-x'; x.textContent = 'Close';
+  x.addEventListener('click', function(e){ e.stopPropagation(); open(false); });
+  bar.appendChild(x);
+
+  /* Starting to read closes it. Nobody scrolls the page in order to keep a menu
+     open, and a list that sits over the page while it moves is just in the way. */
+  addEventListener('scroll', function(){
+    if (!armed || !document.body.classList.contains('nav-open')) return;
+    if (Math.abs(window.scrollY - startY) > 6) open(false);
+  }, {passive: true});
 })();
 </script>
 <script src="morphline.js"></script>
