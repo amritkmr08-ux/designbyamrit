@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#8B8D87;
+    --paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;
     --line:#E3E3DF;--soft:#EDEDEA;--mark:#DCE5D3;--accent:#3D5A45;
     --measure:700px;
     --display:"Poppins",-apple-system,sans-serif;
@@ -29,7 +29,7 @@
   html{scroll-behavior:smooth}
   body{
     background:var(--paper);color:var(--ink);font-family:var(--font);
-    font-size:17px;font-weight:400;line-height:1.65;
+    font-size:17.5px;font-weight:400;line-height:1.65;
     -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
     font-feature-settings:"kern" 1,"liga" 1;text-rendering:optimizeLegibility;
   }
@@ -166,6 +166,14 @@
   .live-bar a{color:var(--accent)}
   .live-bar a:hover{color:var(--ink)}
   @media (max-width:900px){.live{padding:0 22px}.live-frame{height:480px}}
+  .live-poster{display:none}
+  .live-poster img{display:block;width:100%;height:auto}
+  @media (max-width:700px){
+    /* the prototype is laid out for a desktop; on a phone show a still and link to the real thing */
+    .live-frame{height:auto}
+    .live-frame iframe,.live-frame::after{display:none}
+    .live-poster{display:block}
+  }
   /* the disagreement */
   .pos{margin-top:38px;border-top:2px solid var(--ink)}
   .pos .row{display:grid;grid-template-columns:150px 1fr;gap:30px;padding:24px 0;border-bottom:1px solid var(--line);align-items:start}
@@ -192,6 +200,7 @@
   .panel .row.ii{padding-left:32px}
   .panel .q{margin-top:16px;font-size:13.5px;color:var(--faint);font-style:italic;font-family:var(--font)}
   .panel.after .row{font-family:var(--font);font-size:14.5px;color:var(--ink)}
+  .panel-shot img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px}
   .panel.after .rel{color:var(--accent);font-size:13px}
 
   /* spectrum */
@@ -373,7 +382,8 @@
     <a href="#learned">What I took from it</a>
   </nav>
   <div class="foot">
-    <a href="intent-model.html">Next: The intent model →</a><br />
+    <a href="contract-onboarding.html">Contract onboarding</a><br />
+    <a href="intent-model.html">Phoenix listing</a><br />
     © <span id="year"></span> Amrit Kumar
   </div>
 </aside>
@@ -414,6 +424,9 @@
         <dt>Hardest part</dt>
         <dd>Making it survive 340 statements of work. My first layout failed at
         <b>0 legible labels</b>, so I replaced it.</dd>
+        <dt>What transfers</dt>
+        <dd>Any system where AI reasons over stored records: if the storage model is wrong, the
+        AI is confidently wrong. Fix the model before the interface.</dd>
       </dl>
     </div>
   </div>
@@ -432,17 +445,13 @@
 
   <div class="wide">
     <div class="ba">
-      <div class="panel r">
+      <div class="panel r panel-shot">
         <p class="h">What the system showed</p>
-        <p class="row">▼ Counterparty</p>
-        <p class="row i">▼ Master Core Documents</p>
-        <p class="row ii">MSA Contract.pdf</p>
-        <p class="row ii">NDA Agreement.pdf</p>
-        <p class="row ii">Service Level Agreement.pdf</p>
-        <p class="row i">▼ General Contract Terms</p>
-        <p class="row ii">Terms Amendment 2024.pdf</p>
-        <p class="row i">▶ Amendments</p>
-        <p class="row i">▶ SOWs</p>
+        <picture>
+          <source srcset="before-folder-tree.webp" type="image/webp" />
+          <img src="before-folder-tree.png" width="1452" height="1287" loading="lazy" decoding="async"
+               alt="The earlier repository screen: a folder tree for one counterparty. Master Core Documents holds the MSA, an NDA, an SLA and a purchase order as files; General Contract Terms holds two amendments as files. Nothing says which one applies to which agreement." />
+        </picture>
         <p class="q">…which of these applies to the Boston SOW?</p>
       </div>
       <div class="panel after r">
@@ -1060,9 +1069,17 @@
     <div class="live-frame">
       <iframe src="family-graph.html" loading="lazy"
               title="Interactive prototype: a contract family of 340 statements of work, navigated by status and by relationship."></iframe>
+      <a class="live-poster" href="family-graph.html" aria-label="Open the running prototype">
+        <picture>
+          <source srcset="family-graph-poster.webp" type="image/webp" />
+          <img src="family-graph-poster.jpg" width="1400" height="820" loading="lazy" decoding="async"
+               alt="The prototype: an agreement on the left, its statements of work grouped by status in branching columns, one record open with the amendment that applies to it." />
+        </picture>
+      </a>
     </div>
     <div class="live-bar">
       <span class="lb">Fig. 07 · The same model, running</span>
+      <a href="family-graph.html" target="_blank" rel="noopener">Open the prototype in its own tab &rarr;</a>
     </div>
     <figcaption style="margin-top:12px">Branching columns holding a 340-SOW family, playing a
     recorded sequence: a status worth worrying about, a cohort inside it, one record, and the
@@ -1159,12 +1176,21 @@
     <h2 class="r" style="margin-bottom:0">Let's build something that thinks.</h2>
     <a class="mail r" href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a>
     <p class="r" style="margin-top:44px;padding-top:26px;border-top:1px solid var(--line);font-size:15px">
-      <a href="auto-extraction.html">Next: an AI extracts 128 fields, a lawyer still checks them &rarr;</a>
+      <a href="contract-onboarding.html">Next: where this argument shipped, the contract onboarding review &rarr;</a>
     </p>
   </div>
 </section>
 
 
+
+
+</div>
+
+<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged figure">
+  <span class="close">Esc to close</span>
+  <div id="lbBody"></div>
+  <p class="cap" id="lbCap"></p>
+</div>
 
 <script>
   document.getElementById("year").textContent=new Date().getFullYear();
@@ -1219,13 +1245,7 @@
   },{rootMargin:"-20% 0px -70% 0px"});
   secs.forEach(function(s){ if(s) spy.observe(s); });
 </script>
-</div>
 
-<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged figure">
-  <span class="close">Esc to close</span>
-  <div id="lbBody"></div>
-  <p class="cap" id="lbCap"></p>
-</div>
-
+<script src="visits.js" defer></script>
 </body>
 </html>

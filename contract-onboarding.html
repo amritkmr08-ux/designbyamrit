@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The agent groups the contracts. A person decides the groups are right. · Amrit Kumar</title>
+<meta name="description" content="Contract onboarding at Sirion: an agent reads a customer's legacy contracts, names the counterparties and builds the contract families. Three human checkpoints decide what it got right. A shipped case study." />
+<meta property="og:title" content="The agent groups the contracts. A person decides the groups are right. · Amrit Kumar" />
+<meta property="og:description" content="Counterparty mapping and contract-family review for AI-powered contract onboarding. Where the relationships argument shipped." />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
+<meta property="og:url" content="https://www.designamrit.com/contract-onboarding.html" />
+<meta name="twitter:image" content="https://www.designamrit.com/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F7F7F5;
+    --ink: #191A18;
+    --muted: #5F625C;
+    --faint: #6F716A;
+    --line: #E3E3DF;
+    --soft: #EDEDEA;
+    --accent: #3D5A45;
+    --warn: #9A4A38;
+    --radius: 3px;
+    --font-display: "Poppins", -apple-system, sans-serif;
+    --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 17.5px; font-weight: 400; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 720px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  h1, h2, h3, h4, blockquote, .lede { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* reading progress */
+  #bar {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+    background: var(--accent); z-index: 30; transition: width 0.1s linear;
+  }
+
+  /* ---------- persistent sidebar ---------- */
+  .rail {
+    position: fixed; top: 0; left: 0; width: 238px; height: 100vh;
+    padding: 44px 32px; border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; background: var(--bg); z-index: 30;
+  }
+  .rail .mark {
+    display: block; font-family: var(--font-display); font-size: 16px;
+    font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 24px; }
+  .rail .back:hover { color: var(--ink); }
+  .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
+  .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
+  .rail .toc a:hover { color: var(--ink); }
+  .rail .toc a.on { color: var(--ink); font-weight: 500; }
+  .rail .toc .lead {
+    font-family: var(--font-display); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 12px; font-weight: 400;
+  }
+  .rail .foot { margin-top: auto; font-size: 12px; color: var(--faint); line-height: 1.9; }
+  .rail .foot a:hover { color: var(--ink); }
+
+  .shell { margin-left: 238px; }
+
+  @media (max-width: 1080px) {
+    .rail {
+      position: sticky; width: auto; height: auto; flex-direction: row;
+      align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-right: none; border-bottom: 1px solid var(--line);
+      background: rgba(247,247,245,0.94); backdrop-filter: blur(10px);
+    }
+    .rail .mark, .rail .back { margin-bottom: 0; }
+    .rail > div { display: flex; align-items: baseline; gap: 16px; }
+    .rail .toc, .rail .foot { display: none; }
+    .shell { margin-left: 0; }
+  }
+
+  header { padding: 110px 0 72px; }
+  .kicker {
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(32px, 4.6vw, 54px); line-height: 1.18;
+    letter-spacing: -0.02em; max-width: 19ch;
+  }
+  h1 em { color: var(--accent); font-style: normal; }
+  .hero-sub { margin-top: 28px; font-size: 19px; color: var(--muted); max-width: 58ch; }
+
+  .snapshot {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 32px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px 32px; margin-top: 48px;
+  }
+  .tldr { margin-top: 28px; border: 1px solid var(--line); background: #FBFBFA; border-radius: var(--radius); padding: 28px 32px; }
+  .tldr .lb { font-family: var(--font-display); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); margin-bottom: 20px; }
+  .tldr dl { display: grid; grid-template-columns: 150px 1fr; gap: 12px 26px; margin: 0; }
+  .tldr dt { font-family: var(--font-display); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .tldr dd { margin: 0; font-size: 16px; line-height: 1.6; }
+  .tldr dd b { font-weight: 500; }
+  @media (max-width: 700px) { .tldr { padding: 22px; } .tldr dl { grid-template-columns: 1fr; gap: 4px 0; } .tldr dt { margin-top: 12px; } }
+  .snapshot div p:first-child {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3px;
+  }
+  .snapshot div p:last-child { font-size: 15.5px; line-height: 1.45; }
+
+  section { padding: 76px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--font-display); font-weight: 400; font-size: 31px; line-height: 1.3;
+    letter-spacing: -0.02em; margin-bottom: 28px; max-width: 26ch;
+  }
+  h3 { font-family: var(--font-display); font-weight: 500; font-size: 20px; line-height: 1.35; }
+  .body-text p { margin-bottom: 20px; }
+  .body-text p:last-child { margin-bottom: 0; }
+  .lede { font-size: 20px; }
+
+  blockquote {
+    font-family: var(--font-display); font-size: 26px; line-height: 1.4;
+    border-left: 2px solid var(--accent);
+    padding-left: 28px; margin: 48px 0; max-width: 32ch;
+  }
+
+  /* figure plate */
+  figure { margin: 44px 0 0; }
+  .protoframe {
+    position: relative; margin-top: 26px;
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    background: #fff; height: 620px; padding-top: 30px;
+    box-shadow: 0 1px 2px rgba(25,26,24,.04), 0 16px 34px -24px rgba(25,26,24,.2);
+  }
+  .protoframe::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 30px; z-index: 2;
+    background-color: #F2F2EF; border-bottom: 1px solid var(--line);
+    background-image:
+      radial-gradient(circle 3.5px at 17px 15px, #D3D4CE 100%, transparent 100%),
+      radial-gradient(circle 3.5px at 33px 15px, #D3D4CE 100%, transparent 100%),
+      radial-gradient(circle 3.5px at 49px 15px, #D3D4CE 100%, transparent 100%);
+  }
+  /* render the prototype at real-desktop scale, compressed like a product screenshot */
+  .protoframe iframe {
+    display: block; border: 0; background: #fff;
+    width: 138%; height: 138%;
+    transform: scale(0.7246); transform-origin: 0 0;
+  }
+  @media (max-width: 860px) { .protoframe { height: 460px; } }
+  .proto-poster { display: none; }
+  /* The document editor lays out three fixed panes and needs about 1440px to show all of them.
+     Rendered at 142% and scaled back, the 1016px frame gives it 1443. Below 1016px of frame the
+     right-hand panel would be cut mid-word, so the still takes over there rather than at 700. */
+  .protoframe--editor iframe { width: 142%; height: 142%; transform: scale(0.7042); }
+  @media (max-width: 1079px) {
+    .protoframe--editor { height: auto; }
+    .protoframe--editor iframe { display: none; }
+    .protoframe--editor .proto-poster { display: block; }
+  }
+  .proto-poster img { display: block; width: 100%; height: auto; }
+  @media (max-width: 700px) {
+    /* the prototype is laid out for a desktop; on a phone show a still and link to the real thing */
+    .protoframe { height: auto; }
+    .protoframe iframe { display: none; }
+    .proto-poster { display: block; }
+  }
+  .plate {
+    background: radial-gradient(120% 100% at 70% 0%, #DCCFE6 0%, #E6DEEC 50%, #EDEAF0 100%);
+    border: 0; border-radius: 12px; padding: clamp(18px, 4.5%, 48px); overflow: hidden;
+  }
+  .plate img {
+    width: 100%; height: auto; border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(25, 26, 24, 0.1), 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25, 26, 24, 0.45);
+  }
+  /* A 2880px product screen renders at 32% in this column and 12.5% on a phone, so the
+     UI text lands around 4px and the evidence is unreadable. The full shot says what the
+     screen is; the detail under it shows the thing the paragraph is arguing about, at a
+     size you can read. On a phone the full shot is dropped entirely — at 12.5% it carries
+     nothing a reader can use, and the detail is the whole point. */
+  .plate.plate--detail { margin-top: 12px; }
+  .plate.plate--detail img { border-radius: 6px; }
+  .plate.plate--fit img { width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  @media (max-width: 700px) {
+    figure .plate--full { display: none; }
+    .plate.plate--detail { margin-top: 0; }
+  }
+  /* the only thing saying a figure opens is cursor:zoom-in, and a touch screen has no
+     cursor. Say it in words there, and only there. */
+  @media (hover: none) {
+    .plate { position: relative; }
+    .plate::after {
+      content: "Tap to enlarge"; position: absolute; right: 12px; bottom: 12px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--faint);
+      background: rgba(247, 247, 245, 0.92); padding: 4px 8px; border-radius: 3px;
+    }
+  }
+  /* the deck exports already sit on their own gradient: no second field around them */
+  .plate.plate--own { background: none; padding: 0; border-radius: 12px; }
+  .plate.plate--own img { border-radius: 12px; box-shadow: 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25, 26, 24, 0.45); }
+  figcaption {
+    margin-top: 14px; font-size: 14px; color: var(--muted); line-height: 1.55;
+    display: flex; gap: 14px; align-items: baseline;
+  }
+  figcaption b {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); font-weight: 400; white-space: nowrap;
+  }
+
+  /* principles */
+  .prin { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  .prin div { border-top: 2px solid var(--ink); padding-top: 16px; }
+  .prin h3 { margin-bottom: 8px; }
+  .prin p { color: var(--muted); font-size: 15.5px; }
+  @media (max-width: 760px) { .prin { grid-template-columns: 1fr; } }
+
+  /* iteration blocks */
+  .iter { margin-top: 52px; }
+  .iter + .iter { margin-top: 72px; padding-top: 72px; border-top: 1px solid var(--line); }
+  .iter-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 10px; }
+  .iter-head .n {
+    font-family: var(--font-display); font-size: 38px; font-weight: 400;
+    color: var(--accent); line-height: 1; letter-spacing: -0.03em;
+  }
+  .iter-head h3 { font-size: 26px; font-weight: 400; }
+  .iter-grid {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 44px;
+    align-items: start; margin-top: 28px;
+  }
+  .iter-grid figure { margin: 0; }
+  .iter p { color: var(--muted); }
+  .verdict { margin-top: 26px; }
+  .verdict div {
+    display: grid; grid-template-columns: 74px 1fr; gap: 14px;
+    padding: 12px 0; border-top: 1px solid var(--line); align-items: baseline;
+  }
+  .verdict .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .verdict .won .tag { color: var(--accent); }
+  .verdict .cost .tag { color: var(--warn); }
+  .verdict p { font-size: 15.5px; color: var(--ink); }
+  .killed {
+    margin-top: 24px; padding: 18px 22px; background: var(--soft);
+    border-radius: var(--radius); font-size: 15.5px; color: var(--ink);
+  }
+  .killed b { font-weight: 500; }
+  @media (max-width: 860px) { .iter-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* two-option compare */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 40px; }
+  .compare figure { margin: 0; }
+  .opt-lbl {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 12px;
+  }
+  .compare h3 { margin-bottom: 16px; font-size: 19px; }
+  .compare ul { margin-top: 16px; padding-left: 0; list-style: none; }
+  .compare li {
+    font-size: 15px; color: var(--muted); padding: 7px 0 7px 20px;
+    position: relative; line-height: 1.5;
+  }
+  .compare li::before {
+    content: ""; position: absolute; left: 0; top: 15px;
+    width: 8px; height: 1px; background: var(--faint);
+  }
+  .compare li.up::before { background: var(--accent); }
+  .compare li.down::before { background: var(--warn); }
+  @media (max-width: 760px) { .compare { grid-template-columns: 1fr; gap: 44px; } }
+
+  /* retention table */
+  .ret { margin-top: 40px; overflow-x: auto; }
+  .ret table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+  .ret th, .ret td {
+    padding: 13px 10px; text-align: right; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums;
+  }
+  .ret th:first-child, .ret td:first-child { text-align: left; }
+  .ret thead th {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); font-weight: 400;
+    border-bottom: 1px solid var(--ink);
+  }
+  .ret tbody th { font-weight: 400; color: var(--muted); font-size: 14.5px; }
+  .ret .after td { color: var(--accent); font-weight: 500; }
+  .ret .delta td { color: var(--ink); font-family: var(--mono); font-size: 13px; }
+  .ret .delta th { color: var(--faint); font-size: 13px; }
+
+  .headline-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 8px; }
+  .headline-nums div { border-top: 2px solid var(--ink); padding-top: 18px; }
+  .headline-nums .v {
+    font-family: var(--font-display); font-size: clamp(34px, 4.6vw, 52px);
+    font-weight: 400; line-height: 1; letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+  }
+  .headline-nums .l { font-size: 14.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+  .headline-nums.headline-one { grid-template-columns: 1fr; }
+  .headline-nums.headline-one .l { max-width: 62ch; }
+  @media (max-width: 760px) { .headline-nums { grid-template-columns: 1fr; gap: 24px; } }
+
+  .note {
+    border: 1px dashed var(--line); border-radius: var(--radius);
+    padding: 24px 28px; color: var(--muted); font-size: 15.5px; margin-top: 36px;
+  }
+  .note b { color: var(--ink); font-weight: 500; }
+
+  .learned { margin-top: 40px; }
+  .learned > div {
+    display: grid; grid-template-columns: 42px 1fr; gap: 20px;
+    padding: 26px 0; border-top: 1px solid var(--line);
+  }
+  .learned .n {
+    font-family: var(--mono); font-size: 12px; color: var(--faint); padding-top: 7px; margin: 0;
+  }
+  .learned h3 { margin-bottom: 8px; }
+  .learned p { color: var(--muted); font-size: 16px; }
+
+  .faq-wrap { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .faq-wrap > p.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-bottom: 22px; }
+  .faq-wrap .faq-q { color: var(--ink); font-weight: 500; font-size: 16px; margin-bottom: 8px; }
+  .faq-wrap .faq-a { color: var(--muted); font-size: 16px; }
+  .faq-wrap .faq-item + .faq-item { margin-top: 26px; padding-top: 26px; border-top: 1px solid var(--line); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .end-cta { text-align: center; padding: 120px 0; }
+  .end-cta h2 { margin: 0 auto 24px; }
+  .btn {
+    display: inline-block; padding: 14px 28px; border-radius: 999px;
+    font-size: 15px; font-weight: 500; background: var(--ink); color: var(--bg);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover { background: var(--accent); transform: translateY(-2px); }
+  footer { border-top: 1px solid var(--line); padding: 32px 0; }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 20px; font-size: 14px; color: var(--muted); flex-wrap: wrap;
+  }
+
+  @media (max-width: 760px) {
+    header { padding: 72px 0 56px; }
+    section { padding: 56px 0; }
+    .snapshot { grid-template-columns: 1fr 1fr; padding: 22px; }
+    blockquote { font-size: 22px; }
+    .wrap { padding: 0 22px; }
+    .iter-head .n { font-size: 30px; }
+    .iter-head h3 { font-size: 22px; }
+  }
+
+  @media print {
+    nav, #bar, .end-cta, .reveal { position: static; }
+    .reveal { opacity: 1; transform: none; }
+    body { font-size: 11pt; }
+  }
+
+  @media (max-width: 700px) { figcaption { flex-direction: column; gap: 6px; } figcaption b { white-space: normal; } }
+</style>
+<link rel="stylesheet" href="marks.css" />
+</head>
+<body>
+
+<div id="bar"></div>
+
+<aside class="rail">
+  <div>
+    <a class="mark" href="index.html">Amrit Kumar</a>
+    <a class="back" href="index.html#work">&larr; All work</a>
+  </div>
+  <nav class="toc">
+    <p class="lead">Case study</p>
+    <a href="#problem">What onboarding is</a>
+    <a href="#checkpoints">Three checkpoints, not one</a>
+    <a href="#counterparty">Who is this contract with?</a>
+    <a href="#missing">When the agent finds nobody</a>
+    <a href="#families">Where does it belong?</a>
+    <a href="#editor">Inside the document</a>
+    <a href="#decisions">Decisions I'd defend</a>
+    <a href="#evidence">What I can and cannot claim</a>
+    <a href="#learned">What I took from it</a>
+  </nav>
+  <div class="foot">
+    <a href="contract-understanding.html">Contract relationships</a><br />
+    <a href="auto-extraction.html">Verifying AI extraction</a><br />
+    <a href="mailto:amritkmr08@gmail.com">Email me</a>
+  </div>
+</aside>
+
+<div class="shell">
+
+<header>
+  <div class="wrap">
+    <p class="kicker reveal">Case study · Shipped · AI contract onboarding · 9 min read</p>
+    <h1 class="reveal">The agent groups the contracts. A person decides the <em>groups are right</em>.</h1>
+    <p class="hero-sub reveal">When a company moves its contracts into Sirion, an agent reads every
+    file, works out who each one is with, and builds the families they belong to. I designed the
+    three places where a human checks that work before it becomes the record.</p>
+
+    <div class="snapshot reveal">
+      <div><p>Product</p><p>Contract onboarding for Sirion, the parent-child agent that turns uploaded files into a structured contract repository</p></div>
+      <div><p>My role</p><p>The only designer on it. I owned the design end to end, from the concept of where humans step in to the shipped screens</p></div>
+      <div><p>Team</p><p>Product, engineering and the AI team built the agent. I designed how people review it</p></div>
+      <div><p>Status</p><p>Shipped and in use</p></div>
+      <div><p>Evidence</p><p>Not yet in hand. I am asking for post-launch data; until it arrives this page claims the design, not the result</p></div>
+      <div><p>Connects to</p><p><a href="contract-understanding.html" style="text-decoration:underline">Contract relationships</a>, the argument this is the shipped form of</p></div>
+    </div>
+
+    <div class="tldr reveal">
+      <p class="lb">If you read one thing</p>
+      <dl>
+        <dt>Problem</dt>
+        <dd>A new customer arrives with years of contracts as loose files. Before the platform can
+        track a renewal or an obligation, every file needs two facts attached: who it is with, and
+        which agreement it belongs under. Someone used to read each one to find out.</dd>
+        <dt>What I built</dt>
+        <dd>A review flow with <b>three checkpoints</b>: review what was extracted, review the
+        counterparty mapping, review the contract families. The agent does the reading and
+        proposes; each checkpoint is designed so a person can confirm a group of documents at
+        once, see why the agent grouped them, and correct it without starting over.</dd>
+        <dt>The decision I'd defend hardest</dt>
+        <dd>Review happens by <b>counterparty, not by document</b>. Three documents the agent
+        believes are with the same company are shown as one row that opens to show its members. A
+        wrong name gets fixed once, not three times.</dd>
+        <dt>What happened</dt>
+        <dd>It shipped. I do not yet have usage data I trust enough to put here, so there is no
+        number in this case study. When I have one and know how it was measured, it will appear.</dd>
+        <dt>What transfers</dt>
+        <dd>Any bulk AI process: put the human checkpoint where an error would compound into the
+        next step, group the review by the thing the agent decided rather than the file it read,
+        and always leave a visible way to re-run.</dd>
+      </dl>
+    </div>
+  </div>
+</header>
+
+<section id="problem" data-mk="Onboarding is the moment a customer's existing contracts enter the platform. Each file needs a counterparty and a place in a family before anything downstream works, and that used to be manual reading.">
+  <div class="wrap narrow">
+    <h2 class="reveal">What onboarding is, and why it was slow</h2>
+    <div class="body-text reveal">
+      <p class="lede">Contract software is only useful once the contracts are inside it. For a new
+      customer that means bringing in everything they have already signed, often thousands of
+      files, from shared drives and email folders and previous systems.</p>
+      <p>Each file has to end up with two things attached. The <b>counterparty</b>: which company is
+      on the other side. And the <b>family</b>: which master agreement it lives under, whether it is
+      an amendment, a statement of work, an exhibit or a side letter. Without those, nothing
+      downstream works. A renewal date on an amendment means nothing if the system does not know
+      which contract it amends.</p>
+      <p>Historically people did this by reading. Open the file, find the parties, guess the
+      relationship from the title, link it by hand. It is the kind of work that is tedious at fifty
+      documents and a project at five thousand.</p>
+      <p>An agent can now read all of it and propose both facts for every file. That is where my
+      work starts, because a proposal about who a contract is with is exactly the kind of thing a
+      company cannot let a model decide alone.</p>
+    </div>
+
+    <blockquote class="reveal">The agent can name the party and place the document. The company is
+    still the one who has to be right.</blockquote>
+  </div>
+</section>
+
+<section id="checkpoints" data-mk="Three review steps instead of one final approval: extraction, counterparty mapping, families. Each sits where a wrong answer would compound into the next step.">
+  <div class="wrap narrow">
+    <h2 class="reveal">Three checkpoints, not one approval</h2>
+    <div class="body-text reveal">
+      <p>The obvious design is one screen at the end: here is what the agent did, approve it. I
+      argued against that, because the agent's work happens in stages and an error in an early
+      stage multiplies. If the agent reads the wrong party name from a document, then every family
+      it builds on that name is wrong too, and a person reviewing the finished hierarchy is trying
+      to spot a mistake that has already spread.</p>
+      <p>So the flow has three stops, in the order the agent works: <b>review extraction</b>, where
+      the values it pulled from each document are checked (this is the Auto Extraction module,
+      <a href="auto-extraction.html" style="text-decoration:underline">its own case study</a>);
+      <b>counterparty mapping</b>, where the names it found are matched to companies the customer
+      already knows; and <b>review families</b>, where documents are grouped under their parent
+      agreements.</p>
+      <p>Each stop is a place a person can say "yes, go on" quickly when the agent is right, and fix
+      one thing without redoing everything when it is not.</p>
+    </div>
+
+    <div class="prin reveal">
+      <div>
+        <h3>Identify</h3>
+        <p>The agent reads the extracted parties, normalises the names (Ltd, Limited, Inc, spacing
+        and punctuation), and groups documents that share one.</p>
+      </div>
+      <div>
+        <h3>Validate</h3>
+        <p>A person sees each group as one row, with the agent's name beside the customer's own
+        record for that company, and confirms or changes it.</p>
+      </div>
+      <div>
+        <h3>Verify</h3>
+        <p>Only then are families generated, from mappings a person has already stood behind.
+        Unmapped documents are held back rather than guessed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate plate--full">
+        <picture>
+          <source srcset="onb-mapped.webp" type="image/webp" />
+          <img src="onb-mapped.jpg" width="2880" height="1686" loading="lazy"
+               alt="The shipped counterparty mapping screen: a stepper reading Review Extraction, Counterparty Mapping, Review Families; tabs for Mapped, Missing and Orphaned; a table grouped by counterparty with one group expanded to three documents and a dropdown of recommended system records." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-mapped-detail.webp" type="image/webp" />
+          <img src="onb-mapped-detail.jpg" width="1850" height="913" loading="lazy"
+               alt="Detail of the mapping table: a group of three documents opened under the normalised name IBM Functions Pvt Ltd, showing the different name extracted from each file &mdash; IBM Japan, IBM Functions Pvt Ltd, IBM Functions Pvt Ltd &mdash; beside a dropdown of recommended system records." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 01 · The shipped mapping screen</b>
+      <span>The three stops sit across the top: Review Extraction, Counterparty Mapping, Review Families. Below, the Mapped tab with one group opened to show its three documents, and the system record being chosen from a recommended list. Sample data throughout.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="counterparty" data-mk="Counterparty review is grouped by company, not by file. Mapped, Missing and Orphaned tabs; the agent's normalised name sits beside the customer's own system record; a reasoning panel says why they were matched.">
+  <div class="wrap narrow">
+    <h2 class="reveal">Who is this contract with?</h2>
+    <div class="body-text reveal">
+      <p class="lede">The counterparty screen is a table with three tabs: <b>Mapped</b>, <b>Missing</b>
+      and <b>Orphaned</b>. Every row is a company, not a document.</p>
+      <p>That was the first real decision. The agent works document by document, and the first
+      drafts of the screen did too: a long list of files, each with a proposed party. Reviewing it
+      meant reading the same company name over and over. Grouping by the agent's
+      <em>normalised</em> counterparty turns a long list of files into a short list of companies,
+      and each row carries a count: 3 documents, 24 documents. Open a row and you see the members, each with the
+      exact name the agent extracted from that file, so a person can see that "IBM Japan" and
+      "IBM Functions Pvt Ltd" were folded into one and decide whether that was right.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate plate--full">
+        <picture>
+          <source srcset="onb-unmapped-list.webp" type="image/webp" />
+          <img src="onb-unmapped-list.jpg" width="2880" height="1800" loading="lazy"
+               alt="An earlier version of the unmapped-counterparty screen: one row per document with ID, document name, extracted counterparty, normalised counterparty and a Select-or-create cell; a side panel recommends matches with percentages." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-unmapped-list-detail.webp" type="image/webp" />
+          <img src="onb-unmapped-list-detail.jpg" width="1850" height="942" loading="lazy"
+               alt="Detail of the version that did not ship: one row per document, and the words Select or create repeated in every row of the System Counterparty column." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 02 · The version that did not ship</b>
+      <span>One row per document, a match percentage on every recommendation, and "Select or create"
+      repeated down the page. Reviewing it meant deciding the same company many times over. Sample
+      data.</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap narrow" style="margin-top:44px">
+    <div class="body-text reveal">
+      <p>Beside the agent's name sits the <b>system counterparty</b>, the record the customer already
+      holds for that company. When they match, the row is quiet. When the agent had to choose, a
+      reasoning panel explains the match in plain words, with the passage it read and a note on
+      what it ignored to make the match, rather than the match percentage the earlier version carried. That is the same position
+      I took in Auto Extraction: a lawyer cannot act on 0.82, but they can read a sentence and
+      disagree with it.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate plate--full">
+        <picture>
+          <source srcset="onb-reasoning.webp" type="image/webp" />
+          <img src="onb-reasoning.jpg" width="2272" height="1684" loading="lazy"
+               alt="The reasoning panel over the mapping table: the counterparty name, a plain-language explanation of why the agent matched it, and the referenced passage from the document." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-reasoning-detail.webp" type="image/webp" />
+          <img src="onb-reasoning-detail.jpg" width="941" height="684" loading="lazy"
+               alt="Detail of the reasoning panel: the counterparty IBM Japan, the page it was extracted from, and the sentence the agent read, quoted in full. No match percentage." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 03 · The agent explains itself</b>
+      <span>Open the reasoning for a match and it says, in words, why two names were treated as one company, and quotes the passage it read. No percentage.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="missing" data-mk="When the agent finds no matching company, the person assigns one from a recommended list, creates a new one, or bulk-creates all missing counterparties at once. Bulk create is the last point of human judgment before the record changes.">
+  <div class="wrap narrow">
+    <h2 class="reveal">When the agent finds nobody</h2>
+    <div class="body-text reveal">
+      <p>The Missing tab holds the groups where the agent read a party name but found no matching
+      company in the customer's records. This is where onboarding used to stall, because someone
+      had to decide, for each one, whether this was a company they knew under a different name or
+      a new one to create.</p>
+      <p>The screen offers both, in that order. Opening the empty system-counterparty cell shows a
+      short <b>recommended</b> list first, the closest existing records, and only below that the
+      option to create a new supplier. Picking wrong here creates a duplicate company that will
+      confuse every report afterwards, so the design leans toward reuse.</p>
+      <p>For large batches there is <b>Bulk Create</b>: create every missing counterparty from the
+      agent's normalised names in one action. I treated this as the most consequential control on
+      the screen. It is the last moment a person can stop the agent's naming from becoming the
+      customer's master data, so it asks for a review of the grouped names first, with a revert on
+      any group the agent merged, before the confirm.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate plate--full plate--own">
+        <picture>
+          <source srcset="onb-recommend.webp" type="image/webp" />
+          <img src="onb-recommend.jpg" width="2000" height="1503" loading="lazy"
+               alt="The Missing tab: a row with no system counterparty opened to a dropdown listing recommended existing records, with Create New Supplier at the bottom." />
+        </picture>
+      </div>
+      <div class="plate plate--detail plate--fit">
+        <picture>
+          <source srcset="onb-recommend-detail.webp" type="image/webp" />
+          <img src="onb-recommend-detail.jpg" width="690" height="780" loading="lazy"
+               alt="Detail of the empty counterparty cell opened: a Recommended list of the closest existing records, with Create New Supplier last." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 04 · Recommended first, create second</b>
+      <span>For a company the agent could not match, the empty cell opens to the closest existing records before it offers to create a new one.</span></figcaption>
+    </figure>
+    <figure class="reveal">
+      <div class="plate plate--full plate--own">
+        <picture>
+          <source srcset="onb-bulk.webp" type="image/webp" />
+          <img src="onb-bulk.jpg" width="2179" height="1449" loading="lazy"
+               alt="A Bulk Create Counterparty dialog explaining that all counterparties will be created as system counterparties and mapped to their documents, with Cancel and Yes, Create buttons." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-bulk-detail.webp" type="image/webp" />
+          <img src="onb-bulk-detail.jpg" width="1630" height="830" loading="lazy"
+               alt="Detail of the Bulk Create dialog: it says every counterparty will be created as a system counterparty and mapped to its documents, then offers Cancel and Yes, Create." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 05 · The last point of human judgment</b>
+      <span>Bulk Create turns every unmatched name into a real counterparty record in one action. The dialog says exactly that before asking for a yes.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="families" data-mk="Family review shows each counterparty's contracts as a tree: root contract, parent documents, then amendments, statements of work, exhibits and supporting papers. Drag to correct. Orphaned documents stay counted and visible.">
+  <div class="wrap narrow">
+    <h2 class="reveal">Where does it belong?</h2>
+    <div class="body-text reveal">
+      <p class="lede">Once the counterparties are settled, the agent generates families: for each
+      company, which document is the root, which are parents, and which amendments, statements of
+      work, exhibits and certificates hang under them.</p>
+      <p>The review screen is a tree per counterparty, with three numbers always visible at the
+      top: how many families, how many documents, how many <b>orphaned</b>. That last number is the
+      one I fought to keep on screen. An orphan is a document the agent could not place, and the
+      easiest way to make onboarding look finished is to hide them. Keeping the count next to the
+      tree means nobody can export a hierarchy without knowing what was left out of it.</p>
+      <p>Correcting the tree is direct: drag a document to a different parent. Documents are typed
+      as contractual, peripheral or supporting, so a statement of work and a work-completion
+      certificate do not look like the same kind of thing even when they sit at the same level.</p>
+      <p>This is the screen where the
+      <a href="contract-understanding.html" style="text-decoration:underline">contract relationships</a>
+      argument stopped being an argument. That case study says a repository should describe how
+      contracts relate rather than where files sit. This is the shipped place where those
+      relationships get built and checked, one customer at a time.</p>
+    </div>
+
+  </div>
+
+  <div class="wrap">
+    <figure class="reveal">
+      <div class="plate plate--full plate--own">
+        <picture>
+          <source srcset="onb-tree.webp" type="image/webp" />
+          <img src="onb-tree.jpg" width="2000" height="1430" loading="lazy"
+               alt="The Review Families screen: a list of counterparties on the left and, for one of them, a tree of root contracts, parent documents and their amendments and exhibits, with counts for families, documents and orphaned at the top." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-tree-detail.webp" type="image/webp" />
+          <img src="onb-tree-detail.jpg" width="1370" height="725" loading="lazy"
+               alt="Detail of the family tree: a root contract with statements of work, an amendment, an exhibit, an NDA and a work completion certificate nested under it, and the counts for families, documents and orphaned documents above." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 06 · Review families</b>
+      <span>One counterparty, its families as a tree. Root contract, parent documents, then amendments, exhibits, an NDA and a work-completion certificate. Three counts stay at the top: families, documents, orphaned.</span></figcaption>
+    </figure>
+    <figure class="reveal">
+      <div class="plate plate--full plate--own">
+        <picture>
+          <source srcset="onb-drag.webp" type="image/webp" />
+          <img src="onb-drag.jpg" width="2000" height="1384" loading="lazy"
+               alt="The family tree with a document being dragged to a new parent, showing the drop target within the hierarchy." />
+        </picture>
+      </div>
+      <div class="plate plate--detail">
+        <picture>
+          <source srcset="onb-drag-detail.webp" type="image/webp" />
+          <img src="onb-drag-detail.jpg" width="1170" height="490" loading="lazy"
+               alt="Detail of a drag in progress: a document lifted out of its group, a line marking where it will land, and the group it came from greyed behind it." />
+        </picture>
+      </div>
+      <figcaption><b>Fig. 07 · Correcting by hand</b>
+      <span>Drag a document to a different parent. The agent proposed the structure; the person can still move anything.</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap narrow">
+    <div class="note reveal"><b>On the screens.</b> Every screen on this page uses sample data from the
+    design file. No customer names or contracts appear.</div>
+  </div>
+</section>
+
+<section id="editor" data-mk="Inside the document: a paragraph shows nothing until you reach for it. Click and it becomes a content control you can edit, drag the boundary of, tag, or split. Three modes; only one control is ever past browse. The open questions are left open.">
+  <div class="wrap narrow">
+    <h2 class="reveal">Inside the document</h2>
+    <div class="body-text reveal">
+      <p class="lede">A tree says where a document sits. Onboarding also has to read what is inside
+      it: which paragraphs make a clause, which category each clause belongs to, and which tags it
+      carries. The agent proposes all three. A person confirms them inside the document itself.</p>
+      <p>This is the interaction spec for that editor, running. At rest a paragraph shows nothing.
+      Rest on it and its whole run gets a light box and a name. Click and it becomes a content
+      control: edit the text, drag either boundary to take in the paragraph next door, tag a phrase,
+      or select a run and split it out as its own clause with its own category. Three modes &mdash;
+      browse, active, editing &mdash; and only one control is ever past browse at a time.</p>
+      <p>Dragging onto a paragraph another category already owns is refused: the border goes red
+      and nothing is written. What should happen when the same category sits on both sides, whether
+      a drag can be undone, and what two reviewers on one clause see are not decided here. The spec
+      lists them as open questions for engineering instead of drawing an answer it does not have.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="protoframe protoframe--editor reveal">
+      <iframe src="onb-doc-editor.html" loading="lazy"
+              title="Working prototype: the document editor. Reach for a paragraph to preview its clause; click to make it a content control you can edit, drag, tag or split."></iframe>
+      <a class="proto-poster" href="onb-doc-editor.html" aria-label="Open the running prototype">
+        <picture>
+          <source srcset="onb-doc-editor-poster.webp" type="image/webp" />
+          <img src="onb-doc-editor-poster.jpg" width="1400" height="854" loading="lazy" decoding="async"
+               alt="The document editor prototype: the agent's read-back on the left, a master services agreement in the middle with the Termination clause in editing, and the clause mapping panel on the right." />
+        </picture>
+      </a>
+    </div>
+    <figcaption style="margin-top:14px"><b>Fig. 08 &middot; The document editor</b>
+    <span>Working prototype with its interaction spec attached &mdash; press <i>Spec &amp; states</i>
+    in the corner to jump between fifteen states. The interaction is the real one; the contract and
+    the party names are invented.
+    <a href="onb-doc-editor.html" target="_blank" rel="noopener">Open it in its own tab &rarr;</a></span></figcaption>
+  </div>
+</section>
+
+<section id="decisions" data-mk="Four decisions: review by company not by file; reasoning instead of a confidence score; let people proceed with unmapped documents held back rather than blocking them; keep re-run and the orphan count visible.">
+  <div class="wrap narrow">
+    <h2 class="reveal">Decisions I'd defend</h2>
+
+    <div class="learned reveal">
+      <div>
+        <p class="n">01</p>
+        <div>
+          <h3>Review by company, not by file</h3>
+          <p>The agent reads files. People think in companies. Grouping the review by the agent's
+          normalised counterparty means one correction fixes every document in the group, and the
+          screen shrinks to something a person can actually finish.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">02</p>
+        <div>
+          <h3>Reasoning instead of a score</h3>
+          <p>The match panel says what the agent did: matched the names after ignoring company
+          suffixes, here is the passage. A person can disagree with a sentence. Nobody can disagree
+          with 0.82.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">03</p>
+        <div>
+          <h3>Proceed anyway, with the unmapped held back</h3>
+          <p>Blocking family generation until every document is mapped would stall onboarding on
+          the hardest few files. Instead the dialog states how many are unmapped, sends those back
+          to the project queue, and generates families from what a person has confirmed.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">04</p>
+        <div>
+          <h3>Re-run is always on screen</h3>
+          <p>Every review table has a visible Re-Run. Once a person has corrected a few mappings,
+          the agent should be asked again with better inputs rather than the person finishing the
+          rest by hand. Correction feeding the agent is the loop the whole design is built on.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="evidence" data-mk="No outcome number yet. The product shipped; the designer is asking for usage data and will not publish a figure until he knows how it was measured.">
+  <div class="wrap narrow">
+    <h2 class="reveal">What I can and cannot claim</h2>
+    <div class="body-text reveal">
+      <p>The design shipped and customers are being onboarded through it. That much I can say.</p>
+      <p>What I cannot yet say is how much faster or more accurate onboarding has become. Internal
+      material about this project carries figures, and I have chosen not to repeat them here
+      because I do not know how they were measured or whether they were targets or results. A
+      number I cannot explain is not evidence, it is decoration.</p>
+      <p>I am asking for post-launch usage data. When I have it and understand it, this section
+      will change.</p>
+    </div>
+  </div>
+</section>
+
+<section id="learned" data-mk="The checkpoint goes where an error would compound. Group review by what the agent decided, not what it read. And a bulk action is the last point of human judgment, so it deserves the most care.">
+  <div class="wrap narrow">
+    <h2 class="reveal">What I took from it</h2>
+
+    <div class="learned reveal">
+      <div>
+        <p class="n">01</p>
+        <div>
+          <h3>Put the checkpoint where the error compounds</h3>
+          <p>One approval at the end feels efficient and is not. A wrong party name at step one is
+          cheap to fix at step one and expensive to find at step three, buried in a hierarchy built
+          on it.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">02</p>
+        <div>
+          <h3>Review the decision, not the input</h3>
+          <p>The agent's unit of work was the document. The person's unit of judgment was the
+          company. Designing the review around the second made it finishable.</p>
+        </div>
+      </div>
+      <div>
+        <p class="n">03</p>
+        <div>
+          <h3>The bulk action is the real interface</h3>
+          <p>Most of the care in this design went into one button. Bulk Create is where the agent's
+          guesses become the customer's permanent records, so it got a review step, a revert on every
+          merge and a plain statement of what would happen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="end-cta">
+  <div class="wrap">
+    <h2 class="reveal">This is where the relationships argument shipped.</h2>
+    <p class="reveal" style="color:var(--muted); max-width:52ch; margin:0 auto 32px">
+      That case study makes the case that a contract repository should describe how contracts
+      relate. This one is the review flow that builds those relationships for a new customer.</p>
+    <a class="btn reveal" href="contract-understanding.html">Read the relationships case study &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>&copy; <span id="year"></span> Amrit Kumar</span>
+    <a href="intent-model.html">Next: Phoenix listing and the intent model &rarr;</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var bar = document.getElementById('bar');
+  function progress() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', progress, { passive: true });
+  progress();
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  var links = [].slice.call(document.querySelectorAll('.rail .toc a'));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function (a, j) { a.classList.toggle('on', j === i); });
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(function (s) { if (s) spy.observe(s); });
+</script>
+
+<template id="mk-page-summary">
+  <p class="mk-lede">A customer's old contracts arrive as files. An agent names who each is with and
+  builds the families. Three checkpoints let a person confirm or correct that before it becomes the
+  record.</p>
+  <div class="mk-b"><h3>Why three stops and not one</h3>
+    <p>A wrong party name at the first step spreads into every family built on it. The checkpoint
+    goes where the error would compound.</p>
+    <a class="mk-jump" href="#checkpoints">Three checkpoints &rarr;</a></div>
+  <div class="mk-b"><h3>Review by company, not by file</h3>
+    <p>Documents the agent believes share a counterparty appear as one row with a count. One
+    correction fixes the whole group.</p>
+    <a class="mk-jump" href="#counterparty">Who is this contract with? &rarr;</a></div>
+  <div class="mk-b"><h3>The most careful button</h3>
+    <p>Bulk Create turns the agent's names into the customer's master data. It gets a review of the
+    grouped names and a revert on every merge first.</p>
+    <a class="mk-jump" href="#missing">When the agent finds nobody &rarr;</a></div>
+  <div class="mk-b"><h3>What is not claimed</h3>
+    <p>No outcome number. The product shipped; usage data is being requested and will appear once
+    its measurement is understood.</p>
+    <a class="mk-jump" href="#evidence">What I can and cannot claim &rarr;</a></div>
+</template>
+<script src="marks.js" defer></script>
+<script src="lightbox.js" defer></script>
+</body>
+</html>

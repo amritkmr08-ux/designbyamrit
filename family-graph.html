@@ -337,7 +337,7 @@ body.panning,body.panning *{user-select:none!important;-webkit-user-select:none!
     </g></svg><b>Sirion</b>
   </div>
   <div class="tb-div"></div>
-  <div class="crumb">Contracts <i>/</i> Boeing — IBM Corp <i>/</i> <b>IBM Master Services Agreement</b></div>
+  <div class="crumb">Contracts <i>/</i> Aldermoor — Vantor Corp <i>/</i> <b>Vantor Master Services Agreement</b></div>
   <span class="tb-meta" id="tbMeta"></span>
   <div class="sp"></div>
   <button class="ghost" id="mapBtn">How it works</button>
@@ -433,7 +433,7 @@ body.panning,body.panning *{user-select:none!important;-webkit-user-select:none!
     </div>
 
     <div class="hw">
-      <div class="hw-step"><div class="hw-k">Start</div><span class="mchip"><span class="st" style="background:var(--node-msa)"></span>MSA-2024-IBM</span>
+      <div class="hw-step"><div class="hw-k">Start</div><span class="mchip"><span class="st" style="background:var(--node-msa)"></span>MSA-2024-VNT</span>
         <div class="hw-c">The agreement. Its 340 SOWs arrive rolled into 5 groups.</div></div>
       <div class="hw-arw"><span class="g">click a group</span><svg viewBox="0 0 70 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 5 H62"/><path d="M57 1.5 L62 5 L57 8.5"/></svg></div>
 
@@ -615,9 +615,9 @@ const AMENDS=AMEND.map(([id,code,scope,status],i)=>{
     sows:SOWS.filter(s=>s.am===id).map(s=>s.id)};
   REC[id]=a; return a;
 });
-const MSA={id:'msa',kind:'MSA',code:'MSA-2024-IBM',name:'IBM Master Services Agreement',
+const MSA={id:'msa',kind:'MSA',code:'MSA-2024-VNT',name:'Vantor Master Services Agreement',
   status:'Active',date:'Jan 2024',expiry:'Jan 2027',value:'42.8',
-  parties:'Boeing — IBM Corp',law:'Delaware, USA',notice:'90 days'};
+  parties:'Aldermoor — Vantor Corp',law:'Delaware, USA',notice:'90 days'};
 REC.msa=MSA;
 const WOTOTAL=SOWS.reduce((a,s)=>a+s.wos.length,0);
 const COTOTAL=SOWS.reduce((a,s)=>a+s.wos.reduce((b,w)=>b+w.cos.length,0),0);
@@ -631,27 +631,27 @@ const DTYPE={executed:{label:'Executed',c:'--st-active'},exhibit:{label:'Exhibit
 const DORDER=['executed','exhibit','draft','corr'];
 const PILL={Signed:'g',Current:'g','Part of SOW':'n','Part of agreement':'n',Filed:'n',Superseded:'n',
   Unsigned:'w','In review':'w',Pending:'w',Action:'r'};
-MSA.docs=[D('IBM MSA — Executed.pdf','executed','v1 · 64 pp · 12 Jan 2024','Signed','S. Mitta','DocuSign envelope 8841-A'),
-  D('Exhibit A — Service Catalogue.pdf','exhibit','v1 · 22 pp','Part of agreement','IBM Corp','Attached at signature'),
-  D('Exhibit B — Security & Data Addendum.pdf','exhibit','v2 · 14 pp','Part of agreement','Boeing Legal','Replaced v1 at signature'),
-  D('MSA v7 — Boeing markup.docx','draft','v7 · 61 pp · Dec 2023','Superseded','A. Kumar','Final negotiation round'),
+MSA.docs=[D('Vantor MSA — Executed.pdf','executed','v1 · 64 pp · 12 Jan 2024','Signed','S. Mitta','DocuSign envelope 8841-A'),
+  D('Exhibit A — Service Catalogue.pdf','exhibit','v1 · 22 pp','Part of agreement','Vantor Corp','Attached at signature'),
+  D('Exhibit B — Security & Data Addendum.pdf','exhibit','v2 · 14 pp','Part of agreement','Aldermoor Legal','Replaced v1 at signature'),
+  D('MSA v7 — Aldermoor markup.docx','draft','v7 · 61 pp · Dec 2023','Superseded','A. Kumar','Final negotiation round'),
   D('GC approval — sign-off thread.eml','corr','3 messages · Jan 2024','Filed','P. Rao','Outlook')];
 AMENDS.forEach((a,i)=>{
   a.docs = a.status.includes('Draft')
     ? [D(a.code+' — Draft v3.docx','draft','v3 · 8 pp · 22 Jul 2026','Unsigned','A. Kumar','Authored from MSA template'),
-       D('Boeing markup — payment terms.docx','draft','v2 · 14 comments','In review','Boeing Legal','Received 29 Jul 2026'),
+       D('Aldermoor markup — payment terms.docx','draft','v2 · 14 comments','In review','Aldermoor Legal','Received 29 Jul 2026'),
        D('Finance approval request.eml','corr','1 message · awaiting reply','Pending','P. Rao','Sent 01 Aug 2026')]
     : [D(a.code+' — Executed.pdf','executed','v1 · '+(6+i)+' pp · Feb 2024','Signed','S. Mitta','DocuSign envelope 90'+(12+i)+'-C'),
        D(a.code+' — Redline vs MSA.docx','draft','v3 · Jan 2024','Superseded','A. Kumar','Negotiation round 3'),
-       D('Counterparty approval.eml','corr','2 messages · Feb 2024','Filed','IBM Contracts','Outlook')];
+       D('Counterparty approval.eml','corr','2 messages · Feb 2024','Filed','Vantor Contracts','Outlook')];
   if(/Conflict/.test(a.status)) a.docs.push(D('Legal note — §14.2 conflict review.pdf','corr','2 pp · 14 Jun 2026','Action','P. Rao','Raised against Amendment 04'));
 });
 SOWS.forEach((s,i)=>{
   s.docs=[D(s.code+' — Executed.pdf','executed','v1 · '+(12+i%14)+' pp · '+s.date,'Signed',s.owner,'DocuSign envelope 77'+(20+i%80)+'-B'),
-    D('Annexure 1 — Rate card.xlsx','exhibit','v4.2 · 38 line items','Current','IBM Pricing','Supersedes Rate card v3.1'),
+    D('Annexure 1 — Rate card.xlsx','exhibit','v4.2 · 38 line items','Current','Vantor Pricing','Supersedes Rate card v3.1'),
     D('Annexure 2 — Resource plan.pdf','exhibit','v1 · 5 pp','Part of SOW',s.owner,'Attached at signature')];
   if(s.status==='SLA breach'){
-    s.docs.push(D('SLA credit letter — Q2 2026.pdf','corr','2 pp · issued 08 Jul 2026','Action','IBM Service Delivery','Against '+s.sla+'% commitment'));
+    s.docs.push(D('SLA credit letter — Q2 2026.pdf','corr','2 pp · issued 08 Jul 2026','Action','Vantor Service Delivery','Against '+s.sla+'% commitment'));
     s.docs.push(D('Service credit calculation.xlsx','corr','updated 31 Jul 2026','Filed','P. Rao','Finance workbook'));
   }
   if(s.status==='Expiring ≤90 days'||s.status==='Renewal due')
@@ -867,7 +867,7 @@ function build(){
 }
 
 /* ══════════ 5 · RENDER ══════════ */
-function wh(){return {W:stage.clientWidth||innerWidth,H:stage.clientHeight||innerHeight-48};}
+function wh(){return {W:Math.max(1,stage.clientWidth||innerWidth),H:Math.max(1,stage.clientHeight||innerHeight-48)};}
 function render(){
   const {W,H}=wh();
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
@@ -1225,7 +1225,7 @@ function up(){
 }
 function trail(){
   const t=document.getElementById('trail');
-  const parts=[{l:'IBM MSA',f:()=>{S.path=[];S.sel=null;S.sat=null;S.wsat=null;detail(MSA);refresh(true);}}];
+  const parts=[{l:'Vantor MSA',f:()=>{S.path=[];S.sel=null;S.sat=null;S.wsat=null;detail(MSA);refresh(true);}}];
   for(let i=0;i<S.lad.length&&S.path[i]!=null;i++){
     const idx=i, key=S.path[i], g=groupsAt(i).find(x=>x.key===key);
     parts.push({l:key+(g?' · '+g.ids.length:''),
@@ -1364,26 +1364,26 @@ function links(r){
         const g=groupsAt(0).find(x=>x.key===key);
         if(g) detailCohort(g);
         refresh(true);}},
-      /* every other "…IBM MSA" row lights the agreement rather than swapping the panel —
+      /* every other "…Vantor MSA" row lights the agreement rather than swapping the panel —
          this one was the odd man out, so the thing it named never lit up */
-      {t:'Amends IBM MSA',f:()=>setHL(['msa'])}];
+      {t:'Amends Vantor MSA',f:()=>setHL(['msa'])}];
   }
   /* record-level links light the nodes they name rather than jumping the view */
   if(r.kind==='SOW') return [
     {t:`View ${r.wos.length} work orders`,f:()=>setHL(r.wos.map(w=>w.id),()=>{S.sel=r.id;S.sat=r.id;})},
     {t:'Amended by '+REC[r.am].name.split(' — ')[0],f:()=>setHL(['sat-am'],()=>{S.sel=r.id;S.sat=r.id;})},
-    {t:'Governed by IBM MSA',f:()=>setHL(['msa'])}];
+    {t:'Governed by Vantor MSA',f:()=>setHL(['msa'])}];
   if(r.kind==='CO'){
     const wo=REC[r.parent];
     return [{t:'Modifies '+wo.code,f:()=>setHL([wo.id],()=>{S.sat=wo.parent;S.wsat=wo.id;})},
             {t:'Issued under '+REC[wo.parent].code,f:()=>setHL([wo.parent],()=>{S.sat=wo.parent;})},
-            {t:'Governed by IBM MSA',f:()=>setHL(['msa'])}];
+            {t:'Governed by Vantor MSA',f:()=>setHL(['msa'])}];
   }
   const woL=[];
   if(r.cos.length) woL.push({t:`View ${r.cos.length} change order${r.cos.length===1?'':'s'}`,
     f:()=>setHL(r.cos.map(c=>c.id),()=>{S.sat=r.parent;S.sel=r.id;S.wsat=r.id;})});
   woL.push({t:'Issued under '+REC[r.parent].code,f:()=>setHL([r.parent],()=>{S.sat=r.parent;})},
-           {t:'Governed by IBM MSA',f:()=>setHL(['msa'])});
+           {t:'Governed by Vantor MSA',f:()=>setHL(['msa'])});
   return woL;
 }
 
@@ -1451,7 +1451,7 @@ function detailAmendsCohort(){
   document.querySelector('#iChip .dot').style.background=cv('--node-amend');
   document.getElementById('iChipT').textContent='AMENDMENTS';
   document.getElementById('iTitle').innerHTML=
-    `<span class="code">5</span><span class="sep">·</span>Amendments to IBM MSA`;
+    `<span class="code">5</span><span class="sep">·</span>Amendments to Vantor MSA`;
   document.getElementById('iSub').innerHTML=
     `4 active, 1 unsigned<span class="bul">•</span>together they touch all ${SOWS.length} SOWs`;
   const kv=(k,v,cl)=>`<div class="gi-row"><span class="k">${k}</span><span class="v ${cl||''}">${v}</span></div>`;
@@ -1654,10 +1654,13 @@ requestAnimationFrame(()=>{ fit();
   if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
   host.appendChild(cur);
 
-  let stopped = false, timers = [];
+  let stopped = false, timers = [], token = {}, running = false, done = false, started = false;
+  const ONCE = /\bonce\b/.test(location.search);
+  const tell = m => { try { parent !== window && parent.postMessage({ fg: m }, '*'); } catch (e) {} };
+  function halt(){ stopped = true; token = {}; timers.forEach(clearTimeout); timers = []; cur.style.opacity = '0'; running = false; }
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { stopped = true; timers.forEach(clearTimeout); timers = []; }
-    else if (stopped)    { stopped = false; run(); }
+    if (document.hidden) halt();
+    else if (stopped && (!ONCE || (started && !done))) { stopped = false; run(); }
   });
   const sleep = ms => new Promise(r => timers.push(setTimeout(r, ms)));
   const ease  = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
@@ -1670,12 +1673,12 @@ requestAnimationFrame(()=>{ fit();
              y: r.top  - sr.top  + H/2 + S.ty + n.y * S.sc };
   }
 
-  function glide(to, ms){
+  function glide(to, ms, tk){
     return new Promise(res => {
       const from = { x: parseFloat(cur.dataset.x||to.x), y: parseFloat(cur.dataset.y||to.y) };
       const t0 = performance.now();
       (function step(now){
-        if (stopped) return res();
+        if (stopped || tk !== token) return res();
         const t = Math.min(1, (now - t0) / ms), e = ease(t);
         const x = from.x + (to.x - from.x) * e, y = from.y + (to.y - from.y) * e;
         cur.style.transform = `translate(${x}px,${y}px)`;
@@ -1693,21 +1696,23 @@ requestAnimationFrame(()=>{ fit();
     cur.style.transform = cur.style.transform.replace(' scale(.8)','');
   }
 
-  async function tap(node, hold){
-    if (!node || stopped) return;
-    await glide(screenOf(node), 950);
+  async function tap(t, node, hold){
+    if (!node || stopped || t !== token) return;
+    await glide(screenOf(node), 950, t);
     await sleep(420);
+    if (stopped || t !== token) return;
     await press();
     hit(node);
     await sleep(hold || 1500);
   }
 
   /* the controls are part of the story too — Group by is the whole argument */
-  async function tapEl(el, hold){
-    if (!el || stopped) return;
+  async function tapEl(t, el, hold){
+    if (!el || stopped || t !== token) return;
     const r = el.getBoundingClientRect(), sr = host.getBoundingClientRect();
-    await glide({ x: r.left - sr.left + r.width/2, y: r.top - sr.top + r.height/2 }, 950);
+    await glide({ x: r.left - sr.left + r.width/2, y: r.top - sr.top + r.height/2 }, 950, t);
     await sleep(420);
+    if (stopped || t !== token) return;
     await press();
     el.click();
     await sleep(hold || 1900);
@@ -1726,51 +1731,74 @@ requestAnimationFrame(()=>{ fit();
   }
 
   async function cycle(){
+    const t = token;
     reset();
     cur.style.opacity = '1';
     await sleep(1400);
 
     /* ── act 1 · status: find the thing worth worrying about ── */
-    await tap(find('GRP', n => /breach/i.test(n.grp && n.grp.key)) || find('GRP'), 1700);
+    await tap(t, find('GRP', n => /breach/i.test(n.grp && n.grp.key)) || find('GRP'), 1700);
 
     /* one record out of the twelve */
-    await tap(find('SOW'), 2200);
+    await tap(t, find('SOW'), 2200);
 
     /* the amendment it sits under — every sibling on that amendment lights up */
-    await tap(find('AM'), 2400);
+    await tap(t, find('AM'), 2400);
 
     /* the work order below it, and the change orders that branch off */
-    await tap(find('WO'), 2400);
-    await tap(find('CO'), 2000);
+    await tap(t, find('WO'), 2400);
+    await tap(t, find('CO'), 2000);
 
     /* back up to the whole family */
-    await tap(find('MSA'), 1600);
+    await tap(t, find('MSA'), 1600);
 
     /* ── act 2 · the same 340, re-cut ── */
-    await tapEl(seg('amendment'), 2200);
-    await tap(find('GRP'), 1900);
-    await tap(find('SOW'), 2000);
-    await tap(find('MSA'), 1400);
+    await tapEl(t, seg('amendment'), 2200);
+    await tap(t, find('GRP'), 1900);
+    await tap(t, find('SOW'), 2000);
+    await tap(t, find('MSA'), 1400);
 
-    await tapEl(seg('region'), 2100);
-    await tap(findAll('GRP')[1] || find('GRP'), 1900);
-    await tap(find('SOW'), 1900);
-    await tap(find('MSA'), 1300);
+    await tapEl(t, seg('region'), 2100);
+    await tap(t, findAll('GRP')[1] || find('GRP'), 1900);
+    await tap(t, find('SOW'), 1900);
+    await tap(t, find('MSA'), 1300);
 
-    await tapEl(seg('expiry'), 2100);
-    await tap(find('GRP'), 1800);
+    await tapEl(t, seg('expiry'), 2100);
+    await tap(t, find('GRP'), 1800);
 
     /* ── home ── */
-    await tapEl(seg('status'), 1600);
+    await tapEl(t, seg('status'), 1600);
     cur.style.opacity = '0';
     await sleep(900);
   }
 
   async function run(){
+    if (running) return;
+    running = true;
+    if (ONCE) {
+      const t = token;
+      await cycle();
+      running = false;
+      if (!stopped && t === token) { done = true; tell('done'); }
+      return;
+    }
     while (!stopped) { await cycle(); }
+    running = false;
   }
 
-  addEventListener('load', () => setTimeout(run, 900));
+  if (ONCE) {
+    /* embedded: the page that embeds us says when to start, pause, resume and replay */
+    addEventListener('message', e => {
+      const m = e.data && e.data.fg; if (!m) return;
+      if (m === 'start')  { if (!started) { started = true; stopped = false; setTimeout(run, 300); } }
+      else if (m === 'pause')  { if (running) halt(); }
+      else if (m === 'resume') { if (started && !done && stopped) { stopped = false; run(); } }
+      else if (m === 'replay') { halt(); done = false; started = true; stopped = false; setTimeout(run, 80); }
+    });
+    tell('ready');
+  } else {
+    addEventListener('load', () => setTimeout(run, 900));
+  }
 })();
 </script>
 </body>

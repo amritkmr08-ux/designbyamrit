@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>An AI extracts 128 fields. A lawyer still checks them. · Amrit Kumar</title>
+<title>An AI can extract 128 fields. A lawyer still has to check every one. · Amrit Kumar</title>
 <meta name="description" content="Three interface generations for verifying AI-extracted contract data, and what the retention curve did afterwards. A case study in designing for review rather than for speed." />
 <meta property="og:title" content="An AI extracts 128 fields. A lawyer still checks them. · Amrit Kumar" />
 <meta property="og:description" content="Inline annotations, hover cards, assist bars. Three attempts at making an AI's work checkable, and the retention data that followed." />
@@ -22,7 +22,7 @@
     --bg: #F7F7F5;
     --ink: #191A18;
     --muted: #5F625C;
-    --faint: #8B8D87;
+    --faint: #6F716A;
     --line: #E3E3DF;
     --soft: #EDEDEA;
     --accent: #3D5A45;
@@ -36,7 +36,7 @@
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg); color: var(--ink);
-    font-family: var(--font-body); font-size: 17px; font-weight: 400; line-height: 1.65;
+    font-family: var(--font-body); font-size: 17.5px; font-weight: 400; line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
   ::selection { background: var(--accent); color: #fff; }
@@ -110,6 +110,13 @@
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
     padding: 28px 32px; margin-top: 48px;
   }
+  .tldr { margin-top: 28px; border: 1px solid var(--line); background: #FBFBFA; border-radius: var(--radius); padding: 28px 32px; }
+  .tldr .lb { font-family: var(--font-display); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); margin-bottom: 20px; }
+  .tldr dl { display: grid; grid-template-columns: 150px 1fr; gap: 12px 26px; margin: 0; }
+  .tldr dt { font-family: var(--font-display); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .tldr dd { margin: 0; font-size: 16px; line-height: 1.6; }
+  .tldr dd b { font-weight: 500; }
+  @media (max-width: 700px) { .tldr { padding: 22px; } .tldr dl { grid-template-columns: 1fr; gap: 4px 0; } .tldr dt { margin-top: 12px; } }
   .snapshot div p:first-child {
     font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 3px;
@@ -138,17 +145,10 @@
   .protoframe {
     position: relative; margin-top: 26px;
     border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
-    background: #fff; height: 620px; padding-top: 30px;
-    box-shadow: 0 1px 2px rgba(25,26,24,.04), 0 16px 34px -24px rgba(25,26,24,.2);
+    background: #fff; height: 620px; padding-top: 0;
+    box-shadow: 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25,26,24,.45);
   }
-  .protoframe::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 30px; z-index: 2;
-    background-color: #F2F2EF; border-bottom: 1px solid var(--line);
-    background-image:
-      radial-gradient(circle 3.5px at 17px 15px, #D3D4CE 100%, transparent 100%),
-      radial-gradient(circle 3.5px at 33px 15px, #D3D4CE 100%, transparent 100%),
-      radial-gradient(circle 3.5px at 49px 15px, #D3D4CE 100%, transparent 100%);
-  }
+  .protoframe::before { content: none; }
   /* render the prototype at real-desktop scale, compressed like a product screenshot */
   .protoframe iframe {
     display: block; border: 0; background: #fff;
@@ -156,13 +156,21 @@
     transform: scale(0.7246); transform-origin: 0 0;
   }
   @media (max-width: 860px) { .protoframe { height: 460px; } }
+  .proto-poster { display: none; }
+  .proto-poster img { display: block; width: 100%; height: auto; }
+  @media (max-width: 700px) {
+    /* the prototype is laid out for a desktop; on a phone show a still and link to the real thing */
+    .protoframe { height: auto; }
+    .protoframe iframe { display: none; }
+    .proto-poster { display: block; }
+  }
   .plate {
-    background: #FBFBFA; border: 1px solid var(--line); border-radius: 6px;
-    padding: 20px; overflow: hidden;
+    background: radial-gradient(120% 100% at 85% 0%, #EBDDBE 0%, #F0E6D0 50%, #F0EDE4 100%);
+    border: 0; border-radius: 12px; padding: clamp(18px, 4.5%, 48px); overflow: hidden;
   }
   .plate img {
-    width: 100%; height: auto; border-radius: 6px;
-    box-shadow: 0 0 0 1px rgba(25, 26, 24, 0.08), 0 1px 2px rgba(25, 26, 24, 0.04);
+    width: 100%; height: auto; border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(25, 26, 24, 0.1), 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25, 26, 24, 0.45);
   }
   figcaption {
     margin-top: 14px; font-size: 14px; color: var(--muted); line-height: 1.55;
@@ -261,6 +269,8 @@
     font-variant-numeric: tabular-nums;
   }
   .headline-nums .l { font-size: 14.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+  .headline-nums.headline-one { grid-template-columns: 1fr; }
+  .headline-nums.headline-one .l { max-width: 62ch; }
   @media (max-width: 760px) { .headline-nums { grid-template-columns: 1fr; gap: 24px; } }
 
   .note {
@@ -351,7 +361,7 @@
   </nav>
   <div class="foot">
     <a href="contract-understanding.html">Contract relationships</a><br />
-    <a href="intent-model.html">The intent model</a><br />
+    <a href="contract-onboarding.html">Contract onboarding</a><br />
     <a href="mailto:amritkmr08@gmail.com">Email me</a>
   </div>
 </aside>
@@ -360,7 +370,7 @@
 
 <header>
   <div class="wrap">
-    <p class="kicker reveal">Case study · AI review interface · 14 min read</p>
+    <p class="kicker reveal">Case study · AI review interface · 15 min read</p>
     <h1 class="reveal">An AI can extract 128 fields. A lawyer still has to <em>check every one</em>.</h1>
     <p class="hero-sub reveal">Three generations of interface for verifying machine-extracted
     contract data. I built all three. This is the story of what the first two got wrong, and what
@@ -368,11 +378,37 @@
 
     <div class="snapshot reveal">
       <div><p>Product</p><p>Auto Extraction, the AI review module in an enterprise contract platform</p></div>
-      <div><p>My role</p><p>Led end to end UX: research synthesis, journey mapping, wireframes, UI, interaction</p></div>
+      <div><p>My role</p><p>Owned the module end to end: research synthesis, journey mapping, wireframes, UI, interaction, and the handover to build</p></div>
       <div><p>Team</p><p>Partnered with engineering, AI, and legal subject-matter experts</p></div>
       <div><p>Period</p><p>Aug 2024 to Jan 2025</p></div>
       <div><p>Status</p><p>Shipped. First phase of review assist delivered</p></div>
-      <div><p>Measured after</p><p>18% gain in review efficiency, 15% fewer errors, month-four retention up from 5% to 23%</p></div>
+      <div><p>Measured after</p><p>Month-four retention up from 5% to 23%, two cohorts of users tracked for eight months each</p></div>
+    </div>
+
+    <div class="tldr reveal">
+      <p class="lb">If you read one thing</p>
+      <dl>
+        <dt>Problem</dt>
+        <dd>The model could pull 128 values out of a contract in seconds. A lawyer then had to
+        check every one, and if checking took as long as reading, the AI had moved the work
+        rather than removed it.</dd>
+        <dt>What I built</dt>
+        <dd>Three versions of the review interface. Highlights in the text, then hover cards,
+        then permanently visible <b>assist bars</b> in the margin that turn 128 scattered
+        values into one pass down the document. Each version fixed the last one's complaint
+        and exposed a new one.</dd>
+        <dt>The decision I'd defend hardest</dt>
+        <dd>We removed the confidence score. A lawyer cannot act on 0.82. The card shows the
+        model's reasoning and the passage the value came from instead, so verification becomes
+        reading, which is what lawyers are trained to do.</dd>
+        <dt>What happened</dt>
+        <dd>Month-four retention went from <b>5% to 23%</b>. The redesign did not win more
+        users; it stopped losing the ones who arrived. The cohort mix and the model both changed
+        over the period, so I claim the shape of the curve, not the whole number.</dd>
+        <dt>What transfers</dt>
+        <dd>Any product where a person has to sign off on machine output: put the evidence next
+        to the claim, one item at a time, and let the correction teach the model.</dd>
+      </dl>
     </div>
   </div>
 </header>
@@ -632,10 +668,18 @@
     <div class="protoframe reveal">
       <iframe src="ae-review-loop.html" loading="lazy"
               title="Working prototype: accepting an extracted value confirms it, advances to the next field, and scrolls the contract to the passage that value came from."></iframe>
+      <a class="proto-poster" href="ae-review-loop.html" aria-label="Open the running prototype">
+        <picture>
+          <source srcset="ae-review-loop-poster.webp" type="image/webp" />
+          <img src="ae-review-loop-poster.jpg" width="1400" height="820" loading="lazy" decoding="async"
+               alt="The review prototype: contract text on the left, the machine's proposed values on the right, one card open with Accept, Edit and Re-tag." />
+        </picture>
+      </a>
     </div>
     <figcaption style="margin-top:14px"><b>Fig. 04 · The review loop</b>
     <span>Running prototype, playing a recorded sequence. Click Accept yourself and it hands over.
-    The interaction is the real one; the contract and the party names are invented.</span></figcaption>
+    The interaction is the real one; the contract and the party names are invented.
+    <a href="ae-review-loop.html" target="_blank" rel="noopener">Open it in its own tab &rarr;</a></span></figcaption>
   </div>
 </section>
 
@@ -868,30 +912,23 @@
   </div>
 </section>
 
-<section id="impact" data-mk="Month-four retention went from 5% to 23%, alongside 18% faster review and 15% fewer errors. The retention number is the one that matters.">
+<section id="impact" data-mk="Month-four retention went from 5% to 23%. Two groups of users, each tracked for their first four months; the change is all at the back end of the curve.">
   <div class="wrap">
     <h2 class="reveal">What happened after it shipped</h2>
 
-    <div class="headline-nums reveal">
-      <div>
-        <p class="v">18%</p>
-        <p class="l">gain in review efficiency, measured after launch</p>
-      </div>
-      <div>
-        <p class="v">15%</p>
-        <p class="l">reduction in error rates</p>
-      </div>
+    <div class="headline-nums headline-one reveal">
       <div>
         <p class="v">5% &rarr; 23%</p>
-        <p class="l">of users still returning in month four</p>
+        <p class="l">of users still returning in month four: eight months before the redesign
+        against eight months after. The table and the source are below.</p>
       </div>
     </div>
 
     <div class="wrap narrow" style="padding:0; margin-top:52px">
       <div class="body-text reveal">
-        <p>The third number is the one I care about, and it is worth reading carefully rather than
-        as a headline. This is the share of users still coming back to the module each month, for
-        the eight months before the redesign and the eight months after.</p>
+        <p>One number, and it is worth reading carefully rather than as a headline. This is the
+        share of users still coming back to the module each month, for the eight months before
+        the redesign and the eight months after.</p>
       </div>
     </div>
 
@@ -930,8 +967,7 @@
         The decay stops.</p>
         <p><strong>The redesign did not win more users. It stopped losing the ones who
         arrived.</strong> For a tool that has to be trusted before it can be useful, that is the
-        distinction that matters, and it is the only reason I believe the efficiency number rather
-        than just reporting it.</p>
+        distinction that matters.</p>
       </div>
 
       <figure class="reveal">
@@ -1040,7 +1076,7 @@
 <footer>
   <div class="wrap footer-inner">
     <span>&copy; <span id="year"></span> Amrit Kumar</span>
-    <a href="intent-model.html">Next: The intent model &rarr;</a>
+    <a href="airtel-self-serve.html">Next: Support that answers before you ask &rarr;</a>
   </div>
 </footer>
 
@@ -1101,11 +1137,11 @@
   <div class="mk-b"><h3>What happened after it shipped</h3>
     <div class="mk-num">
       <div><b>23%</b>month-four retention,<br />up from 5%</div>
-      <div><b>18%</b>faster review</div>
-      <div><b>15%</b>fewer errors</div>
+      <div><b>2,380</b>users in the after cohort,<br />860 before</div>
     </div>
     <a class="mk-jump" href="#impact">The retention curve &rarr;</a></div>
 </template>
 <script src="marks.js" defer></script>
+<script src="lightbox.js" defer></script>
 </body>
 </html>

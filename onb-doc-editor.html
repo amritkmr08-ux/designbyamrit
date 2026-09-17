@@ -1,0 +1,1862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content Control Interactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Sirion DS 2.0 tokens — harvested from Figma node 336:36188
+   file VBDIzumws3srFCfor0YRfS (Clause / Template Creation_Agentic)
+   Names match the Figma variable names 1:1.
+   ============================================================ */
+:root{
+  --bg-base:#000000;
+  --bg-workspace:#141414;
+  --bg-primary:#1a1a19;
+  --bg-primary_hover:#272726;
+  --bg-secondary:#272726;
+  --bg-tertiary:#444341;
+  --bg-overlay:#272726;
+  --bg-primary-solid:#444341;
+  --bg-brand-solid:#0d5e68;
+  --bg-quaternary_hover:#6e6c68;
+  --bg-white:#ffffff;
+
+  --text-primary-900:#ffffff;
+  --text-secondary-700:#c3c2b8;
+  --text-secondary_hover:#a6a69c;
+  --text-tertiary-600:#888782;
+  --text-quaternary-500:#5f5e5a;
+  --text-placeholder:#6e6c68;
+  --text-warning-primary-600:#facc15;
+  --text-error-primary-600:#f87171;
+
+  --fg-primary-900:#ffffff;
+  --fg-secondary-700:#a6a69c;
+  --fg-secondary_hover:#c3c2b8;
+  --fg-tertiary-600:#888782;
+  --fg-quaternary-400:#6e6c68;
+  --fg-brand-primary-600:#357981;
+  --fg-warning-secondary:#facc15;
+  --fg-error-secondary:#f87171;
+
+  --border-primary:#5f5e5a;
+  --border-secondary:#444341;
+  --border-tertiary:#272726;
+
+  --utility-brand-200:#0b4e57;
+  --utility-brand-300:#0d5e68;
+  --utility-brand-400:#357981;
+  --utility-brand-500:#5e949a;
+  --utility-brand-600:#86aeb3;
+  --utility-yellow-400:#ca8a04;
+  --utility-green-50:#052e16;
+  --utility-green-200:#166534;
+  --utility-green-600:#4ade80;
+  --utility-green-700:#86efac;
+  --utility-neutral-200:#5f5e5a;
+  --utility-neutral-800:#f0efed;
+  --blue-selected:#D9EBF7;
+
+  --font-body:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --text-xxs:11px; --lh-xxs:12px;
+  --text-xs:12px;  --lh-xs:16px;
+  --text-sm:13px;  --lh-sm:19px;  --lh-sm-para:21px;
+  --text-md:16px;  --lh-md:24px;  --lh-lg:28px;
+
+  --sp-none:0px; --sp-xxs:2px; --sp-xs:4px;  --sp-sm:6px;  --sp-md:8px;
+  --sp-lg:10px;  --sp-xl:12px; --sp-2xl:14px; --sp-3xl:16px; --sp-4xl:20px;
+  --sp-5xl:24px; --sp-6xl:32px; --sp-8xl:48px;
+
+  --r-none:0; --r-xxs:2px; --r-xs:4px; --r-sm:6px; --r-md:8px;
+  --r-lg:10px; --r-xl:12px; --r-full:9999px;
+
+  --w-rail:384px; --w-doc:672px; --w-review:384px;
+
+  --shadow-xs:0 1px 2px rgba(0,0,0,.25);
+  --shadow-sm:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.1);
+  --shadow-md:0 2px 4px -2px rgba(0,0,0,.3),0 4px 6px -1px rgba(0,0,0,.5);
+  --shadow-lg:0 2px 2px -1px rgba(0,0,0,.2),0 4px 6px -2px rgba(0,0,0,.15),0 12px 16px -4px rgba(0,0,0,.4);
+
+  /* Not tokenised in the source file — flagged in the spec drawer */
+  --doc-canvas:#f1f1ef;
+  --doc-heading:#0d5e68;          /* teal-base — 366:54295 */
+  --doc-ink:#252525;              /* Neutral/pure-black — 366:54301 */
+  --cc-preview-fill:rgba(0,0,0,.05);   /* alpha-black-05 — 417:64732 */
+  --cc-preview-line:#e2e1db;      /* border-secondary, light mode — 417:64732 */
+  --tag-fill-hint:rgba(250,204,21,.18);
+  --tag-fill:rgba(250,204,21,.32);
+  --tag-fill-hot:rgba(250,204,21,.55);
+  --autopilot:#15803d;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg-base);
+  color:var(--text-primary-900);
+  font-family:var(--font-body);
+  font-size:var(--text-xs);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;padding:0}
+input{font-family:inherit}
+svg{display:block}
+
+/* ---------- app shell ---------- */
+/* the prototype is a fixed 1440 desktop surface; keep its overflow inside a scroller
+   so the page itself never scrolls sideways on a narrow screen */
+.appwrap{width:100%;height:100vh;overflow-x:auto;overflow-y:hidden}
+.app{display:flex;height:100vh;min-width:1180px}
+
+/* ---------- left rail ---------- */
+.rail{width:var(--w-rail);flex:0 0 var(--w-rail);display:flex;flex-direction:column;
+  background:var(--bg-base);border-right:1px solid var(--border-tertiary)}
+.rail-head{height:44px;display:flex;align-items:center;gap:var(--sp-md);padding:0 var(--sp-xl);flex:0 0 44px}
+.mark{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--fg-secondary-700);
+  display:grid;place-items:center;font-size:10px;color:var(--fg-secondary-700)}
+.crumb{display:flex;align-items:center;gap:var(--sp-sm);font-size:var(--text-xs);color:var(--text-tertiary-600);min-width:0}
+.crumb .sep{color:var(--text-quaternary-500)}
+.crumb .cur{color:var(--text-secondary-700);display:flex;align-items:center;gap:4px}
+.rail-head .spacer{flex:1}
+.icobtn{width:24px;height:24px;display:grid;place-items:center;border-radius:var(--r-xs);color:var(--fg-tertiary-600)}
+.icobtn:hover{background:var(--bg-primary_hover);color:var(--fg-secondary_hover)}
+.rail-body{flex:1;overflow:auto;padding:var(--sp-5xl) var(--sp-4xl) 0}
+.agent-msg{font-size:var(--text-sm);line-height:var(--lh-sm-para);color:var(--text-secondary-700)}
+.stats{display:flex;gap:var(--sp-4xl);margin-top:var(--sp-5xl)}
+.stats>div{flex:1;min-width:0}
+.stats .divider{flex:0 0 1px;background:var(--border-tertiary);align-self:stretch;margin:0 2px}
+.stat-h{font-size:var(--text-xs);color:var(--text-tertiary-600);margin-bottom:var(--sp-xl)}
+.stat-row{display:flex;align-items:center;gap:var(--sp-md);font-size:var(--text-xs);
+  color:var(--text-quaternary-500);margin-bottom:var(--sp-lg)}
+.stat-row .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-row .vl{color:var(--text-tertiary-600)}
+.bar{flex:1;height:8px;border-radius:var(--r-xxs);background:var(--bg-secondary);overflow:hidden}
+.bar i{display:block;height:100%;background:#8f9cf5;border-radius:var(--r-xxs)}
+.review-card{display:flex;align-items:center;gap:var(--sp-md);margin-top:var(--sp-5xl);
+  padding:var(--sp-2xl) var(--sp-3xl);border-radius:var(--r-xl);background:var(--bg-primary);
+  border:1px solid var(--border-tertiary);font-size:var(--text-xs)}
+.review-card .warn{color:var(--fg-warning-secondary)}
+.review-card .t{flex:1;color:var(--text-secondary-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.review-card .sub{color:var(--text-quaternary-500)}
+.rail-foot{padding:var(--sp-4xl)}
+.chatbox{display:flex;align-items:center;gap:var(--sp-lg);height:52px;padding:0 var(--sp-md) 0 var(--sp-3xl);
+  border-radius:var(--r-full);background:var(--bg-secondary);border:1px solid rgba(255,255,255,.05)}
+.chatbox .ph{flex:1;color:var(--text-placeholder);font-size:var(--text-sm)}
+.chatbox .send{width:32px;height:32px;border-radius:50%;background:var(--bg-tertiary);display:grid;place-items:center}
+
+/* ---------- top bar ---------- */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:44px;flex:0 0 44px;display:flex;align-items:flex-end;gap:var(--sp-md);
+  padding:0 var(--sp-3xl) 0 0;background:var(--bg-base)}
+.tabs{display:flex;align-items:flex-end;height:38px}
+.tab{display:flex;align-items:center;gap:var(--sp-md);height:38px;padding:0 var(--sp-4xl);
+  font-size:var(--text-xs);color:var(--text-tertiary-600);border-radius:var(--r-md) var(--r-md) 0 0}
+.tab .dot{width:12px;height:12px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:8px}
+.tab.on{background:var(--bg-primary);color:var(--text-primary-900)}
+.topbar .spacer{flex:1}
+.pill-auto{display:flex;align-items:center;gap:var(--sp-xs);height:20px;padding:0 var(--sp-md);
+  border-radius:var(--r-xs);background:var(--autopilot);color:#fff;font-size:var(--text-xxs);
+  font-weight:500;margin-bottom:9px}
+.topbar .close{margin-bottom:5px}
+
+/* ---------- stage ---------- */
+.stage{flex:1;display:flex;min-height:0;background:var(--bg-primary)}
+
+/* ---------- doc panel ---------- */
+/* Rails stay at the DS width-xs (384). The document pane absorbs everything else, and the
+   page keeps its 632px measure and centres — extra width becomes canvas, not line length. */
+.docpanel{flex:1 1 auto;min-width:var(--w-doc);display:flex;flex-direction:column;
+  background:var(--bg-white)}
+/* One bar, not a bar plus a floating pill. The format controls live in it permanently and
+   sit with Download on the right; they dim when nothing is in editing mode rather than
+   vanishing, so the toolbar never changes shape under the pointer. */
+.doctoolbar{height:44px;flex:0 0 44px;display:flex;align-items:center;gap:var(--sp-3xl);
+  padding:0 var(--sp-4xl);background:var(--bg-primary);
+  border-bottom:1px solid var(--border-tertiary);position:relative;z-index:5}
+.tbtn{display:flex;align-items:center;gap:var(--sp-sm);font-size:var(--text-xs);
+  color:var(--text-secondary-700)}
+.tbtn:hover{color:#fff}
+.doctoolbar .spacer{flex:1}
+.fmtbar{display:flex;align-items:center;gap:var(--sp-xxs);transition:opacity .15s}
+.fmtbar.inert{opacity:.4;pointer-events:none}
+.fmtbar button{width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;
+  color:var(--fg-secondary-700)}
+.fmtbar button:hover{background:var(--bg-tertiary);color:#fff}
+.fmtbar button.on{background:var(--bg-tertiary);color:#fff}
+.fmtbar .sep{width:1px;height:16px;background:var(--border-secondary);margin:0 var(--sp-sm)}
+
+.docscroll{flex:1;overflow:auto;background:var(--doc-canvas);padding:30px var(--sp-4xl) 80px}
+/* Page type is the Figma page's own: Inter Medium 12/15 in #252525, one blank line between
+   paragraphs, title Inter Semibold 18 in teal — 366:54301 / 366:54295. */
+.page{max-width:632px;margin:0 auto;
+  background:#fff;padding:32px 60px 60px;box-shadow:0 0 0 1px rgba(0,0,0,.06);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--doc-ink);
+  font-size:12px;line-height:15px;font-weight:500;position:relative;cursor:default}
+.page .title{color:var(--doc-heading);font-size:18px;line-height:24px;font-weight:600;text-align:center;margin:0 0 20px}
+.page p{margin:0 0 15px}
+.page h4{font-size:12px;font-weight:500;margin:0 0 15px}
+.page b{font-weight:700}
+
+/* content-control groups */
+/* Every run is a group, so its padding and margin stack at every run boundary. Keep the
+   two in one budget: 8px of padding either side and no margin puts 16px between runs,
+   near the 12px a paragraph already uses — the document reads as prose, not as boxes. */
+.ccg{position:relative;isolation:isolate;padding:8px 24px;margin:0 -24px}
+.ccg>*:last-child{margin-bottom:0}
+/* The box is drawn by a pseudo-element inset 3px top and bottom, so it wraps the run's
+   text with a little air while the text itself never moves. Top-left corner is square
+   because the name pill sits on it. */
+.ccg::before{content:'';position:absolute;inset:3px 0;z-index:-1;pointer-events:none;
+  border:1px solid transparent;border-radius:0 var(--r-md) var(--r-md) var(--r-md);
+  transition:background .12s,border-color .12s,box-shadow .12s}
+/* hover — the alpha-black-05 fill only, no line (the line is the selected state's) */
+.ccg.preview::before{background:var(--cc-preview-fill)}
+/* selected — white box, 1px dark line (366:54315) */
+.ccg.active::before{border-color:var(--border-tertiary);background:#fff}
+.ccg.editing::before{border:1px dashed var(--utility-brand-500);background:#fff}
+.hl{background:var(--blue-selected);padding:1px 1px;border-radius:1px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl.joining{animation:washIn .85s cubic-bezier(.22,1,.36,1) both}
+@keyframes washIn{from{background-color:transparent}to{background-color:var(--blue-selected)}}
+.ccg.blocked::before{border:1px dashed var(--fg-error-secondary)}
+/* arriving from the panel — one ring that fades, so the eye lands on the right box */
+.ccg.pulse::before{animation:pulseRing 1.2s cubic-bezier(.22,1,.36,1) both}
+@keyframes pulseRing{
+  0%{box-shadow:0 0 0 0 rgba(13,94,104,.55)}
+  40%{box-shadow:0 0 0 6px rgba(13,94,104,.22)}
+  100%{box-shadow:0 0 0 10px rgba(13,94,104,0)}}
+.ccg.processing::before{border-color:var(--border-tertiary)}
+.ccg[contenteditable="true"]{outline:none}
+.ccg .grip{position:absolute;width:16px;height:9px;border-radius:3px;background:#fff;border:1px solid #b9b8b4;
+  display:none;align-items:center;justify-content:center;cursor:ns-resize;color:#6e6c68;z-index:3}
+.ccg.editing .grip,.ccg.blocked .grip{display:flex}
+.ccg .grip.top{right:-2px;top:-2px}
+.ccg .grip.bot{right:-2px;bottom:-2px}
+.ccg .grip svg{width:10px;height:10px}
+
+/* the chip that names a content control */
+/* Content-control chip — Figma 349:51610. Note the asymmetric corners: it sits on the
+   control's top-left, so only that corner is fully round. "Editing" is yellow text, not a
+   filled badge, and the chevron beside the name is how the category gets changed. */
+/* Three looks for one pill, one per state (417:64721 hover, 417:63293 selected, 349:51610
+   editing). It sits flush on the box's top-left corner, its bottom edge on the box's top line. */
+.chip{position:absolute;left:0;top:-24px;display:inline-flex;align-items:center;
+  gap:var(--sp-xxs);height:28px;
+  padding:var(--sp-xxs) var(--sp-md);
+  background:var(--bg-tertiary);border:1px solid var(--border-secondary);
+  border-radius:var(--r-md) var(--r-xs) var(--r-xs) 0;
+  font-family:var(--font-body);font-size:var(--text-xxs);line-height:var(--lh-xxs);
+  font-weight:500;color:var(--text-secondary-700);
+  white-space:nowrap;z-index:4;user-select:none}
+.chip.is-active{background:var(--bg-overlay);color:var(--text-primary-900);
+  padding-right:var(--sp-xxs)}
+.chip.is-editing{background:var(--bg-workspace);border-color:var(--bg-workspace);
+  gap:var(--sp-md);padding-right:var(--sp-xxs);color:var(--text-secondary_hover);
+  box-shadow:var(--shadow-md)}
+.chip.is-processing{background:var(--bg-overlay);color:var(--text-primary-900)}
+.chip .legend{display:flex;align-items:center;gap:var(--sp-md)}
+.chip .body{display:flex;align-items:center;gap:var(--sp-md)}
+.chip .lbl{display:flex;align-items:center;gap:var(--sp-none)}
+.chip .kw{color:var(--fg-warning-secondary)}
+.chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.chip .dot.ai{background:var(--fg-warning-secondary)}
+.chip .dot.mapped{background:var(--utility-green-600)}
+.chip .dot.uncat{background:var(--fg-secondary-700)}
+.chip .sep{width:1px;height:18px;background:var(--fg-tertiary-600);flex:0 0 1px}
+.chip .btn{width:24px;height:24px;display:grid;place-items:center;border-radius:var(--r-xs);
+  color:var(--fg-secondary-700)}
+.chip .btn:hover{background:var(--bg-primary_hover);color:#fff}
+.chip .done{width:24px;height:24px;display:grid;place-items:center;border-radius:var(--r-xs);
+  background:var(--bg-primary);color:#fff}
+.chip .done:hover{background:var(--bg-tertiary)}
+.chip .spin{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--border-secondary);
+  border-top-color:var(--fg-secondary-700);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* smart tags */
+/* Tags are quiet at rest — a document speckled with yellow reads as a warning, not as
+   structure. They surface when their section does: a faint wash on hover that says only
+   "there is something tagged here", and their working colour once the section is open. */
+mark.tag{background:transparent;padding:1px 0;border-radius:2px;cursor:pointer;
+  box-shadow:0 0 0 1px transparent;transition:box-shadow .1s,background .12s}
+.ccg.preview mark.tag{background:var(--tag-fill-hint)}
+.ccg.active mark.tag,
+.ccg.editing mark.tag,
+.ccg.blocked mark.tag{background:var(--tag-fill)}
+.ccg mark.tag:hover,.ccg mark.tag.hot{background:var(--tag-fill-hot);
+  box-shadow:0 0 0 1px var(--utility-yellow-400)}
+.tagtip{position:absolute;z-index:60;display:flex;align-items:center;gap:var(--sp-lg);height:30px;
+  padding:0 var(--sp-3xl);border-radius:var(--r-md);background:var(--bg-primary);color:#fff;
+  font-family:var(--font-body);font-size:var(--text-xs);box-shadow:var(--shadow-lg);
+  transform:translate(-50%,-100%);pointer-events:none;white-space:nowrap}
+.tagtip .ok{color:var(--fg-secondary-700)}
+
+/* redline */
+.page s.del{color:#6e6c68}
+.page ins.ins{color:var(--utility-brand-400);text-decoration:none}
+.page ::selection{background:#cfe3ea}
+
+/* drag error tooltip */
+.dragerr{position:absolute;z-index:60;width:312px;padding:var(--sp-lg) var(--sp-xl);border-radius:var(--r-md);
+  background:#2a1b17;border:1px solid rgba(248,113,113,.35);box-shadow:var(--shadow-lg);
+  font-family:var(--font-body)}
+.dragerr h6{margin:0 0 4px;font-size:var(--text-xs);font-weight:500;color:var(--text-error-primary-600)}
+.dragerr p{margin:0;font-size:var(--text-xxs);line-height:15px;color:var(--text-secondary_hover)}
+
+/* ---------- floating menus ---------- */
+.menu{position:absolute;z-index:70;width:256px;border-radius:var(--r-lg);background:var(--bg-primary);
+  border:1px solid var(--border-tertiary);box-shadow:var(--shadow-lg);overflow:hidden;
+  font-family:var(--font-body)}
+.menu.wide{width:284px}
+.menu .mtabs{display:flex;gap:var(--sp-xs);padding:var(--sp-lg) var(--sp-lg) 0}
+.menu .mtab{height:26px;padding:0 var(--sp-xl);border-radius:var(--r-sm);font-size:var(--text-xs);
+  color:var(--text-tertiary-600)}
+.menu .mtab.on{background:var(--bg-tertiary);color:#fff}
+.menu .msearch{margin:var(--sp-lg);display:flex;align-items:center;gap:var(--sp-md);height:32px;
+  padding:0 var(--sp-lg);border-radius:var(--r-md);background:var(--bg-secondary);
+  border:1px solid var(--border-secondary)}
+.menu .msearch input{flex:1;min-width:0;background:none;border:0;outline:none;color:#fff;font-size:var(--text-xs)}
+.menu .msearch input::placeholder{color:var(--text-placeholder)}
+.menu .mlist{max-height:216px;overflow:auto;padding-bottom:var(--sp-md)}
+.menu .mgroup{padding:var(--sp-lg) var(--sp-3xl) var(--sp-xs);font-size:var(--text-xxs);
+  letter-spacing:.4px;text-transform:uppercase;color:var(--text-quaternary-500)}
+.menu .mitem{display:flex;align-items:center;gap:var(--sp-md);width:100%;height:30px;
+  padding:0 var(--sp-3xl);font-size:var(--text-xs);color:var(--text-secondary-700);text-align:left}
+.menu .mitem:hover{background:var(--bg-primary_hover);color:#fff}
+.menu .mitem .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.menu .mitem .ck{color:var(--fg-secondary-700)}
+/* Uncategorised is not a category, it is the way out of one — and the drag refusal sends
+   the user here by name. Pinned to the card, not parked at the end of a scrolling list. */
+.menu .mfoot{border-top:1px solid var(--border-tertiary);padding:var(--sp-xs) 0;
+  background:var(--bg-primary)}
+.menu .mfoot[hidden]{display:none}
+.menu .mitem.on{background:var(--bg-primary_hover);color:#fff}
+.menu .mitem.remove{height:36px;gap:var(--sp-lg);color:var(--text-tertiary-600)}
+.menu .mitem.remove svg{flex:0 0 15px}
+.menu .mitem.remove.plain{height:34px;gap:var(--sp-md)}
+.menu .mitem.remove:hover{color:var(--text-secondary-700);background:var(--bg-primary_hover)}
+.menu .mempty{padding:var(--sp-3xl);font-size:var(--text-xs);color:var(--text-quaternary-500)}
+.menu .mhint{border-top:1px solid var(--border-tertiary);padding:var(--sp-lg) var(--sp-3xl);
+  font-size:var(--text-xxs);color:var(--text-quaternary-500);line-height:15px}
+
+/* ---------- review panel ---------- */
+.review{width:var(--w-review);flex:0 0 var(--w-review);display:flex;flex-direction:column;
+  background:var(--bg-base);border-left:1px solid var(--border-tertiary);min-width:0}
+.rv-head{display:flex;gap:var(--sp-md);align-items:flex-start;padding:var(--sp-4xl) var(--sp-3xl) 0}
+.rv-head .t{flex:1;min-width:0}
+.rv-head h1{margin:0;font-size:var(--text-md);line-height:var(--lh-md);font-weight:600;color:#fff}
+.rv-head .sub{font-size:var(--text-sm);line-height:var(--lh-sm);color:var(--text-tertiary-600);margin-top:var(--sp-xs)}
+.rv-cards{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--sp-xl);
+  padding:var(--sp-xl) var(--sp-3xl)}
+.card{background:var(--bg-primary);border-radius:var(--r-lg);padding:var(--sp-md);
+  display:flex;flex-direction:column;gap:var(--sp-sm)}
+.card.on{background:var(--bg-primary_hover)}
+.card .lbl{font-size:var(--text-xxs);line-height:var(--lh-xxs);font-weight:600;color:var(--text-placeholder)}
+.card .num{display:flex;align-items:flex-end;gap:var(--sp-sm)}
+.card .num b{font-size:21px;line-height:var(--lh-lg);font-weight:600;letter-spacing:-.525px;color:var(--text-secondary-700)}
+.card .num span{font-size:11.5px;line-height:var(--lh-xs);color:#fff}
+.card.tags .num span{color:var(--text-placeholder)}
+.meter{display:flex;gap:var(--sp-xxs);height:5px;margin:2px 0 4px}
+.meter i{border-radius:var(--r-xxs);display:block}
+.toggles{display:flex;gap:var(--sp-xs);padding:var(--sp-xxs);border-radius:var(--r-sm)}
+.tg{min-height:20px;padding:0 var(--sp-sm);border-radius:var(--r-xs);font-size:var(--text-xxs);
+  line-height:var(--lh-xxs);color:var(--text-tertiary-600);display:flex;align-items:center;gap:4px}
+.tg.on{background:var(--bg-primary);box-shadow:var(--shadow-sm);color:#fff;font-weight:500}
+.tg .n{font-weight:600}
+.tg .n.warn{color:var(--fg-warning-secondary)}
+.tg .n.err{color:var(--fg-error-secondary)}
+.rv-search{padding:var(--sp-xs) var(--sp-3xl)}
+.rv-search .box{display:flex;align-items:center;gap:var(--sp-md);height:32px;padding:0 var(--sp-lg);
+  border-radius:var(--r-md);background:var(--bg-primary);border:1px solid var(--border-secondary)}
+.rv-search input{flex:1;min-width:0;background:none;border:0;outline:none;color:#fff;font-size:var(--text-xs)}
+.rv-search input::placeholder{color:var(--text-placeholder)}
+.rv-list{flex:1;overflow:auto;padding:var(--sp-md) var(--sp-3xl) var(--sp-3xl)}
+.row{display:flex;align-items:center;gap:var(--sp-xl);height:44px;padding:0 var(--sp-xs) 0 var(--sp-md);
+  border-bottom:1px solid var(--border-tertiary);cursor:pointer}
+.row:hover{background:var(--bg-primary)}
+.row .nm{flex:1;min-width:0;font-size:var(--text-xs);line-height:var(--lh-xs);font-weight:500;
+  color:var(--text-secondary-700);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row.dim .nm{color:var(--text-tertiary-600)}
+.row .st{font-size:var(--text-xxs);line-height:var(--lh-xxs);color:var(--text-secondary_hover);padding:0 var(--sp-sm)}
+.row .st.missing{color:var(--text-error-primary-600)}
+.row .st.mapped{color:var(--utility-green-600)}
+/* expanded row — Figma 667:46132 (clause-item) */
+.exp{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:var(--r-md);
+  padding-top:var(--sp-md);margin-bottom:0;display:flex;flex-direction:column;gap:var(--sp-md)}
+.exp .top{display:flex;align-items:center;gap:var(--sp-sm);padding:var(--sp-xxs) var(--sp-xl) 0}
+.exp .top .st{font-size:var(--text-xxs);line-height:var(--lh-xxs);color:var(--text-secondary_hover);padding:0 var(--sp-sm)}
+.exp .top .st.mapped{color:var(--utility-green-600)}
+.exp .top .st.missing{color:var(--text-error-primary-600)}
+.sel{display:flex;align-items:center;gap:var(--sp-md);height:32px;padding:0 var(--sp-lg) 0 var(--sp-xl);
+  border-radius:var(--r-md);background:var(--bg-secondary);border:1px solid var(--border-secondary);
+  font-size:var(--text-xs);line-height:var(--lh-xs);color:#fff;flex:1;min-width:0;cursor:pointer;position:relative}
+.sel:hover{border-color:var(--border-primary)}
+.sel.placeholder .v{color:var(--text-placeholder)}
+.row.nodoc{cursor:default}
+.row.nodoc:hover{background:none}
+.sel .v{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp .pref{padding:0 var(--sp-xl)}
+.exp .badge{display:inline-flex;align-items:center;gap:var(--sp-xxs);padding:var(--sp-xxs) var(--sp-xs) var(--sp-xxs) var(--sp-sm);
+  border-radius:var(--r-xs);background:var(--utility-green-50);color:var(--utility-green-700);
+  font-size:10px;line-height:var(--lh-xxs)}
+.occ{display:flex;gap:var(--sp-xs);flex:1;padding-top:var(--sp-xxs)}
+.occ b{width:20px;height:20px;border-radius:var(--r-xs);display:grid;place-items:center;
+  font-size:var(--text-xxs);font-weight:500;color:var(--text-tertiary-600);cursor:pointer}
+.occ b.on{background:var(--bg-tertiary);color:#fff}
+.exp .foot{display:flex;align-items:center;gap:var(--sp-xs);height:44px;
+  padding:0 var(--sp-md) 0 var(--sp-xl);border-top:1px solid var(--border-tertiary)}
+.exp .foot .more{width:28px;height:28px;display:grid;place-items:center;color:var(--fg-secondary-700);border-radius:var(--r-sm)}
+.exp .foot .more:hover{background:var(--bg-primary_hover);color:#fff}
+.exp .foot .ok{width:28px;height:28px;border-radius:var(--r-sm);background:var(--bg-brand-solid);
+  display:grid;place-items:center;color:#fff}
+.exp .foot .ok:hover{background:var(--utility-brand-400)}
+
+/* ---------- spec drawer ---------- */
+.specbtn{position:fixed;right:var(--sp-3xl);bottom:var(--sp-3xl);z-index:90;display:flex;align-items:center;
+  gap:var(--sp-md);height:34px;padding:0 var(--sp-3xl);border-radius:var(--r-full);
+  background:var(--bg-secondary);border:1px solid var(--border-secondary);color:var(--text-secondary-700);
+  font-size:var(--text-xs);box-shadow:var(--shadow-lg)}
+.specbtn:hover{color:#fff;border-color:var(--border-primary)}
+.spec{position:fixed;inset:0 0 0 auto;width:520px;max-width:92vw;z-index:100;background:var(--bg-workspace);
+  border-left:1px solid var(--border-secondary);display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-lg)}
+.spec.open{transform:none}
+.spec-head{display:flex;align-items:center;gap:var(--sp-md);padding:var(--sp-4xl) var(--sp-5xl) var(--sp-3xl)}
+.spec-head h2{margin:0;flex:1;font-size:var(--text-md);font-weight:600}
+.spec-body{flex:1;overflow:auto;padding:0 var(--sp-5xl) var(--sp-8xl)}
+.spec h3{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.6px;
+  color:var(--text-quaternary-500);margin:var(--sp-5xl) 0 var(--sp-xl);font-weight:600}
+.spec h3:first-child{margin-top:0}
+.spec p,.spec li{font-size:var(--text-sm);line-height:var(--lh-sm-para);color:var(--text-secondary-700)}
+.spec ul{margin:0 0 var(--sp-xl);padding-left:18px}
+.spec li{margin-bottom:var(--sp-sm)}
+.spec code{font-family:var(--font-mono);font-size:11px;color:var(--utility-brand-600);
+  background:var(--bg-primary);padding:1px 5px;border-radius:var(--r-xs)}
+.spec table{width:100%;border-collapse:collapse;font-size:var(--text-xs)}
+.spec th{text-align:left;font-weight:500;color:var(--text-quaternary-500);padding:0 var(--sp-md) var(--sp-md) 0;
+  border-bottom:1px solid var(--border-tertiary)}
+.spec td{padding:var(--sp-md) var(--sp-md) var(--sp-md) 0;border-bottom:1px solid var(--border-tertiary);
+  color:var(--text-secondary-700);vertical-align:top}
+.spec td code{white-space:nowrap}
+.jump{display:flex;flex-direction:column;gap:var(--sp-sm);margin-bottom:var(--sp-xl)}
+.jump button{display:flex;align-items:center;gap:var(--sp-lg);padding:var(--sp-lg) var(--sp-xl);
+  border-radius:var(--r-md);background:var(--bg-primary);border:1px solid var(--border-tertiary);
+  font-size:var(--text-xs);color:var(--text-secondary-700);text-align:left}
+.jump button:hover{border-color:var(--border-primary);color:#fff}
+.jump button .id{font-family:var(--font-mono);font-size:10px;color:var(--text-quaternary-500)}
+.jump button .lb{flex:1}
+.flag{border-left:2px solid var(--fg-warning-secondary);padding:var(--sp-md) 0 var(--sp-md) var(--sp-xl);
+  margin-bottom:var(--sp-xl)}
+.flag b{color:var(--fg-warning-secondary);font-weight:500;display:block;margin-bottom:2px;font-size:var(--text-xs)}
+.flag p{margin:0;font-size:var(--text-xs);line-height:17px;color:var(--text-secondary_hover)}
+
+/* ---------- status line ---------- */
+.hud{position:fixed;right:150px;bottom:var(--sp-3xl);z-index:90;display:flex;align-items:center;gap:var(--sp-lg);
+  height:28px;padding:0 var(--sp-xl);border-radius:var(--r-sm);background:rgba(26,26,25,.92);
+  border:1px solid var(--border-tertiary);font-family:var(--font-mono);font-size:10px;
+  color:var(--text-tertiary-600);pointer-events:none}
+.hud b{color:var(--utility-brand-600);font-weight:500}
+.scrim{position:fixed;inset:0;z-index:65}
+</style>
+</head>
+<body>
+
+<div class="appwrap">
+<div class="app">
+
+  <!-- ============ LEFT RAIL ============ -->
+  <aside class="rail">
+    <div class="rail-head">
+      <div class="mark">S</div>
+      <div class="crumb">
+        <span class="sep">/</span>
+        <span>Ask Sirion</span>
+        <span class="sep">/</span>
+        <span class="cur">Contract Repo…
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+      <div class="spacer"></div>
+      <button class="icobtn" title="History"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3l2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+      <button class="icobtn" title="Panels"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M10 3v10" stroke="currentColor" stroke-width="1.3"/></svg></button>
+    </div>
+
+    <div class="rail-body">
+      <div class="agent-msg">
+        Master Services Agreement as a Service Agreement, Demolition Agreement 1 as a Demolition Agreement. 17 clauses, 14 smart tags and 2 signature blocks read; Notices is identical in both documents, so one clause serves both and 16 unique clauses go forward. Agreement type is my suggestion from your ontology — confirm it before I map. Service Agreement already exists in your Sirion; Demolition Agreement doesn't, so that one needs you: add it here and I re-sync, or pick an existing type.
+      </div>
+
+      <div class="stats">
+        <div>
+          <div class="stat-h">Identified</div>
+          <div class="stat-row"><span class="nm">Agreement types</span><span class="vl">3</span></div>
+          <div class="stat-row"><span class="nm">Clauses (16 unique)</span><span class="vl">17</span></div>
+          <div class="stat-row"><span class="nm">Smart tags</span><span class="vl">14</span></div>
+          <div class="stat-row"><span class="nm">Signature blocks</span><span class="vl">2</span></div>
+        </div>
+        <div class="divider"></div>
+        <div>
+          <div class="stat-h">Clauses per document</div>
+          <div class="stat-row"><span class="nm">Master Ser…</span><span class="bar"><i style="width:80%"></i></span><span class="vl">9</span></div>
+          <div class="stat-row"><span class="nm">Demolition…</span><span class="bar"><i style="width:100%"></i></span><span class="vl">6</span></div>
+          <div class="stat-row"><span class="nm">ABC Sales…</span><span class="bar"><i style="width:100%"></i></span><span class="vl">2</span></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <span class="warn"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2.5L14.5 13.5h-13L8 2.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 6.5v3M8 11.4v.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        <span class="t">Review Required: Confirm 12 a…</span>
+        <span class="sub">Auto-skipped</span>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="color:var(--fg-quaternary-400)"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <div class="rail-foot">
+      <div class="chatbox">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--fg-tertiary-600)"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span class="ph">Reply…</span>
+        <span class="send"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 12.5V4M4.5 7.5L8 4l3.5 3.5" stroke="#c3c2b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tabs">
+        <button class="tab"><span class="dot">!</span>Needs Review</button>
+        <button class="tab on">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 6h5M5.5 9h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Template Review
+        </button>
+      </div>
+      <div class="spacer"></div>
+      <span class="pill-auto">Autopilot
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <button class="icobtn close"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    </div>
+
+    <div class="stage">
+      <!-- doc -->
+      <section class="docpanel">
+        <div class="doctoolbar">
+          <button class="tbtn"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</button>
+          <div class="spacer"></div>
+          <div class="fmtbar inert" id="fmtbar">
+            <button class="on" data-cmd="bold" style="font-weight:700;font-size:13px">B</button>
+            <button data-cmd="italic" style="font-style:italic;font-family:Georgia,serif;font-size:13px">I</button>
+            <button data-cmd="underline" style="text-decoration:underline;font-size:13px">U</button>
+            <span class="sep"></span>
+            <button data-cmd="justifyLeft"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M2.5 7h7M2.5 10h11M2.5 13h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+            <button data-cmd="justifyCenter"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M4.5 7h7M2.5 10h11M4.5 13h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+            <span class="sep"></span>
+            <button data-cmd="link"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 9.5l3-3M7 4.8l1.2-1.2a2.6 2.6 0 113.7 3.7L10.7 8.5M9 11.2l-1.2 1.2a2.6 2.6 0 11-3.7-3.7L5.3 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+          </div>
+          <button class="tbtn"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v7M5 7.5L8 10.5l3-3M3.5 13h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</button>
+        </div>
+        <div class="docscroll" id="docscroll">
+          <div class="page" id="page"></div>
+        </div>
+      </section>
+
+      <!-- review -->
+      <aside class="review">
+        <div class="rv-head">
+          <div class="t">
+            <h1>ACME – MASTER SERVICES AGREEMENT</h1>
+            <div class="sub">Service Agreement | English</div>
+          </div>
+          <button class="icobtn"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+        </div>
+
+        <div class="rv-cards">
+          <div class="card on">
+            <div class="lbl">Clauses</div>
+            <div class="num"><b id="clauseCount">27/42</b><span>mapped</span></div>
+            <div class="meter">
+              <i style="flex:102;background:var(--utility-brand-600)"></i>
+              <i style="flex:13;background:var(--utility-yellow-400)"></i>
+              <i style="flex:13;background:var(--fg-error-secondary)"></i>
+              <i style="flex:9;background:var(--bg-quaternary_hover)"></i>
+            </div>
+            <div class="toggles" id="toggles">
+              <button class="tg on" data-f="review">Review <span class="n warn">9</span></button>
+              <button class="tg" data-f="missing">Missing <span class="n err">2</span></button>
+              <button class="tg" data-f="duplicate">Duplicate <span class="n">8</span></button>
+            </div>
+          </div>
+          <div class="card tags">
+            <div class="lbl">Tags</div>
+            <div class="num"><b id="tagCount">8/15</b><span>mapped</span></div>
+            <div class="meter" style="width:100px"><i style="width:80px;background:var(--utility-brand-600)"></i><i style="flex:10;background:var(--utility-yellow-400)"></i></div>
+            <div style="font-size:11px;line-height:16px;color:var(--text-tertiary-600)">Needs Review <span style="color:var(--fg-warning-secondary);font-weight:600">7</span></div>
+          </div>
+        </div>
+
+        <div class="rv-search">
+          <div class="box">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="color:var(--text-placeholder)"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <input id="rvSearch" placeholder="Search 6 Clauses">
+          </div>
+        </div>
+
+        <div class="rv-list" id="rvList"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+</div>
+
+<button class="specbtn" id="specBtn">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 6.5h5M5.5 9.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  Spec &amp; states
+</button>
+
+<div class="hud" id="hud"></div>
+
+<!-- ============ SPEC DRAWER ============ -->
+<aside class="spec" id="spec">
+  <div class="spec-head">
+    <h2>Doc editor — interaction spec</h2>
+    <button class="icobtn" id="specClose"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="spec-body">
+
+    <h3>Jump to a state</h3>
+    <div class="jump" id="jump"></div>
+
+    <h3>The three modes</h3>
+    <p>Every behaviour below hangs off one of three modes. A content control is in exactly one of them, and only one control can be past <code>browse</code> at a time.</p>
+    <table>
+      <tr><th>Mode</th><th>What the user sees</th><th>Entered by</th></tr>
+      <tr><td><code>browse</code></td><td>Nothing, until hover. After 120 ms on a paragraph, its whole run shows a light grey box and a grey name pill — only that run, never two at once. Paragraphs that belong to no clause group the same way and say <b>Uncategorised</b> with a grey dot.</td><td>Default. Also on Esc, or a click outside.</td></tr>
+      <tr><td colspan="3" style="color:var(--text-tertiary-600)">The format controls live in the toolbar permanently and dim when nothing is in <code>editing</code>, rather than appearing and disappearing — a toolbar that changes shape under the pointer is its own bug.</td></tr>
+      <tr><td colspan="3" style="color:var(--text-tertiary-600)">Hover preview keeps working in <code>active</code> — every control except the focused one still answers the pointer. <code>editing</code> switches it off, so only the control being edited is ever boxed.</td></tr>
+      <tr><td><code>active</code></td><td>White box with a solid 1px dark line, paragraphs filled <code>#D9EBF7</code>, the pill goes dark and gains a pencil. Right panel expands the matching clause row: category select, <b>Prefered</b> badge, occurrences, ⋮ and ✓.</td><td>Click its row in the panel, or ✓ out of editing.</td></tr>
+      <tr><td><code>editing</code></td><td>Dashed teal border, text is editable, drag grips at both ends, format bar in the toolbar, chip turns into the yellow <b>Editing</b> badge with a ✓.</td><td><b>Single click</b> the text (caret lands where you clicked), or the pencil in the pill. ✓ or a click outside saves. While editing, no other control lights up on hover.</td></tr>
+    </table>
+
+    <h3>Boundary drag</h3>
+    <ul>
+      <li>Grips appear only in <code>editing</code>. Top grip moves the start, bottom grip moves the end.</li>
+      <li>Dragging onto an <b>uncategorised</b> paragraph extends the control. The boundary takes a paragraph only once the pointer is ~14 px inside it, so it follows the hand with a little weight. Release → chip shows <b>Processing</b> for ~1.7 s while the new paragraph washes in blue → solid border returns and the mapped total goes up.</li>
+      <li>Dragging onto a paragraph <b>owned by another category</b> is refused: border goes red-dashed and the error card appears at the grip. Release snaps back. Nothing is written.</li>
+      <li>The refusal is category-based, not position-based. Same category on both sides would merge; the design never shows that case, so it isn't built. See open questions.</li>
+    </ul>
+
+    <h3>Tags</h3>
+    <ul>
+      <li>Tags are quiet at rest. They show faintly when their section is hovered, and in their working yellow once it is selected or editing.</li>
+      <li>Hover a visible tag → amber outline plus a dark tooltip with the tag name.</li>
+      <li><b>Click a tag from any mode</b> and the control goes to <code>editing</code> with the tag card open on that tag, in one gesture.</li>
+      <li><code>editing</code> + select text → <b>Search &amp; add new tag</b>. Flat list, no current value.</li>
+      <li>The tag card is <b>Search</b> with the current tag checked at the top, then <span style="letter-spacing:.4px">ALL TAGS</span>. Picking a different one replaces it.</li>
+      <li>Two menus, two different headers and two different list shapes. They are not the same component.</li>
+    </ul>
+
+    <h3>Clause split</h3>
+    <ul>
+      <li><code>editing</code> + drag-select, then release → a card appears at the selection. Which card you get is decided by <b>boundaries, not length</b>: a clause is made of whole paragraphs, so a selection that reaches both ends of a paragraph (or spans several) gets the <b>Clauses | Tags</b> card; anything inside a paragraph can only be a tag. Trailing whitespace and punctuation are ignored.</li>
+      <li>Pick a category and that paragraph leaves its control and becomes its own.</li>
+      <li><b>Uncategorised</b> is pinned to the bottom of the card, outside the scrolling list, because it is the way <i>out</i> of a clause rather than another category — and because the drag refusal sends the user here by name. The parent clause survives on whatever paragraphs are left; it only leaves the document when it has none, and its panel row falls back to Uncategorised.</li>
+      <li>Chip reads <b>Tagged to — &lt;category&gt;</b> until you commit with the ✓ or click outside.</li>
+      <li>The paragraphs left behind stay one clause but are now in two runs, so the parent draws as two boxes sharing one identity.</li>
+    </ul>
+
+    <h3>Open questions for engineering</h3>
+    <div class="flag"><b>What does "· 2" count?</b><p>"Termination Clause · 2" sits on a control spanning three paragraphs, and still reads · 2 after a drag adds a fourth. So it isn't paragraphs. Occurrences across documents? Variations? This prototype declares it on the clause and leaves it alone, because guessing would hide the question.</p></div>
+    <div class="flag"><b>Split leaves a non-contiguous clause</b><p>The canvas note says the parent ends up with two variations (para 1 and para 3) and the user may keep or merge them. The Done frames only draw one box. This prototype draws both runs. Needs a merge affordance, which no frame covers.</p></div>
+    <div class="flag"><b>Near-miss selections</b><p>A drag that covers most of a paragraph but stops a few words short gets the tag card, because it isn't a whole paragraph. That is the only rule the frames support. If users near-miss often in testing, the fix is one card carrying both tabs every time — not a looser threshold, which just moves the wrong guess somewhere else.</p></div>
+    <div class="flag"><b>Undo</b><p>No frame shows undo for a drag, a split, or a retag. All three are destructive to a mapping. Decide whether Ctrl+Z is in scope or the ⋮ menu carries a revert.</p></div>
+    <div class="flag"><b>Two people at once</b><p>Nothing defines what happens if another reviewer commits a category on the same clause while this one is in editing mode.</p></div>
+    <div class="flag"><b>Tags inside a split</b><p>When paragraph 2 splits out, its tag goes with it. That is what this prototype does. Confirm tags follow the paragraph and not the clause.</p></div>
+
+    <h3>Tokens used</h3>
+    <p>All colour, spacing, radius and type values come from the file's own variables, harvested off node <code>336:36188</code>. Names in the CSS match Figma 1:1, so <code>--bg-primary</code> is <code>Colors/Background/bg-primary</code>. Type is Geist at 11 / 12 / 13 / 16.</p>
+    <p>Four values are <b>not</b> in the file and are approximations: the doc canvas grey, the document heading blue, the hover preview fill, and the tag highlight yellow. Tokenise them before build.</p>
+    <p>Icons here are drawn by hand as placeholders — swap in the DS set. The document body renders in a Word-like stack because it comes from the source .docx, not from the DS.</p>
+  </div>
+</aside>
+
+<script>
+"use strict";
+
+/* ============================================================
+   MODEL
+   ============================================================ */
+
+const CLAUSES = {
+  struct: { label:'Structure',              category:'Structure',          status:'mapped' },
+  term:   { label:'Termination',            category:'Termination Clause', status:'ai', occurrences:2 },
+  tax:    { label:'Tax Information clause', category:'Tax Information',    status:'mapped' },
+  ops:    { label:'Operations Clause',      category:'Operations',         status:'mapped' }
+};
+
+const TAGS = ['Term Notice','Effective Termination','Termination force','Customer Term',
+              'Operations Term','Finance Term','Marketing Term Days','Renewal Window','Notice Address'];
+
+const UNCAT = '__uncategorised__';   // sentinel: remove from its clause, don't assign one
+const CATEGORIES = ['Payment Termination clause','Clause Effective Termination','Termination of extended force',
+                    'Customer Success Agreement','Operations','Finance Agreement','Project Proposal',
+                    'Marketing Strategy','User Experience Review','Annual Budget Forecast'];
+
+const ROWS = [
+  { id:'unc1',  name:'Uncategorised 1',       status:'Review',    dim:true, uid:'u:d1' },
+  { id:'term',  name:'Termination Clause',    status:'AI suggested', cc:'term' },
+  { id:'tax',   name:'Tax Information clause',status:'Review',    cc:'tax'  },
+  { id:'unc2',  name:'Uncategorised 2',       status:'Review',    dim:true, uid:'u:t5' },
+  { id:'curr',  name:'Currency Options',      status:'Review'               },
+  { id:'txn',   name:'Transaction History',   status:'Missing'              },
+  { id:'late',  name:'Late Fees',             status:'Mapped'               },
+  { id:'part',  name:'Parties',               status:'Mapped'               },
+  { id:'rec',   name:'Recitals',              status:'Mapped'               },
+  { id:'defs',  name:'Definitions',           status:'Mapped'               },
+  { id:'struct',name:'Agreement Structure',   status:'Mapped',    cc:'struct'},
+  { id:'prec',  name:'Order of Precedence',   status:'Mapped'               },
+  { id:'svc',   name:'Services and Products', status:'Mapped'               },
+  { id:'del',   name:'Deliverables',          status:'Mapped'               }
+];
+
+const tag = (txt,name) => `<mark class="tag" data-tag="${name}">${txt}</mark>`;
+
+// document order. `cc` is the owning content control, null = uncategorised.
+const PARAS = [
+  { id:'d0', kind:'title', html:'ACME – MASTER SERVICES AGREEMENT' },
+  { id:'d1', kind:'p', html:'This Master Services Agreement (the “Agreement”) is entered into between:' },
+  { id:'d2', kind:'p', html:'<b>PEOPLEONE INC.</b>, a company incorporated in the State of New York, with its registered address at 200 Park Avenue, New York, NY 10166, USA (“<b>Supplier</b>”); and' },
+  { id:'d3', kind:'p', html:'<b>ACME LLC,</b> a company incorporated in the State of California, with its registered address at 600 Market Street, San Francisco, CA 94104, USA (“<b>Customer</b>”).' },
+  { id:'d4', kind:'p', html:'WHEREAS, the Parties have engaged in discussions and agreed to the terms governing their business relationship;' },
+  { id:'d5', kind:'p', html:'NOW, THEREFORE, in consideration of the mutual promises set out herein, the Parties agree as follows:' },
+
+  { id:'s1', kind:'h', cc:'struct', html:'1&nbsp;&nbsp; AGREEMENT STRUCTURE' },
+  { id:'s2', kind:'p', cc:'struct', html:'1.2 This Agreement incorporates: (i) these Framework Terms; (ii) all applicable Policies; (iii) any additional documents specified in the Statement of Work; and (vi) where relevant, the acceptance by Supplier of an order placed on an electronic ordering platform. A Statement of Work may be executed in hardcopy or electronic form.' },
+
+  { id:'t1', kind:'h', cc:'term', html:'2 TERMINATION', editedHtml:'2 TERMINATION CLAUSE' },
+  { id:'t2', kind:'p', cc:'term', html:'1. This Agreement shall come into effect upon the Commencement Date and shall, unless terminated earlier in accordance with this clause, continue in full force and effect until Expiration Date (the “Initial Period”)] and shall continue automatically thereafter unless and until terminated in accordance with this clause.' },
+  { id:'t3', kind:'p', cc:'term',
+    html:'2. Customer may terminate this Agreement for convenience at any time without liability to Supplier by serving on Supplier not less than Client Termination For Convenience Notice Period months’ ' + tag('prior written notice.','Term Notice'),
+    editedHtml:'2. Customer <s class="del">may</s> <ins class="ins">Should</ins> terminate this Agreement for convenience at any time without liability to Supplier by serving on <ins class="ins">Supplier not</ins> less than Client Termination For Convenience Notice Period months’ ' + tag('prior written notice.','Term Notice') },
+  { id:'t4', kind:'p', cc:'term', html:'3. Supplier may terminate this Agreement for convenience without liability to Customer by serving not less than Supplier Termination for Convenience Notice Period months’ prior written notice such notice not to have effect before the ' + tag('expiry of the Initial Period.','Effective Termination') },
+  { id:'t5', kind:'p', cc:null,   html:'4. If this Agreement terminates, Customer shall continue to enjoy the benefits of all licenses which have been granted to it on a perpetual basis [except that where Supplier properly terminates this Agreement for breach by Customer, any license for software to which the breach relates shall terminate upon termination of this Agreement' },
+
+  { id:'v1', kind:'h', cc:'tax', html:'2 SERVICES AND PRODUCTS' },
+  { id:'v2', kind:'p', cc:'tax', html:'2.1 Supplier shall perform the Services, including delivery of any relevant Deliverables and provide the Products, in accordance with the Agreement for the benefit of Customer and its Affiliates. Unless stated otherwise in a Statement of Work, the Services shall be available for use by all business and operational functions of Customer and its Affiliates.' },
+  { id:'v3', kind:'p', cc:'tax', html:'2.2 Supplier shall notify Customer in writing within &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;, giving reasonable details, on becoming aware of:' },
+  { id:'v4', kind:'p', cc:'tax', html:'(a) any breach of the Agreement, including any failure to comply with the applicable Policies, that could put Customer at risk or prevent the proper performance of Supplier’s obligations;' },
+  { id:'v5', kind:'p', cc:'tax', html:'(b) any actual or suspected breach of Applicable Law;' },
+  { id:'v6', kind:'p', cc:'tax', html:'(c) any Security Breach;' }
+];
+
+const S = {
+  mode:'browse',          // browse | active | editing
+  focusCC:null,           // id of the control in active/editing
+  previewCC:null,
+  processingCC:null,
+  joined:null,            // paragraph ids that joined in the last drag, while it processes
+  pendingSplit:null,      // { paraId, cc } — split made, not yet committed
+  drag:null,              // { ccId, edge, blocked, candidateEnd }
+  menu:null,              // { kind, x, y, ... }
+  filter:'review',
+  search:'',
+  occ:1,
+  clausesMapped:27, tagsMapped:8
+};
+
+/* ============================================================
+   RENDER — document
+   ============================================================ */
+
+const page = document.getElementById('page');
+const hud  = document.getElementById('hud');
+
+function paraIndex(id){ return PARAS.findIndex(p=>p.id===id); }
+
+/* Membership during a boundary drag is PROVISIONAL: it is computed from the snapshot
+   taken when the drag started, never written back until mouseup. Mutating PARAS live
+   makes the next mousemove read a moved baseline and the box oscillates. */
+function ccOf(i){
+  const d = S.drag;
+  if(!d) return PARAS[i].cc;
+  const base = d.base[i];
+  if(d.blocked || d.target===null) return base;
+  const {ccId, edge, target, lo, hi} = d;
+  if(edge==='end'){
+    if(i>=lo && i<=Math.max(hi,target)) return i<=target ? ccId : null;
+  } else {
+    if(i>=Math.min(lo,target) && i<=hi) return i>=target ? ccId : null;
+  }
+  return base;
+}
+
+// consecutive runs of the same cc
+/* Uncategorised paragraphs group into runs the same way clauses do, so an unassigned
+   stretch answers the pointer and can say what it is. `uid` is what the UI addresses —
+   a clause id for real clauses, "u:<first paragraph>" for an unassigned run. The document
+   title is its own run and never groups; it is not a clause candidate. */
+function runs(){
+  const out=[]; let cur=null;
+  PARAS.forEach((p,i)=>{
+    const cc = ccOf(i);
+    if(p.kind==='title'){ cur=null; out.push({cc:null,uid:null,items:[p],i0:i,i1:i}); return; }
+    const key = cc || 'u';
+    if(cur && cur.key===key && cur.i1===i-1){ cur.items.push(p); cur.i1=i; }
+    else { cur={key,cc:cc||null,items:[p],i0:i,i1:i}; out.push(cur); }
+  });
+  out.forEach(r=>{ if(r.uid!==null) r.uid = r.cc || ('u:'+r.items[0].id); });
+  return out;
+}
+const isUncat = uid => typeof uid==='string' && uid.startsWith('u:');
+
+/* The real clauses either side of a run — what "Merge ›" offers to fold a control into.
+   Used for the merge list only; hover never lights up more than one control. */
+function adjacentTo(rs, uid){
+  const out = new Set();
+  if(!uid) return out;
+  const k = rs.findIndex(r=>r.uid===uid);
+  if(k<0) return out;
+  [rs[k-1], rs[k+1]].forEach(n=>{ if(n && n.cc && n.uid!==uid) out.add(n.uid); });
+  return out;
+}
+
+function chipFor(ccId, runIdx){
+  if(isUncat(ccId)){
+    const active = S.focusCC===ccId && S.mode==='active';
+    const editing = S.focusCC===ccId && S.mode==='editing';
+    if(editing) return `<span class="chip is-editing" data-chip="${ccId}">${chipEditing('Editing','Uncategorised')}</span>`;
+    return `<span class="chip is-uncat ${active?'is-active':''}" data-chip="${ccId}">
+      <span class="body"><span class="dot uncat"></span>Uncategorised</span>
+      ${active?`<button class="btn" data-act="edit" title="Edit">${icoPencil}</button>`:''}</span>`;
+  }
+  const c = CLAUSES[ccId];
+  const editing = S.mode==='editing' && S.focusCC===ccId;
+  const processing = S.processingCC===ccId;
+  const splitPending = S.pendingSplit && S.pendingSplit.cc===ccId;
+
+  if(processing){
+    return `<span class="chip is-processing"><span class="body">Processing<span class="spin"></span></span></span>`;
+  }
+  if(splitPending){
+    // "Tagged to - Operations ⌄ | ✓" — the chevron re-opens the category list (366:58594)
+    return `<span class="chip is-editing" data-chip="${ccId}">
+      <span class="legend"><span class="lbl"><span class="kw">Tagged to</span>- ${c.category}
+          <button class="btn" data-act="cat" title="Change category">${icoChev}</button></span>
+        <span class="sep"></span></span>
+      <button class="done" data-act="commit-split" title="Save">${icoCheck}</button></span>`;
+  }
+  if(editing){
+    const kw = S.menu && S.menu.kind==='tagEdit' ? 'Editing Tag' : 'Editing';
+    return `<span class="chip is-editing" data-chip="${ccId}">${chipEditing(kw, c.label)}</span>`;
+  }
+  const active = S.mode==='active' && S.focusCC===ccId;
+  return `<span class="chip ${active?'is-active':''}" data-chip="${ccId}">
+    <span class="body"><span class="dot ${c.status}"></span>${c.label}</span>
+    ${active?`<button class="btn" data-act="edit" title="Edit">${icoPencil}</button>`:''}</span>`;
+}
+
+const icoCheck  = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const icoPencil = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10.5 2.5l3 3-8 8H2.5v-3l8-8z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>`;
+const icoFlag   = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.5 14V2.5h7l-1 2.5 1 2.5h-7" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>`;
+const icoChevR  = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M6.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const icoChevL  = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M9.5 4l-4 4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+// footer of the category card — 645:71473 / 645:71478: uncategorise, then Merge ›
+const menuFoot  = () => `<div class="mfoot" id="mfoot">
+    <button class="mitem remove" data-val="${UNCAT}">${icoFlag}<span class="nm">Mark as uncategorised</span></button>
+  </div>
+  <div class="mfoot">
+    <button class="mitem remove" data-sub="merge"><span class="nm">Merge</span>${icoChevR}</button>
+  </div>`;
+const icoChev   = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6.5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+// editing chip: "Editing" yellow, name, category chevron, rule, commit tick — 349:51610
+const chipEditing = (kw, name) => `<span class="legend">
+    <span class="lbl"><span class="kw">${kw}</span>- ${name}
+      <button class="btn" data-act="cat">${icoChev}</button></span>
+    <span class="sep"></span>
+  </span>
+  <button class="done" data-act="done">${icoCheck}</button>`;
+const icoGrip   = `<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="4" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="12" cy="8" r="1.2"/></svg>`;
+const icoDots   = `<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3.5" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="8" cy="12.5" r="1.3"/></svg>`;
+
+function renderDoc(){
+  // a clause split in two draws every run, but names itself once — two identical chips
+  // would read as two clauses rather than one clause in two pieces
+  const named = new Set();
+  const rs = runs();
+  const html = rs.map((r,ri)=>{
+    if(r.uid===null){                                   // the document title
+      return r.items.map(p=>paraHtml(p,false)).join('');
+    }
+    const uid = r.uid, uncat = isUncat(uid);
+    const isFocus   = S.focusCC===uid;
+    const editing   = isFocus && S.mode==='editing';
+    const active    = isFocus && S.mode==='active';
+    /* A refusal that doesn't show its cause is just a "no". While a drag is blocked, the
+       control doing the blocking reveals itself in grey with its name — so the message and
+       the thing it refers to are on screen together. Matches 366:53593. */
+    const blocking  = !!S.drag && S.drag.blocked && !!r.cc && S.drag.blockedBy===r.cc;
+    // one hover, one box — the pointer never lights up more than the run it is on
+    const preview   = (S.previewCC===uid && S.focusCC!==uid) || blocking;
+    // r.cc is null on an unassigned run, and so are processingCC / pendingSplit at rest —
+    // without the guard every unassigned run matches null===null and renders as processing
+    const processing= !!r.cc && S.processingCC===r.cc;
+    const blocked   = !!r.cc && !!S.drag && S.drag.blocked && S.drag.ccId===r.cc;
+    const splitPending = !!r.cc && !!S.pendingSplit && S.pendingSplit.cc===r.cc;
+    // Every run is a group, assigned or not — a run that isn't in the DOM can't be hovered.
+    // Idle groups are transparent, so an unassigned stretch looks like plain text until
+    // the pointer finds it.
+
+    // only the run that actually holds the focus paragraph gets chrome
+    const cls = ['ccg'];
+    if(preview) cls.push('preview');
+    if(active || processing || splitPending) cls.push('active');
+    if(editing) cls.push('editing');
+    if(blocked) cls.push('blocked');
+    if(processing) cls.push('processing');
+
+    const firstRun = !named.has(uid);
+    named.add(uid);
+    const showChip = firstRun && (preview || active || editing || processing || splitPending);
+    // an unassigned run has no boundary to drag — there is no clause to grow or shrink
+    const grips = firstRun && !uncat && (editing || blocked)
+      ? `<span class="grip top" data-grip="start" data-cc="${r.cc}">${icoGrip}</span>
+         <span class="grip bot" data-grip="end" data-cc="${r.cc}">${icoGrip}</span>` : '';
+    // paragraphs carry the blue fill in active / processing / split-pending, never in editing,
+    // and never on a heading — matches 336:36188
+    const hl = (active || processing || splitPending);
+
+    return `<div class="${cls.join(' ')}" data-cc="${r.cc||''}" data-uid="${uid}" data-run="${ri}"
+              ${editing?'contenteditable="true" spellcheck="false"':''}>
+        ${showChip?`<span contenteditable="false">${chipFor(uid,ri)}</span>`:''}
+        ${r.items.map(p=>paraHtml(p,editing,hl)).join('')}
+        ${grips?`<span contenteditable="false">${grips}</span>`:''}
+      </div>`;
+  }).join('');
+  page.innerHTML = html;
+  paintHud();
+}
+
+function paraHtml(p, editing, hl){
+  let body = (editing && p.editedHtml) ? p.editedHtml : p.html;
+  if(p.kind==='title') return `<div class="title" data-p="${p.id}">${body}</div>`;
+  if(p.kind==='h')     return `<h4 data-p="${p.id}">${body}</h4>`;
+  if(hl) body = `<span class="hl${S.joined && S.joined.has(p.id) ? ' joining' : ''}">${body}</span>`;
+  return `<p data-p="${p.id}">${body}</p>`;
+}
+
+function paintHud(){
+  const bits = [`mode <b>${S.mode}</b>`];
+  if(S.focusCC) bits.push(`control <b>${S.focusCC}</b>`);
+  if(S.drag) bits.push(S.drag.blocked?`drag <b style="color:var(--fg-error-secondary)">blocked</b>`:`drag <b>${S.drag.edge}</b>`);
+  if(S.menu) bits.push(`menu <b>${S.menu.kind}</b>`);
+  if(S.pendingSplit) bits.push(`<b>split uncommitted</b>`);
+  hud.innerHTML = bits.join(' · ');
+}
+
+/* ============================================================
+   RENDER — review panel
+   ============================================================ */
+
+const rvList = document.getElementById('rvList');
+
+function visibleRows(){
+  let rows = ROWS;
+  if(S.filter==='review')    rows = rows.filter(r=>r.status==='Review'||r.status==='AI suggested'||r.status==='Missing');
+  if(S.filter==='missing')   rows = rows.filter(r=>r.status==='Missing');
+  if(S.filter==='duplicate') rows = rows.filter(r=>r.status==='Mapped');
+  if(S.search) rows = rows.filter(r=>r.name.toLowerCase().includes(S.search.toLowerCase()));
+  // the control you are working on never disappears behind a filter
+  if(S.focusCC && S.mode!=='browse' && !rows.some(r=>rowUid(r)===S.focusCC)){
+    const own = ROWS.find(r=>rowUid(r)===S.focusCC);
+    if(own) rows = [own, ...rows];
+  }
+  return rows;
+}
+
+// The "· 2" next to a clause name is NOT the paragraph count — the Figma shows · 2 on a
+// control that spans three paragraphs, and keeps saying · 2 after a drag adds a fourth.
+// So it is declared on the clause, not derived. What it actually counts is an open question.
+function occurrencesOf(ccId){ return CLAUSES[ccId].occurrences || 1; }
+
+// what a row points at in the document: a clause id, or an unassigned run's uid
+const rowUid = r => r.cc || r.uid || null;
+
+function renderReview(){
+  const rows = visibleRows();
+  document.getElementById('rvSearch').placeholder = `Search ${rows.length} Clause${rows.length===1?'':'s'}`;
+  document.getElementById('clauseCount').textContent = `${S.clausesMapped}/42`;
+  document.getElementById('tagCount').textContent = `${S.tagsMapped}/15`;
+
+  rvList.innerHTML = rows.map(r=>{
+    const uid = rowUid(r);
+    const isOpen = uid && uid===S.focusCC && S.mode!=='browse';
+    if(!isOpen){
+      const st = r.status.toLowerCase();
+      return `<div class="row ${r.dim?'dim':''} ${uid?'':'nodoc'}" data-row="${r.id}" ${uid?`data-uid="${uid}"`:''} ${r.cc?`data-cc="${r.cc}"`:''}>
+        <span class="nm">${r.name}</span>
+        <span class="st ${st==='missing'?'missing':st==='mapped'?'mapped':''}">${r.status}</span>
+      </div>`;
+    }
+    const st = r.status.toLowerCase();
+    if(isUncat(uid)){
+      /* An unassigned run has no category yet — its card is the place to give it one */
+      return `<div class="exp" data-uid="${uid}">
+        <div class="top">
+          <button class="sel placeholder" data-act="cat" title="Choose a category"><span class="v">Choose a category</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--fg-secondary-700)"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="st">${r.status}</span>
+        </div>
+        <div class="foot">
+          <div class="occ"></div>
+          <button class="more" title="More">${icoDots}</button>
+          <button class="ok" data-act="close" title="Done">${icoCheck}</button>
+        </div>
+      </div>`;
+    }
+    const c = CLAUSES[r.cc];
+    const n = occurrencesOf(r.cc);
+    /* Expanded row — Figma 667:46132. The category select IS the title row, with the row's
+       status beside it; a green "Prefered" badge under it; occurrences sit in the footer
+       on the left, ⋮ and the commit tick on the right. */
+    return `<div class="exp" data-cc="${r.cc}">
+      <div class="top">
+        <button class="sel" data-act="cat" title="Change category"><span class="v">${c.category}</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--fg-secondary-700)"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="st ${st==='missing'?'missing':st==='mapped'?'mapped':''}">${r.status}</span>
+      </div>
+      <div class="pref"><button class="badge" data-act="pref">Prefered
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button></div>
+      <div class="foot">
+        <div class="occ">${Array.from({length:n},(_,i)=>`<b class="${S.occ===i+1?'on':''}" data-occ="${i+1}">${i+1}</b>`).join('')}</div>
+        <button class="more" title="More">${icoDots}</button>
+        <button class="ok" data-act="commit" title="Save">${icoCheck}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ============================================================
+   OVERLAYS — tooltips, menus, error card
+   ============================================================ */
+
+let overlay = null, scrim = null;
+
+function clearOverlay(){
+  if(overlay){ overlay.remove(); overlay=null; }
+  if(scrim){ scrim.remove(); scrim=null; }
+}
+
+function place(el, x, y){
+  document.body.appendChild(el);
+  const r = el.getBoundingClientRect();
+  // menus belong to the document pane — never let one spill over the review panel
+  const pane = document.querySelector('.docpanel').getBoundingClientRect();
+  const maxX = Math.min(innerWidth, pane.right) - r.width - 8;
+  el.style.left = Math.max(pane.left + 8, Math.min(x, maxX)) + 'px';
+  el.style.top  = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + 'px';
+}
+
+let tipFor = null;
+function showTagTip(el){
+  if(tipFor === el) return;            // mousemove fires constantly; don't rebuild per pixel
+  clearTagTip();
+  tipFor = el;
+  const r = el.getBoundingClientRect();
+  const t = document.createElement('div');
+  t.className='tagtip'; t.id='tagtip';
+  t.innerHTML = `${el.dataset.tag}<span class="ok">${icoCheck}</span>`;
+  document.body.appendChild(t);
+  t.style.left = (r.left + r.width/2) + 'px';
+  t.style.top  = (r.top - 6) + 'px';
+}
+function clearTagTip(){ const t=document.getElementById('tagtip'); if(t) t.remove(); tipFor=null; }
+
+function openMenu(kind, anchorRect, payload){
+  clearOverlay();
+  clearTagTip();                       // the hover tip would sit on top of the card
+  S.menu = Object.assign({kind}, payload||{});
+
+  scrim = document.createElement('div');
+  scrim.className='scrim';
+  // the second half of a double-click must not close what the first half opened
+  scrim.addEventListener('mousedown', e=>{ if(e.detail>=2) return; e.preventDefault(); closeMenu(); });
+  document.body.appendChild(scrim);
+
+  const m = document.createElement('div');
+  m.className = 'menu' + (kind==='split'||kind==='catPick' ? ' wide' : '');
+  m.innerHTML = menuBody(kind, '');
+  overlay = m;
+  place(m, anchorRect.left, anchorRect.bottom + 6);
+
+  const wireInput = ()=>{
+    const input = m.querySelector('input');
+    if(!input) return;
+    input.focus();
+    input.addEventListener('input', ()=>{
+      const keep = input.value;
+      m.querySelector('.mlist').innerHTML = listBody(kind, keep);
+    });
+  };
+  wireInput();
+  m.addEventListener('mousedown', e=>{
+    const it = e.target.closest('.mitem');
+    if(!it) return;
+    e.preventDefault();
+    // "Merge ›" is a second level: the card turns into the list of neighbouring controls
+    if(it.dataset.sub==='merge'){ m.innerHTML = mergeBody(); return; }
+    if(it.dataset.sub==='back'){ m.innerHTML = menuBody(kind, ''); wireInput(); return; }
+    if(it.dataset.merge){ mergeInto(S.focusCC, it.dataset.merge); return; }
+    if(it.dataset.val===undefined) return;
+    pickFromMenu(kind, it.dataset.val);
+  });
+  m.addEventListener('mousedown', e=>{
+    const t = e.target.closest('.mtab'); if(!t) return;
+    e.preventDefault();
+    m.querySelectorAll('.mtab').forEach(x=>x.classList.toggle('on', x===t));
+    m.querySelector('.mlist').innerHTML = listBody(t.dataset.tab==='tags'?'tagAdd':'split', '');
+    const foot = m.querySelector('.mfoot');            // uncategorise belongs to Clauses only
+    if(foot) foot.hidden = t.dataset.tab==='tags';
+    m.dataset.sub = t.dataset.tab;
+  });
+  // NB: no re-render here — it would blow away the live text selection the tag menu needs.
+  updateChipKw(); paintHud();
+}
+
+function updateChipKw(){
+  const k = page.querySelector('.chip.is-editing .kw');
+  if(k) k.textContent = (S.menu && S.menu.kind==='tagEdit') ? 'Editing Tag' : 'Editing';
+}
+
+function closeMenu(){ S.menu=null; clearOverlay(); renderDoc(); renderReview(); }
+
+function menuBody(kind, q){
+  if(kind==='split'){
+    return `<div class="mtabs">
+        <button class="mtab on" data-tab="clauses">Clauses</button>
+        <button class="mtab" data-tab="tags">Tags</button>
+      </div>
+      <div class="msearch">${searchIco}<input placeholder="Search"></div>
+      <div class="mlist">${listBody('split',q)}</div>
+      <div class="mfoot" id="mfoot">
+        <button class="mitem remove plain" data-val="${UNCAT}"><span class="nm">Uncategorised</span></button>
+      </div>`;
+  }
+  if(kind==='catPick'){
+    return `<div class="msearch">${searchIco}<input placeholder="Search"></div>
+      <div class="mlist">${listBody('catPick',q)}</div>
+      ${menuFoot()}`;
+  }
+  if(kind==='tagAdd'){
+    return `<div class="msearch">${searchIco}<input placeholder="Search &amp; add new tag"></div>
+      <div class="mlist">${listBody('tagAdd',q)}</div>`;
+  }
+  return `<div class="msearch">${searchIco}<input placeholder="Search"></div>
+    <div class="mlist">${listBody('tagEdit',q)}</div>`;
+}
+
+const searchIco = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="color:var(--text-placeholder);flex:0 0 14px"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+
+function listBody(kind, q){
+  const hit = s => !q || s.toLowerCase().includes(q.toLowerCase());
+  if(kind==='catPick'){
+    /* The category this control already carries is the agent's answer, so it leads — under
+       its own heading, ticked — and does not repeat in the list of everything else. */
+    const c = CLAUSES[S.focusCC];
+    const cur = c ? c.category : null;
+    let out = '';
+    if(cur && hit(cur)){
+      out += `<div class="mgroup">AI suggestion</div>
+        <button class="mitem on" data-val="${cur}"><span class="nm">${cur}</span>
+          <span class="ck">${icoCheck}</span></button>`;
+    }
+    const rest = CATEGORIES.filter(x=>x!==cur).filter(hit);
+    out += `<div class="mgroup">All categories</div>`;
+    out += rest.length ? rest.map(x=>`<button class="mitem" data-val="${x}"><span class="nm">${x}</span></button>`).join('')
+                       : `<div class="mempty">No category matches “${q}”.</div>`;
+    return out;
+  }
+  if(kind==='split'){
+    const items = CATEGORIES.filter(hit);
+    if(!items.length) return `<div class="mempty">No category matches “${q}”.</div>`;
+    return items.map(c=>`<button class="mitem" data-val="${c}"><span class="nm">${c}</span></button>`).join('');
+  }
+  if(kind==='tagAdd'){
+    const items = TAGS.filter(hit);
+    if(!items.length) return `<div class="mempty">No tag matches “${q}”. Type to create one.</div>`;
+    return items.map(t=>`<button class="mitem" data-val="${t}"><span class="nm">${t}</span></button>`).join('');
+  }
+  const cur = S.menu && S.menu.current;
+  const rest = TAGS.filter(t=>t!==cur).filter(hit);
+  let out = '';
+  if(cur && hit(cur)) out += `<button class="mitem" data-val="${cur}"><span class="nm">${cur}</span><span class="ck">${icoCheck}</span></button>`;
+  out += `<div class="mgroup">All tags</div>`;
+  out += rest.length ? rest.map(t=>`<button class="mitem" data-val="${t}"><span class="nm">${t}</span></button>`).join('')
+                     : `<div class="mempty">No other tag matches.</div>`;
+  return out;
+}
+
+function pickFromMenu(kind, val){
+  if(kind==='tagAdd')  applyNewTag(val);
+  else if(kind==='tagEdit') applyRetag(val);
+  else if(kind==='split' || kind==='catPick') applySplit(val);
+}
+
+/* ============================================================
+   BEHAVIOUR — hover preview
+   ============================================================ */
+
+// 450 ms was a beat too long — the block arrived after the eye had moved on.
+const HOVER_DELAY = 120;
+let hoverTimer = null, hoverArmedFor = null, lastPoint = {x:-1,y:-1};
+function cancelHover(){ clearTimeout(hoverTimer); hoverArmedFor = null; }
+
+page.addEventListener('mousemove', e=>{
+  // a tag the reader can't see shouldn't name itself — wait until its section surfaces it
+  lastPoint = {x:e.clientX, y:e.clientY};
+  const mark = e.target.closest('mark.tag');
+  const lit  = mark && mark.closest('.ccg.preview, .ccg.active, .ccg.editing, .ccg.blocked');
+  if(lit){ showTagTip(mark); } else { clearTagTip(); }
+
+  /* Hover preview is not a browse-only affordance. Once one control is active the rest of
+     the document still has to answer to the pointer, or the page reads as dead — 553:23786
+     shows a committed control and a hovered one at the same time. Only editing suppresses
+     it, because previews flickering under a typing cursor are noise. */
+  if(S.menu || S.drag){ cancelHover(); return; }
+  // while one control is being edited, no other one lights up — one box on screen at a time
+  if(S.mode==='editing'){ cancelHover(); if(S.previewCC){ S.previewCC=null; repaintPreview(); } return; }
+
+  const g = e.target.closest('.ccg');
+  let cc = g ? g.dataset.uid : null;
+  if(cc === S.focusCC) cc = null;          // the focused control already shows itself
+
+  if(S.mode==='editing' && cc && !page.querySelector(`.ccg[data-uid="${cc}"]`)) { cancelHover(); return; }
+  if(cc === S.previewCC){ cancelHover(); return; }   // already on screen
+  /* The timer must survive movement INSIDE the run it is counting down for. Clearing and
+     re-arming on every mousemove — which is what this did — means the delay only starts
+     when the pointer stops, so any continuous movement reads as "hover is broken". */
+  if(cc === hoverArmedFor) return;
+  cancelHover();
+  if(!cc){ if(S.previewCC){ S.previewCC=null; repaintPreview(); } return; }
+
+  hoverArmedFor = cc;
+  hoverTimer = setTimeout(()=>{
+    hoverArmedFor = null;
+    if(S.menu || S.drag) return;              // conditions can change while armed
+    if(cc === S.focusCC) return;              // …including a click that selected it meanwhile
+    S.previewCC = cc; repaintPreview();
+    // the pointer may already be resting on a tag that only just became visible —
+    // no further mousemove is coming, so name it now rather than waiting for a twitch
+    const el = document.elementFromPoint(lastPoint.x, lastPoint.y);
+    const mk = el && el.closest && el.closest('mark.tag');
+    if(mk && mk.closest('.ccg.preview, .ccg.active, .ccg.editing')) showTagTip(mk);
+  }, HOVER_DELAY);
+});
+
+page.addEventListener('mouseleave', ()=>{
+  cancelHover(); clearTagTip();
+  if(S.previewCC && !S.menu){ S.previewCC=null; repaintPreview(); }
+});
+
+/* While editing, a full re-render would throw away the caret and any live selection — so
+   the hover preview is painted directly onto the neighbouring group instead. Everywhere
+   else the normal render does it. Same visual result, two different costs. */
+function repaintPreview(){
+  if(S.mode!=='editing'){ renderDoc(); return; }
+  page.querySelectorAll('.ccg.lite').forEach(g=>{
+    g.classList.remove('preview','lite');
+    const w = g.querySelector(':scope > span[data-lite]');
+    if(w) w.remove();
+  });
+  const uid = S.previewCC;
+  if(!uid || uid===S.focusCC) return;
+  const g = page.querySelector(`.ccg[data-uid="${uid}"]`);
+  if(!g || g.querySelector('.chip')) return;
+  g.classList.add('preview','lite');
+  const w = document.createElement('span');
+  w.setAttribute('contenteditable','false');
+  w.setAttribute('data-lite','1');
+  w.innerHTML = chipFor(uid, 0);
+  g.insertBefore(w, g.firstChild);
+}
+
+/* ============================================================
+   BEHAVIOUR — click / activate / edit
+   ============================================================ */
+
+page.addEventListener('mousedown', e=>{
+  if(e.target.closest('.grip')) return;          // handled by drag
+  const act = e.target.closest('[data-act]');
+  if(act){
+    e.preventDefault();
+    if(act.dataset.act==='cat'){
+      openMenu('catPick', act.getBoundingClientRect(), { rowCat:true });
+    }
+    else if(act.dataset.act==='edit')    { enterEditing(S.focusCC); }
+    else if(act.dataset.act==='done')    { exitEditing(); }
+    else if(act.dataset.act==='commit-split'){ commitSplit(); }
+    return;
+  }
+
+  const g = e.target.closest('.ccg');
+
+  if(!g){                                        // clicked empty document space
+    if(S.mode!=='browse'){ exitAll(); }
+    return;
+  }
+  if(!g.dataset.uid) return;
+
+  /* One click into a control puts it in editing, caret where the click landed. A click on a
+     tag does the same and opens the tag's card with it. `active` (selected, not editing) is
+     still a real state — the panel row and the ✓ land there — but the document itself goes
+     straight to work. */
+  const uid = g.dataset.uid;
+  const mk  = e.target.closest('mark.tag');
+
+  if(S.mode==='editing' && uid===S.focusCC){          // already editing here
+    if(mk && e.detail >= 2){ e.preventDefault(); openTagCard(locateTag(mk)); }
+    return;                                           // otherwise let the caret land
+  }
+
+  if(uid!==S.focusCC && S.pendingSplit) commitSplit();
+  if(S.mode==='editing') captureEdits();
+
+  e.preventDefault();                                 // we re-render, so we place the caret
+  S.previewCC=null;
+  const loc = mk ? locateTag(mk) : null;
+  enterEditing(uid);
+  if(loc){ openTagCard(loc); return; }                // a tag opens straight onto its card
+  const g2 = page.querySelector(`.ccg[data-uid="${uid}"]`);
+  if(g2){ g2.focus({preventScroll:true}); placeCaretAt(e.clientX, e.clientY); }
+});
+
+// the click that opened the editor should still land the cursor where it was aimed
+function placeCaretAt(x, y){
+  const r = document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
+  if(!r) return;
+  const s = window.getSelection();
+  if(s){ s.removeAllRanges(); s.addRange(r); }
+}
+
+/* Entering editing re-renders the group, so a tag is remembered as paragraph + position
+   and found again afterwards, never held as a node. */
+function locateTag(mk){
+  const pEl = mk.closest('[data-p]');
+  return { paraId:pEl.dataset.p, idx:[...pEl.querySelectorAll('mark.tag')].indexOf(mk) };
+}
+function findTag(loc){
+  const p = page.querySelector(`[data-p="${loc.paraId}"]`);
+  return p ? p.querySelectorAll('mark.tag')[loc.idx] : null;
+}
+function openTagCard(loc){
+  const m2 = findTag(loc);
+  if(!m2) return;
+  m2.classList.add('hot');
+  const sel = window.getSelection(); if(sel) sel.removeAllRanges();
+  openMenu('tagEdit', m2.getBoundingClientRect(), { current:m2.dataset.tag, el:m2 });
+}
+
+// selection inside an editing control → add-tag or split menu
+/* Whether the pointer actually travelled decides this, not the click count. A drag that
+   starts within the double-click window carries detail 2 or 3, and skipping it there was
+   why the card sometimes failed to appear after release. */
+let downAt = null, clickSeq = 0;
+page.addEventListener('mousedown', e=>{ clickSeq++; if(!e.target.closest('.grip,[data-act]')) downAt = {x:e.clientX, y:e.clientY}; }, true);
+// listen on the document: a drag that ends past the page edge, or over the pill, still
+// released — the page itself never hears that mouseup
+document.addEventListener('mouseup', e=>{
+  if(S.mode!=='editing' || !downAt || S.drag) return;
+  const moved = Math.hypot(e.clientX-downAt.x, e.clientY-downAt.y) > 4;
+  downAt = null;
+  if(!moved && e.detail >= 2) return;  // a double-click's word selection is not a tag request
+  const seq = clickSeq;
+  setTimeout(()=>{
+    if(seq !== clickSeq || S.menu) return;   // a second click landed first — this one is stale
+    const sel = window.getSelection();
+    if(!sel || sel.isCollapsed || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    // anchor on the paragraph where the selection starts — a selection across two
+    // paragraphs has the whole group as its common ancestor, which names no paragraph
+    const paraOf = n => { if(!n) return null; if(n.nodeType===3) n = n.parentElement; return n && n.closest ? n.closest('[data-p]') : null; };
+    const p = paraOf(range.startContainer) || paraOf(range.commonAncestorContainer) || paraOf(range.endContainer);
+    if(!p || !p.closest('.ccg.editing')) return;
+
+    /* Which card you get is a question about boundaries, not length. A clause is made of
+       whole paragraphs, so a selection can only become one if it covers whole paragraphs —
+       reaching both ends of the first and last. Anything inside a paragraph can only be a
+       tag. A length threshold gets this wrong for anyone who stops three words short. */
+    const spansParas = range.cloneContents().querySelectorAll('[data-p]').length > 0
+                       || !p.contains(range.endContainer.nodeType===3
+                            ? range.endContainer.parentElement : range.endContainer);
+    // tolerate the leftover the eye ignores: whitespace and trailing punctuation
+    const empty = s => s.replace(/[\s.,;:'"’”)\]]/g,'')==='';
+    const atStart = (()=>{ const r=range.cloneRange(); r.selectNodeContents(p);
+                           r.setEnd(range.startContainer, range.startOffset);
+                           return empty(r.toString()); })();
+    const atEnd   = (()=>{ const r=range.cloneRange(); r.selectNodeContents(p);
+                           r.setStart(range.endContainer, range.endOffset);
+                           return empty(r.toString()); })();
+    const whole = spansParas || (atStart && atEnd);
+    const rect = range.getBoundingClientRect();
+    const keep = range.cloneRange();      // the menu's search input steals focus and collapses
+                                          // the live selection, so carry the range with us
+    if(whole) openMenu('split',  rect, { paraId:p.dataset.p, range:keep });
+    else      openMenu('tagAdd', rect, { paraId:p.dataset.p, range:keep, text:sel.toString() });
+  }, 0);
+});
+
+function enterEditing(cc){
+  if(!cc) return;
+  S.mode='editing'; S.focusCC=cc;
+  document.getElementById('fmtbar').classList.remove('inert');
+  renderDoc(); renderReview();
+}
+
+function exitEditing(){
+  captureEdits();
+  S.mode='active';
+  document.getElementById('fmtbar').classList.add('inert');
+  clearOverlay(); S.menu=null;
+  renderDoc(); renderReview();
+}
+
+function exitAll(){
+  if(S.pendingSplit) commitSplit();
+  captureEdits();
+  S.mode='browse'; S.focusCC=null; S.previewCC=null;
+  document.getElementById('fmtbar').classList.add('inert');
+  clearOverlay(); S.menu=null;
+  renderDoc(); renderReview();
+}
+
+// read contenteditable text back into the model before any re-render
+function captureEdits(){
+  page.querySelectorAll('.ccg[contenteditable="true"] [data-p]').forEach(el=>{
+    const p = PARAS.find(x=>x.id===el.dataset.p);
+    if(!p) return;
+    if(p.editedHtml) p.editedHtml = el.innerHTML; else p.html = el.innerHTML;
+  });
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ if(S.menu) closeMenu(); else exitAll(); }
+});
+
+/* ============================================================
+   BEHAVIOUR — boundary drag
+   ============================================================ */
+
+const BITE = 14;            // px into a paragraph before a drag takes it
+const PROCESSING_MS = 1700; // the join is shown settling, not flashed
+
+page.addEventListener('mousedown', e=>{
+  const grip = e.target.closest('.grip');
+  if(!grip) return;
+  e.preventDefault();
+  const ccId = grip.dataset.cc, edge = grip.dataset.grip;
+  const base = PARAS.map(p=>p.cc||null);
+  const own  = base.map((c,i)=>c===ccId?i:-1).filter(i=>i>=0);
+  S.drag = { ccId, edge, blocked:false, target:null, base,
+             lo:Math.min(...own), hi:Math.max(...own) };
+  document.body.style.cursor='ns-resize';
+
+  // A boundary drag is vertical, so resolve the paragraph by Y alone. Hit-testing by
+  // (x,y) fails as soon as the pointer leaves the text column, which it always does —
+  // the grips sit on the control's right edge, outside it.
+  const paraAtY = y=>{
+    let best=null, bestD=Infinity;
+    page.querySelectorAll('[data-p]').forEach(el=>{
+      const r = el.getBoundingClientRect();
+      const d = (y < r.top) ? r.top - y : (y > r.bottom ? y - r.bottom : 0);
+      if(d < bestD){ bestD=d; best=el; }
+    });
+    return best;
+  };
+
+  const move = ev=>{
+    const pEl = paraAtY(ev.clientY);
+    if(!pEl){ return; }
+    const { lo, hi } = S.drag;
+    let i = paraIndex(pEl.dataset.p);
+    /* Resistance. A paragraph is only taken once the pointer is BITE px inside it, so the
+       boundary follows the hand with a little weight instead of jumping at the first pixel.
+       Letting go of a paragraph (shrinking back) follows the pointer directly. */
+    const r = pEl.getBoundingClientRect();
+    if(edge==='end'   && i>hi && ev.clientY < r.top + BITE)    i -= 1;
+    if(edge==='start' && i<lo && ev.clientY > r.bottom - BITE) i += 1;
+
+    let blocked=false, target=null, blockedBy=null;
+    if(edge==='end' && i>hi){
+      // walk out from the current edge; stop at the first paragraph another control owns
+      for(let k=hi+1;k<=i;k++){
+        if(base[k] && base[k]!==ccId){ blocked=true; blockedBy=base[k]; break; }
+        target=k;
+      }
+    } else if(edge==='start' && i<lo){
+      for(let k=lo-1;k>=i;k--){
+        if(base[k] && base[k]!==ccId){ blocked=true; blockedBy=base[k]; break; }
+        target=k;
+      }
+    } else if(edge==='end'   && i<hi && i>=lo){ target=i; }
+      else if(edge==='start' && i>lo && i<=hi){ target=i; }
+
+    if(blocked===S.drag.blocked && target===S.drag.target) return;
+    S.drag.blocked=blocked; S.drag.target=target; S.drag.blockedBy=blockedBy;
+    renderDoc();
+    blocked ? showDragErr(ccId, edge, grip) : killDragErr();
+  };
+
+  const up = ()=>{
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', up);
+    document.body.style.cursor='';
+    const d = S.drag;
+    killDragErr();
+    if(d.blocked || d.target===null){ S.drag=null; renderDoc(); return; }
+    const resolved = PARAS.map((_,i)=>ccOf(i));
+    S.drag=null;
+    commitDrag(ccId, resolved);
+  };
+  document.addEventListener('mousemove', move);
+  document.addEventListener('mouseup', up);
+});
+
+let dragErrEl=null;
+
+function showDragErr(ccId, edge, grip){
+  if(dragErrEl) return;
+  const g = page.querySelector(`.grip.${edge==='end'?'bot':'top'}[data-cc="${ccId}"]`);
+  const r = (g||grip).getBoundingClientRect();
+  dragErrEl = document.createElement('div');
+  dragErrEl.className='dragerr';
+  dragErrEl.innerHTML = `<h6>Not allowed to drag further</h6>
+    <p>You may uncategorised the below paragraphs and then try adding via drag or select below paragraph manually to this same category</p>`;
+  document.body.appendChild(dragErrEl);
+  dragErrEl.style.left = Math.max(8, r.left - 320) + 'px';
+  dragErrEl.style.top  = Math.max(8, r.top - 90) + 'px';
+}
+function killDragErr(){ if(dragErrEl){ dragErrEl.remove(); dragErrEl=null; } }
+
+function commitDrag(ccId, resolved){
+  // the paragraphs that just joined wash in while the chip says Processing
+  S.joined = new Set(PARAS.filter((p,i)=>resolved[i]===ccId && p.cc!==ccId).map(p=>p.id));
+  resolved.forEach((cc,i)=>{ PARAS[i].cc = cc; });
+  S.processingCC = ccId;
+  S.mode='active';
+  document.getElementById('fmtbar').classList.add('inert');
+  renderDoc(); renderReview();
+  setTimeout(()=>{ S.processingCC=null; S.joined=null; S.clausesMapped=Math.min(42,S.clausesMapped+1); renderDoc(); renderReview(); }, PROCESSING_MS);
+}
+
+/* ============================================================
+   BEHAVIOUR — tags
+   ============================================================ */
+
+function applyNewTag(name){
+  const range = S.menu && S.menu.range;
+  if(range){
+    const m = document.createElement('mark');
+    m.className='tag'; m.dataset.tag=name;
+    try { range.surroundContents(m); }
+    catch(_) { m.textContent = range.toString(); range.deleteContents(); range.insertNode(m); }
+    const sel = window.getSelection(); if(sel) sel.removeAllRanges();
+  }
+  captureEdits();
+  S.tagsMapped = Math.min(15, S.tagsMapped+1);
+  closeMenu();
+}
+
+function applyRetag(name){
+  const el = S.menu && S.menu.el;
+  if(el){ el.dataset.tag = name; }
+  captureEdits();
+  closeMenu();
+}
+
+/* ============================================================
+   BEHAVIOUR — split
+   ============================================================ */
+
+function applySplit(category){
+  // same menu is reused by the right panel's category select — there it just recategorises
+  if(S.menu && S.menu.rowCat){
+    const cc = S.focusCC;
+    if(isUncat(cc)){
+      // giving an unassigned run a category makes it a clause: paragraphs, chip, panel row
+      if(category===UNCAT){ closeMenu(); return; }
+      let ccId = Object.keys(CLAUSES).find(k=>CLAUSES[k].category===category);
+      if(!ccId){
+        ccId = 'c'+Math.random().toString(36).slice(2,7);
+        CLAUSES[ccId] = { label:/clause|agreement/i.test(category)?category:category+' Clause', category, status:'mapped' };
+      }
+      runs().filter(r=>r.uid===cc).forEach(r=>r.items.forEach(p=>{ p.cc=ccId; }));
+      const row = ROWS.find(r=>r.uid===cc);
+      if(row){ row.uid=undefined; row.cc=ccId; row.name=CLAUSES[ccId].category; row.status='Mapped'; row.dim=false; }
+      S.clausesMapped = Math.min(42, S.clausesMapped+1);
+      S.focusCC = ccId; S.mode='active';
+      closeMenu(); return;
+    }
+    if(cc && category===UNCAT){ uncategorise(PARAS.filter(p=>p.cc===cc).map(p=>p.id)); return; }
+    if(cc && CLAUSES[cc]){
+      CLAUSES[cc].category = category;
+      CLAUSES[cc].status   = 'mapped';
+      // the chip shows the label, so recategorising has to move that too or the document
+      // keeps claiming the old name while the panel shows the new one
+      CLAUSES[cc].label = /clause|agreement/i.test(category) ? category : category+' Clause';
+    }
+    closeMenu(); return;
+  }
+  const paraId = S.menu && S.menu.paraId;
+  if(!paraId){ closeMenu(); return; }
+  if(category===UNCAT){ captureEdits(); uncategorise([paraId]); return; }
+  captureEdits();
+  const p = PARAS.find(x=>x.id===paraId);
+  const parent = p.cc;
+  // the target control: reuse `ops` if the category matches, else mint one
+  let ccId = Object.keys(CLAUSES).find(k=>CLAUSES[k].category===category);
+  if(!ccId){
+    ccId = 'c'+Math.random().toString(36).slice(2,7);
+    // the chip appends "Clause" (Figma: category "Operations" → chip "Operations Clause"),
+    // but not onto a name that already carries it — no "Finance Agreement Clause"
+    const label = /clause|agreement/i.test(category) ? category : category+' Clause';
+    CLAUSES[ccId] = { label, category, status:'mapped' };
+  }
+  p.cc = ccId;
+  S.pendingSplit = { paraId, cc:ccId, parent };
+  S.focusCC = ccId; S.mode='active';
+  document.getElementById('fmtbar').classList.add('inert');
+  if(!ROWS.find(r=>r.cc===ccId)) ROWS.unshift({ id:ccId, name:category, status:'Mapped', cc:ccId });
+  closeMenu();
+}
+
+/* Pull paragraphs out of whatever clause they sit in. The parent survives if it still has
+   paragraphs left — possibly in two runs — and only disappears from the document when it
+   has none, at which point its row drops back to Uncategorised in the panel. */
+function uncategorise(paraIds){
+  const parents = new Set();
+  paraIds.forEach(id=>{ const p=PARAS.find(x=>x.id===id); if(p && p.cc){ parents.add(p.cc); p.cc=null; } });
+
+  parents.forEach(cc=>{
+    if(PARAS.some(p=>p.cc===cc)) return;              // parent still has paragraphs
+    const row = ROWS.find(r=>r.cc===cc);
+    if(row){ row.cc = undefined; row.status='Review'; row.dim=true; row.name='Uncategorised'; }
+  });
+
+  S.clausesMapped = Math.max(0, S.clausesMapped - paraIds.length);
+  const survivor = [...parents].find(cc=>PARAS.some(p=>p.cc===cc));
+  S.focusCC = survivor || null;
+  S.mode = survivor ? 'active' : 'browse';
+  S.previewCC = null;
+  document.getElementById('fmtbar').classList.add('inert');
+  closeMenu();
+}
+
+/* ============================================================
+   BEHAVIOUR — merge (600:28140 shows only the "Merge ›" entry; what follows it is this
+   prototype's reading: the control folds into one of its neighbours)
+   ============================================================ */
+
+function mergeBody(){
+  const rs = runs();
+  const near = [...adjacentTo(rs, S.focusCC)];
+  const nameOf = uid => isUncat(uid) ? 'Uncategorised' : (CLAUSES[uid] ? CLAUSES[uid].label : uid);
+  const items = near.length
+    ? near.map(uid=>`<button class="mitem" data-merge="${uid}"><span class="nm">${nameOf(uid)}</span></button>`).join('')
+    : `<div class="mempty">Nothing next to this control to merge with.</div>`;
+  return `<div class="mfoot" style="border-top:0">
+      <button class="mitem remove" data-sub="back">${icoChevL}<span class="nm">Merge with</span></button>
+    </div>
+    <div class="mlist">${items}</div>
+    <div class="mhint">The paragraphs join the neighbour and take its category. Its name stays; this one leaves the list.</div>`;
+}
+
+function mergeInto(src, dst){
+  if(!src || !dst || src===dst) return;
+  captureEdits();
+  const target = isUncat(dst) ? null : dst;
+  runs().filter(r=>r.uid===src).forEach(r=>r.items.forEach(p=>{ p.cc = target; }));
+  if(!isUncat(src)){
+    const row = ROWS.find(r=>r.cc===src);
+    if(row) ROWS.splice(ROWS.indexOf(row), 1);
+  }
+  S.pendingSplit=null; S.menu=null; clearOverlay();
+  S.focusCC = target ? target : null;
+  S.mode = target ? 'active' : 'browse';
+  S.previewCC=null;
+  document.getElementById('fmtbar').classList.add('inert');
+  if(target){
+    S.processingCC = target;
+    renderDoc(); renderReview();
+    setTimeout(()=>{ S.processingCC=null; renderDoc(); renderReview(); }, 900);
+  } else { renderDoc(); renderReview(); }
+}
+
+function commitSplit(){
+  if(!S.pendingSplit) return;
+  S.pendingSplit=null;
+  S.clausesMapped = Math.min(42, S.clausesMapped+1);
+  renderDoc(); renderReview();
+}
+
+/* ============================================================
+   REVIEW PANEL EVENTS
+   ============================================================ */
+
+rvList.addEventListener('mousedown', e=>{
+  const act = e.target.closest('[data-act]');
+  if(act){
+    e.preventDefault();
+    if(act.dataset.act==='commit'){
+      const cc = act.closest('[data-cc]').dataset.cc;
+      CLAUSES[cc].status='mapped';
+      if(S.pendingSplit) commitSplit();
+      exitAll();
+    }
+    if(act.dataset.act==='cat'){
+      openMenu('catPick', act.getBoundingClientRect(), { rowCat:true });
+    }
+    if(act.dataset.act==='close'){ exitAll(); }
+    return;
+  }
+  const occ = e.target.closest('[data-occ]');
+  if(occ){ S.occ = +occ.dataset.occ; renderReview(); return; }
+
+  const row = e.target.closest('.row');
+  if(!row) return;
+  if(row.dataset.uid) goToControl(row.dataset.uid);
+});
+
+/* Navigating from the panel: the document scrolls the control into the middle of the
+   pane and the box pulses once so the eye finds it. The control is selected, not opened
+   for editing — you came to look, and a click in the text takes you the rest of the way. */
+function goToControl(uid){
+  if(S.pendingSplit) commitSplit();
+  if(S.mode==='editing') captureEdits();
+  clearOverlay(); S.menu=null;
+  S.focusCC = uid; S.mode='active'; S.previewCC=null;
+  document.getElementById('fmtbar').classList.add('inert');
+  renderDoc(); renderReview();
+  const el = page.querySelector(`.ccg[data-uid="${uid}"]`);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+  el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
+  setTimeout(()=>el.classList.remove('pulse'), 1400);
+}
+
+document.getElementById('toggles').addEventListener('click', e=>{
+  const t = e.target.closest('.tg'); if(!t) return;
+  S.filter = (S.filter===t.dataset.f) ? 'all' : t.dataset.f;
+  document.querySelectorAll('.tg').forEach(x=>x.classList.toggle('on', x.dataset.f===S.filter));
+  renderReview();
+});
+
+document.getElementById('rvSearch').addEventListener('input', e=>{ S.search=e.target.value; renderReview(); });
+
+/* format bar is display-only except for the real execCommand three */
+document.getElementById('fmtbar').addEventListener('mousedown', e=>{
+  const b = e.target.closest('[data-cmd]'); if(!b) return;
+  e.preventDefault();
+  const cmd = b.dataset.cmd;
+  if(['bold','italic','underline','justifyLeft','justifyCenter'].includes(cmd)){
+    document.execCommand(cmd);
+    if(['bold','italic','underline'].includes(cmd)) b.classList.toggle('on');
+  }
+});
+
+/* ============================================================
+   SPEC DRAWER + state jumps
+   ============================================================ */
+
+const JUMPS = [
+  { id:'336:38473', lb:'Day zero — no content control',        go:()=>{ reset(); } },
+  { id:'417:64747', lb:'Hover preview — Structure',            go:()=>{ reset(); S.previewCC='struct'; renderDoc(); } },
+  { id:'417:63887', lb:'Hover preview — Termination',          go:()=>{ reset(); S.previewCC='term'; renderDoc(); } },
+  { id:'336:36188', lb:'Active content control',               go:()=>{ reset(); S.focusCC='term'; S.mode='active'; renderDoc(); renderReview(); } },
+  { id:'349:51519', lb:'Editing — text and redline',           go:()=>{ reset(); enterEditing('term'); } },
+  { id:'340:40447', lb:'Dragging the boundary',                go:()=>{ reset(); enterEditing('term'); flashGrip(); } },
+  { id:'557:24578', lb:'Drag done — paragraph 4 joined',       go:()=>{ reset(); PARAS.find(p=>p.id==='t5').cc='term'; S.focusCC='term'; S.mode='active'; renderDoc(); renderReview(); } },
+  { id:'366:53593', lb:'Drag refused — category clash',        go:()=>{ reset(); enterEditing('term'); fakeBlocked(); } },
+  { id:'366:52261', lb:'Tag hover — Term Notice',              go:()=>{ reset(); S.focusCC='term'; S.mode='active'; renderDoc(); renderReview(); hotTag('Term Notice'); } },
+  { id:'417:66321', lb:'Add a new tag',                        go:()=>{ reset(); enterEditing('term'); openAt('tagAdd','t2'); } },
+  { id:'417:67018', lb:'Edit an existing tag',                 go:()=>{ reset(); enterEditing('term'); openOnTag(); } },
+  { id:'366:57137', lb:'Split — pick a clause category',       go:()=>{ reset(); enterEditing('term'); openAt('split','t3'); } },
+  { id:'366:58594', lb:'Split created — tagged to Operations', go:()=>{ reset(); enterEditing('term'); S.menu={kind:'split',paraId:'t3'}; applySplit('Operations'); } },
+  { id:'553:23013', lb:'Split saved',                          go:()=>{ reset(); S.menu={kind:'split',paraId:'t3'}; PARAS.find(p=>p.id==='t3').cc='term'; enterEditing('term'); applySplit('Operations'); commitSplit(); } }
+];
+
+document.getElementById('jump').innerHTML = JUMPS.map((j,i)=>
+  `<button data-j="${i}"><span class="id">${j.id}</span><span class="lb">${j.lb}</span></button>`).join('');
+document.getElementById('jump').addEventListener('click', e=>{
+  const b=e.target.closest('[data-j]'); if(!b) return;
+  JUMPS[+b.dataset.j].go();
+});
+
+const BASE = JSON.parse(JSON.stringify(PARAS.map(p=>({id:p.id, cc:p.cc===undefined?null:p.cc}))));
+function reset(){
+  clearOverlay(); clearTagTip(); killDragErr();
+  S.menu=null; S.drag=null; S.pendingSplit=null; S.processingCC=null; S.joined=null;
+  S.mode='browse'; S.focusCC=null; S.previewCC=null; S.occ=1;
+  BASE.forEach(b=>{ const p=PARAS.find(x=>x.id===b.id); p.cc=b.cc; });
+  document.getElementById('fmtbar').classList.add('inert');
+  renderDoc(); renderReview();
+}
+
+function flashGrip(){
+  const g = page.querySelector('.grip.bot');
+  if(g){ g.style.background='var(--utility-brand-500)'; g.style.borderColor='var(--utility-brand-400)'; }
+}
+function fakeBlocked(){
+  PARAS.find(p=>p.id==='t5').cc='term';
+  const base = PARAS.map(p=>p.cc||null);
+  const own  = base.map((c,i)=>c==='term'?i:-1).filter(i=>i>=0);
+  S.drag={ccId:'term',edge:'end',blocked:true,target:null,blockedBy:'tax',
+          base,lo:Math.min(...own),hi:Math.max(...own)};
+  renderDoc();
+  const g = page.querySelector('.grip.bot[data-cc="term"]');
+  if(g){
+    const r=g.getBoundingClientRect();
+    dragErrEl=document.createElement('div');
+    dragErrEl.className='dragerr';
+    dragErrEl.innerHTML=`<h6>Not allowed to drag further</h6><p>You may uncategorised the below paragraphs and then try adding via drag or select below paragraph manually to this same category</p>`;
+    document.body.appendChild(dragErrEl);
+    dragErrEl.style.left=(r.left-320)+'px';
+    dragErrEl.style.top=(r.top-90)+'px';
+  }
+}
+function hotTag(name){
+  const m = page.querySelector(`mark.tag[data-tag="${name}"]`);
+  if(m){ m.classList.add('hot'); showTagTip(m); }
+}
+function openAt(kind, paraId){
+  const el = page.querySelector(`[data-p="${paraId}"]`);
+  if(!el) return;
+  const r = el.getBoundingClientRect();
+  openMenu(kind, {left:r.left+120, bottom:r.top+18}, {paraId});
+}
+function openOnTag(){
+  const m = page.querySelector('mark.tag[data-tag="Term Notice"]');
+  if(!m) return;
+  m.classList.add('hot');
+  openMenu('tagEdit', m.getBoundingClientRect(), {current:'Term Notice', el:m});
+}
+
+const spec = document.getElementById('spec');
+document.getElementById('specBtn').addEventListener('click', ()=>spec.classList.add('open'));
+document.getElementById('specClose').addEventListener('click', ()=>spec.classList.remove('open'));
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+renderDoc();
+renderReview();
+</script>
+</body>
+</html>

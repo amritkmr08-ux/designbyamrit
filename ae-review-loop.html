@@ -6,7 +6,7 @@
 <title>Accept, advance, and the document moves — review loop prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500&family=Roboto:wght@500&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#FFFFFF;
@@ -21,137 +21,108 @@
     --ink:#1B1F1E;
     --muted:#5F6564;
     --faint:#8B918F;
-    --line:#E6E8E8;
-    --hair:#EFF1F1;
-    --band:#F5F6F6;
+    --line:#E3E5E5;
+    --hair:#EDEFEF;
+    --band:#F4F5F5;
     --grey-bar:#F9F9F9;
+    --link:#2E6BD6;
+    --chip-ink:#2B2F2E;
     --font:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
   body{
     background:var(--paper); color:var(--ink); font-family:var(--font);
-    font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased;
+    font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
     overflow:hidden;
   }
   svg{display:block}
   #app{position:fixed;inset:0;display:flex;background:var(--paper)}
 
-  /* ─────────── left icon rail ─────────── */
-  .rail{
-    width:58px;flex:none;border-right:1px solid var(--line);
-    display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0;
-    background:var(--paper)
-  }
-  .rail .ri{
-    width:38px;height:38px;border-radius:7px;display:grid;place-items:center;
-    color:var(--teal-deep)
-  }
-  .rail .ri svg{width:19px;height:19px}
-  .rail .ri.on{background:var(--teal-tint)}
-  .rail .burger{margin-bottom:12px}
-
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
-
-  /* ─────────── top bar ─────────── */
-  .topbar{
-    height:56px;flex:none;display:flex;align-items:center;
-    padding:0 18px;border-bottom:1px solid var(--line);gap:10px
-  }
-  .logo{display:flex;align-items:center;gap:8px}
-  .logo .wm{font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--teal-deep)}
-  .topbar .sp{flex:1}
-  .tb-ico{width:32px;height:32px;display:grid;place-items:center;color:#4B5352}
-  .tb-ico svg{width:17px;height:17px}
-  .tb-pill{
-    display:flex;align-items:center;gap:4px;border:1px solid var(--line);
-    border-radius:999px;padding:3px 6px
-  }
-  .avatar{
-    width:31px;height:31px;border-radius:50%;background:#99BAC1;color:#fff;
-    display:grid;place-items:center;font-size:11.5px;font-weight:600;letter-spacing:.02em
-  }
 
   /* ─────────── document header ─────────── */
   .dochead{
-    flex:none;display:flex;align-items:center;gap:13px;padding:14px 22px 12px
+    flex:none;display:flex;align-items:center;gap:18px;padding:16px 28px 18px 40px;
+    border-bottom:1px solid var(--hair)
   }
-  .pdfic{
-    width:38px;height:38px;border:1px solid var(--line);border-radius:7px;
-    display:grid;place-items:center;flex:none
+  .back{
+    width:52px;height:52px;border:1px solid var(--line);border-radius:6px;
+    display:grid;place-items:center;flex:none;color:#3A403F
   }
-  .pdfic svg{width:19px;height:19px;color:#C7332B}
-  .dh-id{font-size:11.5px;color:var(--faint);line-height:1.3}
-  .dh-name{font-size:19px;font-weight:600;letter-spacing:-.018em;line-height:1.25}
+  .back svg{width:22px;height:22px}
+  .dh-id{font-size:14px;color:var(--link);line-height:1.3}
+  .dh-name{font-size:24px;font-weight:600;letter-spacing:-.012em;line-height:1.2;color:var(--ink)}
   .dochead .sp{flex:1}
-  .statusbtn{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;flex:none}
-  .statusbtn b{font-weight:400;font-size:13px;color:var(--ink);padding:8px 15px}
+  .statusbtn{display:flex;border:1px solid #C9CDCC;border-radius:4px;overflow:hidden;flex:none;height:44px}
+  .statusbtn b{font-weight:400;font-size:16px;color:var(--ink);padding:0 24px;display:flex;align-items:center}
   .statusbtn i{
-    display:grid;place-items:center;width:32px;border-left:1px solid var(--line);color:#5F6564
+    display:grid;place-items:center;width:46px;border-left:1px solid #C9CDCC;color:#3A403F
   }
-  .statusbtn i svg{width:13px;height:13px}
+  .statusbtn i svg{width:14px;height:14px}
 
-  .cols{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 372px 50px;min-height:0}
+  .cols{flex:1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 46px;min-height:0;padding:24px 24px 0 40px;gap:0 20px}
 
   /* ─────────── document pane ─────────── */
-  .docpane{min-height:0;display:flex;flex-direction:column;padding:0 20px 0 22px}
+  .docpane{min-height:0;display:flex;flex-direction:column;border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0;background:var(--paper)}
   .doctools{
-    flex:none;height:50px;background:var(--grey-bar);border-radius:7px;
-    display:flex;align-items:center;justify-content:flex-end;gap:4px;padding:0 12px
+    flex:none;height:56px;background:var(--paper);border-bottom:1px solid var(--line);border-radius:6px 6px 0 0;
+    display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 24px
   }
-  .doctools .ti{width:30px;height:30px;display:grid;place-items:center;color:#5F6564}
-  .doctools .ti svg{width:16px;height:16px}
+  .doctools .ti{width:30px;height:30px;display:grid;place-items:center;color:#4B5352}
+  .doctools .ti svg{width:20px;height:20px}
   .docscroll{flex:1;overflow:hidden;position:relative}
-  .docinner{padding:22px 8px 300px;max-width:720px;margin:0 auto}
-  .doc h4{font-size:15.5px;font-weight:600;margin:0 0 15px;letter-spacing:-.01em}
-  .doc h5{font-size:13.5px;font-weight:400;margin:20px 0 6px}
-  .doc p{font-size:13.5px;line-height:1.9;color:#222726;margin-bottom:12px}
+  .docinner{padding:24px 72px 300px 76px;max-width:none;margin:0}
+  .doc h4{font-size:22px;font-weight:600;margin:0 0 18px;letter-spacing:-.012em}
+  .doc h5{font-size:16px;font-weight:400;margin:22px 0 4px}
+  .doc p{font-size:16px;line-height:1.82;color:#1F2423;margin-bottom:14px}
   mark{
     background:transparent;color:inherit;padding:1px 2px;margin:0 -2px;
     box-shadow:inset 0 0 0 0 transparent;
     transition:background .5s ease, box-shadow .5s ease;
   }
-  mark.live{ background:var(--teal-pale); box-shadow:inset 0 -2px 0 var(--teal-rule); }
+  mark.live{ background:#EAF0EF; box-shadow:inset 0 -2px 0 var(--teal-rule); }
   mark.done{ background:var(--green-pale); }
 
   /* ─────────── fields panel ─────────── */
-  .panel{min-height:0;display:flex;flex-direction:column;border-left:1px solid var(--hair)}
+  .panel{min-height:0;display:flex;flex-direction:column}
   .panelbar{
-    height:50px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px 0 16px
+    height:56px;flex:none;display:flex;align-items:center;gap:10px;padding:0 4px 0 8px
   }
-  .fcount{font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:6px}
-  .fcount svg{width:13px;height:13px;color:#5F6564}
+  .fcount{font-size:17px;font-weight:500;display:flex;align-items:center;gap:10px;letter-spacing:-.005em}
+  .fcount svg{width:15px;height:15px;color:#3A403F}
   .panelbar .sp{flex:1}
-  .panelbar .pi{width:28px;height:28px;display:grid;place-items:center;color:#5F6564}
-  .panelbar .pi svg{width:16px;height:16px}
-  .panelscroll{flex:1;overflow:hidden;padding:6px 16px 120px}
+  .panelbar .pi{width:32px;height:32px;display:grid;place-items:center;color:#3A403F}
+  .panelbar .pi svg{width:20px;height:20px}
+  .panelscroll{flex:1;overflow:hidden;padding:2px 0 120px}
 
+  /* Assist Bar · from Figma node 7878:53821 */
   .fcard{
-    border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--paper);
+    border:1.232px solid #E8E8E8;border-radius:4.927px;margin-bottom:16px;background:var(--paper);
     overflow:hidden;transition:box-shadow .3s ease,border-color .3s ease
   }
-  .fcard.open{border-color:#D5DBDA;box-shadow:0 1px 2px rgba(20,30,30,.04),0 6px 16px -10px rgba(20,30,30,.14)}
-  .fhead{display:flex;align-items:center;gap:12px;padding:14px 16px}
-  .mk{width:9px;height:9px;flex:none;background:var(--mint)}
-  .mk.circle{border-radius:50%}
-  .mk.on{background:var(--teal-deep)}
-  .fname{font-size:13.5px;font-weight:400;flex:1;letter-spacing:-.005em;color:var(--ink)}
-  .pager{display:none;align-items:center;gap:9px;color:#8B918F;font-size:12px}
+  .fcard.open{border-color:#E8E8E8;box-shadow:none}
+  .fhead{display:flex;align-items:center;gap:15px;height:48px;padding:0 18px 0 18px}
+  .mk{width:9.853px;height:9.853px;flex:none;background:var(--mint)}
+  .mk.circle{border-radius:58px}
+  .mk.on{background:#0D5E68}
+  .fname{font-size:14px;font-weight:500;flex:1;letter-spacing:0;color:rgba(0,0,0,.87)}
+  .pager{display:none;align-items:center;gap:2px;color:#252525;font-size:15px;letter-spacing:.02em;line-height:1.66}
   .fcard.open .pager{display:flex}
-  .pager svg{width:12px;height:12px}
-  .pager b{font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+  .pager .gi{width:28px;height:28px;padding:7px 8px;object-fit:contain;display:block;box-sizing:border-box}
+  .pager .gi-link{width:34px;height:20px;padding:0;margin-left:12px;object-fit:contain}
+  .pager b{font-weight:400;color:#252525;font-variant-numeric:tabular-nums;padding:0 4px}
 
   .fbody{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.22,.61,.36,1)}
-  .fcard.open .fbody{max-height:190px}
-  .chipwrap{padding:2px 16px 16px}
+  .fcard.open .fbody{max-height:240px}
+  .chipwrap{padding:0 18px 18px;height:auto}
   .val{
-    display:inline-flex;align-items:center;gap:0;
-    border:1px solid var(--green);color:var(--green);
-    border-radius:999px;padding:8px 18px;font-size:13px;font-weight:400;background:var(--paper);
-    line-height:1.4
+    display:inline-flex;align-items:center;gap:0;height:34px;
+    border:1px solid #808080;color:#18181B;
+    border-radius:80px;padding:0 20px;font-family:"Plus Jakarta Sans",var(--font);font-size:14px;font-weight:400;background:var(--paper);
+    line-height:1.5;font-feature-settings:"case" 1,"lnum" 1,"pnum" 1;transition:border-color .3s ease,color .3s ease
   }
-  /* the tick lives after the value and occupies nothing until it is earned,
-     so an unreviewed chip has no dead space in it */
+  .val.ok{border-color:var(--green);color:var(--green)}
   .tick{width:0;height:14px;flex:none;overflow:hidden;margin-left:0;
         opacity:0;transform:scale(.4);
         transition:width .32s cubic-bezier(.22,.61,.36,1), margin-left .32s cubic-bezier(.22,.61,.36,1),
@@ -159,30 +130,29 @@
   .val.ok .tick{width:14px;margin-left:9px;opacity:1;transform:scale(1)}
   .tick svg{width:14px;height:14px}
 
-  .acts{display:flex;align-items:center;gap:16px;background:var(--band);
-        padding:12px 16px;border-top:1px solid var(--hair)}
+  .acts{display:flex;align-items:center;gap:11px;background:#F9F9F9;padding:18px;border-radius:0 0 8px 8px}
   .accept{
-    background:var(--teal);color:#fff;border:0;border-radius:6px;
-    padding:9px 22px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
-    letter-spacing:.01em;transition:background .2s ease
+    background:#131316;color:#fff;border:0;border-radius:4px;
+    padding:4px 18px;font-family:"Roboto",var(--font);font-size:12px;font-weight:500;line-height:20px;letter-spacing:.14px;cursor:pointer;
+    transition:background .2s ease
   }
-  .accept:hover{background:#01414B}
-  .ai{width:32px;height:32px;border-radius:6px;display:grid;place-items:center;color:#6E7473;
-      transition:background .15s ease}
-  .ai:hover,.ai.hot{background:#EBEEED}
-  .ai svg{width:16px;height:16px}
+  .accept:hover{background:#2A2A2F}
+  .acts .ai{width:28px;height:28px;border-radius:4px;display:grid;place-items:center;padding:4px;transition:background .15s ease}
+  .acts .ai + .ai{margin-left:2px}
+  .ai:hover,.ai.hot{background:#E8EBEA}
+  .ai img{width:19px;height:19px;object-fit:contain;display:block}
   .acts .sp{flex:1}
 
   /* ─────────── right icon rail ─────────── */
   .rrail{
-    border-left:1px solid var(--hair);display:flex;flex-direction:column;
-    align-items:center;gap:12px;padding:14px 0
+    display:flex;flex-direction:column;
+    align-items:center;gap:14px;padding:6px 0 0
   }
   .rrail .rr{
-    width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
-    display:grid;place-items:center;color:#727272;background:var(--paper)
+    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+    display:grid;place-items:center;color:#3A403F;background:var(--paper)
   }
-  .rrail .rr svg{width:15px;height:15px}
+  .rrail .rr img{width:24px;height:24px;object-fit:contain;display:block}
   .rrail .rr.on{background:var(--teal-tint);border-color:#8FB6BC;color:var(--teal-deep)}
 
   /* ─────────── overlay ─────────── */
@@ -193,8 +163,9 @@
     box-shadow:0 0 0 3px rgba(255,255,255,.65);
     transition:opacity .3s ease
   }
+  #cap[hidden]{display:none}
   #cap{
-    position:fixed;left:74px;bottom:14px;z-index:40;
+    position:fixed;left:40px;bottom:14px;z-index:40;
     background:rgba(255,255,255,.92);border:1px solid var(--line);
     border-radius:6px;padding:6px 12px;font-size:11.5px;color:var(--muted);
     backdrop-filter:blur(6px)
@@ -246,46 +217,17 @@
 
 <div id="app">
 
-  <!-- left icon rail -->
-  <nav class="rail" aria-hidden="true">
-    <span class="ri burger"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h12M4 10h12M4 14h12"/></svg></span>
-    <span class="ri"><svg viewBox="0 0 20 20" fill="currentColor"><use href="#i-home"/></svg></span>
-    <span class="ri"><svg viewBox="0 0 20 20" fill="currentColor"><use href="#i-pie"/></svg></span>
-    <span class="ri"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-trend"/></svg></span>
-    <span class="ri on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><use href="#i-doc"/></svg></span>
-    <span class="ri"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#i-gauge"/></svg></span>
-  </nav>
-
   <div class="main">
-
-    <!-- top bar -->
-    <div class="topbar">
-      <div class="logo">
-        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#0D5F6A" stroke-width="1.5" aria-hidden="true">
-          <ellipse cx="13" cy="13" rx="9.4" ry="7.4" transform="rotate(-24 13 13)"/>
-          <ellipse cx="13" cy="13" rx="6.2" ry="4.4" transform="rotate(-24 13 13)"/>
-          <ellipse cx="13" cy="13" rx="2.8" ry="1.8" transform="rotate(-24 13 13)"/>
-        </svg>
-        <span class="wm">sirion</span>
-      </div>
-      <div class="sp"></div>
-      <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-search"/></svg></span>
-      <div class="tb-pill">
-        <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><use href="#i-bell"/></svg></span>
-        <span class="tb-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><use href="#i-card"/></svg></span>
-      </div>
-      <span class="avatar">SG</span>
-    </div>
 
     <!-- document header -->
     <div class="dochead">
-      <span class="pdfic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><use href="#i-pdf"/></svg></span>
+      <span class="back" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10H4M9 4.6 3.6 10 9 15.4"/></svg></span>
       <div>
-        <div class="dh-id">AE0893</div>
+        <div class="dh-id">TechWave Pvt Ltd</div>
         <div class="dh-name">Halcyon SaaS Agreement</div>
       </div>
       <div class="sp"></div>
-      <div class="statusbtn"><b>Review in Progress</b><i><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-d"/></svg></i></div>
+      <div class="statusbtn"><b>Review Complete</b><i><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.5 8h9L10 12.8z"/></svg></i></div>
     </div>
 
     <div class="cols">
@@ -367,10 +309,11 @@
 
       <!-- right icon rail -->
       <div class="rrail" aria-hidden="true">
-        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><use href="#i-lines"/></svg></span>
-        <span class="rr on"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><use href="#i-fields"/></svg></span>
-        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><use href="#i-note"/></svg></span>
-        <span class="rr"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chat"/></svg></span>
+        <span class="rr"><img src="icons/rail-docsearch.png" alt="" /></span>
+        <span class="rr on"><img src="icons/rail-agent-on.png" alt="" /></span>
+        <span class="rr"><img src="icons/rail-table.png" alt="" /></span>
+        <span class="rr"><img src="icons/rail-listclock.png" alt="" /></span>
+        <span class="rr"><img src="icons/rail-comment.png" alt="" /></span>
       </div>
 
     </div>
@@ -379,6 +322,7 @@
 
 <div id="cur"></div>
 <div id="cap">Prototype, playing a recorded sequence &middot; hover a highlight, or click Accept</div>
+<script>if(/[?&]quiet\b/.test(location.search)){document.getElementById("cap").hidden=true;}</script>
 
 <script>
 (function(){
@@ -415,18 +359,19 @@
       '<div class="fhead">'
       +   '<span class="mk ' + f.shape + '"></span>'
       +   '<span class="fname">' + f.name + '</span>'
-      +   '<span class="pager">' + ico('i-chev-l', {w:1.6})
-      +      '<b>' + f.n + '/' + f.of + '</b>' + ico('i-chev-r', {w:1.6}) + '</span>'
+      +   '<span class="pager"><img class="gi" src="icons/chev-l.png" alt="" />'
+      +      '<b>' + f.n + '/' + f.of + '</b><img class="gi" src="icons/chev-r.png" alt="" />'
+      +      '<img class="gi gi-link" src="icons/link.png" alt="" /></span>'
       + '</div>'
       + '<div class="fbody">'
       +   '<div class="chipwrap"><span class="val">' + f.val
       +      '<span class="tick">' + ico('i-check', {w:2.2}) + '</span></span></div>'
       +   '<div class="acts">'
       +     '<button class="accept" type="button">Accept</button>'
-      +     '<span class="ai">' + ico('i-pen', {w:1.5}) + '</span>'
-      +     '<span class="ai">' + ico('i-trash', {w:1.5}) + '</span>'
+      +     '<span class="ai"><img src="icons/edit.png" alt="" /></span>'
+      +     '<span class="ai"><img src="icons/delete.png" alt="" /></span>'
       +     '<span class="sp"></span>'
-      +     '<span class="ai">' + ico('i-note', {w:1.4}) + '</span>'
+      +     '<span class="ai"><img src="icons/note.png" alt="" /></span>'
       +   '</div>'
       + '</div>';
     panel.appendChild(el);
@@ -558,33 +503,60 @@
     await sleep(180);
   }
 
+  var gen = 0, running = false, done = false, started = false;
+  var ONCE = /[?&]once\b/.test(location.search);
+  function tell(m){ try { if (parent !== window) parent.postMessage({ rl: m }, '*'); } catch (err) {} }
+  function halt(){ stopped = true; gen++; timers.forEach(clearTimeout); timers = []; cur.style.opacity = '0'; running = false; }
+
   async function cycle(){
+    var g = ++gen;
     reset();
     await sleep(950);
+    if (g !== gen) return false;
     cur.style.opacity = '1';
-    for (var n = 0; n < els.length && !stopped; n++){
+    for (var n = 0; n < els.length && !stopped && g === gen; n++){
       var e = els[idx];
       /* every few fields, show the reader what else this screen does */
       if (n === 0 || n === 3 || n === 6) await demoHover(e);
       if (n === 1) await demoActions(e);
-      if (stopped) break;
+      if (stopped || g !== gen) break;
       var b = e.btn.getBoundingClientRect();
       await glideCursor({ x: b.right - 14, y: b.bottom - 7 }, 800);
       await sleep(380);
+      if (stopped || g !== gen) break;
       await press();
       var more = await acceptCurrent();
       if (!more) break;
       await sleep(680);
     }
     cur.style.opacity = '0';
-    await sleep(1500);
+    if (g !== gen) return false;
+    /* in once-mode, rest on the finished review; the tick on the last value is the final state */
+    await sleep(ONCE ? 600 : 1500);
+    return g === gen && !stopped;
   }
-  async function run(){ while (!stopped) { await cycle(); } }
+  async function run(){
+    if (running) return; running = true;
+    if (ONCE) { var ok = await cycle(); running = false; if (ok) { done = true; tell('done'); } return; }
+    while (!stopped) { await cycle(); }
+    running = false;
+  }
 
   document.addEventListener('visibilitychange', function(){
-    if (document.hidden) { stopped = true; timers.forEach(clearTimeout); timers = []; }
-    else if (stopped && !reduce) { stopped = false; run(); }
+    if (document.hidden) halt();
+    else if (stopped && !reduce && (!ONCE || (started && !done))) { stopped = false; run(); }
   });
+
+  if (ONCE) {
+    addEventListener('message', function(ev){
+      var m = ev.data && ev.data.rl; if (!m) return;
+      if (m === 'start')       { if (!started && !reduce) { started = true; stopped = false; setTimeout(run, 250); } }
+      else if (m === 'pause')  { if (running) halt(); }
+      else if (m === 'resume') { if (started && !done && stopped && !reduce) { stopped = false; run(); } }
+      else if (m === 'replay') { if (reduce) return; halt(); done = false; started = true; stopped = false; setTimeout(run, 80); }
+    });
+    tell('ready');
+  }
 
   /* document hover values — the tooltip the case study describes */
   var dtip = document.createElement('div');
@@ -610,7 +582,7 @@
   openField(0);
   if (reduce) {
     document.getElementById('cap').textContent = 'Prototype — motion reduced; click Accept to step through';
-  } else {
+  } else if (!ONCE) {
     addEventListener('load', function(){ setTimeout(run, 700); });
   }
 })();

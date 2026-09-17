@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Intent Model · Design Direction · Amrit Kumar</title>
+<title>Phoenix listing and the intent model · In development · Amrit Kumar</title>
 <meta name="description" content="A framework for deciding, on any screen, whether an AI agent should explain, suggest, act, or stay out of the way." />
-<meta property="og:title" content="The Intent Model · Amrit Kumar" />
-<meta property="og:description" content="Four states of mind, one rule for agent autonomy: being sure what someone meant isn't the same as being allowed to do it." />
+<meta property="og:title" content="Phoenix listing: a question reshapes the contract listing into the answer · Amrit Kumar" />
+<meta property="og:description" content="The Phoenix contract listing, now in development, and the intent model underneath it: when an agent should explain, suggest, ask or act." />
 <meta property="og:type" content="article" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta property="og:image" content="https://www.designamrit.com/og-image.jpg" />
@@ -118,9 +118,22 @@
   .shot { margin: 44px 0 8px; }
   .shot img {
     width: 100%; height: auto; display: block;
-    border: 1px solid var(--line); border-radius: 6px; background: #0d0f12;
+    border: 1px solid rgba(25,26,24,.08); border-radius: 8px; background: #0d0f12;
+    box-shadow: 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25,26,24,.45);
   }
+  /* phase-1 screens sit on a soft sky field, the way the homepage shows them */
+  .p1 .shot picture, .p1 .shot > img { display: block; }
+  .p1 .shot picture {
+    display: block; padding: clamp(18px, 4.5%, 48px); border-radius: 12px;
+    background: radial-gradient(120% 100% at 15% 0%, #CFDDEC 0%, #DCE6EF 50%, #E9EDF0 100%);
+  }
+  .p1 .shot picture img { border-color: rgba(25,26,24,.1); }
   .shot figcaption { margin-top: 14px; font-size: 13.5px; color: var(--muted); line-height: 1.65; max-width: 66ch; }
+  .p1 { margin-top: 44px; }
+  .p1 + .p1 { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .p1-k { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: baseline; gap: 14px; }
+  .p1-n { font-size: 22px; letter-spacing: -0.02em; color: var(--accent); text-transform: none; }
+  .p1 .shot { margin-top: 14px; }
   .journey { border-top: 1px solid var(--line); margin-top: 40px; }
   .journey div { display: grid; grid-template-columns: 150px 1fr; gap: 22px; padding: 15px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
   .journey .jk { font-family: var(--font-display); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
@@ -278,7 +291,7 @@
     <a class="back" href="index.html#work">&larr; Back to work</a>
   </div>
   <nav class="toc">
-    <p class="lead">Design direction</p>
+    <p class="lead">The framework</p>
     <a href="#arrive">Nobody arrives here</a>
     <a href="#states">Four situations</a>
     <a href="#thesis">Work should migrate</a>
@@ -287,8 +300,9 @@
     <a href="#personalisation">Personalisation that cannot lie</a>
     <a href="#measures">Measures hard to fake</a>
     <a href="#failure">Showing the failure case</a>
-    <p class="lead" style="margin-top:22px">The first build</p>
+    <p class="lead" style="margin-top:22px">Phoenix listing</p>
     <a href="#surface">Nine months to a surface</a>
+    <a href="#phase1">Phase 1, in build</a>
     <a href="#lens">A question becomes the page</a>
     <a href="#readback">Showing its reading</a>
     <a href="#pin">Pinning is the arrow</a>
@@ -307,19 +321,20 @@
 
 <header>
   <div class="wrap">
-    <p class="kicker reveal">Design direction · Product strategy · 9 min read</p>
-    <h1 class="reveal">The intent model: when should an agent <em>act, ask, or stay quiet?</em></h1>
-    <p class="hero-sub reveal">A framework for deciding, on any screen in the product, whether the
-    agent should explain, suggest, act, or get out of the way. Written for and presented to
-    executive stakeholders as the design direction for an AI-native contract platform.</p>
+    <p class="kicker reveal">In development · Phoenix listing · 11 min read</p>
+    <h1 class="reveal">A question reshapes the contract listing <em>into the answer</em>.</h1>
+    <p class="hero-sub reveal">The Phoenix listing is where you ask for the contracts you need and
+    the list reads back what it understood, then reshapes itself. Underneath it sits the intent
+    model, a framework for when an agent should explain, suggest, ask or act, which I wrote and
+    presented to executive stakeholders. The framework is adopted. The listing is being built.</p>
 
     <div class="snapshot reveal">
-      <div><p>What this is</p><p>Product design direction, not a feature. A rule set that governs every surface</p></div>
-      <div><p>Audience</p><p>Executive stakeholders and product leadership</p></div>
-      <div><p>My role</p><p>Authored the framework and the argument; ran the sessions it came out of</p></div>
+      <div><p>What this is</p><p>The Phoenix contract listing, the first product surface built on the intent model</p></div>
+      <div><p>The framework</p><p>The intent model: a rule set for agent behaviour, presented to executive stakeholders and adopted as direction</p></div>
+      <div><p>My role</p><p>Authored the framework and the argument, ran the sessions, built the listing prototypes in HTML</p></div>
       <div><p>Scope</p><p>Platform-wide: entry points, personalisation, agent autonomy, success measures</p></div>
       <div><p>Year</p><p>2026</p></div>
-      <div><p>Status</p><p>Adopted as direction; first surface moving into build</p></div>
+      <div><p>Status</p><p>In development with engineering. Planned this quarter. Nothing here is shipped or measured yet</p></div>
     </div>
   </div>
 </header>
@@ -709,7 +724,7 @@
       <div><span class="jk">Exploration</span><p>A Figma wall of query studies, references and two bulk flows — <b>around forty full screens</b> — testing where an agent belongs on a listing.</p></div>
       <div><span class="jk">Integration doc</span><p>A written argument for embedding: reusable tasks over typed prompts, disposable chat, insights that chain into one command.</p></div>
       <div><span class="jk">Prototype</span><p><b>Working HTML, real interaction</b> — the screens below are it, running on invented data.</p></div>
-      <div><span class="jk">Build</span><p>Agreed as direction. Moving into build.</p></div>
+      <div><span class="jk">Build</span><p>In development with engineering, planned this quarter.</p></div>
     </div>
     <figure class="shot reveal">
       <picture>
@@ -724,8 +739,81 @@
   </div>
 </section>
 
+<section id="phase1">
+  <div class="wrap narrow">
+    <h2 class="reveal">Phase 1 &middot; Design frozen, engineering build underway</h2>
+    <div class="body-text reveal">
+      <p class="lede">The dark screens further down are the argument. These are the screens
+      engineering is building from: the bulk-edit flow on the contract listing, in Sirion's
+      light interface, with the design frozen for the first phase.</p>
+      <p>Read them as one sequence. The agent suggests, the person states an intent, the agent
+      shows what it understood and what it selected, the person edits and tags a colleague, and
+      only then does anything change. Five screens; the handoff between agent and person is
+      visible at each step.</p>
+    </div>
+  </div>
+  <div class="wrap">
+      <div class="p1 reveal">
+        <p class="p1-k"><span class="p1-n">01</span>Contextual suggestion</p>
+        <figure class="shot">
+          <picture>
+            <source srcset="phx-suggest.webp" type="image/webp" />
+            <img src="phx-suggest.jpg" width="1800" height="1125" loading="lazy" decoding="async" alt="The contract listing with the agent panel open: Describe your task above three suggested bulk tasks and a drag-and-drop upload area, with Bulk Update, Bulk Edit and Bulk Actions chips." />
+          </picture>
+          <figcaption>Open the agent on the listing and it offers three bulk tasks drawn from this view, plus a place to drop a sheet. Nothing has happened yet; the person picks or types.</figcaption>
+        </figure>
+      </div>
+      <div class="p1 reveal">
+        <p class="p1-k"><span class="p1-n">02</span>Intent, interpreted</p>
+        <figure class="shot">
+          <picture>
+            <source srcset="phx-criteria.webp" type="image/webp" />
+            <img src="phx-criteria.jpg" width="1800" height="1125" loading="lazy" decoding="async" alt="The agent panel showing the request, then Filters Applied: expiry date before 1 July 2024, termination fee yes, and We found and selected 20 contracts matching your criteria. Twenty rows are ticked in the table." />
+          </picture>
+          <figcaption>The typed request becomes two applied filters, shown as filters. The agent says what it selected and how many. This is the readback the dark prototype argued for, in production form.</figcaption>
+        </figure>
+      </div>
+      <div class="p1 reveal">
+        <p class="p1-k"><span class="p1-n">03</span>What it found</p>
+        <figure class="shot">
+          <picture>
+            <source srcset="phx-readback.webp" type="image/webp" />
+            <img src="phx-readback.jpg" width="1800" height="1125" loading="lazy" decoding="async" alt="The agent panel: Completed this task, We found 20 contracts and 124 Metadata matching your criteria, a list of metadata fields, and a Describe your task box." />
+          </picture>
+          <figcaption>Twenty contracts, 124 metadata fields. The panel lists the fields and hands control back: edit fields and values as needed. Note the status reads Completed while the edit has not started; that is the line I would still argue about.</figcaption>
+        </figure>
+      </div>
+      <div class="p1 reveal">
+        <p class="p1-k"><span class="p1-n">04</span>Human confirmation</p>
+        <figure class="shot">
+          <picture>
+            <source srcset="phx-edit.webp" type="image/webp" />
+            <img src="phx-edit.jpg" width="1800" height="1125" loading="lazy" decoding="async" alt="The expanded field list grouped under Basic Information and Audit and Benchmarking, Agreement Type showing SOW and Archive chips, and an instruction box carrying a 1 Metadata Edited chip and Describe your task and tag people." />
+          </picture>
+          <figcaption>The person edits one field and the change lands as a chip, 1 Metadata Edited, inside the same box where they can tag a colleague to check it. The trail of what changed stays attached to the instruction.</figcaption>
+        </figure>
+      </div>
+      <div class="p1 reveal">
+        <p class="p1-k"><span class="p1-n">05</span>Result, with a reviewer named</p>
+        <figure class="shot">
+          <picture>
+            <source srcset="phx-done.webp" type="image/webp" />
+            <img src="phx-done.jpg" width="1800" height="1125" loading="lazy" decoding="async" alt="The agent panel showing @Sam Torry check these edits, Bulk edit task completed, 4 Metadata edited on 20 contracts, Successfully tagged the stakeholders." />
+          </picture>
+          <figcaption>Bulk edit completed: four metadata edited on twenty contracts, stakeholders tagged, a colleague asked to check the edits. The next choice is the person’s: save this session or close it.</figcaption>
+        </figure>
+      </div>
+  </div>
+  <div class="wrap narrow">
+    <div class="note reveal"><strong>Status.</strong> In development with engineering, planned for this quarter.
+    Not shipped, not measured. Sample data throughout; the rows repeat on purpose. The screens
+    below are the earlier exploration that made the case for this behaviour.</div>
+  </div>
+</section>
+
 <section id="lens">
   <div class="wrap narrow">
+    <p class="kicker reveal" style="margin-bottom:12px">The exploration &middot; HTML prototype, dark theme</p>
     <h2 class="reveal">A question becomes the page</h2>
     <div class="body-text reveal">
       <p>There is an ask bar, but it isn't a chat. Type "supplier renewals above £1M this quarter"
@@ -841,9 +929,12 @@
   <div class="wrap narrow">
     <h2 class="reveal">Where it stands</h2>
     <div class="body-text reveal">
-      <p>Agreed as direction, moving into build. No outcome numbers yet, and none invented
-      here. When they exist, they'll be the four measures above — chosen, before the build,
-      because they're hard to fake.</p>
+      <p>The framework is adopted. The listing is in development with engineering and planned
+      for this quarter. It has not shipped, so there are no outcome numbers, and none are invented
+      here. When they exist they will be the four measures above, chosen before the build because
+      they are hard to fake. The relationships this listing reads over are built during
+      <a href="contract-onboarding.html" style="border-bottom:1px solid var(--accent)">contract onboarding</a>,
+      which has shipped.</p>
     </div>
   </div>
 </section>
@@ -879,7 +970,7 @@
 <footer>
   <div class="wrap footer-inner">
     <span>© <span id="year"></span> Amrit Kumar</span>
-    <a href="airtel-self-serve.html">Next: Support that answers before you ask &rarr;</a>
+    <a href="auto-extraction.html">Next: Verifying AI extraction &rarr;</a>
   </div>
 </footer>
 
@@ -912,5 +1003,7 @@
   _secs.forEach(function (s) { if (s) _spy.observe(s); });
 </script>
 
+<script src="visits.js" defer></script>
+<script src="lightbox.js" defer></script>
 </body>
 </html>

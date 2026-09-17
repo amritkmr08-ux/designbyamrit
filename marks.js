@@ -34,7 +34,7 @@
   };
 
   /* ---------------- per-section controls ---------------- */
-  var sections = [].slice.call(document.querySelectorAll('[data-mk]'));
+  var sections = document.body.hasAttribute('data-mk-global') ? [] : [].slice.call(document.querySelectorAll('[data-mk]'));
 
   sections.forEach(function (sec) {
     var id = sec.id;
@@ -165,16 +165,21 @@
     'note as you go.</span></span>' +
     '<button class="mk-x" type="button">Close</button></div>' +
     '<div class="mk-tabs">' +
-      (summaryHTML ? '<button class="mk-tab on" data-p="sum" type="button">Quick read</button>' : '') +
-      '<button class="mk-tab' + (summaryHTML ? '' : ' on') + '" data-p="pin" type="button">Your pins <span class="n"></span></button>' +
+      '<button class="mk-tab" data-p="pin" type="button">Your pins <span class="n"></span></button>' +
+      (summaryHTML ? '<button class="mk-tab" data-p="sum" type="button">Quick read</button>' : '') +
       '<button class="mk-tab" data-p="note" type="button">Your notes <span class="n"></span></button>' +
     '</div>' +
     '<div class="mk-body">' +
-      (summaryHTML ? '<div class="mk-pane on" data-p="sum">' + summaryHTML + '</div>' : '') +
-      '<div class="mk-pane' + (summaryHTML ? '' : ' on') + '" data-p="pin"></div>' +
+      '<div class="mk-pane" data-p="pin"></div>' +
+      (summaryHTML ? '<div class="mk-pane" data-p="sum">' + summaryHTML + '</div>' : '') +
       '<div class="mk-pane" data-p="note"></div>' +
     '</div>' +
     '<div class="mk-foot"></div>';
+  (function () {
+    var start = (store.pins.length || !summaryHTML) ? 'pin' : 'sum';
+    panel.querySelector('.mk-tab[data-p="' + start + '"]').classList.add('on');
+    panel.querySelector('.mk-pane[data-p="' + start + '"]').classList.add('on');
+  })();
   document.body.appendChild(veil);
   document.body.appendChild(panel);
   if (pageSummary) pageSummary.remove();
@@ -442,6 +447,7 @@
     dock.setAttribute('aria-label', total
       ? 'Your reading — ' + bits.join(', ')
       : 'Reading tools: pin sections, open a short version, leave notes');
+    dock.title = total ? '' : 'Read it your way: pin sections, open a short version, leave notes. Press R.';
 
     // pinned
     pinPane.innerHTML = '';
@@ -543,4 +549,84 @@
   }
 
   paint();
+})();
+
+/* ------------------------------------------------------------------
+   Remembering. Where the reader got to in each case study, and where
+   they were on the homepage when they left it. Same browser only.
+   ------------------------------------------------------------------ */
+(function () {
+  'use strict';
+  var KEY = 'amrit-visits-v1';
+  var PAGE = location.pathname.split('/').pop() || 'index.html';
+  var CASES = ['contract-understanding.html', 'auto-extraction.html', 'intent-model.html', 'airtel-self-serve.html'];
+  var v = {};
+  try { v = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
+
+  /* on a case study: record how far the reader got */
+  if (CASES.indexOf(PAGE) > -1) {
+    var rec = v[PAGE] || { depth: 0, y: 0 };
+    var lastY = rec.y || 0, lastDepth = rec.depth || 0;   /* where they were before this visit */
+    var t = null;
+    function measure() {
+      var max = document.documentElement.scrollHeight - innerHeight;
+      var d = max > 0 ? Math.min(1, (scrollY + innerHeight * 0.25) / max) : 1;
+      if (d > rec.depth) rec.depth = d;
+      if (scrollY > 0) rec.y = scrollY;   /* a fresh load at the top does not erase their place */
+      rec.at = Date.now();
+      v[PAGE] = rec; save();
+    }
+    addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(measure, 150); }, { passive: true });
+    addEventListener('pagehide', measure);
+    measure();
+    /* going home: ask the homepage to put the reader back where they were */
+    document.querySelectorAll('a[href^="index.html"], a[href="./"], a[href="/"]').forEach(function (a) {
+      a.addEventListener('click', function () { try { sessionStorage.setItem('amrit-return', '1'); } catch (e) {} });
+    });
+    /* coming back to a half-read case study: offer to pick up */
+    if (lastDepth > 0.08 && lastDepth < 0.9 && lastY > innerHeight * 0.8 && !location.hash) {
+      var back = document.createElement('button');
+      back.type = 'button'; back.className = 'mk-resume';
+      back.textContent = 'Pick up where you left off ↓';
+      back.addEventListener('click', function () {
+        window.scrollTo({ top: lastY, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        back.remove();
+      });
+      document.body.appendChild(back);
+      setTimeout(function () { back.classList.add('on'); }, 600);
+      addEventListener('scroll', function gone() { if (scrollY > 400) { back.classList.remove('on'); setTimeout(function () { back.remove(); }, 400); removeEventListener('scroll', gone); } }, { passive: true });
+    }
+  }
+
+  /* on the homepage: mark what has been read, offer to continue what hasn't been finished */
+  if (PAGE === 'index.html') {
+    document.querySelectorAll('a.item[href], a.btext[href]').forEach(function (a) {
+      var page = a.getAttribute('href').split('#')[0];
+      var r = v[page]; if (!r || r.depth < 0.08) return;
+      a.classList.add('seen');
+      var tag = a.querySelector('.seen-tag');
+      var done = r.depth >= 0.9;
+      if (tag) tag.textContent = done ? 'Read' : 'Started';
+      var go = a.querySelector('.go, .bgo');
+      if (go && !done) {
+        var arrow = go.querySelector('span');
+        go.textContent = 'Continue reading ';
+        if (arrow) go.appendChild(arrow);
+        a.href = page;
+      }
+    });
+    /* returning from a case study: same place on the page, no animation */
+    var returning = false;
+    try { returning = sessionStorage.getItem('amrit-return') === '1'; sessionStorage.removeItem('amrit-return'); } catch (e) {}
+    var homeY = 0; try { homeY = parseInt(localStorage.getItem('amrit-home-y') || '0', 10); } catch (e) {}
+    if (returning && homeY > 0 && !location.hash) {
+      var sb = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, homeY);
+      requestAnimationFrame(function () { document.documentElement.style.scrollBehavior = sb; });
+    }
+    var ht = null;
+    addEventListener('scroll', function () { clearTimeout(ht); ht = setTimeout(function () { try { localStorage.setItem('amrit-home-y', String(scrollY)); } catch (e) {} }, 150); }, { passive: true });
+  }
 })();

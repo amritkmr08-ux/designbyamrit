@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sensitivity · Amrit Kumar</title>
+<meta name="description" content="Interaction patterns for interfaces that respond in proportion to the moment." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{--paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--wait:#AFB0A9;--soft:#EDEDEA;
+        --mark:#DCE5D3;--accent:#3D5A45;
+        --display:"Poppins",-apple-system,sans-serif;--font:"Inter","Poppins",-apple-system,sans-serif;
+        /* --faint was #8B8D87 here and #6F716A on every other page. It carries real 14px
+           text — the format note under the summary, the detail beside each breakdown row —
+           and at #8B8D87 that text sits at 3.13:1 on this paper, under the 4.5:1 AA needs.
+           #6F716A is 4.61:1 and is what the rest of the site already used. One value. */
+        --col:620px;
+        /* An editorially centred column, not centred text: the inset is a fixed share of
+           whatever space is left over once the column has taken its 620px, so the block
+           lands on the same line at every width — about a third in, two thirds out, 1:1.85.
+           A centred fixed-width field cannot do that. It swings from 1:6.8 on a 1024
+           laptop to 1:1.4 on a large monitor, because the left inset grows with half the
+           viewport while the right void grows with all of it. The 24vw ceiling only bites
+           past about 2200px, where a third of the leftover is more margin than any column
+           needs. */
+        --axis:clamp(24px, calc((100% - var(--col)) * 0.34), 24vw);}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:28px;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  ::selection{background:var(--mark)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:5px;border-radius:4px}
+  /* A box works on a control, which has edges of its own. Around a block of ragged text
+     it draws a rounded container and reads as "selected", not "focused" — worst on the
+     620px closing block. Those get a rule under the block instead. Same colour, same
+     2px, same 5px away from the ink. */
+  .apb:focus-visible,.amb:focus-visible,.hob:focus-visible,
+  .lift:focus-visible,.spinewrap:focus-visible{outline:none}
+  .apb:focus-visible::after,.amb:focus-visible::after,.hob:focus-visible::after,
+  .lift:focus-visible::after,.spinewrap:focus-visible::after{
+    content:'';position:absolute;left:0;bottom:-7px;width:100%;height:2px;
+    background:var(--accent);border-radius:1px;pointer-events:none}
+  /* the closing block's box is 620px but its ink stops at the 46ch measure, so the rule
+     is measured off the text, not off the box */
+  .spinewrap:focus-visible::after{width:46ch;max-width:100%;bottom:-11px}
+  .wrap{padding-left:var(--axis);padding-right:var(--axis)}
+
+  /* ── The loader ───────────────────────────────────────────────────────────
+     A page about how attention gets spent should not open by spending none on
+     the reader. On every load the one sentence inks in, a word at a time, at
+     about the speed a person reads it, and the page arrives behind it. Nothing
+     spins and nothing counts down — the wait is the sentence.
+     It is hidden until a script turns it on, so a browser with no JavaScript
+     never meets a curtain it cannot lift, and reduced motion skips it outright. */
+  .ldr{display:none;position:fixed;inset:0;z-index:80;background:none;isolation:isolate}
+  .ldr::before{content:"";position:absolute;inset:0;z-index:-1;
+       background-color:rgba(247,247,245,1);
+       -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+       transition:background-color 1000ms cubic-bezier(.33,0,.2,1),
+                  -webkit-backdrop-filter 1000ms cubic-bezier(.33,0,.2,1),
+                  backdrop-filter 1000ms cubic-bezier(.33,0,.2,1)}
+  .ldr.gone::before{background-color:rgba(247,247,245,0);
+       -webkit-backdrop-filter:blur(0px);backdrop-filter:blur(0px)}
+  .ldr.run{display:block}
+  .ldr.gone{pointer-events:none}
+
+  /* Landing. Nothing about the sentence changes — it is never blurred, never faded, never
+     moved. The paper it sits on is what leaves: its colour drains to nothing while the blur
+     it holds over the rest of the page drops to zero, both over a second. By the end the
+     sentence on the paper is sitting exactly on top of the real one underneath, identical,
+     so removing the paper is invisible. Everything else arrives out of focus and sharpens. */
+  .ldr-t{position:absolute;margin:0;color:#C6C7C1}
+  .ldr-t i{font-style:normal;color:#C6C7C1;transition:color 400ms ease}
+  .ldr-t i.on{color:var(--ink-on,var(--ink))}
+  body.ldr-on{overflow:hidden}
+
+
+  /* Safari paints a solid block where a blurred element sits inside a backdrop-filtered box,
+     and it needs the -webkit- prefix for backdrop-filter at all. The nav has both: a frosted
+     bar, and four links each carrying filter: blur(.7px). So the frosting moves to its own
+     layer behind the links, and carries both spellings. The bar looks the same. */
+  /* No frosted bar any more. The nav is four small marks in a corner, so a full-width
+     sheet of blur across the top was doing nothing but smearing the title as it scrolled
+     past underneath. The marks sit on the paper. */
+  nav{position:sticky;top:0;z-index:40;background:transparent}
+  /* geometry copied from the homepage so the cluster lands in the same place on both */
+  /* 80px of air above the marks, so the cluster sits down from the edge rather than on it.
+     The nav is in flow, so everything below comes down with it. */
+  .nav-inner{max-width:1180px;margin:0 auto;padding:44px 40px 20px;display:flex;
+             justify-content:flex-end;align-items:center;gap:8px;white-space:nowrap}
+  .nav-inner a.q{color:var(--muted);font-size:14px}
+  /* ── Nav as four marks ────────────────────────────────────────────────────
+     The same cluster as the homepage, in the same corner: home, Work, About,
+     Contact. At rest none of them says anything — present, unlabelled, costing
+     nothing to look past. Reach for one and that block opens into its word. The
+     page you are on keeps its word open, because it has already earned it.
+     The cluster is anchored to the right edge, so opening a word pushes the
+     others left and the right edge never moves. Each width is measured from the
+     word itself once the fonts have landed, never hard-coded.
+     Where there is no hover to reach with, the words are simply there: a block
+     nobody can reach is a door with no handle. */
+  .nb{position:relative;display:block;width:28px;height:28px;overflow:hidden;flex:none;
+      filter:none;
+      --wd:620ms;--we:cubic-bezier(.45,.05,.25,1);--wl:120ms;
+      --md:420ms;--ml:240ms;--td:260ms;--tl:0ms;
+      transition:width var(--wd) var(--we) var(--wl),
+                 opacity 560ms ease var(--d,0ms),
+                 transform 560ms cubic-bezier(.22,.61,.36,1) var(--d,0ms)}
+  /* The marks arrive one after another once the page has settled, then the one for this
+     page darkens. Hidden only by script, so with no JavaScript they are simply there.
+     The delay is on the arrival alone — reaching for a mark still answers immediately,
+     because a pointer that waits reads as a fault, not as care. */
+  body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
+  body.nav-in .nb{opacity:1;transform:none}
+  .nb .nmk{position:absolute;inset:0;border-radius:8px;background:#DCDDD8;
+      transition:opacity var(--md) ease var(--ml), background-color 420ms ease}
+  .nb .nwd{position:absolute;left:0;top:0;height:28px;line-height:28px;white-space:nowrap;
+      opacity:0;transition:opacity var(--td) ease var(--tl)}
+  /* Reaching for a mark, and letting it go, are two different moves and are timed
+     differently. Reaching: the box opens straight away, its fill leaves quickly, and the
+     word arrives once there is room for it — so the word is never caught half-clipped.
+     Letting go: the word leaves first and fast, then the box closes and its fill returns
+     behind it. Nothing is asked to fade and travel at the same moment, which is what made
+     it feel like a snap. */
+  .nb:hover,.nb:focus-visible{width:var(--w,28px);outline:none;
+      --wd:520ms;--we:cubic-bezier(.22,.61,.36,1);--wl:0ms;
+      --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
+  .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
+  /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
+  body.nav-lit .nb.cur .nmk{background:var(--ink)}
+  /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
+     path so underneath it is still just a coloured box. Same size, same greys, same dark
+     when it is the page you are on, same opening into its word. Only the outline differs,
+     because that project is the one piece of work here that is also an argument. */
+  .nb.sens .nmk{border-radius:0;clip-path:path("M14 0C15.14 0 16.39 0.69 17.42 1.22C18.46 1.76 19.24 2.64 20.23 3.21C21.22 3.78 22.37 4.01 23.36 4.64C24.34 5.28 25.55 6.01 26.12 7C26.7 7.99 26.72 9.41 26.78 10.58C26.84 11.74 26.46 12.86 26.46 14C26.46 15.14 26.84 16.26 26.78 17.42C26.72 18.59 26.7 20.01 26.12 21C25.55 21.99 24.34 22.72 23.36 23.36C22.37 23.99 21.22 24.22 20.23 24.79C19.24 25.36 18.46 26.24 17.42 26.78C16.39 27.31 15.14 28 14 28C12.86 28 11.61 27.31 10.58 26.78C9.54 26.24 8.76 25.36 7.77 24.79C6.78 24.22 5.63 23.99 4.64 23.36C3.66 22.72 2.45 21.99 1.88 21C1.3 20.01 1.28 18.59 1.22 17.42C1.16 16.26 1.54 15.14 1.54 14C1.54 12.86 1.16 11.74 1.22 10.58C1.28 9.41 1.3 7.99 1.88 7C2.45 6.01 3.66 5.28 4.64 4.64C5.63 4.01 6.78 3.78 7.77 3.21C8.76 2.64 9.54 1.76 10.58 1.22C11.61 0.69 12.86 0 14 0Z")}
+  .nb:hover .nwd,.nb:focus-visible .nwd{opacity:1}
+  .nb.id .nwd{font-family:var(--display);font-weight:500;font-size:16px;color:var(--ink);
+      letter-spacing:-.01em}
+  .nb.cta .nwd{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
+  @media (hover:none){
+    .nav-inner{gap:20px;padding:44px 24px 20px}
+    .nb{width:auto;height:auto;overflow:visible}
+    .nb .nmk{display:none}
+    .nb .nwd{position:static;opacity:1;height:auto;line-height:inherit}
+  }
+
+
+  header{padding:150px 0 0}
+  /* The title was 24/500 Poppins — the same voice as every specimen headline, so the page
+     title read as one more specimen. A title has to be the one thing on the page at its size. */
+  h1{font-family:var(--display);font-size:clamp(32px,2.8vw,38px);font-weight:500;letter-spacing:-.028em;line-height:1.12}
+  /* the one line of explanation on the whole page, and it says what the collection is
+     rather than what to do with it. The specimens still have to speak for themselves. */
+  /* The header does nothing, deliberately. It was a door into the documentation for a
+     while, on the reasoning that it is shaped like a specimen and was the only block where
+     reaching did nothing. That was the wrong reading of the first screen: a reader who has
+     not touched anything yet has not made a moment, and offering them the theory before the
+     work invites them to read the explanation instead of feeling the idea. The closing line
+     is the only way in now, which puts the journey in the right order — encounter, play,
+     notice, then explanation. */
+  /* The one sentence a cold reader carries away, in ink — the same sentence that opens the
+     document, so the page and the document no longer define the idea two different ways. */
+  /* The sentence is there from the first moment. Only ink moves through it, a word at a
+     time, because attention can only be in one place at a time. Nothing appears, nothing
+     disappears, nothing moves — so the line stays readable every second it is on screen. */
+  /* The line is in ink on the page. It used to sit in the waiting grey because the page
+     itself inked it in; the loader does that now, and the loader copies its finished colour
+     from this element — so leaving it grey meant the words darkened to grey, which is to
+     say they did not darken at all. */
+  .lede{font-size:17.5px;line-height:28px;max-width:46ch;margin-top:20px;color:var(--ink)}
+  .lede i{font-style:normal;color:inherit}
+
+  /* ── the stages ──
+     One column. Every specimen gets the same empty frame and one thing inside it.
+     No heading, no caption, no card, no rule. The field is what separates them. */
+  .stages{margin-top:80px}
+  /* Set exactly like LATEST WORK on the homepage: display face, 14px, tracked, uppercase,
+     faint — then one line in body type saying what the set is. */
+  .seplbl{margin:176px 0 0}
+  /* The first specimen sits right under the label instead of floating in the middle of its
+     own 440px stage — otherwise the separator introduces a screenful of paper. The rest keep
+     their room. */
+  .stages .stage:first-of-type{min-height:0;align-content:start;margin-top:0}
+  .seplbl .lbl{font-family:var(--display);font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+               color:var(--faint);font-weight:400;line-height:20px;margin:0}
+  .seplbl .lbl-s{font-size:17.5px;line-height:28px;color:var(--muted);margin:10px 0 0;max-width:46ch}
+  /* One hairline on the column axis, the width of the column. It closes the label instead
+     of leaving the sub-line hanging into empty paper, and it gives the 80px below it
+     something to be measured from. */
+  .seprule{max-width:var(--col);height:1px;background:var(--line);margin:28px 0 0}
+  @media (max-width:700px){ .seplbl{margin-top:112px} }
+  .stage{display:grid;align-content:center;min-height:440px;max-width:var(--col)}
+  /* This frame is taller because its card is the biggest thing on the page. It was 540
+     when the card was 620 wide and stacked its breakdown; the card is wider and replaces
+     now, so it needs less. A frame follows what it holds. */
+  .stage.tall{min-height:480px}
+  /* The plates said PREVIEW, TRANSFORM, EXPAND, OPEN over each specimen, which told the
+     reader which kind of thing this was before they had touched it. A specimen run that
+     names its own conclusions is not a specimen run. They stay in the document, where
+     someone who wants the vocabulary can read it, and they stay in the accessibility tree,
+     because a screen reader cannot feel a hover-revealed mark and does need the structure.
+     The frame keeps the rhythm the plate used to keep: 440px of air per specimen. */
+  .plate{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);
+         white-space:nowrap}
+  .obj{padding:0}
+  /* the one thing being looked at sits a step up the scale — the same step a heading uses */
+  .hero{font-family:var(--display);font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.34;color:var(--ink)}
+
+  /* shared demo language */
+  .ttl{font-weight:600;letter-spacing:-.012em}
+  .sec{color:var(--muted)}
+  .sm{font-size:14px}
+  .quiet{color:var(--faint);font-size:14px;font-family:var(--display);letter-spacing:.04em}
+  .quiet:hover{color:var(--muted)}
+  .fold{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows var(--settle-ms,465ms) var(--settle,cubic-bezier(.22,.61,.36,1)),opacity var(--effect-ms,184ms) var(--effect,cubic-bezier(.33,0,.2,1))}
+  .fold.on{grid-template-rows:1fr;opacity:1}
+  .fold>*{overflow:hidden;min-height:0}
+  .swap{position:relative;display:block;min-height:56px;max-width:42ch}
+  .swap i{position:absolute;inset:0;font-style:normal;
+          transition:opacity var(--effect-ms,184ms) var(--effect,cubic-bezier(.33,0,.2,1)),transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),filter var(--effect-ms,184ms) var(--effect,cubic-bezier(.33,0,.2,1))}
+  .swap .b{opacity:0;transform:translateY(.34em);filter:blur(2px)}
+  .swap.on .a{opacity:0;transform:translateY(-.34em);filter:blur(2px)}
+  .swap.on .b{opacity:1;transform:none;filter:none;transition-delay:.06s}
+  .row{display:grid;grid-template-columns:26px 1fr;gap:0 14px;text-align:left;width:100%;padding:8px 12px;margin-left:-12px;border-radius:10px}
+  .mk{position:relative;display:block;width:26px;height:26px;color:var(--faint)}
+  .mk i{position:absolute;left:0;top:0;font-style:normal;transition:opacity var(--effect-ms,184ms) var(--effect,cubic-bezier(.33,0,.2,1)),transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1))}
+  .mk .ar{opacity:0;transform:translate(-6px,6px);color:var(--ink)}
+  .row:hover .mk .n{opacity:0}
+  .row:hover .mk .ar{opacity:1;transform:none}
+  .wall{font-size:14px;line-height:23px;color:var(--faint);padding-top:14px;max-width:44ch}
+  .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #C9CBC6;border-radius:999px;
+        padding:6px 14px;background:#fff;font-size:14px;white-space:nowrap}
+  .chip.on{border-color:var(--accent);color:var(--accent)}
+  .inp{border:1px solid var(--accent);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;background:#fff;width:190px}
+  .menu{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden;max-width:260px}
+  .menu button{display:block;width:100%;text-align:left;padding:9px 14px;font-size:14px;color:var(--muted)}
+  .menu button:hover{background:var(--soft);color:var(--ink)}
+  .dash{display:flex;align-items:center;gap:14px;margin-top:16px}
+  .dash span.l{flex:1;border-top:1px dashed var(--line)}
+  .ask{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:14px;max-width:44ch}
+  .src-q{font-size:14px;color:var(--muted);line-height:23px;display:block}
+  .hl{background:var(--mark);border-radius:2px;padding:0 3px}
+  .addr{color:var(--muted);transition:color var(--effect-ms,184ms) var(--effect,cubic-bezier(.33,0,.2,1))}
+  .addr:hover{color:var(--ink)}
+  .addr.ok{color:var(--accent)}
+  #cw{display:inline-block;min-width:186px;text-align:left}
+  .side{display:grid;grid-template-columns:1fr 1.5fr;gap:0 28px;align-items:start;max-width:var(--col)}
+
+  .swap{min-height:62px}
+  /* one line replaced by another, in place — the hover box is the two lines, nothing wider */
+  .mline{position:relative;display:block;height:28px;font-size:14px;color:var(--muted);margin-top:2px}
+  .mline i{font-style:normal}
+  .mline i.b{display:none}
+  .mline .ml-g{color:var(--muted)}
+  .peek{display:inline-block;outline-offset:8px}
+  /* every mark is centred on the cap height of the line it sits on, and that lands in two
+     different places: a morph host is 33px tall and shifts the baseline, a plain line is not.
+     So the offsets differ by host and were measured, not guessed. */
+  /* the copy mark: it appears when you go near, and gets out of the way once the
+     address has answered for itself — the morph is the confirmation, not a tick */
+  .cv.cpcv{opacity:0;margin-left:12px;vertical-align:.5px;transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  /* the value carries its own history: the same slot, four successive meanings. Two jobs,
+     kept apart. The expand mark on the value opens the clause that was in force for the
+     reading you are on. The steppers sit under the line they change, because that is the
+     line that tells you where in the history you are standing. */
+  .histwrap{position:relative;display:block}
+  .histb{display:block;text-align:left}
+  .histb .hero[data-morph-text]{display:inline-block}
+  .cv.histcv{opacity:0;margin-left:10px;vertical-align:-3.5px;transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .histwrap:hover .histcv,.histwrap:focus-within .histcv{opacity:1}
+  /* the line that says where you are is the line that moves you: pressing it goes back one
+     amendment. Shrink-wrapped, so the target is the words and not the empty column beside them. */
+  .histb,.histd{display:inline-block;text-align:left}
+  .histd .srcl{color:var(--muted);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .histd:hover .srcl .ml-g,.histd:focus-visible .srcl .ml-g{color:var(--ink)}
+  /* how many, and which one — one pip per amendment, chronological, the one you are on
+     stretched rather than coloured in. A readout: it cannot be clicked, because a row of
+     four you could pick from is a row of siblings, which is what this specimen avoids.
+     The space is always occupied, so nothing shifts when the pips arrive. */
+  .pips{display:flex;align-items:center;gap:6px;margin-top:26px;height:6px;
+        opacity:0;pointer-events:none;transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .histwrap:hover .pips,.histwrap:focus-within .pips,.histwrap.stepped .pips,
+  .updwrap:hover .pips,.updwrap:focus-within .pips,.updwrap.stepped .pips{opacity:1}
+  /* An unasked change is the one place on this page where a way back is not optional. The
+     value moves on its own, so the pips are what say a second reading exists in that slot,
+     and the line under it is how you go and look at the first one. They are permanent once
+     the change has landed, because from that moment there really are two things in one
+     place and hiding that would be the interface keeping a secret. */
+  .updwrap{position:relative;display:block}
+  .updd{display:inline-block;text-align:left}
+  .updd .srcl{color:var(--muted);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .updd:hover .srcl .ml-g,.updd:focus-visible .srcl .ml-g{color:var(--ink)}
+  .pips i{width:5px;height:5px;border-radius:3px;background:var(--line);
+          transition:width var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                     background var(--effect-ms,184ms) var(--effect,ease)}
+  .pips i.on{width:17px;background:var(--faint)}
+  /* real glass, so it occludes: the clause takes over the value's reading slot for as long
+     as you are looking at it. Nothing is surrendered — the value is still underneath, still
+     the active thing in its place — so nothing has to be restored when the glass goes. */
+  /* as narrow as the longest clause allows: the widest of the four states measures 581px,
+     so 648 leaves it 19px of rag and none of the four ever wraps — which is what keeps the
+     card the same height in every state as you step through them. */
+  /* a quotation, not a paragraph: the card is the width of a comfortable measure for the
+     clause it holds, not the width of the column it sits on. ~500px of text is 52 characters,
+     the same cap the rest of the writing uses. */
+  .glass.hscard{left:-26px;top:-26px;width:548px;max-width:calc(100% + 52px);
+                transform-origin:26px 26px}
+  .hsq{display:block;width:100%;text-align:left}
+  .hsq:focus-visible{outline-offset:8px}
+  .histwrap.open .glass.hscard{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+                    transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                               transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                               visibility 0s}
+  .hscard .src-q{display:block}
+  /* the mark is positioned, so it paints over plain text beside it — punctuation sitting
+     flush against its edge disappears under the spread. Lift what follows above it. */
+  .hscard .after{position:relative;z-index:1}
+  .hscard .hl[data-morph-text]{height:23px;padding:0;min-width:0!important;
+        background:var(--mark);box-shadow:0 0 0 3px var(--mark);
+        transition:width var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1))}
+  #copyBtn:hover .cpcv,#copyBtn:focus-visible .cpcv{opacity:1}
+  #copyBtn.ok .cpcv{opacity:0}
+  /* the reach, without a control: rest on it and what was withheld expands
+     over the thing it belongs to — same place, same origin, nothing pushed down */
+  /* the hit area is the block, not just the headline: an inline-block shrank to the
+     width of the title, so the end of the second line was dead to the pointer */
+  .lift{position:relative;display:block;width:404px;max-width:100%}
+  /* the same reach as the closing line: the secondary line becomes a précis of what
+     was withheld, and the mark says the rest is one press away */
+  .wlbox{position:relative;display:block}
+  /* Three whole lines, not two and a half. At 58px the third line was cut at 52% — straight
+     through the x-height — so it read as a rendering fault rather than a fade. The box is a
+     multiple of the line now and the mask does the fading, over a line that is all there. */
+  .wline{position:relative;display:block;height:69px;max-width:100%;overflow:hidden;
+         font-size:14px;line-height:23px;color:var(--muted);margin-top:2px}
+  .wline i{font-style:normal}
+  .wline i.b{display:none}
+  .wline .ml-g{color:var(--muted)}
+  /* in the preview the opening line reads in full ink — the fade does the rest */
+  .wline.is-after .ml-g{color:var(--ink)}
+  /* two lines and a third going under: the fade is what says there is more */
+  .wline.is-after .ml-layer,.spine.is-after .ml-layer{
+    -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%);mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%)}
+  /* The mark used to chase the end of the last readable line. That end is wherever the
+     text happened to wrap, so it landed mid-sentence and moved somewhere new on every
+     state. It hangs in the margin now, level with the first line: it marks the block,
+     which is the thing that opens. The truncation and the fade say there is more.
+     Level with the first line means (line-height − 14) / 2, so the two blocks differ:
+     4.5px on a 23px line, 7px on a 28px one. It said the same thing in a comment for a
+     while and was one whole line lower than that in both. */
+  /* no disc: a filled circle reads as the thing to press, and the thing to press is the
+     whole block. Visibility comes from colour instead — the mark sits in the same grey
+     as the text it belongs to. */
+  .cv.wlcv{background:none;color:var(--muted);
+                    transition:opacity var(--effect-ms,184ms) var(--effect,ease),color var(--effect-ms,184ms) var(--effect,ease)}
+  .lift:hover .wlcv{color:var(--muted)}
+  /* Every mark on the page trails the line you press. This one hung in the margin, level
+     with the description, which put it in a third place — some marks after a title, one
+     after a description, two out in the margin — and no reader can infer a rule from that.
+     It sits after the title now, like the rest. The title is stable while the description
+     morphs, so nothing moves and the old reason for the margin is gone. */
+  .cv.wlcv{opacity:0;margin-left:10px;vertical-align:.5px;color:var(--muted);
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  #wallWrap .hero{display:block}
+  .lift:hover .wlcv,.lift:focus-visible .wlcv{opacity:1}
+  /* no geometry of its own: the page has one focus ring (:focus-visible, 5px out, 4px
+     radius). Four different radii read as four different kinds of thing. */
+  .glass{position:absolute;left:-28px;top:-20px;width:calc(100% + 62px);
+         padding:22px 24px 24px;border-radius:20px;
+         background:rgba(247,247,245,.38);
+         -webkit-backdrop-filter:blur(11px) saturate(1.9);
+         backdrop-filter:blur(11px) saturate(1.9);
+         box-shadow:inset 0 1px 0 rgba(255,255,255,.8),
+                    0 24px 48px -20px rgba(25,26,24,.24);
+         opacity:0;visibility:hidden;pointer-events:none;
+         transform:scale(.955) translateY(-6px);transform-origin:20px 16px;
+         transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                    transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                    visibility 0s linear var(--spatial-ms,348ms)}
+  .lift.open .glass,.chipwrap.open .glass,.askwrap.open .glass{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+                    transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                               transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                               visibility 0s}
+  .glass .wall{padding-top:0;color:var(--muted);max-width:46ch}
+  /* the same panel, chip-sized: it opens over the chip, not under it */
+  .chipwrap{position:relative;display:inline-block}
+  /* the panel sits exactly on the chip: same padding, so the label and the value
+     it covers land on the pixels they were already on */
+  .glass.gmenu{left:-10px;top:-10px;width:max(272px, calc(100% + 20px));
+               padding:10px;border-radius:16px;transform-origin:10px 10px}
+  .gline{display:flex;align-items:center;gap:8px;padding:5px 10px}
+  .gmenu .inp{flex:1;min-width:110px;width:auto;margin:0;border:0;background:transparent;
+              padding:0;font-size:17.5px;color:var(--ink)}
+  .gmenu .inp:focus{outline:none}
+  .gmenu .inp::selection{background:var(--mark)}
+  .opts{margin-top:6px}
+  .opt{display:block;width:100%;text-align:left;padding:7px 10px;
+       font-size:17.5px;font-weight:400;color:var(--faint);
+       transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .opt:hover{color:var(--ink)}
+  .opt:focus-visible{color:var(--ink);outline-offset:-2px}
+  /* the one it already is, said with weight — no tick, no bar, no fill */
+  .opt.cur{font-weight:500;color:var(--muted)}
+  .opt.cur:hover{color:var(--ink)}
+  .caret{color:var(--faint);font-size:12px}
+  /* Ask more — the panel arrives under the dashed line but out of flow,
+     so the answer can be any length and the page never re-lays itself out */
+  /* This was pinned to 520px to stop the dashed rule running the full column. The frosted
+     layer behind it is sized off the column, so the content stopped 100px short of the
+     panel's right edge and the card looked like it had slipped inside its own background.
+     Content and panel have to agree on where the right edge is. */
+  .askwrap{position:relative}
+  .glass.askcard{left:0;top:100%;margin-top:16px;width:100%;
+                 padding:0;border-radius:0;background:none;box-shadow:none;
+                 -webkit-backdrop-filter:none;backdrop-filter:none;
+                 transform:translateY(-5px);transform-origin:0 0;overflow:hidden;
+                 transition:opacity var(--effect-ms,184ms) var(--effect,ease),transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                            visibility 0s linear var(--spatial-ms,348ms)}
+  .askwrap.open .glass.askcard{transition:opacity var(--effect-ms,184ms) var(--effect,ease),transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                               height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),visibility 0s}
+  .ask-field{display:flex;align-items:center;gap:12px;background:rgba(25,26,24,.045);
+             border-radius:12px;padding:11px 15px;color:var(--faint);font-size:17.5px}
+  .ask-field span{flex:1}
+  .ask-chips{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .hsep{width:1px;height:11px;background:var(--line);flex:none;margin:0 2px}
+  /* the control arrives with the line, on hover — it is not standing there waiting */
+  /* this one stays put. A reveal needs no control, but an instruction surface is not a
+     reveal — hiding the way in until you happen to hover it hides the whole specimen. */
+  .dash{opacity:1}
+  /* one surface · the base is not left standing on the page while the answer floats below
+     it. The card materialises behind the item and grows down to hold what arrives, so both
+     readings sit on the same raised plane. The padding lives in the layer, not in the flow,
+     so the text stays exactly on the page's axis and nothing moves to make room. */
+  .deckwrap{position:relative}
+  .deckwrap>*{position:relative;z-index:1}
+  .deckwrap>.deck{position:absolute;left:-26px;right:-26px;top:-24px;height:0;z-index:0;
+        display:block;border-radius:20px;opacity:0;pointer-events:none;
+        background:rgba(247,247,245,.38);
+        -webkit-backdrop-filter:blur(11px) saturate(1.9);
+        backdrop-filter:blur(11px) saturate(1.9);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.8),
+                   0 24px 48px -20px rgba(25,26,24,.24);
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                   height var(--settle-ms,465ms) var(--settle,cubic-bezier(.22,.61,.36,1))}
+  .deckwrap.lit>.deck{opacity:1}
+  /* an item that hints its scope on reach and raises onto one card on press. The same
+     shape serves an approval and a question, because both are the agent asking for one
+     decision and neither should cost more attention than that. */
+  .apwrap{position:relative}
+  /* the clause sits under the term it belongs to, not beside it, so the card is a column
+     rather than a band across the page. Out of flow like the others, so opening it moves
+     nothing; the width is set here and the clause wraps inside it. */
+  /* a quiet completion is a state and not a control: the mark goes, because there is
+     nothing left to disclose and un-sharing is not what the mark means */
+  /* the mark is only ever an offer to expand. It is not there once the thing is open,
+     because then pressing would put it away, and it is not there on a finished state,
+     because then there is nothing left to open. */
+  .apwrap.open .apcv,.apwrap.open .amcv,
+  .apwrap.open .hocv,.histwrap.open .histcv,
+  .wkwrap.open .cv.wkcv,.chipwrap.open .cv{opacity:0!important}
+  #ev .src-q{display:block}
+  .apb,.amb{position:relative;display:block;text-align:left}
+  .apb .hero[data-morph-text],.amb .hero[data-morph-text]{display:inline-block}
+  .cv.apcv,.cv.amcv{opacity:0;margin-left:10px;vertical-align:-3.5px;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .apb:hover .apcv,.apb:focus-visible .apcv,
+  .amb:hover .amcv,.amb:focus-visible .amcv{opacity:1}
+  /* 8px of slack inside the clip, taken back with a negative offset so the content still
+     sits exactly on the axis — otherwise overflow:hidden crops the focus ring off the
+     leftmost and lowest control in the card. */
+  .apcard{position:absolute;left:-8px;top:100%;width:calc(100% + 16px);padding:0 8px 8px;
+        margin-top:18px;height:0;overflow:hidden;
+        opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-5px);transform-origin:0 0;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                   transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   visibility 0s linear var(--spatial-ms,348ms)}
+  .apwrap.open .apcard{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                   transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   visibility 0s}
+
+  /* ── the card that used to claim more of the field ──
+     This one opened 280px wider than the column, then 120px, on the argument that reaching
+     forty-two people should show up in the layout rather than in another sentence. It never
+     worked. The text inside is capped at 52 characters whatever the card does, so the extra
+     width was not air, it was an empty third of the card with nothing in it, and the actions
+     had to be pulled back off the edge to stop them stranding. A card that claims space it
+     cannot fill reads as a mistake, not as emphasis. It opens to the column now, like every
+     other specimen. The escalation is carried by what the card says and by the pill that
+     commits it. */
+  /* The frosted layer widened with the card and kept widening after the card stopped:
+     936px of paper behind a 636px card. It follows the base rule now, 26px clear on each
+     side, the same as every other raised card on the page. */
+  #apWrap.open>.apcard{width:calc(100% + 16px)}
+  #apDeckWrap.lit>.deck,#apWrap.open>.apcard{
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                   width var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   visibility 0s}
+  /* the reading stays at a reading measure; only the card got wider */
+  /* The reading is capped at 52 characters; the actions are not. Capping them too was a
+     patch for the card being 740px wide - now that it opens to the column, a capped row
+     left Cancel 71px short of the card's right edge against 26px on its left, which reads
+     as a card that has slipped. The row uses the card's width, so the last thing in it
+     lines up with the card's edge. */
+  #apCard .cons,#apCard .sumline,#apCard .brow{max-width:52ch}
+  /* four ranks, one per job. 24 for the item. 14 muted for its caption, which is metadata.
+     17.5 ink for the card's own line, because that is the thing you opened it to read and it
+     was reading as a pair with the caption while both were 14. And 14 for the actions, which
+     do not need to be the biggest thing on the card — the hairline makes them the clearest. */
+  .apcard .cons{font-size:17.5px;line-height:28px;color:var(--ink);margin-top:16px}
+  .apcard .q{font-size:14px}
+  /* both Alexes commit the share, so both are pills. Inside a card the shapes are the
+     actions and the prose is the statement — nothing has to be read twice to know which. */
+  #amPick{gap:10px}
+  /* reviewing is a second mode of the same card, not a change to the line above it: the
+     block between the item and the actions becomes the list, and the word that opened it
+     becomes the word that closes it. Cause and effect land next to each other. */
+  .rlist{display:grid;grid-template-columns:auto auto;justify-content:start;
+        gap:5px 26px;margin-top:14px;font-size:14px;line-height:23px}
+  /* the number is what you came to check, so it is the one in ink; the region names it.
+     It was the other way round, which is the same inversion as a quiet total. */
+  .rlist i{font-style:normal;color:var(--muted)}
+  .rlist b{font-weight:400;color:var(--ink);text-align:right;
+        font-variant-numeric:tabular-nums}
+  #apRevL[data-morph-text]{min-width:0!important}
+  /* scheduled is not a dead end: the card stays open holding what is going out, because
+     after scheduling that is the thing a person wants to see and making them press for it
+     would be charging them for the obvious. The one action left is the way to stop it. */
+  /* the summary is a claim of the same kind the confidence score was — twelve of what? —
+     so it carries the mark that says the twelve are behind it. The mark trails the sentence,
+     which is safe because that sentence never changes while the mark is showing. */
+  .sumb{display:block;text-align:left;margin-top:16px}
+  /* the summary is this card's one statement in the scheduled state, exactly the job .cons
+     does before it goes, so it takes the same rank. It sat at 14 and made a flat stack of
+     four grey lines with the caption above it and the breakdown below. No cap on the
+     measure: at 17.5 the sentence fits the card on one line, and wrapping it was the
+     52ch limit talking, not the column. */
+  .sumline{display:block;font-size:17.5px;line-height:28px;color:var(--ink)}
+  .summeta{display:block;font-size:14px;line-height:23px;color:var(--faint);margin-top:4px}
+  .cv.sumcv{opacity:0;margin-left:10px;vertical-align:1px;color:var(--faint);
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .sumb:hover .sumcv,.sumb:focus-visible .sumcv{opacity:1}
+  .apwrap.broke .sumcv{opacity:0!important}
+  /* opened, it stays open: dismissing the card is the way out, so nothing here has to be
+     a mark pointing backwards */
+  .blist{margin-top:16px}
+  .brow{display:block;font-size:14px;line-height:23px;color:var(--ink);
+        font-variant-numeric:tabular-nums}
+  .brow + .brow{margin-top:5px}
+  .brow i{font-style:normal;color:var(--faint);margin-left:10px}
+  .apwrap.sent #apRev{display:none}
+  .apwrap.sent #apCard .ask-chips{justify-content:flex-end}
+  #apSendL[data-morph-text]{min-width:0!important}
+  #apCard .ask-chips{justify-content:space-between;margin-top:18px}
+  /* the committing action carries the consequence, so it is the one in ink, and it sits at
+     the far end where nothing else can be pressed by accident on the way to it. A word at
+     exactly the weight of the word beside it was too little for something that goes to
+     forty-two people, so it gets a hairline: one step up, and the quietest thing that still
+     reads as a button. */
+  .apcard .q.commit{color:var(--ink);border:1px solid var(--line);border-radius:999px;
+        padding:6px 16px;transition:border-color var(--effect-ms,184ms) var(--effect,ease)}
+  /* the committing action always sits at the right edge, alone or not */
+  .apcard .ask-chips.right{justify-content:flex-end}
+  .apcard .q.commit:hover{border-color:var(--ink)}
+  /* a whole block is a big thing to ring: the page already tunes this for .lift and the
+     spine, and these read the same way */
+  /* an answer nobody can check is the confidence score again, so the answer carries its
+     evidence. Two targets, as on the notice period: the line runs the work, the line under
+     it opens what the work was read from — and only once there is something to open. */
+  .wkwrap{position:relative;display:block}
+  /* both lines are block-level buttons, which shrink to their own text, so neither needs a
+     break between them and neither can drift off the axis */
+  .wkd{display:block;text-align:left}
+  .wkd:not([disabled]):hover .srcl .ml-g,
+  .wkd:not([disabled]):focus-visible .srcl .ml-g{color:var(--ink)}
+  /* the way back on the hand-off is un-asking, which makes something happen, so it is a
+     word in the action row and not a mark on the state. One action slot, relabelled. */
+  #hoBtnL[data-morph-text]{min-width:0!important}
+  .glass.wkcard{left:-26px;top:-26px;width:472px;max-width:calc(100% + 52px);
+        transform-origin:26px 26px}
+  .wkwrap.open .glass.wkcard{opacity:1;visibility:visible;pointer-events:auto;transform:none;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                   transform var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
+                   visibility 0s}
+  .wkcard .said{display:block;font-size:14px;line-height:23px;color:var(--ink)}
+  .wkcard .said + .said{margin-top:7px}
+  .wkcard .said i{font-style:normal;color:var(--faint);margin-left:8px}
+  /* the other fifteen are not evidence for anything, so they are not shown — but saying what
+     was left out costs one line and is cheaper than either showing it or staying quiet */
+  .wkcard .others{display:block;font-size:14px;line-height:23px;color:var(--faint);
+        margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
+  /* one slot under the value, and it always holds the next move: a word while pressing would
+     make something happen, a line with the mark once pressing would reveal something. The
+     rest state needs no caption — "nothing summarised yet" said nothing the count above it
+     did not already say. */
+  /* and the state that reveals gets the disclosure mark. It trails the line rather than
+     leading it, which is only safe because it exists in one state: the words beside it
+     never change while it is showing, so it has nothing to chase. */
+  /* optically centred on the line rather than baseline-nudged. The 1px raise the other marks
+     use leaves this glyph's centre 4px above the middle of the text, which measures the same
+     on the 24px lines — it just does not show there. Against 14px it does. */
+  .cv.wkcv{opacity:0;margin-left:10px;vertical-align:-4px;color:var(--faint);
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .wkwrap.done .cv.wkcv{opacity:1}
+  /* the beat lives over the line it will replace, so waiting costs no layout at all */
+  .wkline{position:relative;display:inline-block;vertical-align:top}
+  .wkline .srcl{transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .wkline .dots{position:absolute;left:-2px;top:5px;opacity:0;pointer-events:none;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .wkwrap.busy .wkline .srcl{opacity:0}
+  .wkwrap.busy .wkline .dots{opacity:1}
+  /* the action earns its space on the surface you asked for, not on the bare page. At rest
+     the specimen is a state and nothing more; the thing that messages a person appears once
+     you have opened the object it belongs to. */
+  #hoDeckWrap{width:440px;max-width:100%}
+  .hob{position:relative;display:block;text-align:left}
+  .hob .hero[data-morph-text]{display:inline-block}
+  .cv.hocv{opacity:0;margin-left:10px;vertical-align:-3.5px;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .hob:hover .hocv,.hob:focus-visible .hocv{opacity:1}
+  #hoCons[data-morph-text],#amCons[data-morph-text]{height:28px;min-width:0!important}
+  /* sharing takes a moment, so it takes a moment: the beat sits over the line it will hand
+     back, and nothing about the share is instant except the decision */
+  /* the status slot, wherever it appears: the line it normally shows, and the beat that
+     stands in for it while something is on its way to a person */
+  .beat{position:relative;display:inline-block;vertical-align:top}
+  .beat .srcl{transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .beat .dots{position:absolute;left:-2px;top:5px;opacity:0;pointer-events:none;
+        transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  .apwrap.busy .beat .srcl{opacity:0}
+  .apwrap.busy .beat .dots{opacity:1}
+  .apwrap.busy .amcv,.apwrap.busy .apcv,.apwrap.busy .hocv{opacity:0!important}
+  /* nothing in the card can be pressed while the deed is in flight, and the item cannot be
+     pressed either — a beat you can interrupt halfway is not a beat, it is a race */
+  .apwrap.busy .apcard,.apwrap.busy>button{pointer-events:none}
+  /* the beat between asking and answering */
+  .dots{display:inline-flex;gap:5px;align-items:center;padding:6px 2px}
+  .dots span{width:5px;height:5px;border-radius:50%;background:var(--faint);
+             animation:dotpulse 1.1s ease infinite}
+  .dots span:nth-child(2){animation-delay:.18s}
+  .dots span:nth-child(3){animation-delay:.36s}
+  @keyframes dotpulse{0%,100%{opacity:.25;transform:translateY(0)}
+                      40%{opacity:1;transform:translateY(-2px)}}
+  .q{font-size:17.5px;color:var(--muted);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .q:hover{color:var(--ink)}
+  .ask-q{font-size:17.5px;font-weight:600;letter-spacing:-.012em;color:var(--ink);padding-right:64px}
+  /* the question is the heading of the answer, so it keeps 17.5; the answer itself drops to
+     14, which is what lets it say enough to be worth having asked for */
+  .ask-a{font-size:14px;line-height:23px;color:var(--muted);margin-top:12px;max-width:52ch}
+  .ask-tools{position:absolute;top:0;right:0;display:flex;gap:14px;color:var(--faint)}
+  .ask-tools button{display:grid;place-items:center;color:inherit;transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .ask-tools button:hover{color:var(--ink)}
+  /* The reader's own motion setting has to outrank every rule on the page, which is what
+     the !important is for. Each panel redeclares its transition in its open state, so the
+     more specific rule was quietly winning: six of the seven specimens still slid, grew and
+     widened for someone who had asked for no motion. */
+  @media (prefers-reduced-motion:reduce){
+    .glass,.apcard,.deckwrap>.deck{transition:opacity .01s!important}
+  }
+  /* the unasked change: value and its source line, both replaced in place */
+  .srcl{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+  .srcl .ml-g{color:var(--muted)}
+  .hero[data-morph-text]{display:block;height:33px}
+  [hidden]{display:none!important}
+  .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  /* no chip at rest — just the reading. The shape only appears under the pointer,
+     on the one part that can actually be repaired. */
+  .chip{display:inline-flex;align-items:center;gap:8px;border:0;background:none;
+        border-radius:999px;padding:5px 10px;font-size:17.5px;white-space:nowrap;color:var(--ink);
+        transition:background var(--effect-ms,184ms) var(--effect,ease),color var(--effect-ms,184ms) var(--effect,ease)}
+  .chip .sec{font-size:14px}
+  .chip.live{cursor:pointer}
+  .chip.live:hover,.chipwrap.open .chip{background:rgba(25,26,24,.055)}
+  .chip.on{color:var(--accent)}
+  .cv{flex:none;color:var(--faint);margin-left:2px}
+  /* the address is the control and the confirmation: the letters rearrange in place,
+     and the box never shrinks below the address, so nothing beside it moves */
+  #cw{height:33px}
+
+  /* Morphline — shared glyph layer */
+  .ml-probe,.ml-layer{font:inherit;line-height:inherit;letter-spacing:inherit}
+  .ml-probe{display:block}
+  .ml-probe .ml-w{display:inline-block;white-space:nowrap}
+  .ml-probe .ml-c{display:inline-block;font-style:normal;white-space:pre}
+  .ml-layer{position:absolute;inset:0;pointer-events:none}
+  /* No will-change at rest. It was on every glyph permanently, which asked the GPU to hold a
+     layer for each letter of every morphing line — 365 compositor layers on a page that is
+     mostly standing still. Without it: 36. A browser promotes a glyph the moment its transform
+     starts to transition, so the morphs run exactly as before; measured frame for frame. */
+  .ml-layer .ml-g{position:absolute;display:inline-block;font-style:normal;white-space:pre}
+  .ml-layer .ml-in{opacity:0;transform:translateY(.32em);filter:blur(3px)}
+  [data-morph-text]{position:relative;display:inline-block;height:28px;vertical-align:top;
+                    transition:width var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1))}
+  .quiet .ml-g{color:var(--faint);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .quiet:hover .ml-g{color:var(--muted)}
+
+  /* close */
+  .close{padding-top:120px;max-width:var(--col)}
+  .cq{font-family:var(--display);font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.34;max-width:24ch}
+  .spine{font-size:17.5px;color:var(--ink);margin-top:34px}
+
+  /* the reasoning — no control of its own.
+     Rest on the spine and it ghosts in underneath; press and it opens over
+     the page. Nothing below ever moves: the preview is out of flow and the
+     pop-up is fixed. */
+  /* the closing line is the control. Rest on it and it becomes the first line of
+     the argument — the letters travel, nothing else on the page moves, and the
+     chevron appears to say there is more behind it. */
+  .spinewrap{position:relative;max-width:var(--col);margin-top:34px;cursor:pointer}
+  /* both states wrap to two lines at the same measure, so the letters that carry
+     over stay near where they were — a morph only reads as one when the two
+     shapes are comparable */
+  .spbox{position:relative;display:block;width:46ch;max-width:100%}
+  .spine{position:relative;display:block;height:84px;max-width:100%;overflow:hidden;
+         font-size:17.5px;line-height:28px;margin-top:0}
+  .spine i{font-style:normal}
+  .spine i.b{display:none}
+  .spine .ml-g{color:var(--ink);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  /* No mark here. A mark means a value is hiding behind the line and pressing brings it
+     out in place. Pressing this moves you into a document with its own scroll and its own
+     way out, which is a different thing, so it gets no mark. The statement and the line
+     are one target: resting anywhere on the block opens the line, which is the affordance. */
+  .spinewrap .cq{margin:0}
+  .spinewrap .spbox{margin-top:34px}
+
+  .ov{position:fixed;inset:0;z-index:90;background:rgba(222,222,218,.66);
+      -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+      overflow:hidden;overscroll-behavior:contain;
+      opacity:0;visibility:hidden;
+      transition:opacity var(--effect-ms,184ms) var(--effect,ease),
+                 visibility 0s linear var(--effect-ms,184ms)}
+  .ov.ready{overflow-y:auto}
+  .ov.on{opacity:1;visibility:visible;
+         transition:opacity var(--effect-ms,184ms) var(--effect,ease),visibility 0s}
+  .ov-in{display:flex;justify-content:center;padding:52px 24px 120px;min-height:100%}
+  .md{width:100%;max-width:680px;align-self:flex-start;background:var(--paper);border-radius:20px;
+      box-shadow:0 0 0 1px rgba(25,26,24,.07),0 34px 66px -32px rgba(25,26,24,.34);
+      transform:translateY(34vh);
+      transition:transform var(--settle-ms,465ms) var(--settle,cubic-bezier(.22,.61,.36,1))}
+  .ov.on .md{transform:none}
+  .ov-x{position:fixed;top:30px;right:max(18px,calc(50% - 392px));width:42px;height:42px;
+        border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;
+        cursor:pointer;z-index:91;color:var(--ink);font-size:17.5px;font-family:var(--font);line-height:1}
+  .ov-x:hover{background:var(--soft)}
+  /* A frontispiece, not a hero: the one image in the whole thing, at the top of the document
+     rather than on the specimen page, because the specimens are supposed to speak for
+     themselves and this says what the collection is about. The aspect ratio is declared so the
+     card is its final height before the image arrives and the text underneath never jumps. */
+  .md-banner{display:block;margin:0;border-radius:20px 20px 0 0;overflow:hidden;
+        background:var(--soft);aspect-ratio:1360/754}
+  .md-banner img{display:block;width:100%;height:100%;object-fit:cover}
+  /* Clustering by interval, not by rule. A heading sits almost on top of the paragraph
+     it owns; a section sits five times further from the one before it. Everything was
+     22px apart before, which is why it read as one undifferentiated block. */
+  .md-body{padding:56px 92px 104px}
+  /* The document is its own context, so it gets its own three ranks rather than five
+     costumes on one size. It had a 24px title and everything else at 17.5 — body, statement,
+     term, and a section head in uppercase letterspaced grey. Then I went the other way and
+     added a 34 title and 24 section heads, which was four sizes where two would do.
+     Two sizes. 24 for the title, 17.5 for everything else. A section head is Poppins at
+     body size; a term is Inter semibold at body size; body is Inter regular in grey. The
+     level is said by weight, family and the silence above it — 64px before a section, 34px
+     before a term, one line between paragraphs. Space is cheaper than a size and it never
+     reads as scattered.
+     (.md-head is a <p> inside .md-body, so it must be scoped or `.md-body p` wins.) */
+  .md-body p.md-head{font-family:var(--display);font-size:24px;font-weight:500;
+           letter-spacing:-.018em;line-height:1.32;color:var(--ink);margin-top:0}
+  .md-body p{font-size:17.5px;line-height:26px;color:var(--muted);max-width:52ch;margin-top:22px}
+  .md-body p.first{margin-top:0}
+  .md-body p.hard{color:var(--ink)}
+  /* Two classes for this whole document, and both only move things. .turn is the sentence
+     that closes a section, held off the list above it; .rule is a claim whose next line is
+     its gloss. Everything else — the four sizes, the two families, ink and grey — is what
+     the page already had. */
+  .md-body p.turn{margin-top:36px}
+  .md-body p.turn + p.hard{margin-top:8px}
+  .md-body p.rule{color:var(--ink);margin-top:28px}
+  /* :not(.rung-h) because a section head is also a <p>, and `p.rule + p` outranks
+     `p.rung-h` on specificity — so Motion was landing 5px under the last rule instead of
+     96px under it. The gloss rule may only catch a gloss. */
+  .md-body p.rule + p:not(.rung-h){margin-top:4px}
+  /* the first rule sits under its heading, not a section apart from it. This was written
+     as p.rule:first-of-type, which never matched: the first <p> in the body is the title. */
+  .md-body .rung-h + p.rule{margin-top:8px}
+  .md-body p.rung-h{font-family:var(--display);font-size:17.5px;font-weight:500;
+          letter-spacing:-.006em;line-height:26px;color:var(--ink);margin-top:64px}
+  .md-body .rung-h + p{margin-top:6px}
+  /* 600 lives nowhere else on this site: everything that carries weight carries 500. The
+     specimens keep their own 600, because those are simulated product screens, not this
+     site's typography. */
+  .md-body h3{font-size:17.5px;font-weight:500;letter-spacing:-.012em;color:var(--ink);
+          line-height:26px;margin-top:34px}
+  .md-body h3 + p{margin-top:4px;max-width:52ch}
+  .md-body i{font-style:normal;color:var(--faint)}
+  .md-body b{font-weight:500;color:var(--ink)}
+
+  /* First viewport: what a reader carries away, and it never moves. Title, the one sentence,
+     the three decisions, and one line saying what each decides. Someone can close the
+     document there and still explain the idea. */
+  .md-body p.carry{margin-top:12px;color:var(--ink)}
+  /* the why-now. It is also the homepage headline said the other way round: AI can answer,
+     a person still has to decide. One argument, two pages. */
+  .md-body p.why{margin-top:14px;color:var(--ink)}
+  .md-body p.triad{font-family:var(--display);font-weight:500;letter-spacing:-.006em;
+                   color:var(--ink);margin-top:44px}
+  .md-body p.triad .ar{color:var(--faint);font-weight:400;margin:0 .18em}
+  .md-body p.triad-s{margin-top:6px}
+
+  /* The framework behaving like the thing it describes. Every term in a set stays visible,
+     because their order is the meaning — Nothing to Interrupt is a ladder, and a ladder
+     you can only see one rung of is not a ladder. Only the explanation is temporal: one
+     line under the set, and reaching for a term changes that line and nothing else. No
+     height is added, nothing below moves, one slot is reused. The rule closes each set. */
+  .md-body .fw{margin-top:96px}
+  .md-body .fw .rung-h + .fw-q{margin-top:8px}
+  /* Tab states, the same everywhere: at rest a word is slightly out of focus; the chosen
+     one is sharp and in ink. Nothing else marks it. */
+  /* Three units, each with its own air. Head and its question sit together. The terms and
+     the one definition sit together. The rule stands alone. Inside a unit the gap is small;
+     between units it is four times that, so the eye lands on three things, not eight lines. */
+  .md-body .fw-terms{display:flex;flex-wrap:wrap;gap:20px 30px;margin-top:46px;max-width:52ch}
+  .md-body .fw-t{position:relative;padding:0;font:500 17.5px/26px var(--font);letter-spacing:-.012em;
+                 color:var(--faint);filter:blur(.7px);
+                 transition:color var(--effect-ms,184ms) var(--effect,ease),filter 300ms ease}
+  .md-body .fw-t:hover,.md-body .fw-t:focus-visible,
+  .md-body .fw-t[aria-pressed="true"]{color:var(--ink);filter:blur(0);outline:none}
+  /* The chosen tab carries a line — the same 1.5px of accent the top navigation uses, six
+     pixels clear of the word, growing in from the left. One tab component means one selected
+     state: out of focus at rest, sharp and in ink when chosen, and a line under the chosen
+     one. Top of the page and inside it, no exceptions. */
+  .md-body .fw-t::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1.5px;
+                 background:var(--accent);transition:right .3s ease}
+  .md-body .fw-t[aria-pressed="true"]::after{right:0}
+  @media (prefers-reduced-motion:reduce){.md-body .fw-t,.md-body .fw-t::after{transition:none}}
+  .md-body p.fw-def[data-morph-text]{display:block;min-height:28px;height:28px;margin-top:24px;
+                 color:var(--ink);max-width:none}
+  .md-body .fw-def .ml-g{color:var(--ink)}
+  /* The limit is the claim the whole set turns on, so it is set as a claim: ink, and on a
+     narrower measure than the demonstration above it, which is what separates a statement
+     from another paragraph on this page. */
+  .md-body p.fw-rule{margin-top:52px;color:var(--ink);max-width:44ch}
+
+  /* ── The demonstration under Expression ───────────────────────────────────
+     The slot here used to hold a sentence defining each pattern. A sentence
+     about Transform is a build instruction, and nobody reading a portfolio is
+     about to go and build it. So the slot performs instead: one value out of a
+     contract, and whichever pattern is chosen happens to it, on a loop, inside
+     a box whose height never changes. The line underneath names the currency —
+     time or space — and nothing anywhere tells a reader when to use which. */
+  /* Every rule here is scoped to .md-body: `.md-body p` sets a 22px top margin on any
+     paragraph in the document, and it outranks a bare .dm-v, so an unscoped rule here
+     silently loses its own spacing. */
+  .md-body .fw-demo{position:relative;margin-top:30px;max-width:52ch}
+  .md-body .dm-stage{position:relative;height:92px;overflow:hidden}
+  .md-body p.dm-k{font-family:var(--display);font-size:12px;font-weight:400;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--faint);line-height:18px;margin:0;max-width:none}
+  .md-body .dm-back{display:inline-block;margin-right:8px;color:var(--faint)}
+  .md-body p.dm-v,.md-body p.dm-v2{font-size:17.5px;line-height:26px;color:var(--ink);
+        margin:4px 0 0;max-width:none}
+  .md-body p.dm-v2{color:var(--muted)}
+  .md-body .dm-below p{font-size:17.5px;line-height:26px;color:var(--muted);margin:0;max-width:none}
+
+  /* one horizontal rail, two cards; Open slides the rail and nothing else moves. */
+  .md-body .dm-rail{position:absolute;left:0;top:0;width:100%;display:flex;gap:30px;
+           transition:transform 560ms cubic-bezier(.22,.61,.36,1)}
+  .md-body .dm-card{flex:0 0 100%}
+
+  /* Preview and Expand deliberately use the same room under the value. The difference the
+     reader is meant to catch is not where it lands, it is whether it stays. */
+  .md-body p.dm-float{position:absolute;left:0;top:58px;width:100%;font-size:17.5px;
+            line-height:26px;color:var(--muted);margin:0;max-width:none;
+            opacity:0;transform:translateY(6px);
+            transition:opacity 340ms ease,transform 340ms cubic-bezier(.22,.61,.36,1)}
+  .md-body .fw-demo[data-mode="preview"].on p.dm-float{opacity:1;transform:none}
+
+  .md-body .dm-below{overflow:hidden;height:0;opacity:0;
+            transition:height 420ms cubic-bezier(.22,.61,.36,1),opacity 300ms ease,
+                       margin-top 420ms cubic-bezier(.22,.61,.36,1)}
+  .md-body .fw-demo[data-mode="expand"].on .dm-below{height:var(--below-h,26px);opacity:1;margin-top:6px}
+
+  .md-body .fw-demo[data-mode="open"].on .dm-rail{transform:translateX(calc(-100% - 30px))}
+
+  /* The cost is a label, not a sentence, so it is set like every other label on this
+     site — small, uppercase, tracked, faint, one weight. It was a 14px line with a bold
+     word in it, which reads as a chip out of some product UI, and it floated exactly
+     between the demonstration and the rule so it belonged to neither — floating in the
+     dead space the stage keeps in reserve for Expand. It sits on the specimen's own top
+     line now, opposite its key: label left, cost right, one baseline. */
+  .md-body p.dm-cost{position:absolute;right:0;top:0;margin:0;font-family:var(--display);
+                     font-size:12px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;
+                     line-height:18px;color:var(--faint);max-width:none;text-align:right}
+  .md-body p.dm-cost b{font-weight:inherit;color:inherit}
+
+  @media (prefers-reduced-motion:reduce){
+    .md-body p.dm-float,.md-body .dm-below,.md-body .dm-rail{transition:none}
+  }
+  @media (max-width:700px){ .md-body .dm-stage{height:120px}
+    .md-body p.dm-float{top:58px} }
+
+  .md-body p.close{margin-top:96px;color:var(--ink)}
+
+  footer{margin-top:150px;padding-top:26px;padding-bottom:70px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+  footer a:hover{color:var(--ink)}
+  @media (max-width:900px){
+    :root{--axis:24px}
+    .wlcv{display:none}
+    header{padding-top:104px}
+    .stages{margin-top:64px}
+    .stage{min-height:0;padding:44px 0}
+    .plate{margin-bottom:0}
+    .side{grid-template-columns:1fr;gap:18px 0}
+    .md-body{padding:52px 28px 88px}
+  }
+  @media (prefers-reduced-motion:reduce){.swap i,.fold,.mk i{transition:none}}
+
+  /* ── The ground, and the room around the opening ──────────────────────────
+     Paper you can see rather than a flat screen, and an opening that is mostly
+     silence. The title goes up in size, not in weight: this site says a title
+     is large and light — the homepage name is 132px at weight 400 — so the
+     page title follows that, and the air does the rest. */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:90;
+    opacity:.10;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  header{padding:220px 0 0}
+  h1{font-size:clamp(44px,4.6vw,62px);font-weight:400;letter-spacing:-.04em;line-height:1.04}
+  .lede{margin-top:28px}
+  @media (max-width:700px){header{padding:128px 0 76px}}
+
+  /* soft until you reach for it, sharp where you are — the same as the tabs */
+  /* the nav is marks now, not blurred words — a blurred block is just a smudge */
+  .nav-inner a.q{font-weight:500}
+
+  /* ── Tab: one component, everywhere ───────────────────────────────────────
+     Every switch on this site reads the same way. At rest a tab is out of focus,
+     grey and a shade heavier than body text — the extra weight is what keeps a
+     blurred word legible instead of turning it into a smudge. Reached for, or
+     selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
+     no underline. Blur .7px, weight 500, the site's own grey and ink.
+     These four selectors are the same component wearing four names. */
+</style>
+</head>
+<body>
+<nav aria-label="Main">
+  <div class="nav-inner">
+    <a class="id nb" href="index.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
+    <a class="q nb" href="index.html#work"><i class="nmk" aria-hidden="true"></i><span class="nwd">Work</span></a>
+    <a class="q nb sens cur" href="sensitivity.html" aria-current="page"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
+    <a class="q nb" href="about.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
+    <a class="q nb cta" href="index.html#contact"><i class="nmk" aria-hidden="true"></i><span class="nwd">Contact</span></a>
+  </div>
+</nav>
+
+<div class="ldr" id="ldr" aria-hidden="true" data-over="#lede"><p class="ldr-t">AI makes information cheap. Attention remains expensive. The question is no longer what an interface can show, but what a moment deserves.</p></div>
+
+<header class="wrap">
+  <h1>Sensitivity</h1>
+  <!-- The one description, and the only thing that moves on this page before you touch it. -->
+  <p class="lede" id="lede">AI makes information cheap. Attention remains expensive. The question is no longer what an interface can show, but what a moment deserves.</p>
+</header>
+
+<!-- The same separator the work list uses, doing the same job: naming what is below and
+     saying it is live. Without it the page opens on a screenful of paper and the first
+     specimen arrives with nothing to introduce it. -->
+<div class="seplbl wrap">
+  <p class="lbl">Specimens</p>
+  <p class="lbl-s">Eleven of them. Every one is live, not a picture of one.</p>
+  <div class="seprule" aria-hidden="true"></div>
+</div>
+
+<main class="wrap stages">
+
+  <section class="stage">
+    <p class="plate">Preview</p>
+    <div class="obj">
+      <div class="lift" id="wallWrap" tabindex="0" role="button" aria-haspopup="true"
+           aria-expanded="false" aria-controls="wall" data-morph-host>
+        <p class="hero"><span class="wlt">Counter the renewal at +6%</span><svg class="cv wlcv"
+          width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+          d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+          stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+        <span class="wlbox">
+        <span class="wline" data-morph>
+          <i class="a">Their ask sits above comparable renewals and usage is low.</i>
+          <i class="b">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%.</i>
+        </span>
+        </span>
+        <div class="glass" id="wall"><p class="wall">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%. Prior renewal +9%, accepted without counter. Contract permits 30-day notice. Three similar accounts countered at +6%, +5%, +7%. Model confidence 0.81. Suggested next step: draft counter. Alternative: request usage-based tier. Related obligations: 2. Escalation path: category lead.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage tall">
+    <p class="plate">Expand</p>
+    <div class="obj">
+      <div class="deckwrap" id="apDeckWrap">
+        <span class="deck" id="apDeck" aria-hidden="true"></span>
+      <div class="apwrap" id="apWrap">
+        <button class="apb" id="apBtn" type="button" aria-expanded="false" aria-controls="apCard">
+          <span class="hero" id="apV" data-morph-text>Send summary to 42 customers</span><svg class="cv apcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <br><span class="beat"><span class="srcl" id="apD" data-morph-text>drafted from this week&rsquo;s activity</span><span class="dots" aria-label="Scheduling"><span></span><span></span><span></span></span></span>
+        </button>
+        <div class="apcard" id="apCard">
+          <p class="cons" id="apCons">It goes at 4:00 PM and cannot be recalled after that.</p>
+          <div class="rlist" id="apList" hidden>
+            <i>EMEA</i><b>18</b>
+            <i>Americas</i><b>15</b>
+            <i>APAC</i><b>9</b>
+          </div>
+          <button class="sumb" id="apSum" type="button" hidden><span class="sumline">Twelve
+            items shipped, three moved to next week, one still blocked.<svg class="cv sumcv"
+            width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span
+            class="summeta">one paragraph each &middot; no attachments</span></button>
+          <div class="blist" id="apBList" hidden>
+            <span class="brow">Shipped &middot; 12<i>in the digest, in merge order</i></span>
+            <span class="brow">Moved &middot; 3<i>re-dated to Thursday next week</i></span>
+            <span class="brow">Blocked &middot; 1<i>the SSO migration, waiting on the vendor</i></span>
+          </div>
+          <div class="ask-chips">
+            <button class="q" id="apRev" type="button"><span id="apRevL"
+              data-morph-text>Review recipients</span></button>
+            <button class="q commit" id="apSend" type="button"><span id="apSendL"
+              data-morph-text>Send</span></button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage">
+    <p class="plate">Transform</p>
+    <div class="obj peek" data-morph-host tabindex="0">
+      <p class="hero">Payment term &middot; Net-45</p>
+      <span class="mline" data-morph>
+        <i class="a">0.82 confidence</i>
+        <i class="b">read from &sect;7.2</i>
+      </span>
+      <span class="vh">read from &sect;7.2</span>
+    </div>
+  </section>
+
+
+  <section class="stage">
+    <p class="plate">Transform</p>
+    <div class="obj">
+      <div class="wkwrap" id="wkWrap">
+        <p class="hero" id="wkV" data-morph-text>18 unread messages</p>
+        <button class="wkd" id="wkChk" type="button" aria-expanded="false"
+          aria-controls="wkCard"><span class="wkline"><span class="srcl" id="wkD"
+          data-morph-text>Summarise</span><span class="dots"
+          aria-label="Working"><span></span><span></span><span></span></span></span><svg
+          class="cv wkcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+          d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+          stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="glass wkcard" id="wkCard">
+          <span class="said">&ldquo;Can we push to Friday?&rdquo;<i>Priya &middot; Tue 14:02</i></span>
+          <span class="said">&ldquo;Monday works better for us.&rdquo;<i>Sam &middot; Tue 16:40</i></span>
+          <span class="said">&ldquo;Friday it is, then.&rdquo;<i>Dev &middot; Wed 09:15</i></span>
+          <span class="others">The other fifteen say nothing about the deadline.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <section class="stage">
+    <p class="plate">Expand</p>
+    <div class="obj">
+      <div class="deckwrap" id="amDeckWrap">
+        <span class="deck" id="amDeck" aria-hidden="true"></span>
+      <div class="apwrap" id="amWrap">
+        <button class="amb" id="amBtn" type="button" aria-expanded="false" aria-controls="amCard">
+          <span class="hero" id="amV" data-morph-text>Share the draft with Alex</span><svg class="cv amcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <br><span class="beat"><span class="srcl" id="amD" data-morph-text>one question before this goes</span><span class="dots" aria-label="Sharing"><span></span><span></span><span></span></span></span>
+        </button>
+        <div class="apcard" id="amCard">
+          <p class="cons" id="amCons" data-morph-text>Whoever you pick can open it and comment.</p>
+          <div class="ask-chips" id="amPick">
+            <button class="q commit" data-who="Alex Mehta" data-team="Design" type="button">Alex Mehta &middot; Design</button>
+            <button class="q commit" data-who="Alex Ross" data-team="Legal" type="button">Alex Ross &middot; Legal</button>
+          </div>
+          <div class="ask-chips right" id="amUndo" hidden>
+            <button class="q commit" id="amRevoke" type="button">Revoke</button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+    <section class="stage">
+    <p class="plate">Expand</p>
+    <div class="obj">
+      <div class="deckwrap" id="askDeckWrap">
+        <span class="deck" id="askDeck" aria-hidden="true"></span>
+      <p class="hero">Sign or annotate the review</p>
+      <p class="sec sm">No response by the 22nd counts as acceptance.</p>
+      <div class="askwrap" id="askWrap">
+        <div class="dash"><span class="l"></span><button class="quiet" id="askBtn" type="button"
+          aria-expanded="false" aria-controls="ask"><span id="askLbl" data-morph-text>+ Ask more</span></button></div>
+        <div class="glass askcard" id="ask">
+          <div id="askAsk">
+            <div class="ask-field">
+              <span>Give instruction</span>
+              <svg width="13" height="18" viewBox="0 0 13 18" aria-hidden="true" fill="none"
+                   stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="4.2" y="1.2"
+                   width="4.6" height="8.4" rx="2.3"/><path d="M1.5 8.2a5 5 0 0 0 10 0M6.5 13.2v3.4"/></svg>
+            </div>
+            <div class="ask-chips">
+              <button class="q" type="button" data-a="0">What does deemed acceptance mean?</button>
+              <span class="hsep" aria-hidden="true"></span>
+              <button class="q" type="button" data-a="1">Draft a reply</button>
+            </div>
+          </div>
+          <div id="askWait" hidden><span class="dots" aria-label="Thinking"><span></span><span></span><span></span></span></div>
+          <div id="askAns" hidden>
+            <p class="ask-q" id="askQ"></p>
+            <p class="ask-a" id="askA"></p>
+          </div>
+          <div class="ask-tools" id="askTools" hidden>
+            <button type="button" aria-label="Save"><svg width="16" height="16" viewBox="0 0 16 16"
+              fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path
+              d="M8 1.6 10 5.8l4.6.6-3.3 3.2.8 4.6L8 12l-4.1 2.2.8-4.6L1.4 6.4 6 5.8z"/></svg></button>
+            <button type="button" id="askX" aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16"
+              fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path
+              d="M3.4 3.4l9.2 9.2M12.6 3.4l-9.2 9.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage">
+    <p class="plate">Preview</p>
+    <div class="obj">
+      <span class="sec sm">Understood as</span>
+      <div style="display:flex;gap:2px;flex-wrap:wrap;margin-top:14px;margin-left:-10px">
+        <span class="chip"><span class="sec sm">Risk</span>High</span>
+        <span class="chipwrap" id="regWrap">
+          <button class="chip live" id="regionChip" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="sec sm">Region</span><span id="regVal" data-morph-text>Europe</span>
+            <svg class="cv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+              d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+              stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="glass gmenu" id="regMenu">
+            <div class="gline"><span class="sec sm">Region</span><input class="inp" id="regInp" value="Europe" aria-label="Region" /></div>
+            <div class="opts">
+              <button class="opt" type="button">EMEA</button>
+              <button class="opt" type="button">Europe (EU only)</button>
+              <button class="opt" type="button">Europe, Middle East</button>
+            </div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage" id="upd">
+    <p class="plate">Transform</p>
+    <div class="obj">
+      <div class="updwrap" id="updWrap">
+        <p class="hero" id="capV" data-morph-text>Liability cap &middot; $2,000,000</p>
+        <button class="updd" id="capStep" type="button"><span class="srcl" id="capS"
+          data-morph-text>read from &sect;11.1</span><span class="vh">Show the value before the
+          amendment</span></button>
+        <span class="pips" id="capPips" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <p class="plate">Transform</p>
+    <div class="obj">
+      <div class="histwrap" id="hsWrap">
+        <button class="histb" id="histBtn" type="button" aria-expanded="false" aria-controls="hsCard">
+          <span class="hero" id="hsV" data-morph-text>Notice period &middot; 90 days</span><svg
+            class="cv histcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <br><button class="histd" id="hsStep" type="button"><span class="srcl" id="hsD"
+          data-morph-text>in force since 31 March 2026</span><span class="vh">Show the previous
+          amendment</span></button>
+        <span class="pips" id="hsPips" aria-hidden="true"></span>
+        <div class="glass hscard" id="hsCard">
+          <button class="hsq" id="hsQBtn" type="button"><span class="src-q">&ldquo;Either party
+            may terminate this Agreement, in whole or in part, for convenience on <span
+            class="hl" id="hsQ" data-morph-text>ninety (90)
+            days</span><span class="after">&rsquo; prior written notice to the other party.
+            Termination under this Section does not relieve either party of any obligation
+            accrued before the effective date of termination.&rdquo;</span></span><span
+            class="srcl" id="hsS" data-morph-text>&sect;14.1 &middot; Amendment 3, 31 March 2026</span><span
+            class="vh">Show the previous amendment</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage">
+    <p class="plate">Expand</p>
+    <div class="obj">
+      <div class="deckwrap" id="hoDeckWrap">
+        <span class="deck" id="hoDeck" aria-hidden="true"></span>
+      <div class="apwrap" id="hoWrap">
+        <button class="hob" id="hoOpen" type="button" aria-expanded="false" aria-controls="hoCard">
+          <span class="hero" id="hoV" data-morph-text>Paused &middot; 14 of 20 files renamed</span><svg
+            class="cv hocv" width="10" height="14" viewBox="0 0 10 14"
+            aria-hidden="true"><path d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none"
+            stroke="currentColor" stroke-width="1.35" stroke-linecap="round"
+            stroke-linejoin="round"/></svg>
+          <br><span class="beat"><span class="srcl" id="hoD" data-morph-text>the last six need admin access</span><span class="dots" aria-label="Asking"><span></span><span></span><span></span></span></span>
+        </button>
+        <div class="apcard" id="hoCard">
+          <p class="cons" id="hoCons" data-morph-text>Your admin sees the six files and the reason.</p>
+          <div class="ask-chips right">
+            <button class="q commit" id="hoBtn" type="button"><span id="hoBtnL"
+              data-morph-text>Ask an admin</span></button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="stage">
+    <p class="plate">Transform</p>
+    <div class="obj">
+      <button class="addr hero" id="copyBtn"><span id="cw" data-morph-text>amrit@example.com</span><svg
+        class="cv cpcv" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none"
+        stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><rect
+        x="4.8" y="4.8" width="8.4" height="8.4" rx="2"/><path
+        d="M9.2 4.8V2.4a1.6 1.6 0 0 0-1.6-1.6H2.4A1.6 1.6 0 0 0 .8 2.4v5.2a1.6 1.6 0 0 0 1.6 1.6h2.4"/></svg></button>
+    </div>
+  </section>
+
+
+  <section class="close">
+    <p class="plate">Open</p>
+    <div class="spinewrap" id="spine" role="button" tabindex="0" aria-haspopup="dialog"
+         aria-controls="ov" data-morph-host>
+      <p class="cq">Before deciding how the interface responds, decide how much attention
+         the moment deserves.</p>
+      <span class="spbox">
+      <span class="spine" data-morph>
+        <i class="a">Then use the least interface that makes it clear.</i>
+        <i class="b">Increase expression only as far as understanding requires. Behind this line, the reasoning on one page: what Sensitivity is, how it works, why it matters now.</i>
+      </span>
+      </span>
+    </div>
+  </section>
+
+</main>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Sensitivity">
+  <button class="ov-x" id="ovX" type="button" aria-label="Close">&times;</button>
+  <div class="ov-in"><div class="md"><picture class="md-banner">
+      <source srcset="sens-banner-plain.webp" type="image/webp" />
+      <img src="sens-banner-plain.jpg" width="1360" height="754" loading="lazy" decoding="async"
+        alt="One profile repeated four times along a single horizontal line, from a dark point
+        at one end to a light one at the other." />
+    </picture><div class="md-body">
+      <p class="md-head">Sensitivity</p>
+      <p class="carry">A way of deciding how much attention a moment deserves, then spending
+         no more than that.</p>
+      <p class="triad">Attention is the budget. Space and time are how it gets spent.</p>
+      <p class="triad-s">Space is how much is present at once. Time is the same place, used again
+         at a later moment. Most interfaces only know how to spend space.</p>
+
+      <section class="fw" id="fwAttention">
+        <p class="rung-h">01 &middot; Attention</p>
+        <p class="fw-q">How much attention is the interface allowed to take?</p>
+        <div class="fw-terms" role="group" aria-label="Attention">
+          <button class="fw-t" type="button" aria-pressed="false"
+            data-def="No attention yet.">Nothing</button>
+          <button class="fw-t" type="button" aria-pressed="true"
+            data-def="Let the reader notice something new is there.">Hint</button>
+          <button class="fw-t" type="button" aria-pressed="false"
+            data-def="Show more when asked.">Reveal</button>
+          <button class="fw-t" type="button" aria-pressed="false"
+            data-def="Compete with the current task.">Emphasise</button>
+          <button class="fw-t" type="button" aria-pressed="false"
+            data-def="Temporarily become the task.">Interrupt</button>
+        </div>
+        <p class="fw-def" data-morph-text>Let the reader notice something new is there.</p>
+      </section>
+
+      <section class="fw" id="fwExpression">
+        <p class="rung-h">02 &middot; Expression</p>
+        <p class="fw-q">Four ways to spend the allowance. Two of them buy meaning with time,
+           two of them buy it with space.</p>
+        <div class="fw-terms" role="group" aria-label="Expression">
+          <button class="fw-t" type="button" aria-pressed="false" data-m="preview" data-cost="time"
+            data-def="The clause comes close for a moment, then leaves.">Preview</button>
+          <button class="fw-t" type="button" aria-pressed="true"  data-m="transform" data-cost="time"
+            data-def="The value is replaced in place by what comes next.">Transform</button>
+          <button class="fw-t" type="button" aria-pressed="false" data-m="expand" data-cost="space"
+            data-def="The clause takes its own room under the value, and both stay.">Expand</button>
+          <button class="fw-t" type="button" aria-pressed="false" data-m="open" data-cost="space"
+            data-def="A second place, with its own way back.">Open</button>
+        </div>
+
+        <div class="fw-demo" id="dExpr" data-mode="transform">
+          <p class="dm-cost">spends <b>time</b></p>
+          <p class="vh" id="dExprVH">The value is replaced in place by what comes next.</p>
+          <div class="dm-stage" aria-hidden="true">
+            <p class="dm-float">Extended from Net 30 by Schedule 2 on renewal.</p>
+            <div class="dm-rail">
+              <div class="dm-card">
+                <p class="dm-k">Payment terms</p>
+                <p class="dm-v" data-morph-text>Net 45</p>
+                <div class="dm-below"><p>Extended from Net 30 by Schedule 2 on renewal.</p></div>
+              </div>
+              <div class="dm-card">
+                <p class="dm-k"><span class="dm-back">&larr;</span>Schedule 2</p>
+                <p class="dm-v2">Extended from Net 30 by Schedule 2 on renewal.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="fw-rule">Time can stand in for space only when the earlier information has
+           finished its job. Where the two need to be compared, replacing one with the other
+           saves pixels and spends memory.</p>
+      </section>
+
+      <section class="fw" id="fwSource">
+        <p class="rung-h">03 &middot; Source</p>
+        <p class="fw-q">Where did the new information come from?</p>
+        <div class="fw-terms" role="group" aria-label="Source">
+          <button class="fw-t" type="button" aria-pressed="true"
+            data-def="Already in the system before anyone asked.">Retrieved</button>
+          <button class="fw-t" type="button" aria-pressed="false"
+            data-def="Made by the system just now, because someone asked.">Generated</button>
+        </div>
+        <p class="fw-def" data-morph-text>Already in the system before anyone asked.</p>
+        <p class="fw-rule">Generated information can take time, be uncertain, need correction, and be wrong.</p>
+      </section>
+
+      <p class="close">Choose the least expensive interaction that gives the moment enough
+         attention.</p>
+    </div></div></div>
+</div>
+
+<footer class="wrap"><a href="index.html">&larr; Amrit Kumar</a></footer>
+
+<script src="morphline.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const say=(el,t)=>{ if(window.Morphline && el._mlCur!==undefined) window.Morphline.to(el,t);
+                      else el.textContent=t; };
+
+  /* Hover · the wall — the same reach as the closing line. Resting on it turns the
+     summary into a précis of what was withheld; pressing opens the whole of it on glass. */
+  (function(){
+    const wrap=$('#wallWrap'); if(!wrap) return;
+    const open =()=>{ wrap.classList.add('open');  wrap.setAttribute('aria-expanded','true'); };
+    const close=()=>{ wrap.classList.remove('open'); wrap.setAttribute('aria-expanded','false'); };
+    wrap.addEventListener('click',e=>{ e.stopPropagation();
+      wrap.classList.contains('open') ? close() : open(); });
+    wrap.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); wrap.classList.contains('open')?close():open(); }
+      if(e.key==='Escape'){ close(); } });
+    document.addEventListener('click',e=>{ if(!wrap.contains(e.target)) close(); });
+  })();
+
+  /* Later · ask more — pressing raises the whole item onto one card, which grows downward
+     to hold the answer. Both readings end up on the same surface and neither moves: the
+     card layer is out of flow and the text keeps its place on the page's axis. */
+  (function(){
+    const wrap=$('#askWrap'), btn=$('#askBtn'), card=$('#ask'),
+          dwrap=$('#askDeckWrap'), deck=$('#askDeck'),
+          ask=$('#askAsk'), wait=$('#askWait'), ans=$('#askAns'), tools=$('#askTools'),
+          q=$('#askQ'), a=$('#askA');
+    let beat;
+    const A=[{q:'What does deemed acceptance mean?',
+              a:'Nobody has to agree. If the 22nd passes with no response, the review stands as '
+               +'filed and carries the same weight as a signature. Annotating is not accepting: '
+               +'notes attach to the record and the clock keeps running underneath them. An '
+               +'extension has to be asked for before the date rather than after it, and the '
+               +'request itself does not pause anything.'},
+             {q:'Draft a reply',
+              a:'“Acknowledging receipt. We are reviewing the figures against the schedule and '
+               +'will respond in full before the 22nd. Two line items need confirmation from '
+               +'the delivery team; if that lands late we will ask for a short extension rather '
+               +'than let the date pass.”'}];
+    /* the layer has to reach past the base block, the gap, and whatever the card is
+       currently holding — measured, never guessed, because the answer sets its own height */
+    function lay(h){
+      if(!deck) return;
+      deck.style.height=(24 + dwrap.offsetHeight + 16 + h + 18)+'px';
+    }
+    function grow(fn){
+      const from=card.offsetHeight;
+      fn();
+      card.style.height='auto';
+      const to=card.offsetHeight;
+      card.style.height=from+'px'; void card.offsetHeight;
+      card.style.height=to+'px';
+      lay(to);
+    }
+    function open(){
+      wrap.classList.add('open');
+      const from=card.offsetHeight; card.style.height='auto';
+      const h=card.offsetHeight;
+      card.style.height=from+'px'; void card.offsetHeight; card.style.height=h+'px';
+      dwrap.classList.add('lit'); lay(h);
+      btn.setAttribute('aria-expanded','true'); say($('#askLbl'),'− Ask more');
+    }
+    function shut(){
+      wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false');
+      say($('#askLbl'),'+ Ask more');
+      dwrap.classList.remove('lit'); if(deck) deck.style.height='0px';
+      clearTimeout(beat);
+      setTimeout(()=>{ if(!wrap.classList.contains('open')){
+        ans.hidden=true; tools.hidden=true; wait.hidden=true; ask.hidden=false;
+        card.style.height=''; } },340);
+    }
+    btn.addEventListener('click',()=>wrap.classList.contains('open')?shut():open());
+    $$('.q',card).forEach(b=>b.addEventListener('click',()=>{
+      const it=A[+b.dataset.a];
+      grow(()=>{ ask.hidden=true; ans.hidden=true; tools.hidden=true; wait.hidden=false; });
+      clearTimeout(beat);
+      beat=setTimeout(()=>{
+        grow(()=>{ wait.hidden=true; q.textContent=it.q; a.textContent=it.a;
+                   ans.hidden=false; tools.hidden=false; });
+      },620); }));
+    $('#askX').addEventListener('click',()=>{ clearTimeout(beat);
+      grow(()=>{ ans.hidden=true; tools.hidden=true; wait.hidden=true; ask.hidden=false; }); });
+    addEventListener('keydown',e=>{ if(e.key==='Escape'&&wrap.classList.contains('open')) shut(); });
+    /* clicking away is a dismissal, the same as it is for the panels that float. The whole
+       raised block counts as inside — the headline is on the card, not behind it. */
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !dwrap.contains(e.target)) shut(); });
+  })();
+
+  /* Approval, escalating · the agent knows the whole shape of this before you reach for it.
+     At rest it says only what it would do. On reach it says how far that reaches. On press the
+     item comes up onto a card carrying the one fact that decides it — when it goes, and when it
+     stops being undoable — and the two choices worth having. Attention rises with consequence
+     and stops rising there. */
+  (function(){
+    const dw=$('#apDeckWrap'), deck=$('#apDeck'), wrap=$('#apWrap'), btn=$('#apBtn'),
+          card=$('#apCard'), v=$('#apV'), d=$('#apD'), rev=$('#apRev'), send=$('#apSend');
+    if(!dw) return;
+    const cons=$('#apCons'), list=$('#apList'), revL=$('#apRevL'), sum=$('#apSum'),
+          sendL=$('#apSendL'), blist=$('#apBList');
+    const REST={v:'Send summary to 42 customers', d:'drafted from this week’s activity'};
+    const SCOPE='42 customers · 3 regions · scheduled 4:00 PM';
+    let near=false, sent=false, listed=false;
+    /* A height set straight from 'auto' to a pixel value never animates: 'auto' is not a
+       number the browser can count from, so the card jumped to its open size in one frame.
+       Measure the height it is at now, put that back as a real number, force the browser to
+       read it, and only then set the target — which gives the transition two numbers to
+       travel between. */
+    const lay=()=>{ const from=card.offsetHeight;
+      card.style.height='auto'; const h=card.offsetHeight;
+      card.style.height=from+'px'; void card.offsetHeight;
+      card.style.height=h+'px';
+      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
+    const line=()=>{ if(sent || wrap.classList.contains('busy')) return; say(v,REST.v);
+      say(d,(near||wrap.classList.contains('open')) ? SCOPE : REST.d); };
+    /* the card holds exactly one thing between the item and the actions. Four things can
+       go in that slot and never two at once — which is how the card already worked before
+       sending; the breakdown was the one exception that stacked. */
+    const mode=m=>{ listed=(m==='list');
+      cons.hidden=(m!=='cons'); list.hidden=(m!=='list');
+      sum.hidden=(m!=='sum'); blist.hidden=(m!=='break');
+      wrap.classList.toggle('broke', m==='break');
+      say(revL, m==='cons' ? 'Review recipients' : 'Done'); };
+    /* twelve of what. Pressing the claim turns it into its parts, in the slot the claim
+       was in. Nothing is lost by replacing it — the parts carry the same three numbers and
+       say what each one is. Dismissing the card is the way back, so the parts need no
+       mark pointing at where they came from. */
+    sum.addEventListener('click',()=>{ if(blist.hidden) mode('break'); lay(); });
+    const open=()=>{ wrap.classList.add('open'); dw.classList.add('lit');
+      btn.setAttribute('aria-expanded','true'); line(); lay(); };
+    const shut=()=>{ wrap.classList.remove('open'); dw.classList.remove('lit');
+      btn.setAttribute('aria-expanded','false'); deck.style.height='0px'; card.style.height='';
+      near=false; mode(sent ? 'sum' : 'cons'); line(); };
+    btn.addEventListener('pointerenter',()=>{ near=true; line(); });
+    btn.addEventListener('pointerleave',()=>{ near=false; line(); });
+    btn.addEventListener('focus',()=>{ near=true; line(); });
+    btn.addEventListener('blur',()=>{ near=false; line(); });
+    /* the mark keeps its one meaning the whole way through: it shows and hides the card */
+    btn.addEventListener('click',()=>{
+      if(wrap.classList.contains('open')) return shut();
+      mode(sent ? 'sum' : 'cons'); open(); });
+    /* the card transforms rather than the line above it, and the same word is the way out */
+    rev.addEventListener('click',()=>{ mode(listed ? 'cons' : 'list'); lay(); });
+    /* one committing slot, and the word in it always says what pressing does */
+    /* scheduling forty-two emails is not instant either. The card stays where it is, the
+       status line goes to a beat, and the result lands once &mdash; in both directions. */
+    let bt;
+    const beat=then=>{ clearTimeout(bt); wrap.classList.add('busy');
+      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },900); };
+    send.addEventListener('click',()=>{
+      if(wrap.classList.contains('busy')) return;
+      if(sent) return beat(()=>{ sent=false; wrap.classList.remove('sent');
+        say(sendL,'Send'); mode('cons'); line(); lay(); });
+      beat(()=>{ sent=true; wrap.classList.add('sent'); say(sendL,'Cancel');
+        say(v,'Summary scheduled'); say(d,'42 customers · 4:00 PM');
+        mode('sum'); lay(); }); });
+    addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
+    /* leave the stage and it forgets, so the escalation can be watched more than once */
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
+      if(e.intersectionRatio===0 && sent){ clearTimeout(bt); wrap.classList.remove('busy');
+        sent=false; wrap.classList.remove('sent');
+        say(sendL,'Send'); mode('cons'); line(); }
+    }),{threshold:[0]}).observe(dw);
+  })();
+
+  /* Working, in place · the request becomes the beat and the beat becomes the answer. Three
+     meanings in one slot, and the waiting costs no layout: the dots sit over the line they
+     will hand back. No spinner across the page, no toast when it lands. */
+  (function(){
+    const wrap=$('#wkWrap'), chk=$('#wkChk'), v=$('#wkV'), d=$('#wkD');
+    if(!wrap) return;
+    const ASK={v:'18 unread messages', d:'Summarise'};
+    const ANS={v:'Three of them moved the deadline', d:'read from 18 messages · just now'};
+    /* The value line is a value: three states in one slot and nothing to press. Everything you
+       can do sits in the line underneath, and what kind of thing it is changes with the state —
+       a word while pressing would make something happen, a line with the mark once pressing
+       would reveal something. Never both, and never the wrong one. */
+    let t, at=0;                             /* 0 asked, 1 reading, 2 answered */
+    const shut=()=>{ wrap.classList.remove('open'); chk.setAttribute('aria-expanded','false'); };
+    const rest=()=>{ clearTimeout(t); shut(); at=0;
+      wrap.classList.remove('done'); wrap.classList.remove('busy'); chk.disabled=false;
+      say(v,ASK.v); say(d,ASK.d); };
+    const run=()=>{
+      clearTimeout(t); shut(); wrap.classList.remove('done'); at=1; chk.disabled=true;
+      wrap.classList.add('busy'); say(v,'Reading 18 messages');
+      t=setTimeout(()=>{ wrap.classList.remove('busy'); say(v,ANS.v); say(d,ANS.d);
+        wrap.classList.add('done'); chk.disabled=false; at=2; },1500);
+    };
+    /* one target, and the state decides what it means: run, or show the three it read */
+    chk.addEventListener('click',()=>{
+      if(at===0) return run();
+      if(at===1) return;
+      const on=wrap.classList.toggle('open');
+      chk.setAttribute('aria-expanded', on ? 'true' : 'false'); });
+    /* the glass covers the line that presses back, so the glass must not be a dead surface
+       sitting on the exit: pressing it hands the answer back */
+    $('#wkCard').addEventListener('click',shut);
+    addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !wrap.contains(e.target)) shut(); });
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
+      if(e.intersectionRatio===0) rest();
+    }),{threshold:[0]}).observe(wrap);
+  })();
+
+  /* Ambiguity, without a conversation · the agent found two people with the same name. It does
+     not stop the work and it does not open a chat: it marks that there is one question, and the
+     two answers become co-present with the request when you reach for it. */
+  (function(){
+    const dw=$('#amDeckWrap'), deck=$('#amDeck'), wrap=$('#amWrap'), btn=$('#amBtn'),
+          card=$('#amCard'), v=$('#amV'), d=$('#amD'), cons=$('#amCons'),
+          pick=$('#amPick'), undo=$('#amUndo'), rev=$('#amRevoke'); if(!dw) return;
+    const REST={v:'Share the draft with Alex', d:'one question before this goes',
+                c:'Whoever you pick can open it and comment.'};
+    /* the reach says what the question is, so the card does not have to repeat it */
+    const WHY='two people are called Alex';
+    let done=false, t;
+    /* A height set straight from 'auto' to a pixel value never animates: 'auto' is not a
+       number the browser can count from, so the card jumped to its open size in one frame.
+       Measure the height it is at now, put that back as a real number, force the browser to
+       read it, and only then set the target — which gives the transition two numbers to
+       travel between. */
+    const lay=()=>{ const from=card.offsetHeight;
+      card.style.height='auto'; const h=card.offsetHeight;
+      card.style.height=from+'px'; void card.offsetHeight;
+      card.style.height=h+'px';
+      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
+    const shut=()=>{ wrap.classList.remove('open'); dw.classList.remove('lit');
+      btn.setAttribute('aria-expanded','false'); deck.style.height='0px'; card.style.height='';
+      near=false; if(!done && !wrap.classList.contains('busy')) say(d,REST.d); };
+    /* the card holds the question before, and what the share actually did after */
+    const face=()=>{ pick.hidden=done; undo.hidden=!done; };
+    /* sharing a draft is not instant, so it does not look instant: the beat sits over the
+       line it will hand back, and only the decision happens the moment you make it */
+    const beat=(ms,then)=>{ clearTimeout(t); shut(); wrap.classList.add('busy');
+      t=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },ms); };
+    let near=false;
+    const line=()=>{ if(done||wrap.classList.contains('busy')) return;
+      say(d,(near||wrap.classList.contains('open')) ? WHY : REST.d); };
+    btn.addEventListener('pointerenter',()=>{ near=true; line(); });
+    btn.addEventListener('pointerleave',()=>{ near=false; line(); });
+    btn.addEventListener('focus',()=>{ near=true; line(); });
+    btn.addEventListener('blur',()=>{ near=false; line(); });
+    btn.addEventListener('click',()=>{
+      if(wrap.classList.contains('busy')) return;
+      if(wrap.classList.contains('open')) return shut();
+      face(); wrap.classList.add('open'); dw.classList.add('lit');
+      btn.setAttribute('aria-expanded','true'); line(); lay(); });
+    $$('.q',pick).forEach(q=>q.addEventListener('click',()=>{
+      beat(900,()=>{ done=true; face();
+        say(v,'Shared with '+q.dataset.who); say(d,q.dataset.team+' · just now');
+        say(cons, q.dataset.who+' can open it and comment. Nobody else was added.'); }); }));
+    rev.addEventListener('click',()=>{
+      beat(900,()=>{ done=false; face();
+        say(v,REST.v); say(d,near?WHY:REST.d); say(cons,REST.c); }); });
+    addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
+      if(e.intersectionRatio===0 && done){ clearTimeout(t); wrap.classList.remove('busy');
+        done=false; near=false; face(); say(v,REST.v); say(d,REST.d); say(cons,REST.c); }
+    }),{threshold:[0]}).observe(dw);
+  })();
+
+  /* Interrupt, quietly · the work stopped, and stopping is the loudest thing that happens.
+     The state says where it got to, the line beneath says what it cannot pass, and there is one
+     way on. No colour, no banner, no second warning, no paragraph of apology. */
+  (function(){
+    const dw=$('#hoDeckWrap'), deck=$('#hoDeck'), wrap=$('#hoWrap'), opn=$('#hoOpen'),
+          card=$('#hoCard'), v=$('#hoV'), d=$('#hoD'), cons=$('#hoCons'),
+          btn=$('#hoBtn'), lbl=$('#hoBtnL');
+    if(!dw) return;
+    const REST ={v:'Paused · 14 of 20 files renamed', d:'the last six need admin access',
+                 c:'Your admin sees the six files and the reason.', a:'Ask an admin'};
+    const ASKED={v:'Waiting on your admin', d:'asked just now · 14 already renamed',
+                 c:'Nothing more runs until they answer.',        a:'Revoke'};
+    let asked=false;
+    /* A height set straight from 'auto' to a pixel value never animates: 'auto' is not a
+       number the browser can count from, so the card jumped to its open size in one frame.
+       Measure the height it is at now, put that back as a real number, force the browser to
+       read it, and only then set the target — which gives the transition two numbers to
+       travel between. */
+    const lay=()=>{ const from=card.offsetHeight;
+      card.style.height='auto'; const h=card.offsetHeight;
+      card.style.height=from+'px'; void card.offsetHeight;
+      card.style.height=h+'px';
+      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
+    const shut=()=>{ wrap.classList.remove('open'); dw.classList.remove('lit');
+      opn.setAttribute('aria-expanded','false'); deck.style.height='0px'; card.style.height=''; };
+    /* one slot, and the word in it always says what pressing will do */
+    const paint=()=>{ const t = asked ? ASKED : REST;
+      say(v,t.v); say(d,t.d); say(cons,t.c); say(lbl,t.a); };
+    opn.addEventListener('click',()=>{
+      if(wrap.classList.contains('open')) return shut();
+      wrap.classList.add('open'); dw.classList.add('lit');
+      opn.setAttribute('aria-expanded','true'); lay(); });
+    /* asking a human being is the most consequential thing on this page, so it is the last
+       thing that should look instantaneous. The card holds still, the status line beats. */
+    let bt;
+    const beat=then=>{ clearTimeout(bt); wrap.classList.add('busy');
+      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },900); };
+    btn.addEventListener('click',()=>{
+      if(wrap.classList.contains('busy')) return;
+      beat(()=>{ asked=!asked; paint(); lay(); }); });
+    addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
+    if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
+      if(e.intersectionRatio===0 && asked){ clearTimeout(bt); wrap.classList.remove('busy');
+        asked=false; paint(); }
+    }),{threshold:[0]}).observe(dw);
+  })();
+
+  /* Instead · the address */
+  const cb=$('#copyBtn'), cw=$('#cw'); let ct;
+  const EMAIL='amrit@example.com';
+  cb.addEventListener('click',()=>{
+    say(cw,'copied'); cb.classList.add('ok');
+    if(navigator.clipboard) navigator.clipboard.writeText(EMAIL).catch(()=>{});
+    clearTimeout(ct); ct=setTimeout(()=>{ say(cw,EMAIL); cb.classList.remove('ok'); },2200);
+  });
+
+  /* Instead · repair — the options open over the chip, never under it.
+     Only the part that was misread is spent again; the rest of the row holds still. */
+  (function(){
+    const wrap=$('#regWrap'), chip=$('#regionChip'), menu=$('#regMenu'), inp=$('#regInp'), val=$('#regVal');
+    const open=()=>{ wrap.classList.add('open'); chip.setAttribute('aria-expanded','true');
+                     inp.value = val._mlCur || val.textContent; mark();
+                     inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); };
+    const shut=back=>{ wrap.classList.remove('open'); chip.setAttribute('aria-expanded','false');
+                       if(back!==false) chip.focus(); };
+    const mark=()=>{ const now=(val._mlCur||val.textContent).trim();
+      $$('.opt',menu).forEach(o=>o.classList.toggle('cur', o.textContent.trim()===now)); };
+    const pick=t=>{ say(val,t); chip.classList.add('on'); shut(); };
+    chip.addEventListener('click',e=>{ e.stopPropagation();
+      wrap.classList.contains('open') ? shut() : open(); });
+    /* hover only shows the shape; the panel waits for a press, like everything else */
+    $$('.opt',menu).forEach(b=>b.addEventListener('click',()=>pick(b.textContent.trim())));
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){ e.preventDefault(); if(inp.value.trim()) pick(inp.value.trim()); }
+      if(e.key==='Escape'){ shut(); } });
+    menu.addEventListener('keydown',e=>{ if(e.key==='Escape') shut(); });
+    document.addEventListener('click',e=>{ if(!wrap.contains(e.target)) shut(false); });
+  })();
+
+
+  /* Transform, unasked · the value changes under you, in the place you were reading.
+     No replay control: arriving is the trigger. Scroll away and the value quietly resets, so
+     coming back shows it again. The two thresholds are far apart on purpose — it re-arms only
+     when the stage is almost entirely in view, and resets once a fifth of it has left — so
+     reading it steadily never trips a replay, but moving to the next specimen and back does. */
+  (function(){
+    const box=$('#upd'), wrap=$('#updWrap'), v=$('#capV'), sc=$('#capS'),
+          step=$('#capStep'), pips=$('#capPips');
+    /* leftmost is the contract as it was read, same direction the amendment history runs */
+    const S=[{v:'Liability cap · $2,000,000', s:'read from §11.1'},
+             {v:'Liability cap · $5,000,000', s:'changed by Amendment 3 · executed today'}];
+    const dots=[];
+    if(pips) S.forEach(()=>{ const el=document.createElement('i'); pips.appendChild(el); dots.push(el); });
+    let i=0, armed=true, t;
+    const paint=()=>{ say(v,S[i].v); say(sc,S[i].s);
+      dots.forEach((el,k)=>el.classList.toggle('on', k===i)); };
+    /* press the line and you walk between the two readings, the same one rule the amendment
+       history uses: press whatever is currently showing the reading and you go back one */
+    if(step) step.addEventListener('click',()=>{
+      clearTimeout(t); armed=false; wrap.classList.add('stepped');
+      i=(i+1)%S.length; paint(); });
+    paint();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(es=>es.forEach(e=>{
+        if(e.intersectionRatio >= .95 && armed){
+          armed=false; clearTimeout(t);
+          t=setTimeout(()=>{ i=1; paint(); wrap.classList.add('stepped'); },1500);
+        } else if(e.intersectionRatio < .6 && !armed){
+          clearTimeout(t); i=0; paint(); wrap.classList.remove('stepped'); armed=true;
+        }
+      }),{threshold:[0,.35,.6,.8,.95,1]}).observe(box);
+    }
+  })();
+
+  /* Transform, four deep · the value carries its own history. No control choosing between
+     sibling rows: the value itself steps back through what it used to be, and the line under
+     it says which reading you are looking at. */
+  (function(){
+    const wrap=$('#hsWrap'), btn=$('#histBtn'), step=$('#hsStep'), v=$('#hsV'), d=$('#hsD'),
+          pips=$('#hsPips'), q=$('#hsQ'), sc=$('#hsS'), qb=$('#hsQBtn');
+    if(!wrap) return;
+    const H=[{v:'Notice period · 90 days', d:'in force since 31 March 2026',
+              q:'ninety (90) days',      s:'§14.1 · Amendment No. 3 — Renewal & Terms, 31 March 2026'},
+             {v:'Notice period · 60 days', d:'2 February 2024 to 31 March 2026',
+              q:'sixty (60) days',       s:'§14.1 · Amendment No. 2 — Scope Expansion, 2 February 2024'},
+             {v:'Notice period · 45 days', d:'31 January 2019 to 2 February 2024',
+              q:'forty-five (45) days',  s:'§14.1 · Amendment No. 1 — Pricing, 31 January 2019'},
+             {v:'Notice period · 30 days', d:'as originally signed, 31 January 2018',
+              q:'thirty (30) days',      s:'§14.1 · Master Services Agreement, as executed 31 January 2018'}];
+    /* pips read chronologically — leftmost is the contract as signed — so stepping back
+       walks the stretched one leftward, the direction the dates go */
+    const dots=[];
+    if(pips) for(let k=H.length-1;k>=0;k--){
+      const el=document.createElement('i'); pips.appendChild(el); dots[k]=el; }
+    let i=0;
+    /* the clause in the card belongs to the reading above it, so it steps with the value:
+       only the number changes, in the sentence it was read from */
+    const paint=()=>{ say(v,H[i].v); say(d,H[i].d); say(q,H[i].q); say(sc,H[i].s);
+      dots.forEach((el,k)=>el.classList.toggle('on', k===i));
+      wrap.classList.toggle('stepped', i!==0); };
+    /* one rule, two states: press whatever is currently showing the reading and you go back
+       one. Closed that is the date line; open it is the clause, because the clause has taken
+       the date line's place. The pips stay clear of the glass either way. */
+    const back=()=>{ i=(i+1)%H.length; paint(); };
+    step.addEventListener('click',back);
+    if(qb) qb.addEventListener('click',back);
+    btn.addEventListener('click',()=>{ const on=wrap.classList.toggle('open');
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false'); });
+    paint();
+    const shut=()=>{ wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false'); };
+    addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
+    document.addEventListener('click',e=>{
+      if(wrap.classList.contains('open') && !wrap.contains(e.target)) shut(); });
+  })();
+
+
+  /* The framework's one temporal slot. Hover with a little intent, focus, or press a term
+     and the definition under the set becomes that term's — through Morphline, so the letters
+     that survive travel and the rest fade, the same Transform the specimens use. The choice
+     sticks: a set remembers the last term you reached for. Nothing else changes. */
+  (function(){
+    /* The slot is sized to the longest definition in its own set, measured at the width it
+       really has, so no definition ever clips and the set below never moves. Source stays one
+       line; Attention and Expression each carry one definition that runs to two, so those
+       slots hold two. Measured again on resize, after Morphline has re-laid its glyphs. */
+    function size(fw){
+      const def=$('.fw-def',fw); if(!def) return;
+      const cs=getComputedStyle(def), lh=parseFloat(cs.lineHeight)||28;
+      const probe=document.createElement('p');
+      probe.style.cssText='position:absolute;visibility:hidden;left:0;top:0;margin:0;padding:0;'+
+        'font:'+cs.font+';letter-spacing:'+cs.letterSpacing+';width:'+def.clientWidth+'px;white-space:normal';
+      fw.appendChild(probe);
+      let h=lh;
+      $$('.fw-t',fw).forEach(t=>{ probe.textContent=t.dataset.def; h=Math.max(h, probe.offsetHeight); });
+      probe.remove();
+      def.style.height=Math.ceil(h)+'px';
+    }
+    const all=$$('.fw');
+    const sizeAll=()=>all.forEach(size);
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(sizeAll); else addEventListener('load',sizeAll);
+    let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(sizeAll,200); });
+
+    all.forEach(fw=>{
+      const def=$('.fw-def',fw), terms=$$('.fw-t',fw);
+      let intent;
+      const demo=$('.fw-demo',fw);
+      function pick(b){
+        if(b.getAttribute('aria-pressed')==='true') return;
+        terms.forEach(t=>t.setAttribute('aria-pressed', t===b ? 'true' : 'false'));
+        /* a set either explains itself in a line or demonstrates itself. Never both. */
+        if(def && b.dataset.def) say(def, b.dataset.def);
+        if(demo && b.dataset.m){
+          const vh=$('.vh',demo); if(vh && b.dataset.def) vh.textContent=b.dataset.def;
+          demo.dataset.mode = b.dataset.m;
+          const c=$('b',demo.querySelector('.dm-cost')); if(c) c.textContent=b.dataset.cost;
+        }
+      }
+      terms.forEach(b=>{
+        b.addEventListener('mouseenter',()=>{ clearTimeout(intent); intent=setTimeout(()=>pick(b),90); });
+        b.addEventListener('mouseleave',()=>clearTimeout(intent));
+        b.addEventListener('focus',()=>pick(b));
+        b.addEventListener('click',()=>{ clearTimeout(intent); pick(b); });
+      });
+    });
+  })();
+
+  /* The demonstration runs itself. Choosing a term is the only thing a reader should have
+     to do; after that the pattern performs on a slow loop, so the difference between paying
+     in time and paying in space is watched rather than read. It runs only while the panel is
+     on screen and the tab is in front. Reduced motion holds the finished state and never moves. */
+  (function(){
+    const demo=$('#dExpr'); if(!demo) return;
+    const val=$('.dm-v',demo), cost=$('.dm-cost b',demo);
+    const VALUE='Net 45', CLAUSE='Extended from Net 30 by Schedule 2 on renewal.';
+    const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    let timers=[], live=false, seen=false;
+    /* Expand animates to a real height, so the height has to be measured at the width the
+       demo actually has — one line on a desktop, two on a phone. */
+    const below=$('.dm-below',demo), bp=below&&below.firstElementChild;
+    function measure(){ if(bp) demo.style.setProperty('--below-h', bp.offsetHeight+'px'); }
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
+    let mz; addEventListener('resize',()=>{ clearTimeout(mz); mz=setTimeout(measure,200); });
+    const clear=()=>{ timers.forEach(clearTimeout); timers=[]; };
+    const at=(ms,f)=>timers.push(setTimeout(f,ms));
+
+    function rest(){ demo.classList.remove('on'); if(val) say(val, VALUE); }
+    function beat(){
+      if(!live) return;
+      demo.classList.add('on');
+      if(demo.dataset.mode==='transform' && val) say(val, CLAUSE);
+      at(2600,()=>{ if(!live) return; rest(); at(1500,beat); });
+    }
+    function start(){
+      if(live) return; live=true;
+      if(reduce){ demo.classList.add('on'); return; }
+      clear(); at(700,beat);
+    }
+    function stop(){ live=false; clear(); rest(); }
+    const sync=()=>{ (seen && !document.hidden) ? start() : stop(); };
+
+    new IntersectionObserver(es=>{ seen=es[0].isIntersecting; sync(); },{threshold:.3}).observe(demo);
+    addEventListener('visibilitychange',sync);
+    /* a newly chosen pattern restarts the loop from the top, so nothing is caught mid-move */
+    new MutationObserver(()=>{ if(reduce) return; clear(); rest(); if(live) at(420,beat); })
+      .observe(demo,{attributes:true,attributeFilter:['data-mode']});
+  })();
+
+  /* The description no longer moves on the page: the loader has just inked it in, and
+     doing it twice would be the same sentence told twice. It is split into words only so
+     it keeps the shape the loader handed over. */
+  (function(){
+    const lede=$('#lede'); if(!lede) return;
+    const src=lede.textContent.trim(); lede.textContent='';
+    src.split(/(\s+)/).forEach(chunk=>{
+      if(/^\s+$/.test(chunk)) lede.appendChild(document.createTextNode(chunk));
+      else { const i=document.createElement('i'); i.textContent=chunk; lede.appendChild(i); }
+    });
+    [...lede.querySelectorAll('i')].forEach(w=>w.classList.add('on'));
+  })();
+
+  /* the page's own Later step — hover ghosts it in, press opens it over the page.
+     The scrollbar's width is handed to the body as padding while the page is
+     locked, so nothing behind the pop-up shifts by even a pixel. */
+  (function(){
+    const spine=$('#spine'), ov=$('#ov'), x=$('#ovX');
+    let pad;
+
+
+    function open(){
+      pad = innerWidth - document.documentElement.clientWidth;
+      document.body.style.paddingRight = pad + 'px';
+      document.body.style.overflow = 'hidden';
+      ov.classList.add('on');
+      clearTimeout(ov._rd); ov._rd=setTimeout(()=>ov.classList.add('ready'),520);
+      x.focus();
+    }
+    function shut(){
+      ov.classList.remove('on'); ov.classList.remove('ready'); clearTimeout(ov._rd);
+      document.body.style.overflow = ''; document.body.style.paddingRight = '';
+      spine.focus();
+    }
+    spine.addEventListener('click',open);
+    spine.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){
+      e.preventDefault(); open(); } });
+    x.addEventListener('click',shut);
+    ov.addEventListener('click',e=>{ if(e.target===ov||e.target.classList.contains('ov-in')) shut(); });
+    addEventListener('keydown',e=>{ if(e.key==='Escape'&&ov.classList.contains('on')) shut(); });
+  })();
+})();
+</script>
+
+<script>
+/* The loader does not put the sentence somewhere of its own. It measures where that
+   exact sentence will sit once the page is up, and puts it there — same column, same
+   line, same colour. So when the paper lifts, nothing moves: the sentence stays where
+   it is and the page arrives around it. Re-measured on resize, and the type is copied
+   from the real element rather than guessed at. */
+(function(){
+  var el=document.getElementById('ldr'); if(!el) return;
+  var t=el.querySelector('.ldr-t');
+  var target=document.querySelector(el.getAttribute('data-over'));
+  if(!t||!target){ if(el.parentNode) el.parentNode.removeChild(el); return; }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.parentNode.removeChild(el); return; }
+
+  function place(){
+    var r=target.getBoundingClientRect(), cs=getComputedStyle(target);
+    t.style.top=(r.top+scrollY)+'px';
+    t.style.left=(r.left+scrollX)+'px';
+    t.style.width=r.width+'px';
+    t.style.font=cs.font;
+    t.style.letterSpacing=cs.letterSpacing;
+    t.style.setProperty('--ink-on', cs.color);
+  }
+  place();
+  target.style.visibility='hidden';
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
+  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(place,150); });
+
+  el.classList.add('run'); document.body.classList.add('ldr-on');
+  var src=t.textContent.replace(/\s+/g,' ').trim();
+  t.textContent='';
+  src.split(/(\s+)/).forEach(function(c){
+    if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
+    else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
+  });
+  var ws=[].slice.call(t.querySelectorAll('i'));
+  var STEP=Math.max(140, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
+  ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 300+k*STEP); });
+  setTimeout(function(){
+    el.classList.add('gone');
+    document.body.classList.remove('ldr-on');
+    /* removed only once the paper is fully clear, when the sentence on it and the sentence
+       under it are the same pixels */
+    setTimeout(function(){
+      target.style.visibility='';
+      if(el.parentNode) el.parentNode.removeChild(el);
+    }, 1060);
+  }, 300 + ws.length*STEP + 700);
+})();
+</script>
+
+<script>
+/* Each mark opens to the width of its own word. Measured from the word in place,
+   after the fonts have landed, and again on resize — never guessed. */
+(function(){
+  var items=[].slice.call(document.querySelectorAll('.nb'));
+  if(!items.length) return;
+  function measure(){
+    items.forEach(function(a){
+      var w=a.querySelector('.nwd'); if(!w) return;
+      var prev=a.style.width; a.style.width='auto';
+      var px=Math.ceil(w.getBoundingClientRect().width);
+      a.style.width=prev;
+      a.style.setProperty('--w', px+'px');
+    });
+  }
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
+  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(measure,200); });
+
+  /* The block that marks this page does not arrive dark. It darkens a beat after the page
+     has settled, so the state reads as something the page did rather than something that
+     was always sitting there. */
+  document.body.classList.add('nav-arrive');
+  items.forEach(function(a,i){ a.style.setProperty('--d', (i*70)+'ms'); });
+  function arrive(){
+    document.body.classList.add('nav-in');
+    setTimeout(function(){ document.body.classList.add('nav-lit'); }, items.length*70 + 80);
+  }
+  if(!document.getElementById('ldr')) setTimeout(arrive, 180);
+  else {
+    var w = setInterval(function(){
+      if(!document.getElementById('ldr')){ clearInterval(w); setTimeout(arrive, 120); }
+    }, 100);
+  }
+})();
+</script>
+</body>
+</html>
