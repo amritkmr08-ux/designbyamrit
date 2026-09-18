@@ -1348,7 +1348,7 @@
         <ul class="ab-lines r">
           <li><span class="dim">Design</span> &middot; Interaction design, information architecture, user research, design systems</li>
           <li><span class="dim">AI product</span> &middot; Agentic workflows, human-in-the-loop review, provenance, uncertainty and trust</li>
-          <li><span class="dim">Tools</span> &middot; Figma, FigJam, HTML, CSS and JavaScript, Miro, Adobe CC</li>
+          <li><span class="dim">Tools</span> &middot; Figma, FigJam, HTML, Miro, Adobe CC</li>
         </ul>
 
         <h2 class="ab-h r">Education</h2>
@@ -1511,6 +1511,8 @@
     bar.setAttribute('aria-expanded', on ? 'true' : 'false');
     clearTimeout(arm); armed = false;
     if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
+    /* the page is back where it was; anything that stopped measuring can start again */
+    if (!on) setTimeout(function(){ dispatchEvent(new Event('nav:closed')); }, 380);
   };
   bar.setAttribute('aria-label', 'Pages');
   open(false);

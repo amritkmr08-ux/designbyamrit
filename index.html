@@ -1111,8 +1111,12 @@
      because html is the scrolling element, and on a phone a touch drag moves
      the page regardless. Both are locked, and the overlay itself refuses touch
      gestures so nothing underneath can be dragged. */
-  html.ldr-on,body.ldr-on{overflow:hidden;overscroll-behavior:none}
-  html.ldr-on{touch-action:none}
+  /* overflow:hidden alone does not hold a phone still - a touch drag scrolls the page
+     anyway. Pinning the body is what actually stops it, and the page is at the top when
+     the loader runs, so there is nothing to put back afterwards. */
+  html.ldr-on{overflow:hidden;overscroll-behavior:none;touch-action:none;height:100%}
+  body.ldr-on{overflow:hidden;overscroll-behavior:none;touch-action:none;
+              position:fixed;top:0;left:0;right:0;width:100%}
   .ldr{touch-action:none;overscroll-behavior:none}
 
   header .wide, #work .wrap, #contact .wrap, footer, .nav-inner {
@@ -1690,7 +1694,15 @@
     /* A band across the upper third of the screen. Two sections can sit in it at once while
        one scrolls out and the next scrolls in, so the one further down the page wins — that
        is the one being scrolled towards. */
-    var live = [];
+    var live = [], want = 0;
+    /* The band is measured against the window, and on a phone opening the nav pile grows
+       the bar from 62px to about 320px. The page slides under the band, different sections
+       fall into it, and the mark for the section you were actually reading went grey the
+       moment you opened the list - which is the one moment you are looking at it. The spy
+       keeps watching while the pile is open; it just stops having an opinion until the
+       pile is shut and the page is back where it was. */
+    function settle(){ if (!document.body.classList.contains('nav-open')) show(want); }
+    addEventListener('nav:closed', settle);
     var spy = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         var i = secs.indexOf(e.target);
@@ -1698,7 +1710,7 @@
         if (e.isIntersecting) { if (at < 0) live.push(i); }
         else if (at >= 0) live.splice(at, 1);
       });
-      if (live.length) show(Math.max.apply(null, live));
+      if (live.length) { want = Math.max.apply(null, live); settle(); }
     }, { rootMargin: "-30% 0px -60% 0px" });
     secs.forEach(function (sc) { spy.observe(sc); });
   })();
@@ -1846,6 +1858,8 @@
     bar.setAttribute('aria-expanded', on ? 'true' : 'false');
     clearTimeout(arm); armed = false;
     if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
+    /* the page is back where it was; anything that stopped measuring can start again */
+    if (!on) setTimeout(function(){ dispatchEvent(new Event('nav:closed')); }, 380);
   };
   bar.setAttribute('aria-label', 'Pages');
   open(false);
