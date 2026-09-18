@@ -1110,14 +1110,17 @@
 
        Nothing here reads --ml-h any more, so no morph can change a height. */
     .hero[data-morph-text]{height:auto;min-height:33px}
-    #apV,#amV,#capV,#hoV,#wkV{min-height:64px}
     #cw{height:auto;min-height:33px}
     [data-morph-text]{height:auto;min-height:28px}
-    #apD{min-height:56px}
-    #hsS{min-height:80px}
-    #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:56px}
     .mline{height:auto;min-height:28px}
     .hscard .hl[data-morph-text]{height:auto;min-height:23px}
+    /* Only the ones that really need two lines at this width. Reserving two for all of
+       them held a half-line of nothing under "Share the draft with Alex" and "Liability
+       cap - $2,000,000", which fit on one line from 360px up. Measured at 320, 360, 390,
+       414 and 430, through every state each value passes through. */
+    #apV,#hoV,#wkV{min-height:64px}
+    #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:56px}
+    #hsS{min-height:56px}
 
     /* ── The chevron nobody could reach for ────────────────────────────────
        Six of these say "this opens" with a chevron that is invisible until a
@@ -1141,9 +1144,20 @@
     .stage .lit .cv{opacity:1!important}
     .apb,.hob{position:relative}
     .apb .cv.apcv,.hob .cv.hocv{position:absolute;right:0;top:10px;margin:0;vertical-align:0}
-    /* The value is a block here, so it already ends its own line. The <br> that follows
-       it was landing on a line of its own and holding 24px of nothing open. */
+    /* The value is a block here, so it already ends its own line, and the <br> after it
+       was landing on a line of its own. Hiding the <br> was not enough: the newline
+       between the tags is a text node of its own, and between a block and an inline-block
+       it still draws a 28px line box - the gap under "Send summary to 42 customers" and
+       "Paused - 14 of 20 files renamed". Whitespace between two blocks is discarded, so
+       the line underneath becomes a block too and the gap goes with it. */
     .apb > br,.hob > br{display:none}
+    .apb > .beat,.hob > .beat{display:block}
+  }
+  /* A narrow phone wraps four more of them onto a second line */
+  @media (max-width:359px){
+    #amV,#capV{min-height:64px}
+    #apD{min-height:56px}
+    #hsS{min-height:81px}
   }
 
   @media (max-width:700px){
