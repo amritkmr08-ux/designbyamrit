@@ -816,6 +816,10 @@
 
   footer { text-align: left; max-width: 1180px; margin: 0 auto; padding: 64px 40px 44px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 12.5px; color: var(--faint); }
   footer .credit { margin-top: 0; }
+  /* Said once, in the quietest place on the page, because it is true and because the work
+     this site is about is people and models sharing the job. Plain text, not a badge. */
+  .fbuilt { color: var(--faint); }
+
   footer .floot { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: color 0.25s ease; }
   footer .floot:hover { color: var(--ink); border-color: var(--ink); }
 
@@ -1051,7 +1055,19 @@
   .md h3 { font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 26px; margin: 64px 0 6px; letter-spacing: -0.012em; }
   .md p { font-size: 17.5px; line-height: 26px; max-width: 52ch; color: var(--muted); margin: 0 0 22px; }
   .md p b { color: inherit; font-weight: 400; }
-  .md-ev { font-size: 14px !important; color: var(--faint) !important; margin: 66px 0 0 !important; line-height: 1.62 !important; }
+  /* What my part in it was, and what is actually measured, used to sit at the foot of a
+     2,000-word card. The people who most need that line - the ones deciding whether to
+     believe the rest - were the least likely to scroll to it. It is part of the header
+     now: title, what and where, the sentence, then the honest account of my role. The
+     rule underneath closes the header rather than splitting it. */
+  .md-ev { font-size: 14px !important; color: var(--faint) !important; margin: 18px 0 0 !important; line-height: 1.62 !important; }
+  /* .md p sets the measure in ch at 17.5px; this line is 14px, so the same 52ch came out
+     115px narrower than the sentence above it. 65ch at 14px is the same physical measure. */
+  .md p.md-ev { max-width: 65ch; }
+  /* the way out of a long read is an offer, not a button */
+  .md-end { margin: 60px 0 0 !important; padding-top: 26px; border-top: 1px solid var(--line); font-size: 17.5px; }
+  .md-end a { color: var(--accent); }
+  .md-end a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .md-links { display: flex; gap: 26px; flex-wrap: wrap; margin: 26px 0 0 !important; }
   .md-go { color: var(--accent); font-size: 17.5px; }
   @media (max-width: 700px) {
@@ -1163,7 +1179,9 @@
   #contact h2 .q.is-after .ml-g { color: var(--ink); }
   .copybtn { margin-top: 96px; }
   .mailalt { font-size: 14px; display: block; margin-top: 26px; }
-  footer { margin-top: 150px; padding-top: 26px; padding-bottom: 60px; border-top: 1px solid var(--line); display: block; font-size: 14px; }
+  /* two things in the footer now, so it goes back to the row it was built as: the name on
+     the left, how it was made on the right, the same as the other two pages. */
+  footer { margin-top: 150px; padding-top: 26px; padding-bottom: 60px; border-top: 1px solid var(--line); display: flex; font-size: 14px; }
   .rule { display: none; }
   /* Four sizes, nothing else. 114 the name, 24 a heading, 17.5 everything you read,
      14 the labels around it. Weight and colour do the rest. */
@@ -1466,8 +1484,9 @@
       <div class="md-body">
         <h2>Contract Relationships</h2>
         <p class="md-k">Contract systems &middot; Sirion &middot; 2025&ndash;26</p>
-        <hr />
         <p class="md-lead">A folder tells you where a document sits. Not what it changes.</p>
+        <p class="md-ev">My role: framing the problem, prototyping the alternatives, making the argument &middot; Shared decisions with designers, product managers and engineers &middot; Approved and prioritised for build; not in production, so there are no post-launch numbers here</p>
+        <hr />
         <p>A legal team asks &ldquo;which amendment applies to this SOW?&rdquo; dozens of times a week. Answering took half an hour of reconstruction: open the folder, read the file names, check the notes, and hope nobody had renamed anything.</p>
         <h3>It was never a search problem</h3>
         <p>I tried what search offers: filters, OCR, a better index. None of it worked.</p>
@@ -1487,7 +1506,7 @@
         <p>The radial layout shrank to 12% to fit and left zero legible labels. I replaced it with branching columns grouped by status rather than defend it, and settled the debate with the measurement instead of an opinion.</p>
         <h3>What transfers</h3>
         <p>Any system where AI reasons over stored records. If the storage model is wrong, the AI is confidently wrong. Fix the model before the interface.</p>
-        <p class="md-ev">My role: framing the problem, prototyping the alternatives, making the argument &middot; Shared decisions with designers, product managers and engineers &middot; Approved and prioritised for build; not in production, so there are no post-launch numbers here</p>
+        <p class="md-end">Happy to go deeper on this one. <a href="mailto:amritkmr08@gmail.com?subject=Contract%20Relationships">Write to me</a></p>
       </div>
     </article>
     <article class="md" data-i="1" hidden>
@@ -1495,8 +1514,9 @@
       <div class="md-body">
         <h2>Contract Onboarding</h2>
         <p class="md-k">AI onboarding review &middot; Sirion &middot; Shipped</p>
-        <hr />
         <p class="md-lead">The agent groups the contracts. A person decides the groups are right.</p>
+        <p class="md-ev">Only designer on it, concept to shipped screens &middot; No usage number here until I have one I trust and know how it was measured</p>
+        <hr />
         <p>A new customer arrives with years of contracts as loose files. Before the platform can track a single renewal or obligation, every file needs two facts attached: who it is with, and which agreement it belongs under. Someone used to read each one to find out.</p>
         <p>This is the first thing a customer ever does with the product. If it goes badly, everything built on top of it inherits the mess.</p>
         <h3>The speed is the value and the risk</h3>
@@ -1513,7 +1533,7 @@
         <p>Confirming a group applies to every document in it, and the system offers the system records it thinks are right rather than making the reviewer search. Where nothing fits, they create the record from the same place instead of leaving the flow.</p>
         <h3>What transfers</h3>
         <p>Any bulk AI process a person is accountable for. Put the human checkpoints inside the run, group the work by the unit the person actually decides about, and make one correction fix everything downstream of it.</p>
-        <p class="md-ev">Only designer on it, concept to shipped screens &middot; No usage number here until I have one I trust and know how it was measured</p>
+        <p class="md-end">Happy to go deeper on this one. <a href="mailto:amritkmr08@gmail.com?subject=Contract%20Onboarding">Write to me</a></p>
       </div>
     </article>
     <article class="md" data-i="2" hidden>
@@ -1521,8 +1541,9 @@
       <div class="md-body">
         <h2>Phoenix Listing</h2>
         <p class="md-k">Agent in the contract listing &middot; Sirion &middot; In development</p>
-        <hr />
         <p class="md-lead">A question reshapes the contract listing into the answer.</p>
+        <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
+        <hr />
         <p>Enterprise software is designed as though people will arrive at it. They don&rsquo;t.</p>
         <p>Nobody&rsquo;s job is &ldquo;check the contract system&rdquo;. A system of record isn&rsquo;t somewhere anyone chooses to spend their morning, and designing as if they will is a large part of why this category still feels manual.</p>
         <h3>The first question is not what the homepage shows</h3>
@@ -1538,7 +1559,7 @@
         <p>A wrong answer that arrives with its reasoning visible is recoverable. A wrong answer that arrives as a finished action is not. The panel is designed so the expensive step always happens after a person has seen the interpretation.</p>
         <h3>What I own here</h3>
         <p>The framework and the argument for it, the sessions with stakeholders, and the listing prototypes in HTML. Scope is platform-wide: entry points, personalisation, how much autonomy an agent gets, and how we would know it worked.</p>
-        <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
+        <p class="md-end">Happy to go deeper on this one. <a href="mailto:amritkmr08@gmail.com?subject=Phoenix%20Listing">Write to me</a></p>
       </div>
     </article>
     <article class="md" data-i="3" hidden>
@@ -1546,8 +1567,9 @@
       <div class="md-body">
         <h2>Auto Extraction</h2>
         <p class="md-k">AI review interface &middot; Sirion &middot; Shipped 2024</p>
-        <hr />
         <p class="md-lead">An AI can extract 128 fields. A lawyer still has to check every one.</p>
+        <p class="md-ev">Owned end to end, research to shipped releases &middot; Three redesigns &middot; Retention measured in Heap, June 2025</p>
+        <hr />
         <p>The model pulled 128 values out of a contract in seconds. A lawyer then had to check every one.</p>
         <p>If checking takes as long as reading, the AI has moved the work, not removed it. That was the whole design problem, and it is not solved by making the model better.</p>
         <h3>Three versions, each one earning the next</h3>
@@ -1564,7 +1586,7 @@
         <p>Two eight-month cohorts in Heap, captured June 2025. The cohort mix and the extraction model both changed over the period, so I claim the shape of the curve, not the whole number.</p>
         <h3>What transfers</h3>
         <p>Wherever a model produces many answers a person is accountable for: show one at a time, put the evidence next to the claim, and spend the interface on verification rather than on presenting confidence.</p>
-        <p class="md-ev">Owned end to end, research to shipped releases &middot; Three redesigns &middot; Retention measured in Heap, June 2025</p>
+        <p class="md-end">Happy to go deeper on this one. <a href="mailto:amritkmr08@gmail.com?subject=Auto%20Extraction">Write to me</a></p>
       </div>
     </article>
   </div>
@@ -1583,6 +1605,7 @@
 </section>
 <footer>
   <div>© <span id="year"></span> Amrit Kumar</div>
+  <div class="fbuilt">Built with Claude</div>
 </footer>
 <script>
 (function () {

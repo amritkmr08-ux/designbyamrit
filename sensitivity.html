@@ -989,6 +989,11 @@
 
   footer{margin-top:150px;padding-top:26px;padding-bottom:70px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
   footer a:hover{color:var(--ink)}
+  footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+  /* Said once, in the quietest place on the page, because it is true and because the work
+     this site is about is people and models sharing the job. Plain text, not a badge. */
+  .fbuilt { color: var(--faint); }
+
   @media (max-width:900px){
     :root{--axis:24px}
     .wlcv{display:none}
@@ -1468,7 +1473,7 @@
     </div></div></div>
 </div>
 
-<footer class="wrap"><a href="index.html">&larr; Amrit Kumar</a></footer>
+<footer class="wrap"><a href="index.html">&larr; Amrit Kumar</a><span class="fbuilt">Built with Claude</span></footer>
 
 <script>
 /* The pile. One listener: while it is closed, the first tap anywhere in the bar
