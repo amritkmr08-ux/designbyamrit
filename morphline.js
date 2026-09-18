@@ -387,3 +387,53 @@ function onWidth(fn){
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
   else addEventListener('load', start);
 })();
+
+/* ── Putting the nudge arrow where the reading stops ───────────────────────
+   Morphline draws a sentence as loose glyphs that travel into place over about
+   half a second, staggered, so anything that measures them on a fixed timeout
+   catches them mid-flight and drops the arrow where they no longer are. This
+   watches instead: it re-places the mark every frame until the last glyph has
+   stopped moving, then marks it settled. The page shows the arrow only once
+   that class is on, so it never slides around while the words are landing. */
+window.nudgeMark = function (host, go) {
+  var frames = 0, prev = -1, same = 0;
+  function put() {
+    var lay = host.querySelector('.ml-layer');
+    if (!lay || !lay.firstChild) return null;
+    var r = host.getBoundingClientRect(), last = null;
+    [].slice.call(lay.children).forEach(function (g) {
+      if (parseFloat(getComputedStyle(g).opacity) < 0.5) return;   /* on its way out */
+      if (!(g.textContent || '').trim()) return;                   /* a space is not an ending */
+      var b = g.getBoundingClientRect();
+      if (!b.width) return;
+      if (!last || b.bottom > last.bottom + 1 ||
+          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
+    });
+    if (!last) return null;
+    var cs = getComputedStyle(lay.firstChild);
+    var F = parseFloat(cs.fontSize) || 17.5;
+    var L = parseFloat(cs.lineHeight) || F * 1.6;
+    /* Every glyph on a line shares the line box bottom; its own height does not,
+       which is what made the arrow drift from one line to the next. From that
+       bottom back up to the baseline is half the leading plus the descender. */
+    var drop = (L - F * 1.21) / 2 + F * 0.24;
+    go.style.left = Math.round(last.right - r.left + 7) + 'px';
+    go.style.top  = Math.round(last.bottom - r.top - drop - 14) + 'px';
+    return last.right;
+  }
+  go.classList.remove('set');
+  (function step() {
+    var v = put();
+    if (v !== null) {
+      /* The glyphs do not start moving on the same frame the hover fires, so a
+         plain "has it stopped" test settles on the old line before the new one
+         has begun. Watch past the whole travel first, then wait for stillness. */
+      if (frames > 40 && Math.abs(v - prev) < 0.5) {
+        if (++same > 2) { go.classList.add('set'); return; }
+      } else same = 0;
+      prev = v;
+    }
+    if (++frames < 120) requestAnimationFrame(step);
+    else go.classList.add('set');
+  })();
+};

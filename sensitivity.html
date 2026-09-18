@@ -27,7 +27,8 @@
            past about 2200px, where a third of the leftover is more margin than any column
            needs. */
         --axis:clamp(24px, calc((100% - var(--col)) * 0.34), 24vw);}
-  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
   *{margin:0;padding:0;box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:28px;-webkit-font-smoothing:antialiased}
@@ -130,6 +131,22 @@
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk{position:absolute;inset:0;border-radius:8px;background:#DCDDD8;
       transition:opacity var(--md) ease var(--ml), background-color 420ms ease}
+  /* ── One icon, and only one ───────────────────────────────────────────
+     Five marks and no words until you reach for one, which leaves a reader
+     guessing at all five. An icon on the page you are already on answers the
+     question you are not asking, and four of these five have no symbol anybody
+     would read the same way. Home does, and it shows only where it can be read:
+     knocked out of the dark block, on the page that block belongs to. On the other
+     pages the home mark is a grey box like the rest. It leaves with the mark when
+     the mark opens into its word. */
+  .nb.nav-id .nmk::after, .nb.id .nmk::after {
+        content: ""; position: absolute; inset: 0; opacity: 0;
+        background-color: var(--paper);
+        -webkit-mask: var(--home) no-repeat center / 15px 15px;
+        mask: var(--home) no-repeat center / 15px 15px;
+        transition: opacity 420ms ease; }
+  body.nav-lit .nb.nav-id.here .nmk::after,
+  body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
   .nb .nwd{position:absolute;left:0;top:0;height:28px;line-height:28px;white-space:nowrap;
       opacity:0;transition:opacity var(--td) ease var(--tl)}
   /* Reaching for a mark, and letting it go, are two different moves and are timed
@@ -143,7 +160,7 @@
       --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.here .nmk{background:var(--here)}
+  body.nav-lit .nb.here .nmk{background:var(--ink)}
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -224,7 +241,9 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
+    .nb.here .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    /* the dark does not wait for the bar to light up here, so neither does the house */
+    .nb.nav-id.here .nmk::after,.nb.id.here .nmk::after{opacity:1}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
@@ -291,6 +310,17 @@
      own 440px stage — otherwise the separator introduces a screenful of paper. The rest keep
      their room. */
   .stages .stage:first-of-type{min-height:0;align-content:start;margin-top:0}
+  .stages .stage:nth-of-type(1){min-height:216px}
+  .stages .stage:nth-of-type(2){min-height:408px}
+  .stages .stage:nth-of-type(3){min-height:272px}
+  .stages .stage:nth-of-type(4){min-height:344px}
+  .stages .stage:nth-of-type(5){min-height:384px}
+  .stages .stage:nth-of-type(6){min-height:392px}
+  .stages .stage:nth-of-type(7){min-height:408px}
+  .stages .stage:nth-of-type(8){min-height:288px}
+  .stages .stage:nth-of-type(9){min-height:320px}
+  .stages .stage:nth-of-type(10){min-height:384px}
+  .stages .stage:nth-of-type(11){min-height:256px}
   .seplbl .lbl{font-family:var(--display);font-size:14px;letter-spacing:.1em;text-transform:uppercase;
                color:var(--faint);font-weight:400;line-height:20px;margin:0}
   .seplbl .lbl-s{font-size:17.5px;line-height:28px;color:var(--muted);margin:10px 0 0;max-width:46ch}
@@ -299,11 +329,18 @@
      something to be measured from. */
   .seprule{max-width:var(--col);height:1px;background:var(--line);margin:28px 0 0}
   @media (max-width:700px){ .seplbl{margin-top:112px} }
-  .stage{display:grid;align-content:center;min-height:440px;max-width:var(--col)}
+  /* Every specimen used to be a 440px frame with its content floating in the middle,
+     so a specimen with two lines in it sat in the same box as one with a card, and the
+     short ones opened a hole three hundred pixels deep. Each one reserves what it
+     actually needs instead - the height of its own widest open state, measured once at
+     1000, 1280 and 1440 and written down below - and the air between them is one
+     constant. Nothing is measured while the page runs, so nothing can shuffle. */
+  .stage{display:grid;align-content:start;min-height:0;max-width:var(--col)}
+  .stages .stage + .stage{margin-top:72px}
   /* This frame is taller because its card is the biggest thing on the page. It was 540
      when the card was 620 wide and stacked its breakdown; the card is wider and replaces
      now, so it needs less. A frame follows what it holds. */
-  .stage.tall{min-height:480px}
+  .stage.tall{min-height:0}
   /* The plates said PREVIEW, TRANSFORM, EXPAND, OPEN over each specimen, which told the
      reader which kind of thing this was before they had touched it. A specimen run that
      names its own conclusions is not a specimen run. They stay in the document, where
@@ -452,9 +489,30 @@
      way to invite someone in - the signal and the obstacle were the same thing. The block
      keeps its three whole lines and an arrow says it instead, in the one colour on the
      page that means "this opens". */
-  .wline.is-after::after{content:"";position:absolute;right:0;bottom:4px;width:14px;height:14px;color:var(--here);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;pointer-events:none}
-  .spine.is-after .ml-layer{
-    -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%);mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%)}
+  /* It used to be pinned to the bottom right corner of the block, which is wherever
+     the box ends rather than wherever the sentence does - so it sat in white space a
+     word or two past the full stop. Measured off the last glyph now, like every other
+     one on the site: it lands after the reading, not after the box. */
+  .wline .wl-go{position:absolute;opacity:0;pointer-events:none;width:14px;height:14px;
+        color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        transform:translate(-5px,5px);
+        transition:opacity .22s ease .14s,transform .34s cubic-bezier(.22,.61,.36,1) .14s}
+  .wline.is-after:not(.clip) .wl-go.set{opacity:1;transform:none}
+  /* On a narrow column the sentence does not finish inside the three lines - it is cut
+     mid-clause. There is no end of the reading to put a mark after, so it goes back to
+     the corner of the block, which is what the block itself is offering. */
+  .wline.is-after.clip::after{content:"";position:absolute;right:0;bottom:4px;
+        width:14px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;pointer-events:none}
+  /* This block had the same fade the specimen cards had: the last line dimmed to say
+     there was more, which made the invitation and the obstacle the same thing. Same
+     answer here - the lines stay readable and the arrow says it, after the full stop. */
+  .spine .sp-go{position:absolute;opacity:0;pointer-events:none;
+    width:14px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+    transform:translate(-5px,5px);
+    transition:opacity .22s ease .14s,transform .34s cubic-bezier(.22,.61,.36,1) .14s}
+  .spine.is-after .sp-go.set,
+  .spinewrap:hover .sp-go.set,
+  .spinewrap:focus-visible .sp-go.set{opacity:1;transform:none}
   /* The mark used to chase the end of the last readable line. That end is wherever the
      text happened to wrap, so it landed mid-sentence and moved somewhere new on every
      state. It hangs in the margin now, level with the first line: it marks the block,
@@ -1051,10 +1109,27 @@
        always, whether or not it has a card. Nothing is measured, nothing is
        watched, nothing can move. It costs a longer page, which on a phone is
        a scroll, and buys a page that holds still. */
-    .stage{min-height:0;align-content:start;padding:0 0 360px}
+    /* Every specimen used to get the same 360px of reserved room, whether it opened
+       a tall card or nothing at all, so the short ones sat in a hole two thirds of a
+       screen deep. Each one now reserves what it actually needs: the height of its
+       own widest open state, measured once at 320, 360, 390, 414, 430, 760 and 900
+       and written down here. Still nothing measured while the page is running, so
+       nothing can shuffle - but the page is roughly half as long. */
+    .stage{min-height:0;align-content:start;padding:0}
     .stage.tall{min-height:0}
-    .stages .stage + .stage{margin-top:0}
+    .stages .stage + .stage{margin-top:72px}
     .stages .stage:first-of-type{margin-top:0}
+    .stages .stage:nth-of-type(1){min-height:416px}
+    .stages .stage:nth-of-type(2){min-height:320px}
+    .stages .stage:nth-of-type(3){min-height:80px}
+    .stages .stage:nth-of-type(4){min-height:256px}
+    .stages .stage:nth-of-type(5){min-height:368px}
+    .stages .stage:nth-of-type(6){min-height:384px}
+    .stages .stage:nth-of-type(7){min-height:240px}
+    .stages .stage:nth-of-type(8){min-height:144px}
+    .stages .stage:nth-of-type(9){min-height:360px}
+    .stages .stage:nth-of-type(10){min-height:288px}
+    .stages .stage:nth-of-type(11){min-height:88px}
     .plate{margin-bottom:0}
     .side{grid-template-columns:1fr;gap:18px 0}
     .md-body{padding:52px 28px 88px}
@@ -2429,6 +2504,63 @@ function onWidth(fn){
   });
   /* and so does closing whatever it opened */
   addEventListener('keydown', function(e){ if (e.key === 'Escape') only(null); });
+})();
+</script>
+<script>
+/* The closing block morphs and opens the essay, so it carries the same nudge the
+   specimens and the Work rows carry. Placed by watching the glyphs land. */
+(function(){
+  var wrap = document.getElementById('spine'); if (!wrap) return;
+  var sp = wrap.querySelector('.spine'); if (!sp) return;
+  function mark(){
+    if (typeof nudgeMark !== 'function') return;
+    var go = sp.querySelector('.sp-go');
+    if (!go){ go = document.createElement('span'); go.className = 'sp-go';
+              go.setAttribute('aria-hidden','true'); sp.appendChild(go); }
+    nudgeMark(sp, go);
+  }
+  var t;
+  function soon(){ clearTimeout(t); t = setTimeout(mark, 40); }
+  wrap.addEventListener('pointerenter', soon);
+  wrap.addEventListener('focus', soon);
+  wrap.addEventListener('touchstart', soon, {passive:true});
+  wrap.addEventListener('pointerleave', function(){ clearTimeout(t); });
+})();
+</script>
+<script>
+/* Same nudge as the closing block and the Work rows, on the specimen that opens
+   the card: placed by watching the glyphs land, so it follows the sentence. */
+(function(){
+  var wrap = document.getElementById('wallWrap'); if (!wrap) return;
+  var wl = wrap.querySelector('.wline'); if (!wl) return;
+  /* Does the sentence finish inside the block, or is it cut mid-clause? Asked of the
+     glyphs themselves once they have landed, because the block clips and the glyph
+     layer is absolutely positioned - the box's own scroll height knows nothing. */
+  function cut(){
+    var lay = wl.querySelector('.ml-layer'); if (!lay) return false;
+    var limit = wl.getBoundingClientRect().top + wl.clientHeight + 1, over = false;
+    [].slice.call(lay.children).forEach(function(g){
+      if (parseFloat(getComputedStyle(g).opacity) < 0.5) return;
+      if (!(g.textContent || '').trim()) return;
+      if (g.getBoundingClientRect().bottom > limit) over = true;
+    });
+    return over;
+  }
+  function mark(){
+    if (typeof nudgeMark !== 'function') return;
+    var go = wl.querySelector('.wl-go');
+    if (!go){ go = document.createElement('span'); go.className = 'wl-go';
+              go.setAttribute('aria-hidden','true'); wl.appendChild(go); }
+    nudgeMark(wl, go);
+    setTimeout(function(){ wl.classList.toggle('clip', cut()); }, 900);
+  }
+  var t;
+  function soon(){ clearTimeout(t); t = setTimeout(mark, 40); }
+  wrap.addEventListener('pointerenter', soon);
+  wrap.addEventListener('focus', soon);
+  wrap.addEventListener('touchstart', soon, {passive:true});
+  wrap.addEventListener('click', soon);
+  wrap.addEventListener('pointerleave', function(){ clearTimeout(t); });
 })();
 </script>
 </body>

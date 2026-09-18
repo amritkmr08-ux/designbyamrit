@@ -118,6 +118,22 @@
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk{position:absolute;inset:0;border-radius:8px;background:#DCDDD8;
       transition:opacity var(--md) ease var(--ml), background-color 420ms ease}
+  /* ── One icon, and only one ───────────────────────────────────────────
+     Five marks and no words until you reach for one, which leaves a reader
+     guessing at all five. An icon on the page you are already on answers the
+     question you are not asking, and four of these five have no symbol anybody
+     would read the same way. Home does, and it shows only where it can be read:
+     knocked out of the dark block, on the page that block belongs to. On the other
+     pages the home mark is a grey box like the rest. It leaves with the mark when
+     the mark opens into its word. */
+  .nb.nav-id .nmk::after, .nb.id .nmk::after {
+        content: ""; position: absolute; inset: 0; opacity: 0;
+        background-color: var(--paper);
+        -webkit-mask: var(--home) no-repeat center / 15px 15px;
+        mask: var(--home) no-repeat center / 15px 15px;
+        transition: opacity 420ms ease; }
+  body.nav-lit .nb.nav-id.here .nmk::after,
+  body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
   .nb .nwd{position:absolute;left:0;top:0;height:28px;line-height:28px;white-space:nowrap;
       opacity:0;transition:opacity var(--td) ease var(--tl)}
   /* Reaching for a mark, and letting it go, are two different moves and are timed
@@ -131,7 +147,7 @@
       --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.here .nmk{background:var(--here)}
+  body.nav-lit .nb.here .nmk{background:var(--ink)}
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -210,7 +226,9 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
+    .nb.here .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    /* the dark does not wait for the bar to light up here, so neither does the house */
+    .nb.nav-id.here .nmk::after,.nb.id.here .nmk::after{opacity:1}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
@@ -1016,7 +1034,8 @@
   .nav-end { display: flex; align-items: center; gap: 14px; }
   /* ===== Editorial · paper, hairlines, one quiet field ===== */
   :root { --paper:#F7F7F5; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --soft:#EDEDEA; --mark:#DCE5D3; --accent:#3D5A45; --field:#EEEFEB; }
-  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
   body { background: var(--paper); color: var(--ink); }
   body::after { opacity: .10; }
   nav { background: transparent !important; border-bottom: 0 !important; }
@@ -1172,12 +1191,7 @@
   .ab-rows .rw:focus-visible { outline: none; }
   .ab-rows .n { position: relative; display: block; height: 28px; font-family: var(--display); font-size: 14px; letter-spacing: .02em; color: var(--faint); line-height: 28px; white-space: nowrap; }
   .ab-rows .n i { position: absolute; left: 0; top: 0; font-style: normal; }
-  .ab-rows .n .num { transition: opacity .18s ease; }
-  .ab-rows .n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink);
-                     width: 14px; height: 14px; top: 5px; display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
-                     transition: opacity .22s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
-  .ab-rows a.rw:hover .num, .ab-rows a.rw:focus-visible .num { opacity: 0; }
-  .ab-rows a.rw:hover .arw, .ab-rows a.rw:focus-visible .arw { opacity: 1; transform: none; }
+  /* No arrow by the year here either - the one after the sentence carries it. */
   .ab-rows .t { display: block; min-width: 0; }
   .ab-rows .t b { display: block; font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 28px; letter-spacing: -.012em; }
   .ab-rows .t b span { color: var(--faint); font-weight: 400; }
@@ -1194,11 +1208,11 @@
      morphed your eye is at the end of a sentence, a column away from it. The
      nudge goes where the reading stops instead. Same drawn arrow as Work. */
   .ab-rows .rw-go { position: absolute; opacity: 0; pointer-events: none;
-        width: 14px; height: 14px; color: var(--here); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
         transform: translate(-5px, 5px);
         transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s; }
-  .ab-rows a.rw:hover .rw-go,
-  .ab-rows a.rw:focus-visible .rw-go { opacity: 1; transform: none; }
+  .ab-rows a.rw:hover .rw-go.set,
+  .ab-rows a.rw:focus-visible .rw-go.set { opacity: 1; transform: none; }
   /* ── These rows on a phone ─────────────────────────────────────────────
      Hover can add, it cannot carry. On a desktop each row rests on a short
      line and opens to the full one when you reach for it. A phone has no
@@ -1211,7 +1225,7 @@
     .ab-rows .sw{height:auto;min-height:0}
     .ab-rows .sw i.a{display:none}
     .ab-rows .sw i.b{display:inline;color:var(--muted)}
-    .ab-rows a.rw .sw i.b::after{content:"";display:inline-block;width:14px;height:14px;margin-left:8px;vertical-align:-2px;background-color:var(--here);-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain}
+    .ab-rows a.rw .sw i.b::after{content:"";display:inline-block;width:14px;height:14px;margin-left:8px;vertical-align:-2px;background-color:var(--ink);-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain}
     /* the screen-reader copy would now be read twice */
     .ab-rows .t .vh{display:none}
     .ab-rows li + li{margin-top:32px}
@@ -1368,13 +1382,13 @@ function onWidth(fn){
         <h2 class="ab-h r">Direction I argued for</h2>
         <ul class="ab-rows">
       <li class="r"><a class="rw" href="contract-understanding.html" data-morph-host>
-        <span class="n" aria-hidden="true"><i class="num">01</i><i class="arw">&#8599;</i></span>
+        <span class="n" aria-hidden="true"><i class="num">01</i></span>
         <span class="t"><b>Replaced folder hierarchy with contract relationships.</b>
         <span class="sw mline" data-morph><i class="a">Approved, and shipped through onboarding.</i><i class="b">The product should model which agreements govern, amend or apply, not only where files are stored.</i></span>
         <span class="vh">The product should model which agreements govern, amend or apply, not only where files are stored.</span></span>
       </a></li>
       <li class="r"><a class="rw" href="intent-model.html" data-morph-host>
-        <span class="n" aria-hidden="true"><i class="num">02</i><i class="arw">&#8599;</i></span>
+        <span class="n" aria-hidden="true"><i class="num">02</i></span>
         <span class="t"><b>Turned separate AI screens into one decision framework.</b>
         <span class="sw mline" data-morph><i class="a">Adopted as direction for Phoenix.</i><i class="b">Three questions for every surface: what does the person want, how certain is the system, and can the action be undone?</i></span>
         <span class="vh">Three questions for every surface: what does the person want, how certain is the system, and can the action be undone?</span></span>
@@ -1693,26 +1707,17 @@ function onWidth(fn){
   if (!rows.length) return;
   function mark(row){
     var sw = row.querySelector('.sw'); if (!sw) return;
-    var lay = sw.querySelector('.ml-layer'); if (!lay) return;
     var go = sw.querySelector('.rw-go');
     if (!go){ go = document.createElement('span'); go.className = 'rw-go';
               go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
-    var r = sw.getBoundingClientRect(), last = null;
-    [].slice.call(lay.children).forEach(function(g){
-      var b = g.getBoundingClientRect();
-      if (!last || b.bottom > last.bottom + 1 ||
-          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
-    });
-    if (!last) return;
-    go.style.left = Math.round(last.right - r.left + 21) + 'px';
-    go.style.top  = Math.round(last.top - r.top + last.height / 2 - 12) + 'px';
+    nudgeMark(sw, go);
   }
   rows.forEach(function(row){
     var t;
     row.addEventListener('pointerenter', function(){
-      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 430); });
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 40); });
     row.addEventListener('focus', function(){
-      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 430); });
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 40); });
     row.addEventListener('pointerleave', function(){ clearTimeout(t); });
   });
 })();

@@ -958,15 +958,10 @@
   .ix-n { position: relative; display: block; width: 30px; height: 24px; color: var(--faint);
         font-family: var(--display); font-size: 14px; letter-spacing: .02em; line-height: 24px; }
   .ix-n i { position: absolute; left: 0; top: 0; font-style: normal; }
-  .ix-n .num { transition: opacity .18s ease; }
-  /* The arrow used to be the text glyph U+2197, which meant its weight came from
-     whatever font the OS happened to have it in - hairline on a Mac, and a different
-     hairline on About. It is one drawn shape now: same stroke, same size, every page. */
-  .ix-n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink);
-               width: 14px; height: 14px; top: 5px; display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
-               transition: opacity .2s ease .06s, transform .34s cubic-bezier(.22,.61,.36,1) .06s; }
-  .ix-b:hover .num, .ix-b:focus-visible .num { opacity: 0; }
-  .ix-b:hover .arw, .ix-b:focus-visible .arw { opacity: 1; transform: none; }
+  /* The number used to swap for an arrow on hover. Two marks were saying the same
+     thing at opposite ends of the row, and the one by the number was a column away
+     from where the reading finishes. The number just stays a number; the arrow after
+     the sentence is the one that says this opens. */
   .ix-t { display: block; }
   .ix-top { display: flex; align-items: baseline; gap: 15px; flex-wrap: wrap; }
   /* hierarchy from weight and colour only — the title and its credit line are the same size,
@@ -994,13 +989,13 @@
      reading ends instead - straight after the full stop, on whichever line it
      lands on. */
   .ix-go { position: absolute; opacity: 0; pointer-events: none;
-        width: 14px; height: 14px; color: var(--here); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
 
         transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s;
         transform: translate(-5px, 5px); }
-  .ix-b.lit .ix-go,
-  .ix-b:hover .ix-go,
-  .ix-b:focus-visible .ix-go { opacity: 1; transform: none; }
+  .ix-b.lit .ix-go.set,
+  .ix-b:hover .ix-go.set,
+  .ix-b:focus-visible .ix-go.set { opacity: 1; transform: none; }
 
   /* the pop-up: where the story lives */
   .ov { position: fixed; inset: 0; z-index: 90; background: rgba(222,222,218,.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
@@ -1024,10 +1019,6 @@
        and a phone leaves :hover stuck on the last thing tapped, which left an arrow on a
        row that had already gone back to resting. Here the arrow means one thing only:
        this row opens on the next tap. */
-    .ix-b:hover .num { opacity: 1; }
-    .ix-b:hover .arw { opacity: 0; transform: translate(-6px, 6px); }
-    .ix-b.lit .num { opacity: 0; }
-    .ix-b.lit .arw { opacity: 1; transform: none; }
     .ov-close { display: block; position: fixed; top: 14px; right: 16px; z-index: 95;
       font-family: var(--display); font-size: 13px; line-height: 20px; font-weight: 500;
       color: var(--ink); background: var(--paper);
@@ -1096,7 +1087,8 @@
 
   /* ---- one column, placed left of centre; the field around it is the design ---- */
   :root { --col: 620px; --axis: max(24px, calc(50% - 550px)); }
-  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
 
   /* ── The loader ───────────────────────────────────────────────────────────
      A page about how attention gets spent should not open by spending none on
@@ -1133,14 +1125,15 @@
      sees, so the line changed to one that only ever lived in the page's meta
      description, and it is set at a size you read across a room. Nothing lands
      any more, so nothing has to match: the paper clears and the page is there. */
+  /* Back to the page's own size. It was set large for a while - 34px display type,
+     readable across a room - and that made the first thing anybody saw a poster
+     rather than the sentence the page actually opens with. Same type as the hero
+     paragraph now: same face, same size, same measure, so the two read as one thing. */
   .ldr-solo .ldr-t{position:absolute;left:var(--axis);right:max(24px,calc(50% - 550px));
         top:50%;transform:translateY(-56%);width:auto;
-        font-family:var(--display);font-weight:400;
-        font-size:clamp(24px,2.7vw,34px);line-height:1.28;letter-spacing:-.022em;
-        max-width:30ch}
-  @media (max-width:700px){
-    .ldr-solo .ldr-t{font-size:clamp(21px,5.4vw,26px);max-width:none}
-  }
+        font-family:var(--font);font-weight:400;
+        font-size:17.5px;line-height:28px;letter-spacing:normal;
+        max-width:44ch}
   .ldr-t i{font-style:normal;color:#C6C7C1;transition:color 400ms ease}
   .ldr-t i.on{color:var(--ink-on,var(--ink))}
   /* The loader runs for about five seconds and the page behind it stayed
@@ -1218,6 +1211,15 @@
   #contact h2 .q i.b { display: none; }
   #contact h2 .q .ml-g { color: var(--muted); }
   #contact h2 .q.is-after .ml-g { color: var(--ink); }
+  /* The line used to end in a typed arrow, which came out black and a different
+     shape from every other arrow on the site. Same drawn mark as Work now. */
+  #contact h2 .q .q-go { position: absolute; opacity: 0; pointer-events: none;
+        width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        transform: translate(-5px, 5px);
+        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s; }
+  #contact h2 .q:hover .q-go.set,
+  #contact h2 .q.is-after .q-go.set,
+  #contact h2 .q:focus-visible .q-go.set { opacity: 1; transform: none; }
   .copybtn { margin-top: 96px; }
   .mailalt { font-size: 14px; display: block; margin-top: 26px; }
   /* two things in the footer now, so it goes back to the row it was built as: the name on
@@ -1296,6 +1298,22 @@
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk { position: absolute; inset: 0; border-radius: 8px; background: #DCDDD8;
         transition: opacity var(--md) ease var(--ml), background-color 420ms ease; }
+  /* ── One icon, and only one ───────────────────────────────────────────
+     Five marks and no words until you reach for one, which leaves a reader
+     guessing at all five. An icon on the page you are already on answers the
+     question you are not asking, and four of these five have no symbol anybody
+     would read the same way. Home does, and it shows only where it can be read:
+     knocked out of the dark block, on the page that block belongs to. On the other
+     pages the home mark is a grey box like the rest. It leaves with the mark when
+     the mark opens into its word. */
+  .nb.nav-id .nmk::after, .nb.id .nmk::after {
+        content: ""; position: absolute; inset: 0; opacity: 0;
+        background-color: var(--paper);
+        -webkit-mask: var(--home) no-repeat center / 15px 15px;
+        mask: var(--home) no-repeat center / 15px 15px;
+        transition: opacity 420ms ease; }
+  body.nav-lit .nb.nav-id.here .nmk::after,
+  body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
   .nb .nwd { position: absolute; left: 0; top: 0; height: 28px; line-height: 28px;
         white-space: nowrap; opacity: 0; transition: opacity var(--td) ease var(--tl); }
   /* Reaching for a mark, and letting it go, are two different moves and are timed
@@ -1309,7 +1327,7 @@
         --md: 240ms; --ml: 0ms; --td: 340ms; --tl: 190ms; }
   .nb:hover .nmk, .nb:focus-visible .nmk { opacity: 0; }
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.here .nmk { background: var(--here); }
+  body.nav-lit .nb.here .nmk { background: var(--ink); }
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -1390,7 +1408,9 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
+    .nb.here .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    /* the dark does not wait for the bar to light up here, so neither does the house */
+    .nb.nav-id.here .nmk::after,.nb.id.here .nmk::after{opacity:1}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
@@ -1461,7 +1481,7 @@ function onWidth(fn){
     </div>
   </div>
 </nav>
-<div class="ldr ldr-solo" id="ldr" aria-hidden="true"><p class="ldr-t">I design how humans and AI agents share judgment in enterprise work,<br />especially where decisions are hard and being wrong is expensive.</p></div>
+<div class="ldr ldr-solo" id="ldr" aria-hidden="true"><p class="ldr-t">I design how humans and AI agents share judgment in enterprise work, especially where decisions are hard and being wrong is expensive.</p></div>
 
 <header id="top">
   <div class="wide hero-grid">
@@ -1488,7 +1508,7 @@ function onWidth(fn){
     <ol class="ixl">
       <li class="ix r">
         <button class="ix-b" type="button" data-i="0" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">01</i><i class="arw">&#8599;</i></span>
+          <span class="ix-n" aria-hidden="true"><i class="num">01</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Contract Relationships</b></span>
             <span class="ix-sw mline" data-morph>
@@ -1501,7 +1521,7 @@ function onWidth(fn){
       </li>
       <li class="ix r">
         <button class="ix-b" type="button" data-i="1" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">02</i><i class="arw">&#8599;</i></span>
+          <span class="ix-n" aria-hidden="true"><i class="num">02</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Contract Onboarding</b></span>
             <span class="ix-sw mline" data-morph>
@@ -1514,7 +1534,7 @@ function onWidth(fn){
       </li>
       <li class="ix r">
         <button class="ix-b" type="button" data-i="2" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">03</i><i class="arw">&#8599;</i></span>
+          <span class="ix-n" aria-hidden="true"><i class="num">03</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Phoenix Listing</b></span>
             <span class="ix-sw mline" data-morph>
@@ -1527,7 +1547,7 @@ function onWidth(fn){
       </li>
       <li class="ix r">
         <button class="ix-b" type="button" data-i="3" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">04</i><i class="arw">&#8599;</i></span>
+          <span class="ix-n" aria-hidden="true"><i class="num">04</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Auto Extraction</b></span>
             <span class="ix-sw mline" data-morph>
@@ -1540,7 +1560,7 @@ function onWidth(fn){
       </li>
       <li class="ix r">
         <a class="ix-b" href="sensitivity.html" data-morph-host>
-          <span class="ix-n" aria-hidden="true"><i class="num">05</i><i class="arw">&#8599;</i></span>
+          <span class="ix-n" aria-hidden="true"><i class="num">05</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Sensitivity</b></span>
             <span class="ix-sw mline" data-morph>
@@ -1675,7 +1695,7 @@ function onWidth(fn){
     <h2 class="r">Working on difficult decisions between people and AI? Let's talk ?
       <a class="q mline" href="about.html" data-morph data-morph-host>
         <i class="a">Open to Staff and Lead Product Designer roles in AI and enterprise software.</i>
-        <i class="b">How I got here, and how I work. About me &rarr;</i>
+        <i class="b">How I got here, and how I work. About me</i>
       </a></h2>
     <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
     <span class="mailalt r"><button class="copylink" id="copymail" type="button" title="Copy email address"><span id="copytxt" data-morph-text>amritkmr08@gmail.com</span></button>
@@ -1878,26 +1898,13 @@ function onWidth(fn){
     var sw = btn.querySelector('.ix-sw'); if (!sw) return;
     var go = sw.querySelector('.ix-go');
     if (!go){ go = document.createElement('span'); go.className = 'ix-go';
-              go.textContent = '\u2197'; go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
-    var lay = sw.querySelector('.ml-layer'); if (!lay) return;
-    var r = sw.getBoundingClientRect(), last = null;
-    [].slice.call(lay.children).forEach(function(g){
-      var b = g.getBoundingClientRect();
-      if (!last || b.bottom > last.bottom + 1 ||
-          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
-    });
-    if (!last) return;
-    /* Aligned by the ink, not by the boxes. The arrow is 15px in a 28px line and the
-       sentence is 17.5px, so matching the two line boxes left the arrow riding 6px above
-       the letters. Measured off the rendered pixels: this puts the middle of the arrow
-       on the middle of the x-height beside it. */
-    go.style.left = Math.round(last.right - r.left + 21) + 'px';
-    go.style.top  = Math.round(last.top - r.top + last.height / 2 - 12) + 'px';
+              go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
+    nudgeMark(sw, go);
   }
   function litten(b){
     if (lit === b) return;
     light(lit, false); lit = b; light(b, true);
-    if (b) setTimeout(function(){ mark(b); }, 430);
+    if (b) mark(b);
   }
 
   /* A pointer gets the same mark: it reveals the sentence by reaching for the row,
@@ -1905,9 +1912,9 @@ function onWidth(fn){
   [].slice.call(document.querySelectorAll('.ix-b')).forEach(function(b){
     var t;
     b.addEventListener('pointerenter', function(){
-      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 430); });
+      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 40); });
     b.addEventListener('focus', function(){
-      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 430); });
+      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 40); });
     b.addEventListener('pointerleave', function(){ clearTimeout(t); });
     b.addEventListener('click', function(e){
       if (TOUCH && lit !== b){ e.preventDefault(); litten(b); return; }
@@ -2093,6 +2100,23 @@ function onWidth(fn){
       if(!document.getElementById('ldr')){ clearInterval(w); setTimeout(arrive, 120); }
     }, 100);
   }
+})();
+</script>
+<script>
+/* The contact line morphs and leads to About, so it gets the same nudge the Work
+   rows get: measured off the last glyph once the sentence has landed. */
+(function(){
+  var q = document.querySelector('#contact h2 .q'); if (!q) return;
+  function mark(){
+    var go = q.querySelector('.q-go');
+    if (!go){ go = document.createElement('span'); go.className = 'q-go';
+              go.setAttribute('aria-hidden','true'); q.appendChild(go); }
+    nudgeMark(q, go);
+  }
+  var t;
+  q.addEventListener('pointerenter', function(){ clearTimeout(t); t = setTimeout(mark, 430); });
+  q.addEventListener('focus', function(){ clearTimeout(t); t = setTimeout(mark, 430); });
+  q.addEventListener('pointerleave', function(){ clearTimeout(t); });
 })();
 </script>
 </body>
