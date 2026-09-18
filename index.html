@@ -26,7 +26,7 @@
     --line: #E3E3DF;
     --soft: #EDEDEA;
     --mark: #DCE5D3;
-    --accent: #3D5A45;
+    --accent: #3D5A45; --here: #EC613E;
     --dark: #0B0C0E;
     --display: "Poppins", -apple-system, sans-serif;
     --font: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -959,7 +959,11 @@
         font-family: var(--display); font-size: 14px; letter-spacing: .02em; line-height: 24px; }
   .ix-n i { position: absolute; left: 0; top: 0; font-style: normal; }
   .ix-n .num { transition: opacity .18s ease; }
-  .ix-n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink); font-size: 17px;
+  /* The arrow used to be the text glyph U+2197, which meant its weight came from
+     whatever font the OS happened to have it in - hairline on a Mac, and a different
+     hairline on About. It is one drawn shape now: same stroke, same size, every page. */
+  .ix-n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink);
+               width: 14px; height: 14px; top: 5px; display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
                transition: opacity .2s ease .06s, transform .34s cubic-bezier(.22,.61,.36,1) .06s; }
   .ix-b:hover .num, .ix-b:focus-visible .num { opacity: 0; }
   .ix-b:hover .arw, .ix-b:focus-visible .arw { opacity: 1; transform: none; }
@@ -982,6 +986,21 @@
   /* the credit line is secondary — grey at rest; the sentence it becomes is the point, so it lands in ink */
   .ix-sw .ml-g { color: var(--muted); }
   .ix-sw.is-after .ml-g { color: var(--ink); }
+  /* ── Where the next tap goes ───────────────────────────────────────────
+     The first tap turns the credit line into the sentence the work is about,
+     and the number on the left turns into an arrow. Nobody read that as an
+     invitation: the arrow is most of a column away from where your eye finishes,
+     and by then you have read a sentence and stopped. The mark goes where the
+     reading ends instead - straight after the full stop, on whichever line it
+     lands on. */
+  .ix-go { position: absolute; opacity: 0; pointer-events: none;
+        width: 14px; height: 14px; color: var(--here); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+
+        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s;
+        transform: translate(-5px, 5px); }
+  .ix-b.lit .ix-go,
+  .ix-b:hover .ix-go,
+  .ix-b:focus-visible .ix-go { opacity: 1; transform: none; }
 
   /* the pop-up: where the story lives */
   .ov { position: fixed; inset: 0; z-index: 90; background: rgba(222,222,218,.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
@@ -1077,6 +1096,7 @@
 
   /* ---- one column, placed left of centre; the field around it is the design ---- */
   :root { --col: 620px; --axis: max(24px, calc(50% - 550px)); }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
 
   /* ── The loader ───────────────────────────────────────────────────────────
      A page about how attention gets spent should not open by spending none on
@@ -1094,6 +1114,8 @@
                   backdrop-filter 1000ms cubic-bezier(.33,0,.2,1)}
   .ldr.gone::before{background-color:rgba(247,247,245,0);
        -webkit-backdrop-filter:blur(0px);backdrop-filter:blur(0px)}
+  .ldr-solo .ldr-t{transition:opacity 620ms ease}
+  .ldr-solo.gone .ldr-t{opacity:0}
   .ldr.run{display:block}
   body.ldr-on .r{opacity:1;transform:none;transition:none}
   .ldr.gone{pointer-events:none}
@@ -1104,6 +1126,21 @@
      sentence on the paper is sitting exactly on top of the real one underneath, identical,
      so removing the paper is invisible. Everything else arrives out of focus and sharpens. */
   .ldr-t{position:absolute;margin:0;color:#C6C7C1}
+  /* ── The loader says its own thing ─────────────────────────────────────
+     It used to trace the page's own sentence, in the page's own size, and land
+     on it exactly - the paper left and the words stayed. That size is right for
+     a paragraph you read after arriving and small for the first thing anybody
+     sees, so the line changed to one that only ever lived in the page's meta
+     description, and it is set at a size you read across a room. Nothing lands
+     any more, so nothing has to match: the paper clears and the page is there. */
+  .ldr-solo .ldr-t{position:absolute;left:var(--axis);right:max(24px,calc(50% - 550px));
+        top:50%;transform:translateY(-56%);width:auto;
+        font-family:var(--display);font-weight:400;
+        font-size:clamp(24px,2.7vw,34px);line-height:1.28;letter-spacing:-.022em;
+        max-width:30ch}
+  @media (max-width:700px){
+    .ldr-solo .ldr-t{font-size:clamp(21px,5.4vw,26px);max-width:none}
+  }
   .ldr-t i{font-style:normal;color:#C6C7C1;transition:color 400ms ease}
   .ldr-t i.on{color:var(--ink-on,var(--ink))}
   /* The loader runs for about five seconds and the page behind it stayed
@@ -1201,12 +1238,10 @@
   [data-morph-text] { position: relative; display: inline-block; height: 28px; vertical-align: top;
                       transition: width .46s cubic-bezier(.2,.8,.2,1); }
   .copybtn { font-size: 17.5px; }
-  .ix-n .arw { font-size: 17.5px; }
   #contact h2, #contact h2 em { font-size: 24px; letter-spacing: -0.02em; line-height: 1.34; }
   #contact h2 .q { font-size: 17.5px; }
   .md h2 { font-size: 24px; font-weight: 500; letter-spacing: -0.018em; line-height: 1.32; }
   .copybtn { font-size: 17.5px; }
-  .ix-n .arw { font-size: 17.5px; }
   @media (max-width: 900px) {
     :root { --axis: 24px; }
     .ix-b { width: 100%; margin-left: 0; padding: 8px 0 10px; grid-template-columns: 20px 1fr; gap: 0 12px; }
@@ -1274,7 +1309,7 @@
         --md: 240ms; --ml: 0ms; --td: 340ms; --tl: 190ms; }
   .nb:hover .nmk, .nb:focus-visible .nmk { opacity: 0; }
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.cur .nmk { background: var(--ink); }
+  body.nav-lit .nb.here .nmk { background: var(--here); }
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -1284,6 +1319,9 @@
   .nb.nav-id .nwd { font-family: var(--display); font-size: 16px; font-weight: 500;
         color: var(--ink); letter-spacing: -0.01em; }
   .nb.cta .nwd { color: var(--accent); }
+  /* All five stay marks. The page you are on is the one in colour - the only colour
+     on the page, so it reads as a state rather than as a darker box. Which one that is
+     comes from the address, not from the scroll-spy, so it never changes as you read. */
   @media (prefers-reduced-motion:reduce){ .nb, .nb .nmk, .nb .nwd { transition: none; } }
   /* ── The navigation on a phone: a pile, not a row ──────────────────────
      Five words will not fit a 390 column, and shrinking them to fit made the
@@ -1352,11 +1390,11 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.here) .nmk{background:#DCDDD8!important}
     /* a way out that does not depend on guessing where the backdrop is */
     .nav-x{display:none}
     body:not(.nav-in) .nav-x{display:none!important}
@@ -1423,7 +1461,7 @@ function onWidth(fn){
     </div>
   </div>
 </nav>
-<div class="ldr" id="ldr" aria-hidden="true" data-over=".hero-copy .sub"><p class="ldr-t">I design how humans and AI agents share judgment in enterprise work, especially where decisions are hard and being wrong is expensive.</p></div>
+<div class="ldr ldr-solo" id="ldr" aria-hidden="true"><p class="ldr-t">I design how humans and AI agents share judgment in enterprise work,<br />especially where decisions are hard and being wrong is expensive.</p></div>
 
 <header id="top">
   <div class="wide hero-grid">
@@ -1637,7 +1675,7 @@ function onWidth(fn){
     <h2 class="r">Working on difficult decisions between people and AI? Let's talk ?
       <a class="q mline" href="about.html" data-morph data-morph-host>
         <i class="a">Open to Staff and Lead Product Designer roles in AI and enterprise software.</i>
-        <i class="b">13 years in design, by way of brand, creative direction and a denim label I co-founded. About me &rarr;</i>
+        <i class="b">How I got here, and how I work. About me &rarr;</i>
       </a></h2>
     <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
     <span class="mailalt r"><button class="copylink" id="copymail" type="button" title="Copy email address"><span id="copytxt" data-morph-text>amritkmr08@gmail.com</span></button>
@@ -1834,9 +1872,43 @@ function onWidth(fn){
       b.dispatchEvent(ev);
     }
   }
-  function litten(b){ if (lit === b) return; light(lit, false); lit = b; light(b, true); }
+  /* The sentence is drawn as loose glyphs that travel into place, so where it ends
+     is only known once they have landed. Measured then, from the last one. */
+  function mark(btn){
+    var sw = btn.querySelector('.ix-sw'); if (!sw) return;
+    var go = sw.querySelector('.ix-go');
+    if (!go){ go = document.createElement('span'); go.className = 'ix-go';
+              go.textContent = '\u2197'; go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
+    var lay = sw.querySelector('.ml-layer'); if (!lay) return;
+    var r = sw.getBoundingClientRect(), last = null;
+    [].slice.call(lay.children).forEach(function(g){
+      var b = g.getBoundingClientRect();
+      if (!last || b.bottom > last.bottom + 1 ||
+          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
+    });
+    if (!last) return;
+    /* Aligned by the ink, not by the boxes. The arrow is 15px in a 28px line and the
+       sentence is 17.5px, so matching the two line boxes left the arrow riding 6px above
+       the letters. Measured off the rendered pixels: this puts the middle of the arrow
+       on the middle of the x-height beside it. */
+    go.style.left = Math.round(last.right - r.left + 21) + 'px';
+    go.style.top  = Math.round(last.top - r.top + last.height / 2 - 12) + 'px';
+  }
+  function litten(b){
+    if (lit === b) return;
+    light(lit, false); lit = b; light(b, true);
+    if (b) setTimeout(function(){ mark(b); }, 430);
+  }
 
+  /* A pointer gets the same mark: it reveals the sentence by reaching for the row,
+     and the place the reading ends is where the way in belongs, there too. */
   [].slice.call(document.querySelectorAll('.ix-b')).forEach(function(b){
+    var t;
+    b.addEventListener('pointerenter', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 430); });
+    b.addEventListener('focus', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(b); }, 430); });
+    b.addEventListener('pointerleave', function(){ clearTimeout(t); });
     b.addEventListener('click', function(e){
       if (TOUCH && lit !== b){ e.preventDefault(); litten(b); return; }
       /* the browser sends its own pointerleave on the way out of a tap, which drops
@@ -1856,6 +1928,27 @@ function onWidth(fn){
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
 })();
 
+</script>
+<script>
+/* ── One word, so the marks can be read ───────────────────────────────────
+   Five unlabelled blocks in the corner say nothing until you hover one, and a
+   reader has no reason to try. The page you are on wears its word instead of a
+   dark fill: one label in ink tells you these are pages and which one this is,
+   and the other four stay marks that open when you reach for them.
+
+   Which one is "here" comes from the address, not from the scroll-spy. On the
+   home page the spy moves as you pass each section, and a word that changed
+   length while you read would shuffle the whole cluster sideways. The word
+   names the page. It does not move. */
+(function(){
+  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var here = [].slice.call(document.querySelectorAll('.nb')).filter(function(a){
+    var h = (a.getAttribute('href') || '').split('/').pop().split('#')[0].toLowerCase();
+    if (!h) h = 'index.html';
+    return h === file || (file === '' && h === 'index.html');
+  })[0];
+  if (here) here.classList.add('here');
+})();
 </script>
 <script>
 /* The pile. One listener: while it is closed, the first tap anywhere in the bar
@@ -1889,7 +1982,7 @@ function onWidth(fn){
      set once at load rather than tracking the scroll-spy, because a stack that
      reshuffles itself while you read is a distraction, not a signal. */
   var cards = [].slice.call(document.querySelectorAll('.nb'));
-  var front = cards.filter(function(a){ return a.classList.contains('cur'); })[0] || cards[cards.length-1];
+  var front = cards.filter(function(a){ return a.classList.contains('here'); })[0] || cards[cards.length-1];
   var depth = 1;
   cards.forEach(function(a){
     var k = (a === front) ? 0 : depth++;
@@ -1933,30 +2026,27 @@ function onWidth(fn){
 (function(){
   var el=document.getElementById('ldr'); if(!el) return;
   var t=el.querySelector('.ldr-t');
-  var target=document.querySelector(el.getAttribute('data-over'));
-  if(!t||!target){ if(el.parentNode) el.parentNode.removeChild(el); return; }
+  if(!t){ if(el.parentNode) el.parentNode.removeChild(el); return; }
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.parentNode.removeChild(el); return; }
-
-  function place(){
-    var r=target.getBoundingClientRect(), cs=getComputedStyle(target);
-    t.style.top=(r.top+scrollY)+'px';
-    t.style.left=(r.left+scrollX)+'px';
-    t.style.width=r.width+'px';
-    t.style.font=cs.font;
-    t.style.letterSpacing=cs.letterSpacing;
-    t.style.setProperty('--ink-on', cs.color);
-  }
-  place();
-  target.style.visibility='hidden';
-  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
-  onWidth(function(){ place(); });
+  /* The line is its own now - placed by the stylesheet, on the same axis as
+     everything else, and it takes no measurement from the page behind it. */
+  t.style.setProperty('--ink-on', 'var(--ink)');
 
   el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
-  var src=t.textContent.replace(/\s+/g,' ').trim();
+  /* Each word is wrapped so it can take ink on its own. The rebuild used to read the
+     whole line as one string, which threw away the break the sentence was written with
+     and let it wrap wherever the column happened to end - mid-clause, every time. It
+     walks the nodes now, so a <br> survives and the break stays where it was put. */
+  var parts=[].slice.call(t.childNodes);
   t.textContent='';
-  src.split(/(\s+)/).forEach(function(c){
-    if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
-    else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
+  parts.forEach(function(node){
+    if(node.nodeName==='BR'){ t.appendChild(document.createElement('br')); return; }
+    var str=(node.textContent||'').replace(/\s+/g,' ');
+    if(!str.trim()){ if(str) t.appendChild(document.createTextNode(' ')); return; }
+    str.trim().split(/(\s+)/).forEach(function(c){
+      if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
+      else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
+    });
   });
   var ws=[].slice.call(t.querySelectorAll('i'));
   var STEP=Math.max(140, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
@@ -1964,12 +2054,8 @@ function onWidth(fn){
   setTimeout(function(){
     el.classList.add('gone');
     document.body.classList.remove('ldr-on'); document.documentElement.classList.remove('ldr-on');
-    /* removed only once the paper is fully clear, when the sentence on it and the sentence
-       under it are the same pixels */
-    setTimeout(function(){
-      target.style.visibility='';
-      if(el.parentNode) el.parentNode.removeChild(el);
-    }, 1060);
+    /* the line leaves with the paper it is written on */
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1060);
   }, 300 + ws.length*STEP + 700);
 })();
 </script>

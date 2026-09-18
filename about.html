@@ -26,7 +26,7 @@
     --line: #E3E3DF;
     --soft: #EDEDEA;
     --mark: #DCE5D3;
-    --accent: #3D5A45;
+    --accent: #3D5A45; --here: #EC613E;
     --dark: #0B0C0E;
     --display: "Poppins", -apple-system, sans-serif;
     --font: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -131,7 +131,7 @@
       --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.cur .nmk{background:var(--ink)}
+  body.nav-lit .nb.here .nmk{background:var(--here)}
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -139,7 +139,10 @@
   .nb.sens .nmk{border-radius:0;clip-path:path("M14 0C15.14 0 16.39 0.69 17.42 1.22C18.46 1.76 19.24 2.64 20.23 3.21C21.22 3.78 22.37 4.01 23.36 4.64C24.34 5.28 25.55 6.01 26.12 7C26.7 7.99 26.72 9.41 26.78 10.58C26.84 11.74 26.46 12.86 26.46 14C26.46 15.14 26.84 16.26 26.78 17.42C26.72 18.59 26.7 20.01 26.12 21C25.55 21.99 24.34 22.72 23.36 23.36C22.37 23.99 21.22 24.22 20.23 24.79C19.24 25.36 18.46 26.24 17.42 26.78C16.39 27.31 15.14 28 14 28C12.86 28 11.61 27.31 10.58 26.78C9.54 26.24 8.76 25.36 7.77 24.79C6.78 24.22 5.63 23.99 4.64 23.36C3.66 22.72 2.45 21.99 1.88 21C1.3 20.01 1.28 18.59 1.22 17.42C1.16 16.26 1.54 15.14 1.54 14C1.54 12.86 1.16 11.74 1.22 10.58C1.28 9.41 1.3 7.99 1.88 7C2.45 6.01 3.66 5.28 4.64 4.64C5.63 4.01 6.78 3.78 7.77 3.21C8.76 2.64 9.54 1.76 10.58 1.22C11.61 0.69 12.86 0 14 0Z")}
   .nb:hover .nwd,.nb:focus-visible .nwd{opacity:1}
   .nb.cta .nwd{color:var(--accent)}
-  @media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
+    /* All five stay marks. The page you are on is the one in colour - the only colour
+     on the page, so it reads as a state rather than as a darker box. Which one that is
+     comes from the address, not from the scroll-spy, so it never changes as you read. */
+@media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
   /* ── The navigation on a phone: a pile, not a row ──────────────────────
      Five words will not fit a 390 column, and shrinking them to fit made the
      bar the loudest thing on the page. On touch the marks stay marks: a tight
@@ -207,11 +210,11 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.here) .nmk{background:#DCDDD8!important}
     /* a way out that does not depend on guessing where the backdrop is */
     .nav-x{display:none}
     body:not(.nav-in) .nav-x{display:none!important}
@@ -1013,6 +1016,7 @@
   .nav-end { display: flex; align-items: center; gap: 14px; }
   /* ===== Editorial · paper, hairlines, one quiet field ===== */
   :root { --paper:#F7F7F5; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --soft:#EDEDEA; --mark:#DCE5D3; --accent:#3D5A45; --field:#EEEFEB; }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
   body { background: var(--paper); color: var(--ink); }
   body::after { opacity: .10; }
   nav { background: transparent !important; border-bottom: 0 !important; }
@@ -1145,6 +1149,15 @@
   .ab-acts li { font-size: 15px; line-height: 1.9; }
   .ab-acts a { color: var(--muted); border-bottom: 1px solid var(--line); transition: color .25s ease, border-color .25s ease; }
   .ab-acts a:hover { color: var(--ink); border-color: var(--ink); }
+  /* The year column is 96px because Education and Recognition put a bare year in it.
+     The route puts a year and a place there - "2013-2017 - Lee Cooper" - which ran straight
+     under the title beside it. Same rows, a column wide enough for what this section holds. */
+  .route-lede { margin-bottom: 44px; }
+  .ab-years.route li { grid-template-columns: 190px minmax(0, 1fr); }
+  .ab-years.route li + li { margin-top: 30px; }
+  .ab-years.route .g { margin-top: 5px; max-width: 62ch; }
+  @media (max-width: 760px) { .ab-years.route li { grid-template-columns: 1fr; }
+        .ab-years.route .g { grid-column: 1; } .ab-years.route li + li { margin-top: 26px; } }
   @media (max-width: 560px) { .ab-years li { grid-template-columns: 1fr; } .ab-years .g { grid-column: 1; } .ab-years li + li { margin-top: 20px; } }
   /* Sensitivity, applied to the record. A row states the fact at rest. Reach for it and the
      second line becomes the evidence, in the same place; nothing else moves. Rows that lead
@@ -1160,7 +1173,8 @@
   .ab-rows .n { position: relative; display: block; height: 28px; font-family: var(--display); font-size: 14px; letter-spacing: .02em; color: var(--faint); line-height: 28px; white-space: nowrap; }
   .ab-rows .n i { position: absolute; left: 0; top: 0; font-style: normal; }
   .ab-rows .n .num { transition: opacity .18s ease; }
-  .ab-rows .n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink); font-size: 17px; font-family: var(--font);
+  .ab-rows .n .arw { opacity: 0; transform: translate(-6px, 6px); color: var(--ink);
+                     width: 14px; height: 14px; top: 5px; display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
                      transition: opacity .22s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
   .ab-rows a.rw:hover .num, .ab-rows a.rw:focus-visible .num { opacity: 0; }
   .ab-rows a.rw:hover .arw, .ab-rows a.rw:focus-visible .arw { opacity: 1; transform: none; }
@@ -1175,6 +1189,16 @@
   .ab-rows .sw i.b { font-style: normal; display: none; }
   .ab-rows .sw .ml-g { color: var(--muted); }
   .ab-rows .sw.is-after .ml-g { color: var(--ink); }
+  /* ── Where the next tap goes ──────────────────────────────────────────
+     The number on the left turns into an arrow, but by the time the line has
+     morphed your eye is at the end of a sentence, a column away from it. The
+     nudge goes where the reading stops instead. Same drawn arrow as Work. */
+  .ab-rows .rw-go { position: absolute; opacity: 0; pointer-events: none;
+        width: 14px; height: 14px; color: var(--here); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        transform: translate(-5px, 5px);
+        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s; }
+  .ab-rows a.rw:hover .rw-go,
+  .ab-rows a.rw:focus-visible .rw-go { opacity: 1; transform: none; }
   /* ── These rows on a phone ─────────────────────────────────────────────
      Hover can add, it cannot carry. On a desktop each row rests on a short
      line and opens to the full one when you reach for it. A phone has no
@@ -1187,6 +1211,7 @@
     .ab-rows .sw{height:auto;min-height:0}
     .ab-rows .sw i.a{display:none}
     .ab-rows .sw i.b{display:inline;color:var(--muted)}
+    .ab-rows a.rw .sw i.b::after{content:"";display:inline-block;width:14px;height:14px;margin-left:8px;vertical-align:-2px;background-color:var(--here);-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain}
     /* the screen-reader copy would now be read twice */
     .ab-rows .t .vh{display:none}
     .ab-rows li + li{margin-top:32px}
@@ -1284,13 +1309,39 @@ function onWidth(fn){
         <div class="ab-text">
           <p class="r">Legal teams already face difficult decisions; the interface shouldn't
           make them harder.</p>
-          <p class="r">I came to product design through brand, creative direction and a denim label I
-          co-founded. That background shapes both how the work functions and how it reads. I prefer
-          proving an idea in a browser, not a deck.</p>
-          <p class="r">Being a father changed how I see design. I watch where my daughter gets stuck and
-          what she tries next; I look for the same things at work. Good design gets out of the way so
-          people can keep going.</p>
+          <p class="r">The work is calm. The route here wasn&rsquo;t &mdash; graphic design, fashion,
+          a denim label I co-founded, then product. I prefer proving an idea in a browser, not a deck.</p>
         </div>
+
+        <h2 class="ab-h r">A career made of different materials</h2>
+        <p class="ab-scope route-lede r">This is not a clean ladder upward. Each practice changed
+        what I notice in the next one.</p>
+        <ul class="ab-years route">
+          <li class="r"><span class="y">2013 &middot; NIFT Chennai</span><span class="r0">Visual design</span>
+            <p class="g">Composition is not decoration. It decides what gets seen first, what waits
+            and what disappears. <b>Left behind:</b> hierarchy, typography, rhythm and an instinct
+            for removing what weakens the whole.</p></li>
+          <li class="r"><span class="y">2013&ndash;2017 &middot; Lee Cooper</span><span class="r0">Fashion and material</span>
+            <p class="g">A beautiful direction still has to survive production, repetition and the
+            hands that make it. <b>Left behind:</b> respect for constraints, systems that tolerate
+            variation and the difference between a concept and a thing that ships.</p></li>
+          <li class="r"><span class="y">2017&ndash;2018 &middot; Zhero Denim</span><span class="r0">Founder reality</span>
+            <p class="g">Design cannot rescue a broken route to market. The whole system has to work.
+            <b>Left behind:</b> commercial judgement, humility and a permanent suspicion of beautiful
+            answers to the wrong problem.</p></li>
+          <li class="r"><span class="y">2019&ndash;2021 &middot; Airtel</span><span class="r0">Consumer scale</span>
+            <p class="g">At scale, one unclear choice becomes millions of moments of friction.
+            <b>Left behind:</b> behavioural evidence, intent-led support and an understanding that
+            small interface decisions compound.</p></li>
+          <li class="r"><span class="y">2021&ndash;now &middot; Sirion.ai</span><span class="r0">Enterprise AI</span>
+            <p class="g">AI can answer. A person still has to judge the evidence, consequence and
+            next move. <b>Left behind:</b> decision systems, provenance, reversible action, human
+            checkpoints and interfaces that remain calm when the model is uncertain.</p></li>
+          <li class="r"><span class="y">Every day &middot; Fatherhood</span><span class="r0">Watching hesitation</span>
+            <p class="g">My daughter rarely explains where an experience failed. She pauses, tries
+            something else, or leaves. <b>Left behind:</b> a sharper eye for where confidence
+            breaks &mdash; and respect for what people do instead of what they say.</p></li>
+        </ul>
 
         <h2 class="ab-h r">How I work</h2>
         <ul class="ab-rows">
@@ -1511,6 +1562,27 @@ function onWidth(fn){
 })();
 </script>
 <script>
+/* ── One word, so the marks can be read ───────────────────────────────────
+   Five unlabelled blocks in the corner say nothing until you hover one, and a
+   reader has no reason to try. The page you are on wears its word instead of a
+   dark fill: one label in ink tells you these are pages and which one this is,
+   and the other four stay marks that open when you reach for them.
+
+   Which one is "here" comes from the address, not from the scroll-spy. On the
+   home page the spy moves as you pass each section, and a word that changed
+   length while you read would shuffle the whole cluster sideways. The word
+   names the page. It does not move. */
+(function(){
+  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var here = [].slice.call(document.querySelectorAll('.nb')).filter(function(a){
+    var h = (a.getAttribute('href') || '').split('/').pop().split('#')[0].toLowerCase();
+    if (!h) h = 'index.html';
+    return h === file || (file === '' && h === 'index.html');
+  })[0];
+  if (here) here.classList.add('here');
+})();
+</script>
+<script>
 /* The pile. One listener: while it is closed, the first tap anywhere in the bar
    opens it instead of following a link - otherwise a stacked mark would fire a
    link the reader cannot even see the name of. Once open the links behave
@@ -1542,7 +1614,7 @@ function onWidth(fn){
      set once at load rather than tracking the scroll-spy, because a stack that
      reshuffles itself while you read is a distraction, not a signal. */
   var cards = [].slice.call(document.querySelectorAll('.nb'));
-  var front = cards.filter(function(a){ return a.classList.contains('cur'); })[0] || cards[cards.length-1];
+  var front = cards.filter(function(a){ return a.classList.contains('here'); })[0] || cards[cards.length-1];
   var depth = 1;
   cards.forEach(function(a){
     var k = (a === front) ? 0 : depth++;
@@ -1612,5 +1684,38 @@ function onWidth(fn){
 })();
 </script>
 
+<script>
+/* The sentence is drawn as loose glyphs that travel into place, so where it ends is
+   only known once they have landed. Measured then, from the last one. Touch never
+   morphs these rows, so there the arrow just follows the line in CSS. */
+(function(){
+  var rows = [].slice.call(document.querySelectorAll('.ab-rows a.rw'));
+  if (!rows.length) return;
+  function mark(row){
+    var sw = row.querySelector('.sw'); if (!sw) return;
+    var lay = sw.querySelector('.ml-layer'); if (!lay) return;
+    var go = sw.querySelector('.rw-go');
+    if (!go){ go = document.createElement('span'); go.className = 'rw-go';
+              go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
+    var r = sw.getBoundingClientRect(), last = null;
+    [].slice.call(lay.children).forEach(function(g){
+      var b = g.getBoundingClientRect();
+      if (!last || b.bottom > last.bottom + 1 ||
+          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
+    });
+    if (!last) return;
+    go.style.left = Math.round(last.right - r.left + 21) + 'px';
+    go.style.top  = Math.round(last.top - r.top + last.height / 2 - 12) + 'px';
+  }
+  rows.forEach(function(row){
+    var t;
+    row.addEventListener('pointerenter', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 430); });
+    row.addEventListener('focus', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 430); });
+    row.addEventListener('pointerleave', function(){ clearTimeout(t); });
+  });
+})();
+</script>
 </body>
 </html>

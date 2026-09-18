@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{--paper:#F7F7F5;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--wait:#AFB0A9;--soft:#EDEDEA;
-        --mark:#DCE5D3;--accent:#3D5A45;
+        --mark:#DCE5D3;--accent:#3D5A45; --here: #EC613E;
         --display:"Poppins",-apple-system,sans-serif;--font:"Inter","Poppins",-apple-system,sans-serif;
         /* --faint was #8B8D87 here and #6F716A on every other page. It carries real 14px
            text — the format note under the summary, the detail beside each breakdown row —
@@ -27,6 +27,7 @@
            past about 2200px, where a third of the leftover is more margin than any column
            needs. */
         --axis:clamp(24px, calc((100% - var(--col)) * 0.34), 24vw);}
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.3 11.7 11.6 4.4'/%3E%3Cpath d='M5.8 4.4h5.8v5.8'/%3E%3C/svg%3E"); }
   *{margin:0;padding:0;box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:28px;-webkit-font-smoothing:antialiased}
@@ -142,7 +143,7 @@
       --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
-  body.nav-lit .nb.cur .nmk{background:var(--ink)}
+  body.nav-lit .nb.here .nmk{background:var(--here)}
   /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
      path so underneath it is still just a coloured box. Same size, same greys, same dark
      when it is the page you are on, same opening into its word. Only the outline differs,
@@ -152,7 +153,10 @@
   .nb.id .nwd{font-family:var(--display);font-weight:500;font-size:16px;color:var(--ink);
       letter-spacing:-.01em}
   .nb.cta .nwd{color:var(--accent)}
-  @media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
+    /* All five stay marks. The page you are on is the one in colour - the only colour
+     on the page, so it reads as a state rather than as a darker box. Which one that is
+     comes from the address, not from the scroll-spy, so it never changes as you read. */
+@media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
   /* ── The navigation on a phone: a pile, not a row ──────────────────────
      Five words will not fit a 390 column, and shrinking them to fit made the
      bar the loudest thing on the page. On touch the marks stay marks: a tight
@@ -220,11 +224,11 @@
     /* The page you are on is the dark card, wherever it lands in the deck. The
        scroll-spy moves .cur as you read, and the outline styling above carries
        !important, so without this the newly current mark went white. */
-    .nb.cur .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    .nb.here .nmk{background:var(--here)!important;border-color:var(--here)}
     .nb:not(.back) .nmk{box-shadow:0 0 0 1.5px var(--paper)}
     body.nav-open .nb .nmk{box-shadow:none}
     /* open, every card is its own row again, so they all take their real fill */
-    body.nav-open .nb.back:not(.cur) .nmk{background:#DCDDD8!important}
+    body.nav-open .nb.back:not(.here) .nmk{background:#DCDDD8!important}
     /* a way out that does not depend on guessing where the backdrop is */
     .nav-x{display:none}
     body:not(.nav-in) .nav-x{display:none!important}
@@ -444,8 +448,12 @@
   .wline .ml-g{color:var(--muted)}
   /* in the preview the opening line reads in full ink — the fade does the rest */
   .wline.is-after .ml-g{color:var(--ink)}
-  /* two lines and a third going under: the fade is what says there is more */
-  .wline.is-after .ml-layer,.spine.is-after .ml-layer{
+  /* The fade said there was more by making the last line hard to read, which is a strange
+     way to invite someone in - the signal and the obstacle were the same thing. The block
+     keeps its three whole lines and an arrow says it instead, in the one colour on the
+     page that means "this opens". */
+  .wline.is-after::after{content:"";position:absolute;right:0;bottom:4px;width:14px;height:14px;color:var(--here);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;pointer-events:none}
+  .spine.is-after .ml-layer{
     -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%);mask-image:linear-gradient(to bottom,#000 0,#000 62%,rgba(0,0,0,.34) 88%,rgba(0,0,0,.12) 100%)}
   /* The mark used to chase the end of the last readable line. That end is wherever the
      text happened to wrap, so it landed mid-sentence and moved somewhere new on every
@@ -1232,7 +1240,7 @@ function onWidth(fn){
      specimen arrives with nothing to introduce it. -->
 <div class="seplbl wrap">
   <p class="lbl">Specimens</p>
-  <p class="lbl-s">Eleven of them. Every one is live, not a picture of one.</p>
+  <p class="lbl-s">Each one is a moment where the interface has to decide how much to say. Reach for one and see what it chose.</p>
   <div class="seprule" aria-hidden="true"></div>
 </div>
 
@@ -1627,6 +1635,27 @@ function onWidth(fn){
 <footer class="wrap"><a href="index.html">&larr; Amrit Kumar</a><span class="fbuilt">Built with Claude</span></footer>
 
 <script>
+/* ── One word, so the marks can be read ───────────────────────────────────
+   Five unlabelled blocks in the corner say nothing until you hover one, and a
+   reader has no reason to try. The page you are on wears its word instead of a
+   dark fill: one label in ink tells you these are pages and which one this is,
+   and the other four stay marks that open when you reach for them.
+
+   Which one is "here" comes from the address, not from the scroll-spy. On the
+   home page the spy moves as you pass each section, and a word that changed
+   length while you read would shuffle the whole cluster sideways. The word
+   names the page. It does not move. */
+(function(){
+  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var here = [].slice.call(document.querySelectorAll('.nb')).filter(function(a){
+    var h = (a.getAttribute('href') || '').split('/').pop().split('#')[0].toLowerCase();
+    if (!h) h = 'index.html';
+    return h === file || (file === '' && h === 'index.html');
+  })[0];
+  if (here) here.classList.add('here');
+})();
+</script>
+<script>
 /* The pile. One listener: while it is closed, the first tap anywhere in the bar
    opens it instead of following a link - otherwise a stacked mark would fire a
    link the reader cannot even see the name of. Once open the links behave
@@ -1658,7 +1687,7 @@ function onWidth(fn){
      set once at load rather than tracking the scroll-spy, because a stack that
      reshuffles itself while you read is a distraction, not a signal. */
   var cards = [].slice.call(document.querySelectorAll('.nb'));
-  var front = cards.filter(function(a){ return a.classList.contains('cur'); })[0] || cards[cards.length-1];
+  var front = cards.filter(function(a){ return a.classList.contains('here'); })[0] || cards[cards.length-1];
   var depth = 1;
   cards.forEach(function(a){
     var k = (a === front) ? 0 : depth++;
