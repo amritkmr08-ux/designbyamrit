@@ -1391,6 +1391,25 @@
      These four selectors are the same component wearing four names. */
 </style>
 <body>
+<script>
+/* ── A phone's address bar is not a resize ──────────────────────────────────
+   Everything below that listens for resize is asking one question: how much
+   width is there? The column, the glyph layout, where a panel sits. None of it
+   cares how tall the window is. But a phone slides its address bar in and out
+   as you scroll, firing resize the whole way - so the page was re-measuring
+   itself while you were reading. The reserved room under each specimen dropped
+   to zero and came back, roughly three thousand pixels of the page collapsing
+   and re-expanding under your thumb. A resize that changed only the height is
+   the address bar, and nothing here needs to hear about it. */
+function onWidth(fn){
+  var w = innerWidth;
+  addEventListener('resize', function(){
+    if (innerWidth === w) return;
+    w = innerWidth; fn();
+  });
+}
+</script>
+
 <nav aria-label="Main">
   <div class="nav-inner">
     <a class="nav-id nb" href="#top"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
@@ -1930,7 +1949,7 @@
   place();
   target.style.visibility='hidden';
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
-  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(place,150); });
+  onWidth(function(){ place(); });
 
   el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
   var src=t.textContent.replace(/\s+/g,' ').trim();
@@ -1971,7 +1990,7 @@
     });
   }
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
-  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(measure,200); });
+  onWidth(function(){ measure(); });
 
   /* The block that marks this page does not arrive dark. It darkens a beat after the page
      has settled, so the state reads as something the page did rather than something that

@@ -16,6 +16,22 @@
 
   var REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mounted = [];   /* every live host, so a resize can re-measure its glyphs */
+/* ── A phone's address bar is not a resize ──────────────────────────────────
+   Every one of these exists to answer a change in how much width there is: the
+   column, the glyph layout, the nav words, where a panel sits. None of them
+   cares how tall the window is. But a phone slides its address bar in and out
+   as you scroll, and that fires resize on every frame of it - so the whole page
+   was re-measuring itself while you were reading, which is what made scrolling
+   feel rough and the specimens shift under you. A resize that only changed the
+   height is the address bar; a resize that changed the width is a real one. */
+function onWidth(fn){
+  var w = innerWidth;
+  addEventListener('resize', function(){
+    if (innerWidth === w) return;
+    w = innerWidth; fn();
+  });
+}
+
 
   /* ── the motion system ──
      Two curves, not one, and the property being animated picks which.
@@ -328,7 +344,7 @@
     tabs[0].classList.add('on');
     tabs[0].setAttribute('aria-selected', 'true');
     seat(tabs[0], false);
-    addEventListener('resize', function () {
+    onWidth(function () {
       var on = tabs.filter(function (t) { return t.classList.contains('on'); })[0];
       if (on) seat(on, false);
     });
@@ -356,7 +372,7 @@
   };
 
   var rz;
-  addEventListener('resize', function () {
+  onWidth(function () {
     clearTimeout(rz);
     rz = setTimeout(function () {
       mounted.forEach(function (m) { rest(m.host, layout(m.host, m.text())); });

@@ -1031,10 +1031,21 @@
        Here the box is the size of what is in it, the content starts at the top,
        and the distance between one specimen and the next is stated once. The
        bottom padding is left to the room an open card asks for. */
-    .stage{min-height:0;align-content:start;padding:0 0 var(--spill,0px);
-        transition:padding-bottom .34s cubic-bezier(.22,.61,.36,1)}
+    /* ── One gap, stated once ──────────────────────────────────────────────
+       Each specimen used to work out for itself how much room its card would
+       need, at load and again on every resize. It was correct and it never
+       stopped moving: a phone fires resize each time its address bar slides,
+       so the page re-measured itself while you were reading it, and every
+       imperfect measurement showed up as the specimens shuffling vertically.
+
+       The widest card any specimen opens, measured across 320, 360, 390, 414
+       and 430px, needs 341px below its headline. So every specimen gets 360,
+       always, whether or not it has a card. Nothing is measured, nothing is
+       watched, nothing can move. It costs a longer page, which on a phone is
+       a scroll, and buys a page that holds still. */
+    .stage{min-height:0;align-content:start;padding:0 0 360px}
     .stage.tall{min-height:0}
-    .stages .stage + .stage{margin-top:112px}
+    .stages .stage + .stage{margin-top:0}
     .stages .stage:first-of-type{margin-top:0}
     .plate{margin-bottom:0}
     .side{grid-template-columns:1fr;gap:18px 0}
@@ -1084,12 +1095,29 @@
        beside them. The shorter values stay inline so their chevron still trails
        the last word, which is where it belongs. */
     .apb .hero[data-morph-text],.hob .hero[data-morph-text]{display:block}
-    .hero[data-morph-text]{height:auto;min-height:var(--ml-h,33px)}
-    #cw{height:auto;min-height:var(--ml-h,33px)}
-    [data-morph-text]{height:auto;min-height:var(--ml-h,28px)}
-    #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:var(--ml-h,28px)}
+    /* Each of these boxes took its height from the string currently in it, so a value
+       that morphed from one line to two made its specimen taller and pushed everything
+       below it down - the last thing that could still move the page. Every box is now
+       as tall as the tallest thing it will ever hold, from the first frame. Measured by
+       opening every specimen through every state at 320 and 390px:
+
+         a 24px value that wraps      64px   Send summary to 42 customers
+         a 24px value that never does 33px   Notice period - 90 days, the address
+         a 17.5px sentence in a card  56px   Your admin sees the six files and the reason.
+         a 14px line under a value    28px   drafted from this week's activity
+         the scheduling line          56px   it becomes two lines while it sends
+         the clause source line       80px   three lines at 320px
+
+       Nothing here reads --ml-h any more, so no morph can change a height. */
+    .hero[data-morph-text]{height:auto;min-height:33px}
+    #apV,#amV,#capV,#hoV,#wkV{min-height:64px}
+    #cw{height:auto;min-height:33px}
+    [data-morph-text]{height:auto;min-height:28px}
+    #apD{min-height:56px}
+    #hsS{min-height:80px}
+    #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:56px}
     .mline{height:auto;min-height:28px}
-    .hscard .hl[data-morph-text]{height:auto;min-height:var(--ml-h,23px)}
+    .hscard .hl[data-morph-text]{height:auto;min-height:23px}
 
     /* ── The chevron nobody could reach for ────────────────────────────────
        Six of these say "this opens" with a chevron that is invisible until a
@@ -1148,6 +1176,25 @@
 </style>
 </head>
 <body>
+<script>
+/* ── A phone's address bar is not a resize ──────────────────────────────────
+   Everything below that listens for resize is asking one question: how much
+   width is there? The column, the glyph layout, where a panel sits. None of it
+   cares how tall the window is. But a phone slides its address bar in and out
+   as you scroll, firing resize the whole way - so the page was re-measuring
+   itself while you were reading. The reserved room under each specimen dropped
+   to zero and came back, roughly three thousand pixels of the page collapsing
+   and re-expanding under your thumb. A resize that changed only the height is
+   the address bar, and nothing here needs to hear about it. */
+function onWidth(fn){
+  var w = innerWidth;
+  addEventListener('resize', function(){
+    if (innerWidth === w) return;
+    w = innerWidth; fn();
+  });
+}
+</script>
+
 <nav aria-label="Main">
   <div class="nav-inner">
     <a class="id nb" href="index.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
@@ -1977,7 +2024,7 @@
       menu.style.maxWidth = Math.round(c.width) + 'px';
       menu.style.width = Math.round(c.width) + 'px';
     };
-    addEventListener('resize', place);
+    onWidth(place);
     const open=()=>{ place(); wrap.classList.add('open'); chip.setAttribute('aria-expanded','true');
                      inp.value = val._mlCur || val.textContent; mark();
                      inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); };
@@ -2098,7 +2145,7 @@
     const all=$$('.fw');
     const sizeAll=()=>all.forEach(size);
     if(document.fonts&&document.fonts.ready) document.fonts.ready.then(sizeAll); else addEventListener('load',sizeAll);
-    let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(sizeAll,200); });
+    onWidth(()=>{ sizeAll(); });
 
     all.forEach(fw=>{
       const def=$('.fw-def',fw), terms=$$('.fw-t',fw);
@@ -2139,7 +2186,7 @@
     const below=$('.dm-below',demo), bp=below&&below.firstElementChild;
     function measure(){ if(bp) demo.style.setProperty('--below-h', bp.offsetHeight+'px'); }
     if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
-    let mz; addEventListener('resize',()=>{ clearTimeout(mz); mz=setTimeout(measure,200); });
+    onWidth(()=>{ measure(); });
     const clear=()=>{ timers.forEach(clearTimeout); timers=[]; };
     const at=(ms,f)=>timers.push(setTimeout(f,ms));
 
@@ -2234,7 +2281,7 @@
   place();
   target.style.visibility='hidden';
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
-  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(place,150); });
+  onWidth(function(){ place(); });
 
   el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
   var src=t.textContent.replace(/\s+/g,' ').trim();
@@ -2275,7 +2322,7 @@
     });
   }
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
-  var rz; addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(measure,200); });
+  onWidth(function(){ measure(); });
 
   /* The block that marks this page does not arrive dark. It darkens a beat after the page
      has settled, so the state reads as something the page did rather than something that
@@ -2295,105 +2342,6 @@
 })();
 </script>
 
-<script>
-/* ── Room for an open card on a phone ───────────────────────────────────────
-   Every specimen panel is absolutely positioned, so on a desktop it hangs into
-   the margin beside the column and nothing collides. On a phone the column is
-   the whole screen and the section below reserved no room, so an open card
-   printed over the next specimen's text.
-
-   The first version chased the card as it grew: it watched every panel and
-   re-padded the section on each frame of the animation. That was correct and it
-   felt wrong - the whole page below shuffled while you were trying to read the
-   thing you had just opened.
-
-   This measures instead. Once, at load, each panel is briefly let out to its
-   full height inside a single synchronous block - laid out, measured, put back
-   before the browser paints - and the section keeps that much room from then on.
-   The card opens into space that was already there, and nothing below it moves.
-
-   The watcher that is left can only ever add room, never take it away, so a
-   card that grows further as you use it still has somewhere to go and the page
-   underneath still holds still. */
-(function(){
-  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
-  var GAP = 40;
-  /* Slack on top of what was measured. A card can still grow after it opens - the
-     history one morphs its clause to a longer phrase and gains a line - and this is
-     the room for that to happen inside, so nothing below has to move for it. */
-  var HEADROOM = 64;
-  var all = [].slice.call(document.querySelectorAll('.stage')).map(function(st){
-    return { st: st, panels: [].slice.call(st.querySelectorAll('.glass, .apcard, .deckwrap > .deck')), floor: 0 };
-  });
-  var rows = all.filter(function(r){ return r.panels.length; });
-  var flat = all.filter(function(r){ return !r.panels.length; });
-  if (!rows.length) return;
-
-  function reserve(){
-    rows.forEach(function(r){ r.st.style.setProperty('--spill', '0px'); });
-    rows.forEach(function(r){
-      var box = r.st.getBoundingClientRect();
-      var natural = box.height, top = box.top;
-      var saved = r.panels.map(function(p){
-        return [p, p.style.height, p.style.visibility, p.style.opacity]; });
-      saved.forEach(function(a){
-        a[0].style.height = 'auto'; a[0].style.visibility = 'visible'; a[0].style.opacity = '1'; });
-      void r.st.offsetHeight;                       /* lay it out, do not paint it */
-      var need = 0;
-      r.panels.forEach(function(p){
-        var b = p.getBoundingClientRect();
-        if (b.height > 0) need = Math.max(need, b.bottom - top);
-      });
-      saved.forEach(function(a){
-        a[0].style.height = a[1]; a[0].style.visibility = a[2]; a[0].style.opacity = a[3]; });
-      /* A deck is the frosted sheet behind a card, and it has no content of its own -
-         let out to auto it measures nothing. Its script wraps it round the open card
-         with 18px above and 18px below, so it always reaches that much further than
-         the card whose bottom we just measured. */
-      if (r.panels.some(function(p){ return /\bdeck\b/.test(p.className); })) need += 36;
-      r.floor = Math.max(0, Math.round(need + GAP + HEADROOM - natural));
-      r.st.style.setProperty('--spill', r.floor + 'px');
-    });
-    /* Three specimens have nothing to open, so they need no room - and were left sitting
-       on a different beat from the other eight, which read as an error rather than as a
-       difference. They take the middle of what the rest reserved, so the page keeps one
-       rhythm whether or not a particular specimen has a card behind it. */
-    if (flat.length){
-      var ms = rows.map(function(r){ return r.floor; }).sort(function(a,b){ return a-b; });
-      var mid = ms[Math.floor(ms.length / 2)];
-      flat.forEach(function(r){ r.floor = mid; r.st.style.setProperty('--spill', mid + 'px'); });
-    }
-  }
-
-  /* Last resort, and only for a real collision. The first version of this kept a constant
-     gap under whatever was open, so the moment a card grew by twelve pixels it moved the
-     whole page by twelve pixels to restore that gap - which is the adjusting you could see,
-     and no amount of extra room fixed it, because the rule was about the gap and not about
-     the collision. It now asks one question: is anything reaching past the room that was
-     already set aside? Almost always the answer is no and nothing moves. */
-  function guard(){
-    rows.forEach(function(r){
-      var box = r.st.getBoundingClientRect();
-      var top = box.top, need = 0;
-      r.panels.forEach(function(p){
-        var cs = getComputedStyle(p);
-        if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) <= 0.01) return;
-        var b = p.getBoundingClientRect();
-        if (b.height > 0) need = Math.max(need, b.bottom - top);
-      });
-      if (top + need <= box.bottom) return;                  /* it fits; leave the page alone */
-      var want = Math.round(need + GAP - (box.height - r.floor));
-      if (want > r.floor){ r.floor = want; r.st.style.setProperty('--spill', want + 'px'); }
-    });
-  }
-
-  reserve();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
-  addEventListener('load', reserve);
-  var rz; addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(reserve, 200); });
-  addEventListener('transitionend', function(){ guard(); }, true);
-})();
-</script>
 <script>
 /* ── Two taps on a specimen ────────────────────────────────────────────────
    Every one of these was built around a pointer that arrives before it presses.
