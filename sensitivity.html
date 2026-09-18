@@ -160,12 +160,29 @@
   @media (hover:none), (max-width:760px){
     /* !important because an earlier rule pins the bar to transparent with
        !important of its own; this is the one screen size where it has to win. */
-    body nav{background:rgba(247,247,245,.88)!important;
+    /* At 88% the paper was a window: a headline passing behind the bar showed
+       through it, right across the pile, which is what made the marks look like
+       they were changing as you scrolled. The bar is paper now, and a short fade
+       under it lets a line dissolve into that paper instead of being sliced by an
+       edge halfway up its letters. */
+    body nav{background:rgba(247,247,245,.97)!important;
         -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-    .nav-inner.nav-inner{display:flex;flex-direction:row;flex-wrap:nowrap;
-        justify-content:flex-end;align-items:center;gap:0;
+    body nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
+        pointer-events:none;
+        background:linear-gradient(to bottom,rgba(247,247,245,.97),rgba(247,247,245,0))}
+    /* One axis, both states. The pile used to be a row and the open list a column,
+       and flex-direction cannot be animated - it flips in a single frame. So on close
+       every card jumped to its row position first and only then slid its width back,
+       which is the lurch to the left you could see. Here the bar is a column either
+       way: closed, each card is pulled up onto the one before it by a negative margin
+       and nudged by its depth; open, the margins go to zero and the gap opens. Margin,
+       width, height and transform all interpolate, so the pile falls into a list and
+       gathers back up without a single jump. */
+    .nav-inner.nav-inner{display:flex;flex-direction:column;flex-wrap:nowrap;
+        justify-content:flex-start;align-items:flex-end;gap:0;
         padding:18px 24px 14px;white-space:normal;max-width:none;
-        transition:gap .30s cubic-bezier(.22,.61,.36,1)}
+        transition:gap .34s cubic-bezier(.22,.61,.36,1),
+                   padding .34s cubic-bezier(.22,.61,.36,1)}
     /* The two groups have to dissolve so all five marks are siblings of one
        flex row - otherwise the overlap only applies inside each group and the
        pile comes out in three pieces. Scoped through .nav-inner so it outranks
@@ -173,17 +190,19 @@
     .nav-inner .nav-mid,.nav-inner .nav-end{display:contents}
     .nb.nb{position:relative;display:block;width:30px;height:30px;overflow:hidden;flex:none;
         font-family:var(--display);font-size:13px;line-height:30px;padding:0;
-        margin-left:-30px;
+        margin:-30px 0 0;
         /* declared again below at .nav-inner strength: body.nav-in .nb sets
            transform:none for the arrival animation and was cancelling the deck */
         transition:width .34s cubic-bezier(.22,.61,.36,1),
+                   height .34s cubic-bezier(.22,.61,.36,1),
+                   line-height .34s cubic-bezier(.22,.61,.36,1),
                    margin .34s cubic-bezier(.22,.61,.36,1),
                    transform .34s cubic-bezier(.22,.61,.36,1)}
     /* Only the mark that actually starts the row loses its overlap. :first-child
        on its own matched the first mark inside each group too, because
        display:contents changes layout and not the tree, which is why the pile
        came out with two seams in it. */
-    .nav-inner > .nb:first-child{margin-left:0}
+    .nav-inner > .nb:first-child{margin-top:0}
     /* Overlapping marks of the same grey fused into one slab. A ring of paper
        around each one draws the edge of the card behind it, which is what makes
        a pile read as a pile rather than a smear. */
@@ -216,11 +235,10 @@
         white-space:nowrap;opacity:0;transition:opacity .22s ease}
 
     /* open: the pile falls into a column, each mark wearing its word */
-    body.nav-open .nav-inner.nav-inner{flex-direction:column;align-items:flex-end;gap:8px;
-        padding-bottom:20px}
+    body.nav-open .nav-inner.nav-inner{gap:8px;padding-bottom:20px}
     .nav-inner .nb.nb{transform:translate(calc(var(--k,0) * -3px), calc(var(--k,0) * 3px))}
     body.nav-open .nav-inner .nb.nb{transform:none}
-    body.nav-open .nb.nb{margin-left:0;width:calc(var(--w, 70px) + 44px)}
+    body.nav-open .nb.nb{margin-top:0;width:calc(var(--w, 70px) + 44px)}
     body.nav-open .nb .nwd{opacity:1;transition:opacity .26s ease .10s}
     /* a 30px mark is not a 44px target; the row it sits in is */
     body.nav-open .nb.nb{height:38px;line-height:38px}
@@ -999,7 +1017,20 @@
     .wlcv{display:none}
     header{padding-top:104px}
     .stages{margin-top:64px}
-    .stage{min-height:0;padding:44px 0 calc(44px + var(--spill,0px))}
+    /* ── The rhythm of the specimens on a phone ────────────────────────────
+       Each specimen is a grid box with a 440px floor and its content centred in
+       it, which on a wide screen is what puts one idea alone on the screen. On a
+       phone the floor stayed, .tall kept a 480px one, and the content - three
+       short lines - floated in the middle of it. The air was accidental: a
+       200px hole above one specimen, none between it and the next.
+
+       Here the box is the size of what is in it, the content starts at the top,
+       and the distance between one specimen and the next is stated once. The
+       bottom padding is left to the room an open card asks for. */
+    .stage{min-height:0;align-content:start;padding:0 0 var(--spill,0px)}
+    .stage.tall{min-height:0}
+    .stages .stage + .stage{margin-top:112px}
+    .stages .stage:first-of-type{margin-top:0}
     .plate{margin-bottom:0}
     .side{grid-template-columns:1fr;gap:18px 0}
     .md-body{padding:52px 28px 88px}
@@ -1028,6 +1059,59 @@
      to fit, so the page scrolled 83px sideways and the right-hand edge of
      every specimen sat off screen. Each one takes the column it is given now,
      and the cards that hang past the text on a desktop sit flush instead. */
+  /* ── A value that needs two lines on a phone ───────────────────────────
+     Every morphing line was given a fixed height, because on a desktop every one of
+     these strings fits on a single line and a box that cannot change height cannot
+     jog the page while the letters move. A phone column is 342px. "Send summary to
+     42 customers" needs two lines there, "Paused - 14 of 20 files renamed" needs
+     two, and so does the sentence inside the handoff card. The box stayed 33px, the
+     second line was drawn outside it, and whatever came next printed straight
+     through it - measured at 64px of glyphs inside a 33px box.
+
+     The floor stays, so nothing collapses mid-morph; the ceiling goes, so a line
+     that needs the room takes it and pushes the rest down. */
+  @media (max-width:760px){
+    /* These value boxes are inline-block so their width can travel while the letters
+       move. Inline means a baseline, and a baseline under a two-line box leaves a
+       half-line of descender space before the line underneath. On a phone the value
+       has the row to itself, so it goes back to being a block. */
+    /* Only the two values that fill the column: their chevron had nowhere to sit
+       beside them. The shorter values stay inline so their chevron still trails
+       the last word, which is where it belongs. */
+    .apb .hero[data-morph-text],.hob .hero[data-morph-text]{display:block}
+    .hero[data-morph-text]{height:auto;min-height:var(--ml-h,33px)}
+    #cw{height:auto;min-height:var(--ml-h,33px)}
+    [data-morph-text]{height:auto;min-height:var(--ml-h,28px)}
+    #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:var(--ml-h,28px)}
+    .mline{height:auto;min-height:28px}
+    .hscard .hl[data-morph-text]{height:auto;min-height:var(--ml-h,23px)}
+
+    /* ── The chevron nobody could reach for ────────────────────────────────
+       Six of these say "this opens" with a chevron that is invisible until a
+       pointer arrives. On a phone no pointer ever arrives, so six specimens read
+       as plain headings with a blank line under them - the line the chevron was
+       holding. Here they are simply present, quietly, at rest.
+
+       Two of them follow a value that fills the whole column, so there was never
+       room beside it and the chevron took a row of its own. Those sit in the
+       corner of the block instead, level with its first line. */
+    .apwrap:not(.open):not(.busy) .cv.apcv,
+    .apwrap:not(.open):not(.busy) .cv.amcv,
+    .apwrap:not(.open):not(.busy) .cv.hocv,
+    .histwrap:not(.open) .cv.histcv,
+    .cv.cpcv{opacity:.3}
+    /* A tap on a resting specimen is the reach a phone does not have: the chevron comes
+       up to full and whatever the specimen shows on hover shows now. The tap after that
+       is the one that opens it. So the specimen that will open is the one wearing a
+       chevron you can actually see, and nothing opens under a thumb by surprise. */
+    .stage .lit .cv{opacity:1!important}
+    .apb,.hob{position:relative}
+    .apb .cv.apcv,.hob .cv.hocv{position:absolute;right:0;top:10px;margin:0;vertical-align:0}
+    /* The value is a block here, so it already ends its own line. The <br> that follows
+       it was landing on a line of its own and holding 24px of nothing open. */
+    .apb > br,.hob > br{display:none}
+  }
+
   @media (max-width:700px){
     .stage{grid-template-columns:minmax(0,1fr)}
     .obj{min-width:0}
@@ -1869,7 +1953,24 @@
      Only the part that was misread is spent again; the rest of the row holds still. */
   (function(){
     const wrap=$('#regWrap'), chip=$('#regionChip'), menu=$('#regMenu'), inp=$('#regInp'), val=$('#regVal');
-    const open=()=>{ wrap.classList.add('open'); chip.setAttribute('aria-expanded','true');
+    /* The menu hangs off the chip, and the chip sits mid-row. On a wide screen there is
+       margin either side of the column for it to hang into. On a phone the column is the
+       screen, so a 342px panel anchored to a chip 110px in put its left edge 65px off the
+       side of the display. Here it lines up with the column instead, which is where every
+       other panel on this page sits. Measured on open, because the row moves. */
+    const place=()=>{
+      if(!matchMedia('(max-width: 760px)').matches){
+        menu.style.left=menu.style.right=menu.style.maxWidth=menu.style.minWidth=''; return; }
+      const col = wrap.closest('.stage'); if(!col) return;
+      const c = col.getBoundingClientRect(), w = wrap.getBoundingClientRect();
+      menu.style.left  = Math.round(c.left - w.left) + 'px';
+      menu.style.right = 'auto';
+      menu.style.minWidth = '0';
+      menu.style.maxWidth = Math.round(c.width) + 'px';
+      menu.style.width = Math.round(c.width) + 'px';
+    };
+    addEventListener('resize', place);
+    const open=()=>{ place(); wrap.classList.add('open'); chip.setAttribute('aria-expanded','true');
                      inp.value = val._mlCur || val.textContent; mark();
                      inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); };
     const shut=back=>{ wrap.classList.remove('open'); chip.setAttribute('aria-expanded','false');
@@ -2222,7 +2323,15 @@
       r.panels.forEach(function(p){
         if (!shows(p)) return;
         var b = p.getBoundingClientRect();
-        if (b.height > 0) need = Math.max(need, b.bottom - top);
+        if (b.height <= 0) return;
+        /* The card that is opening already knows how tall it will be - its own script
+           writes that height on the way in and the transition walks it there. Ask for
+           the room it is going to need, not the room it needs this frame: otherwise
+           every section below is re-laid twenty times while the card grows, and the
+           page shuffles under the thing you are trying to read. */
+        var target = parseFloat(p.style.height);
+        var h = (target > 0 && target > b.height) ? target : b.height;
+        need = Math.max(need, (b.top - top) + h);
       });
       var spill = Math.max(0, Math.round(need + GAP - r.natural));
       if (spill !== r.last){ r.last = spill; r.st.style.setProperty('--spill', spill + 'px'); }
@@ -2256,6 +2365,52 @@
     });
   }
   addEventListener('transitionend', sync, true);
+})();
+</script>
+<script>
+/* ── Two taps on a specimen ────────────────────────────────────────────────
+   Every one of these was built around a pointer that arrives before it presses.
+   Reaching for a specimen shows you what kind of thing it is - the chevron that
+   says it opens - and only then does the press open it. A finger does both in one
+   move, so on a phone the card appeared before the reader had seen there was
+   anything to open.
+
+   The rule here is the one the specimen shows you: a resting specimen wears a
+   faint chevron, a tap brings it up, and the tap after that opens the card. One
+   specimen is lit at a time, a tap anywhere else puts it back, and closing a card
+   puts its specimen back too, so what you are looking at always matches what the
+   next tap will do.
+
+   The listener sits on the section in capture, not on the buttons, because each
+   specimen already has its own click handler and several of them stop the event
+   on the way up; a capture listener above them all runs first either way. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  var SEL = '#apBtn, #amBtn, #hoOpen, #histBtn, #askBtn, #regionChip';
+  var root = document.querySelector('.stages') || document.body;
+  var lit = null;
+
+  function light(btn, on){
+    if (!btn) return;
+    btn.classList.toggle('lit', on);
+    try { btn.dispatchEvent(new PointerEvent(on ? 'pointerenter' : 'pointerleave')); } catch (e) {}
+  }
+  function only(btn){ if (lit === btn) return; light(lit, false); lit = btn; light(btn, true); }
+
+  root.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest(SEL);
+    if (!btn) return;
+    if (lit === btn) return;                  /* second tap: the specimen's own handler runs */
+    e.preventDefault(); e.stopPropagation();
+    only(btn);
+  }, true);
+
+  /* a tap on the page behind them puts the lit specimen back */
+  document.addEventListener('click', function(e){
+    if (lit && !lit.contains(e.target)) only(null);
+  });
+  /* and so does closing whatever it opened */
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') only(null); });
 })();
 </script>
 </body>

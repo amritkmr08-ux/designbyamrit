@@ -1292,12 +1292,29 @@
   @media (hover:none), (max-width:760px){
     /* !important because an earlier rule pins the bar to transparent with
        !important of its own; this is the one screen size where it has to win. */
-    body nav{background:rgba(247,247,245,.88)!important;
+    /* At 88% the paper was a window: a headline passing behind the bar showed
+       through it, right across the pile, which is what made the marks look like
+       they were changing as you scrolled. The bar is paper now, and a short fade
+       under it lets a line dissolve into that paper instead of being sliced by an
+       edge halfway up its letters. */
+    body nav{background:rgba(247,247,245,.97)!important;
         -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-    .nav-inner.nav-inner{display:flex;flex-direction:row;flex-wrap:nowrap;
-        justify-content:flex-end;align-items:center;gap:0;
+    body nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
+        pointer-events:none;
+        background:linear-gradient(to bottom,rgba(247,247,245,.97),rgba(247,247,245,0))}
+    /* One axis, both states. The pile used to be a row and the open list a column,
+       and flex-direction cannot be animated - it flips in a single frame. So on close
+       every card jumped to its row position first and only then slid its width back,
+       which is the lurch to the left you could see. Here the bar is a column either
+       way: closed, each card is pulled up onto the one before it by a negative margin
+       and nudged by its depth; open, the margins go to zero and the gap opens. Margin,
+       width, height and transform all interpolate, so the pile falls into a list and
+       gathers back up without a single jump. */
+    .nav-inner.nav-inner{display:flex;flex-direction:column;flex-wrap:nowrap;
+        justify-content:flex-start;align-items:flex-end;gap:0;
         padding:18px 24px 14px;white-space:normal;max-width:none;
-        transition:gap .30s cubic-bezier(.22,.61,.36,1)}
+        transition:gap .34s cubic-bezier(.22,.61,.36,1),
+                   padding .34s cubic-bezier(.22,.61,.36,1)}
     /* The two groups have to dissolve so all five marks are siblings of one
        flex row - otherwise the overlap only applies inside each group and the
        pile comes out in three pieces. Scoped through .nav-inner so it outranks
@@ -1305,17 +1322,19 @@
     .nav-inner .nav-mid,.nav-inner .nav-end{display:contents}
     .nb.nb{position:relative;display:block;width:30px;height:30px;overflow:hidden;flex:none;
         font-family:var(--display);font-size:13px;line-height:30px;padding:0;
-        margin-left:-30px;
+        margin:-30px 0 0;
         /* declared again below at .nav-inner strength: body.nav-in .nb sets
            transform:none for the arrival animation and was cancelling the deck */
         transition:width .34s cubic-bezier(.22,.61,.36,1),
+                   height .34s cubic-bezier(.22,.61,.36,1),
+                   line-height .34s cubic-bezier(.22,.61,.36,1),
                    margin .34s cubic-bezier(.22,.61,.36,1),
                    transform .34s cubic-bezier(.22,.61,.36,1)}
     /* Only the mark that actually starts the row loses its overlap. :first-child
        on its own matched the first mark inside each group too, because
        display:contents changes layout and not the tree, which is why the pile
        came out with two seams in it. */
-    .nav-inner > .nb:first-child{margin-left:0}
+    .nav-inner > .nb:first-child{margin-top:0}
     /* Overlapping marks of the same grey fused into one slab. A ring of paper
        around each one draws the edge of the card behind it, which is what makes
        a pile read as a pile rather than a smear. */
@@ -1348,11 +1367,10 @@
         white-space:nowrap;opacity:0;transition:opacity .22s ease}
 
     /* open: the pile falls into a column, each mark wearing its word */
-    body.nav-open .nav-inner.nav-inner{flex-direction:column;align-items:flex-end;gap:8px;
-        padding-bottom:20px}
+    body.nav-open .nav-inner.nav-inner{gap:8px;padding-bottom:20px}
     .nav-inner .nb.nb{transform:translate(calc(var(--k,0) * -3px), calc(var(--k,0) * 3px))}
     body.nav-open .nav-inner .nb.nb{transform:none}
-    body.nav-open .nb.nb{margin-left:0;width:calc(var(--w, 70px) + 44px)}
+    body.nav-open .nb.nb{margin-top:0;width:calc(var(--w, 70px) + 44px)}
     body.nav-open .nb .nwd{opacity:1;transition:opacity .26s ease .10s}
     /* a 30px mark is not a 44px target; the row it sits in is */
     body.nav-open .nb.nb{height:38px;line-height:38px}

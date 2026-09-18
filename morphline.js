@@ -122,10 +122,17 @@
         for (var m = k + 1; m < pos.length && Math.abs(pos[m].y - lineY) < 1; m++) pos[m].x -= dx;
       }
     }
-    var w = probe.getBoundingClientRect().width;
+    var pr = probe.getBoundingClientRect();
+    var w = pr.width, h = pr.height;
     host.removeChild(probe);
     if (lock) host.style.width = lock;
     pos.w = w;
+    /* How tall the string actually came out. On a desktop every one of these lines fits
+       on one, so the boxes were given a fixed height and nothing needed to ask. A phone
+       column wraps some of them, and a box that cannot grow draws its second line over
+       whatever sits underneath. The measurement is published as a custom property; the
+       stylesheet decides, per breakpoint, whether to use it. */
+    pos.h = h;
     return pos;
   }
 
@@ -192,7 +199,10 @@
        forces a reflow, and a width written during that reflow lands with no
        old value to travel from — the box would snap while the letters moved */
     requestAnimationFrame(function () { requestAnimationFrame(function () {
-      if (host.hasAttribute('data-morph-text') && B.w) host.style.width = B.w + 'px';
+      if (host.hasAttribute('data-morph-text')) {
+        if (B.w) host.style.width = B.w + 'px';
+        if (B.h) host.style.setProperty('--ml-h', B.h + 'px');
+      }
       moves.forEach(function (o) {
         o.el.style.transition = TRAVEL;
         o.el.style.transitionDelay = when(o.box, 120, 0) + 'ms';
@@ -231,7 +241,10 @@
     });
     if (old) old.remove();
     host.appendChild(layer);
-    if (host.hasAttribute('data-morph-text') && B.w) host.style.width = B.w + 'px';
+    if (host.hasAttribute('data-morph-text')) {
+      if (B.w) host.style.width = B.w + 'px';
+      if (B.h) host.style.setProperty('--ml-h', B.h + 'px');
+    }
   }
 
   /* A. two states, held by hover or focus: <span data-morph><i class="a">…</i><i class="b">…</i></span> */
