@@ -2318,10 +2318,15 @@
 (function(){
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
   var GAP = 40;
-  var rows = [].slice.call(document.querySelectorAll('.stage')).map(function(st){
-    var panels = [].slice.call(st.querySelectorAll('.glass, .apcard, .deckwrap > .deck'));
-    return panels.length ? { st: st, panels: panels, floor: 0 } : null;
-  }).filter(Boolean);
+  /* Slack on top of what was measured. A card can still grow after it opens - the
+     history one morphs its clause to a longer phrase and gains a line - and this is
+     the room for that to happen inside, so nothing below has to move for it. */
+  var HEADROOM = 64;
+  var all = [].slice.call(document.querySelectorAll('.stage')).map(function(st){
+    return { st: st, panels: [].slice.call(st.querySelectorAll('.glass, .apcard, .deckwrap > .deck')), floor: 0 };
+  });
+  var rows = all.filter(function(r){ return r.panels.length; });
+  var flat = all.filter(function(r){ return !r.panels.length; });
   if (!rows.length) return;
 
   function reserve(){
@@ -2346,22 +2351,38 @@
          with 18px above and 18px below, so it always reaches that much further than
          the card whose bottom we just measured. */
       if (r.panels.some(function(p){ return /\bdeck\b/.test(p.className); })) need += 36;
-      r.floor = Math.max(0, Math.round(need + GAP - natural));
+      r.floor = Math.max(0, Math.round(need + GAP + HEADROOM - natural));
       r.st.style.setProperty('--spill', r.floor + 'px');
     });
+    /* Three specimens have nothing to open, so they need no room - and were left sitting
+       on a different beat from the other eight, which read as an error rather than as a
+       difference. They take the middle of what the rest reserved, so the page keeps one
+       rhythm whether or not a particular specimen has a card behind it. */
+    if (flat.length){
+      var ms = rows.map(function(r){ return r.floor; }).sort(function(a,b){ return a-b; });
+      var mid = ms[Math.floor(ms.length / 2)];
+      flat.forEach(function(r){ r.floor = mid; r.st.style.setProperty('--spill', mid + 'px'); });
+    }
   }
 
-  /* only ever upward */
+  /* Last resort, and only for a real collision. The first version of this kept a constant
+     gap under whatever was open, so the moment a card grew by twelve pixels it moved the
+     whole page by twelve pixels to restore that gap - which is the adjusting you could see,
+     and no amount of extra room fixed it, because the rule was about the gap and not about
+     the collision. It now asks one question: is anything reaching past the room that was
+     already set aside? Almost always the answer is no and nothing moves. */
   function guard(){
     rows.forEach(function(r){
-      var top = r.st.getBoundingClientRect().top, need = 0;
+      var box = r.st.getBoundingClientRect();
+      var top = box.top, need = 0;
       r.panels.forEach(function(p){
         var cs = getComputedStyle(p);
         if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) <= 0.01) return;
         var b = p.getBoundingClientRect();
         if (b.height > 0) need = Math.max(need, b.bottom - top);
       });
-      var want = Math.round(need + GAP - (r.st.getBoundingClientRect().height - r.floor));
+      if (top + need <= box.bottom) return;                  /* it fits; leave the page alone */
+      var want = Math.round(need + GAP - (box.height - r.floor));
       if (want > r.floor){ r.floor = want; r.st.style.setProperty('--spill', want + 'px'); }
     });
   }
