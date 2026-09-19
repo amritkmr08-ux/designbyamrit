@@ -1340,6 +1340,11 @@
   /* the phone pile draws marks at 30px; the two drawn shapes are 28px paths inside that
      box, so the circle is brought to 28 as well and the three sit at one size */
   @media (hover:none), (max-width:760px) { .nb.abt .nmk { width: 28px; height: 28px; margin: 1px } }
+
+  /* the opening argument, after the first paragraph the loader traces */
+  .lede-more{max-width:46ch}
+  .lede-more p{font-size:17.5px;line-height:28px;color:var(--ink);margin:20px 0 0}
+  .lede-more p:last-child{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1370,12 +1375,21 @@ function onWidth(fn){
   </div>
 </nav>
 
-<div class="ldr" id="ldr" aria-hidden="true" data-over="#lede"><p class="ldr-t">AI makes information cheap. Attention remains expensive. The question is no longer what an interface can show, but what a moment deserves.</p></div>
+<div class="ldr" id="ldr" aria-hidden="true" data-over="#lede"><p class="ldr-t">Interfaces keep getting better at producing more. More answers, more recommendations, more states, more explanations.</p></div>
 
 <header class="wrap">
   <h1>Sensitivity</h1>
   <!-- The one description, and the only thing that moves on this page before you touch it. -->
-  <p class="lede" id="lede">AI makes information cheap. Attention remains expensive. The question is no longer what an interface can show, but what a moment deserves.</p>
+  <p class="lede" id="lede">Interfaces keep getting better at producing more. More answers, more recommendations, more states, more explanations.</p>
+  <!-- The rest of the argument, in the writer's own line breaks. The loader traces only the
+       first paragraph; these arrive with the page. -->
+  <div class="lede-more">
+    <p>But people did not get more attention.</p>
+    <p>So the design problem changed.</p>
+    <p>Not &ldquo;how much can the interface show?&rdquo;<br>But: how much attention does this moment deserve?</p>
+    <p>Sometimes the answer is nothing.<br>Sometimes a hint.<br>Sometimes more, but only when the person reaches for it.</p>
+    <p>Sensitivity is a way of deciding that amount &mdash; then using the least interface necessary to spend it well.</p>
+  </div>
 </header>
 
 <!-- The same separator the work list uses, doing the same job: naming what is below and
