@@ -1379,6 +1379,29 @@
      keeps one height now, so the page never moves. The paper-outline trick for
      the cards behind is gone too: a shape drawn with clip-path clips its own
      border away, so those marks were paper on paper - invisible. */
+  /* ── One rhythm for the specimens ─────────────────────────────────────
+     Every specimen used to reserve the height of its own open card, so the resting
+     page had a different hole under each one. Now the rest state is only the rest
+     state: one gap between specimens, stated once, and nothing reserved. A card
+     that opens floats on glass above whatever is under it - it is already drawn
+     out of flow - and the specimen that is open is lifted above its neighbours so
+     the card paints over them, not under. Nothing in the page moves when it opens. */
+  .stages .stage, .stages .stage.tall,
+  .stages .stage:nth-of-type(1), .stages .stage:nth-of-type(2), .stages .stage:nth-of-type(3),
+  .stages .stage:nth-of-type(4), .stages .stage:nth-of-type(5), .stages .stage:nth-of-type(6),
+  .stages .stage:nth-of-type(7), .stages .stage:nth-of-type(8), .stages .stage:nth-of-type(9),
+  .stages .stage:nth-of-type(10), .stages .stage:nth-of-type(11) { min-height: 0; }
+  .stages { margin-top: 96px; }
+  .stages .stage + .stage { margin-top: 96px; }
+  .stage { position: relative; z-index: 0; }
+  .stage:has(.open), .stage:has(.lit), .stage:has(.busy), .stage:focus-within { z-index: 6; }
+  /* the pane has to carry text over text now, so it is a little less see-through */
+  .glass, .deckwrap > .deck { background: rgba(247,247,245,.72);
+         -webkit-backdrop-filter: blur(14px) saturate(1.6); backdrop-filter: blur(14px) saturate(1.6); }
+  @media (max-width:900px) {
+    .stages { margin-top: 88px; }
+    .stages .stage + .stage { margin-top: 88px; }
+  }
   @media (hover:none), (max-width:760px) {
     /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
        The bar is in flow and keeps one height (60px), so nothing under it ever moves. */

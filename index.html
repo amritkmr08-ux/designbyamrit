@@ -1556,18 +1556,21 @@
      row already owns the space the pane fills. */
   .ix-b { padding: 16px 18px 18px; margin-left: -18px; width: calc(100% + 36px); border-radius: 16px;
     transition: background .26s ease, box-shadow .26s ease; }
+  /* The pane is the same glass card as on Sensitivity - same tint, same blur, same
+     highlight along the top edge, same shadow, same corner. One material on the site. */
   .ix-b.lit, .ix-b:focus-visible {
-    background: rgba(255,255,255,.5);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
-    box-shadow: inset 0 0 0 1px rgba(25,26,24,.07), 0 18px 34px -24px rgba(25,26,24,.35); }
+    background: rgba(247,247,245,.38);
+    -webkit-backdrop-filter: blur(11px) saturate(1.9); backdrop-filter: blur(11px) saturate(1.9);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24); }
+  .ix-b { border-radius: 20px; }
   @media (hover:hover) {
     .ix-b:hover {
-      background: rgba(255,255,255,.5);
-      -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
-      box-shadow: inset 0 0 0 1px rgba(25,26,24,.07), 0 18px 34px -24px rgba(25,26,24,.35); }
+      background: rgba(247,247,245,.38);
+      -webkit-backdrop-filter: blur(11px) saturate(1.9); backdrop-filter: blur(11px) saturate(1.9);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24); }
   }
   @media (max-width: 900px) {
-    .ix-b { padding: 14px 14px 16px; margin-left: -14px; width: calc(100% + 28px); border-radius: 14px; }
+    .ix-b { padding: 14px 14px 16px; margin-left: -14px; width: calc(100% + 28px); border-radius: 20px; }
   }
   @media (hover:none), (max-width:760px) {
     /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
