@@ -129,9 +129,10 @@ function onWidth(fn){
       if (w) probe.style.width = w + 'px';
     }
     var cells = [];
-    text.split(/(\s+)/).forEach(function (chunk) {
+    /* a no-break space is part of its word, so "Sirion\u00a0·" never wraps to a line that starts with a dot */
+    text.split(/([ \t\r\n\f]+)/).forEach(function (chunk) {
       if (!chunk) return;
-      if (/^\s+$/.test(chunk)) {
+      if (/^[ \t\r\n\f]+$/.test(chunk)) {
         chunk.split('').forEach(function (ch) {
           var c = document.createElement('i');
           c.className = 'ml-c'; c.textContent = ch;
@@ -158,7 +159,7 @@ function onWidth(fn){
        the next one, which indents that line by one space. Real text lets the space hang past
        the edge instead. Do the same: park it at the end of the line it belongs to. */
     for (var k = 1; k < pos.length; k++) {
-      if (/^\s$/.test(pos[k].ch) && pos[k].y > pos[k - 1].y + 1) {
+      if (/^[ \t\r\n\f]$/.test(pos[k].ch) && pos[k].y > pos[k - 1].y + 1) {
         var lineY = pos[k].y, dx = pos[k].w || 0;
         pos[k].y = pos[k - 1].y;
         pos[k].x = pos[k - 1].x + (pos[k - 1].w || 0);

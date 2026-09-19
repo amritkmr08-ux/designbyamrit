@@ -920,6 +920,8 @@
         border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;
         cursor:pointer;z-index:91;color:var(--ink);font-size:17.5px;font-family:var(--font);line-height:1}
   .ov-x:hover{background:var(--soft)}
+  @media (max-width:760px){ .ov-x{top:12px;right:14px;width:36px;height:36px;font-size:16px;
+        box-shadow:0 6px 16px -10px rgba(25,26,24,.35)} }
   /* A frontispiece, not a hero: the one image in the whole thing, at the top of the document
      rather than on the specimen page, because the specimens are supposed to speak for
      themselves and this says what the collection is about. The aspect ratio is declared so the
@@ -1076,6 +1078,14 @@
     .md-body p.dm-float{top:58px} }
 
   .md-body p.close{margin-top:96px;color:var(--ink)}
+  @media (max-width:760px){
+    /* a phone column has no measure to tell a definition from a claim, so the colour does:
+       the definition reads as explanation, the rule stays the statement */
+    .md-body p.fw-def[data-morph-text], .md-body .fw-def .ml-g{color:var(--muted)}
+    .md-body .fw{margin-top:72px}
+    .close{padding-top:40px}
+    .md-body p.close{margin-top:72px}
+  }
 
   footer{margin-top:150px;padding-top:26px;padding-bottom:70px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
   footer a:hover{color:var(--ink)}

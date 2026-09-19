@@ -1088,6 +1088,28 @@
   @media (max-width: 700px) {
     .ov-in { padding: 24px 12px 80px; } .md-body { padding: 26px 20px 44px; } .md-lead { font-size: 17.5px; }
   }
+  /* ── Card header, one order of reading ─────────────────────────────────
+     Title. What and where, 10px under it. Rule. The sentence, in ink: it is the
+     claim. Then my part in it, small and faint, with real air under it before
+     the story starts - it used to sit flush against the first paragraph. */
+  .md-k { margin: 10px 0 0; }
+  .md hr { margin: 32px 0 36px; }
+  .md-lead { color: var(--ink); margin: 0 0 16px; }
+  .md-ev { margin: 0 0 48px !important; }
+  /* the way out: a small cross floating at the top right of the card */
+  .ov-close { font-size: 0; line-height: 0; color: transparent; }
+  @media (hover: none), (max-width: 760px) {
+    .ov-close { width: 36px; height: 36px; padding: 0; border-radius: 50%; top: 12px; right: 14px;
+      box-shadow: 0 6px 16px -10px rgba(25,26,24,.35); }
+    .ov-close::before, .ov-close::after { content: ""; position: absolute; left: 50%; top: 50%;
+      width: 14px; height: 1.5px; background: var(--ink); border-radius: 1px;
+      transform: translate(-50%,-50%) rotate(45deg); }
+    .ov-close::after { transform: translate(-50%,-50%) rotate(-45deg); }
+    .ov-in { padding-top: 24px; }
+    /* the two ways on, one under the other - side by side they broke mid-phrase */
+    .md-end { display: flex; flex-direction: column; gap: 10px; }
+    .md-sep { display: none; }
+  }
   @media (prefers-reduced-motion: reduce) { .ov, .md { transition: none; } }
 
   /* ---- one column, placed left of centre; the field around it is the design ---- */
@@ -1625,7 +1647,7 @@ function onWidth(fn){
           <span class="ix-t">
             <span class="ix-top"><b>Contract Relationships</b></span>
             <span class="ix-sw mline" data-morph>
-              <i class="a">Contract systems &middot; Sirion &middot; 2025&ndash;26</i>
+              <i class="a">Contract systems&nbsp;&middot; Sirion&nbsp;&middot; 2025&ndash;26</i>
               <i class="b">A folder tells you where a document sits. Not what it changes.</i>
             </span>
             <span class="vh">A folder tells you where a document sits. Not what it changes.</span>
@@ -1638,7 +1660,7 @@ function onWidth(fn){
           <span class="ix-t">
             <span class="ix-top"><b>Contract Onboarding</b></span>
             <span class="ix-sw mline" data-morph>
-              <i class="a">AI onboarding review &middot; Sirion &middot; Shipped</i>
+              <i class="a">AI onboarding review&nbsp;&middot; Sirion&nbsp;&middot; Shipped</i>
               <i class="b">The agent groups the contracts. A person decides the groups are right.</i>
             </span>
             <span class="vh">The agent groups the contracts. A person decides the groups are right.</span>
@@ -1651,7 +1673,7 @@ function onWidth(fn){
           <span class="ix-t">
             <span class="ix-top"><b>Phoenix Listing</b></span>
             <span class="ix-sw mline" data-morph>
-              <i class="a">Agent in the contract listing &middot; Sirion &middot; In development</i>
+              <i class="a">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</i>
               <i class="b">A question reshapes the contract listing into the answer.</i>
             </span>
             <span class="vh">A question reshapes the contract listing into the answer.</span>
@@ -1664,7 +1686,7 @@ function onWidth(fn){
           <span class="ix-t">
             <span class="ix-top"><b>Auto Extraction</b></span>
             <span class="ix-sw mline" data-morph>
-              <i class="a">AI review interface &middot; Sirion &middot; Shipped 2024</i>
+              <i class="a">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</i>
               <i class="b">An AI can extract 128 fields. A lawyer still has to check every one.</i>
             </span>
             <span class="vh">An AI can extract 128 fields. A lawyer still has to check every one.</span>
@@ -1677,7 +1699,7 @@ function onWidth(fn){
           <span class="ix-t">
             <span class="ix-top"><b>Sensitivity</b></span>
             <span class="ix-sw mline" data-morph>
-              <i class="a">Interaction patterns &middot; 2026</i>
+              <i class="a">Interaction patterns&nbsp;&middot; 2026</i>
               <i class="b">Any answer is cheap now. Attention is not.</i>
             </span>
             <span class="vh">Any answer is cheap now. Attention is not.</span>
@@ -1689,13 +1711,13 @@ function onWidth(fn){
 </section>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Project">
-  <button class="ov-close" id="ovClose" type="button">Close</button>
+  <button class="ov-close" id="ovClose" type="button" aria-label="Close">Close</button>
   <div class="ov-in" id="ovin" tabindex="-1">
     <article class="md" data-i="0" hidden>
       <div class="md-shot" data-src="family-graph.html"><picture><img src="cr-graph.webp" width="1344" height="787" loading="lazy" decoding="async" alt="Contract Relationships &mdash; product screen." /></picture><iframe title="" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
       <div class="md-body">
         <h2>Contract Relationships</h2>
-        <p class="md-k">Contract systems &middot; Sirion &middot; 2025&ndash;26</p>
+        <p class="md-k">Contract systems&nbsp;&middot; Sirion&nbsp;&middot; 2025&ndash;26</p>
         <hr />
         <p class="md-lead">A folder tells you where a document sits. Not what it changes.</p>
         <p class="md-ev">My role: framing the problem, prototyping the alternatives, making the argument &middot; Shared decisions with designers, product managers and engineers &middot; Approved and prioritised for build; not in production, so there are no post-launch numbers here</p>
@@ -1725,7 +1747,7 @@ function onWidth(fn){
       <div class="md-shot still"><picture><img src="onb-missing.webp" width="2628" height="1538" loading="lazy" decoding="async" alt="Contract Onboarding &mdash; product screen." /></picture></div>
       <div class="md-body">
         <h2>Contract Onboarding</h2>
-        <p class="md-k">AI onboarding review &middot; Sirion &middot; Shipped</p>
+        <p class="md-k">AI onboarding review&nbsp;&middot; Sirion&nbsp;&middot; Shipped</p>
         <hr />
         <p class="md-lead">The agent groups the contracts. A person decides the groups are right.</p>
         <p class="md-ev">Only designer on it, concept to shipped screens &middot; No usage number here until I have one I trust and know how it was measured</p>
@@ -1752,7 +1774,7 @@ function onWidth(fn){
       <div class="md-shot still"><picture><img src="phx-question.webp" width="2824" height="1654" loading="lazy" decoding="async" alt="Phoenix Listing &mdash; product screen." /></picture></div>
       <div class="md-body">
         <h2>Phoenix Listing</h2>
-        <p class="md-k">Agent in the contract listing &middot; Sirion &middot; In development</p>
+        <p class="md-k">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</p>
         <hr />
         <p class="md-lead">A question reshapes the contract listing into the answer.</p>
         <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
@@ -1778,7 +1800,7 @@ function onWidth(fn){
       <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="1800" height="1132" loading="lazy" decoding="async" alt="Auto Extraction in Sirion &mdash; the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
       <div class="md-body">
         <h2>Auto Extraction</h2>
-        <p class="md-k">AI review interface &middot; Sirion &middot; Shipped 2024</p>
+        <p class="md-k">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</p>
         <p class="md-lead">An AI can extract 128 fields. A lawyer still has to check every one.</p>
         <p class="md-ev">Owned end to end, research to shipped releases &middot; Three redesigns &middot; Retention measured in Heap, June 2025</p>
         <hr />

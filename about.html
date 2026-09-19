@@ -1195,6 +1195,7 @@
   .ab-rows .t { display: block; min-width: 0; }
   .ab-rows .t b { display: block; font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 24px; letter-spacing: -.012em; }
   .ab-rows .t b span { color: var(--faint); font-weight: 400; }
+  .co::before { content: "\00a0\00b7\00a0"; }
   .ab-rows .sw { position: relative; display: block; margin-top: 10px; height: 50px; font-size: 17.5px; line-height: 25px; }
   .ab-rows .sw.one { height: 25px; }
   /* the second line of a row reads in muted on the homepage and read in faint here — one
@@ -1228,7 +1229,10 @@
     .ab-rows a.rw .sw i.b::after{content:"";display:inline-block;width:14px;height:14px;margin-left:8px;vertical-align:-2px;background-color:var(--ink);-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain}
     /* the screen-reader copy would now be read twice */
     .ab-rows .t .vh{display:none}
-    .ab-rows li + li{margin-top:32px}
+    .ab-rows li + li, .ab-rows li.thin + li.thin{margin-top:36px}
+    /* year, role, company: three short lines, never a company split across two */
+    .ab-rows .t b .co, .ab-years .r0 .co{display:block;margin-top:2px}
+    .co::before{content:none}
   }
   .ml-layer { position: absolute; inset: 0; pointer-events: none; }
   .ml-layer .ml-g { position: absolute; display: inline-block; font-style: normal; white-space: pre; }
@@ -1238,7 +1242,7 @@
   .ml-probe .ml-w { display: inline-block; white-space: nowrap; }
   .ml-probe .ml-c { display: inline-block; font-style: normal; white-space: pre; }
   .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  @media (max-width: 560px) { .ab-rows .rw { grid-template-columns: 1fr; gap: 0; } .ab-rows .n { height: 22px; line-height: 22px; } .ab-rows .sw { height: 75px; } .ab-rows .sw.one { height: 50px; } }
+  @media (max-width: 560px) { .ab-rows .rw { grid-template-columns: 1fr; gap: 0; } .ab-rows .n { height: 24px; line-height: 24px; margin-bottom: 2px; } .ab-rows .sw, .ab-rows .sw.one { height: auto; min-height: 0; } }
   @media (max-width: 900px) {
     .ab-grid { grid-template-columns: 1fr; gap: 56px 0; }
     .ab-side { position: static; }
@@ -1506,31 +1510,31 @@ function onWidth(fn){
         <ul class="ab-rows">
       <li class="r"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2021 &ndash; now</i></span>
-        <span class="t"><b>Product Designer <span>&middot; Sirion.ai</span></b>
+        <span class="t"><b>Product Designer <span class="co">Sirion.ai</span></b>
         <span class="sw mline" data-morph><i class="a">Enterprise contract management, used by global legal teams.</i><i class="b">Auto Extraction, owned end to end: month-four retention 5% to 23%, cohort 860 to 2,380 users.</i></span>
         <span class="vh">Auto Extraction, owned end to end: month-four retention 5% to 23%, cohort 860 to 2,380 users.</span></span>
       </div></li>
       <li class="r"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2019 &ndash; 2021</i></span>
-        <span class="t"><b>UX Designer <span>&middot; Bharti Airtel</span></b>
+        <span class="t"><b>UX Designer <span class="co">Bharti Airtel</span></b>
         <span class="sw mline" data-morph><i class="a">Airtel Thanks, one of India&rsquo;s largest consumer apps.</i><i class="b">Help redesigned around predicted intent: call volume down 9%, daily engagement up 15%.</i></span>
         <span class="vh">Help redesigned around predicted intent: call volume down 9%, daily engagement up 15%.</span></span>
       </div></li>
       <li class="r thin"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2019</i></span>
-        <span class="t"><b>UI/UX Designer <span>&middot; Think Matra</span></b></span>
+        <span class="t"><b>UI/UX Designer <span class="co">Think Matra</span></b></span>
       </div></li>
       <li class="r thin"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2018 &ndash; 2019</i></span>
-        <span class="t"><b>Senior Creative UI Designer <span>&middot; Great Place to Study</span></b></span>
+        <span class="t"><b>Senior Creative UI Designer <span class="co">Great Place to Study</span></b></span>
       </div></li>
       <li class="r thin"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2017 &ndash; 2018</i></span>
-        <span class="t"><b>Co-founder and Creative Director <span>&middot; Zhero Denim</span></b></span>
+        <span class="t"><b>Co-founder and Creative Director <span class="co">Zhero Denim</span></b></span>
       </div></li>
       <li class="r thin"><div class="rw" data-morph-host>
         <span class="n" aria-hidden="true"><i class="num">2013 &ndash; 2017</i></span>
-        <span class="t"><b>Graphic and Product Designer <span>&middot; Lee Cooper</span></b></span>
+        <span class="t"><b>Graphic and Product Designer <span class="co">Lee Cooper</span></b></span>
       </div></li>
         </ul>
 
@@ -1543,16 +1547,16 @@ function onWidth(fn){
 
         <h2 class="ab-h r">Education</h2>
         <ul class="ab-years">
-          <li class="r"><span class="y">2025 &ndash; 2026</span><span class="r0">Executive Development Program in Strategy and Leadership <span>&middot; XLRI Delhi-NCR</span></span></li>
-          <li class="r"><span class="y">2020</span><span class="r0">Design Thinking: From Insights to Viability <span>&middot; Stanford Graduate School of Business, online</span></span></li>
-          <li class="r"><span class="y">2013</span><span class="r0">Bachelor of Design <span>&middot; NIFT Chennai</span></span></li>
-          <li class="r"><span class="y">2011</span><span class="r0">Product Design Trainee <span>&middot; IIT Guwahati</span></span></li>
+          <li class="r"><span class="y">2025 &ndash; 2026</span><span class="r0">Executive Development Program in Strategy and Leadership <span class="co">XLRI Delhi-NCR</span></span></li>
+          <li class="r"><span class="y">2020</span><span class="r0">Design Thinking: From Insights to Viability <span class="co">Stanford Graduate School of Business, online</span></span></li>
+          <li class="r"><span class="y">2013</span><span class="r0">Bachelor of Design <span class="co">NIFT Chennai</span></span></li>
+          <li class="r"><span class="y">2011</span><span class="r0">Product Design Trainee <span class="co">IIT Guwahati</span></span></li>
         </ul>
 
         <h2 class="ab-h r">Recognition</h2>
         <ul class="ab-years">
-          <li class="r"><span class="y">2024</span><span class="r0">Best AI-Driven Design Concept <span>&middot; Sirion</span></span></li>
-          <li class="r"><span class="y">2023</span><span class="r0">Lightning Talk <span>&middot; UX India</span></span></li>
+          <li class="r"><span class="y">2024</span><span class="r0">Best AI-Driven Design Concept <span class="co">Sirion</span></span></li>
+          <li class="r"><span class="y">2023</span><span class="r0">Lightning Talk <span class="co">UX India</span></span></li>
         </ul>
 
         <figure class="ab-photo r">
