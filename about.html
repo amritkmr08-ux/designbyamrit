@@ -1303,6 +1303,57 @@
   .nb.nav-id .nmk::after, .nb.id .nmk::after { content: none }
   /* the phone pile draws marks at 30px; the two drawn shapes are 28px paths inside that
      box, so the circle is brought to 28 as well and the three sit at one size */
+
+  /* ── The three marks, sized to sit together ───────────────────────────
+     Drawn full-bleed in a 28px box they read heavy against the type, and the
+     three shapes carry different amounts of ink - a house fills its box, a
+     person does not - so at one scale they looked like three sizes. Each is
+     scaled inside its box to a similar visual weight, and the boxes sit 12px
+     apart instead of 8. The box itself is unchanged, so the hit area and the
+     opening into the word are exactly as they were. */
+  @media (hover:hover) and (min-width:761px) {
+    .nav-inner, .nav-mid { gap: 12px; }
+    .nb.nav-id .nmk, .nb.id .nmk { transform: scale(.82); transform-origin: 50% 54%; }
+    .nb.abt .nmk { transform: scale(.94); transform-origin: 50% 50%; }
+    .nb.sens .nmk { transform: scale(.88); transform-origin: 50% 50%; }
+    .nb:hover .nmk, .nb:focus-visible .nmk { transform: scale(1); }
+  }
+  /* ── Phone nav, plain version ─────────────────────────────────────────────
+     Closed: the three marks sit in a row, all of them visible, the page you are
+     on dark. Open: the same three marks with their words, as a list laid OVER the
+     page. The list used to grow the bar itself, which pushed the page down on open
+     and pulled it back up on close - that is the "auto scroll" you saw. The bar
+     keeps one height now, so the page never moves. The paper-outline trick for
+     the cards behind is gone too: a shape drawn with clip-path clips its own
+     border away, so those marks were paper on paper - invisible. */
+  @media (hover:none), (max-width:760px) {
+    nav { height: 60px; }
+    .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
+        gap: 10px; padding: 16px 24px 16px; transition: none; }
+    .nb.nb { margin: 0; width: 28px; height: 28px; line-height: 28px; transition: none; }
+    /* A tap on a phone leaves the link in its :hover state, and the desktop hover
+       rule fades the mark out to make room for its word. That is the mark that went
+       missing after you tapped it. No hover behaviour here at all. */
+    .nb.nb:hover, .nb.nb:focus-visible { width: 28px; }
+    .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { opacity: 1; }
+    body.nav-open .nb.nb:hover, body.nav-open .nb.nb:focus-visible { width: calc(var(--w, 70px) + 42px); }
+    .nav-inner .nb.nb, body.nav-open .nav-inner .nb.nb { transform: none; }
+    .nb.nb .nmk { width: 28px; height: 28px; top: 0; border: 0 !important;
+        box-shadow: none !important; background: #DCDDD8 !important;
+        -webkit-transform: translateZ(0); transform: translateZ(0); }
+    .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
+    .nb .nwd { height: 28px; line-height: 28px; right: 38px; top: 0; }
+    /* open: a list over the page, the bar under it unchanged */
+    body.nav-open nav .nav-inner.nav-inner { position: absolute; left: 0; right: 0; top: 0;
+        z-index: 2; flex-direction: column; align-items: flex-end; gap: 8px;
+        padding: 16px 24px 18px; background: rgba(247,247,245,.98);
+        box-shadow: 0 22px 34px -22px rgba(0,0,0,.22); }
+    body.nav-open .nb.nb { width: calc(var(--w, 70px) + 42px); height: 36px; line-height: 36px; }
+    body.nav-open .nb.nb .nmk, body.nav-open .nb .nwd { top: 4px; }
+    body.nav-open .nb .nwd { height: 28px; line-height: 28px; opacity: 1;
+        transition: opacity .18s ease; }
+    body.nav-open .nav-x { margin: 4px 0 0; padding: 8px 0 0; }
+  }
 </style>
 <body>
 <script>
