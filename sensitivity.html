@@ -690,7 +690,6 @@
   .apcard .q{font-size:14px}
   /* both Alexes commit the share, so both are pills. Inside a card the shapes are the
      actions and the prose is the statement — nothing has to be read twice to know which. */
-  #amPick{gap:10px}
   /* reviewing is a second mode of the same card, not a change to the line above it: the
      block between the item and the actions becomes the list, and the word that opened it
      becomes the word that closes it. Cause and effect land next to each other. */
@@ -1316,6 +1315,18 @@
         border-bottom:1px solid var(--line);font-size:14px;line-height:24px;color:var(--faint)}
   .askcard .ask-chips{margin-top:12px;gap:14px}
   .askcard .ask-chips .q{font-size:14px;line-height:24px}
+
+  /* ── Choosing between two people ───────────────────────────────────────
+     Two names side by side read as two buttons. As a list they read as what
+     they are: a choice, one per line, the name at reading size and the thing
+     that tells them apart at the right in small. */
+  .apcard .plist{margin-top:14px;border-top:1px solid var(--line)}
+  .apcard .plist .q{display:flex;justify-content:space-between;align-items:baseline;width:100%;
+        font-size:17.5px;line-height:25px;color:var(--ink);padding:12px 0;
+        border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;text-align:left}
+  .apcard .plist .q small{font-size:14px;line-height:25px;color:var(--faint);
+        transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .apcard .plist .q:hover small{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1341,8 +1352,8 @@ function onWidth(fn){
 <nav aria-label="Main">
   <div class="nav-inner">
     <a class="id nb" href="index.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
-    <a class="q nb sens cur" href="sensitivity.html" aria-current="page"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
     <a class="q nb" href="about.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
+    <a class="q nb sens cur" href="sensitivity.html" aria-current="page"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
   </div>
 </nav>
 
@@ -1475,9 +1486,9 @@ function onWidth(fn){
         </button>
         <div class="apcard" id="amCard">
           <p class="cons" id="amCons" data-morph-text>Whoever you pick can open it and comment.</p>
-          <div class="ask-chips" id="amPick">
-            <button class="q commit" data-who="Alex Mehta" data-team="Design" type="button">Alex Mehta &middot; Design</button>
-            <button class="q commit" data-who="Alex Ross" data-team="Legal" type="button">Alex Ross &middot; Legal</button>
+          <div class="plist" id="amPick">
+            <button class="q" data-who="Alex Mehta" data-team="Design" type="button">Alex Mehta<small>Design</small></button>
+            <button class="q" data-who="Alex Ross" data-team="Legal" type="button">Alex Ross<small>Legal</small></button>
           </div>
           <div class="ask-chips right" id="amUndo" hidden>
             <button class="q commit" id="amRevoke" type="button">Revoke</button>
