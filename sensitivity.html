@@ -131,7 +131,7 @@
   body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk{position:absolute;inset:0;border-radius:8px;background:#C3C4BE;
-      transition:opacity var(--md) ease var(--ml), background-color 420ms ease}
+      transition:opacity var(--md) ease var(--ml), transform var(--md) cubic-bezier(.22,.61,.36,1) var(--ml), background-color 420ms ease}
   /* ── One icon, and only one ───────────────────────────────────────────
      Five marks and no words until you reach for one, which leaves a reader
      guessing at all five. An icon on the page you are already on answers the
@@ -157,8 +157,8 @@
      behind it. Nothing is asked to fade and travel at the same moment, which is what made
      it feel like a snap. */
   .nb:hover,.nb:focus-visible{width:var(--w,28px);outline:none;
-      --wd:520ms;--we:cubic-bezier(.22,.61,.36,1);--wl:0ms;
-      --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
+      --wd:560ms;--we:cubic-bezier(.22,.61,.36,1);--wl:90ms;
+      --md:340ms;--ml:90ms;--td:360ms;--tl:300ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
   body.nav-lit .nb.here .nmk{background:var(--ink)}
@@ -1396,8 +1396,10 @@
   .stage { position: relative; z-index: 0; }
   .stage:has(.open), .stage:has(.lit), .stage:has(.busy), .stage:focus-within { z-index: 6; }
   /* the pane has to carry text over text now, so it is a little less see-through */
-  .glass, .deckwrap > .deck { background: rgba(247,247,245,.72);
-         -webkit-backdrop-filter: blur(14px) saturate(1.6); backdrop-filter: blur(14px) saturate(1.6); }
+  /* Real frosted glass: the page behind stays visible as soft shapes, blurred hard
+     enough that the card's own text reads over it. Less tint, more blur. */
+  .glass, .deckwrap > .deck { background: rgba(247,247,245,.48);
+         -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); }
   @media (max-width:900px) {
     .stages { margin-top: 88px; }
     .stages .stage + .stage { margin-top: 88px; }

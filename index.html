@@ -1198,26 +1198,23 @@
 
   /* the facts, as tabs: three labels, one line that morphs between them */
   .hero-facts { display: block; margin-top: 104px; padding-top: 0; border-top: 0; }
-  .ftabs { position: relative; display: inline-flex; gap: 14px 30px; flex-wrap: wrap; margin-left: 0; }
-  /* no chip. The tabs carry their state the same way the Sensitivity framework does:
-     out of focus at rest, sharp in ink when chosen. The travelling pill Morphline seats
-     is still created, and hidden here. */
-  .ftab-pill { display: none; }
-  /* labels at rest sit slightly out of focus; the chosen one is sharp and in ink — the same
-     two states the Sensitivity framework uses */
+  .ftabs { position: relative; display: inline-flex; gap: 8px 12px; flex-wrap: wrap; margin-left: -14px; }
+  /* The chosen tab sits on a glass pill: the same frosted paper as every card on the
+     site, cut to a pill, with a light along its top edge and a soft lift under it.
+     Morphline seats the pill under whichever tab is chosen and slides it between them. */
+  .ftab-pill { display: block; position: absolute; left: 0; top: 0; z-index: 0; border-radius: 999px;
+          background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.12) 55%, rgba(255,255,255,0)),
+                      rgba(247,247,245,.48);
+          -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(25,26,24,.05),
+                      0 8px 18px -10px rgba(25,26,24,.32);
+          transition: transform .46s cubic-bezier(.22,.61,.36,1), width .46s cubic-bezier(.22,.61,.36,1); }
   .ftab { position: relative; z-index: 1; background: none; border: 0; cursor: pointer; font: inherit;
-          padding: 6px 0; border-radius: 0;
+          padding: 8px 14px; border-radius: 999px;
           font-size: 14px; letter-spacing: .1em; text-transform: uppercase;
           font-family: var(--display); color:var(--faint);font-weight:500;filter:blur(.7px); transition:color .26s ease, filter .3s ease; }
   .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); filter: blur(0); outline: none; }
-  /* The chosen tab carries a line — the same 1.5px of accent the top navigation uses, six
-     pixels clear of the word, growing in from the left. One tab component means one selected
-     state: out of focus at rest, sharp and in ink when chosen, and a line under the chosen
-     one. Top of the page and inside it, no exceptions. */
-  .ftab::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 1.5px;
-          background: var(--accent); transition: right .3s ease; }
-  .ftab.on::after { right: .1em; }
-  @media (prefers-reduced-motion: reduce) { .ftab::after { transition: none; } }
+  .ftab::after { content: none; }
   @media (prefers-reduced-motion: reduce) { .ftab, .ftab-pill { transition: none; } }
   .fval { position: relative; margin-top: 26px; height: 56px;
           font-size: 17.5px; line-height: 28px; max-width: 46ch; }
@@ -1324,7 +1321,7 @@
   body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk { position: absolute; inset: 0; border-radius: 8px; background: #C3C4BE;
-        transition: opacity var(--md) ease var(--ml), background-color 420ms ease; }
+        transition: opacity var(--md) ease var(--ml), transform var(--md) cubic-bezier(.22,.61,.36,1) var(--ml), background-color 420ms ease; }
   /* ── One icon, and only one ───────────────────────────────────────────
      Five marks and no words until you reach for one, which leaves a reader
      guessing at all five. An icon on the page you are already on answers the
@@ -1350,8 +1347,8 @@
      behind it. Nothing is asked to fade and travel at the same moment, which is what made
      it feel like a snap. */
   .nb:hover, .nb:focus-visible { width: var(--w, 28px); outline: none;
-        --wd: 520ms; --we: cubic-bezier(.22,.61,.36,1); --wl: 0ms;
-        --md: 240ms; --ml: 0ms; --td: 340ms; --tl: 190ms; }
+        --wd: 560ms; --we: cubic-bezier(.22,.61,.36,1); --wl: 90ms;
+        --md: 340ms; --ml: 90ms; --td: 360ms; --tl: 300ms; }
   .nb:hover .nmk, .nb:focus-visible .nmk { opacity: 0; }
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
   body.nav-lit .nb.here .nmk { background: var(--ink); }
@@ -1559,14 +1556,14 @@
   /* The pane is the same glass card as on Sensitivity - same tint, same blur, same
      highlight along the top edge, same shadow, same corner. One material on the site. */
   .ix-b.lit, .ix-b:focus-visible {
-    background: rgba(247,247,245,.38);
-    -webkit-backdrop-filter: blur(11px) saturate(1.9); backdrop-filter: blur(11px) saturate(1.9);
+    background: rgba(247,247,245,.48);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
     box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24); }
   .ix-b { border-radius: 20px; }
   @media (hover:hover) {
     .ix-b:hover {
-      background: rgba(247,247,245,.38);
-      -webkit-backdrop-filter: blur(11px) saturate(1.9); backdrop-filter: blur(11px) saturate(1.9);
+      background: rgba(247,247,245,.48);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24); }
   }
   @media (max-width: 900px) {

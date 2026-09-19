@@ -297,10 +297,28 @@ function onWidth(fn){
     var c = document.createElement('i');
     c.className = 'ml-g ml-rest';
     c.textContent = B.map(function (p) { return p.ch; }).join('');
-    c.style.cssText = 'position:static;display:inline;white-space:pre-wrap;will-change:auto;transform:none;filter:none;opacity:1';
+    /* A line that was measured as one line stays one line. The probe measures letters
+       one box each, which loses the kerning a real run has, so the two can differ by a
+       fraction of a pixel - enough for the last word to wrap out of a fitted box. */
+    var oneLine = B.every(function (p) { return Math.abs((p.y || 0) - (B[0].y || 0)) < 1; });
+    c.style.cssText = 'position:static;display:inline;white-space:' + (oneLine ? 'pre' : 'pre-wrap') +
+      ';will-change:auto;transform:none;filter:none;opacity:1';
     layer.appendChild(c);
     if (old) old.remove();
     host.appendChild(layer);
+    /* The end of the line is now wherever the real run put its last letter, which can
+       differ from the probe by a wrap. Ask the run, not the probe. */
+    try {
+      var tn = c.firstChild, txt = tn ? tn.textContent : '';
+      var e = txt.replace(/\s+$/, '').length;
+      if (tn && e > 0) {
+        var rg = document.createRange(); rg.setStart(tn, e - 1); rg.setEnd(tn, e);
+        var rr = rg.getBoundingClientRect(), hb = host.getBoundingClientRect();
+        var LH2 = parseFloat(getComputedStyle(host).lineHeight) || 28;
+        var lineTop = Math.round((rr.top - hb.top) / LH2) * LH2;
+        host._mlEnd = { right: rr.right - hb.left, bottom: lineTop + LH2 };
+      }
+    } catch (err) {}
     if (host.hasAttribute('data-morph-text')) {
       if (B.w) host.style.width = B.w + 'px';
       if (B.h) host.style.setProperty('--ml-h', B.h + 'px');

@@ -117,7 +117,7 @@
   body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
   body.nav-in .nb{opacity:1;transform:none}
   .nb .nmk{position:absolute;inset:0;border-radius:8px;background:#C3C4BE;
-      transition:opacity var(--md) ease var(--ml), background-color 420ms ease}
+      transition:opacity var(--md) ease var(--ml), transform var(--md) cubic-bezier(.22,.61,.36,1) var(--ml), background-color 420ms ease}
   /* ── One icon, and only one ───────────────────────────────────────────
      Five marks and no words until you reach for one, which leaves a reader
      guessing at all five. An icon on the page you are already on answers the
@@ -143,8 +143,8 @@
      behind it. Nothing is asked to fade and travel at the same moment, which is what made
      it feel like a snap. */
   .nb:hover,.nb:focus-visible{width:var(--w,28px);outline:none;
-      --wd:520ms;--we:cubic-bezier(.22,.61,.36,1);--wl:0ms;
-      --md:240ms;--ml:0ms;--td:340ms;--tl:190ms}
+      --wd:560ms;--we:cubic-bezier(.22,.61,.36,1);--wl:90ms;
+      --md:340ms;--ml:90ms;--td:360ms;--tl:300ms}
   .nb:hover .nmk,.nb:focus-visible .nmk{opacity:0}
   /* the page you are on: the block goes dark and stays a block. That is the whole signal. */
   body.nav-lit .nb.here .nmk{background:var(--ink)}
@@ -1172,7 +1172,8 @@
      The route puts a year and a place there - "2013-2017 - Lee Cooper" - which ran straight
      under the title beside it. Same rows, a column wide enough for what this section holds. */
   .route-lede { margin-bottom: 44px; }
-  .ab-years.route li { grid-template-columns: 190px minmax(0, 1fr); }
+  .ab-years.route li { grid-template-columns: 190px minmax(0, 1fr); align-items: start; }
+  .ab-years.route .y { white-space: normal; line-height: 24px; padding-right: 8px; }
   .ab-years.route li + li { margin-top: 30px; }
   .ab-years.route .g { margin-top: 5px; max-width: 62ch; }
   @media (max-width: 760px) { .ab-years.route li { grid-template-columns: 1fr; }
