@@ -288,13 +288,16 @@ function onWidth(fn){
     var layer = document.createElement('span');
     layer.className = 'ml-layer';
     layer.setAttribute('aria-hidden', 'true');
-    B.forEach(function (p) {
-      if (!p.ch.trim()) return;
-      var c = document.createElement('i');
-      c.className = 'ml-g'; c.textContent = p.ch;
-      c.style.left = p.x + 'px'; c.style.top = p.y + 'px';
-      layer.appendChild(c);
-    });
+    /* At rest the string is ONE run of real text, not a letter per box. A letter in its
+       own box sits at a fractional pixel and, with will-change on it, gets rasterised as
+       its own layer - which is what made the resting lines look out of focus. Real text
+       is drawn by the text engine, sharp and kerned, and wraps exactly as the probe did
+       because the layer has the host's width and the same font. */
+    var c = document.createElement('i');
+    c.className = 'ml-g ml-rest';
+    c.textContent = B.map(function (p) { return p.ch; }).join('');
+    c.style.cssText = 'position:static;display:inline;white-space:pre-wrap;will-change:auto;transform:none;filter:none;opacity:1';
+    layer.appendChild(c);
     if (old) old.remove();
     host.appendChild(layer);
     if (host.hasAttribute('data-morph-text')) {

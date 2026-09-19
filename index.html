@@ -1547,8 +1547,17 @@
     /* open: a list over the page, the bar under it unchanged */
     body.nav-open nav .nav-inner.nav-inner { position: absolute; left: 0; right: 0; top: 0;
         z-index: 2; flex-direction: column; align-items: flex-end; gap: 8px;
-        padding: 16px 24px 18px; background: rgba(247,247,245,.98);
-        box-shadow: 0 22px 34px -22px rgba(0,0,0,.22); }
+        padding: 16px 24px 18px;
+        /* glass: the page shows through, softened */
+        background: rgba(247,247,245,.72);
+        -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
+        border-bottom: 1px solid rgba(25,26,24,.06);
+        box-shadow: 0 22px 34px -22px rgba(0,0,0,.18); }
+    /* the bar's own frosting would trap the list's backdrop inside the bar's 60px, so it
+       steps aside while the list is open; the bar is still paper underneath */
+    body.nav-open nav { -webkit-backdrop-filter: none; backdrop-filter: none; }
+    /* one size for all three words in the list; the name was still carrying its desktop 17.5px */
+    .nb.nb .nwd, .nb.nb.nav-id .nwd, .nb.nb.id .nwd { font-size: 14px; font-weight: 500; letter-spacing: 0; }
     body.nav-open .nb.nb { width: calc(var(--w, 70px) + 42px); height: 36px; line-height: 36px; }
     body.nav-open .nb.nb .nmk, body.nav-open .nb .nwd { top: 4px; }
     body.nav-open .nb .nwd { height: 28px; line-height: 28px; opacity: 1;
