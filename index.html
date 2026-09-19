@@ -1497,13 +1497,11 @@
      box, so the circle is brought to 28 as well and the three sit at one size */
   @media (hover:none), (max-width:760px) { .nb.abt .nmk { width: 28px; height: 28px; margin: 1px } }
 
-  /* ── One case study ──────────────────────────────────────────────────────
-     Four of the five pieces of work have not shipped, or cannot be shown in
-     full. They stay in the list as what they are - a title, a credit line, and
-     on hover the one sentence the work is about - but nothing opens. Auto
-     Extraction shipped, and it is the one that opens. */
-  .ix-b:not([data-i]):not(a) { cursor: default; }
+  /* ── Every card opens; one goes further ────────────────────────────────
+     Each row opens its card. Only Auto Extraction has shipped and can be shown
+     in full, so its card is the only one that goes on to a full case study. */
   .md-end a { color: var(--muted); }
+  .md-end a.md-full { color: var(--ink); font-weight: 500; }
   .md-end a:hover { color: var(--ink); text-decoration: none; }
   .md-sep { color: var(--line); margin: 0 14px; }
 </style>
@@ -1562,7 +1560,7 @@ function onWidth(fn){
     <p class="ix-lbl r">Latest work</p>
     <ol class="ixl">
       <li class="ix r">
-        <div class="ix-b" data-morph-host>
+        <button class="ix-b" type="button" data-i="0" data-morph-host aria-haspopup="dialog">
           <span class="ix-n" aria-hidden="true"><i class="num">01</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Contract Relationships</b></span>
@@ -1572,10 +1570,10 @@ function onWidth(fn){
             </span>
             <span class="vh">A folder tells you where a document sits. Not what it changes.</span>
           </span>
-        </div>
+        </button>
       </li>
       <li class="ix r">
-        <div class="ix-b" data-morph-host>
+        <button class="ix-b" type="button" data-i="1" data-morph-host aria-haspopup="dialog">
           <span class="ix-n" aria-hidden="true"><i class="num">02</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Contract Onboarding</b></span>
@@ -1585,10 +1583,10 @@ function onWidth(fn){
             </span>
             <span class="vh">The agent groups the contracts. A person decides the groups are right.</span>
           </span>
-        </div>
+        </button>
       </li>
       <li class="ix r">
-        <div class="ix-b" data-morph-host>
+        <button class="ix-b" type="button" data-i="2" data-morph-host aria-haspopup="dialog">
           <span class="ix-n" aria-hidden="true"><i class="num">03</i></span>
           <span class="ix-t">
             <span class="ix-top"><b>Phoenix Listing</b></span>
@@ -1598,7 +1596,7 @@ function onWidth(fn){
             </span>
             <span class="vh">A question reshapes the contract listing into the answer.</span>
           </span>
-        </div>
+        </button>
       </li>
       <li class="ix r">
         <button class="ix-b" type="button" data-i="3" data-morph-host aria-haspopup="dialog">
@@ -1633,8 +1631,91 @@ function onWidth(fn){
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Project">
   <button class="ov-close" id="ovClose" type="button">Close</button>
   <div class="ov-in" id="ovin" tabindex="-1">
+    <article class="md" data-i="0" hidden>
+      <div class="md-shot" data-src="family-graph.html"><picture><img src="cr-graph.webp" width="1344" height="787" loading="lazy" decoding="async" alt="Contract Relationships &mdash; product screen." /></picture><iframe title="" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="md-body">
+        <h2>Contract Relationships</h2>
+        <p class="md-k">Contract systems &middot; Sirion &middot; 2025&ndash;26</p>
+        <hr />
+        <p class="md-lead">A folder tells you where a document sits. Not what it changes.</p>
+        <p class="md-ev">My role: framing the problem, prototyping the alternatives, making the argument &middot; Shared decisions with designers, product managers and engineers &middot; Approved and prioritised for build; not in production, so there are no post-launch numbers here</p>
+        <p>A legal team asks &ldquo;which amendment applies to this SOW?&rdquo; dozens of times a week. Answering took half an hour of reconstruction: open the folder, read the file names, check the notes, and hope nobody had renamed anything.</p>
+        <h3>It was never a search problem</h3>
+        <p>I tried what search offers: filters, OCR, a better index. None of it worked.</p>
+        <p>Users weren&rsquo;t searching. They were reconstructing meaning. A search result hands you a document. What they needed was a sentence: this amendment, from this date, governs this SOW, and supersedes the one before it.</p>
+        <h3>The argument I had to win</h3>
+        <p>The agreed direction was to improve the folder hierarchy: faster, safer, shippable in weeks, and defensible because the whole category works that way. It was already in the product, and customers were asking for it by name.</p>
+        <p>I argued the hierarchy was the problem. An amendment can govern several agreements at once; a record can inherit from more than one instrument. Contract relationships are many to many. A tree cannot express them.</p>
+        <p>This was not a preference between two layouts. A folder tree can only ever answer where a file is stored, so every feature built above it inherits that limit.</p>
+        <h3>Why a design argument was an AI argument</h3>
+        <p>A wrong model doesn&rsquo;t just inconvenience a user. It makes the AI answer with the superseded clause in the same confident tone it uses for the right one, because nothing in the structure tells it which one governs.</p>
+        <p>What a system can represent sets the ceiling on what any model built over it can understand. That is now the argument I make before anyone opens a design tool.</p>
+        <h3>What I designed</h3>
+        <p>Navigation and meaning became two different things. A record carries explicit relationships &mdash; governed by, amended by, applies to &mdash; and the interface reads them back in words: which agreement governs this one, which amendment currently applies, what it changed, and what it superseded.</p>
+        <p>Open a statement of work and the panel answers the question the team was asking, rather than showing you the shelf the file was on.</p>
+        <h3>And it had to survive real volume</h3>
+        <p>A relationship view is easy to draw for a family of six. Real families aren&rsquo;t six. I built it as a working prototype and ran it at 340 statements of work.</p>
+        <p>The radial layout shrank to 12% to fit and left zero legible labels. I replaced it with branching columns grouped by status rather than defend it, and settled the debate with the measurement instead of an opinion.</p>
+        <h3>What transfers</h3>
+        <p>Any system where AI reasons over stored records. If the storage model is wrong, the AI is confidently wrong. Fix the model before the interface.</p>
+        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+      </div>
+    </article>
+    <article class="md" data-i="1" hidden>
+      <div class="md-shot still"><picture><img src="onb-missing.webp" width="2628" height="1538" loading="lazy" decoding="async" alt="Contract Onboarding &mdash; product screen." /></picture></div>
+      <div class="md-body">
+        <h2>Contract Onboarding</h2>
+        <p class="md-k">AI onboarding review &middot; Sirion &middot; Shipped</p>
+        <hr />
+        <p class="md-lead">The agent groups the contracts. A person decides the groups are right.</p>
+        <p class="md-ev">Only designer on it, concept to shipped screens &middot; No usage number here until I have one I trust and know how it was measured</p>
+        <p>A new customer arrives with years of contracts as loose files. Before the platform can track a single renewal or obligation, every file needs two facts attached: who it is with, and which agreement it belongs under. Someone used to read each one to find out.</p>
+        <p>This is the first thing a customer ever does with the product. If it goes badly, everything built on top of it inherits the mess.</p>
+        <h3>The speed is the value and the risk</h3>
+        <p>The agent reads thousands of documents in the time a person reads one. At that speed a wrong assumption is applied thousands of times before anyone sees it.</p>
+        <p>So the checkpoints go inside the run, not after it: review what was extracted, review the counterparty mapping, review the contract families. The agent proposes at each one; a person confirms or corrects, and the run continues from there rather than starting over.</p>
+        <h3>Review by counterparty, not by document</h3>
+        <p>Three documents the agent believes are with the same company are one row that opens to its members. A wrong name gets fixed once, not three times.</p>
+        <p>It sounds like a grouping decision. It is a decision about whose time the interface spends: the reviewer&rsquo;s job becomes confirming a judgement, not repeating a correction.</p>
+        <p>The screen splits the work into what is mapped, what is missing a match, and what is orphaned, so the reviewer always knows how much is left and what kind of decision each pile needs.</p>
+        <h3>It explains itself in words, not a score</h3>
+        <p>Open the reasoning for a match and it says why two names were treated as one company, and quotes the passage it read. No percentage.</p>
+        <p>A person can check a sentence. They cannot check 0.87.</p>
+        <h3>Bulk, without losing the thread</h3>
+        <p>Confirming a group applies to every document in it, and the system offers the system records it thinks are right rather than making the reviewer search. Where nothing fits, they create the record from the same place instead of leaving the flow.</p>
+        <h3>What transfers</h3>
+        <p>Any bulk AI process a person is accountable for. Put the human checkpoints inside the run, group the work by the unit the person actually decides about, and make one correction fix everything downstream of it.</p>
+        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+      </div>
+    </article>
+    <article class="md" data-i="2" hidden>
+      <div class="md-shot still"><picture><img src="phx-question.webp" width="2824" height="1654" loading="lazy" decoding="async" alt="Phoenix Listing &mdash; product screen." /></picture></div>
+      <div class="md-body">
+        <h2>Phoenix Listing</h2>
+        <p class="md-k">Agent in the contract listing &middot; Sirion &middot; In development</p>
+        <hr />
+        <p class="md-lead">A question reshapes the contract listing into the answer.</p>
+        <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
+        <p>Enterprise software is designed as though people will arrive at it. They don&rsquo;t.</p>
+        <p>Nobody&rsquo;s job is &ldquo;check the contract system&rdquo;. A system of record isn&rsquo;t somewhere anyone chooses to spend their morning, and designing as if they will is a large part of why this category still feels manual.</p>
+        <h3>The first question is not what the homepage shows</h3>
+        <p>If we can&rsquo;t rely on people coming to us, how does the work reach them? That reframes the surface: the listing is not a place to browse, it is where a question gets answered and a decision gets made.</p>
+        <h3>Four situations, not four features</h3>
+        <p>Not personas. States of mind. The same person moves between them hourly, and which one they are in decides whether the agent should explain, suggest, ask or act.</p>
+        <p>They already know what they want and just need it done. They don&rsquo;t know yet and need the system to bring the problem to them. They are looking for something specific. They are checking whether anything is wrong. Each one calls for a different amount of agent autonomy, and getting that wrong is what makes AI features feel either useless or alarming.</p>
+        <p>I wrote that as a rule set, argued it to executive stakeholders, and it was adopted as direction for the platform. This listing is the first surface built on it.</p>
+        <h3>What it does with a question</h3>
+        <p>You ask in the panel beside the list. The agent shows the steps it took &mdash; reading the intent, setting the criteria, finding the contracts &mdash; then reads back what it understood and answers in the same place.</p>
+        <p>Then it stops and asks what to do next: tag these for the executive dashboard, or send the summary to the accounts team. It has the answer and it still waits. Being sure and being allowed are two different things.</p>
+        <h3>Why the readback matters</h3>
+        <p>A wrong answer that arrives with its reasoning visible is recoverable. A wrong answer that arrives as a finished action is not. The panel is designed so the expensive step always happens after a person has seen the interpretation.</p>
+        <h3>What I own here</h3>
+        <p>The framework and the argument for it, the sessions with stakeholders, and the listing prototypes in HTML. Scope is platform-wide: entry points, personalisation, how much autonomy an agent gets, and how we would know it worked.</p>
+        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+      </div>
+    </article>
     <article class="md" data-i="3" hidden>
-      <div class="md-shot still"><picture><img src="ae-review-loop-poster.webp" width="1400" height="820" loading="lazy" decoding="async" alt="Auto Extraction &mdash; product screen." /></picture></div>
+      <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="1800" height="1132" loading="lazy" decoding="async" alt="Auto Extraction in Sirion &mdash; the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
       <div class="md-body">
         <h2>Auto Extraction</h2>
         <p class="md-k">AI review interface &middot; Sirion &middot; Shipped 2024</p>
@@ -1657,7 +1738,7 @@ function onWidth(fn){
         <p>Two eight-month cohorts in Heap, captured June 2025. The cohort mix and the extraction model both changed over the period, so I claim the shape of the curve, not the whole number.</p>
         <h3>What transfers</h3>
         <p>Wherever a model produces many answers a person is accountable for: show one at a time, put the evidence next to the claim, and spend the interface on verification rather than on presenting confidence.</p>
-        <p class="md-end"><a href="#work" id="mdBack">&larr; Back to work</a><span class="md-sep" aria-hidden="true">&middot;</span><a href="about.html">How I work &rarr;</a></p>
+        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a><span class="md-sep" aria-hidden="true">&middot;</span><a href="auto-extraction.html" class="md-full">Read the full case study &rarr;</a></p>
       </div>
     </article>
   </div>
@@ -1867,7 +1948,6 @@ function onWidth(fn){
   /* The sentence is drawn as loose glyphs that travel into place, so where it ends
      is only known once they have landed. Measured then, from the last one. */
   function mark(btn){
-    if (!btn.dataset.i && btn.tagName !== 'A') return;   /* nothing to open, so no arrow */
     var sw = btn.querySelector('.ix-sw'); if (!sw) return;
     var go = sw.querySelector('.ix-go');
     if (!go){ go = document.createElement('span'); go.className = 'ix-go';
@@ -1903,8 +1983,8 @@ function onWidth(fn){
     if (lit && !lit.contains(e.target)) litten(null);
   });
   ov.addEventListener('click',function(e){ if(e.target===ov||e.target===inn) close(); });
-  var mdBack = document.getElementById('mdBack');
-  if (mdBack) mdBack.addEventListener('click', function(e){ e.preventDefault(); close(); });
+  [].slice.call(document.querySelectorAll('.md-back')).forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); close(); }); });
   var ovClose=document.getElementById('ovClose');
   if(ovClose) ovClose.addEventListener('click',close);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
