@@ -1212,8 +1212,14 @@
   .ftab { position: relative; z-index: 1; background: none; border: 0; cursor: pointer; font: inherit;
           padding: 8px 14px; border-radius: 999px;
           font-size: 14px; letter-spacing: .1em; text-transform: uppercase;
-          font-family: var(--display); color:var(--faint);font-weight:500;filter:blur(.7px); transition:color .26s ease, filter .3s ease; }
-  .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); filter: blur(0); outline: none; }
+          font-family: var(--display); font-weight:500;
+          /* out of focus at rest. Drawn with a soft text-shadow on transparent type rather
+             than filter:blur - Safari drops a filter on an element that shares a parent
+             with a backdrop-filter, which is what made these go sharp when the pill arrived */
+          color: transparent; text-shadow: 0 0 1.1px var(--faint), 0 0 .4px var(--faint);
+          -webkit-filter: none; filter: none;
+          transition: color .26s ease, text-shadow .3s ease; }
+  .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); text-shadow: 0 0 0 transparent; outline: none; }
   .ftab::after { content: none; }
   @media (prefers-reduced-motion: reduce) { .ftab, .ftab-pill { transition: none; } }
   .fval { position: relative; margin-top: 26px; height: 56px;

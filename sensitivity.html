@@ -2026,7 +2026,7 @@ function onWidth(fn){
       beat=setTimeout(()=>{
         grow(()=>{ wait.hidden=true; q.textContent=it.q; a.textContent=it.a;
                    ans.hidden=false; tools.hidden=false; });
-      },620); }));
+      },1600); }));
     $('#askX').addEventListener('click',()=>{ clearTimeout(beat);
       grow(()=>{ ans.hidden=true; tools.hidden=true; wait.hidden=true; ask.hidden=false; }); });
     addEventListener('keydown',e=>{ if(e.key==='Escape'&&wrap.classList.contains('open')) shut(); });
@@ -2095,7 +2095,7 @@ function onWidth(fn){
        status line goes to a beat, and the result lands once &mdash; in both directions. */
     let bt;
     const beat=then=>{ clearTimeout(bt); wrap.classList.add('busy');
-      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },900); };
+      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },1800); };
     send.addEventListener('click',()=>{
       if(wrap.classList.contains('busy')) return;
       if(sent) return beat(()=>{ sent=false; wrap.classList.remove('sent');
@@ -2135,7 +2135,7 @@ function onWidth(fn){
       clearTimeout(t); shut(); wrap.classList.remove('done'); at=1; chk.disabled=true;
       wrap.classList.add('busy'); say(v,'Reading 18 messages');
       t=setTimeout(()=>{ wrap.classList.remove('busy'); say(v,ANS.v); say(d,ANS.d);
-        wrap.classList.add('done'); chk.disabled=false; at=2; },1500);
+        wrap.classList.add('done'); chk.disabled=false; at=2; },2400);
     };
     /* one target, and the state decides what it means: run, or show the three it read */
     chk.addEventListener('click',()=>{
@@ -2198,11 +2198,11 @@ function onWidth(fn){
       face(); wrap.classList.add('open'); dw.classList.add('lit');
       btn.setAttribute('aria-expanded','true'); line(); lay(); });
     $$('.q',pick).forEach(q=>q.addEventListener('click',()=>{
-      beat(900,()=>{ done=true; face();
+      beat(1800,()=>{ done=true; face();
         say(v,'Shared with '+q.dataset.who); say(d,q.dataset.team+' · just now');
         say(cons, q.dataset.who+' can open it and comment. Nobody else was added.'); }); }));
     rev.addEventListener('click',()=>{
-      beat(900,()=>{ done=false; face();
+      beat(1800,()=>{ done=false; face();
         say(v,REST.v); say(d,near?WHY:REST.d); say(cons,REST.c); }); });
     addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
     document.addEventListener('click',e=>{
@@ -2249,7 +2249,7 @@ function onWidth(fn){
        thing that should look instantaneous. The card holds still, the status line beats. */
     let bt;
     const beat=then=>{ clearTimeout(bt); wrap.classList.add('busy');
-      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },900); };
+      bt=setTimeout(()=>{ wrap.classList.remove('busy'); then(); },1800); };
     btn.addEventListener('click',()=>{
       if(wrap.classList.contains('busy')) return;
       beat(()=>{ asked=!asked; paint(); lay(); }); });
