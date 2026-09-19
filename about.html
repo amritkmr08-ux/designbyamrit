@@ -129,8 +129,8 @@
   .nb.nav-id .nmk::after, .nb.id .nmk::after {
         content: ""; position: absolute; inset: 0; opacity: 0;
         background-color: var(--paper);
-        -webkit-mask: var(--home) no-repeat center / 15px 15px;
-        mask: var(--home) no-repeat center / 15px 15px;
+        -webkit-mask: var(--home) no-repeat center / 13px 13px;
+        mask: var(--home) no-repeat center / 13px 13px;
         transition: opacity 420ms ease; }
   body.nav-lit .nb.nav-id.here .nmk::after,
   body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
@@ -1035,7 +1035,7 @@
   /* ===== Editorial · paper, hairlines, one quiet field ===== */
   :root { --paper:#F7F7F5; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --soft:#EDEDEA; --mark:#DCE5D3; --accent:#3D5A45; --field:#EEEFEB; }
   :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
-  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
   body { background: var(--paper); color: var(--ink); }
   body::after { opacity: .10; }
   nav { background: transparent !important; border-bottom: 0 !important; }
@@ -1189,14 +1189,14 @@
                  text-align: left; background: none; border: 0; font: inherit; color: inherit; }
   .ab-rows a.rw { cursor: pointer; }
   .ab-rows .rw:focus-visible { outline: none; }
-  .ab-rows .n { position: relative; display: block; height: 28px; font-family: var(--display); font-size: 14px; letter-spacing: .02em; color: var(--faint); line-height: 28px; white-space: nowrap; }
+  .ab-rows .n { position: relative; display: block; height: 24px; font-family: var(--display); font-size: 14px; letter-spacing: .02em; color: var(--faint); line-height: 24px; white-space: nowrap; }
   .ab-rows .n i { position: absolute; left: 0; top: 0; font-style: normal; }
   /* No arrow by the year here either - the one after the sentence carries it. */
   .ab-rows .t { display: block; min-width: 0; }
-  .ab-rows .t b { display: block; font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 28px; letter-spacing: -.012em; }
+  .ab-rows .t b { display: block; font-size: 17.5px; font-weight: 500; color: var(--ink); line-height: 24px; letter-spacing: -.012em; }
   .ab-rows .t b span { color: var(--faint); font-weight: 400; }
-  .ab-rows .sw { position: relative; display: block; margin-top: 2px; height: 56px; font-size: 17.5px; line-height: 28px; }
-  .ab-rows .sw.one { height: 28px; }
+  .ab-rows .sw { position: relative; display: block; margin-top: 10px; height: 50px; font-size: 17.5px; line-height: 25px; }
+  .ab-rows .sw.one { height: 25px; }
   /* the second line of a row reads in muted on the homepage and read in faint here — one
      grey for the same line */
   .ab-rows .sw i.a { font-style: normal; color: var(--muted); }
@@ -1210,7 +1210,7 @@
   .ab-rows .rw-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
         transform: translate(-5px, 5px);
-        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s; }
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1); }
   .ab-rows a.rw:hover .rw-go.set,
   .ab-rows a.rw:focus-visible .rw-go.set { opacity: 1; transform: none; }
   /* ── These rows on a phone ─────────────────────────────────────────────
@@ -1238,7 +1238,7 @@
   .ml-probe .ml-w { display: inline-block; white-space: nowrap; }
   .ml-probe .ml-c { display: inline-block; font-style: normal; white-space: pre; }
   .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  @media (max-width: 560px) { .ab-rows .rw { grid-template-columns: 1fr; gap: 0; } .ab-rows .n { height: 22px; line-height: 22px; } .ab-rows .sw { height: 84px; } .ab-rows .sw.one { height: 56px; } }
+  @media (max-width: 560px) { .ab-rows .rw { grid-template-columns: 1fr; gap: 0; } .ab-rows .n { height: 22px; line-height: 22px; } .ab-rows .sw { height: 75px; } .ab-rows .sw.one { height: 50px; } }
   @media (max-width: 900px) {
     .ab-grid { grid-template-columns: 1fr; gap: 56px 0; }
     .ab-side { position: static; }
@@ -1260,6 +1260,35 @@
      selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
      no underline. Blur .7px, weight 500, the site's own grey and ink.
      These four selectors are the same component wearing four names. */
+
+  /* ── The type system ──────────────────────────────────────────────────
+     Measured across all three pages before this: three near-identical sizes
+     doing one job, four leadings at the body size, three trackings at 14px,
+     and a title sitting one pixel above its description. Now one ramp, one
+     leading per job, and a beat wherever a title has a description under it.
+
+       page title       114 / 62 / 32   one per page, as they were
+       section head      24 / 32        heads, the contact question, case-study titles
+       body            17.5 / 28        a paragraph
+       title line      17.5 / 24  500   the name of a thing
+       description     17.5 / 25        the line under a title, 10px below it
+       small             14 / 24        labels, meta, captions, footnotes, footer
+
+     Uppercase labels carry .1em. Small Poppins numerals carry .02em. Inter at
+     14 carries nothing. Nothing else is tracked. Specimens on Sensitivity keep
+     their own internal type: those are product screens, not this site. */
+  .about-page h1 { line-height: 32px; letter-spacing: -.02em; }
+  .ab-text p, .ab-list p, .ab-lines li { line-height: 28px; }
+  .vh { line-height: 28px; }
+  .nb.nav-id .nwd { letter-spacing: -.01em; }
+  /* a career chapter is a title with a description under it: same pattern as a Work row */
+  .ab-years .r0 { font-size: 17.5px; font-weight: 500; line-height: 24px; letter-spacing: -.012em; }
+  .ab-years .g { font-size: 17.5px; line-height: 25px; margin-top: 10px; }
+  .ab-years .y, .ab-h, .ab-rows .n, .num { line-height: 24px; }
+  .ab-role { letter-spacing: 0; line-height: 24px; }
+  .ab-cred li, .ab-scope, .ab-acts li, .ab-acts a, .ab-acts b { font-size: 14px; line-height: 24px; }
+  .ab-photo figcaption { line-height: 24px; }
+  footer, footer div, footer span, footer .floot { font-size: 14px; line-height: 24px; }
 </style>
 <body>
 <script>
@@ -1305,7 +1334,7 @@ function onWidth(fn){
         <p class="ab-role r">Product Designer, AI systems</p>
         <p class="ab-name r">Amrit Kumar</p>
         <ul class="ab-cred r">
-          <li>SirionLabs &middot; 5 years</li>
+          <li>Sirion &middot; 5 years</li>
           <li>13 years in design &middot; 6 in product &middot; 3 on AI-native products</li>
           <li>Noida, India</li>
         </ul>

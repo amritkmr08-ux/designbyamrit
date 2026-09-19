@@ -28,7 +28,8 @@
            needs. */
         --axis:clamp(24px, calc((100% - var(--col)) * 0.34), 24vw);}
   :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
-  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
+  :root { --xpd: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
   *{margin:0;padding:0;box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17.5px;line-height:28px;-webkit-font-smoothing:antialiased}
@@ -142,8 +143,8 @@
   .nb.nav-id .nmk::after, .nb.id .nmk::after {
         content: ""; position: absolute; inset: 0; opacity: 0;
         background-color: var(--paper);
-        -webkit-mask: var(--home) no-repeat center / 15px 15px;
-        mask: var(--home) no-repeat center / 15px 15px;
+        -webkit-mask: var(--home) no-repeat center / 13px 13px;
+        mask: var(--home) no-repeat center / 13px 13px;
         transition: opacity 420ms ease; }
   body.nav-lit .nb.nav-id.here .nmk::after,
   body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
@@ -493,11 +494,13 @@
      the box ends rather than wherever the sentence does - so it sat in white space a
      word or two past the full stop. Measured off the last glyph now, like every other
      one on the site: it lands after the reading, not after the box. */
-  .wline .wl-go{position:absolute;opacity:0;pointer-events:none;width:14px;height:14px;
-        color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+  .wline .wl-go{position:absolute;opacity:0;pointer-events:none;width:11px;height:14px;
+        color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--xpd) no-repeat center/contain;mask:var(--xpd) no-repeat center/contain;
         transform:translate(-5px,5px);
-        transition:opacity .22s ease .14s,transform .34s cubic-bezier(.22,.61,.36,1) .14s}
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1)}
   .wline.is-after:not(.clip) .wl-go.set{opacity:1;transform:none}
+  /* one signal, not two: the same icon used to sit beside the headline as well */
+  #wallWrap .cv.wlcv{display:none}
   /* On a narrow column the sentence does not finish inside the three lines - it is cut
      mid-clause. There is no end of the reading to put a mark after, so it goes back to
      the corner of the block, which is what the block itself is offering. */
@@ -507,9 +510,9 @@
      there was more, which made the invitation and the obstacle the same thing. Same
      answer here - the lines stay readable and the arrow says it, after the full stop. */
   .spine .sp-go{position:absolute;opacity:0;pointer-events:none;
-    width:14px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+    width:11px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--xpd) no-repeat center/contain;mask:var(--xpd) no-repeat center/contain;
     transform:translate(-5px,5px);
-    transition:opacity .22s ease .14s,transform .34s cubic-bezier(.22,.61,.36,1) .14s}
+    transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1)}
   .spine.is-after .sp-go.set,
   .spinewrap:hover .sp-go.set,
   .spinewrap:focus-visible .sp-go.set{opacity:1;transform:none}
@@ -633,7 +636,7 @@
   #ev .src-q{display:block}
   .apb,.amb{position:relative;display:block;text-align:left}
   .apb .hero[data-morph-text],.amb .hero[data-morph-text]{display:inline-block}
-  .cv.apcv,.cv.amcv{opacity:0;margin-left:10px;vertical-align:-3.5px;
+  .cv.apcv,.cv.amcv{opacity:0;margin-left:9px;vertical-align:-2px;
         transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
   .apb:hover .apcv,.apb:focus-visible .apcv,
   .amb:hover .amcv,.amb:focus-visible .amcv{opacity:1}
@@ -791,7 +794,7 @@
   #hoDeckWrap{width:440px;max-width:100%}
   .hob{position:relative;display:block;text-align:left}
   .hob .hero[data-morph-text]{display:inline-block}
-  .cv.hocv{opacity:0;margin-left:10px;vertical-align:-3.5px;
+  .cv.hocv{opacity:0;margin-left:9px;vertical-align:-2px;
         transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
   .hob:hover .hocv,.hob:focus-visible .hocv{opacity:1}
   #hoCons[data-morph-text],#amCons[data-morph-text]{height:28px;min-width:0!important}
@@ -1226,7 +1229,7 @@
        chevron you can actually see, and nothing opens under a thumb by surprise. */
     .stage .lit .cv{opacity:1!important}
     .apb,.hob{position:relative}
-    .apb .cv.apcv,.hob .cv.hocv{position:absolute;right:0;top:10px;margin:0;vertical-align:0}
+    /* the icon follows the sub-line now, so it no longer needs pinning beside the headline */
     /* The value is a block here, so it already ends its own line, and the <br> after it
        was landing on a line of its own. Hiding the <br> was not enough: the newline
        between the tags is a text node of its own, and between a block and an inline-block
@@ -1270,6 +1273,26 @@
      selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
      no underline. Blur .7px, weight 500, the site's own grey and ink.
      These four selectors are the same component wearing four names. */
+
+  /* ── The type system ──────────────────────────────────────────────────
+     Measured across all three pages before this: three near-identical sizes
+     doing one job, four leadings at the body size, three trackings at 14px,
+     and a title sitting one pixel above its description. Now one ramp, one
+     leading per job, and a beat wherever a title has a description under it.
+
+       page title       114 / 62 / 32   one per page, as they were
+       section head      24 / 32        heads, the contact question, case-study titles
+       body            17.5 / 28        a paragraph
+       title line      17.5 / 24  500   the name of a thing
+       description     17.5 / 25        the line under a title, 10px below it
+       small             14 / 24        labels, meta, captions, footnotes, footer
+
+     Uppercase labels carry .1em. Small Poppins numerals carry .02em. Inter at
+     14 carries nothing. Nothing else is tracked. Specimens on Sensitivity keep
+     their own internal type: those are product screens, not this site. */
+  .hero, .cq { line-height: 32px; }
+  .nb.id .nwd { font-size: 17.5px; letter-spacing: -.01em; }
+  .seplbl .lbl, .lbl { line-height: 24px; }
 </style>
 </head>
 <body>
@@ -1349,10 +1372,8 @@ function onWidth(fn){
         <span class="deck" id="apDeck" aria-hidden="true"></span>
       <div class="apwrap" id="apWrap">
         <button class="apb" id="apBtn" type="button" aria-expanded="false" aria-controls="apCard">
-          <span class="hero" id="apV" data-morph-text>Send summary to 42 customers</span><svg class="cv apcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
-            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
-            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <br><span class="beat"><span class="srcl" id="apD" data-morph-text>drafted from this week&rsquo;s activity</span><span class="dots" aria-label="Scheduling"><span></span><span></span><span></span></span></span>
+          <span class="hero" id="apV" data-morph-text>Send summary to 42 customers</span>
+          <br><span class="beat"><span class="srcl" id="apD" data-morph-text>drafted from this week&rsquo;s activity</span><span class="dots" aria-label="Scheduling"><span></span><span></span><span></span></span><svg class="cv apcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path             d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"             stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <div class="apcard" id="apCard">
           <p class="cons" id="apCons">It goes at 4:00 PM and cannot be recalled after that.</p>
@@ -1428,10 +1449,8 @@ function onWidth(fn){
         <span class="deck" id="amDeck" aria-hidden="true"></span>
       <div class="apwrap" id="amWrap">
         <button class="amb" id="amBtn" type="button" aria-expanded="false" aria-controls="amCard">
-          <span class="hero" id="amV" data-morph-text>Share the draft with Alex</span><svg class="cv amcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
-            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
-            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <br><span class="beat"><span class="srcl" id="amD" data-morph-text>one question before this goes</span><span class="dots" aria-label="Sharing"><span></span><span></span><span></span></span></span>
+          <span class="hero" id="amV" data-morph-text>Share the draft with Alex</span>
+          <br><span class="beat"><span class="srcl" id="amD" data-morph-text>one question before this goes</span><span class="dots" aria-label="Sharing"><span></span><span></span><span></span></span><svg class="cv amcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path             d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"             stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <div class="apcard" id="amCard">
           <p class="cons" id="amCons" data-morph-text>Whoever you pick can open it and comment.</p>
@@ -1569,12 +1588,8 @@ function onWidth(fn){
         <span class="deck" id="hoDeck" aria-hidden="true"></span>
       <div class="apwrap" id="hoWrap">
         <button class="hob" id="hoOpen" type="button" aria-expanded="false" aria-controls="hoCard">
-          <span class="hero" id="hoV" data-morph-text>Paused &middot; 14 of 20 files renamed</span><svg
-            class="cv hocv" width="10" height="14" viewBox="0 0 10 14"
-            aria-hidden="true"><path d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none"
-            stroke="currentColor" stroke-width="1.35" stroke-linecap="round"
-            stroke-linejoin="round"/></svg>
-          <br><span class="beat"><span class="srcl" id="hoD" data-morph-text>the last six need admin access</span><span class="dots" aria-label="Asking"><span></span><span></span><span></span></span></span>
+          <span class="hero" id="hoV" data-morph-text>Paused &middot; 14 of 20 files renamed</span>
+          <br><span class="beat"><span class="srcl" id="hoD" data-morph-text>the last six need admin access</span><span class="dots" aria-label="Asking"><span></span><span></span><span></span></span><svg             class="cv hocv" width="10" height="14" viewBox="0 0 10 14"             aria-hidden="true"><path d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none"             stroke="currentColor" stroke-width="1.35" stroke-linecap="round"             stroke-linejoin="round"/></svg></span>
         </button>
         <div class="apcard" id="hoCard">
           <p class="cons" id="hoCons" data-morph-text>Your admin sees the six files and the reason.</p>
@@ -2552,7 +2567,9 @@ function onWidth(fn){
     if (!go){ go = document.createElement('span'); go.className = 'wl-go';
               go.setAttribute('aria-hidden','true'); wl.appendChild(go); }
     nudgeMark(wl, go);
-    setTimeout(function(){ wl.classList.toggle('clip', cut()); }, 900);
+    /* decide once the letters have landed, not on a timer that used to beat them */
+    var settle = function(){ wl.removeEventListener('ml:rest', settle); wl.classList.toggle('clip', cut()); };
+    if (wl.hasAttribute('data-ml-busy')) wl.addEventListener('ml:rest', settle); else settle();
   }
   var t;
   function soon(){ clearTimeout(t); t = setTimeout(mark, 40); }

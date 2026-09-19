@@ -969,11 +969,16 @@
   /* 600 lives nowhere else on this site: everything that carries weight carries 500. The
      specimens keep their own 600, because those are simulated product screens, not this
      site's typography. */
-  .ix-t b { font-size: 17.5px; font-weight: 500; color: var(--ink); letter-spacing: -0.012em; line-height: 1.45; }
+  /* Title and sentence used to sit one pixel apart on 28px leading, so the title's
+     descenders all but touched the sentence's ascenders and the two read as one
+     block. Editorial habit: a clear beat between title and description, and the
+     description set a little tighter than running body so it holds together as a
+     unit. Same size for both - the difference is weight and colour, not scale. */
+  .ix-t b { font-size: 17.5px; font-weight: 500; color: var(--ink); letter-spacing: -0.012em; line-height: 24px; }
   /* Sensitivity, applied to my own index: at rest the row states what the work is.
      Touch it and that line becomes the sentence the work is about. Nothing moves but the words. */
-  .ix-sw { position: relative; display: block; margin-top: 1px; height: 56px;
-           font-size: 17.5px; line-height: 28px; max-width: 42ch; }
+  .ix-sw { position: relative; display: block; margin-top: 10px; height: 50px;
+           font-size: 17.5px; line-height: 25px; max-width: 42ch; }
   .ix-sw i.a { font-style: normal; }
   .ix-sw i.b { font-style: normal; display: none; }   /* the second state is never in flow */
   /* a pointer can hover for the second line; a screen reader cannot, so the row's name carries both */
@@ -991,7 +996,7 @@
   .ix-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
 
-        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s;
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1);
         transform: translate(-5px, 5px); }
   .ix-b.lit .ix-go.set,
   .ix-b:hover .ix-go.set,
@@ -1088,7 +1093,7 @@
   /* ---- one column, placed left of centre; the field around it is the design ---- */
   :root { --col: 620px; --axis: max(24px, calc(50% - 550px)); }
   :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
-  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.6 7.1 8 2.9l5.4 4.2'/%3E%3Cpath d='M4.3 6.7v6.4h7.4V6.7'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
 
   /* ── The loader ───────────────────────────────────────────────────────────
      A page about how attention gets spent should not open by spending none on
@@ -1216,7 +1221,7 @@
   #contact h2 .q .q-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
         transform: translate(-5px, 5px);
-        transition: opacity .22s ease .14s, transform .34s cubic-bezier(.22,.61,.36,1) .14s; }
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1); }
   #contact h2 .q:hover .q-go.set,
   #contact h2 .q.is-after .q-go.set,
   #contact h2 .q:focus-visible .q-go.set { opacity: 1; transform: none; }
@@ -1309,8 +1314,8 @@
   .nb.nav-id .nmk::after, .nb.id .nmk::after {
         content: ""; position: absolute; inset: 0; opacity: 0;
         background-color: var(--paper);
-        -webkit-mask: var(--home) no-repeat center / 15px 15px;
-        mask: var(--home) no-repeat center / 15px 15px;
+        -webkit-mask: var(--home) no-repeat center / 13px 13px;
+        mask: var(--home) no-repeat center / 13px 13px;
         transition: opacity 420ms ease; }
   body.nav-lit .nb.nav-id.here .nmk::after,
   body.nav-lit .nb.id.here .nmk::after { opacity: 1; }
@@ -1447,6 +1452,35 @@
      selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
      no underline. Blur .7px, weight 500, the site's own grey and ink.
      These four selectors are the same component wearing four names. */
+
+  /* ── The type system ──────────────────────────────────────────────────
+     Measured across all three pages before this: three near-identical sizes
+     doing one job, four leadings at the body size, three trackings at 14px,
+     and a title sitting one pixel above its description. Now one ramp, one
+     leading per job, and a beat wherever a title has a description under it.
+
+       page title       114 / 62 / 32   one per page, as they were
+       section head      24 / 32        heads, the contact question, case-study titles
+       body            17.5 / 28        a paragraph
+       title line      17.5 / 24  500   the name of a thing
+       description     17.5 / 25        the line under a title, 10px below it
+       small             14 / 24        labels, meta, captions, footnotes, footer
+
+     Uppercase labels carry .1em. Small Poppins numerals carry .02em. Inter at
+     14 carries nothing. Nothing else is tracked. Specimens on Sensitivity keep
+     their own internal type: those are product screens, not this site. */
+  .hero-copy .role { line-height: 28px; }
+  .vh { line-height: 28px; }
+  .copybtn { line-height: 28px; }
+  .nb.nav-id .nwd { font-size: 17.5px; letter-spacing: -.01em; }
+  .ix-lbl, .ftab { line-height: 24px; }
+  .mailalt, .mailalt a, .mailalt button { font-size: 14px; line-height: 24px; }
+  footer, footer div { font-size: 14px; line-height: 24px; }
+  #contact h2, #contact h2 em { font-size: 24px; line-height: 32px; letter-spacing: -.02em; }
+  .md h2 { font-size: 24px; line-height: 32px; letter-spacing: -.02em; }
+  .md-k, .md-lead, .md p { line-height: 28px; }
+  .md h3 { line-height: 24px; margin-bottom: 10px; }
+  .md-ev { line-height: 24px !important; }
 </style>
 <body>
 <script>
@@ -1492,7 +1526,7 @@ function onWidth(fn){
       especially where decisions are hard and being wrong is expensive.</p>
       <div class="hero-facts" data-morph-tabs>
         <div class="ftabs" role="tablist" aria-label="About me">
-          <button class="ftab" type="button" data-v="Product Designer, SirionLabs &middot; 5 years">Currently</button>
+          <button class="ftab" type="button" data-v="Product Designer, Sirion &middot; 5 years">Currently</button>
           <button class="ftab" type="button" data-v="13 years in design &middot; 6 in product &middot; 3 on AI-native products">Experience</button>
           <button class="ftab" type="button" data-v="Noida, India">Based in</button>
         </div>

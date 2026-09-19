@@ -49,7 +49,34 @@ function onWidth(fn){
   var SPRING = (window.CSS && CSS.supports && CSS.supports('transition-timing-function', 'linear(0, 0.5, 1)'));
   var SPATIAL = SPRING ? 'linear(0.0000, 0.0219, 0.0799, 0.1632, 0.2624, 0.3697, 0.4787, 0.5844, 0.6831, 0.7723, 0.8505, 0.9169, 0.9714, 1.0146, 1.0471, 1.0701, 1.0849, 1.0927, 1.0948, 1.0924, 1.0867, 1.0786, 1.0691, 1.0589, 1.0486, 1.0386, 1.0293, 1.0210, 1.0136, 1.0074, 1.0024, 0.9983, 0.9953, 0.9932, 0.9919, 0.9912, 0.9910, 0.9913, 0.9918, 0.9926, 0.9935, 0.9945, 1.0000)' : 'cubic-bezier(.22,1.2,.36,1)';
   var EFFECT  = SPRING ? 'linear(0.0000, 0.0079, 0.0291, 0.0601, 0.0981, 0.1411, 0.1872, 0.2349, 0.2833, 0.3313, 0.3784, 0.4240, 0.4678, 0.5096, 0.5491, 0.5863, 0.6213, 0.6539, 0.6842, 0.7123, 0.7382, 0.7622, 0.7842, 0.8044, 0.8229, 0.8398, 0.8552, 0.8693, 0.8820, 0.8937, 0.9042, 0.9138, 0.9225, 0.9303, 0.9374, 0.9438, 0.9495, 0.9547, 0.9594, 0.9636, 0.9674, 0.9708, 1.0000)' : 'cubic-bezier(.33,0,.2,1)';
-  var T_SP = 348, T_EF = 184;
+  /* ── Pace ──
+     It used to be 348ms for every letter, whether it moved four pixels or three
+     hundred, on a stagger that was a straight ramp across the line. That reads
+     as a wipe: a value being set, not letters rearranging. Three things changed.
+     A letter that travels further takes longer - the base plus a share of the
+     distance, capped. Every letter carries a small offset of its own, the same
+     one every time, so the ramp has grain in it without being random. And there
+     is a beat between the old line leaving and the new one landing. The whole
+     morph is about a second and a half, which is long enough to watch. */
+  var T_SP = 520, T_EF = 300;          /* base travel, and the fade */
+  var PER_PX = 1.10, MAX_EXTRA = 380;  /* distance adds time, up to this much */
+  var SPAN_MOVE = 260, SPAN_OUT = 200, SPAN_IN = 340, IN_BASE = 260;  /* the sweeps, and the beat */
+  var JITTER = 55, T_REST = 1550;      /* per-letter offset; when the layer is redrawn clean */
+  function jit(i) { var h = ((i * 7919) % 97) / 97; return Math.round((h - 0.5) * 2 * JITTER); }
+
+  /* Where a laid-out string ends: the last letter in reading order, as a box
+     relative to the host. Known the moment the layout is measured, long before
+     the letters have travelled there, so anything that sits after the sentence
+     can be placed at once instead of waiting to measure landed glyphs. */
+  function endOf(host, B) {
+    var LH = parseFloat(getComputedStyle(host).lineHeight) || 28, last = null;
+    B.forEach(function (p) {
+      if (!p.ch.trim()) return;
+      if (!last || p.y > last.y + 1 || (Math.abs(p.y - last.y) <= 1 && p.x + (p.w || 0) > last.x + (last.w || 0))) last = p;
+    });
+    if (!last) { host._mlEnd = null; return; }
+    host._mlEnd = { right: last.x + (last.w || 0), bottom: last.y + LH };
+  }
 
   var TRAVEL = 'transform ' + T_SP + 'ms ' + SPATIAL + ', color ' + T_EF + 'ms ' + EFFECT;
   var FADE   = 'opacity ' + T_EF + 'ms ' + EFFECT +
@@ -155,7 +182,9 @@ function onWidth(fn){
   /* morph a host element from one string to another, leaving it resting on the second */
   function morph(host, fromText, toText, opts) {
     opts = opts || {};
+    host.setAttribute('data-ml-busy', '');
     var A = layout(host, fromText), B = layout(host, toText);
+    endOf(host, B);
     var link = pairs(A.map(function (p) { return p.ch; }), B.map(function (p) { return p.ch; }));
 
     /* A letter that shifts a few characters reads as the same letter moving.
@@ -219,31 +248,42 @@ function onWidth(fn){
         if (B.w) host.style.width = B.w + 'px';
         if (B.h) host.style.setProperty('--ml-h', B.h + 'px');
       }
-      moves.forEach(function (o) {
-        o.el.style.transition = TRAVEL;
-        o.el.style.transitionDelay = when(o.box, 120, 0) + 'ms';
+      var lands = 0;
+      moves.forEach(function (o, k) {
+        var dist = Math.sqrt(o.dx * o.dx + o.dy * o.dy);
+        var dur  = Math.round(T_SP + Math.min(MAX_EXTRA, dist * PER_PX));
+        var dl   = Math.max(0, when(o.box, SPAN_MOVE, 0) + jit(k));
+        lands = Math.max(lands, dl + dur);
+        o.el.style.transition = 'transform ' + dur + 'ms ' + SPATIAL + ', color ' + T_EF + 'ms ' + EFFECT;
+        o.el.style.transitionDelay = dl + 'ms';
         o.el.style.transform = 'translate(' + o.dx + 'px,' + o.dy + 'px)';
         if (opts.toColor) o.el.style.color = opts.toColor;
       });
-      outs.forEach(function (o) {
+      outs.forEach(function (o, k) {
         o.el.style.transition = FADE;
-        o.el.style.transitionDelay = when(o.box, 150, 0) + 'ms';
+        o.el.style.transitionDelay = Math.max(0, when(o.box, SPAN_OUT, 0) + jit(k + 31)) + 'ms';
         o.el.style.opacity = 0; o.el.style.transform = 'translateY(-0.32em)';
         o.el.style.filter = 'blur(3px)';
       });
-      ins.forEach(function (o) {
+      ins.forEach(function (o, k) {
+        var dl = Math.max(0, when(o.box, SPAN_IN, IN_BASE) + jit(k + 67));
+        lands = Math.max(lands, dl + T_SP);
         o.el.style.transition = FADE;
-        o.el.style.transitionDelay = when(o.box, 190, Math.round(T_EF * 0.75)) + 'ms';
+        o.el.style.transitionDelay = dl + 'ms';
         o.el.style.opacity = 1; o.el.style.transform = 'none'; o.el.style.filter = 'none';
       });
+      /* the last letter is down at this moment; the redraw at T_REST is only housekeeping */
+      host._mlLands = performance.now() + lands;
+      try { host.dispatchEvent(new CustomEvent('ml:start', { bubbles: true })); } catch (e) {}
     }); });
 
     clearTimeout(host._mlT);
-    host._mlT = setTimeout(function () { rest(host, B); }, T_SP + 480);
+    host._mlT = setTimeout(function () { rest(host, B); }, T_REST);
   }
 
   /* settle: redraw the finished string with no transforms in flight */
   function rest(host, B) {
+    endOf(host, B);
     var old = host.querySelector('.ml-layer');
     var layer = document.createElement('span');
     layer.className = 'ml-layer';
@@ -261,6 +301,9 @@ function onWidth(fn){
       if (B.w) host.style.width = B.w + 'px';
       if (B.h) host.style.setProperty('--ml-h', B.h + 'px');
     }
+    /* the letters are where they will stay; anything placed against them can trust this */
+    host.removeAttribute('data-ml-busy');
+    try { host.dispatchEvent(new CustomEvent('ml:rest', { bubbles: true })); } catch (e) {}
   }
 
   /* A. two states, held by hover or focus: <span data-morph><i class="a">…</i><i class="b">…</i></span> */
@@ -388,52 +431,45 @@ function onWidth(fn){
   else addEventListener('load', start);
 })();
 
-/* ── Putting the nudge arrow where the reading stops ───────────────────────
-   Morphline draws a sentence as loose glyphs that travel into place over about
-   half a second, staggered, so anything that measures them on a fixed timeout
-   catches them mid-flight and drops the arrow where they no longer are. This
-   watches instead: it re-places the mark every frame until the last glyph has
-   stopped moving, then marks it settled. The page shows the arrow only once
-   that class is on, so it never slides around while the words are landing. */
+/* ── Putting the nudge mark where the reading stops ────────────────────────
+   Morphline knows where a sentence will end the moment it lays it out, before
+   a single letter has moved (host._mlEnd), and it knows when the last letter
+   will be down (host._mlLands). So the mark is placed at once, exactly, and
+   shown at the moment the sentence completes - not a second later when the
+   layer is redrawn for housekeeping. Nothing is measured off moving glyphs. */
 window.nudgeMark = function (host, go) {
-  var frames = 0, prev = -1, same = 0;
   function put() {
-    var lay = host.querySelector('.ml-layer');
-    if (!lay || !lay.firstChild) return null;
-    var r = host.getBoundingClientRect(), last = null;
-    [].slice.call(lay.children).forEach(function (g) {
-      if (parseFloat(getComputedStyle(g).opacity) < 0.5) return;   /* on its way out */
-      if (!(g.textContent || '').trim()) return;                   /* a space is not an ending */
-      var b = g.getBoundingClientRect();
-      if (!b.width) return;
-      if (!last || b.bottom > last.bottom + 1 ||
-          (Math.abs(b.bottom - last.bottom) <= 1 && b.right > last.right)) last = b;
-    });
-    if (!last) return null;
-    var cs = getComputedStyle(lay.firstChild);
+    var e = host._mlEnd; if (!e) return false;
+    var cs = getComputedStyle(host);
     var F = parseFloat(cs.fontSize) || 17.5;
     var L = parseFloat(cs.lineHeight) || F * 1.6;
-    /* Every glyph on a line shares the line box bottom; its own height does not,
-       which is what made the arrow drift from one line to the next. From that
-       bottom back up to the baseline is half the leading plus the descender. */
+    /* from the line box bottom back up to the baseline: half the leading plus the descender */
     var drop = (L - F * 1.21) / 2 + F * 0.24;
-    go.style.left = Math.round(last.right - r.left + 7) + 'px';
-    go.style.top  = Math.round(last.bottom - r.top - drop - 14) + 'px';
-    return last.right;
+    go.style.left = Math.round(e.right + 7) + 'px';
+    go.style.top  = Math.round(e.bottom - drop - 14) + 'px';
+    return true;
   }
   go.classList.remove('set');
-  (function step() {
-    var v = put();
-    if (v !== null) {
-      /* The glyphs do not start moving on the same frame the hover fires, so a
-         plain "has it stopped" test settles on the old line before the new one
-         has begun. Watch past the whole travel first, then wait for stillness. */
-      if (frames > 40 && Math.abs(v - prev) < 0.5) {
-        if (++same > 2) { go.classList.add('set'); return; }
-      } else same = 0;
-      prev = v;
-    }
-    if (++frames < 120) requestAnimationFrame(step);
-    else go.classList.add('set');
-  })();
+  if (host._nmOff) host._nmOff();
+  var shown = false, t1 = null, t2 = null;
+  function show() {
+    if (shown) return; shown = true;
+    if (host._nmOff) host._nmOff();
+    if (put()) go.classList.add('set');
+  }
+  if (!host.hasAttribute('data-ml-busy')) { show(); return; }
+  /* the end is known already; place it now so it never appears anywhere else */
+  put();
+  var arm = function () {
+    var wait = Math.max(0, (host._mlLands || performance.now()) - performance.now());
+    clearTimeout(t1); t1 = setTimeout(show, wait);
+  };
+  if (host._mlLands) arm();
+  host.addEventListener('ml:start', arm);
+  host.addEventListener('ml:rest', show);
+  t2 = setTimeout(show, 2600);   /* never left armed forever */
+  host._nmOff = function () {
+    host.removeEventListener('ml:start', arm); host.removeEventListener('ml:rest', show);
+    clearTimeout(t1); clearTimeout(t2); host._nmOff = null;
+  };
 };
