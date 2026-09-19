@@ -1293,6 +1293,29 @@
   .hero, .cq { line-height: 32px; }
   .nb.id .nwd { font-size: 17.5px; letter-spacing: -.01em; }
   .seplbl .lbl, .lbl { line-height: 24px; }
+
+  /* ── The cards, quiet ───────────────────────────────────────────────────
+     The hierarchy inside an open card used to go 24, 14, then back up to 17.5
+     for the body and the follow-ups, so the things you could press read as
+     headings. It steps one way now: the headline, the sub-line, one sentence
+     at 17.5, and under a hairline everything you can press at 14 - plain words,
+     not pills, with the one committing action in ink at the right edge. The
+     field you type in is a line, not a filled box. The card speaks the site's
+     language rather than a product's. */
+  .apcard .cons{font-size:17.5px;line-height:25px;margin-top:6px}   /* the card already sits 18px under the line */
+  .apcard .ask-chips{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+        gap:16px;justify-content:space-between}
+  .apcard .ask-chips.right{justify-content:flex-end}
+  .apcard .q,.apcard .q.commit{font-size:14px;line-height:24px;color:var(--muted);
+        border:0;border-radius:0;padding:0;background:none;
+        transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .apcard .q:hover{color:var(--ink)}
+  /* two equal choices stay quiet and lift on hover; a lone committing action is in ink */
+  .apcard .ask-chips.right .q.commit,#apCard .q.commit{color:var(--ink);font-weight:500}
+  .askcard .ask-field{background:none;border-radius:0;padding:10px 0;
+        border-bottom:1px solid var(--line);font-size:14px;line-height:24px;color:var(--faint)}
+  .askcard .ask-chips{margin-top:12px;gap:14px}
+  .askcard .ask-chips .q{font-size:14px;line-height:24px}
 </style>
 </head>
 <body>
