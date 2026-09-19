@@ -1198,6 +1198,9 @@
   .co::before { content: "\00a0\00b7\00a0"; }
   .ab-rows .sw { position: relative; display: block; margin-top: 10px; height: 50px; font-size: 17.5px; line-height: 25px; }
   .ab-rows .sw.one { height: 25px; }
+  .ab-rows .sw.plain { height: auto; color: var(--muted); }
+  .ab-edu { margin-top: 36px; }
+  .ab-note { margin: 40px 0 0; max-width: 46ch; font-size: 17.5px; line-height: 28px; color: var(--ink); }
   /* the second line of a row reads in muted on the homepage and read in faint here — one
      grey for the same line */
   .ab-rows .sw i.a { font-style: normal; color: var(--muted); }
@@ -1332,41 +1335,18 @@
      the cards behind is gone too: a shape drawn with clip-path clips its own
      border away, so those marks were paper on paper - invisible. */
   @media (hover:none), (max-width:760px) {
-    nav { height: 60px; }
+    /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
+       The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
     .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
-        gap: 10px; padding: 16px 24px 16px; transition: none; }
-    .nb.nb { margin: 0; width: 28px; height: 28px; line-height: 28px; transition: none; }
-    /* A tap on a phone leaves the link in its :hover state, and the desktop hover
-       rule fades the mark out to make room for its word. That is the mark that went
-       missing after you tapped it. No hover behaviour here at all. */
-    .nb.nb:hover, .nb.nb:focus-visible { width: 28px; }
-    .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { opacity: 1; }
-    body.nav-open .nb.nb:hover, body.nav-open .nb.nb:focus-visible { width: calc(var(--w, 70px) + 42px); }
-    .nav-inner .nb.nb, body.nav-open .nav-inner .nb.nb { transform: none; }
-    .nb.nb .nmk, body.nav-open .nb.nb:not(.here) .nmk { width: 28px; height: 28px; top: 0; border: 0 !important;
-        box-shadow: none !important; background: #C3C4BE !important;
+        gap: 0; padding: 10px 18px 10px; transition: none; }
+    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
+        transition: none; transform: none; }
+    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
+        opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
         -webkit-transform: translateZ(0); transform: translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
-    .nb .nwd { height: 28px; line-height: 28px; right: 38px; top: 0; }
-    /* open: a list over the page, the bar under it unchanged */
-    body.nav-open nav .nav-inner.nav-inner { position: absolute; left: 0; right: 0; top: 0;
-        z-index: 2; flex-direction: column; align-items: flex-end; gap: 8px;
-        padding: 16px 24px 18px;
-        /* glass: the page shows through, softened */
-        background: rgba(247,247,245,.72);
-        -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
-        border-bottom: 1px solid rgba(25,26,24,.06);
-        box-shadow: 0 22px 34px -22px rgba(0,0,0,.18); }
-    /* the bar's own frosting would trap the list's backdrop inside the bar's 60px, so it
-       steps aside while the list is open; the bar is still paper underneath */
-    body.nav-open nav { -webkit-backdrop-filter: none; backdrop-filter: none; }
-    /* one size for all three words in the list; the name was still carrying its desktop 17.5px */
-    .nb.nb .nwd, .nb.nb.nav-id .nwd, .nb.nb.id .nwd { font-size: 14px; font-weight: 500; letter-spacing: 0; }
-    body.nav-open .nb.nb { width: calc(var(--w, 70px) + 42px); height: 36px; line-height: 36px; }
-    body.nav-open .nb.nb .nmk, body.nav-open .nb .nwd { top: 4px; }
-    body.nav-open .nb .nwd { height: 28px; line-height: 28px; opacity: 1;
-        transition: opacity .18s ease; }
-    body.nav-open .nav-x { margin: 4px 0 0; padding: 8px 0 0; }
+    .nb .nwd { opacity: 0; }
+    .nav-x { display: none !important; }
   }
 </style>
 <body>
@@ -1435,18 +1415,11 @@ function onWidth(fn){
         <p class="ab-scope route-lede r">This is not a clean ladder upward. Each practice changed
         what I notice in the next one.</p>
         <ul class="ab-years route">
-          <li class="r"><span class="y">2013 &middot; NIFT Chennai</span><span class="r0">Visual design</span>
+          <li class="r"><span class="y">2013&ndash;2017 &middot; NIFT Chennai, Lee Cooper</span><span class="r0">Visual foundations</span>
             <p class="g">Composition is not decoration. It decides what gets seen first, what waits
-            and what disappears. <b>Left behind:</b> hierarchy, typography, rhythm and an instinct
-            for removing what weakens the whole.</p></li>
-          <li class="r"><span class="y">2013&ndash;2017 &middot; Lee Cooper</span><span class="r0">Fashion and material</span>
-            <p class="g">A beautiful direction still has to survive production, repetition and the
-            hands that make it. <b>Left behind:</b> respect for constraints, systems that tolerate
-            variation and the difference between a concept and a thing that ships.</p></li>
-          <li class="r"><span class="y">2017&ndash;2018 &middot; Zhero Denim</span><span class="r0">Founder reality</span>
-            <p class="g">Design cannot rescue a broken route to market. The whole system has to work.
-            <b>Left behind:</b> commercial judgement, humility and a permanent suspicion of beautiful
-            answers to the wrong problem.</p></li>
+            and what disappears &mdash; and a beautiful direction still has to survive production and
+            the hands that make it. <b>Left behind:</b> hierarchy, typography, rhythm, respect for
+            constraints, and the difference between a concept and a thing that ships.</p></li>
           <li class="r"><span class="y">2019&ndash;2021 &middot; Airtel</span><span class="r0">Consumer scale</span>
             <p class="g">At scale, one unclear choice becomes millions of moments of friction.
             <b>Left behind:</b> behavioural evidence, intent-led support and an understanding that
@@ -1455,32 +1428,6 @@ function onWidth(fn){
             <p class="g">AI can answer. A person still has to judge the evidence, consequence and
             next move. <b>Left behind:</b> decision systems, provenance, reversible action, human
             checkpoints and interfaces that remain calm when the model is uncertain.</p></li>
-          <li class="r"><span class="y">Every day &middot; Fatherhood</span><span class="r0">Watching hesitation</span>
-            <p class="g">My daughter rarely explains where an experience failed. She pauses, tries
-            something else, or leaves. <b>Left behind:</b> a sharper eye for where confidence
-            breaks &mdash; and respect for what people do instead of what they say.</p></li>
-        </ul>
-
-        <h2 class="ab-h r">How I work</h2>
-        <ul class="ab-rows">
-      <li class="r"><div class="rw" data-morph-host>
-        <span class="n" aria-hidden="true"><i class="num">01</i></span>
-        <span class="t"><b>Prototype</b>
-        <span class="sw mline" data-morph><i class="a">A mockup cannot tell me how 340 records behave.</i><i class="b">A relationship graph with 340 records behaves differently from a linked-frame mockup, so I build the real thing first.</i></span>
-        <span class="vh">A relationship graph with 340 records behaves differently from a linked-frame mockup, so I build the real thing first.</span></span>
-      </div></li>
-      <li class="r"><div class="rw" data-morph-host>
-        <span class="n" aria-hidden="true"><i class="num">02</i></span>
-        <span class="t"><b>Measure</b>
-        <span class="sw mline" data-morph><i class="a">The argument ended at 606 contracts.</i><i class="b">At 606 contracts the radial graph shrank to 12%, with no readable label. Measuring at real scale ended the debate.</i></span>
-        <span class="vh">At 606 contracts the radial graph shrank to 12%, with no readable label. Measuring at real scale ended the debate.</span></span>
-      </div></li>
-      <li class="r"><div class="rw" data-morph-host>
-        <span class="n" aria-hidden="true"><i class="num">03</i></span>
-        <span class="t"><b>Judge</b>
-        <span class="sw mline" data-morph><i class="a">AI widens the options. It does not pick one.</i><i class="b">AI helps me generate and test more directions. I still decide what is right, what to cut, and what evidence I can stand behind.</i></span>
-        <span class="vh">AI helps me generate and test more directions. I still decide what is right, what to cut, and what evidence I can stand behind.</span></span>
-      </div></li>
         </ul>
 
         <h2 class="ab-h r">Direction I argued for</h2>
@@ -1504,60 +1451,38 @@ function onWidth(fn){
         <span class="vh">An AI can extract 128 fields. A lawyer still has to check every one.</span></span>
       </a></li>
 </ul>
-        <p class="ab-scope r">Shared decisions, developed with 3&ndash;4 designers, 2&ndash;3 product managers and 4&ndash;5 engineers. My part: framing the problem, prototyping alternatives, making the argument.</p>
+        
 
         <h2 class="ab-h r" id="experience">Experience</h2>
         <ul class="ab-rows">
-      <li class="r"><div class="rw" data-morph-host>
+      <li class="r"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2021 &ndash; now</i></span>
         <span class="t"><b>Product Designer <span class="co">Sirion.ai</span></b>
-        <span class="sw mline" data-morph><i class="a">Enterprise contract management, used by global legal teams.</i><i class="b">Auto Extraction, owned end to end: month-four retention 5% to 23%, cohort 860 to 2,380 users.</i></span>
-        <span class="vh">Auto Extraction, owned end to end: month-four retention 5% to 23%, cohort 860 to 2,380 users.</span></span>
+        <span class="sw one plain">Enterprise contract management, used by global legal teams.</span></span>
       </div></li>
-      <li class="r"><div class="rw" data-morph-host>
+      <li class="r"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2019 &ndash; 2021</i></span>
         <span class="t"><b>UX Designer <span class="co">Bharti Airtel</span></b>
-        <span class="sw mline" data-morph><i class="a">Airtel Thanks, one of India&rsquo;s largest consumer apps.</i><i class="b">Help redesigned around predicted intent: call volume down 9%, daily engagement up 15%.</i></span>
-        <span class="vh">Help redesigned around predicted intent: call volume down 9%, daily engagement up 15%.</span></span>
+        <span class="sw one plain">Airtel Thanks, one of India&rsquo;s largest consumer apps.</span></span>
       </div></li>
-      <li class="r thin"><div class="rw" data-morph-host>
+      <li class="r thin"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2019</i></span>
         <span class="t"><b>UI/UX Designer <span class="co">Think Matra</span></b></span>
       </div></li>
-      <li class="r thin"><div class="rw" data-morph-host>
+      <li class="r thin"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2018 &ndash; 2019</i></span>
         <span class="t"><b>Senior Creative UI Designer <span class="co">Great Place to Study</span></b></span>
       </div></li>
-      <li class="r thin"><div class="rw" data-morph-host>
+      <li class="r thin"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2017 &ndash; 2018</i></span>
         <span class="t"><b>Co-founder and Creative Director <span class="co">Zhero Denim</span></b></span>
       </div></li>
-      <li class="r thin"><div class="rw" data-morph-host>
+      <li class="r thin"><div class="rw">
         <span class="n" aria-hidden="true"><i class="num">2013 &ndash; 2017</i></span>
         <span class="t"><b>Graphic and Product Designer <span class="co">Lee Cooper</span></b></span>
       </div></li>
         </ul>
-
-        <h2 class="ab-h r">Practice</h2>
-        <ul class="ab-lines r">
-          <li><span class="dim">Design</span> &middot; Interaction design, information architecture, user research, design systems</li>
-          <li><span class="dim">AI product</span> &middot; Agentic workflows, human-in-the-loop review, provenance, uncertainty and trust</li>
-          <li><span class="dim">Tools</span> &middot; Figma, FigJam, HTML, Miro, Adobe CC</li>
-        </ul>
-
-        <h2 class="ab-h r">Education</h2>
-        <ul class="ab-years">
-          <li class="r"><span class="y">2025 &ndash; 2026</span><span class="r0">Executive Development Program in Strategy and Leadership <span class="co">XLRI Delhi-NCR</span></span></li>
-          <li class="r"><span class="y">2020</span><span class="r0">Design Thinking: From Insights to Viability <span class="co">Stanford Graduate School of Business, online</span></span></li>
-          <li class="r"><span class="y">2013</span><span class="r0">Bachelor of Design <span class="co">NIFT Chennai</span></span></li>
-          <li class="r"><span class="y">2011</span><span class="r0">Product Design Trainee <span class="co">IIT Guwahati</span></span></li>
-        </ul>
-
-        <h2 class="ab-h r">Recognition</h2>
-        <ul class="ab-years">
-          <li class="r"><span class="y">2024</span><span class="r0">Best AI-Driven Design Concept <span class="co">Sirion</span></span></li>
-          <li class="r"><span class="y">2023</span><span class="r0">Lightning Talk <span class="co">UX India</span></span></li>
-        </ul>
+        <p class="ab-scope ab-edu r">Bachelor of Design, NIFT Chennai &middot; Design Thinking, Stanford Graduate School of Business (online).</p>
 
         <figure class="ab-photo r">
           <picture>
@@ -1567,6 +1492,9 @@ function onWidth(fn){
           <figcaption>Most of the hard decisions are settled on a wall like this, weeks before
           anyone opens a design tool.</figcaption>
         </figure>
+        <p class="ab-note r">The rest I learn at home. My daughter rarely explains where an experience
+        failed. She pauses, tries something else, or leaves. It left me a sharper eye for where
+        confidence breaks &mdash; and respect for what people do instead of what they say.</p>
       </article>
     </div>
   </div>
@@ -1712,7 +1640,9 @@ function onWidth(fn){
    link the reader cannot even see the name of. Once open the links behave
    normally, and a tap outside closes it. Pointer devices never run any of this. */
 (function(){
-  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  /* Retired: the three marks sit in a row on a phone and a tap goes straight to the
+     page, the same as a pointer. No pile, no list, nothing to open or close. */
+  return;
   var bar = document.querySelector('.nav-inner');
   if (!bar) return;
   /* The pile grows the bar from 62px to about 320px, and the browser keeps the

@@ -1549,42 +1549,39 @@
      keeps one height now, so the page never moves. The paper-outline trick for
      the cards behind is gone too: a shape drawn with clip-path clips its own
      border away, so those marks were paper on paper - invisible. */
+  /* ── Glass on reach ─────────────────────────────────────────────────────
+     A row you reach for lifts onto a pane of glass: the same frosted paper as the
+     phone nav list. A pointer gets it on hover; a thumb gets it on the first tap,
+     the one that turns the credit line into the sentence. Nothing moves - the
+     row already owns the space the pane fills. */
+  .ix-b { padding: 16px 18px 18px; margin-left: -18px; width: calc(100% + 36px); border-radius: 16px;
+    transition: background .26s ease, box-shadow .26s ease; }
+  .ix-b.lit, .ix-b:focus-visible {
+    background: rgba(255,255,255,.5);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+    box-shadow: inset 0 0 0 1px rgba(25,26,24,.07), 0 18px 34px -24px rgba(25,26,24,.35); }
+  @media (hover:hover) {
+    .ix-b:hover {
+      background: rgba(255,255,255,.5);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+      box-shadow: inset 0 0 0 1px rgba(25,26,24,.07), 0 18px 34px -24px rgba(25,26,24,.35); }
+  }
+  @media (max-width: 900px) {
+    .ix-b { padding: 14px 14px 16px; margin-left: -14px; width: calc(100% + 28px); border-radius: 14px; }
+  }
   @media (hover:none), (max-width:760px) {
-    nav { height: 60px; }
+    /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
+       The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
     .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
-        gap: 10px; padding: 16px 24px 16px; transition: none; }
-    .nb.nb { margin: 0; width: 28px; height: 28px; line-height: 28px; transition: none; }
-    /* A tap on a phone leaves the link in its :hover state, and the desktop hover
-       rule fades the mark out to make room for its word. That is the mark that went
-       missing after you tapped it. No hover behaviour here at all. */
-    .nb.nb:hover, .nb.nb:focus-visible { width: 28px; }
-    .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { opacity: 1; }
-    body.nav-open .nb.nb:hover, body.nav-open .nb.nb:focus-visible { width: calc(var(--w, 70px) + 42px); }
-    .nav-inner .nb.nb, body.nav-open .nav-inner .nb.nb { transform: none; }
-    .nb.nb .nmk, body.nav-open .nb.nb:not(.here) .nmk { width: 28px; height: 28px; top: 0; border: 0 !important;
-        box-shadow: none !important; background: #C3C4BE !important;
+        gap: 0; padding: 10px 18px 10px; transition: none; }
+    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
+        transition: none; transform: none; }
+    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
+        opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
         -webkit-transform: translateZ(0); transform: translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
-    .nb .nwd { height: 28px; line-height: 28px; right: 38px; top: 0; }
-    /* open: a list over the page, the bar under it unchanged */
-    body.nav-open nav .nav-inner.nav-inner { position: absolute; left: 0; right: 0; top: 0;
-        z-index: 2; flex-direction: column; align-items: flex-end; gap: 8px;
-        padding: 16px 24px 18px;
-        /* glass: the page shows through, softened */
-        background: rgba(247,247,245,.72);
-        -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
-        border-bottom: 1px solid rgba(25,26,24,.06);
-        box-shadow: 0 22px 34px -22px rgba(0,0,0,.18); }
-    /* the bar's own frosting would trap the list's backdrop inside the bar's 60px, so it
-       steps aside while the list is open; the bar is still paper underneath */
-    body.nav-open nav { -webkit-backdrop-filter: none; backdrop-filter: none; }
-    /* one size for all three words in the list; the name was still carrying its desktop 17.5px */
-    .nb.nb .nwd, .nb.nb.nav-id .nwd, .nb.nb.id .nwd { font-size: 14px; font-weight: 500; letter-spacing: 0; }
-    body.nav-open .nb.nb { width: calc(var(--w, 70px) + 42px); height: 36px; line-height: 36px; }
-    body.nav-open .nb.nb .nmk, body.nav-open .nb .nwd { top: 4px; }
-    body.nav-open .nb .nwd { height: 28px; line-height: 28px; opacity: 1;
-        transition: opacity .18s ease; }
-    body.nav-open .nav-x { margin: 4px 0 0; padding: 8px 0 0; }
+    .nb .nwd { opacity: 0; }
+    .nav-x { display: none !important; }
   }
 </style>
 <body>
@@ -2100,7 +2097,9 @@ function onWidth(fn){
    link the reader cannot even see the name of. Once open the links behave
    normally, and a tap outside closes it. Pointer devices never run any of this. */
 (function(){
-  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  /* Retired: the three marks sit in a row on a phone and a tap goes straight to the
+     page, the same as a pointer. No pile, no list, nothing to open or close. */
+  return;
   var bar = document.querySelector('.nav-inner');
   if (!bar) return;
   /* The pile grows the bar from 62px to about 320px, and the browser keeps the
