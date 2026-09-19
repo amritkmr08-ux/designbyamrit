@@ -1289,6 +1289,21 @@
   .ab-cred li, .ab-scope, .ab-acts li, .ab-acts a, .ab-acts b { font-size: 14px; line-height: 24px; }
   .ab-photo figcaption { line-height: 24px; }
   footer, footer div, footer span, footer .floot { font-size: 14px; line-height: 24px; }
+
+  /* ── Three pages, three shapes ────────────────────────────────────────
+     Sensitivity already had a form of its own. The other two get one too: a
+     house for home, a circle for the person. The block is the shape of the
+     place it goes to, so the bar reads at rest without a word, and the house
+     drawn inside the square is no longer needed - the square is the house.
+     Same greys, same dark when it is the page you are on, same opening into
+     its word on hover. */
+  .nb.nav-id .nmk, .nb.id .nmk { border-radius: 0;
+        clip-path: path("M14 1.2 L26.2 11.6 Q27 12.3 27 13.3 V25 Q27 28 24 28 H4 Q1 28 1 25 V13.3 Q1 12.3 1.8 11.6 Z") }
+  .nb.abt .nmk { border-radius: 50% }
+  .nb.nav-id .nmk::after, .nb.id .nmk::after { content: none }
+  /* the phone pile draws marks at 30px; the two drawn shapes are 28px paths inside that
+     box, so the circle is brought to 28 as well and the three sit at one size */
+  @media (hover:none), (max-width:760px) { .nb.abt .nmk { width: 28px; height: 28px; margin: 1px } }
 </style>
 <body>
 <script>
@@ -1314,7 +1329,7 @@ function onWidth(fn){
   <div class="nav-inner">
     <a class="nav-id nb" href="index.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
     <div class="nav-mid">
-      <a class="nb cur" href="about.html" aria-current="page"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
+      <a class="nb cur abt" href="about.html" aria-current="page"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
       <a class="nb sens" href="sensitivity.html"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
     </div>
   </div>
