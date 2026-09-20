@@ -1404,6 +1404,51 @@
     .stages { margin-top: 88px; }
     .stages .stage + .stage { margin-top: 88px; }
   }
+  /* ── Glass on reach, every specimen ───────────────────────────────────
+     Same rule as the work rows on the home page: the moment a specimen is reached
+     for - pointer over it, first tap on a phone, a card open, a beat running, a
+     result landed - it sits on a pane of glass. At rest there is nothing. The pane
+     is drawn behind the object, out of flow, so nothing in the page moves. The
+     deck that a card opens onto grows out of the same pane. */
+  .stage .obj { position: relative; }
+  .stage .obj::before { content: ""; position: absolute; z-index: 0; pointer-events: none;
+     left: -26px; right: -26px; top: -22px; bottom: -22px; border-radius: 20px;
+     background: rgba(247,247,245,.48);
+     -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+     box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24);
+     opacity: 0; transition: opacity .32s ease .06s; }
+  .stage .obj > * { position: relative; z-index: 1; }
+  /* The rule, stated once. Glass means "this specimen is in hand":
+       - a pointer is over it (desktop), or
+       - it was tapped in the last four seconds (phone), or
+       - a card of its is open, or a beat is running.
+     A result that has landed does not hold the glass on its own: once the hand
+     leaves, the pane goes, and what was learned stays as plain text. */
+  .stage .obj.reach::before, .stage .obj:has(.open)::before, .stage .obj:has(.busy)::before { opacity: 1; }
+  @media (hover:hover) { .stage .obj:hover::before { opacity: 1; } }
+  /* when a specimen opens a card that is itself glass and covers the object, the pane
+     under it steps aside so there is one sheet of glass, not two edges */
+  .stage .obj:has(.deckwrap.lit)::before, .stage .obj:has(.lift.open)::before,
+  .stage .obj:has(.wkwrap.open)::before, .stage .obj:has(.histwrap.open)::before { opacity: 0 !important; }
+  /* the deck under an open card keeps the same material, and also shows on reach */
+  .deckwrap > .deck { background: rgba(247,247,245,.48);
+     -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); }
+  @media (max-width:900px) {
+    .stage .obj::before { left: -14px; right: -14px; top: -16px; bottom: -16px; border-radius: 16px; }
+  }
+  /* The closing statement opens the reasoning, so it is a specimen too: same glass on
+     reach, same rule. */
+  .spinewrap { position: relative; }
+  .spinewrap::before { content: ""; position: absolute; z-index: 0; pointer-events: none;
+     left: -26px; right: -26px; top: -22px; bottom: -22px; border-radius: 20px;
+     background: rgba(247,247,245,.48);
+     -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+     box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24);
+     opacity: 0; transition: opacity .32s ease .06s; }
+  .spinewrap > * { position: relative; z-index: 1; }
+  .spinewrap.reach::before, .spinewrap:focus-visible::before { opacity: 1; }
+  @media (hover:hover) { .spinewrap:hover::before { opacity: 1; } }
+  @media (max-width:900px) { .spinewrap::before { left: -14px; right: -14px; top: -16px; bottom: -16px; border-radius: 16px; } }
   @media (hover:none), (max-width:760px) {
     /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
        The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
@@ -1942,6 +1987,21 @@ function onWidth(fn){
     if (!armed || !document.body.classList.contains('nav-open')) return;
     if (Math.abs(window.scrollY - startY) > 6) open(false);
   }, {passive: true});
+})();
+</script>
+<script>
+/* glass on reach: hover is CSS; a tap holds it for four seconds, renewed by every tap
+   inside the same specimen, and cleared by a tap anywhere else */
+(function(){
+  var objs=[].slice.call(document.querySelectorAll('.stage .obj, .spinewrap'));
+  var timers=new Map();
+  function hold(o){ objs.forEach(function(x){ if(x!==o){ x.classList.remove('reach'); clearTimeout(timers.get(x)); } });
+    o.classList.add('reach'); clearTimeout(timers.get(o));
+    timers.set(o, setTimeout(function(){ o.classList.remove('reach'); }, 4000)); }
+  document.addEventListener('pointerdown', function(e){
+    var o=e.target.closest && e.target.closest('.stage .obj, .spinewrap');
+    if(o) hold(o); else objs.forEach(function(x){ x.classList.remove('reach'); clearTimeout(timers.get(x)); });
+  }, true);
 })();
 </script>
 <script src="morphline.js"></script>
