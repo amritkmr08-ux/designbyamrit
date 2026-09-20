@@ -43,6 +43,16 @@
      2px, same 5px away from the ink. */
   .apb:focus-visible,.amb:focus-visible,.hob:focus-visible,
   .lift:focus-visible,.spinewrap:focus-visible{outline:none}
+  /* ── One indicator at a time ─────────────────────────────────────────────
+     A control that already wears the pill, or sits inside an open card, is plainly
+     the live thing. Drawing a box around it as well is the interface saying the same
+     thing twice - the exact habit this page argues against. The box is for controls
+     that have no other state to show. */
+  .updd:focus-visible,.histd:focus-visible,.wkd:focus-visible,#copyBtn:focus-visible,
+  .apcard .q:focus-visible,.apcard .plist .q:focus-visible,.gmenu .opt:focus-visible,
+  .hscard .hs-arw:focus-visible,.hsq:focus-visible,.quiet:focus-visible{outline:none}
+  /* what they show instead: the same pill, or the same step to ink */
+  .apcard .q:focus-visible,.gmenu .opt:focus-visible,.hscard .hs-arw:focus-visible{color:var(--ink)}
   .apb:focus-visible::after,.amb:focus-visible::after,.hob:focus-visible::after,
   .lift:focus-visible::after,.spinewrap:focus-visible::after{
     content:'';position:absolute;left:0;bottom:-7px;width:100%;height:2px;
@@ -499,6 +509,7 @@
         transform:translate(-5px,5px);
         transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1)}
   .wline.is-after:not(.clip) .wl-go.set{opacity:1;transform:none}
+  .lift.open .wline .wl-go.set{opacity:1}
   /* one signal, not two: the same icon used to sit beside the headline as well */
   #wallWrap .cv.wlcv{display:none}
   /* On a narrow column the sentence does not finish inside the three lines - it is cut
@@ -510,7 +521,7 @@
      there was more, which made the invitation and the obstacle the same thing. Same
      answer here - the lines stay readable and the arrow says it, after the full stop. */
   .spine .sp-go{position:absolute;opacity:0;pointer-events:none;
-    width:11px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--xpd) no-repeat center/contain;mask:var(--xpd) no-repeat center/contain;
+    width:14px;height:14px;color:var(--ink);display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
     transform:translate(-5px,5px);
     transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1)}
   .spine.is-after .sp-go.set,
@@ -1000,10 +1011,10 @@
      between units it is four times that, so the eye lands on three things, not eight lines. */
   .md-body .fw-terms{display:flex;flex-wrap:wrap;gap:20px 30px;margin-top:46px;max-width:52ch}
   .md-body .fw-t{position:relative;padding:0;font:500 17.5px/26px var(--font);letter-spacing:-.012em;
-                 color:var(--faint);filter:blur(.7px);
-                 transition:color var(--effect-ms,184ms) var(--effect,ease),filter 300ms ease}
+                 color:var(--faint);
+                 transition:color var(--effect-ms,184ms) var(--effect,ease)}
   .md-body .fw-t:hover,.md-body .fw-t:focus-visible,
-  .md-body .fw-t[aria-pressed="true"]{color:var(--ink);filter:blur(0);outline:none}
+  .md-body .fw-t[aria-pressed="true"]{color:var(--ink);outline:none}
   /* The chosen tab carries a line — the same 1.5px of accent the top navigation uses, six
      pixels clear of the word, growing in from the left. One tab component means one selected
      state: out of focus at rest, sharp and in ink when chosen, and a line under the chosen
@@ -1019,6 +1030,68 @@
      narrower measure than the demonstration above it, which is what separates a statement
      from another paragraph on this page. */
   .md-body p.fw-rule{margin-top:52px;color:var(--ink);max-width:44ch}
+
+
+  /* ── 04 · The same moment, twice ──────────────────────────────────────────
+     The page itself is the experience: eleven specimens, no labels, nothing
+     explained. This is where the comparison lives, because a comparison is a
+     document. Each pair is the usual answer and then the same moment answered
+     with Sensitivity, stacked, because this card is a reading column and a
+     reading column has no middle to draw a line down. The pairs are shown at
+     the moment that matters - the usual one at rest, ours already answering -
+     and nothing is written underneath them. */
+  .md-body .pair{margin-top:56px}
+  .md-body .pair + .pair{margin-top:72px}
+  .md-body p.pl{font-family:var(--display);font-size:14px;letter-spacing:.1em;
+     text-transform:uppercase;color:var(--faint);line-height:20px;margin-top:0;max-width:none}
+  .md-body .pb{margin-top:34px;padding-top:34px;border-top:1px solid var(--line)}
+  .md-body .pair p.v{font-family:var(--display);font-size:24px;line-height:32px;
+     font-weight:500;letter-spacing:-.008em;color:var(--ink);margin-top:14px;max-width:none}
+  .md-body .pair p.sub{font-size:17.5px;line-height:28px;color:var(--muted);margin-top:4px;max-width:none}
+  .md-body p.sm-lbl{font-size:14px;line-height:24px;color:var(--muted);margin-top:14px;max-width:none}
+
+  /* the usual answer, drawn the way the usual answer is drawn */
+  .md-body .dlg{margin-top:20px;border:1px solid var(--line);border-radius:4px;padding:20px 22px}
+  .md-body .dlg p{margin-top:0;font-size:17.5px;line-height:28px;color:var(--ink);max-width:none}
+  .md-body .btns{display:flex;gap:10px;margin-top:18px}
+  .md-body .bt{font-family:var(--display);font-size:14px;line-height:24px;
+     padding:6px 16px;border-radius:3px;border:1px solid var(--line);background:none;color:var(--muted)}
+  .md-body .bt.pri{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  .md-body .bar{margin-top:18px;max-width:300px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+  .md-body .bar i{display:block;height:100%;width:70%;background:var(--muted);border-radius:3px}
+  .md-body .toast{margin-top:18px;display:inline-flex;align-items:center;gap:20px;
+     border:1px solid var(--line);border-radius:4px;padding:11px 18px}
+  .md-body .toast em{font-style:normal;font-size:17.5px;line-height:28px;color:var(--ink)}
+  .md-body .toast b{font-weight:400;font-size:17.5px;line-height:28px;color:var(--muted)}
+  .md-body .rows{margin-top:16px}
+  .md-body .rw{display:grid;grid-template-columns:1fr auto;gap:0 20px;padding:10px 0;
+     border-top:1px solid var(--line);align-items:baseline}
+  .md-body .rw b{font-weight:400;font-size:17.5px;line-height:28px;color:var(--ink)}
+  .md-body .rw span{font-size:14px;line-height:24px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .md-body .rw i{font-style:normal;font-size:14px;line-height:24px;color:var(--faint)}
+  .md-body .rw.hist{grid-template-columns:96px 1fr}
+  .md-body .rw.hist b{color:var(--muted)}
+  .md-body .rw.hist.on b{color:var(--ink);font-weight:500}
+
+  /* ours, caught at the moment it answers */
+  .md-body .ev{font-size:17.5px;line-height:28px;color:var(--muted);margin-top:8px;max-width:none}
+  .md-body .cons{font-size:17.5px;line-height:28px;color:var(--ink);margin-top:16px;max-width:none}
+  .md-body .grp{display:flex;gap:26px;margin-top:12px;flex-wrap:wrap}
+  .md-body .grp span{font-size:17.5px;line-height:28px;color:var(--ink)}
+  .md-body .grp span i{font-style:normal;font-size:14px;color:var(--faint);margin-right:7px}
+  .md-body .act{display:inline-flex;align-items:center;gap:8px;font-size:17.5px;
+     line-height:28px;color:var(--ink);margin-top:18px}
+  .md-body .act u{text-decoration:none;display:inline-block;width:13px;height:13px;
+     background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;
+     mask:var(--arw) no-repeat center/contain}
+  .md-body .pips2{display:inline-flex;align-items:center;gap:7px;margin-top:14px}
+  .md-body .pips2 i{width:5px;height:5px;border-radius:3px;background:var(--line);display:block}
+  .md-body .pips2 i.on{width:16px;background:var(--muted)}
+
+  @media (max-width:760px){
+    .md-body .pair + .pair{margin-top:56px}
+    .md-body .rw.hist{grid-template-columns:1fr;gap:2px}
+  }
 
   /* ── The demonstration under Expression ───────────────────────────────────
      The slot here used to hold a sentence defining each pattern. A sentence
@@ -1353,8 +1426,12 @@
   /* the opening argument, after the first paragraph the loader traces */
   .lede-more{max-width:46ch}
   /* one statement in ink, the argument in grey under it, the definition back in ink to close */
-  .lede-more p{font-size:17.5px;line-height:28px;color:var(--muted);margin:20px 0 0}
-  .lede-more p:last-child{color:var(--ink);margin-top:36px}
+  /* One colour. The opening is six short paragraphs of one argument - there is no
+     supporting voice here to set apart, and the grey was dimming its sharpest line
+     ("But people did not get more attention") while the setup above it sat in ink.
+     The break before the definition is air, not colour. */
+  .lede-more p{font-size:17.5px;line-height:28px;color:var(--ink);margin:20px 0 0}
+  .lede-more p:last-child{margin-top:36px}
 
   /* ── The three marks, sized to sit together ───────────────────────────
      Drawn full-bleed in a 28px box they read heavy against the type, and the
@@ -1418,6 +1495,9 @@
      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24);
      opacity: 0; transition: opacity .32s ease .06s; }
   .stage .obj > * { position: relative; z-index: 1; }
+  /* except the screen-reader copy: made relative it becomes an inline box again, and an
+     inline box ignores width/height, so each one was holding a full line of empty space. */
+  .stage .obj > .vh, .spinewrap > .vh { position: absolute; }
   /* The rule, stated once. Glass means "this specimen is in hand":
        - a pointer is over it (desktop), or
        - it was tapped in the last four seconds (phone), or
@@ -1462,6 +1542,94 @@
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }
+  }
+
+  /* ── One vocabulary for the marks ─────────────────────────────────────
+       ⌃⌄ expand    opens into more, here, in the same place. Same glyph open or closed.
+       →  arrow     leaves this page.
+       grey→ink     alternatives in a set; the one you reach for is ink.
+     Nothing else. A reader learns each once. */
+  .cv{transition:opacity var(--effect-ms,184ms) var(--effect,ease),transform .3s cubic-bezier(.22,.61,.36,1),color var(--effect-ms,184ms) var(--effect,ease)}
+  /* The mark is the expand glyph, two chevrons pointing outward: "this opens into more,
+     here, in the same place". Not a single ⌄, which reads as a dropdown and promises the
+     page will grow downward - the one thing these specimens never do. Symmetrical, so it
+     says the same thing open or closed and nothing has to rotate. */
+  /* the marks that were hidden while open come back, rotated, so the way out is where the way in was */
+  .apwrap.open .apcv,.apwrap.open .amcv,.apwrap.open .hocv,.histwrap.open .histcv,.wkwrap.open .cv.wkcv,.chipwrap.open .cv{opacity:1!important}
+  /* Ask more carries the chevron like every other opener */
+  .quiet{display:inline-flex;align-items:center;gap:8px}
+  .cv.askcv{width:10px;height:14px;color:var(--faint);opacity:1}
+  .quiet:hover .cv.askcv{color:var(--muted)}
+
+  /* ── Pressable text just comes into ink ──────────────────────────────────
+     The specimen is already on glass when you reach for it. Putting a second glass
+     chip around the line inside it is a card on a card - the interface saying "live"
+     twice. The line steps from grey to ink, and that is the whole signal. Same two
+     states the options use, so there is one rule, not two. */
+  .updd .srcl, .histd .srcl, .wkd .wkline .srcl, #copyBtn #cw{
+        transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .updd:hover .srcl .ml-g,.updd:hover .srcl .ml-rest,.updd:focus-visible .srcl .ml-g,.updd:focus-visible .srcl .ml-rest,
+  .histd:hover .srcl .ml-g,.histd:hover .srcl .ml-rest,.histd:focus-visible .srcl .ml-g,.histd:focus-visible .srcl .ml-rest,
+  .wkd:not([disabled]):hover .srcl .ml-g,.wkd:not([disabled]):hover .srcl .ml-rest,
+  .wkd:focus-visible .srcl .ml-g,.wkd:focus-visible .srcl .ml-rest,
+  #copyBtn:hover #cw .ml-g,#copyBtn:hover #cw .ml-rest,
+  #copyBtn:focus-visible #cw .ml-g,#copyBtn:focus-visible #cw .ml-rest{color:var(--ink)}
+  /* the copy icon is redundant; reaching for the address is enough */
+  .cv.cpcv{display:none}
+
+  /* ── Alternatives in a set ────────────────────────────────────────────────
+     No blur anywhere on this site. An option you have not chosen is grey; the one
+     you reach for is ink. Weight and colour do the whole job - the same two states
+     the tabs use, and nothing has to be put out of focus to say "not this one". */
+  .apcard .plist .q > span:first-child, .gmenu .opt:not(.cur){
+        color:var(--muted);transition:color .26s ease}
+  .apcard .plist .q:hover > span:first-child, .apcard .plist .q:focus-visible > span:first-child,
+  .gmenu .opt:hover, .gmenu .opt:focus-visible{color:var(--ink)}
+
+  /* Renewal: the long text opens under the headline, which stays put */
+  /* The card is the block, morphed - so it stands where the block stands and covers it.
+     Seeing the headline above the card would say two things are here; there is one. */
+  .lift .glass.under{top:-20px;padding-top:22px;background:rgba(247,247,245,.94)}
+
+  /* Card buttons: everything you can press in a card is one kind of thing. Grey at rest,
+     ink on hover; the one committing action is ink and medium from the start. */
+  .apcard .q{color:var(--muted)}
+  .apcard .q:hover,.apcard .q:focus-visible{color:var(--ink)}
+
+  /* Summarise: the value holds while it reads; the dots beside the word are the wait */
+  .wkwrap.busy .hero{opacity:.55;transition:opacity .3s ease}
+
+  /* A mark waits for its line. While the text beside it is still morphing (Morphline
+     marks the host data-ml-busy) the chevron is held back; it appears once the letters
+     have landed, every time, so it never seems to arrive early or late. */
+  [data-ml-busy] ~ .cv, .beat:has([data-ml-busy]) ~ .cv, .wkline:has([data-ml-busy]) ~ .cv, .hero:has([data-ml-busy]) ~ .cv{opacity:0!important;transition:none}
+
+  /* ── The clause card: three things, in the order a reader needs them ───────
+       1. which document the change came from, with the way to walk the run
+       2. the clause itself, the value marked inside the sentence it was read from
+       3. the exact reference, small, last
+     They were one block of grey before, so the source and the evidence read as
+     the same thing. */
+  .hscard .hs-top{display:flex;align-items:center;justify-content:space-between;gap:20px;
+        padding-bottom:12px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+  .hscard .hs-doc{font-family:var(--display);font-size:14px;line-height:20px;color:var(--ink);
+        font-weight:500;letter-spacing:-.005em}
+  .hscard .hs-nav{display:flex;align-items:center;gap:10px;flex:none}
+  .hscard .hs-of{font-size:12px;line-height:20px;color:var(--faint);letter-spacing:.02em;
+        font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hscard .hs-arw{display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;
+        border-radius:999px;background:none;color:var(--muted);cursor:pointer;
+        transition:color var(--effect-ms,184ms) var(--effect,ease),background .2s ease}
+  .hscard .hs-arw:hover:not([disabled]){color:var(--ink);background:rgba(25,26,24,.05)}
+  .hscard .hs-arw[disabled]{color:var(--line);cursor:default}
+  .hscard .src-q{margin:0;max-width:52ch}
+  .hscard .hs-ref{margin:16px 0 0;font-size:12px;line-height:20px;color:var(--faint);
+        letter-spacing:.01em}
+  .hscard .hs-ref [data-morph-text]{height:20px}
+  @media (max-width:760px){
+    .hscard .hs-top{gap:12px}
+    .hscard .hs-doc{font-size:13.5px}
+    .hscard .hs-ref [data-morph-text]{height:auto;min-height:20px}
   }
 </style>
 </head>
@@ -1536,7 +1704,7 @@ function onWidth(fn){
           <i class="b">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%.</i>
         </span>
         </span>
-        <div class="glass" id="wall"><p class="wall">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%. Prior renewal +9%, accepted without counter. Contract permits 30-day notice. Three similar accounts countered at +6%, +5%, +7%. Model confidence 0.81. Suggested next step: draft counter. Alternative: request usage-based tier. Related obligations: 2. Escalation path: category lead.</p></div>
+        <div class="glass under" id="wall"><p class="wall">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%. Prior renewal +9%, accepted without counter. Contract permits 30-day notice. Three similar accounts countered at +6%, +5%, +7%. Model confidence 0.81. Suggested next step: draft counter. Alternative: request usage-based tier. Related obligations: 2. Escalation path: category lead.</p></div>
       </div>
     </div>
   </section>
@@ -1632,8 +1800,8 @@ function onWidth(fn){
         <div class="apcard" id="amCard">
           <p class="cons" id="amCons" data-morph-text>Whoever you pick can open it and comment.</p>
           <div class="plist" id="amPick">
-            <button class="q" data-who="Alex Mehta" data-team="Design" type="button">Alex Mehta<small>Design</small></button>
-            <button class="q" data-who="Alex Ross" data-team="Legal" type="button">Alex Ross<small>Legal</small></button>
+            <button class="q" data-who="Alex Mehta" data-team="Design" type="button"><span>Alex Mehta</span><small>Design</small></button>
+            <button class="q" data-who="Alex Ross" data-team="Legal" type="button"><span>Alex Ross</span><small>Legal</small></button>
           </div>
           <div class="ask-chips right" id="amUndo" hidden>
             <button class="q commit" id="amRevoke" type="button">Revoke</button>
@@ -1654,7 +1822,7 @@ function onWidth(fn){
       <p class="sec sm">No response by the 22nd counts as acceptance.</p>
       <div class="askwrap" id="askWrap">
         <div class="dash"><span class="l"></span><button class="quiet" id="askBtn" type="button"
-          aria-expanded="false" aria-controls="ask"><span id="askLbl" data-morph-text>+ Ask more</span></button></div>
+          aria-expanded="false" aria-controls="ask"><span id="askLbl" data-morph-text>Ask more</span><svg class="cv askcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
         <div class="glass askcard" id="ask">
           <div id="askAsk">
             <div class="ask-field">
@@ -1744,14 +1912,20 @@ function onWidth(fn){
           amendment</span></button>
         <span class="pips" id="hsPips" aria-hidden="true"></span>
         <div class="glass hscard" id="hsCard">
-          <button class="hsq" id="hsQBtn" type="button"><span class="src-q">&ldquo;Either party
-            may terminate this Agreement, in whole or in part, for convenience on <span
-            class="hl" id="hsQ" data-morph-text>ninety (90)
-            days</span><span class="after">&rsquo; prior written notice to the other party.
+          <div class="hs-top">
+            <span class="hs-doc" id="hsDoc" data-morph-text>Amendment No. 3 &middot; Renewal &amp; Terms</span>
+            <span class="hs-nav">
+              <button class="hs-arw" id="hsPrev" type="button" aria-label="Earlier version"><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M6 1.5 1.5 6 6 10.5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="hs-of" id="hsOf">1 of 4</span>
+              <button class="hs-arw" id="hsNext" type="button" aria-label="Later version"><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M2 1.5 6.5 6 2 10.5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
+          </div>
+          <p class="src-q">&ldquo;Either party may terminate this Agreement, in whole or in part,
+            for convenience on <span class="hl" id="hsQ" data-morph-text>ninety (90)
+            days</span><span class="after"> prior written notice to the other party.
             Termination under this Section does not relieve either party of any obligation
-            accrued before the effective date of termination.&rdquo;</span></span><span
-            class="srcl" id="hsS" data-morph-text>&sect;14.1 &middot; Amendment 3, 31 March 2026</span><span
-            class="vh">Show the previous amendment</span></button>
+            accrued before the effective date of termination.&rdquo;</span></p>
+          <p class="hs-ref"><span id="hsS" data-morph-text>&sect;14.1 &middot; 31 March 2026</span></p>
         </div>
       </div>
     </div>
@@ -1892,6 +2066,87 @@ function onWidth(fn){
         </div>
         <p class="fw-def" data-morph-text>Already in the system before anyone asked.</p>
         <p class="fw-rule">Generated information can take time, be uncertain, need correction, and be wrong.</p>
+      </section>
+
+
+      <section class="fw" id="fwPractice">
+        <p class="rung-h">04 &middot; The same moment, twice</p>
+        <p class="fw-q">First what software normally does, then the same moment spending
+           only what it is worth.</p>
+
+      <div class="pair">
+        <div class="ph"><p class="pl">Usual</p>
+          <p class="v">Counter the renewal at &plus;6&percnt;</p>
+          <div class="dlg"><p>Send the counter-offer at &plus;6&percnt;?</p>
+            <div class="btns"><span class="bt">Cancel</span><span class="bt pri">Confirm</span></div></div>
+        </div>
+        <div class="pb"><p class="pl">Sensitivity</p>
+          <p class="v">Counter the renewal at &plus;6&percnt;</p>
+          <p class="ev">Vendor requested &plus;12&percnt;, submitted 4&nbsp;March. Comparable renewals in
+             segment: &plus;5.4&percnt; median, n&thinsp;=&thinsp;38. Seat utilisation 61&percnt; trailing 90 days,
+             down from 78&percnt;.</p>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="ph"><p class="pl">Usual</p>
+          <p class="v">Send summary to 42 customers</p>
+          <p class="sub">drafted from this week&rsquo;s activity</p>
+          <div class="toast"><em>Sent to 42 customers</em><b>Undo</b></div>
+        </div>
+        <div class="pb"><p class="pl">Sensitivity</p>
+          <p class="v">Send summary to 42 customers</p>
+          <p class="cons">It goes at 4:00&nbsp;PM and cannot be recalled after that.</p>
+          <div class="grp"><span><i>EMEA</i>18</span><span><i>Americas</i>15</span><span><i>APAC</i>9</span></div>
+          <p class="act">Review recipients<u></u></p>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="ph"><p class="pl">Usual</p>
+          <p class="sm-lbl">Understood as</p>
+          <div class="rows">
+            <div class="rw"><b>Risk &middot; High</b><span>confidence 0.82</span></div>
+            <div class="rw"><b>Region &middot; Europe</b><span>confidence 0.79</span></div>
+          </div>
+        </div>
+        <div class="pb"><p class="pl">Sensitivity</p>
+          <p class="sm-lbl">Understood as</p>
+          <div class="grp" style="margin-top:14px"><span><i>Risk</i>High</span><span><i>Region</i>Europe</span></div>
+          <p class="act">Change what it read<u></u></p>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="ph"><p class="pl">Usual</p>
+          <p class="v">Notice period &middot; 90 days</p>
+          <div class="rows">
+            <div class="rw hist on"><b>90 days</b><i>in force since 31 March 2026 &middot; Amendment No.&nbsp;3</i></div>
+            <div class="rw hist"><b>60 days</b><i>2 February 2024 to 31 March 2026 &middot; Amendment No.&nbsp;2</i></div>
+            <div class="rw hist"><b>45 days</b><i>31 January 2019 to 2 February 2024 &middot; Amendment No.&nbsp;1</i></div>
+            <div class="rw hist"><b>30 days</b><i>as signed, 31 January 2018 &middot; Master Services Agreement</i></div>
+          </div>
+        </div>
+        <div class="pb"><p class="pl">Sensitivity</p>
+          <p class="v">Notice period &middot; 90 days</p>
+          <p class="sub">in force since 31 March 2026</p>
+          <span class="pips2" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i></span>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="ph"><p class="pl">Usual</p>
+          <p class="v">Renaming files&hellip;</p>
+          <div class="bar"><i></i></div>
+          <p class="sub">14 of 20</p>
+        </div>
+        <div class="pb"><p class="pl">Sensitivity</p>
+          <p class="v">Paused &middot; 14 of 20 files renamed</p>
+          <p class="sub">the last six need admin access</p>
+          <p class="act">Ask an admin<u></u></p>
+        </div>
+      </div>
+
       </section>
 
       <p class="close">Choose the least expensive interaction that gives the moment enough
@@ -2067,11 +2322,11 @@ function onWidth(fn){
       const h=card.offsetHeight;
       card.style.height=from+'px'; void card.offsetHeight; card.style.height=h+'px';
       dwrap.classList.add('lit'); lay(h);
-      btn.setAttribute('aria-expanded','true'); say($('#askLbl'),'− Ask more');
+      btn.setAttribute('aria-expanded','true'); say($('#askLbl'),'Ask more');
     }
     function shut(){
       wrap.classList.remove('open'); btn.setAttribute('aria-expanded','false');
-      say($('#askLbl'),'+ Ask more');
+      say($('#askLbl'),'Ask more');
       dwrap.classList.remove('lit'); if(deck) deck.style.height='0px';
       clearTimeout(beat);
       setTimeout(()=>{ if(!wrap.classList.contains('open')){
@@ -2193,7 +2448,7 @@ function onWidth(fn){
       say(v,ASK.v); say(d,ASK.d); };
     const run=()=>{
       clearTimeout(t); shut(); wrap.classList.remove('done'); at=1; chk.disabled=true;
-      wrap.classList.add('busy'); say(v,'Reading 18 messages');
+      wrap.classList.add('busy');
       t=setTimeout(()=>{ wrap.classList.remove('busy'); say(v,ANS.v); say(d,ANS.d);
         wrap.classList.add('done'); chk.disabled=false; at=2; },2400);
     };
@@ -2411,16 +2666,16 @@ function onWidth(fn){
      it says which reading you are looking at. */
   (function(){
     const wrap=$('#hsWrap'), btn=$('#histBtn'), step=$('#hsStep'), v=$('#hsV'), d=$('#hsD'),
-          pips=$('#hsPips'), q=$('#hsQ'), sc=$('#hsS'), qb=$('#hsQBtn');
+          pips=$('#hsPips'), q=$('#hsQ'), sc=$('#hsS');
     if(!wrap) return;
     const H=[{v:'Notice period · 90 days', d:'in force since 31 March 2026',
-              q:'ninety (90) days',      s:'§14.1 · Amendment No. 3 · Renewal & Terms, 31 March 2026'},
+              q:'ninety (90) days',  doc:'Amendment No. 3 · Renewal & Terms', s:'§14.1 · 31 March 2026'},
              {v:'Notice period · 60 days', d:'2 February 2024 to 31 March 2026',
-              q:'sixty (60) days',       s:'§14.1 · Amendment No. 2 · Scope Expansion, 2 February 2024'},
+              q:'sixty (60) days',   doc:'Amendment No. 2 · Scope Expansion', s:'§14.1 · 2 February 2024'},
              {v:'Notice period · 45 days', d:'31 January 2019 to 2 February 2024',
-              q:'forty-five (45) days',  s:'§14.1 · Amendment No. 1 · Pricing, 31 January 2019'},
+              q:'forty-five (45) days', doc:'Amendment No. 1 · Pricing', s:'§14.1 · 31 January 2019'},
              {v:'Notice period · 30 days', d:'as originally signed, 31 January 2018',
-              q:'thirty (30) days',      s:'§14.1 · Master Services Agreement, as executed 31 January 2018'}];
+              q:'thirty (30) days',  doc:'Master Services Agreement', s:'§14.1 · as executed 31 January 2018'}];
     /* pips read chronologically — leftmost is the contract as signed — so stepping back
        walks the stretched one leftward, the direction the dates go */
     const dots=[];
@@ -2429,15 +2684,24 @@ function onWidth(fn){
     let i=0;
     /* the clause in the card belongs to the reading above it, so it steps with the value:
        only the number changes, in the sentence it was read from */
+    const doc=$('#hsDoc'), of=$('#hsOf'), prev=$('#hsPrev'), next=$('#hsNext');
     const paint=()=>{ say(v,H[i].v); say(d,H[i].d); say(q,H[i].q); say(sc,H[i].s);
+      if(doc) say(doc,H[i].doc);
+      if(of) of.textContent=(H.length-i)+' of '+H.length;
+      if(prev) prev.disabled = i===H.length-1;
+      if(next) next.disabled = i===0;
       dots.forEach((el,k)=>el.classList.toggle('on', k===i));
       wrap.classList.toggle('stepped', i!==0); };
     /* one rule, two states: press whatever is currently showing the reading and you go back
        one. Closed that is the date line; open it is the clause, because the clause has taken
        the date line's place. The pips stay clear of the glass either way. */
+    /* Closed, the date line steps back one at a time - the reading is the thing you press.
+       Open, the card is a document viewer: two arrows, earlier and later, each stopping at
+       the end of the run. One idea per state, no wrap-around to surprise anyone. */
     const back=()=>{ i=(i+1)%H.length; paint(); };
     step.addEventListener('click',back);
-    if(qb) qb.addEventListener('click',back);
+    if(prev) prev.addEventListener('click',e=>{ e.stopPropagation(); if(i<H.length-1){ i++; paint(); } });
+    if(next) next.addEventListener('click',e=>{ e.stopPropagation(); if(i>0){ i--; paint(); } });
     btn.addEventListener('click',()=>{ const on=wrap.classList.toggle('open');
       btn.setAttribute('aria-expanded', on ? 'true' : 'false'); });
     paint();

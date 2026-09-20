@@ -1082,7 +1082,6 @@
   /* the way out of a long read is an offer, not a button */
   .md-end { margin: 60px 0 0 !important; padding-top: 26px; border-top: 1px solid var(--line); font-size: 17.5px; }
   .md-end a { color: var(--accent); }
-  .md-end a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .md-links { display: flex; gap: 26px; flex-wrap: wrap; margin: 26px 0 0 !important; }
   .md-go { color: var(--accent); font-size: 17.5px; }
   @media (max-width: 700px) {
@@ -1176,10 +1175,10 @@
               position:fixed;top:0;left:0;right:0;width:100%}
   .ldr{touch-action:none;overscroll-behavior:none}
 
-  header .wide, #work .wrap, #contact .wrap, footer, .nav-inner {
+  header .wide, #work .wrap, #live .wrap, #contact .wrap, footer, .nav-inner {
     max-width: none; width: auto; margin: 0; padding-left: var(--axis); padding-right: max(24px, calc(50% - 550px));
   }
-  header .wide > *, #work .wrap > *, #contact .wrap > * { max-width: var(--col); }
+  header .wide > *, #work .wrap > *, #live .wrap > *, #contact .wrap > * { max-width: var(--col); }
   header .wide > .hero-copy > .hero-facts { max-width: var(--col); }
   header { padding: 150px 0 0; min-height: 0; display: block; }
   header h1 { font-size: clamp(56px, 8.2vw, 114px); line-height: 0.95; letter-spacing: -0.046em; max-width: 8ch; }
@@ -1213,13 +1212,10 @@
           padding: 8px 14px; border-radius: 999px;
           font-size: 14px; letter-spacing: .1em; text-transform: uppercase;
           font-family: var(--display); font-weight:500;
-          /* out of focus at rest. Drawn with a soft text-shadow on transparent type rather
-             than filter:blur - Safari drops a filter on an element that shares a parent
-             with a backdrop-filter, which is what made these go sharp when the pill arrived */
-          color: transparent; text-shadow: 0 0 1.1px var(--faint), 0 0 .4px var(--faint);
-          -webkit-filter: none; filter: none;
-          transition: color .26s ease, text-shadow .3s ease; }
-  .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); text-shadow: 0 0 0 transparent; outline: none; }
+          /* No blur. The pill is the whole signal: the chosen tab wears it, the others do
+             not, and the word steps from grey to ink. One thing carrying one state. */
+          color: var(--faint); transition: color .26s ease; }
+  .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); outline: none; }
   .ftab::after { content: none; }
   @media (prefers-reduced-motion: reduce) { .ftab, .ftab-pill { transition: none; } }
   .fval { position: relative; margin-top: 26px; height: 28px;
@@ -1278,7 +1274,7 @@
     :root { --axis: 24px; }
     .ix-b { width: 100%; margin-left: 0; padding: 8px 0 10px; grid-template-columns: 20px 1fr; gap: 0 12px; }
     .ix + .ix { margin-top: 52px; }
-    header .wide, #work .wrap, #contact .wrap, footer, .nav-inner { padding-right: 24px; }
+    header .wide, #work .wrap, #live .wrap, #contact .wrap, footer, .nav-inner { padding-right: 24px; }
     header { padding-top: 108px; } #work, #contact { padding-top: 96px; } footer { margin-top: 96px; }
   }
 
@@ -1526,9 +1522,18 @@
   /* ── Every card opens; one goes further ────────────────────────────────
      Each row opens its card. Only Auto Extraction has shipped and can be shown
      in full, so its card is the only one that goes on to a full case study. */
-  .md-end a { color: var(--muted); }
+  /* the two ways out of a card read the same way as the way into Sensitivity:
+     the mark travels, nothing is underlined */
+  .md-end a { color: var(--muted); text-decoration: none; transition: color .26s ease; }
   .md-end a.md-full { color: var(--ink); font-weight: 500; }
-  .md-end a:hover { color: var(--ink); text-decoration: none; }
+  .md-end a:hover, .md-end a:focus-visible { color: var(--ink); text-decoration: none; }
+  .md-end a .mk { display: inline-block; width: 14px; height: 14px; vertical-align: -2px;
+     background-color: currentColor; -webkit-mask: var(--arw) no-repeat center/contain;
+     mask: var(--arw) no-repeat center/contain;
+     transition: transform .3s cubic-bezier(.22,.61,.36,1); }
+  .md-end a.md-back .mk { transform: scaleX(-1); }
+  .md-end a.md-full:hover .mk, .md-end a.md-full:focus-visible .mk { transform: translateX(4px); }
+  .md-end a.md-back:hover .mk, .md-end a.md-back:focus-visible .mk { transform: scaleX(-1) translateX(4px); }
   .md-sep { color: var(--line); margin: 0 14px; }
 
   /* ── The three marks, sized to sit together ───────────────────────────
@@ -1591,6 +1596,88 @@
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }
   }
+
+  /* ── One idea, live ────────────────────────────────────────────────────
+     A specimen from the Sensitivity page, running on the home page: it changes its own
+     value once it is in view, and shows the way back. Same glass, same rule. */
+  #live { padding: 96px 0 0; }
+  #live .obj { position: relative; max-width: 46ch; }
+  #live .hero { font-family: var(--display); font-size: 24px; font-weight: 500; letter-spacing: -.02em;
+     line-height: 32px; color: var(--ink); margin: 0; }
+  #live .hero[data-morph-text] { display: block; height: 32px; }
+  #live .srcl { display: block; font-size: 14px; line-height: 24px; color: var(--muted); margin-top: 6px; }
+  #live .srcl .ml-g, #live .srcl .ml-rest { color: var(--muted); }
+  #live .updwrap { position: relative; display: block; }
+  #live .updd { display: inline-block; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+  #live .updd:hover .srcl .ml-g, #live .updd:hover .srcl .ml-rest, #live .updd:focus-visible .srcl { color: var(--ink); outline: none; }
+  /* The dots belong to the value they sit under, so they are closer to it than to
+     anything else: 14px up, 48px down. Before, 31 and 40 read as one loose stack. */
+  #live .pips { display: flex; align-items: center; gap: 6px; margin-top: 14px; height: 6px;
+     opacity: 0; transition: opacity .2s ease; }
+  #live .updwrap:hover .pips, #live .updwrap:focus-within .pips, #live .updwrap.stepped .pips { opacity: 1; }
+  #live .pips i { width: 5px; height: 5px; border-radius: 3px; background: var(--line);
+     transition: width .35s cubic-bezier(.22,1.2,.36,1), background .18s ease; }
+  #live .pips i.on { width: 17px; background: var(--faint); }
+  #live .live-note { margin: 48px 0 0; max-width: 46ch; font-size: 17.5px; line-height: 28px; color: var(--muted); }
+  #live .live-note a { color: var(--ink); font-weight: 500; }
+  /* glass on reach, same as every specimen */
+  #live .obj::before { content: ""; position: absolute; z-index: 0; pointer-events: none;
+     left: -26px; right: -26px; top: -22px; bottom: -22px; border-radius: 20px;
+     background: rgba(247,247,245,.48);
+     -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
+     box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 24px 48px -20px rgba(25,26,24,.24);
+     opacity: 0; transition: opacity .32s ease .06s; }
+  #live .obj > * { position: relative; z-index: 1; }
+  #live .obj > .vh { position: absolute; }
+  #live .obj.reach::before { opacity: 1; }
+  @media (hover:hover) { #live .obj:hover::before { opacity: 1; } }
+  #work { padding-top: 120px; }
+
+  /* ── Figures inside a case study ───────────────────────────────────────
+     One screen at the end of the section it illustrates, full width of the column,
+     with a one-line caption in the label voice. The reader sees the thing the
+     paragraph just described, then moves on. */
+  .md-fig { margin: 36px 0 52px; padding: 0; }
+  .md-fig img { display: block; width: 100%; height: auto; border-radius: 10px;
+     border: 1px solid var(--line); background: #fff; }
+  .md-fig figcaption { margin-top: 12px; font-size: 14px; line-height: 24px; color: var(--faint); max-width: 65ch; }
+  .md-fig.tri .tri-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .md-fig.tri .tri-row img { aspect-ratio: 1 / 1.05; object-fit: cover; object-position: top; }
+  @media (max-width: 700px) {
+    .md-fig { margin: 28px 0 40px; }
+    .md-fig.tri .tri-row { grid-template-columns: 1fr 1fr; }
+    .md-fig.tri .tri-row img:last-child { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+  }
+
+  /* A diagram or a cut-out is not a screenshot: no frame, no white card. It is drawn
+     straight onto the paper, its white multiplied away, so it reads as part of the page. */
+  .md-fig.flat img { border: 0; border-radius: 0; background: transparent; mix-blend-mode: multiply; }
+  .md-fig.flat.tri .tri-row img { border-radius: 8px; }
+
+  /* The way into Sensitivity: the arrow alone. It is the one mark on this site that means
+     "leaves this page", and it is the only one on the home page, so nothing else has to say
+     it. A rule under the words at rest would say it a second time - on a page that argues
+     for spending the least attention necessary. On reach the arrow travels forward. */
+  #live .live-go { margin: 18px 0 0; font-size: 17.5px; line-height: 28px; }
+  #live .live-go a { display: inline-flex; align-items: center; gap: 8px;
+     color: var(--ink); font-weight: 500; text-decoration: none; outline: none; }
+  #live .live-go .go { display: inline-block; width: 14px; height: 14px;
+     background-color: currentColor; -webkit-mask: var(--arw) no-repeat center/contain; mask: var(--arw) no-repeat center/contain;
+     transition: transform .3s cubic-bezier(.22,.61,.36,1); }
+  #live .live-go a:hover .go, #live .live-go a:focus-visible .go { transform: translateX(4px); }
+
+  /* The retention chart, redrawn in the page's own type instead of a cropped screenshot.
+     Same numbers, read off the Heap export; one bar per month, the height is the share. */
+  .md-fig.ret .ret-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .md-fig.ret .ret-h { font-size: 14px; line-height: 24px; color: var(--ink); font-weight: 500; margin: 0 0 14px; }
+  .md-fig.ret .ret-h span { display: block; color: var(--faint); font-weight: 400; }
+  .md-fig.ret .ret-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 8px; align-items: end; }
+  .md-fig.ret .ret-row li { display: flex; flex-direction: column; align-items: stretch; }
+  .md-fig.ret .ret-row i { display: block; height: calc(var(--v) * 120px); min-height: 2px; background: var(--ink); border-radius: 3px 3px 0 0; opacity: .82; }
+  .md-fig.ret .ret-row li:first-child i { opacity: 1; }
+  .md-fig.ret .ret-row b { font-weight: 500; font-size: 14px; line-height: 24px; color: var(--ink); margin-top: 8px; }
+  .md-fig.ret .ret-row small { font-size: 12px; line-height: 16px; color: var(--faint); }
+  @media (max-width: 700px) { .md-fig.ret .ret-grid { grid-template-columns: 1fr; gap: 28px 0; } }
 </style>
 <body>
 <script>
@@ -1641,6 +1728,24 @@ function onWidth(fn){
     </div>
   </div>
 </header>
+
+<section id="live" aria-label="One idea, live">
+  <div class="wrap">
+    <p class="ix-lbl r">From Sensitivity</p>
+    <div class="obj r" id="upd">
+      <div class="updwrap" id="updWrap">
+        <p class="hero" id="capV" data-morph-text>Liability cap &middot; $2,000,000</p>
+        <button class="updd" id="capStep" type="button"><span class="srcl" id="capS"
+          data-morph-text>read from &sect;11.1</span><span class="vh">Show the value before the
+          amendment</span></button>
+        <span class="pips" id="capPips" aria-hidden="true"></span>
+      </div>
+    </div>
+    <p class="live-note r">A value that changed while you were reading. The dots show that
+      another reading exists in that slot; the line under it takes you back.</p>
+    <p class="live-go r"><a href="sensitivity.html">All eleven patterns, in Sensitivity <span class="go" aria-hidden="true"></span></a></p>
+  </div>
+</section>
 
 <section id="work" aria-label="Selected work">
   <div class="wrap">
@@ -1698,19 +1803,6 @@ function onWidth(fn){
           </span>
         </button>
       </li>
-      <li class="ix r">
-        <a class="ix-b" href="sensitivity.html" data-morph-host>
-          <span class="ix-n" aria-hidden="true"><i class="num">05</i></span>
-          <span class="ix-t">
-            <span class="ix-top"><b>Sensitivity</b></span>
-            <span class="ix-sw mline" data-morph>
-              <i class="a">Interaction patterns&nbsp;&middot; 2026</i>
-              <i class="b">Any answer is cheap now. Attention is not.</i>
-            </span>
-            <span class="vh">Any answer is cheap now. Attention is not.</span>
-          </span>
-        </a>
-      </li>
     </ol>
   </div>
 </section>
@@ -1730,6 +1822,7 @@ function onWidth(fn){
         <h3>It was never a search problem</h3>
         <p>I tried what search offers: filters, OCR, a better index. None of it worked.</p>
         <p>Users weren&rsquo;t searching. They were reconstructing meaning. A search result hands you a document. What they needed was a sentence: this amendment, from this date, governs this SOW, and supersedes the one before it.</p>
+        <figure class="md-fig flat"><img src="before-folder-tree.webp" alt="" loading="lazy" decoding="async"><figcaption>Before: a folder tree says where a file sits, not what it governs.</figcaption></figure>
         <h3>The argument I had to win</h3>
         <p>The agreed direction was to improve the folder hierarchy: faster, safer, shippable in weeks, and defensible because the whole category works that way. It was already in the product, and customers were asking for it by name.</p>
         <p>I argued the hierarchy was the problem. An amendment can govern several agreements at once; a record can inherit from more than one instrument. Contract relationships are many to many. A tree cannot express them.</p>
@@ -1740,12 +1833,13 @@ function onWidth(fn){
         <h3>What I designed</h3>
         <p>Navigation and meaning became two different things. A record carries explicit relationships (governed by, amended by, applies to) and the interface reads them back in words: which agreement governs this one, which amendment currently applies, what it changed, and what it superseded.</p>
         <p>Open a statement of work and the panel answers the question the team was asking, rather than showing you the shelf the file was on.</p>
+        <figure class="md-fig"><img src="ui-authority-view.webp" alt="" loading="lazy" decoding="async"><figcaption>The agreement read back in relationships: what it governs, what amends it, what applies.</figcaption></figure>
         <h3>And it had to survive real volume</h3>
         <p>A relationship view is easy to draw for a family of six. Real families aren&rsquo;t six. I built it as a working prototype and ran it at 340 statements of work.</p>
         <p>The radial layout shrank to 12% to fit and left zero legible labels. I replaced it with branching columns grouped by status rather than defend it, and settled the debate with the measurement instead of an opinion.</p>
         <h3>What transfers</h3>
         <p>Any system where AI reasons over stored records. If the storage model is wrong, the AI is confidently wrong. Fix the model before the interface.</p>
-        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+        <p class="md-end"><a href="#work" class="md-back"><span class="mk" aria-hidden="true"></span> Back to work</a></p>
       </div>
     </article>
     <article class="md" data-i="1" hidden>
@@ -1765,14 +1859,17 @@ function onWidth(fn){
         <p>Three documents the agent believes are with the same company are one row that opens to its members. A wrong name gets fixed once, not three times.</p>
         <p>It sounds like a grouping decision. It is a decision about whose time the interface spends: the reviewer&rsquo;s job becomes confirming a judgement, not repeating a correction.</p>
         <p>The screen splits the work into what is mapped, what is missing a match, and what is orphaned, so the reviewer always knows how much is left and what kind of decision each pile needs.</p>
+        <figure class="md-fig"><img src="onb-mapped-detail.webp" alt="" loading="lazy" decoding="async"><figcaption>Documents grouped by counterparty; the system counterparty is chosen once for the whole group.</figcaption></figure>
         <h3>It explains itself in words, not a score</h3>
         <p>Open the reasoning for a match and it says why two names were treated as one company, and quotes the passage it read. No percentage.</p>
         <p>A person can check a sentence. They cannot check 0.87.</p>
+        <figure class="md-fig flat"><img src="onb-reasoning-detail.webp" alt="" loading="lazy" decoding="async"><figcaption>The reason, and the passage it was read from.</figcaption></figure>
         <h3>Bulk, without losing the thread</h3>
         <p>Confirming a group applies to every document in it, and the system offers the system records it thinks are right rather than making the reviewer search. Where nothing fits, they create the record from the same place instead of leaving the flow.</p>
+        <figure class="md-fig"><img src="onb-bulk.webp" alt="" loading="lazy" decoding="async"><figcaption>Bulk create, stated in one sentence before it runs.</figcaption></figure>
         <h3>What transfers</h3>
         <p>Any bulk AI process a person is accountable for. Put the human checkpoints inside the run, group the work by the unit the person actually decides about, and make one correction fix everything downstream of it.</p>
-        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+        <p class="md-end"><a href="#work" class="md-back"><span class="mk" aria-hidden="true"></span> Back to work</a></p>
       </div>
     </article>
     <article class="md" data-i="2" hidden>
@@ -1794,11 +1891,13 @@ function onWidth(fn){
         <h3>What it does with a question</h3>
         <p>You ask in the panel beside the list. The agent shows the steps it took (reading the intent, setting the criteria, finding the contracts), then reads back what it understood and answers in the same place.</p>
         <p>Then it stops and asks what to do next: tag these for the executive dashboard, or send the summary to the accounts team. It has the answer and it still waits. Being sure and being allowed are two different things.</p>
+        <figure class="md-fig"><img src="phx-criteria.webp" alt="" loading="lazy" decoding="async"><figcaption>The criteria it applied, shown before the result.</figcaption></figure>
         <h3>Why the readback matters</h3>
         <p>A wrong answer that arrives with its reasoning visible is recoverable. A wrong answer that arrives as a finished action is not. The panel is designed so the expensive step always happens after a person has seen the interpretation.</p>
+        <figure class="md-fig"><img src="phx-done.webp" alt="" loading="lazy" decoding="async"><figcaption>The readback: what it understood, what it did, what it asks you to check.</figcaption></figure>
         <h3>What I own here</h3>
         <p>The framework and the argument for it, the sessions with stakeholders, and the listing prototypes in HTML. Scope is platform-wide: entry points, personalisation, how much autonomy an agent gets, and how we would know it worked.</p>
-        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a></p>
+        <p class="md-end"><a href="#work" class="md-back"><span class="mk" aria-hidden="true"></span> Back to work</a></p>
       </div>
     </article>
     <article class="md" data-i="3" hidden>
@@ -1814,18 +1913,33 @@ function onWidth(fn){
         <h3>Three versions, each one earning the next</h3>
         <p>Highlights in the text: the values were findable, but review became a hunt through the document. Hover cards: closer, but the answer vanished the moment you looked away, so nothing accumulated.</p>
         <p>Assist bars in the margin, permanently visible: 128 scattered values become one pass down the document. Each version fixed the last one&rsquo;s complaint and exposed a new one. That is the honest shape of the work.</p>
+        <figure class="md-fig flat"><img src="ae-iter-3-ui.webp" alt="" loading="lazy" decoding="async"><figcaption>The third version: assist bars in the margin, one pass down the document.</figcaption></figure>
         <h3>The decision I&rsquo;d defend hardest</h3>
         <p>We removed the confidence score. A lawyer cannot act on 0.82.</p>
         <p>The card shows the model&rsquo;s reasoning and the passage the value came from instead, so verification becomes reading, which is what lawyers are trained to do, and what they are paid for.</p>
+        <figure class="md-fig flat"><img src="ae-card-anatomy.webp" alt="" loading="lazy" decoding="async"><figcaption>The review card: field, value, the model&rsquo;s reasoning, the source, one action.</figcaption></figure>
         <h3>Accept, and the document comes to you</h3>
         <p>Accepting a value marks it and opens the next one, and the document scrolls to the passage that field was read from. The reviewer never goes looking; the work arrives in order and the position in the document is always earned by the field in hand.</p>
         <p>Edit and reject sit beside accept, at the same weight, because disagreeing has to be as cheap as agreeing or people stop reading and start clicking.</p>
         <h3>What happened</h3>
         <p>Month-four retention went from 5% to 23%. The redesign didn&rsquo;t win more users. It stopped losing the ones who arrived, which is the outcome that matters for a tool people are assigned rather than choose.</p>
         <p>Two eight-month cohorts in Heap, captured June 2025. The cohort mix and the extraction model both changed over the period, so I claim the shape of the curve, not the whole number.</p>
+        <figure class="md-fig ret">
+          <div class="ret-grid">
+            <div class="ret-col">
+              <p class="ret-h">Before the redesign <span>Sep 2023 to Jun 2024 &middot; 860 users</span></p>
+              <ol class="ret-row"><li><i style="--v:.798"></i><b>80%</b><small>month 0</small></li><li><i style="--v:.305"></i><b>31%</b><small>1</small></li><li><i style="--v:.227"></i><b>23%</b><small>2</small></li><li><i style="--v:.148"></i><b>15%</b><small>3</small></li><li><i style="--v:.05"></i><b>5%</b><small>4</small></li></ol>
+            </div>
+            <div class="ret-col">
+              <p class="ret-h">After <span>Sep 2024 to Jun 2025 &middot; 2,380 users</span></p>
+              <ol class="ret-row"><li><i style="--v:.748"></i><b>75%</b><small>month 0</small></li><li><i style="--v:.297"></i><b>30%</b><small>1</small></li><li><i style="--v:.23"></i><b>23%</b><small>2</small></li><li><i style="--v:.223"></i><b>22%</b><small>3</small></li><li><i style="--v:.231"></i><b>23%</b><small>4</small></li></ol>
+            </div>
+          </div>
+          <figcaption>Share of users still coming back, month by month. Heap, captured June 2025.</figcaption>
+        </figure>
         <h3>What transfers</h3>
         <p>Wherever a model produces many answers a person is accountable for: show one at a time, put the evidence next to the claim, and spend the interface on verification rather than on presenting confidence.</p>
-        <p class="md-end"><a href="#work" class="md-back">&larr; Back to work</a><span class="md-sep" aria-hidden="true">&middot;</span><a href="auto-extraction.html" class="md-full">Read the full case study &rarr;</a></p>
+        <p class="md-end"><a href="#work" class="md-back"><span class="mk" aria-hidden="true"></span> Back to work</a><span class="md-sep" aria-hidden="true">&middot;</span><a href="auto-extraction.html" class="md-full">Read the full case study <span class="mk" aria-hidden="true"></span></a></p>
       </div>
     </article>
   </div>
@@ -2167,6 +2281,35 @@ function onWidth(fn){
 })();
 </script>
 <script src="morphline.js"></script>
+<script>
+/* One idea, live: the Liability cap specimen from Sensitivity, verbatim. Arriving is the
+   trigger; scroll away and it resets, so coming back shows it again. */
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var say=function(el,t){ if(window.Morphline && el._mlCur!==undefined) window.Morphline.to(el,t); else el.textContent=t; };
+  var box=$('#upd'), wrap=$('#updWrap'), v=$('#capV'), sc=$('#capS'), step=$('#capStep'), pips=$('#capPips');
+  if(!box) return;
+  var S=[{v:'Liability cap · $2,000,000', s:'read from §11.1'},
+         {v:'Liability cap · $5,000,000', s:'changed by Amendment 3 · executed today'}];
+  var dots=[]; S.forEach(function(){ var el=document.createElement('i'); pips.appendChild(el); dots.push(el); });
+  var i=0, armed=true, t;
+  var paint=function(){ say(v,S[i].v); say(sc,S[i].s); dots.forEach(function(el,k){ el.classList.toggle('on',k===i); }); };
+  step.addEventListener('click',function(){ clearTimeout(t); armed=false; wrap.classList.add('stepped'); i=(i+1)%S.length; paint(); });
+  paint();
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ es.forEach(function(e){
+      if(e.intersectionRatio>=.95 && armed){ armed=false; clearTimeout(t);
+        t=setTimeout(function(){ i=1; paint(); wrap.classList.add('stepped'); },1800); }
+      else if(e.intersectionRatio<.6 && !armed){ clearTimeout(t); i=0; paint(); wrap.classList.remove('stepped'); armed=true; }
+    }); },{threshold:[0,.35,.6,.8,.95,1]}).observe(box);
+  }
+  /* glass holds four seconds after a tap */
+  var tm; document.addEventListener('pointerdown',function(e){
+    if(box.contains(e.target)){ box.classList.add('reach'); clearTimeout(tm); tm=setTimeout(function(){ box.classList.remove('reach'); },4000); }
+    else { box.classList.remove('reach'); clearTimeout(tm); }
+  },true);
+})();
+</script>
 
 <script>
 /* The loader does not put the sentence somewhere of its own. It measures where that
