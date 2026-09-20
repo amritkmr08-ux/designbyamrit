@@ -1215,7 +1215,7 @@
   .ab-rows .rw-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
         transform: translate(-5px, 5px);
-        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1); }
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1); }
   .ab-rows a.rw:hover .rw-go.set,
   .ab-rows a.rw:focus-visible .rw-go.set { opacity: 1; transform: none; }
   /* ── These rows on a phone ─────────────────────────────────────────────
@@ -1349,6 +1349,33 @@
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }
   }
+  /* ── Three levels of text, and only three ─────────────────────────────
+       1. Ink at body size or heading size: what you read. Headings, statements, body.
+       2. Grey at body size (17.5/28): a sentence that supports what is above it - a
+          description under a title, the line that introduces a section.
+       3. Faint at label size (14/24): not a sentence. A year, a section label, a
+          caption, a line of metadata. It does not react to the pointer.
+     A sentence is never set at label size; a label is never set at body size. */
+  .ab-text { margin-top: 40px; }
+  .ab-text p { color: var(--ink); line-height: 28px; }
+  .ab-h { margin: 96px 0 14px; }
+  .ab-scope.route-lede { font-size: 17.5px; line-height: 28px; color: var(--muted); max-width: 46ch; margin: 0 0 44px; }
+  .ab-years .y, .ab-years li:hover .y, .ab-years li:focus-within .y { color: var(--faint); transition: none; }
+  .ab-years .g { line-height: 28px; color: var(--muted); }
+  .ab-years .g b { color: var(--ink); }
+  .ab-edu { font-size: 14px; line-height: 24px; color: var(--faint); }
+  /* a label that wraps to two lines must not push the body down: it spans both rows */
+  .ab-years.route .y { grid-row: 1 / span 2; }
+  .ab-years.route .r0 { grid-column: 2; grid-row: 1; }
+  .ab-years.route .g { grid-row: 2; }
+  @media (max-width:560px) { .ab-years.route .y { grid-row: auto; } .ab-years.route .r0, .ab-years.route .g { grid-column: 1; grid-row: auto; } }
+  @media (max-width:900px) { .ab-text { margin-top: 32px; } .ab-h { margin-top: 80px; } }
+  /* Experience: one rhythm. The rows with a line under them and the rows without
+     were spaced differently (26px against 4px), so the list read as two lists. One gap
+     for every row; a description, where there is one, sits inside its row. */
+  .ab-rows li + li, .ab-rows li.thin + li.thin { margin-top: 28px; }
+  /* the education line is one line of metadata, not a two-line paragraph */
+  .ab-edu { max-width: none; margin-top: 44px; }
 </style>
 <body>
 <script>
@@ -1408,7 +1435,7 @@ function onWidth(fn){
         <div class="ab-text">
           <p class="r">Legal teams already face difficult decisions; the interface shouldn't
           make them harder.</p>
-          <p class="r">The work is calm. The route here wasn&rsquo;t &mdash; graphic design, fashion,
+          <p class="r">The work is calm. The route here wasn&rsquo;t: graphic design, fashion,
           a denim label I co-founded, then product. I prefer proving an idea in a browser, not a deck.</p>
         </div>
 
@@ -1418,7 +1445,7 @@ function onWidth(fn){
         <ul class="ab-years route">
           <li class="r"><span class="y">2013&ndash;2017 &middot; NIFT Chennai, Lee Cooper</span><span class="r0">Visual foundations</span>
             <p class="g">Composition is not decoration. It decides what gets seen first, what waits
-            and what disappears &mdash; and a beautiful direction still has to survive production and
+            and what disappears. A beautiful direction still has to survive production and
             the hands that make it. <b>Left behind:</b> hierarchy, typography, rhythm, respect for
             constraints, and the difference between a concept and a thing that ships.</p></li>
           <li class="r"><span class="y">2019&ndash;2021 &middot; Airtel</span><span class="r0">Consumer scale</span>
@@ -1495,7 +1522,7 @@ function onWidth(fn){
         </figure>
         <p class="ab-note r">The rest I learn at home. My daughter rarely explains where an experience
         failed. She pauses, tries something else, or leaves. It left me a sharper eye for where
-        confidence breaks &mdash; and respect for what people do instead of what they say.</p>
+        confidence breaks, and respect for what people do instead of what they say.</p>
       </article>
     </div>
   </div>

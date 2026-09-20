@@ -476,8 +476,15 @@ window.nudgeMark = function (host, go) {
   var shown = false, t1 = null, t2 = null;
   function show() {
     if (shown) return; shown = true;
-    if (host._nmOff) host._nmOff();
     if (put()) go.classList.add('set');
+  }
+  /* The probe measures one box per letter; real text is kerned, so the settled line can
+     end a wrap away from where the probe said. When the line settles, the mark is placed
+     again from the settled text, whether or not it is already showing. */
+  function onRest() { show(); put(); off(); }
+  function off() {
+    host.removeEventListener('ml:start', arm); host.removeEventListener('ml:rest', onRest);
+    clearTimeout(t1); clearTimeout(t2); host._nmOff = null;
   }
   if (!host.hasAttribute('data-ml-busy')) { show(); return; }
   /* the end is known already; place it now so it never appears anywhere else */
@@ -488,10 +495,7 @@ window.nudgeMark = function (host, go) {
   };
   if (host._mlLands) arm();
   host.addEventListener('ml:start', arm);
-  host.addEventListener('ml:rest', show);
-  t2 = setTimeout(show, 2600);   /* never left armed forever */
-  host._nmOff = function () {
-    host.removeEventListener('ml:start', arm); host.removeEventListener('ml:rest', show);
-    clearTimeout(t1); clearTimeout(t2); host._nmOff = null;
-  };
+  host.addEventListener('ml:rest', onRest);
+  t2 = setTimeout(function () { show(); off(); }, 2600);   /* never left armed forever */
+  host._nmOff = off;
 };

@@ -996,7 +996,7 @@
   .ix-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
 
-        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1);
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1);
         transform: translate(-5px, 5px); }
   .ix-b.lit .ix-go.set,
   .ix-b:hover .ix-go.set,
@@ -1222,7 +1222,7 @@
   .ftab:hover, .ftab.on, .ftab:focus-visible { color: var(--ink); text-shadow: 0 0 0 transparent; outline: none; }
   .ftab::after { content: none; }
   @media (prefers-reduced-motion: reduce) { .ftab, .ftab-pill { transition: none; } }
-  .fval { position: relative; margin-top: 26px; height: 56px;
+  .fval { position: relative; margin-top: 26px; height: 28px;
           font-size: 17.5px; line-height: 28px; max-width: 46ch; }
   .fval .ml-layer .ml-g { color: var(--muted); }
   @media (max-width: 700px) { .fval { height: 84px; } }
@@ -1246,7 +1246,7 @@
   #contact h2 .q .q-go { position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
         transform: translate(-5px, 5px);
-        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1); }
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1); }
   #contact h2 .q:hover .q-go.set,
   #contact h2 .q.is-after .q-go.set,
   #contact h2 .q:focus-visible .q-go.set { opacity: 1; transform: none; }
@@ -1287,16 +1287,18 @@
      the gaps a reader actually feels: into the page, out of the hero, between
      one piece of work and the next. Nothing is resized or moved. */
   header{padding:72px 0 0}
-  #work{padding-top:230px}
-  #contact{padding-top:230px}
-  .ix-lbl{margin:0 0 64px}
-  .ix + .ix{margin-top:110px}
+  /* 230 read as a hole once the facts stopped being a three-column block. 96 is the same
+     step the About and Sensitivity pages use between sections. */
+  #work{padding-top:96px}
+  #contact{padding-top:160px}
+  .ix-lbl{margin:0 0 44px}
+  .ix + .ix{margin-top:64px}
   @media (max-width:900px){
     header{padding-top:128px}
-    #work{padding-top:132px}
+    #work{padding-top:88px}
     #contact{padding-top:132px}
-    .ix-lbl{margin:0 0 44px}
-    .ix + .ix{margin-top:68px}
+    .ix-lbl{margin:0 0 40px}
+    .ix + .ix{margin-top:52px}
   }
 
   /* the nav reads the same way: soft until you reach for it, sharp where you are */
@@ -1717,7 +1719,7 @@ function onWidth(fn){
   <button class="ov-close" id="ovClose" type="button" aria-label="Close">Close</button>
   <div class="ov-in" id="ovin" tabindex="-1">
     <article class="md" data-i="0" hidden>
-      <div class="md-shot" data-src="family-graph.html"><picture><img src="cr-graph.webp" width="1344" height="787" loading="lazy" decoding="async" alt="Contract Relationships &mdash; product screen." /></picture><iframe title="" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="md-shot" data-src="family-graph.html"><picture><img src="cr-graph.webp" width="1344" height="787" loading="lazy" decoding="async" alt="Contract Relationships, product screen." /></picture><iframe title="" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
       <div class="md-body">
         <h2>Contract Relationships</h2>
         <p class="md-k">Contract systems&nbsp;&middot; Sirion&nbsp;&middot; 2025&ndash;26</p>
@@ -1736,7 +1738,7 @@ function onWidth(fn){
         <p>A wrong model doesn&rsquo;t just inconvenience a user. It makes the AI answer with the superseded clause in the same confident tone it uses for the right one, because nothing in the structure tells it which one governs.</p>
         <p>What a system can represent sets the ceiling on what any model built over it can understand. That is now the argument I make before anyone opens a design tool.</p>
         <h3>What I designed</h3>
-        <p>Navigation and meaning became two different things. A record carries explicit relationships &mdash; governed by, amended by, applies to &mdash; and the interface reads them back in words: which agreement governs this one, which amendment currently applies, what it changed, and what it superseded.</p>
+        <p>Navigation and meaning became two different things. A record carries explicit relationships (governed by, amended by, applies to) and the interface reads them back in words: which agreement governs this one, which amendment currently applies, what it changed, and what it superseded.</p>
         <p>Open a statement of work and the panel answers the question the team was asking, rather than showing you the shelf the file was on.</p>
         <h3>And it had to survive real volume</h3>
         <p>A relationship view is easy to draw for a family of six. Real families aren&rsquo;t six. I built it as a working prototype and ran it at 340 statements of work.</p>
@@ -1747,7 +1749,7 @@ function onWidth(fn){
       </div>
     </article>
     <article class="md" data-i="1" hidden>
-      <div class="md-shot still"><picture><img src="onb-missing.webp" width="2628" height="1538" loading="lazy" decoding="async" alt="Contract Onboarding &mdash; product screen." /></picture></div>
+      <div class="md-shot still"><picture><img src="onb-missing.webp" width="2628" height="1538" loading="lazy" decoding="async" alt="Contract Onboarding, product screen." /></picture></div>
       <div class="md-body">
         <h2>Contract Onboarding</h2>
         <p class="md-k">AI onboarding review&nbsp;&middot; Sirion&nbsp;&middot; Shipped</p>
@@ -1774,7 +1776,7 @@ function onWidth(fn){
       </div>
     </article>
     <article class="md" data-i="2" hidden>
-      <div class="md-shot still"><picture><img src="phx-question.webp" width="2824" height="1654" loading="lazy" decoding="async" alt="Phoenix Listing &mdash; product screen." /></picture></div>
+      <div class="md-shot still"><picture><img src="phx-question.webp" width="2824" height="1654" loading="lazy" decoding="async" alt="Phoenix Listing, product screen." /></picture></div>
       <div class="md-body">
         <h2>Phoenix Listing</h2>
         <p class="md-k">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</p>
@@ -1790,7 +1792,7 @@ function onWidth(fn){
         <p>They already know what they want and just need it done. They don&rsquo;t know yet and need the system to bring the problem to them. They are looking for something specific. They are checking whether anything is wrong. Each one calls for a different amount of agent autonomy, and getting that wrong is what makes AI features feel either useless or alarming.</p>
         <p>I wrote that as a rule set, argued it to executive stakeholders, and it was adopted as direction for the platform. This listing is the first surface built on it.</p>
         <h3>What it does with a question</h3>
-        <p>You ask in the panel beside the list. The agent shows the steps it took &mdash; reading the intent, setting the criteria, finding the contracts &mdash; then reads back what it understood and answers in the same place.</p>
+        <p>You ask in the panel beside the list. The agent shows the steps it took (reading the intent, setting the criteria, finding the contracts), then reads back what it understood and answers in the same place.</p>
         <p>Then it stops and asks what to do next: tag these for the executive dashboard, or send the summary to the accounts team. It has the answer and it still waits. Being sure and being allowed are two different things.</p>
         <h3>Why the readback matters</h3>
         <p>A wrong answer that arrives with its reasoning visible is recoverable. A wrong answer that arrives as a finished action is not. The panel is designed so the expensive step always happens after a person has seen the interpretation.</p>
@@ -1800,7 +1802,7 @@ function onWidth(fn){
       </div>
     </article>
     <article class="md" data-i="3" hidden>
-      <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="1800" height="1132" loading="lazy" decoding="async" alt="Auto Extraction in Sirion &mdash; the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
+      <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="1800" height="1132" loading="lazy" decoding="async" alt="Auto Extraction in Sirion: the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
       <div class="md-body">
         <h2>Auto Extraction</h2>
         <p class="md-k">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</p>
@@ -1814,7 +1816,7 @@ function onWidth(fn){
         <p>Assist bars in the margin, permanently visible: 128 scattered values become one pass down the document. Each version fixed the last one&rsquo;s complaint and exposed a new one. That is the honest shape of the work.</p>
         <h3>The decision I&rsquo;d defend hardest</h3>
         <p>We removed the confidence score. A lawyer cannot act on 0.82.</p>
-        <p>The card shows the model&rsquo;s reasoning and the passage the value came from instead, so verification becomes reading &mdash; which is what lawyers are trained to do, and what they are paid for.</p>
+        <p>The card shows the model&rsquo;s reasoning and the passage the value came from instead, so verification becomes reading, which is what lawyers are trained to do, and what they are paid for.</p>
         <h3>Accept, and the document comes to you</h3>
         <p>Accepting a value marks it and opens the next one, and the document scrolls to the passage that field was read from. The reviewer never goes looking; the work arrives in order and the position in the document is always earned by the field in hand.</p>
         <p>Edit and reject sit beside accept, at the same weight, because disagreeing has to be as cheap as agreeing or people stop reading and start clicking.</p>
