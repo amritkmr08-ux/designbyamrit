@@ -935,6 +935,14 @@
   #contact h2 em { box-shadow: inset 0 -0.14em 0 var(--mark); }
   .qmark { color: var(--mark); }
 </style>
+<script>
+/* before the first paint, not after it */
+(function(){var d=document.documentElement;
+  try{ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  d.classList.add('ldr-boot');
+  setTimeout(function(){ d.classList.remove('ldr-boot'); }, 6000);
+})();
+</script>
 </head>
 <style>
   /* the index: text only */
@@ -1137,6 +1145,19 @@
   .ldr.run{display:block}
   body.ldr-on .r{opacity:1;transform:none;transition:none}
   .ldr.gone{pointer-events:none}
+
+  /* ── The curtain has to be up before the first paint ──────────────────────
+     The loader script runs at the end of the body, so for one frame the browser
+     had already painted the whole page - you saw the finished thing, then it was
+     taken away and replaced by a loading sentence. Worse than no loader.
+     So a three-line script in the head raises the curtain before anything is
+     painted, and the loader script below drops this class the moment it has
+     placed its sentence and taken over. If that script never runs, the timeout
+     in the head drops it anyway: a curtain nobody can lift is the one bug a
+     loader must not have. */
+  html.ldr-boot{overflow:hidden}
+  html.ldr-boot .ldr{display:block}
+  html.ldr-boot .ldr-t{visibility:hidden}
 
   /* Landing. Nothing about the sentence changes — it is never blurred, never faded, never
      moved. The paper it sits on is what leaves: its colour drains to nothing while the blur
@@ -2318,15 +2339,17 @@ function onWidth(fn){
    it is and the page arrives around it. Re-measured on resize, and the type is copied
    from the real element rather than guessed at. */
 (function(){
-  var el=document.getElementById('ldr'); if(!el) return;
+  var lift=function(){ document.documentElement.classList.remove('ldr-boot'); };
+  var el=document.getElementById('ldr'); if(!el){ lift(); return; }
   var t=el.querySelector('.ldr-t');
   if(!t){ if(el.parentNode) el.parentNode.removeChild(el); return; }
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.parentNode.removeChild(el); return; }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ lift(); el.parentNode.removeChild(el); return; }
   /* The line is its own now - placed by the stylesheet, on the same axis as
      everything else, and it takes no measurement from the page behind it. */
   t.style.setProperty('--ink-on', 'var(--ink)');
 
   el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
+  document.documentElement.classList.remove('ldr-boot');
   /* Each word is wrapped so it can take ink on its own. The rebuild used to read the
      whole line as one string, which threw away the break the sentence was written with
      and let it wrap wherever the column happened to end - mid-clause, every time. It

@@ -81,6 +81,19 @@
   .ldr.run{display:block}
   .ldr.gone{pointer-events:none}
 
+  /* ── The curtain has to be up before the first paint ──────────────────────
+     The loader script runs at the end of the body, so for one frame the browser
+     had already painted the whole page - you saw the finished thing, then it was
+     taken away and replaced by a loading sentence. Worse than no loader.
+     So a three-line script in the head raises the curtain before anything is
+     painted, and the loader script below drops this class the moment it has
+     placed its sentence and taken over. If that script never runs, the timeout
+     in the head drops it anyway: a curtain nobody can lift is the one bug a
+     loader must not have. */
+  html.ldr-boot{overflow:hidden}
+  html.ldr-boot .ldr{display:block}
+  html.ldr-boot .ldr-t{visibility:hidden}
+
   /* Landing. Nothing about the sentence changes — it is never blurred, never faded, never
      moved. The paper it sits on is what leaves: its colour drains to nothing while the blur
      it holds over the rest of the page drops to zero, both over a second. By the end the
@@ -511,7 +524,7 @@
   .wline.is-after:not(.clip) .wl-go.set{opacity:1;transform:none}
   .lift.open .wline .wl-go.set{opacity:1}
   /* one signal, not two: the same icon used to sit beside the headline as well */
-  #wallWrap .cv.wlcv{display:none}
+  :is(#wallWrap,#wallWrap-e) .cv.wlcv{display:none}
   /* On a narrow column the sentence does not finish inside the three lines - it is cut
      mid-clause. There is no end of the reading to put a mark after, so it goes back to
      the corner of the block, which is what the block itself is offering. */
@@ -547,7 +560,7 @@
      morphs, so nothing moves and the old reason for the margin is gone. */
   .cv.wlcv{opacity:0;margin-left:10px;vertical-align:.5px;color:var(--muted);
         transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
-  #wallWrap .hero{display:block}
+  :is(#wallWrap,#wallWrap-e) .hero{display:block}
   .lift:hover .wlcv,.lift:focus-visible .wlcv{opacity:1}
   /* no geometry of its own: the page has one focus ring (:focus-visible, 5px out, 4px
      radius). Four different radii read as four different kinds of thing. */
@@ -679,8 +692,8 @@
   /* The frosted layer widened with the card and kept widening after the card stopped:
      936px of paper behind a 636px card. It follows the base rule now, 26px clear on each
      side, the same as every other raised card on the page. */
-  #apWrap.open>.apcard{width:calc(100% + 16px)}
-  #apDeckWrap.lit>.deck,#apWrap.open>.apcard{
+  :is(#apWrap,#apWrap-e).open>.apcard{width:calc(100% + 16px)}
+  :is(#apDeckWrap,#apDeckWrap-e).lit>.deck,:is(#apWrap,#apWrap-e).open>.apcard{
         transition:opacity var(--effect-ms,184ms) var(--effect,ease),
                    width var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
                    height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)),
@@ -692,7 +705,7 @@
      left Cancel 71px short of the card's right edge against 26px on its left, which reads
      as a card that has slipped. The row uses the card's width, so the last thing in it
      lines up with the card's edge. */
-  #apCard .cons,#apCard .sumline,#apCard .brow{max-width:52ch}
+  :is(#apCard,#apCard-e) .cons,:is(#apCard,#apCard-e) .sumline,:is(#apCard,#apCard-e) .brow{max-width:52ch}
   /* four ranks, one per job. 24 for the item. 14 muted for its caption, which is metadata.
      17.5 ink for the card's own line, because that is the thing you opened it to read and it
      was reading as a pair with the caption while both were 14. And 14 for the actions, which
@@ -711,7 +724,7 @@
   .rlist i{font-style:normal;color:var(--muted)}
   .rlist b{font-weight:400;color:var(--ink);text-align:right;
         font-variant-numeric:tabular-nums}
-  #apRevL[data-morph-text]{min-width:0!important}
+  :is(#apRevL,#apRevL-e)[data-morph-text]{min-width:0!important}
   /* scheduled is not a dead end: the card stays open holding what is going out, because
      after scheduling that is the thing a person wants to see and making them press for it
      would be charging them for the obvious. The one action left is the way to stop it. */
@@ -737,10 +750,10 @@
         font-variant-numeric:tabular-nums}
   .brow + .brow{margin-top:5px}
   .brow i{font-style:normal;color:var(--faint);margin-left:10px}
-  .apwrap.sent #apRev{display:none}
-  .apwrap.sent #apCard .ask-chips{justify-content:flex-end}
-  #apSendL[data-morph-text]{min-width:0!important}
-  #apCard .ask-chips{justify-content:space-between;margin-top:18px}
+  .apwrap.sent :is(#apRev,#apRev-e){display:none}
+  .apwrap.sent :is(#apCard,#apCard-e) .ask-chips{justify-content:flex-end}
+  :is(#apSendL,#apSendL-e)[data-morph-text]{min-width:0!important}
+  :is(#apCard,#apCard-e) .ask-chips{justify-content:space-between;margin-top:18px}
   /* the committing action carries the consequence, so it is the one in ink, and it sits at
      the far end where nothing else can be pressed by accident on the way to it. A word at
      exactly the weight of the word beside it was too little for something that goes to
@@ -922,7 +935,7 @@
   .ov.on{opacity:1;visibility:visible;
          transition:opacity var(--effect-ms,184ms) var(--effect,ease),visibility 0s}
   .ov-in{display:flex;justify-content:center;padding:52px 24px 120px;min-height:100%}
-  .md{width:100%;max-width:680px;align-self:flex-start;background:var(--paper);border-radius:20px;
+  .md{width:100%;max-width:860px;align-self:flex-start;background:var(--paper);border-radius:20px;
       box-shadow:0 0 0 1px rgba(25,26,24,.07),0 34px 66px -32px rgba(25,26,24,.34);
       transform:translateY(34vh);
       transition:transform var(--settle-ms,465ms) var(--settle,cubic-bezier(.22,.61,.36,1))}
@@ -956,7 +969,7 @@
      (.md-head is a <p> inside .md-body, so it must be scoped or `.md-body p` wins.) */
   .md-body p.md-head{font-family:var(--display);font-size:24px;font-weight:500;
            letter-spacing:-.018em;line-height:1.32;color:var(--ink);margin-top:0}
-  .md-body p{font-size:17.5px;line-height:26px;color:var(--muted);max-width:52ch;margin-top:22px}
+  .md-body p:not(.in-card *){font-size:17.5px;line-height:26px;color:var(--muted);max-width:52ch;margin-top:22px}
   .md-body p.first{margin-top:0}
   .md-body p.hard{color:var(--ink)}
   /* Two classes for this whole document, and both only move things. .turn is the sentence
@@ -982,8 +995,8 @@
   .md-body h3{font-size:17.5px;font-weight:500;letter-spacing:-.012em;color:var(--ink);
           line-height:26px;margin-top:34px}
   .md-body h3 + p{margin-top:4px;max-width:52ch}
-  .md-body i{font-style:normal;color:var(--faint)}
-  .md-body b{font-weight:500;color:var(--ink)}
+  .md-body i:not(.in-card *){font-style:normal;color:var(--faint)}
+  .md-body b:not(.in-card *){font-weight:500;color:var(--ink)}
 
   /* First viewport: what a reader carries away, and it never moves. Title, the one sentence,
      the three decisions, and one line saying what each decides. Someone can close the
@@ -1035,62 +1048,68 @@
   /* ── 04 · The same moment, twice ──────────────────────────────────────────
      The page itself is the experience: eleven specimens, no labels, nothing
      explained. This is where the comparison lives, because a comparison is a
-     document. Each pair is the usual answer and then the same moment answered
-     with Sensitivity, stacked, because this card is a reading column and a
-     reading column has no middle to draw a line down. The pairs are shown at
-     the moment that matters - the usual one at rest, ours already answering -
-     and nothing is written underneath them. */
-  .md-body .pair{margin-top:56px}
-  .md-body .pair + .pair{margin-top:72px}
-  .md-body p.pl{font-family:var(--display);font-size:14px;letter-spacing:.1em;
-     text-transform:uppercase;color:var(--faint);line-height:20px;margin-top:0;max-width:none}
-  .md-body .pb{margin-top:34px;padding-top:34px;border-top:1px solid var(--line)}
-  .md-body .pair p.v{font-family:var(--display);font-size:24px;line-height:32px;
-     font-weight:500;letter-spacing:-.008em;color:var(--ink);margin-top:14px;max-width:none}
-  .md-body .pair p.sub{font-size:17.5px;line-height:28px;color:var(--muted);margin-top:4px;max-width:none}
-  .md-body p.sm-lbl{font-size:14px;line-height:24px;color:var(--muted);margin-top:14px;max-width:none}
+     document. Three moments, each named once. In the margin beside each one,
+     two words: Usual and Sensitivity. The one in ink is the one you are looking
+     at; press the other and the same moment is answered the other way, in the
+     same slot. The Sensitivity answer is the real specimen from the page above -
+     the same markup, the same script, every interaction intact - because a copy
+     that only looked like it would be the exact dishonesty this page is about. */
+  .md-body .pair{margin-top:48px}
+  .md-body .pair + .pair{margin-top:36px}
+  .md-body p.pt{font-family:var(--display);font-size:17.5px;line-height:26px;font-weight:500;
+     letter-spacing:-.006em;color:var(--ink);margin-top:0;max-width:none}
+  .md-body .prow{display:grid;grid-template-columns:112px 1fr;gap:0 28px;margin-top:0;align-items:start}
+  .md-body .ptabs{display:flex;flex-direction:column;gap:6px;padding-top:6px}
+  .md-body .ptabs button{background:none;border:0;padding:0;margin:0;text-align:left;cursor:pointer;
+     font-family:var(--display);font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+     line-height:24px;color:var(--faint);transition:color var(--effect-ms,184ms) var(--effect,ease)}
+  .md-body .ptabs button:hover{color:var(--muted)}
+  .md-body .ptabs button.on{color:var(--ink);cursor:default}
+  .md-body .pslot{min-width:0}
+  .md-body .pslot > [hidden]{display:none}
+
+  /* the live specimen, exactly as it is on the page, minus the page's stage geometry */
+  /* each one keeps the room its open state needs, as the page does, so a card that comes
+     up never has to lie over the next pair */
+  .md-body .stage.in-card{max-width:none;margin:0;display:block;min-height:0}
+  .md-body .pslot:has(.c1){min-height:240px}
+  .md-body .pslot:has(.c2){min-height:260px}
+  .md-body .pslot:has(.c3){min-height:250px}
+  .md-body .in-card .obj{padding:0}
 
   /* the usual answer, drawn the way the usual answer is drawn */
-  .md-body .dlg{margin-top:20px;border:1px solid var(--line);border-radius:4px;padding:20px 22px}
-  .md-body .dlg p{margin-top:0;font-size:17.5px;line-height:28px;color:var(--ink);max-width:none}
-  .md-body .btns{display:flex;gap:10px;margin-top:18px}
-  .md-body .bt{font-family:var(--display);font-size:14px;line-height:24px;
-     padding:6px 16px;border-radius:3px;border:1px solid var(--line);background:none;color:var(--muted)}
+  .md-body .va > * + *{margin-top:10px}
+  .md-body .va p{font-size:17.5px;line-height:28px;color:var(--muted);margin:0;max-width:none}
+  .md-body .va p.lead{font-family:var(--display);font-size:24px;line-height:32px;font-weight:500;
+     letter-spacing:-.008em;color:var(--ink)}
+  .md-body .va p.fine{font-size:14px;line-height:24px;color:var(--faint)}
+  .md-body .dlg{border:1px solid var(--line);border-radius:4px;padding:16px 18px;max-width:44ch}
+  .md-body .dlg p{color:var(--ink)}
+  .md-body .btns{display:flex;gap:8px;margin-top:14px}
+  .md-body .bt{font:inherit;font-family:var(--display);font-size:14px;line-height:24px;cursor:pointer;
+     padding:4px 14px;border-radius:3px;border:1px solid var(--line);background:none;color:var(--muted)}
   .md-body .bt.pri{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-  .md-body .bar{margin-top:18px;max-width:300px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
-  .md-body .bar i{display:block;height:100%;width:70%;background:var(--muted);border-radius:3px}
-  .md-body .toast{margin-top:18px;display:inline-flex;align-items:center;gap:20px;
-     border:1px solid var(--line);border-radius:4px;padding:11px 18px}
+  .md-body .toast{display:none;align-items:center;gap:18px;
+     border:1px solid var(--line);border-radius:4px;padding:8px 16px}
   .md-body .toast em{font-style:normal;font-size:17.5px;line-height:28px;color:var(--ink)}
-  .md-body .toast b{font-weight:400;font-size:17.5px;line-height:28px;color:var(--muted)}
-  .md-body .rows{margin-top:16px}
-  .md-body .rw{display:grid;grid-template-columns:1fr auto;gap:0 20px;padding:10px 0;
+  .md-body .toast button{background:none;border:0;padding:0;font:inherit;font-size:17.5px;
+     line-height:28px;color:var(--muted);cursor:pointer}
+  .md-body .toast button:hover{color:var(--ink)}
+  .md-body .va.sent .uface{display:none}
+  .md-body .va.sent .toast{display:inline-flex}
+  .md-body .rows{max-width:52ch}
+  .md-body .rw{display:grid;grid-template-columns:104px 1fr;gap:0 18px;padding:9px 0;
      border-top:1px solid var(--line);align-items:baseline}
-  .md-body .rw b{font-weight:400;font-size:17.5px;line-height:28px;color:var(--ink)}
-  .md-body .rw span{font-size:14px;line-height:24px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .md-body .rw:first-child{border-top:0;padding-top:0}
+  .md-body .rw b{font-weight:400;font-size:17.5px;line-height:28px;color:var(--muted)}
+  .md-body .rw.on b{color:var(--ink);font-weight:500}
   .md-body .rw i{font-style:normal;font-size:14px;line-height:24px;color:var(--faint)}
-  .md-body .rw.hist{grid-template-columns:96px 1fr}
-  .md-body .rw.hist b{color:var(--muted)}
-  .md-body .rw.hist.on b{color:var(--ink);font-weight:500}
-
-  /* ours, caught at the moment it answers */
-  .md-body .ev{font-size:17.5px;line-height:28px;color:var(--muted);margin-top:8px;max-width:none}
-  .md-body .cons{font-size:17.5px;line-height:28px;color:var(--ink);margin-top:16px;max-width:none}
-  .md-body .grp{display:flex;gap:26px;margin-top:12px;flex-wrap:wrap}
-  .md-body .grp span{font-size:17.5px;line-height:28px;color:var(--ink)}
-  .md-body .grp span i{font-style:normal;font-size:14px;color:var(--faint);margin-right:7px}
-  .md-body .act{display:inline-flex;align-items:center;gap:8px;font-size:17.5px;
-     line-height:28px;color:var(--ink);margin-top:18px}
-  .md-body .act u{text-decoration:none;display:inline-block;width:13px;height:13px;
-     background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;
-     mask:var(--arw) no-repeat center/contain}
-  .md-body .pips2{display:inline-flex;align-items:center;gap:7px;margin-top:14px}
-  .md-body .pips2 i{width:5px;height:5px;border-radius:3px;background:var(--line);display:block}
-  .md-body .pips2 i.on{width:16px;background:var(--muted)}
 
   @media (max-width:760px){
+    .md-body .prow{grid-template-columns:1fr;gap:10px 0}
+    .md-body .ptabs{flex-direction:row;gap:18px}
     .md-body .pair + .pair{margin-top:56px}
-    .md-body .rw.hist{grid-template-columns:1fr;gap:2px}
+    .md-body .rw{grid-template-columns:1fr;gap:0}
   }
 
   /* ── The demonstration under Expression ───────────────────────────────────
@@ -1286,9 +1305,9 @@
        them held a half-line of nothing under "Share the draft with Alex" and "Liability
        cap - $2,000,000", which fit on one line from 360px up. Measured at 320, 360, 390,
        414 and 430, through every state each value passes through. */
-    #apV,#hoV,#wkV{min-height:64px}
+    :is(#apV,#apV-e),#hoV,#wkV{min-height:64px}
     #hoCons[data-morph-text],#amCons[data-morph-text]{height:auto;min-height:56px}
-    #hsS{min-height:56px}
+    :is(#hsS,#hsS-e){min-height:56px}
 
     /* ── The chevron nobody could reach for ────────────────────────────────
        Six of these say "this opens" with a chevron that is invisible until a
@@ -1304,7 +1323,7 @@
     .apwrap:not(.open):not(.busy) .cv.hocv,
     .histwrap:not(.open) .cv.histcv,
     .cv.cpcv,
-    #wallWrap:not(.open) .cv.wlcv{opacity:.3}
+    :is(#wallWrap,#wallWrap-e):not(.open) .cv.wlcv{opacity:.3}
     /* A tap on a resting specimen is the reach a phone does not have: the chevron comes
        up to full and whatever the specimen shows on hover shows now. The tap after that
        is the one that opens it. So the specimen that will open is the one wearing a
@@ -1324,8 +1343,8 @@
   /* A narrow phone wraps four more of them onto a second line */
   @media (max-width:359px){
     #amV,#capV{min-height:64px}
-    #apD{min-height:56px}
-    #hsS{min-height:81px}
+    :is(#apD,#apD-e){min-height:56px}
+    :is(#hsS,#hsS-e){min-height:81px}
   }
 
   @media (max-width:700px){
@@ -1336,7 +1355,7 @@
     .glass.hscard,.glass.wkcard{left:0;top:-20px;width:100%;max-width:100%}
     .deckwrap>.deck{left:-12px;right:-12px}
     .apcard{left:0;width:100%}
-    #apWrap.open>.apcard{width:100%}
+    :is(#apWrap,#apWrap-e).open>.apcard{width:100%}
     /* The region dropdown is positioned against its chip, which sits mid-row, so
        on a small screen it opened straight off the right edge. On a phone it
        hangs from the right of the chip instead and never exceeds the column. */
@@ -1393,7 +1412,7 @@
         transition:color var(--effect-ms,184ms) var(--effect,ease)}
   .apcard .q:hover{color:var(--ink)}
   /* two equal choices stay quiet and lift on hover; a lone committing action is in ink */
-  .apcard .ask-chips.right .q.commit,#apCard .q.commit{color:var(--ink);font-weight:500}
+  .apcard .ask-chips.right .q.commit,:is(#apCard,#apCard-e) .q.commit{color:var(--ink);font-weight:500}
   .askcard .ask-field{background:none;border-radius:0;padding:10px 0;
         border-bottom:1px solid var(--line);font-size:14px;line-height:24px;color:var(--faint)}
   .askcard .ask-chips{margin-top:12px;gap:14px}
@@ -1469,7 +1488,7 @@
   .stages .stage:nth-of-type(7), .stages .stage:nth-of-type(8), .stages .stage:nth-of-type(9),
   .stages .stage:nth-of-type(10), .stages .stage:nth-of-type(11) { min-height: 0; }
   .stages { margin-top: 96px; }
-  .stages .stage + .stage { margin-top: 96px; }
+  .stages .stage + .stage { margin-top: 128px; }
   .stage { position: relative; z-index: 0; }
   .stage:has(.open), .stage:has(.lit), .stage:has(.busy), .stage:focus-within { z-index: 6; }
   /* the pane has to carry text over text now, so it is a little less see-through */
@@ -1479,7 +1498,7 @@
          -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); }
   @media (max-width:900px) {
     .stages { margin-top: 88px; }
-    .stages .stage + .stage { margin-top: 88px; }
+    .stages .stage + .stage { margin-top: 112px; }
   }
   /* ── Glass on reach, every specimen ───────────────────────────────────
      Same rule as the work rows on the home page: the moment a specimen is reached
@@ -1632,6 +1651,14 @@
     .hscard .hs-ref [data-morph-text]{height:auto;min-height:20px}
   }
 </style>
+<script>
+/* before the first paint, not after it */
+(function(){var d=document.documentElement;
+  try{ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  d.classList.add('ldr-boot');
+  setTimeout(function(){ d.classList.remove('ldr-boot'); }, 6000);
+})();
+</script>
 </head>
 <body>
 <script>
@@ -2071,79 +2098,140 @@ function onWidth(fn){
 
       <section class="fw" id="fwPractice">
         <p class="rung-h">04 &middot; The same moment, twice</p>
-        <p class="fw-q">First what software normally does, then the same moment spending
-           only what it is worth.</p>
+        <p class="fw-q">Three moments from the page above. Beside each, the answer most
+           software gives, and the one it was given here.</p>
 
       <div class="pair">
-        <div class="ph"><p class="pl">Usual</p>
-          <p class="v">Counter the renewal at &plus;6&percnt;</p>
-          <div class="dlg"><p>Send the counter-offer at &plus;6&percnt;?</p>
-            <div class="btns"><span class="bt">Cancel</span><span class="bt pri">Confirm</span></div></div>
-        </div>
-        <div class="pb"><p class="pl">Sensitivity</p>
-          <p class="v">Counter the renewal at &plus;6&percnt;</p>
-          <p class="ev">Vendor requested &plus;12&percnt;, submitted 4&nbsp;March. Comparable renewals in
-             segment: &plus;5.4&percnt; median, n&thinsp;=&thinsp;38. Seat utilisation 61&percnt; trailing 90 days,
-             down from 78&percnt;.</p>
-        </div>
+        <div class="prow">
+          <div class="ptabs" role="tablist"><button type="button" data-go="a">Usual</button><button type="button" data-go="b" class="on">Sensitivity</button></div>
+          <div class="pslot">
+            <div class="va" data-var="a" hidden>
+              <p class="lead">Counter the renewal at &plus;6&percnt;</p>
+              <div class="dlg"><p>Send the counter-offer at &plus;6&percnt;?</p>
+                <div class="btns"><button class="bt" type="button">Cancel</button><button class="bt pri" type="button">Confirm</button></div></div>
+            </div>
+            <div class="vb" data-var="b">
+              <section class="stage in-card c1"><div class="obj">
+      <div class="lift" id="wallWrap-e" tabindex="0" role="button" aria-haspopup="true"
+           aria-expanded="false" aria-controls="wall-e" data-morph-host>
+        <p class="hero"><span class="wlt">Counter the renewal at +6%</span><svg class="cv wlcv"
+          width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+          d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+          stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+        <span class="wlbox">
+        <span class="wline" data-morph>
+          <i class="a">Their ask sits above comparable renewals and usage is low.</i>
+          <i class="b">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%.</i>
+        </span>
+        </span>
+        <div class="glass under" id="wall-e"><p class="wall">Vendor requested +12%, submitted 4 March. Comparable renewals in segment: +5.4% median, n=38. Seat utilisation 61% trailing 90 days, down from 78%. Prior renewal +9%, accepted without counter. Contract permits 30-day notice. Three similar accounts countered at +6%, +5%, +7%. Model confidence 0.81. Suggested next step: draft counter. Alternative: request usage-based tier. Related obligations: 2. Escalation path: category lead.</p></div>
       </div>
-
-      <div class="pair">
-        <div class="ph"><p class="pl">Usual</p>
-          <p class="v">Send summary to 42 customers</p>
-          <p class="sub">drafted from this week&rsquo;s activity</p>
-          <div class="toast"><em>Sent to 42 customers</em><b>Undo</b></div>
-        </div>
-        <div class="pb"><p class="pl">Sensitivity</p>
-          <p class="v">Send summary to 42 customers</p>
-          <p class="cons">It goes at 4:00&nbsp;PM and cannot be recalled after that.</p>
-          <div class="grp"><span><i>EMEA</i>18</span><span><i>Americas</i>15</span><span><i>APAC</i>9</span></div>
-          <p class="act">Review recipients<u></u></p>
-        </div>
-      </div>
-
-      <div class="pair">
-        <div class="ph"><p class="pl">Usual</p>
-          <p class="sm-lbl">Understood as</p>
-          <div class="rows">
-            <div class="rw"><b>Risk &middot; High</b><span>confidence 0.82</span></div>
-            <div class="rw"><b>Region &middot; Europe</b><span>confidence 0.79</span></div>
+              </div></section>
+            </div>
           </div>
         </div>
-        <div class="pb"><p class="pl">Sensitivity</p>
-          <p class="sm-lbl">Understood as</p>
-          <div class="grp" style="margin-top:14px"><span><i>Risk</i>High</span><span><i>Region</i>Europe</span></div>
-          <p class="act">Change what it read<u></u></p>
-        </div>
       </div>
 
       <div class="pair">
-        <div class="ph"><p class="pl">Usual</p>
-          <p class="v">Notice period &middot; 90 days</p>
-          <div class="rows">
-            <div class="rw hist on"><b>90 days</b><i>in force since 31 March 2026 &middot; Amendment No.&nbsp;3</i></div>
-            <div class="rw hist"><b>60 days</b><i>2 February 2024 to 31 March 2026 &middot; Amendment No.&nbsp;2</i></div>
-            <div class="rw hist"><b>45 days</b><i>31 January 2019 to 2 February 2024 &middot; Amendment No.&nbsp;1</i></div>
-            <div class="rw hist"><b>30 days</b><i>as signed, 31 January 2018 &middot; Master Services Agreement</i></div>
+        <div class="prow">
+          <div class="ptabs" role="tablist"><button type="button" data-go="a">Usual</button><button type="button" data-go="b" class="on">Sensitivity</button></div>
+          <div class="pslot">
+            <div class="va" data-var="a" hidden>
+              <div class="uface">
+                <p class="lead">Send summary to 42 customers</p>
+                <p>drafted from this week&rsquo;s activity</p>
+                <div class="btns"><button class="bt pri" type="button" data-send>Send</button></div>
+              </div>
+              <div class="toast"><em>Sent to 42 customers</em><button type="button" data-undo>Undo</button></div>
+            </div>
+            <div class="vb" data-var="b">
+              <section class="stage in-card c2"><div class="obj">
+      <div class="deckwrap" id="apDeckWrap-e">
+        <span class="deck" id="apDeck-e" aria-hidden="true"></span>
+      <div class="apwrap" id="apWrap-e">
+        <button class="apb" id="apBtn-e" type="button" aria-expanded="false" aria-controls="apCard-e">
+          <span class="hero" id="apV-e" data-morph-text>Send summary to 42 customers</span>
+          <br><span class="beat"><span class="srcl" id="apD-e" data-morph-text>drafted from this week&rsquo;s activity</span><span class="dots" aria-label="Scheduling"><span></span><span></span><span></span></span><svg class="cv apcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path             d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"             stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+        <div class="apcard" id="apCard-e">
+          <p class="cons" id="apCons-e">It goes at 4:00 PM and cannot be recalled after that.</p>
+          <div class="rlist" id="apList-e" hidden>
+            <i>EMEA</i><b>18</b>
+            <i>Americas</i><b>15</b>
+            <i>APAC</i><b>9</b>
+          </div>
+          <button class="sumb" id="apSum-e" type="button" hidden><span class="sumline">Twelve
+            items shipped, three moved to next week, one still blocked.<svg class="cv sumcv"
+            width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span
+            class="summeta">one paragraph each &middot; no attachments</span></button>
+          <div class="blist" id="apBList-e" hidden>
+            <span class="brow">Shipped &middot; 12<i>in the digest, in merge order</i></span>
+            <span class="brow">Moved &middot; 3<i>re-dated to Thursday next week</i></span>
+            <span class="brow">Blocked &middot; 1<i>the SSO migration, waiting on the vendor</i></span>
+          </div>
+          <div class="ask-chips">
+            <button class="q" id="apRev-e" type="button"><span id="apRevL-e"
+              data-morph-text>Review recipients</span></button>
+            <button class="q commit" id="apSend-e" type="button"><span id="apSendL-e"
+              data-morph-text>Send</span></button>
           </div>
         </div>
-        <div class="pb"><p class="pl">Sensitivity</p>
-          <p class="v">Notice period &middot; 90 days</p>
-          <p class="sub">in force since 31 March 2026</p>
-          <span class="pips2" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i></span>
+      </div>
+      </div>
+              </div></section>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="pair">
-        <div class="ph"><p class="pl">Usual</p>
-          <p class="v">Renaming files&hellip;</p>
-          <div class="bar"><i></i></div>
-          <p class="sub">14 of 20</p>
+        <div class="prow">
+          <div class="ptabs" role="tablist"><button type="button" data-go="a">Usual</button><button type="button" data-go="b" class="on">Sensitivity</button></div>
+          <div class="pslot">
+            <div class="va" data-var="a" hidden>
+              <p class="lead">Notice period &middot; 90 days</p>
+              <div class="rows">
+                <div class="rw on"><b>90 days</b><i>in force since 31 March 2026 &middot; Amendment No.&nbsp;3</i></div>
+                <div class="rw"><b>60 days</b><i>2 February 2024 to 31 March 2026 &middot; Amendment No.&nbsp;2</i></div>
+                <div class="rw"><b>45 days</b><i>31 January 2019 to 2 February 2024 &middot; Amendment No.&nbsp;1</i></div>
+                <div class="rw"><b>30 days</b><i>as signed, 31 January 2018 &middot; Master Services Agreement</i></div>
+              </div>
+            </div>
+            <div class="vb" data-var="b">
+              <section class="stage in-card c3"><div class="obj">
+      <div class="histwrap" id="hsWrap-e">
+        <button class="histb" id="histBtn-e" type="button" aria-expanded="false" aria-controls="hsCard-e">
+          <span class="hero" id="hsV-e" data-morph-text>Notice period &middot; 90 days</span><svg
+            class="cv histcv" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path
+            d="M1.7 5.3 5 2l3.3 3.3M1.7 8.7 5 12l3.3-3.3" fill="none" stroke="currentColor"
+            stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <br><button class="histd" id="hsStep-e" type="button"><span class="srcl" id="hsD-e"
+          data-morph-text>in force since 31 March 2026</span><span class="vh">Show the previous
+          amendment</span></button>
+        <span class="pips" id="hsPips-e" aria-hidden="true"></span>
+        <div class="glass hscard" id="hsCard-e">
+          <div class="hs-top">
+            <span class="hs-doc" id="hsDoc-e" data-morph-text>Amendment No. 3 &middot; Renewal &amp; Terms</span>
+            <span class="hs-nav">
+              <button class="hs-arw" id="hsPrev-e" type="button" aria-label="Earlier version"><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M6 1.5 1.5 6 6 10.5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="hs-of" id="hsOf-e">1 of 4</span>
+              <button class="hs-arw" id="hsNext-e" type="button" aria-label="Later version"><svg width="8" height="12" viewBox="0 0 8 12" aria-hidden="true"><path d="M2 1.5 6.5 6 2 10.5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
+          </div>
+          <p class="src-q">&ldquo;Either party may terminate this Agreement, in whole or in part,
+            for convenience on <span class="hl" id="hsQ-e" data-morph-text>ninety (90)
+            days</span><span class="after"> prior written notice to the other party.
+            Termination under this Section does not relieve either party of any obligation
+            accrued before the effective date of termination.&rdquo;</span></p>
+          <p class="hs-ref"><span id="hsS-e" data-morph-text>&sect;14.1 &middot; 31 March 2026</span></p>
         </div>
-        <div class="pb"><p class="pl">Sensitivity</p>
-          <p class="v">Paused &middot; 14 of 20 files renamed</p>
-          <p class="sub">the last six need admin access</p>
-          <p class="act">Ask an admin<u></u></p>
+      </div>
+              </div></section>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2269,7 +2357,9 @@ function onWidth(fn){
 
   /* Hover · the wall — the same reach as the closing line. Resting on it turns the
      summary into a précis of what was withheld; pressing opens the whole of it on glass. */
-  (function(){
+  function initRenewal(S){
+    const $=(q,r=document)=>r.querySelector(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S));
+    const $$=(q,r=document)=>[...r.querySelectorAll(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S))];
     const wrap=$('#wallWrap'); if(!wrap) return;
     const open =()=>{ wrap.classList.add('open');  wrap.setAttribute('aria-expanded','true'); };
     const close=()=>{ wrap.classList.remove('open'); wrap.setAttribute('aria-expanded','false'); };
@@ -2279,7 +2369,8 @@ function onWidth(fn){
       if(e.key==='Enter'||e.key===' '){ e.preventDefault(); wrap.classList.contains('open')?close():open(); }
       if(e.key==='Escape'){ close(); } });
     document.addEventListener('click',e=>{ if(!wrap.contains(e.target)) close(); });
-  })();
+  }
+  initRenewal(''); initRenewal('-e');
 
   /* Later · ask more — pressing raises the whole item onto one card, which grows downward
      to hold the answer. Both readings end up on the same surface and neither moves: the
@@ -2356,7 +2447,9 @@ function onWidth(fn){
      item comes up onto a card carrying the one fact that decides it — when it goes, and when it
      stops being undoable — and the two choices worth having. Attention rises with consequence
      and stops rising there. */
-  (function(){
+  function initSend(S){
+    const $=(q,r=document)=>r.querySelector(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S));
+    const $$=(q,r=document)=>[...r.querySelectorAll(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S))];
     const dw=$('#apDeckWrap'), deck=$('#apDeck'), wrap=$('#apWrap'), btn=$('#apBtn'),
           card=$('#apCard'), v=$('#apV'), d=$('#apD'), rev=$('#apRev'), send=$('#apSend');
     if(!dw) return;
@@ -2427,7 +2520,8 @@ function onWidth(fn){
         sent=false; wrap.classList.remove('sent');
         say(sendL,'Send'); mode('cons'); line(); }
     }),{threshold:[0]}).observe(dw);
-  })();
+  }
+  initSend(''); initSend('-e');
 
   /* Working, in place · the request becomes the beat and the beat becomes the answer. Three
      meanings in one slot, and the waiting costs no layout: the dots sit over the line they
@@ -2664,7 +2758,9 @@ function onWidth(fn){
   /* Transform, four deep · the value carries its own history. No control choosing between
      sibling rows: the value itself steps back through what it used to be, and the line under
      it says which reading you are looking at. */
-  (function(){
+  function initNotice(S){
+    const $=(q,r=document)=>r.querySelector(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S));
+    const $$=(q,r=document)=>[...r.querySelectorAll(q.replace(/#([A-Za-z_][\w-]*)/g,(m,id)=>'#'+id+S))];
     const wrap=$('#hsWrap'), btn=$('#histBtn'), step=$('#hsStep'), v=$('#hsV'), d=$('#hsD'),
           pips=$('#hsPips'), q=$('#hsQ'), sc=$('#hsS');
     if(!wrap) return;
@@ -2709,8 +2805,24 @@ function onWidth(fn){
     addEventListener('keydown',e=>{ if(e.key==='Escape' && wrap.classList.contains('open')) shut(); });
     document.addEventListener('click',e=>{
       if(wrap.classList.contains('open') && !wrap.contains(e.target)) shut(); });
-  })();
+  }
+  initNotice(''); initNotice('-e');
 
+
+  /* 04 · the margin words are the tabs. One slot, two answers; the one in ink is showing. */
+  (function(){
+    $$('#fwPractice .pair').forEach(pair=>{
+      const tabs=$$('.ptabs button',pair), vars=$$('.pslot > [data-var]',pair);
+      tabs.forEach(b=>b.addEventListener('click',()=>{
+        vars.forEach(v=>{ v.hidden = v.dataset.var!==b.dataset.go; });
+        tabs.forEach(t=>t.classList.toggle('on', t===b));
+        const va=$('.va',pair); if(va) va.classList.remove('sent');
+      }));
+      const va=$('.va',pair), sd=$('[data-send]',pair), ud=$('[data-undo]',pair);
+      if(sd) sd.addEventListener('click',()=>va.classList.add('sent'));
+      if(ud) ud.addEventListener('click',()=>va.classList.remove('sent'));
+    });
+  })();
 
   /* The framework's one temporal slot. Hover with a little intent, focus, or press a term
      and the definition under the set becomes that term's — through Morphline, so the letters
@@ -2854,11 +2966,12 @@ function onWidth(fn){
    it is and the page arrives around it. Re-measured on resize, and the type is copied
    from the real element rather than guessed at. */
 (function(){
-  var el=document.getElementById('ldr'); if(!el) return;
+  var lift=function(){ document.documentElement.classList.remove('ldr-boot'); };
+  var el=document.getElementById('ldr'); if(!el){ lift(); return; }
   var t=el.querySelector('.ldr-t');
   var target=document.querySelector(el.getAttribute('data-over'));
-  if(!t||!target){ if(el.parentNode) el.parentNode.removeChild(el); return; }
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.parentNode.removeChild(el); return; }
+  if(!t||!target){ lift(); if(el.parentNode) el.parentNode.removeChild(el); return; }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ lift(); el.parentNode.removeChild(el); return; }
 
   function place(){
     var r=target.getBoundingClientRect(), cs=getComputedStyle(target);
@@ -2875,6 +2988,7 @@ function onWidth(fn){
   onWidth(function(){ place(); });
 
   el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
+  document.documentElement.classList.remove('ldr-boot');
   var src=t.textContent.replace(/\s+/g,' ').trim();
   t.textContent='';
   src.split(/(\s+)/).forEach(function(c){
@@ -2952,8 +3066,8 @@ function onWidth(fn){
    on the way up; a capture listener above them all runs first either way. */
 (function(){
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
-  var SEL = '#wallWrap, #apBtn, #amBtn, #hoOpen, #histBtn, #askBtn, #regionChip';
-  var root = document.querySelector('.stages') || document.body;
+  var SEL = '#wallWrap, #apBtn, #amBtn, #hoOpen, #histBtn, #askBtn, #regionChip, #wallWrap-e, #apBtn-e, #histBtn-e';
+  var root = document.body;
   var lit = null;
 
   function light(btn, on){
@@ -3003,8 +3117,8 @@ function onWidth(fn){
 <script>
 /* Same nudge as the closing block and the Work rows, on the specimen that opens
    the card: placed by watching the glyphs land, so it follows the sentence. */
-(function(){
-  var wrap = document.getElementById('wallWrap'); if (!wrap) return;
+['','-e'].forEach(function(S){
+  var wrap = document.getElementById('wallWrap'+S); if (!wrap) return;
   var wl = wrap.querySelector('.wline'); if (!wl) return;
   /* Does the sentence finish inside the block, or is it cut mid-clause? Asked of the
      glyphs themselves once they have landed, because the block clips and the glyph
@@ -3036,7 +3150,7 @@ function onWidth(fn){
   wrap.addEventListener('touchstart', soon, {passive:true});
   wrap.addEventListener('click', soon);
   wrap.addEventListener('pointerleave', function(){ clearTimeout(t); });
-})();
+});
 </script>
 </body>
 </html>
