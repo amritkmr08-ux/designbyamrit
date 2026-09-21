@@ -1342,9 +1342,13 @@
         gap: 0; padding: 10px 18px 10px; transition: none; }
     .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
         transition: none; transform: none; }
+    /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
+       Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
+       so shrinking its box would have cut the scallop off instead of making it smaller.
+       Each mark comes down to 26px and the space between two of them opens by 2px. */
     .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
         opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
-        -webkit-transform: translateZ(0); transform: translateZ(0); }
+        -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }

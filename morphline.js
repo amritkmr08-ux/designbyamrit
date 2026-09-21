@@ -296,11 +296,33 @@ function onWidth(fn){
        because the layer has the host's width and the same font. */
     var c = document.createElement('i');
     c.className = 'ml-g ml-rest';
-    c.textContent = B.map(function (p) { return p.ch; }).join('');
     /* A line that was measured as one line stays one line. The probe measures letters
        one box each, which loses the kerning a real run has, so the two can differ by a
-       fraction of a pixel - enough for the last word to wrap out of a fitted box. */
+       fraction of a pixel - enough for the last word to wrap out of a fitted box.
+       The same disagreement runs the other way on a line that was measured as two: the
+       letters travel to the probe's wrap, and then the resting run, left to wrap on its
+       own kerning, pulls the last word back up a line the moment the layer is redrawn.
+       You saw that as the sentence twitching and the arrow after it flying up from the
+       line below. So the breaks the letters landed on are the breaks they keep: the run
+       is written with those breaks in it and never asked to find its own. */
     var oneLine = B.every(function (p) { return Math.abs((p.y || 0) - (B[0].y || 0)) < 1; });
+    var txt = '';
+    if (oneLine) txt = B.map(function (p) { return p.ch; }).join('');
+    else {
+      var ly = B.length ? (B[0].y || 0) : 0;
+      B.forEach(function (p, i) {
+        var y = p.y || 0;
+        if (i && y > ly + 1) {
+          txt = txt.replace(/[ \t]+$/, '') + '\n';   /* the space the wrap ate */
+          ly = y;
+          if (!p.ch.trim()) return;                  /* and any space it starts with */
+        }
+        txt += p.ch;
+      });
+    }
+    c.textContent = txt;
+    /* pre-wrap rather than pre: the written breaks are kept either way, and a line that
+       still does not fit can wrap instead of hanging out of its box. */
     c.style.cssText = 'position:static;display:inline;white-space:' + (oneLine ? 'pre' : 'pre-wrap') +
       ';will-change:auto;transform:none;filter:none;opacity:1';
     layer.appendChild(c);
@@ -460,15 +482,29 @@ function onWidth(fn){
    shown at the moment the sentence completes - not a second later when the
    layer is redrawn for housekeeping. Nothing is measured off moving glyphs. */
 window.nudgeMark = function (host, go) {
-  function put() {
+  /* `instant` places the mark without animating it. left and top carry a transition so a
+     mark you are already looking at can follow its line rather than jumping, but before
+     the mark is visible that same transition turns a re-measure into a flight across the
+     block. Out of sight it simply arrives. */
+  function put(instant) {
     var e = host._mlEnd; if (!e) return false;
     var cs = getComputedStyle(host);
     var F = parseFloat(cs.fontSize) || 17.5;
     var L = parseFloat(cs.lineHeight) || F * 1.6;
     /* from the line box bottom back up to the baseline: half the leading plus the descender */
     var drop = (L - F * 1.21) / 2 + F * 0.24;
-    go.style.left = Math.round(e.right + 7) + 'px';
-    go.style.top  = Math.round(e.bottom - drop - 14) + 'px';
+    var l = Math.round(e.right + 7) + 'px';
+    var t = Math.round(e.bottom - drop - 14) + 'px';
+    if (l === go.style.left && t === go.style.top) return true;
+    if (instant) {
+      var keep = go.style.transition;
+      go.style.transition = 'none';
+      go.style.left = l; go.style.top = t;
+      void go.offsetWidth;                  /* commit it before the transition comes back */
+      go.style.transition = keep;
+    } else {
+      go.style.left = l; go.style.top = t;
+    }
     return true;
   }
   go.classList.remove('set');
@@ -476,7 +512,7 @@ window.nudgeMark = function (host, go) {
   var shown = false, t1 = null, t2 = null;
   function show() {
     if (shown) return; shown = true;
-    if (put()) go.classList.add('set');
+    if (put(true)) go.classList.add('set');
   }
   /* The probe measures one box per letter; real text is kerned, so the settled line can
      end a wrap away from where the probe said. When the line settles, the mark is placed
@@ -488,7 +524,7 @@ window.nudgeMark = function (host, go) {
   }
   if (!host.hasAttribute('data-ml-busy')) { show(); return; }
   /* the end is known already; place it now so it never appears anywhere else */
-  put();
+  put(true);
   var arm = function () {
     var wait = Math.max(0, (host._mlLands || performance.now()) - performance.now());
     clearTimeout(t1); t1 = setTimeout(show, wait);

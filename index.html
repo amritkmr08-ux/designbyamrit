@@ -1610,9 +1610,13 @@
         gap: 0; padding: 10px 18px 10px; transition: none; }
     .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
         transition: none; transform: none; }
+    /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
+       Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
+       so shrinking its box would have cut the scallop off instead of making it smaller.
+       Each mark comes down to 26px and the space between two of them opens by 2px. */
     .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
         opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
-        -webkit-transform: translateZ(0); transform: translateZ(0); }
+        -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }
@@ -1805,9 +1809,9 @@ function onWidth(fn){
             <span class="ix-top"><b>Phoenix Listing</b></span>
             <span class="ix-sw mline" data-morph>
               <i class="a">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</i>
-              <i class="b">A question reshapes the contract listing into the answer.</i>
+              <i class="b">A question reshapes the contract listing into the answer. You stop browsing for it.</i>
             </span>
-            <span class="vh">A question reshapes the contract listing into the answer.</span>
+            <span class="vh">A question reshapes the contract listing into the answer. You stop browsing for it.</span>
           </span>
         </button>
       </li>
@@ -1899,7 +1903,7 @@ function onWidth(fn){
         <h2>Phoenix Listing</h2>
         <p class="md-k">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</p>
         <hr />
-        <p class="md-lead">A question reshapes the contract listing into the answer.</p>
+        <p class="md-lead">A question reshapes the contract listing into the answer. You stop browsing for it.</p>
         <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
         <p>Enterprise software is designed as though people will arrive at it. They don&rsquo;t.</p>
         <p>Nobody&rsquo;s job is &ldquo;check the contract system&rdquo;. A system of record isn&rsquo;t somewhere anyone chooses to spend their morning, and designing as if they will is a large part of why this category still feels manual.</p>

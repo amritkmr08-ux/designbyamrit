@@ -1324,6 +1324,19 @@
     .histwrap:not(.open) .cv.histcv,
     .cv.cpcv,
     :is(#wallWrap,#wallWrap-e):not(.open) .cv.wlcv{opacity:.3}
+    /* The renewal block is the one specimen whose chevron is switched off site-wide: on a
+       wide column the mark after the sentence says "this opens" instead, and two marks
+       saying one thing is one too many. A phone column is too narrow for that sentence to
+       finish inside its three lines, so the mark had nowhere to sit and fell back to an
+       arrow in the block's corner — the only arrow on a page where every other specimen
+       opens with a chevron. Same word as the rest of them here: the chevron comes back
+       and the corner arrow goes.
+       The headline fills the column, so the chevron has no room to sit after it and
+       wrapped onto a row of its own. It goes in the corner of the block, level with the
+       first line, which is where the other two full-width specimens already put theirs. */
+    :is(#wallWrap,#wallWrap-e) .cv.wlcv{display:inline;position:absolute;
+        right:0;top:9px;margin:0}
+    .wline.is-after.clip::after{content:none}
     /* A tap on a resting specimen is the reach a phone does not have: the chevron comes
        up to full and whatever the specimen shows on hover shows now. The tap after that
        is the one that opens it. So the specimen that will open is the one wearing a
@@ -1555,9 +1568,13 @@
         gap: 0; padding: 10px 18px 10px; transition: none; }
     .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
         transition: none; transform: none; }
+    /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
+       Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
+       so shrinking its box would have cut the scallop off instead of making it smaller.
+       Each mark comes down to 26px and the space between two of them opens by 2px. */
     .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
         opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
-        -webkit-transform: translateZ(0); transform: translateZ(0); }
+        -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
     .nb .nwd { opacity: 0; }
     .nav-x { display: none !important; }
@@ -3066,7 +3083,11 @@ function onWidth(fn){
    on the way up; a capture listener above them all runs first either way. */
 (function(){
   if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
-  var SEL = '#wallWrap, #apBtn, #amBtn, #hoOpen, #histBtn, #askBtn, #regionChip, #wallWrap-e, #apBtn-e, #histBtn-e';
+  /* Only the specimens that actually hide something behind a pointer. "Ask more" and the
+     region chip wear a full-strength mark next to a word that says what pressing does,
+     so there is nothing for a first tap to reveal — it only ever cost a tap. Those two
+     open on the first press, like the buttons they look like. */
+  var SEL = '#wallWrap, #apBtn, #amBtn, #hoOpen, #histBtn, #wallWrap-e, #apBtn-e, #histBtn-e';
   var root = document.body;
   var lit = null;
 
