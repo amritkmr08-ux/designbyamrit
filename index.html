@@ -994,6 +994,13 @@
   /* the credit line is secondary — grey at rest; the sentence it becomes is the point, so it lands in ink */
   .ix-sw .ml-g { color: var(--muted); }
   .ix-sw.is-after .ml-g { color: var(--ink); }
+  /* see the note in the Work script: on a phone the row carries its argument outright.
+     No second state means no reserved height either - the line takes the room it needs. */
+  @media (hover:none), (max-width:760px){
+    .ix-sw.flat { height: auto; min-height: 0; }
+    .ix-sw.flat i.a { display: none; }
+    .ix-sw.flat i.b { display: inline; color: var(--ink); }
+  }
   /* ── Where the next tap goes ───────────────────────────────────────────
      The first tap turns the credit line into the sentence the work is about,
      and the number on the left turns into an arrow. Nobody read that as an
@@ -1272,6 +1279,12 @@
   /* two things in the footer now, so it goes back to the row it was built as: the name on
      the left, how it was made on the right, the same as the other two pages. */
   footer { margin-top: 150px; padding-top: 26px; padding-bottom: 60px; border-top: 1px solid var(--line); display: flex; font-size: 14px; }
+  /* One line about how the site itself behaves, kept where a colophon goes: it gives a
+     reader a reason to notice the marks and the changing copy, without the page stopping
+     to explain itself. Its own row above the credits, on the same measure as the writing. */
+  footer { flex-direction: column; gap: 22px; }
+  footer .fnote { margin: 0; max-width: 46ch; color: var(--faint); }
+  footer .frow { display: flex; justify-content: space-between; gap: 20px; }
   .rule { display: none; }
   /* Four sizes, nothing else. 114 the name, 24 a heading, 17.5 everything you read,
      14 the labels around it. Weight and colour do the rest. */
@@ -1766,9 +1779,9 @@ function onWidth(fn){
         <span class="pips" id="capPips" aria-hidden="true"></span>
       </div>
     </div>
-    <p class="live-note r">A value that changed while you were reading. The dots show that
-      another reading exists in that slot; the line under it takes you back.</p>
-    <p class="live-go r"><a href="sensitivity.html">All eleven patterns, in Sensitivity <span class="go" aria-hidden="true"></span></a></p>
+    <p class="live-note r">A value changed while you were reading.<br />The interface preserves
+      the current answer without asking you to hold the old one in memory.</p>
+    <p class="live-go r"><a href="sensitivity.html">See Sensitivity <span class="go" aria-hidden="true"></span></a></p>
   </div>
 </section>
 
@@ -1809,9 +1822,9 @@ function onWidth(fn){
             <span class="ix-top"><b>Phoenix Listing</b></span>
             <span class="ix-sw mline" data-morph>
               <i class="a">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</i>
-              <i class="b">A question reshapes the contract listing into the answer. You stop browsing for it.</i>
+              <i class="b">A question reshapes the listing into the answer.</i>
             </span>
-            <span class="vh">A question reshapes the contract listing into the answer. You stop browsing for it.</span>
+            <span class="vh">A question reshapes the listing into the answer.</span>
           </span>
         </button>
       </li>
@@ -1903,7 +1916,7 @@ function onWidth(fn){
         <h2>Phoenix Listing</h2>
         <p class="md-k">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</p>
         <hr />
-        <p class="md-lead">A question reshapes the contract listing into the answer. You stop browsing for it.</p>
+        <p class="md-lead">A question reshapes the listing into the answer.</p>
         <p class="md-ev">Adopted as platform direction &middot; Design frozen for phase 1, engineering build underway &middot; Nothing here is shipped or measured yet, and the data in the screens is sample data</p>
         <p>Enterprise software is designed as though people will arrive at it. They don&rsquo;t.</p>
         <p>Nobody&rsquo;s job is &ldquo;check the contract system&rdquo;. A system of record isn&rsquo;t somewhere anyone chooses to spend their morning, and designing as if they will is a large part of why this category still feels manual.</p>
@@ -1971,7 +1984,7 @@ function onWidth(fn){
 </div>
 <section id="contact">
   <div class="wrap">
-    <h2 class="r">Working on difficult decisions between people and AI? Let's talk ?
+    <h2 class="r">Working on difficult decisions between people and AI? Let's talk.
       <a class="q mline" href="about.html" data-morph data-morph-host>
         <i class="a">Open to Staff and Lead Product Designer roles in AI and enterprise software.</i>
         <i class="b">How I got here, and how I work. About me</i>
@@ -1982,8 +1995,12 @@ function onWidth(fn){
   </div>
 </section>
 <footer>
-  <div>© <span id="year"></span> Amrit Kumar</div>
-  <div class="fbuilt">Built with Claude</div>
+  <p class="fnote">This site follows the same principle: information stays quiet until it
+    earns attention.</p>
+  <div class="frow">
+    <div>&copy; <span id="year"></span> Amrit Kumar</div>
+    <div class="fbuilt">Built with Claude</div>
+  </div>
 </footer>
 <script>
 (function () {
@@ -2161,6 +2178,18 @@ function onWidth(fn){
      a pointer does rather than reaching inside it. */
   var TOUCH = window.matchMedia && matchMedia('(hover: none), (max-width: 760px)').matches;
   var lit = null;
+  /* A phone has no reaching, only pressing, so a row cannot hold one line at rest and
+     another for the reader who leans in - it gets one line, and it should be the one worth
+     reading. The morph is taken off these rows before Morphline is even told they exist:
+     the argument is simply the line, in ink, wrapping to whatever it needs, and the press
+     goes straight to the case study instead of spending itself on a sentence. The visually
+     hidden copy goes too - it is on the page now, and saying it twice helps nobody. */
+  if (TOUCH) [].slice.call(document.querySelectorAll('#work .ix-sw')).forEach(function(sw){
+    sw.removeAttribute('data-morph');
+    sw.classList.add('flat');
+    var vh = sw.parentNode && sw.parentNode.querySelector('.vh');
+    if (vh) vh.parentNode.removeChild(vh);
+  });
   function light(b, on){
     if (!b) return;
     b.classList.toggle('lit', on);
@@ -2196,10 +2225,6 @@ function onWidth(fn){
       clearTimeout(t); t = setTimeout(function(){ mark(b); }, 40); });
     b.addEventListener('pointerleave', function(){ clearTimeout(t); });
     b.addEventListener('click', function(e){
-      if (TOUCH && lit !== b){ e.preventDefault(); litten(b); return; }
-      /* the browser sends its own pointerleave on the way out of a tap, which drops
-         the sentence a beat before the card covers it. Ask for it back. */
-      if (TOUCH) light(b, true);
       if (!b.dataset.i) return;                  /* the last row is a link out */
       last = b; open(+b.dataset.i);
     });
