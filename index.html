@@ -996,10 +996,11 @@
   .ix-sw.is-after .ml-g { color: var(--ink); }
   /* see the note in the Work script: on a phone the row carries its argument outright.
      No second state means no reserved height either - the line takes the room it needs. */
+  /* On a phone the sentence wraps further than it does in a desktop column, and by a
+     different amount on every row. A single reserved height would leave a hole under
+     the short rows, so each row is measured and given its own - see the Work script. */
   @media (hover:none), (max-width:760px){
-    .ix-sw.flat { height: auto; min-height: 0; }
-    .ix-sw.flat i.a { display: none; }
-    .ix-sw.flat i.b { display: inline; color: var(--ink); }
+    .ix-sw { height: auto; min-height: 0; }
   }
   /* ── Where the next tap goes ───────────────────────────────────────────
      The first tap turns the credit line into the sentence the work is about,
@@ -1013,9 +1014,14 @@
 
         transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1);
         transform: translate(-5px, 5px); }
+  /* The hover half is behind hover:hover on purpose. A phone leaves :hover stuck on the
+     last thing a thumb touched, so without the guard the arrow stayed on a resting row
+     after its card closed - the row would have been claiming a tap it no longer had. */
   .ix-b.lit .ix-go.set,
-  .ix-b:hover .ix-go.set,
   .ix-b:focus-visible .ix-go.set { opacity: 1; transform: none; }
+  @media (hover:hover) {
+    .ix-b:hover .ix-go.set { opacity: 1; transform: none; }
+  }
 
   /* the pop-up: where the story lives */
   .ov { position: fixed; inset: 0; z-index: 90; background: rgba(222,222,218,.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
@@ -1692,10 +1698,8 @@
      with a one-line caption in the label voice. The reader sees the thing the
      paragraph just described, then moves on. */
   .md-fig { margin: 36px 0 52px; padding: 0; }
-  /* the shot sat flush inside its own outline, so a screenshot that already runs to
-     its edge read as clipped. A white mat inside the line gives it somewhere to end. */
   .md-fig img { display: block; width: 100%; height: auto; border-radius: 10px;
-     border: 1px solid var(--line); background: #fff; padding: 12px; }
+     border: 1px solid var(--line); background: #fff; }
   .md-fig figcaption { margin-top: 12px; font-size: 14px; line-height: 24px; color: var(--faint); max-width: 65ch; }
   .md-fig.tri .tri-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .md-fig.tri .tri-row img { aspect-ratio: 1 / 1.05; object-fit: cover; object-position: top; }
@@ -2219,6 +2223,11 @@ function onWidth(fn){
     window.scrollTo(0,y);
     requestAnimationFrame(function(){ root.style.scrollBehavior=prev; });
     if(last && byKey) last.focus({preventScroll:true});
+    /* Closing a card puts its row back, the same as closing a specimen does on
+       Sensitivity: what you are looking at always matches what the next tap will do.
+       A row left lit behind a closed card would still be wearing its arrow, and the
+       tap that was meant to open it would only re-light it. */
+    litten(null);
   }
   var byKey=false;
   document.addEventListener('keydown',function(e){ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') byKey=true; });
@@ -2241,18 +2250,39 @@ function onWidth(fn){
      a pointer does rather than reaching inside it. */
   var TOUCH = window.matchMedia && matchMedia('(hover: none), (max-width: 760px)').matches;
   var lit = null;
-  /* A phone has no reaching, only pressing, so a row cannot hold one line at rest and
-     another for the reader who leans in - it gets one line, and it should be the one worth
-     reading. The morph is taken off these rows before Morphline is even told they exist:
-     the argument is simply the line, in ink, wrapping to whatever it needs, and the press
-     goes straight to the case study instead of spending itself on a sentence. The visually
-     hidden copy goes too - it is on the page now, and saying it twice helps nobody. */
-  if (TOUCH) [].slice.call(document.querySelectorAll('#work .ix-sw')).forEach(function(sw){
-    sw.removeAttribute('data-morph');
-    sw.classList.add('flat');
-    var vh = sw.parentNode && sw.parentNode.querySelector('.vh');
-    if (vh) vh.parentNode.removeChild(vh);
-  });
+  /* A phone gets the same two steps a pointer gets, because the change is the point:
+     the first tap lifts the row onto its pane of glass and turns the credit line into
+     the sentence the work is about, with the arrow landing after the full stop. The
+     second tap opens the case study. Nothing is hidden behind a gesture nobody can
+     see - the row wearing the arrow is the row that will open next.
+
+     The two states are different lengths, and on a narrow screen they wrap by different
+     amounts, so each row keeps room for whichever of its two lines is taller. Measured
+     once the type has loaded, and again if the screen turns. */
+  if (TOUCH) (function(){
+    function fit(){
+      [].slice.call(document.querySelectorAll('#work .ix-sw')).forEach(function(sw){
+        var a = sw.querySelector('i.a'), b = sw.querySelector('i.b');
+        if (!a || !b) return;
+        var w = sw.clientWidth; if (!w) return;
+        var cs = getComputedStyle(sw);
+        var probe = document.createElement('span');
+        probe.style.cssText = 'position:absolute;left:-9999px;top:0;display:block;visibility:hidden';
+        probe.style.width = w + 'px';
+        probe.style.font = cs.font;
+        probe.style.letterSpacing = cs.letterSpacing;
+        probe.style.lineHeight = cs.lineHeight;
+        sw.parentNode.appendChild(probe);
+        probe.textContent = a.textContent; var ha = probe.offsetHeight;
+        probe.textContent = b.textContent; var hb = probe.offsetHeight;
+        probe.parentNode.removeChild(probe);
+        sw.style.height = Math.max(ha, hb) + 'px';
+      });
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    else addEventListener('load', fit);
+    var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(fit, 180); });
+  })();
   function light(b, on){
     if (!b) return;
     b.classList.toggle('lit', on);
@@ -2289,6 +2319,8 @@ function onWidth(fn){
     b.addEventListener('pointerleave', function(){ clearTimeout(t); });
     b.addEventListener('click', function(e){
       if (!b.dataset.i) return;                  /* the last row is a link out */
+      /* a thumb cannot hover, so the first tap does the reaching and the second one opens */
+      if (TOUCH && lit !== b){ litten(b); return; }
       last = b; open(+b.dataset.i);
     });
   });

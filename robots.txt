@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.designamrit.com/sitemap.xml
+Sitemap: https://amritkmr08-ux.github.io/designbyamrit/sitemap.xml
