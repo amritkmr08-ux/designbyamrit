@@ -1276,15 +1276,21 @@
   #contact h2 .q:focus-visible .q-go.set { opacity: 1; transform: none; }
   .copybtn { margin-top: 96px; }
   .mailalt { font-size: 14px; display: block; margin-top: 26px; }
+  .mailalt .sep { font-style: normal; }
+  /* On a phone these four sat in one line of 13.5px grey with dots between them: four
+     separate destinations reading as one string, and four tap targets the width of a
+     word. One per row instead. The dots go - a row break already says "next thing" -
+     and every row is 40px tall, so the thing you meant to press is the thing you get. */
+  @media (max-width: 700px) {
+    .mailalt { display: flex; flex-direction: column; align-items: flex-start; gap: 0;
+               margin-top: 22px; }
+    .mailalt .sep { display: none; }
+    .mailalt > a { padding: 9px 0; line-height: 22px; font-size: 14px; }
+    .mailalt > .copylink { margin: 0 0 9px; line-height: 22px; font-size: 14px; }
+  }
   /* two things in the footer now, so it goes back to the row it was built as: the name on
      the left, how it was made on the right, the same as the other two pages. */
   footer { margin-top: 150px; padding-top: 26px; padding-bottom: 60px; border-top: 1px solid var(--line); display: flex; font-size: 14px; }
-  /* One line about how the site itself behaves, kept where a colophon goes: it gives a
-     reader a reason to notice the marks and the changing copy, without the page stopping
-     to explain itself. Its own row above the credits, on the same measure as the writing. */
-  footer { flex-direction: column; gap: 22px; }
-  footer .fnote { margin: 0; max-width: 46ch; color: var(--faint); }
-  footer .frow { display: flex; justify-content: space-between; gap: 20px; }
   .rule { display: none; }
   /* Four sizes, nothing else. 114 the name, 24 a heading, 17.5 everything you read,
      14 the labels around it. Weight and colour do the rest. */
@@ -1579,9 +1585,9 @@
      opening into the word are exactly as they were. */
   @media (hover:hover) and (min-width:761px) {
     /* one size for all three: the shapes are drawn to balance each other, so no
-       per-shape correction. .86 of 28px is a 24px mark; 6px + the scaled-off edge
-       reads as an 8px gap. */
-    .nav-inner, .nav-mid { gap: 4px; }
+       per-shape correction. .86 of 28px is a 24px mark; the flex gap plus the
+       scaled-off edge on each side reads as a 10px gap. */
+    .nav-inner, .nav-mid { gap: 6px; }
     .nb .nmk { transform: scale(.86); transform-origin: 50% 50%; }
     .nb:hover .nmk, .nb:focus-visible .nmk { transform: scale(1); }
   }
@@ -1621,13 +1627,14 @@
        The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
     .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
         gap: 0; padding: 10px 18px 10px; transition: none; }
-    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
+    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 42px; height: 40px; line-height: 40px;
         transition: none; transform: none; }
     /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
        Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
        so shrinking its box would have cut the scallop off instead of making it smaller.
-       Each mark comes down to 26px and the space between two of them opens by 2px. */
-    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
+       Each mark comes down to 26px. The touch box is 2px wider than it is tall, which
+       is where the space between two marks comes from: 16px, not 14. */
+    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 7px;
         opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
         -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
@@ -1656,6 +1663,15 @@
   #live .pips i { width: 5px; height: 5px; border-radius: 3px; background: var(--line);
      transition: width .35s cubic-bezier(.22,1.2,.36,1), background .18s ease; }
   #live .pips i.on { width: 17px; background: var(--faint); }
+  /* The claim, then the drawing, then the moment it is about. The drawing carries the
+     argument on its own - many readings into one point, and a smaller set out - so it
+     wants no caption and no label. It is hairline and it sits at the text's own colour. */
+  #live .live-head { font-family: var(--display); font-size: 24px; font-weight: 500;
+        letter-spacing: -.02em; line-height: 32px; color: var(--ink);
+        max-width: 34ch; margin: 20px 0 0; }
+  #live .live-fig { margin: 34px 0 46px; max-width: 420px; color: var(--ink); }
+  #live .live-fig .fig { display: block; width: 100%; height: auto; }
+  @media (max-width: 700px) { #live .live-fig { max-width: 100%; margin: 26px 0 38px; } }
   #live .live-note { margin: 48px 0 0; max-width: 46ch; font-size: 17.5px; line-height: 28px; color: var(--muted); }
   #live .live-note a { color: var(--ink); font-weight: 500; }
   /* glass on reach, same as every specimen */
@@ -1676,8 +1692,10 @@
      with a one-line caption in the label voice. The reader sees the thing the
      paragraph just described, then moves on. */
   .md-fig { margin: 36px 0 52px; padding: 0; }
+  /* the shot sat flush inside its own outline, so a screenshot that already runs to
+     its edge read as clipped. A white mat inside the line gives it somewhere to end. */
   .md-fig img { display: block; width: 100%; height: auto; border-radius: 10px;
-     border: 1px solid var(--line); background: #fff; }
+     border: 1px solid var(--line); background: #fff; padding: 12px; }
   .md-fig figcaption { margin-top: 12px; font-size: 14px; line-height: 24px; color: var(--faint); max-width: 65ch; }
   .md-fig.tri .tri-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .md-fig.tri .tri-row img { aspect-ratio: 1 / 1.05; object-fit: cover; object-position: top; }
@@ -1758,7 +1776,7 @@ function onWidth(fn){
       <div class="hero-facts" data-morph-tabs>
         <div class="ftabs" role="tablist" aria-label="About me">
           <button class="ftab" type="button" data-v="Product Designer, Sirion &middot; 5 years">Currently</button>
-          <button class="ftab" type="button" data-v="13 years in design &middot; 6 in product &middot; 3 on AI-native products">Experience</button>
+          <button class="ftab" type="button" data-v="13 years in design &middot; 6 in product &middot; 3 in AI-native products">Experience</button>
           <button class="ftab" type="button" data-v="Noida, India">Based in</button>
         </div>
         <div class="fval" data-morph-value></div>
@@ -1770,6 +1788,55 @@ function onWidth(fn){
 <section id="live" aria-label="One idea, live">
   <div class="wrap">
     <p class="ix-lbl r">From Sensitivity</p>
+    <p class="live-head r">Sometimes the shortest path to more information is not more
+      space. It is the right moment.</p>
+    <div class="live-fig r" aria-hidden="true">
+      <svg class="fig" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 348" role="img" aria-label="Many separate readings pass through one moment and leave as a smaller set of answers.">
+        <g fill="none" stroke="currentColor" stroke-width="0.85" stroke-linecap="round" opacity="0.58">
+          <path d="M0 19.0 L112 19.0 C211.0 19.0 266.8 174 292 174"/>
+      <path d="M0 38.4 L112 38.4 C211.0 38.4 266.8 174 292 174"/>
+      <path d="M0 57.8 L112 57.8 C211.0 57.8 266.8 174 292 174"/>
+      <path d="M0 77.1 L112 77.1 C211.0 77.1 266.8 174 292 174"/>
+      <path d="M0 96.5 L112 96.5 C211.0 96.5 266.8 174 292 174"/>
+      <path d="M0 115.9 L112 115.9 C211.0 115.9 266.8 174 292 174"/>
+      <path d="M0 135.2 L112 135.2 C211.0 135.2 266.8 174 292 174"/>
+      <path d="M0 154.6 L112 154.6 C211.0 154.6 266.8 174 292 174"/>
+      <path d="M0 174.0 L112 174.0 C211.0 174.0 266.8 174 292 174"/>
+      <path d="M0 193.4 L112 193.4 C211.0 193.4 266.8 174 292 174"/>
+      <path d="M0 212.8 L112 212.8 C211.0 212.8 266.8 174 292 174"/>
+      <path d="M0 232.1 L112 232.1 C211.0 232.1 266.8 174 292 174"/>
+      <path d="M0 251.5 L112 251.5 C211.0 251.5 266.8 174 292 174"/>
+      <path d="M0 270.9 L112 270.9 C211.0 270.9 266.8 174 292 174"/>
+      <path d="M0 290.2 L112 290.2 C211.0 290.2 266.8 174 292 174"/>
+      <path d="M0 309.6 L112 309.6 C211.0 309.6 266.8 174 292 174"/>
+      <path d="M0 329.0 L112 329.0 C211.0 329.0 266.8 174 292 174"/>
+      <path d="M292 174 C319.2 174 389.0 74.0 486 74.0 L694 74.0"/>
+      <path d="M292 174 C319.2 174 389.0 94.0 486 94.0 L694 94.0"/>
+      <path d="M292 174 C319.2 174 389.0 114.0 486 114.0 L694 114.0"/>
+      <path d="M292 174 C319.2 174 389.0 134.0 486 134.0 L694 134.0"/>
+      <path d="M292 174 C319.2 174 389.0 154.0 486 154.0 L694 154.0"/>
+      <path d="M292 174 C319.2 174 389.0 174.0 486 174.0 L694 174.0"/>
+      <path d="M292 174 C319.2 174 389.0 194.0 486 194.0 L694 194.0"/>
+      <path d="M292 174 C319.2 174 389.0 214.0 486 214.0 L694 214.0"/>
+      <path d="M292 174 C319.2 174 389.0 234.0 486 234.0 L694 234.0"/>
+      <path d="M292 174 C319.2 174 389.0 254.0 486 254.0 L694 254.0"/>
+      <path d="M292 174 C319.2 174 389.0 274.0 486 274.0 L694 274.0"/>
+        </g>
+        <g fill="none" stroke="currentColor" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" opacity="0.58">
+          <path d="M690 70.6 L695 74.0 L690 77.4"/>
+      <path d="M690 90.6 L695 94.0 L690 97.4"/>
+      <path d="M690 110.6 L695 114.0 L690 117.4"/>
+      <path d="M690 130.6 L695 134.0 L690 137.4"/>
+      <path d="M690 150.6 L695 154.0 L690 157.4"/>
+      <path d="M690 170.6 L695 174.0 L690 177.4"/>
+      <path d="M690 190.6 L695 194.0 L690 197.4"/>
+      <path d="M690 210.6 L695 214.0 L690 217.4"/>
+      <path d="M690 230.6 L695 234.0 L690 237.4"/>
+      <path d="M690 250.6 L695 254.0 L690 257.4"/>
+      <path d="M690 270.6 L695 274.0 L690 277.4"/>
+        </g>
+      </svg>
+    </div>
     <div class="obj r" id="upd">
       <div class="updwrap" id="updWrap">
         <p class="hero" id="capV" data-morph-text>Liability cap &middot; $2,000,000</p>
@@ -1939,7 +2006,7 @@ function onWidth(fn){
       </div>
     </article>
     <article class="md" data-i="3" hidden>
-      <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="1800" height="1132" loading="lazy" decoding="async" alt="Auto Extraction in Sirion: the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
+      <div class="md-shot still"><picture><img src="ae-review-screen.webp" width="2400" height="1462" loading="lazy" decoding="async" alt="Auto Extraction in Sirion: the contract on the left, the 128 extracted fields on the right, one open for review with Accept, edit and reject beside the evidence." /></picture></div>
       <div class="md-body">
         <h2>Auto Extraction</h2>
         <p class="md-k">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</p>
@@ -1991,16 +2058,12 @@ function onWidth(fn){
       </a></h2>
     <a class="copybtn r" href="mailto:amritkmr08@gmail.com?subject=Saw%20your%20portfolio">Write to me</a>
     <span class="mailalt r"><button class="copylink" id="copymail" type="button" title="Copy email address"><span id="copytxt" data-morph-text>amritkmr08@gmail.com</span></button>
-      &nbsp;&middot;&nbsp; <a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a> &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a> &nbsp;&middot;&nbsp; <a href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">Medium</a></span>
+      <i class="sep" aria-hidden="true">&nbsp;&middot;&nbsp;</i><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a><i class="sep" aria-hidden="true">&nbsp;&middot;&nbsp;</i><a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a><i class="sep" aria-hidden="true">&nbsp;&middot;&nbsp;</i><a href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">Medium</a></span>
   </div>
 </section>
 <footer>
-  <p class="fnote">This site follows the same principle: information stays quiet until it
-    earns attention.</p>
-  <div class="frow">
-    <div>&copy; <span id="year"></span> Amrit Kumar</div>
-    <div class="fbuilt">Built with Claude</div>
-  </div>
+  <div>&copy; <span id="year"></span> Amrit Kumar</div>
+  <div class="fbuilt">Built with Claude</div>
 </footer>
 <script>
 (function () {

@@ -27,7 +27,7 @@
     --soft: #EDEDEA;
     --accent: #3D5A45;
     --warn: #9A4A38;
-    --radius: 3px;
+    --radius: 20px;
     --font-display: "Poppins", -apple-system, sans-serif;
     --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -64,7 +64,9 @@
     display: block; font-family: var(--font-display); font-size: 16px;
     font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
   }
-  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 24px; }
+  /* the name above this was a second link to the same place; the way back is enough.
+     It carries the rail on its own now, so it steps up one notch of presence. */
+  .rail .back { display: block; font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
   .rail .back:hover { color: var(--ink); }
   .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
   .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
@@ -141,10 +143,13 @@
   }
 
   /* figure plate */
-  figure { margin: 44px 0 0; }
+  figure { margin: 44px 0 40px; }
+  figure:last-child { margin-bottom: 0; }
+  /* The prototype is a figure like the rest, so it stands on a stage like the rest.
+     It used to sit straight on the paper with a border of its own, which made it
+     the one exhibit on the page framed a different way. */
   .protoframe {
-    position: relative; margin-top: 26px;
-    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    position: relative; border: 0; border-radius: 8px; overflow: hidden;
     background: #fff; height: 620px; padding-top: 0;
     box-shadow: 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25,26,24,.45);
   }
@@ -164,13 +169,58 @@
     .protoframe iframe { display: none; }
     .proto-poster { display: block; }
   }
+  /* The plate was a single warm ramp, and ten of them down one page read as a
+     yellow cast on every screenshot. Two soft blooms instead, cool at the top
+     right and a pale lilac at the bottom left, fading into a neutral base with
+     no hard stop anywhere. The screenshots carry their own colour in small
+     chips, so the stage stays low in saturation and lets them keep it. */
   .plate {
-    background: radial-gradient(120% 100% at 85% 0%, #EBDDBE 0%, #F0E6D0 50%, #F0EDE4 100%);
     border: 0; border-radius: 12px; padding: clamp(18px, 4.5%, 48px); overflow: hidden;
+    background:
+      radial-gradient(96% 88% at 86% -6%, var(--g1) 0%, var(--g1f) 56%),
+      radial-gradient(88% 86% at 8% 104%, var(--g2) 0%, var(--g2f) 60%),
+      radial-gradient(120% 70% at 50% 120%, var(--g3) 0%, var(--g3f) 64%),
+      var(--gb);
   }
+  /* Six stages, one family. Each figure gets its own so the page is not one long
+     wash, but they are built the same way every time - a bloom from the top right,
+     one from the bottom left, a third rising from the base for depth, no hard stop
+     anywhere. They cycle in document order, so no two figures next to each other
+     share a stage. */
+  .p1 { --g1:#C6D6F0; --g1f:rgba(198,214,240,0); --g2:#DED0EA; --g2f:rgba(222,208,234,0);
+        --g3:#DCE7EC; --g3f:rgba(220,231,236,0); --gb:#E7E9EE; }
+  .p2 { --g1:#D9C9EC; --g1f:rgba(217,201,236,0); --g2:#F4D9C4; --g2f:rgba(244,217,196,0);
+        --g3:#E6DCEC; --g3f:rgba(230,220,236,0); --gb:#EDE6EB; }
+  .p3 { --g1:#C2E2D6; --g1f:rgba(194,226,214,0); --g2:#CCDEF2; --g2f:rgba(204,222,242,0);
+        --g3:#E4EFE6; --g3f:rgba(228,239,230,0); --gb:#E2EBE8; }
+  .p4 { --g1:#F6CEC2; --g1f:rgba(246,206,194,0); --g2:#C7DBF3; --g2f:rgba(199,219,243,0);
+        --g3:#F3E2D6; --g3f:rgba(243,226,214,0); --gb:#F0E5E2; }
+  .p5 { --g1:#BFE1DC; --g1f:rgba(191,225,220,0); --g2:#D8CCF0; --g2f:rgba(216,204,240,0);
+        --g3:#E0EEEC; --g3f:rgba(224,238,236,0); --gb:#E3EBEB; }
+  .p6 { --g1:#F2DEB2; --g1f:rgba(242,222,178,0); --g2:#EFCCD6; --g2f:rgba(239,204,214,0);
+        --g3:#EFE6D4; --g3f:rgba(239,230,212,0); --gb:#EFE7DD; }
+  /* The filter figure is its own gradient already. Standing it on a second one put
+     a coloured frame around a coloured picture, so that one keeps no stage: the
+     image is the figure, edge to edge. */
+  .plate.bleed { background: none; padding: 0; }
+  /* One lift, no outline. The hairline ring drew a second edge around figures
+     that already carry their own - a screenshot of a card, a page with a border -
+     so every one of those read as two frames stacked. The shadow alone is enough
+     to sit the figure above the plate, and any line you see now belongs to the
+     thing in the picture. */
+  /* A figure that is drawn rather than captured: no card, no shadow, it is the
+     stage itself carrying the marks. The training screen said this with a row of
+     counters that were placeholder numbers; the drawing says it with structure,
+     which is the part that was true. */
+  /* the prototype's stage is not inside a <figure>, so it needs the same air above
+     it that every other figure gets from figure { margin } */
+  .wrap > .plate { margin-top: 44px; }
+  .plate.drawn { padding: clamp(26px, 5.5%, 56px) clamp(18px, 4.5%, 48px); }
+  .plate.drawn .fnote { text-transform: uppercase; }
+  .plate .fig { display: block; width: 100%; height: auto; color: var(--ink); }
   .plate img {
     width: 100%; height: auto; border-radius: 8px;
-    box-shadow: 0 0 0 1px rgba(25, 26, 24, 0.1), 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25, 26, 24, 0.45);
+    box-shadow: 0 2px 4px rgba(25, 26, 24, .06), 0 36px 60px -30px rgba(25, 26, 24, 0.45);
   }
   figcaption {
     margin-top: 14px; font-size: 14px; color: var(--muted); line-height: 1.55;
@@ -342,7 +392,6 @@
 
 <aside class="rail">
   <div>
-    <a class="mark" href="index.html">Amrit Kumar</a>
     <a class="back" href="index.html#work">&larr; All work</a>
   </div>
   <nav class="toc">
@@ -360,8 +409,7 @@
     <a href="#learned">What I took from it</a>
   </nav>
   <div class="foot">
-    <a href="contract-understanding.html">Contract relationships</a><br />
-    <a href="contract-onboarding.html">Contract onboarding</a><br />
+    <a href="index.html#work">All work</a><br />
     <a href="mailto:amritkmr08@gmail.com">Email me</a>
   </div>
 </aside>
@@ -372,9 +420,9 @@
   <div class="wrap">
     <p class="kicker reveal">Case study · AI review interface · 15 min read</p>
     <h1 class="reveal">An AI can extract 128 fields. A lawyer still has to <em>check every one</em>.</h1>
-    <p class="hero-sub reveal">Three generations of interface for verifying machine-extracted
-    contract data. I built all three. This is the story of what the first two got wrong, and what
-    the retention curve did once the third one shipped.</p>
+    <p class="hero-sub reveal">Three versions of the same screen, for checking what an AI pulled
+    out of a contract. I built all three. This is what the first two got wrong, and what happened
+    to retention once the third one shipped.</p>
 
     <div class="snapshot reveal">
       <div><p>Product</p><p>Auto Extraction, the AI review module in an enterprise contract platform</p></div>
@@ -389,25 +437,24 @@
       <p class="lb">If you read one thing</p>
       <dl>
         <dt>Problem</dt>
-        <dd>The model could pull 128 values out of a contract in seconds. A lawyer then had to
-        check every one, and if checking took as long as reading, the AI had moved the work
-        rather than removed it.</dd>
+        <dd>The model pulled 128 values out of a contract in seconds. Then a lawyer had to check
+        every one. If checking took as long as reading, the AI had moved the work, not removed it.</dd>
         <dt>What I built</dt>
-        <dd>Three versions of the review interface. Highlights in the text, then hover cards,
-        then permanently visible <b>assist bars</b> in the margin that turn 128 scattered
-        values into one pass down the document. Each version fixed the last one's complaint
-        and exposed a new one.</dd>
+        <dd>Three versions of the review screen. First highlights in the text. Then hover cards.
+        Then <b>assist bars</b> in the margin that stay visible, so 128 scattered values become
+        one pass down the document. Each version fixed the last one's complaint and created a new
+        one.</dd>
         <dt>The decision I'd defend hardest</dt>
-        <dd>We removed the confidence score. A lawyer cannot act on 0.82. The card shows the
-        model's reasoning and the passage the value came from instead, so verification becomes
-        reading, which is what lawyers are trained to do.</dd>
+        <dd>We took out the confidence score. A lawyer can't do anything with 0.82. The card shows
+        the model's reasoning and the passage the value came from instead. Checking becomes
+        reading, which is the job lawyers already know how to do.</dd>
         <dt>What happened</dt>
-        <dd>Month-four retention went from <b>5% to 23%</b>. The redesign did not win more
-        users; it stopped losing the ones who arrived. The cohort mix and the model both changed
-        over the period, so I claim the shape of the curve, not the whole number.</dd>
+        <dd>Month-four retention went from <b>5% to 23%</b>. The redesign didn't bring in more
+        users. It stopped losing the ones who showed up. The customer mix and the model both
+        changed over that period, so I claim the shape of the curve, not the whole number.</dd>
         <dt>What transfers</dt>
-        <dd>Any product where a person has to sign off on machine output: put the evidence next
-        to the claim, one item at a time, and let the correction teach the model.</dd>
+        <dd>Any product where a person has to sign off on what a machine produced: put the
+        evidence next to the claim, one item at a time, and let the correction teach the model.</dd>
       </dl>
     </div>
   </div>
@@ -417,16 +464,15 @@
   <div class="wrap narrow">
     <h2 class="reveal">The task nobody can skip</h2>
     <div class="body-text reveal">
-      <p class="lede">Thousands of contracts, each running to hundreds of pages, have to be read
-      closely enough to pin down every risky clause, position, numeric value and date. Miss one and
-      it costs the company money or exposes it legally. So nobody skims. The work is slow because
-      the consequences of speed are expensive.</p>
-      <p>An AI model can read those pages in seconds and pull out the values. That was already
-      working. The model was not the problem.</p>
-      <p>The problem was the second half of the job. Once the machine has proposed 128 answers, a
-      lawyer has to agree with each one, and until they do, none of the speed counts. If verifying
-      the machine takes as long as reading the contract, the AI has moved the work rather than
-      removed it.</p>
+      <p class="lede">Thousands of contracts. Hundreds of pages each. Someone has to read them
+      closely enough to catch every risky clause, position, number and date. Miss one and it costs
+      the company money, or leaves it exposed legally. So nobody skims. The work is slow because
+      going fast is expensive.</p>
+      <p>An AI can read those pages in seconds and pull the values out. That part already worked.
+      The model was not the problem.</p>
+      <p>The problem was the second half of the job. The machine proposes 128 answers. A lawyer
+      has to agree with each one, and until they do, none of that speed counts. If checking the
+      machine takes as long as reading the contract, the AI has moved the work, not removed it.</p>
     </div>
 
     <blockquote class="reveal">The extraction was fast. The verification was not. Everything
@@ -435,15 +481,15 @@
 
   <div class="wrap">
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p1">
         <picture>
-<img src="ae-review-screen.webp" width="1800" height="1132"
+<img src="ae-review-screen.webp" width="2400" height="1462"
                alt="The Auto Extraction review screen: contract text on the left, a panel of extracted fields on the right with accept and edit controls." loading="lazy" />
         </picture>
       </div>
       <figcaption><b>Fig. 01 · The screen</b>
-      <span>Contract on the left, the machine's 128 proposed answers on the right. Every one of them
-      needs a human to accept, correct or reject it.</span></figcaption>
+      <span>Contract on the left, the machine's 128 proposed answers on the right. Every one of
+      them needs a person to accept, correct or reject it.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -452,17 +498,16 @@
   <div class="wrap narrow">
     <h2 class="reveal">What lawyers actually asked for</h2>
     <div class="body-text reveal">
-      <p>The instinct with an AI feature is to design for speed. Sitting with reviewers, that turned
-      out to be the wrong target. They did not want the tool to be faster at telling them things.
-      They wanted to be able to see <em>why</em> it had said them, without leaving the sentence they
-      were reading.</p>
-      <p>Three principles came out of that, and every decision below was settled against them.</p>
+      <p>The instinct with an AI feature is to design for speed. Sitting with reviewers, speed
+      turned out to be the wrong target. They didn't want the tool to tell them things faster.
+      They wanted to see <em>why</em> it said them, without leaving the sentence they were on.</p>
+      <p>Three principles came out of that. Every decision below was settled against them.</p>
     </div>
 
     <div class="prin reveal">
       <div>
         <h3>Transparency over speed</h3>
-        <p>A reviewer needs to see why a clause was flagged. An answer they cannot trace is an
+        <p>A reviewer needs to see why a clause was flagged. An answer they can't trace back is an
         answer they have to redo themselves.</p>
       </div>
       <div>
@@ -472,23 +517,23 @@
       </div>
       <div>
         <h3>Continuity of flow</h3>
-        <p>Breaking focus reduces accuracy. Anything that pulls a reader out of the document has to
-        earn its interruption.</p>
+        <p>Break someone's focus and accuracy drops. Anything that pulls a reader out of the
+        document has to earn the interruption.</p>
       </div>
     </div>
   </div>
 
   <div class="wrap">
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p2">
         <picture>
-<img src="ae-matrix.webp" width="1800" height="1054"
+<img src="ae-matrix.webp" width="1784" height="1034"
                alt="A two-by-two prioritisation board mapping pain points against business impact and difficulty to execute, covered in sticky notes." loading="lazy" />
         </picture>
       </div>
       <figcaption><b>Fig. 02 · Prioritisation</b>
-      <span>Pain points mapped against business impact and difficulty to execute, so the argument
-      about what to build first happened once rather than every week.</span></figcaption>
+      <span>Pain points mapped against business impact and how hard they were to build, so the
+      argument about what to do first happened once instead of every week.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -499,20 +544,20 @@
     <div class="body-text reveal">
       <p class="lede">Before designing anything I went looking for what reviewing already looks
       like when nobody has built a tool for it.</p>
-      <p>People review things constantly. Someone turns a packet over in a shop and runs a finger
-      down the nutrition panel, checking a few values against what they care about. A rent agreement
-      comes back from a tenant with a highlighter through the clauses that matter, the marks sitting
-      directly on the sentences rather than in a summary somewhere else.</p>
-      <p>Both share a property worth copying: <b>the annotation stays on the source.</b> Nobody
-      transcribes the numbers into a separate sheet to check them. The mark is made where the
+      <p>People review things all the time. Someone turns a packet over in a shop and runs a
+      finger down the nutrition panel, checking the few numbers they care about. A rent agreement
+      comes back from a tenant with highlighter through the clauses that matter. The marks sit on
+      the sentences themselves, not in a summary somewhere else.</p>
+      <p>Both do the same thing, and it is worth copying: <b>the mark stays on the source.</b>
+      Nobody copies the numbers into a separate sheet to check them. The mark goes where the
       evidence is, so the evidence and the judgment about it never come apart.</p>
-      <p>That gave the first version its shape, and it turned out to be the constraint that survived
-      all three. What changed across the iterations was how much could sit on the page at once
-      without breaking the reading. What did not change was the rule that a reviewer should never
-      have to leave the sentence to check the claim about it.</p>
+      <p>That gave the first version its shape, and it is the one rule that survived all three.
+      What changed each time was how much could sit on the page at once without breaking the
+      reading. What never changed: a reviewer should not have to leave the sentence to check the
+      claim about it.</p>
     </div>
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p3">
         <picture>
 <img src="wb-review-argument.webp" width="1800" height="1341" loading="lazy"
                alt="A whiteboard reading: good review requires owning the entire information into a structure personalised to me. Below it, that an AI summary giving shallow structure feels incomplete or low quality, and that in contracts reading the sources to build that ownership is expensive at a thousand pages. At the bottom, a summary of a contract and the raw contracts, with a reconstruction accelerator between them." />
@@ -520,9 +565,9 @@
       </div>
       <figcaption><b>Fig. 03 &middot; The argument underneath</b>
       <span>The board this work started from. A summary can be accurate and still feel incomplete,
-      because the reviewer has not built the structure themselves &mdash; and the source that would
-      let them runs to a thousand pages. Everything after this is an attempt to close that gap
-      without asking anyone to read it all.</span></figcaption>
+      because the reviewer hasn't built the structure in their own head. The source that would let
+      them do that runs to a thousand pages. Everything after this tries to close that gap without
+      asking anyone to read all of it.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -531,9 +576,9 @@
   <div class="wrap narrow">
     <h2 class="reveal">Three attempts at showing the machine's work</h2>
     <div class="body-text reveal">
-      <p>What follows is the honest sequence. Each version solved the complaint about the one before
-      it and introduced a new one. I am including the two I replaced because the reason each failed
-      is the actual finding.</p>
+      <p>This is the honest sequence. Each version solved the complaint about the one before it
+      and created a new one. I am including the two I replaced, because why each one failed is the
+      actual finding.</p>
     </div>
   </div>
 
@@ -546,25 +591,25 @@
       </div>
       <div class="iter-grid">
         <figure>
-          <div class="plate">
+          <div class="plate p4">
             <picture>
-<img src="ae-iter-1-ui.webp" width="1500" height="1664"
+<img src="ae-iter-1-ui.webp" width="1226" height="1379"
                    alt="Contract text with AI-extracted values highlighted directly in the paragraphs in green, blue and red." loading="lazy" />
             </picture>
           </div>
         </figure>
         <div>
-          <p>Highlight the extracted values directly in the text, where the lawyer is already
+          <p>Highlight the extracted values right in the text, where the lawyer is already
           looking. No panel, no navigation, no second place to look. The most literal reading of
-          "keep them in the document".</p>
+          "keep it in the document".</p>
           <div class="verdict">
             <div class="won"><span class="tag">Worked</span><p>Fast to scan. The value stayed
             attached to the sentence that produced it.</p></div>
             <div class="cost"><span class="tag">Cost</span><p>Detail was hidden behind a hover.
             Reading stopped every time someone needed to check what a highlight meant.</p></div>
           </div>
-          <div class="killed"><b>Why I replaced it.</b> Efficient for spotting things, too shallow
-          for deciding about them. Detection is not verification.</div>
+          <div class="killed"><b>Why I replaced it.</b> Good for spotting things, too thin for
+          deciding about them. Spotting is not verifying.</div>
         </div>
       </div>
     </div>
@@ -576,26 +621,25 @@
       </div>
       <div class="iter-grid">
         <figure>
-          <div class="plate">
+          <div class="plate p5">
             <picture>
-<img src="ae-iter-2-ui.webp" width="1370" height="1475"
+<img src="ae-iter-2-ui.webp" width="1336" height="1425"
                    alt="The same contract text, with a small card floating above a highlighted passage showing the extracted field name and its value." loading="lazy" />
             </picture>
           </div>
         </figure>
         <div>
-          <p>Expand the highlight into a card that shows the extracted value alongside the text, so
-          a reviewer gets the context without losing their place. This fixed the depth problem
+          <p>Open the highlight into a card that shows the extracted value next to the text, so a
+          reviewer gets the context without losing their place. That fixed the depth problem
           directly.</p>
           <div class="verdict">
-            <div class="won"><span class="tag">Worked</span><p>Richer detail at a glance. Less
-            guesswork, and validating a single value became quick.</p></div>
-            <div class="cost"><span class="tag">Cost</span><p>Every check still required a
-            deliberate mouse movement. Across a long document that is hundreds of small
-            interruptions.</p></div>
+            <div class="won"><span class="tag">Worked</span><p>More detail at a glance. Less
+            guesswork, and checking a single value got quick.</p></div>
+            <div class="cost"><span class="tag">Cost</span><p>Every check still needed a
+            deliberate mouse move. Across a long document that is hundreds of small interruptions.</p></div>
           </div>
           <div class="killed"><b>Why I replaced it.</b> It solved one lookup well and a hundred
-          lookups badly. The unit of work was never one value; it was a whole contract.</div>
+          lookups badly. The unit of work was never one value. It was a whole contract.</div>
         </div>
       </div>
     </div>
@@ -607,26 +651,26 @@
       </div>
       <div class="iter-grid">
         <figure>
-          <div class="plate">
+          <div class="plate p6">
             <picture>
-<img src="ae-iter-3-ui.webp" width="1500" height="1427"
+<img src="ae-iter-3-ui.webp" width="1465" height="1347"
                    alt="Contract text with labelled bars aligned in the right margin, each naming an extracted field beside the passage it came from." loading="lazy" />
             </picture>
           </div>
         </figure>
         <div>
-          <p>Stop hiding the labels. Put them in the margin, aligned with the passage each value came
-          from, permanently visible. Names, dates and clauses become a sequence a reviewer can work
-          down rather than a set of things to go hunting for.</p>
+          <p>Stop hiding the labels. Put them in the margin, lined up with the passage each value
+          came from, and leave them visible. Names, dates and clauses become a list a reviewer can
+          work down, instead of things to go hunting for.</p>
           <div class="verdict">
-            <div class="won"><span class="tag">Worked</span><p>Sequential and structured. Review
-            became one continuous pass instead of constant context switching.</p></div>
+            <div class="won"><span class="tag">Worked</span><p>Ordered and structured. Review
+            became one continuous pass instead of constant switching.</p></div>
             <div class="cost"><span class="tag">Cost</span><p>An extra layer of interface, and a
             real learning curve for people opening it for the first time.</p></div>
           </div>
           <div class="killed"><b>Why this one stayed.</b> It turned scattered highlights into a
-          guided path through the document. It costs new users something on day one and pays it back
-          on every document after.</div>
+          guided path through the document. It costs a new user something on day one and pays it
+          back on every document after that.</div>
         </div>
       </div>
     </div>
@@ -638,28 +682,28 @@
   <div class="wrap narrow">
     <h2 class="reveal">The document moves, not the reviewer</h2>
     <div class="body-text reveal">
-      <p class="lede">The assist bars gave the review a sequence. What makes the sequence work is
-      what happens after a single click.</p>
-      <p>Accept a value and three things follow, in that order rather than all at once. The tick
-      lands on the value, because a person just decided it. A beat later the card closes and the
-      next field opens. And the contract scrolls itself to the passage that next value was taken
+      <p class="lede">The assist bars gave the review an order. What makes that order work is what
+      happens after a single click.</p>
+      <p>Accept a value and three things happen, one after another instead of all at once. The
+      tick lands on the value, because a person just decided it. A beat later the card closes and
+      the next field opens. Then the contract scrolls itself to the passage that next value came
       from, with the passage lit.</p>
-      <p>The beat in the middle is doing real work. If the confirmation and the change of view
-      happened in the same instant, the reviewer would lose sight of what they had just agreed to.
-      The tick gets its own moment before anything else moves.</p>
-      <p>What leaves the loop is the navigation. It used to run: read the proposed value, scroll the
-      document, find the clause, compare, scroll back, click. The reading and the deciding stay.
-      The searching is gone, because the evidence for the next decision is already on screen by the
-      time the reviewer gets there.</p>
+      <p>That beat in the middle is doing real work. If the tick and the change of view landed at
+      the same instant, the reviewer would lose sight of what they had just agreed to. So the tick
+      gets its own moment before anything else moves.</p>
+      <p>What drops out of the loop is the navigation. It used to go: read the proposed value,
+      scroll the document, find the clause, compare, scroll back, click. The reading and the
+      deciding stay. The searching is gone, because the evidence for the next decision is already
+      on screen when the reviewer gets there.</p>
       <p>That is also the answer to the question this whole product turns on. You do not get a
-      lawyer to trust a machine by telling them it is accurate. You put the source in front of them
-      before they ask for it, on every value, without making them work for it.</p>
+      lawyer to trust a machine by telling them it is accurate. You put the source in front of
+      them before they ask, on every value, without making them work for it.</p>
     </div>
 
   </div>
 
   <div class="wrap">
-    <div class="protoframe reveal">
+    <div class="plate p1 reveal"><div class="protoframe">
       <iframe src="ae-review-loop.html" loading="lazy"
               title="Working prototype: accepting an extracted value confirms it, advances to the next field, and scrolls the contract to the passage that value came from."></iframe>
       <a class="proto-poster" href="ae-review-loop.html" aria-label="Open the running prototype">
@@ -668,10 +712,10 @@
                alt="The review prototype: contract text on the left, the machine's proposed values on the right, one card open with Accept, Edit and Re-tag." />
         </picture>
       </a>
-    </div>
+    </div></div>
     <figcaption style="margin-top:14px"><b>Fig. 04 · The review loop</b>
-    <span>Running prototype, playing a recorded sequence. Click Accept yourself and it hands over.
-    The interaction is the real one; the contract and the party names are invented.
+    <span>Running prototype, playing a recorded sequence. Click Accept yourself and it hands over
+    to you. The interaction is the real one. The contract and the party names are made up.
     <a href="ae-review-loop.html" target="_blank" rel="noopener">Open it in its own tab &rarr;</a></span></figcaption>
   </div>
 </section>
@@ -682,22 +726,21 @@
     <div class="body-text reveal">
       <p>Four kinds of thing get extracted, and a reviewer has to tell them apart at a glance:
       metadata, clauses, obligations and service levels. The obvious answer is four colours. The
-      obvious answer excludes colour-blind reviewers, and this is software people use for six hours
-      a day.</p>
-      <p>So each type carries a shape as well as a colour. A circle, a square, a triangle, a
-      diamond. The distinction survives without colour, and it costs nothing to anyone who can see
-      it.</p>
+      obvious answer also leaves out colour-blind reviewers, and this is software people sit in
+      for six hours a day.</p>
+      <p>So each type carries a shape as well as a colour. Circle, square, triangle, diamond. The
+      difference holds up without colour, and costs nothing to anyone who can see it.</p>
     </div>
 
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p2">
         <picture>
-<img src="ae-legend.webp" width="1800" height="1008"
+<img src="ae-legend.webp" width="1917" height="975"
                alt="A legend showing four extraction types, each with a distinct coloured geometric shape: metadata, clause, obligation and service levels." loading="lazy" />
         </picture>
       </div>
       <figcaption><b>Fig. 05 · The four types</b>
-      <span>Shape carries the meaning, colour reinforces it. Simple geometry turned out to be enough
+      <span>Shape carries the meaning, colour backs it up. Simple geometry turned out to be enough
       for both jobs.</span></figcaption>
     </figure>
   </div>
@@ -707,24 +750,24 @@
   <div class="wrap narrow">
     <h2 class="reveal">The number we decided not to show</h2>
     <div class="body-text reveal">
-      <p class="lede">Every AI feature reaches the same fork: the model has some sense of how sure
-      it is, so do you put that on screen? The default answer is a confidence score. We tried it
-      and took it out.</p>
-      <p>A lawyer cannot act on 0.82. It tells them the machine is somewhat sure, which they already
-      assumed, and it gives them nothing to check. Worse, a high number invites people to skip the
+      <p class="lede">Every AI feature hits the same fork. The model has some sense of how sure it
+      is, so do you put that on screen? The default answer is a confidence score. We tried it,
+      then took it out.</p>
+      <p>A lawyer cannot act on 0.82. It says the machine is fairly sure, which they already
+      assumed, and it gives them nothing to check. Worse: a high number invites people to skip the
       check, and a low one tells them to look without telling them where. Either way the score
-      substitutes for the evidence rather than pointing at it.</p>
-      <p>What reviewers were actually doing was reading <b>where</b> the value came from. If the
-      party name was pulled from the preamble it was almost certainly right. If it came from a
-      recital halfway down page nine, it needed a second look. The position of a value in a contract
-      carries meaning, and lawyers already know how to read that. So the interface shows the
-      provenance instead of a probability.</p>
+      stands in for the evidence instead of pointing at it.</p>
+      <p>What reviewers were actually doing was reading <b>where</b> the value came from. A party
+      name pulled from the preamble was almost certainly right. One pulled from a recital halfway
+      down page nine needed a second look. Where a value sits in a contract carries meaning, and
+      lawyers already know how to read that. So the interface shows provenance instead of
+      probability.</p>
     </div>
 
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p3">
         <picture>
-<img src="ae-card-anatomy.webp" width="1500" height="805"
+<img src="ae-card-anatomy.webp" width="1603" height="905"
                alt="The review card broken into its parts: multi-value navigation, the field title and extracted value, the model's reasoning in plain language, numbered references back into the document, and the accept, edit and delete actions." loading="lazy" />
         </picture>
       </div>
@@ -734,19 +777,18 @@
     </figure>
 
     <div class="body-text reveal">
-      <p>The card went through its own revision on the way here. An earlier version pasted the
-      surrounding sentence from the contract and gave a page number, which was honest but left the
-      reviewer to work out why that passage was the relevant one. Replacing the excerpt with the
-      model's reasoning, and the page number with jumpable references, kept the provenance and added
-      the argument.</p>
+      <p>The card went through its own revision on the way here. An earlier version pasted in the
+      surrounding sentence and gave a page number. Honest, but it left the reviewer to work out
+      why that passage was the relevant one. Swapping the excerpt for the model's reasoning, and
+      the page number for references you can jump to, kept the provenance and added the argument.</p>
       <p>Two of those bands do the work a score would have done, and do it better.</p>
-      <p><b>The reasoning band states the case in words.</b> "Based on the last 12 documents, the
-      standard term used for this document type is Master Service Agreement." That is checkable. A
-      reviewer can disagree with the reasoning itself, which they cannot do with a number.</p>
-      <p><b>The references band cites positions in the contract.</b> Selecting one scrolls the
-      document to the passage the value was taken from, so the reviewer is looking at the source
-      rather than at a claim about it. Verification becomes reading, which is the job lawyers were
-      trained to do, rather than trusting a metric they have no way to audit.</p>
+      <p><b>The reasoning band makes the case in words.</b> "Based on the last 12 documents, the
+      standard term used for this document type is Master Service Agreement." That can be checked.
+      A reviewer can disagree with the reasoning itself. You cannot disagree with a number.</p>
+      <p><b>The references band points at places in the contract.</b> Select one and the document
+      scrolls to the passage the value came from, so the reviewer is looking at the source, not at
+      a claim about it. Verification becomes reading, which is the job lawyers were trained for,
+      instead of trusting a number they have no way to audit.</p>
     </div>
   </div>
 </section>
@@ -755,20 +797,20 @@
   <div class="wrap narrow">
     <h2 class="reveal">What happens when it is wrong</h2>
     <div class="body-text reveal">
-      <p>Extraction gets things wrong, and a review tool that only designs the agreeing path is
-      not a review tool. Every proposed value has three exits, not one.</p>
+      <p>Extraction gets things wrong. A review tool that only designs the agreeing path is not a
+      review tool. Every proposed value has three ways out, not one.</p>
       <p><b>Accept</b> confirms it and moves to the next value, so agreement costs a single click
       and the reviewer keeps their place.</p>
-      <p><b>Edit</b> corrects the value in place. The field becomes editable where it already sits,
-      rather than opening a form somewhere else.</p>
-      <p><b>Re-tag</b> is the one that matters. If the machine took the value from the wrong part of
-      the document, the reviewer selects the correct passage in the contract itself and the value is
-      rebound to it. The correction is made against the evidence rather than typed over the top of
-      it, so the record keeps a defensible source rather than an unexplained override.</p>
+      <p><b>Edit</b> fixes the value where it is. The field becomes editable in place, instead of
+      opening a form somewhere else.</p>
+      <p><b>Re-tag</b> is the one that matters. If the machine took the value from the wrong part
+      of the document, the reviewer selects the right passage in the contract and the value is
+      rebound to it. The correction is made against the evidence, not typed over the top of it, so
+      the record keeps a source you can defend instead of an override nobody can explain.</p>
     </div>
 
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p4">
         <picture>
 <img src="ae-inline-edit.webp" width="778" height="348"
                alt="A party value being corrected in place: an editable field reading SailPoint Technologies with done and cancel controls beneath it." loading="lazy" />
@@ -779,45 +821,98 @@
     </figure>
 
     <div class="body-text reveal">
-      <p>Values are presented one at a time rather than as a wall of 128. That was a deliberate
-      trade: it costs a reviewer some sense of the whole, and it buys a sequence they can work down
-      without deciding what to look at next. On a hundred-page agreement, removing that decision
-      repeatedly is worth more than the overview.</p>
+      <p>Values come one at a time, not as a wall of 128. That was a deliberate trade. It costs a
+      reviewer some sense of the whole, and buys an order they can work down without deciding what
+      to look at next. On a hundred-page agreement, taking that decision away over and over is
+      worth more than the overview.</p>
 
       <h3 style="margin-top:44px">Where a rejection goes</h3>
-      <p>Rejecting a value removes it from the reviewer's view, which is what they want, but it is
-      the most informative thing that happens all day and throwing it away would be a waste. Every
-      correction becomes a labelled example on the training side of the product, sorted by <b>what
-      kind of mistake it was</b>: a value the model missed entirely, a value it captured
-      incorrectly, or one a person tagged by hand.</p>
-      <p>That distinction matters, because a miss and a wrong answer are different failures and a
-      single "incorrect" bucket would hide which one the model is actually getting worse at.</p>
+      <p>Rejecting a value takes it off the reviewer's screen, which is what they want. But it is
+      also the most informative thing that happens all day, and throwing it away would be a waste.
+      Every correction becomes a labelled example on the training side of the product, sorted by
+      <b>what kind of mistake it was</b>: a value the model missed completely, a value it got
+      wrong, or one a person tagged by hand.</p>
+      <p>That split matters. A miss and a wrong answer are different failures, and one "incorrect"
+      bucket would hide which one the model is actually getting worse at.</p>
     </div>
 
     <figure class="reveal">
-      <div class="plate">
-        <picture>
-<img src="ae-train.webp" width="1500" height="230"
-               alt="The training screen for one field category, showing counts of all selected data, user-tagged data, missed values, incorrectly captured values and uploaded data, with a note that a minimum of twenty data points is required before a model can be trained." loading="lazy" />
-        </picture>
+      <div class="plate p5 drawn">
+        <svg class="fig" viewBox="0 0 760 178" role="img"
+             aria-label="The same corrections filed two ways. On the left a single bracket holds all of them under one label, Incorrect. On the right three brackets hold the same marks row by row: missed entirely, captured incorrectly, tagged by hand.">
+          <g fill="currentColor" opacity="0.8">
+              <circle cx="12" cy="34" r="4.2" />
+              <circle cx="42" cy="34" r="4.2" />
+              <circle cx="72" cy="34" r="4.2" />
+              <circle cx="102" cy="34" r="4.2" />
+              <circle cx="132" cy="34" r="4.2" />
+              <circle cx="162" cy="34" r="4.2" />
+              <circle cx="12" cy="70" r="4.2" />
+              <circle cx="42" cy="70" r="4.2" />
+              <circle cx="72" cy="70" r="4.2" />
+              <circle cx="102" cy="70" r="4.2" />
+              <circle cx="132" cy="70" r="4.2" />
+              <circle cx="162" cy="70" r="4.2" />
+              <circle cx="12" cy="106" r="4.2" />
+              <circle cx="42" cy="106" r="4.2" />
+              <circle cx="72" cy="106" r="4.2" />
+              <circle cx="102" cy="106" r="4.2" />
+              <circle cx="132" cy="106" r="4.2" />
+              <circle cx="162" cy="106" r="4.2" />
+              <circle cx="360" cy="34" r="4.2" />
+              <circle cx="390" cy="34" r="4.2" />
+              <circle cx="420" cy="34" r="4.2" />
+              <circle cx="450" cy="34" r="4.2" />
+              <circle cx="480" cy="34" r="4.2" />
+              <circle cx="510" cy="34" r="4.2" />
+              <circle cx="360" cy="70" r="4.2" />
+              <circle cx="390" cy="70" r="4.2" />
+              <circle cx="420" cy="70" r="4.2" />
+              <circle cx="450" cy="70" r="4.2" />
+              <circle cx="480" cy="70" r="4.2" />
+              <circle cx="510" cy="70" r="4.2" />
+              <circle cx="360" cy="106" r="4.2" />
+              <circle cx="390" cy="106" r="4.2" />
+              <circle cx="420" cy="106" r="4.2" />
+              <circle cx="450" cy="106" r="4.2" />
+              <circle cx="480" cy="106" r="4.2" />
+              <circle cx="510" cy="106" r="4.2" />
+          </g>
+          <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.72">
+              <path d="M174 18 h13 V122 h-13" />
+              <path d="M522 21 h13 V47 h-13" />
+              <path d="M522 57 h13 V83 h-13" />
+              <path d="M522 93 h13 V119 h-13" />
+          </g>
+          <g fill="currentColor" font-family="inherit" font-size="13" letter-spacing="0.01em" opacity="0.82">
+              <text x="202" y="74">Incorrect</text>
+              <text x="550" y="38">Missed entirely</text>
+              <text x="550" y="74">Captured incorrectly</text>
+              <text x="550" y="110">Tagged by hand</text>
+          </g>
+          <g class="fnote" fill="currentColor" font-family="inherit" font-size="11.5" letter-spacing="0.1em" opacity="0.42">
+              <text x="12" y="156">Filed as one</text>
+              <text x="360" y="156">Filed as three</text>
+          </g>
+        </svg>
       </div>
-      <figcaption><b>Fig. 08 · Corrections, sorted</b>
-      <span>Failures counted by type rather than lumped together. Design exploration; the row
-      content is placeholder text.</span></figcaption>
+      <figcaption><b>Fig. 08 · One bucket, or three</b>
+      <span>The same corrections, filed two ways. One bucket cannot tell you which failure is
+      growing. Three can.</span></figcaption>
     </figure>
 
     <div class="body-text reveal">
       <p>Two decisions in that screen are the ones I would defend hardest.</p>
       <p><b>A person chooses what the model learns from.</b> Each example has a toggle and a
-      validation state, so corrections are curated rather than swept in automatically. A reviewer
+      validation state, so corrections get picked rather than swept in automatically. A reviewer
       having a bad afternoon should not be able to teach the model something wrong, and a
       duplicate should not count twice.</p>
-      <p><b>Training has a floor.</b> The model cannot be retrained until there are at least twenty
-      data points. It is a small rule that stops someone reacting to a single bad extraction by
-      retraining on it, which is exactly the instinct people have when they are annoyed.</p>
-      <p>The loop only closes because the review interface captures why something was wrong rather
-      than only that it was. The two screens were designed as one system, and that is the part I
-      would want to talk through rather than write down.</p>
+      <p><b>Training has a floor.</b> The model cannot be retrained until there are at least
+      twenty data points. A small rule, and it stops someone reacting to one bad extraction by
+      retraining on it &mdash; which is exactly what people want to do when they are annoyed.</p>
+      <p>The loop only closes because the review screen captures why something was wrong, not just
+      that it was. The two screens were designed as one system, and that is the part I would
+      rather talk through than write down.</p>
     </div>
   </div>
 </section>
@@ -826,12 +921,12 @@
   <div class="wrap narrow">
     <h2 class="reveal">Then the field count grew</h2>
     <div class="body-text reveal">
-      <p>Assist bars worked. Then contracts arrived with a hundred and twenty-eight extracted
-      fields, and the thing that had made review continuous started making it crowded. Clarity at
-      forty fields is clutter at a hundred and twenty-eight.</p>
-      <p>Three questions had to be answered together: how does a reviewer switch between the four
-      types, where does filtering live, and how much can be visible before visibility becomes
-      noise.</p>
+      <p>Assist bars worked. Then contracts turned up with a hundred and twenty-eight extracted
+      fields, and the thing that had made review continuous started making it crowded. What reads
+      as clear at forty fields reads as clutter at a hundred and twenty-eight.</p>
+      <p>Three questions had to be answered together. How does a reviewer switch between the four
+      types? Where does filtering live? And how much can stay visible before visible turns into
+      noise?</p>
     </div>
   </div>
 
@@ -841,9 +936,9 @@
         <p class="opt-lbl">Option 1</p>
         <h3>Chips across the top</h3>
         <figure>
-          <div class="plate">
+          <div class="plate p6">
             <picture>
-<img src="ae-filter-chips.webp" width="920" height="830"
+<img src="ae-filter-chips.webp" width="1000" height="918"
                    alt="A filter row of coloured chips showing counts for metadata, clauses, obligations, service levels and other categories." loading="lazy" />
             </picture>
           </div>
@@ -859,18 +954,18 @@
         <p class="opt-lbl">Option 2</p>
         <h3>Grouped dropdown</h3>
         <figure>
-          <div class="plate">
+          <div class="plate p1">
             <picture>
-<img src="ae-filter-dropdown.webp" width="940" height="810"
+<img src="ae-filter-dropdown.webp" width="1000" height="918"
                    alt="A dropdown filter listing extraction categories with counts, expanded over the field list." loading="lazy" />
             </picture>
           </div>
         </figure>
         <ul>
-          <li class="up">Compact, and a familiar interaction to reach for</li>
+          <li class="up">Compact, and a familiar thing to reach for</li>
           <li class="up">Start broad, then go deeper into a category</li>
           <li class="up">Holds up as the dataset grows</li>
-          <li class="down">More clicks than chips, and easy to overlook if underplayed</li>
+          <li class="down">More clicks than chips, and easy to miss if it sits too quietly</li>
         </ul>
       </div>
     </div>
@@ -878,22 +973,21 @@
 
   <div class="wrap narrow">
     <div class="body-text reveal" style="margin-top:52px">
-      <p>The dropdown won on scale, so I took it and fixed the thing it was bad at. Fields were
-      grouped into meaningful categories rather than listed flat, and the groups were nested, so
-      128 fields reads as 64 performance review, then 34 obligations inside it. The filter stops
-      being a list of everything and becomes a way of narrowing down.</p>
+      <p>The dropdown won on scale, so I took it and fixed what it was bad at. Fields got grouped
+      into real categories instead of one flat list, and the groups nest, so 128 fields reads as
+      64 performance review, then 34 obligations inside that. The filter stops being a list of
+      everything and becomes a way to narrow down.</p>
     </div>
 
     <figure class="reveal">
-      <div class="plate">
+      <div class="plate p2 bleed">
         <picture>
-<img src="ae-final-filter.webp" width="1400" height="1379"
+<img src="ae-final-filter.webp" width="1378" height="1310"
                alt="The final filter: a dropdown with fields grouped into named categories and counts, nested under a performance review heading." loading="lazy" />
         </picture>
       </div>
       <figcaption><b>Fig. 09 · Where it landed</b>
-      <span>Grouped and hierarchical. Clutter removed without hiding anything a reviewer needs to
-      reach.</span></figcaption>
+      <span>Grouped and nested. Clutter gone, without hiding anything a reviewer needs to reach.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -912,9 +1006,9 @@
 
     <div class="wrap narrow" style="padding:0; margin-top:52px">
       <div class="body-text reveal">
-        <p>One number, and it is worth reading carefully rather than as a headline. This is the
-        share of users still coming back to the module each month, for the eight months before
-        the redesign and the eight months after.</p>
+        <p>One number, and it is worth reading properly rather than as a headline. This is the
+        share of users still coming back to the module each month &mdash; eight months before the
+        redesign, eight months after.</p>
       </div>
     </div>
 
@@ -946,20 +1040,20 @@
     <div class="wrap narrow" style="padding:0">
       <div class="body-text reveal" style="margin-top:44px">
         <p>Months zero, one and two barely move. Slightly fewer people tried it, in fact. If the
-        redesign had made the module more appealing, that is where it would show, and it doesn't.</p>
-        <p>The change is entirely at the back end of the curve. Before, month three was 14.8% and
-        month four fell off a cliff to 5%: people tried it, worked with it for a while, and went
-        back to doing it by hand. After, month three holds at 22.3% and month four holds at 23.1%.
-        The decay stops.</p>
-        <p><strong>The redesign did not win more users. It stopped losing the ones who
-        arrived.</strong> For a tool that has to be trusted before it can be useful, that is the
-        distinction that matters.</p>
+        redesign had made the module more appealing, that is where it would show up. It doesn't.</p>
+        <p>The change is all at the back end of the curve. Before: month three was 14.8%, then
+        month four fell off a cliff to 5%. People tried it, worked with it for a while, and went
+        back to doing it by hand. After: month three holds at 22.3%, month four at 23.1%. The
+        drop-off stops.</p>
+        <p><strong>The redesign did not win more users. It stopped losing the ones who showed
+        up.</strong> For a tool that has to be trusted before it is useful, that is the difference
+        that matters.</p>
       </div>
 
       <figure class="reveal">
-        <div class="plate">
+        <div class="plate p3">
           <picture>
-<img src="ae-retention.webp" width="1800" height="814"
+<img src="ae-retention.webp" width="1828" height="792"
                  alt="Two analytics tables from Heap showing month-over-month return rates for the module before and after the revamp." loading="lazy" />
           </picture>
         </div>
@@ -970,20 +1064,20 @@
 
       <div class="note reveal">
         <b>What this data cannot tell you.</b> The cohort nearly tripled between the two windows,
-        from 860 users to 2,380, so the population is not identical and some of the improvement will
-        belong to a different customer mix rather than to the interface. The AI model was also being
-        improved over the same period. Retention is a rate rather than a count, which makes the
-        comparison a fair one, but I would not claim the redesign is the sole cause. What I do claim is
-        narrower: the curve stopped decaying at the point the redesign landed, and the shape of the
-        change, flat at the front and wide at the back, is what a usability fix looks like rather
-        than a better model or a bigger sales year.
+        from 860 users to 2,380, so it is not the same population, and some of the gain will
+        belong to a different customer mix rather than the interface. The AI model was being
+        improved over the same period too. Retention is a rate, not a count, which makes the
+        comparison a fair one &mdash; but I would not claim the redesign is the only cause. What I
+        do claim is narrower: the curve stopped decaying at the point the redesign landed, and the
+        shape of that change, flat at the front and wide at the back, looks like a usability fix
+        rather than a better model or a bigger sales year.
       </div>
 
       <div class="body-text reveal" style="margin-top:40px">
-        <p>Alongside the numbers, the module went out in soft releases to customers including IBM
-        and EY, and the response back was that it had become noticeably easier to work with. That is
-        qualitative and I treat it as such, but it came from the accounts where being wrong is most
-        expensive.</p>
+        <p>Alongside the numbers: the module went out in soft releases to customers including IBM
+        and EY, and the response back was that it had become noticeably easier to work with. That
+        is qualitative and I treat it that way &mdash; but it came from the accounts where being
+        wrong costs the most.</p>
       </div>
     </div>
   </div>
@@ -998,19 +1092,18 @@
         <p class="n">01</p>
         <div>
           <h3>Faster extraction is not faster review</h3>
-          <p>The model was never the bottleneck. Almost all of the time a reviewer spends is spent
-          agreeing or disagreeing with the machine, and that is an interface problem, not a model
-          problem. Teams building AI features consistently invest in the half that was already
-          working.</p>
+          <p>The model was never the bottleneck. Nearly all of a reviewer's time goes on agreeing
+          or disagreeing with the machine, and that is an interface problem, not a model problem.
+          Teams building AI features keep investing in the half that already worked.</p>
         </div>
       </div>
       <div>
         <p class="n">02</p>
         <div>
           <h3>Design for the hundredth interaction</h3>
-          <p>Hover cards tested beautifully on a single value and failed on a whole contract. I now
-          look at any interaction and ask what it costs when it happens a hundred times in an hour,
-          because that is the real usage and it is not what a demo shows you.</p>
+          <p>Hover cards tested beautifully on a single value and failed on a whole contract. Now
+          I look at any interaction and ask what it costs when it happens a hundred times in an
+          hour. That is the real usage, and it is not what a demo shows you.</p>
         </div>
       </div>
       <div>
@@ -1018,18 +1111,19 @@
         <div>
           <h3>Retention is the honest metric for trust</h3>
           <p>Efficiency percentages are easy to produce and easy to argue with. Whether people are
-          still using the thing four months later is much harder to explain away, and for AI
-          features, where the real question is whether anyone believes the output, it is closer to
-          what you actually wanted to know.</p>
+          still using the thing four months later is much harder to explain away. For AI features,
+          where the real question is whether anyone believes the output, that is closer to what
+          you wanted to know anyway.</p>
         </div>
       </div>
       <div>
         <p class="n">04</p>
         <div>
           <h3>Two of the three designs here are mine and failed</h3>
-          <p>Inline annotations and hover cards were not someone else's bad ideas that I fixed. I
-          made them, watched them fall short, and replaced them. The sequence is the work. A case
-          study that shows only the third one is describing a different job than the one I did.</p>
+          <p>Inline annotations and hover cards were not someone else's bad ideas that I came in
+          and fixed. I made them, watched them fall short, and replaced them. The sequence is the
+          work. A case study that shows only the third version is describing a different job than
+          the one I did.</p>
         </div>
       </div>
     </div>
@@ -1050,18 +1144,18 @@
 
 <section class="end-cta">
   <div class="wrap">
-    <h2 class="reveal">This is the same argument as the contract graph, one layer down.</h2>
+    <h2 class="reveal">Some of this is easier to talk through than to write down.</h2>
     <p class="reveal" style="color:var(--muted); max-width:52ch; margin:0 auto 32px">
-      That case study is about giving the AI ground worth reasoning over. This one is about what a
-      person does with the answer once it has reasoned.</p>
-    <a class="btn reveal" href="contract-understanding.html">Read that case study &rarr;</a>
+      The review screen and the training screen were designed as one system. That part, and the
+      arguments behind it, are worth a conversation.</p>
+    <a class="btn reveal" href="mailto:amritkmr08@gmail.com">Email me &rarr;</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap footer-inner">
     <span>&copy; <span id="year"></span> Amrit Kumar</span>
-    <a href="airtel-self-serve.html">Next: Support that answers before you ask &rarr;</a>
+    <a href="index.html#work">All work &rarr;</a>
   </div>
 </footer>
 

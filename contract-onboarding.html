@@ -27,7 +27,7 @@
     --soft: #EDEDEA;
     --accent: #3D5A45;
     --warn: #9A4A38;
-    --radius: 3px;
+    --radius: 20px;
     --font-display: "Poppins", -apple-system, sans-serif;
     --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -64,7 +64,9 @@
     display: block; font-family: var(--font-display); font-size: 16px;
     font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px;
   }
-  .rail .back { display: block; font-size: 13px; color: var(--faint); margin-bottom: 24px; }
+  /* the name above this was a second link to the same place; the way back is enough.
+     It carries the rail on its own now, so it steps up one notch of presence. */
+  .rail .back { display: block; font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
   .rail .back:hover { color: var(--ink); }
   .rail .toc { display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
   .rail .toc a { color: var(--muted); padding: 5px 0; line-height: 1.45; transition: color 0.2s ease; }
@@ -385,7 +387,6 @@
 
 <aside class="rail">
   <div>
-    <a class="mark" href="index.html">Amrit Kumar</a>
     <a class="back" href="index.html#work">&larr; All work</a>
   </div>
   <nav class="toc">

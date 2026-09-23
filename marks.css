@@ -92,8 +92,8 @@
   border-left: 2px solid var(--mk-acc);
 }
 .mk-drawer-in p.k {
-  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
-  letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: var(--mk-disp); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--mk-faint); margin: 0 0 6px;
 }
 .mk-drawer-in p.s {
@@ -279,10 +279,16 @@
   letter-spacing: -0.018em; margin-bottom: 26px;
 }
 .mk-b { margin-bottom: 24px; }
+/* Uppercase earns its place here — these are one-line labels separating the blocks of
+   the short version, and a reader scans past them rather than reading them. But they
+   were set at 11px on 0.2em, where the rest of the site sets an uppercase label at
+   0.1em: at four and five words that extra tracking pulls each label into a long
+   sparse strip that outruns the sentence underneath it. Site tracking, one size up,
+   and the weight the small rung uses so it stays legible at that size. */
 .mk-b h3 {
-  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--mk-faint); margin-bottom: 7px;
+  font-family: var(--mk-disp); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mk-faint); margin-bottom: 8px;
 }
 .mk-b p { font-size: 14.5px; line-height: 1.65; margin: 0; color: var(--mk-ink); }
 .mk-b p + p { margin-top: 7px; }
@@ -301,12 +307,19 @@
   color: var(--mk-ink); letter-spacing: -0.03em;
 }
 
-.mk-empty { font-size: 14px; line-height: 1.7; color: var(--mk-muted); max-width: 40ch; }
+/* An empty state is a hint, not content. It was set in the same grey as the writing,
+   at body size, so it read as something to take in rather than something explaining
+   that there is nothing here yet. */
+.mk-empty { font-size: 13.5px; line-height: 1.65; color: var(--mk-faint); max-width: 40ch; }
 .mk-group { margin-bottom: 24px; }
+/* This is the page a pin came from, and on the case studies a page title is a whole
+   sentence. Uppercase at 0.2em is for a two-word label; a sentence set that way is
+   twice as wide, wraps, and is slower to read than the pin titles underneath it —
+   which is backwards, since it is the quieter of the two. Sentence case, small, faint. */
 .mk-group > p.pg {
-  font-family: var(--mk-disp); font-size: 11px; font-weight: 400;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--mk-faint); margin-bottom: 4px;
+  font-family: var(--mk-font); font-size: 12.5px; font-weight: 400;
+  letter-spacing: 0; text-transform: none; line-height: 1.5;
+  color: var(--mk-faint); margin-bottom: 6px; max-width: 46ch;
 }
 .mk-item {
   position: relative; display: flex; align-items: flex-start; gap: 8px;
@@ -371,6 +384,9 @@
   border-bottom: 1px solid var(--mk-ink);
 }
 .mk-do:hover { color: var(--mk-acc); border-bottom-color: var(--mk-acc); }
+/* the second action is the quieter one; it removes rather than produces */
+.mk-do.quiet { color: var(--mk-muted); border-bottom-color: var(--mk-line); }
+.mk-do.quiet:hover { color: #A0422C; border-bottom-color: #A0422C; }
 .mk-actions { align-items: center; }
 .mk-actions .mk-morewrap { margin-left: 2px; }
 

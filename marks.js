@@ -476,13 +476,15 @@
         }).join('\n\n'), cp);
       });
       acts.appendChild(cp);
-      acts.appendChild(moreButton('More actions for pinned sections', function (menu, done) {
-        menuItem(menu, ICON.trash,
-          'Clear all ' + store.pins.length + (store.pins.length === 1 ? ' pin' : ' pins'),
-          true, function () {
-            done(); store.pins = []; save(); paint(); refreshTools();
-          });
-      }));
+      /* This used to be a three-dot menu holding exactly one item. A menu is worth its
+         tap when it hides several choices; holding one just puts a door in front of it. */
+      var cl = document.createElement('button');
+      cl.className = 'mk-do quiet'; cl.type = 'button';
+      cl.textContent = store.pins.length === 1 ? 'Clear pin' : 'Clear all';
+      cl.addEventListener('click', function () {
+        store.pins = []; save(); paint(); refreshTools();
+      });
+      acts.appendChild(cl);
       pinPane.appendChild(acts);
     }
 

@@ -15,7 +15,10 @@
     --teal-tint:#E4F1F1;       /* active nav / active rail chip */
     --teal-pale:#F0FAFB;       /* live highlight fill */
     --teal-rule:#2D737B;       /* live highlight underline */
-    --mint:#B0CFC9;            /* empty markers */
+    --ty-meta:#0E5E69;         /* metadata  · circle  — from the legend, Fig. 05 */
+    --ty-clause:#B0CFC9;       /* clause    · square  */
+    --ty-oblig:#818CFF;        /* obligation· triangle */
+    --ty-sla:#9342A1;          /* service levels · diamond */
     --green:#2E7D32;           /* accepted value */
     --green-pale:#EAF5EE;
     --ink:#1B1F1E;
@@ -27,6 +30,10 @@
     --grey-bar:#F9F9F9;
     --link:#2E6BD6;
     --chip-ink:#2B2F2E;
+    --btn:#222635;             /* Accept, sampled from the current screen */
+    --btn-hi:#343949;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --ease-h:cubic-bezier(.4,0,.2,1);   /* heights: eases in as well as out */
     --font:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -61,7 +68,7 @@
   }
   .statusbtn i svg{width:14px;height:14px}
 
-  .cols{flex:1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 46px;min-height:0;padding:24px 24px 0 40px;gap:0 20px}
+  .cols{flex:1;display:grid;grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);min-height:0;padding:24px 40px 0 40px;gap:0 26px}
 
   /* ─────────── document pane ─────────── */
   .docpane{min-height:0;display:flex;flex-direction:column;border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0;background:var(--paper)}
@@ -98,23 +105,34 @@
 
   /* Assist Bar · from Figma node 7878:53821 */
   .fcard{
-    border:1.232px solid #E8E8E8;border-radius:4.927px;margin-bottom:16px;background:var(--paper);
-    overflow:hidden;transition:box-shadow .3s ease,border-color .3s ease
+    border:1px solid #E8E8E8;border-radius:5px;margin-bottom:18px;background:var(--paper);
+    overflow:hidden;transition:box-shadow .34s ease,border-color .34s ease
   }
-  .fcard.open{border-color:#E8E8E8;box-shadow:none}
+  .fcard.open{border-color:#DCE2E2;box-shadow:0 1px 2px rgba(20,30,30,.04),0 12px 26px -18px rgba(20,30,30,.34)}
   .fhead{display:flex;align-items:center;gap:15px;height:48px;padding:0 18px 0 18px}
-  .mk{width:9.853px;height:9.853px;flex:none;background:var(--mint)}
-  .mk.circle{border-radius:58px}
-  .mk.on{background:#0D5E68}
+  .mk{width:10px;height:10px;flex:none;background:var(--ty-clause)}
+  .mk.circle{border-radius:58px;background:var(--ty-meta)}
+  .mk.triangle{background:transparent;width:0;height:0;
+       border-left:5.5px solid transparent;border-right:5.5px solid transparent;
+       border-bottom:10px solid var(--ty-oblig)}
+  .mk.diamond{background:var(--ty-sla);transform:rotate(45deg);width:8.4px;height:8.4px}
   .fname{font-size:14px;font-weight:500;flex:1;letter-spacing:0;color:rgba(0,0,0,.87)}
-  .pager{display:none;align-items:center;gap:2px;color:#252525;font-size:15px;letter-spacing:.02em;line-height:1.66}
+  .pager{display:none;align-items:center;gap:4px;color:#6B7270;font-size:14.5px;letter-spacing:.02em;line-height:1.66;
+         opacity:0;transition:opacity .28s ease .1s}
   .fcard.open .pager{display:flex}
-  .pager .gi{width:28px;height:28px;padding:7px 8px;object-fit:contain;display:block;box-sizing:border-box}
-  .pager .gi-link{width:34px;height:20px;padding:0;margin-left:12px;object-fit:contain}
-  .pager b{font-weight:400;color:#252525;font-variant-numeric:tabular-nums;padding:0 4px}
+  .fcard.open .pager{opacity:1}
+  .pager svg{width:17px;height:17px;display:block}
+  .pager b{font-weight:400;color:#252525;font-variant-numeric:tabular-nums;padding:0 3px}
 
-  .fbody{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.22,.61,.36,1)}
-  .fcard.open .fbody{max-height:240px}
+  /* a card opens to the height of what is in it, so nothing is clipped mid-way */
+  .fbody{display:grid;grid-template-rows:0fr;
+         transition:grid-template-rows .52s var(--ease-h)}
+  .fbody>.fin{overflow:hidden;min-height:0}
+  .fcard.open .fbody{grid-template-rows:1fr}
+  .fin{opacity:0;transform:translateY(-5px);
+       transition:opacity .22s ease, transform .3s var(--ease-h)}
+  .fcard.open .fin{transition:opacity .34s ease .1s, transform .46s var(--ease-h) .1s}
+  .fcard.open .fin{opacity:1;transform:none}
   .chipwrap{padding:0 18px 18px;height:auto}
   .val{
     display:inline-flex;align-items:center;gap:0;height:34px;
@@ -132,28 +150,18 @@
 
   .acts{display:flex;align-items:center;gap:11px;background:#F9F9F9;padding:18px;border-radius:0 0 8px 8px}
   .accept{
-    background:#131316;color:#fff;border:0;border-radius:4px;
+    background:var(--btn);color:#fff;border:0;border-radius:4px;
     padding:4px 18px;font-family:"Roboto",var(--font);font-size:12px;font-weight:500;line-height:20px;letter-spacing:.14px;cursor:pointer;
     transition:background .2s ease
   }
-  .accept:hover{background:#2A2A2F}
-  .acts .ai{width:28px;height:28px;border-radius:4px;display:grid;place-items:center;padding:4px;transition:background .15s ease}
+  .accept:hover{background:var(--btn-hi)}
+  .accept:active{transform:translateY(1px)}
+  .acts .ai{width:30px;height:30px;border-radius:5px;display:grid;place-items:center;color:#4B5352;
+            transition:background .18s ease,color .18s ease}
   .acts .ai + .ai{margin-left:2px}
-  .ai:hover,.ai.hot{background:#E8EBEA}
-  .ai img{width:19px;height:19px;object-fit:contain;display:block}
+  .ai:hover,.ai.hot{background:#E7EBEB;color:var(--ty-meta)}
+  .ai svg{width:19px;height:19px;display:block}
   .acts .sp{flex:1}
-
-  /* ─────────── right icon rail ─────────── */
-  .rrail{
-    display:flex;flex-direction:column;
-    align-items:center;gap:14px;padding:6px 0 0
-  }
-  .rrail .rr{
-    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
-    display:grid;place-items:center;color:#3A403F;background:var(--paper)
-  }
-  .rrail .rr img{width:24px;height:24px;object-fit:contain;display:block}
-  .rrail .rr.on{background:var(--teal-tint);border-color:#8FB6BC;color:var(--teal-deep)}
 
   /* ─────────── overlay ─────────── */
   #cur{
@@ -165,7 +173,7 @@
   }
   #cap[hidden]{display:none}
   #cap{
-    position:fixed;left:40px;bottom:14px;z-index:40;
+    position:fixed;right:40px;bottom:16px;z-index:40;
     background:rgba(255,255,255,.92);border:1px solid var(--line);
     border-radius:6px;padding:6px 12px;font-size:11.5px;color:var(--muted);
     backdrop-filter:blur(6px)
@@ -186,7 +194,10 @@
   mark{cursor:default}
   mark.hot{background:var(--teal-pale);box-shadow:inset 0 -2px 0 var(--teal-rule)}
 
-  @media (prefers-reduced-motion: reduce){ mark,.fbody,.val,.tick{transition:none} }
+  #cur{will-change:transform}
+  @media (prefers-reduced-motion: reduce){
+    mark,.fbody,.fin,.val,.tick,.fcard{transition:none}
+  }
 </style>
 </head>
 <body>
@@ -307,15 +318,6 @@
         <div class="panelscroll" id="panelscroll"></div>
       </div>
 
-      <!-- right icon rail -->
-      <div class="rrail" aria-hidden="true">
-        <span class="rr"><img src="icons/rail-docsearch.png" alt="" /></span>
-        <span class="rr on"><img src="icons/rail-agent-on.png" alt="" /></span>
-        <span class="rr"><img src="icons/rail-table.png" alt="" /></span>
-        <span class="rr"><img src="icons/rail-listclock.png" alt="" /></span>
-        <span class="rr"><img src="icons/rail-comment.png" alt="" /></span>
-      </div>
-
     </div>
   </div>
 </div>
@@ -359,21 +361,20 @@
       '<div class="fhead">'
       +   '<span class="mk ' + f.shape + '"></span>'
       +   '<span class="fname">' + f.name + '</span>'
-      +   '<span class="pager"><img class="gi" src="icons/chev-l.png" alt="" />'
-      +      '<b>' + f.n + '/' + f.of + '</b><img class="gi" src="icons/chev-r.png" alt="" />'
-      +      '<img class="gi gi-link" src="icons/link.png" alt="" /></span>'
+      +   '<span class="pager">' + ico('i-chev-l', {w:1.7})
+      +      '<b>' + f.n + '/' + f.of + '</b>' + ico('i-chev-r', {w:1.7}) + '</span>'
       + '</div>'
-      + '<div class="fbody">'
+      + '<div class="fbody"><div class="fin">'
       +   '<div class="chipwrap"><span class="val">' + f.val
       +      '<span class="tick">' + ico('i-check', {w:2.2}) + '</span></span></div>'
       +   '<div class="acts">'
       +     '<button class="accept" type="button">Accept</button>'
-      +     '<span class="ai"><img src="icons/edit.png" alt="" /></span>'
-      +     '<span class="ai"><img src="icons/delete.png" alt="" /></span>'
+      +     '<span class="ai" title="Edit">'   + ico('i-pen',   {w:1.5}) + '</span>'
+      +     '<span class="ai" title="Re-tag">' + ico('i-trash', {w:1.5}) + '</span>'
       +     '<span class="sp"></span>'
-      +     '<span class="ai"><img src="icons/note.png" alt="" /></span>'
+      +     '<span class="ai" title="Note">'   + ico('i-note',  {w:1.5}) + '</span>'
       +   '</div>'
-      + '</div>';
+      + '</div></div>';
     panel.appendChild(el);
   });
 
@@ -388,25 +389,36 @@
     };
   });
 
-  /* controlled easing so the scroll matches the rest of the motion */
-  var raf = null;
+  /* one easing curve for everything that moves, and one running animation per
+     scroller — two glides fighting over the same element is what reads as jerk */
+  var rafs = new WeakMap();
+  function ease(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
   function glideScroll(el, to, ms){
-    if (raf) cancelAnimationFrame(raf);
+    var prev = rafs.get(el); if (prev) cancelAnimationFrame(prev);
     var from = el.scrollTop, t0 = performance.now();
+    if (Math.abs(to - from) < 1) return Promise.resolve();
     return new Promise(function(res){
       (function step(now){
         var t = Math.min(1, (now - t0) / ms);
-        var e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-        el.scrollTop = from + (to - from) * e;
-        if (t < 1) raf = requestAnimationFrame(step); else res();
+        el.scrollTop = from + (to - from) * ease(t);
+        if (t < 1) rafs.set(el, requestAnimationFrame(step)); else { rafs.delete(el); res(); }
       })(performance.now());
     });
   }
+  function clampTo(el, target){
+    return Math.max(0, Math.min(el.scrollHeight - el.clientHeight, target));
+  }
   function scrollToMark(mk){
     if (!mk) return Promise.resolve();
-    var target = mk.offsetTop - docScroll.clientHeight * 0.32;
-    var max = docScroll.scrollHeight - docScroll.clientHeight;
-    return glideScroll(docScroll, Math.max(0, Math.min(max, target)), 950);
+    return glideScroll(docScroll, clampTo(docScroll, mk.offsetTop - docScroll.clientHeight * 0.32), 900);
+  }
+  /* keep the card that just opened inside the panel, the way a real list would */
+  function followCard(card){
+    if (!card) return Promise.resolve();
+    var top = card.offsetTop, h = 172;                 /* room for the card once it is open */
+    var view = panel.clientHeight, at = panel.scrollTop;
+    if (top >= at + 12 && top + h <= at + view - 12) return Promise.resolve();
+    return glideScroll(panel, clampTo(panel, top - view * 0.26), 640);
   }
 
   var idx = 0, stopped = false, timers = [];
@@ -415,7 +427,6 @@
   function openField(i){
     els.forEach(function(e, j){
       e.card.classList.toggle('open', j === i);
-      if (j === i) e.mk.classList.add('on');
       if (e.mark) e.mark.classList.toggle('live', j === i);
     });
   }
@@ -428,7 +439,8 @@
     idx++;
     if (idx >= els.length) return false;
     openField(idx);
-    await scrollToMark(els[idx].mark);
+    await sleep(140);                     /* let the card start opening first */
+    await Promise.all([ followCard(els[idx].card), scrollToMark(els[idx].mark) ]);
     return true;
   }
 
@@ -442,36 +454,40 @@
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  var cx = null, cy = null, cs = 1;
+  function drawCur(){
+    cur.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) scale(' + cs + ')';
+  }
   function glideCursor(to, ms){
+    if (cx === null) { cx = to.x; cy = to.y; drawCur(); return Promise.resolve(); }
+    var from = { x: cx, y: cy }, t0 = performance.now();
     return new Promise(function(res){
-      var from = { x: parseFloat(cur.dataset.x || to.x), y: parseFloat(cur.dataset.y || to.y) };
-      var t0 = performance.now();
       (function step(now){
         if (stopped) return res();
-        var t = Math.min(1, (now - t0) / ms);
-        var e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-        var x = from.x + (to.x - from.x) * e, y = from.y + (to.y - from.y) * e;
-        cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-        cur.dataset.x = x; cur.dataset.y = y;
+        var t = Math.min(1, (now - t0) / ms), e = ease(t);
+        cx = from.x + (to.x - from.x) * e;
+        cy = from.y + (to.y - from.y) * e;
+        drawCur();
         if (t < 1) requestAnimationFrame(step); else res();
       })(performance.now());
     });
   }
   async function press(){
-    cur.style.transform += ' scale(.78)';
-    await sleep(130);
-    cur.style.transform = cur.style.transform.replace(' scale(.78)', '');
+    cs = .72; drawCur();
+    await sleep(150);
+    cs = 1;   drawCur();
   }
 
   function reset(){
     idx = 0;
     els.forEach(function(e){
       e.card.classList.remove('open');
-      e.mk.classList.remove('on');
       e.val.classList.remove('ok');
       if (e.mark) e.mark.classList.remove('live', 'done');
     });
     docScroll.scrollTop = 0;
+    panel.scrollTop = 0;
+    cx = cy = null; cs = 1;
     openField(0);
   }
 
@@ -565,7 +581,7 @@
   function showTip(e){
     if (!e.mark) return;
     dtip.innerHTML = '<div class="th"><span class="mk ' + e.f.shape
-      + ' on"></span>' + e.f.name + '</div><div class="tc"><span class="tval">'
+      + '"></span>' + e.f.name + '</div><div class="tc"><span class="tval">'
       + e.f.val + '</span></div>';
     var rects = e.mark.getClientRects(), r = rects[0] || e.mark.getBoundingClientRect();
     dtip.style.left = Math.max(8, Math.min(r.left, innerWidth - 244)) + 'px';

@@ -1072,9 +1072,14 @@
   /* each one keeps the room its open state needs, as the page does, so a card that comes
      up never has to lie over the next pair */
   .md-body .stage.in-card{max-width:none;margin:0;display:block;min-height:0}
-  .md-body .pslot:has(.c1){min-height:240px}
-  .md-body .pslot:has(.c2){min-height:260px}
-  .md-body .pslot:has(.c3){min-height:250px}
+  /* These held 240-260px open under every pair so an opened specimen would not cover the
+     pair below. At rest that left 137-197px of nothing under each one, which is the gap
+     that grows as you scroll. Same answer as the page: the room arrives with the card. */
+  .md-body .pslot{transition:min-height var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1))}
+  .md-body .pslot:has(.c1):has(.open){min-height:314px}
+  .md-body .pslot:has(.c2):has(.open){min-height:293px}
+  .md-body .pslot:has(.c3):has(.open){min-height:351px}
+  @media (prefers-reduced-motion:reduce){ .md-body .pslot{transition:none} }
   .md-body .in-card .obj{padding:0}
 
   /* the usual answer, drawn the way the usual answer is drawn */
@@ -1474,9 +1479,9 @@
      opening into the word are exactly as they were. */
   @media (hover:hover) and (min-width:761px) {
     /* one size for all three: the shapes are drawn to balance each other, so no
-       per-shape correction. .86 of 28px is a 24px mark; 6px + the scaled-off edge
-       reads as an 8px gap. */
-    .nav-inner, .nav-mid { gap: 4px; }
+       per-shape correction. .86 of 28px is a 24px mark; the flex gap plus the
+       scaled-off edge on each side reads as a 10px gap. */
+    .nav-inner, .nav-mid { gap: 6px; }
     .nb .nmk { transform: scale(.86); transform-origin: 50% 50%; }
     .nb:hover .nmk, .nb:focus-visible .nmk { transform: scale(1); }
   }
@@ -1502,6 +1507,17 @@
   .stages .stage:nth-of-type(10), .stages .stage:nth-of-type(11) { min-height: 0; }
   .stages { margin-top: 96px; }
   .stages .stage + .stage { margin-top: 128px; }
+  /* An opened card is out of flow, so it was landing on the specimen below it - up to
+     95px into it at the narrow end. The obvious fix is to hold that room open all the
+     time, but then every specimen sits over a hole it only uses when pressed. So the
+     stage grows by what its own card needs, at the moment it needs it, and gives the
+     room back when the card closes. Measured per specimen across six widths: most need
+     ~50px past the gap, the share card needs 111, the clause card 86, plus 12 of slack. */
+  .stages .stage { transition: padding-bottom var(--spatial-ms,348ms) var(--spatial,cubic-bezier(.22,1.2,.36,1)); }
+  .stages .stage:has(.open) { padding-bottom: 68px; }
+  .stages .stage:has(#amWrap.open) { padding-bottom: 124px; }
+  .stages .stage:has(#hsWrap.open) { padding-bottom: 100px; }
+  @media (prefers-reduced-motion: reduce) { .stages .stage { transition: none; } }
   .stage { position: relative; z-index: 0; }
   .stage:has(.open), .stage:has(.lit), .stage:has(.busy), .stage:focus-within { z-index: 6; }
   /* the pane has to carry text over text now, so it is a little less see-through */
@@ -1566,13 +1582,14 @@
        The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
     .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
         gap: 0; padding: 10px 18px 10px; transition: none; }
-    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 40px; height: 40px; line-height: 40px;
+    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 42px; height: 40px; line-height: 40px;
         transition: none; transform: none; }
     /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
        Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
        so shrinking its box would have cut the scallop off instead of making it smaller.
-       Each mark comes down to 26px and the space between two of them opens by 2px. */
-    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 6px;
+       Each mark comes down to 26px. The touch box is 2px wider than it is tall, which
+       is where the space between two marks comes from: 16px, not 14. */
+    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 7px;
         opacity: 1; border: 0 !important; box-shadow: none !important; background: #C3C4BE !important;
         -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
     .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
