@@ -30,7 +30,8 @@
     dots:'<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3.2" r="1.35"/><circle cx="8" cy="8" r="1.35"/><circle cx="8" cy="12.8" r="1.35"/></svg>',
     link:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6.6 9.4a3 3 0 004.3 0l2.2-2.2a3 3 0 10-4.3-4.3l-.9.9"/><path d="M9.4 6.6a3 3 0 00-4.3 0L2.9 8.8a3 3 0 104.3 4.3l.9-.9"/></svg>',
     trash:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 4.2h10.4M6.2 4.2V2.8h3.6v1.4M4.2 4.2l.6 8.4h6.4l.6-8.4"/></svg>',
-    arrow:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"/></svg>'
+    arrow:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"/></svg>',
+    spark:'<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.4 1.5 7.5 4.6 10.6 5.7 7.5 6.8 6.4 9.9 5.3 6.8 2.2 5.7 5.3 4.6z"/><path d="M11.6 8.6l.62 1.72 1.72.62-1.72.62-.62 1.72-.62-1.72-1.72-.62 1.72-.62z"/></svg>'
   };
 
   /* ---------------- per-section controls ---------------- */
@@ -60,7 +61,7 @@
       tools.appendChild(b); return b;
     }
     var bPin  = mkBtn('pin', 'Keep this in Your reading');
-    var bSum  = sec.dataset.mk ? mkBtn('sum', 'The short version') : null;
+    var bSum  = sec.dataset.mk ? mkBtn('sum', 'The short version, written by a model') : null;
     var bNote = mkBtn('note', 'Write a note here');
     h2.appendChild(tools);
 
@@ -70,7 +71,20 @@
     if (bSum) {
       dSum = document.createElement('div');
       dSum.className = 'mk-drawer';
-      dSum.innerHTML = '<div class="mk-drawer-in"><p class="k">In short</p><p class="s"></p></div>';
+      /* it says on its face that a model wrote it. the section under it was written
+         by hand; this line was not, and a reader deciding whether to skip the section
+         should know which one they are trusting. */
+      dSum.innerHTML =
+        '<div class="mk-drawer-in mk-sum">' +
+          '<div class="hd">' +
+            '<span class="sp">' + ICON.spark + '</span>' +
+            '<p class="k">In short</p>' +
+          '</div>' +
+          '<div class="body" aria-live="polite">' +
+            '<p class="s"></p>' +
+            '<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>' +
+          '</div>' +
+        '</div>';
       dSum.querySelector('p.s').textContent = sec.dataset.mk;
       host.insertBefore(dSum, h2.nextSibling);
     }
@@ -113,10 +127,25 @@
       }
     });
 
+    /* Opening it is not instant, because what it opens is not a paragraph someone
+       already wrote — it is a machine answer, and on the sensitivity page a machine
+       answer always takes a beat before it lands. Same beat here. The line keeps its
+       place in the layout while it waits, so nothing under it jumps when the words
+       arrive. */
+    var sumBeat;
     if (bSum) bSum.addEventListener('click', function () {
       var open = dSum.classList.toggle('open');
+      var card = dSum.querySelector('.mk-sum');
       bSum.classList.toggle('on', open);
       bSum.setAttribute('aria-expanded', open);
+      clearTimeout(sumBeat);
+      if (!open) { card.classList.remove('busy', 'ready'); return; }
+      card.classList.remove('ready');
+      card.classList.add('busy');
+      sumBeat = setTimeout(function () {
+        card.classList.remove('busy');
+        card.classList.add('ready');
+      }, 1100);
     });
 
     bNote.addEventListener('click', function () {

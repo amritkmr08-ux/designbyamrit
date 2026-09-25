@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Details · Amrit Kumar</title>
+<meta name="description" content="Interface details from enterprise AI work: how an agent shows its reasoning, how relationships sit on a row, how a person confirms what the machine grouped." />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Details · Amrit Kumar" />
+<meta property="og:description" content="Interface details from enterprise AI work, up close." />
+<meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/details-01.jpg" />
+<meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/details.html" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F7F7F5; --ink: #191A18; --muted: #5F625C; --faint: #6F716A;
+    --line: #E3E3DF; --soft: #EDEDEA; --mark: #DCE5D3; --accent: #3D5A45;
+    --display: "Poppins", -apple-system, sans-serif;
+    --font: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper); color: var(--ink); font-family: var(--font);
+    font-size: 17.5px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mark); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* ── The marks, lifted from the rest of the site ───────────────────────
+     This page was built before the nav became three marks under a pane of
+     glass, and next to the others it read as an older page. Same marks, same
+     glass, same widening-into-a-word. The mobile pile is left out on purpose:
+     it is retired everywhere else, and three marks fit a phone in a row. */
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
+
+  nav { position: sticky; top: 0; z-index: 20; background: transparent; }
+  .nav-inner {
+    position: relative; z-index: 0;
+    max-width: 1180px; margin: 0 auto; padding: 44px 40px 20px;
+    display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+    font-size: 13.5px; color: var(--muted);
+  }
+  .nav-mid { display: flex; gap: 8px; }
+
+  /* the surface behind */
+  .nav-inner::after {
+    content: ""; position: absolute; z-index: -2;
+    left: calc(var(--pane-x, 0px) + 10px);
+    top:  calc(var(--pane-y, 0px) + 11px);
+    width: var(--pane-w, 0px); height: var(--pane-h, 0px);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,255,255,0) 44%, rgba(255,255,255,.92));
+    filter: blur(5px);
+    pointer-events: none;
+  }
+  /* the glass face */
+  .nav-inner::before {
+    content: ""; position: absolute; z-index: -1;
+    left: var(--pane-x, 0px); top: var(--pane-y, 0px);
+    width: var(--pane-w, 0px); height: var(--pane-h, 0px);
+    border-radius: 999px;
+    background: rgba(255,255,255,.14);
+    -webkit-backdrop-filter: blur(26px) saturate(1.05) brightness(1.03);
+            backdrop-filter: blur(26px) saturate(1.05) brightness(1.03);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.97),
+      inset 7px 8px 17px -5px rgba(25,26,24,.075),
+      inset 0 1px 1px rgba(255,255,255,.85);
+    pointer-events: none;
+  }
+
+  .nb { position: relative; display: block; width: 28px; height: 28px; overflow: hidden;
+        flex: none;
+        --wd: 620ms; --we: cubic-bezier(.45,.05,.25,1); --wl: 120ms;
+        --md: 420ms; --ml: 240ms; --td: 260ms; --tl: 0ms;
+        transition: width var(--wd) var(--we) var(--wl),
+                    opacity 560ms ease var(--d, 0ms),
+                    transform 560ms cubic-bezier(.22,.61,.36,1) var(--d, 0ms); }
+  body.nav-arrive .nb { opacity: 0; transform: translateY(-5px); }
+  body.nav-in .nb { opacity: 1; transform: none; }
+  .nb .nmk { position: absolute; inset: 0; border-radius: 8px; background: #C3C4BE;
+        transition: opacity var(--md) ease var(--ml),
+                    transform var(--md) cubic-bezier(.22,.61,.36,1) var(--ml),
+                    background-color 420ms ease; }
+  .nb .nwd { position: absolute; left: 0; top: 0; height: 28px; line-height: 28px;
+        white-space: nowrap; opacity: 0; transition: opacity var(--td) ease var(--tl); }
+  .nb:hover, .nb:focus-visible { width: var(--w, 28px); outline: none;
+        --wd: 560ms; --we: cubic-bezier(.22,.61,.36,1); --wl: 90ms;
+        --md: 340ms; --ml: 90ms; --td: 360ms; --tl: 300ms; }
+  .nb:hover .nmk, .nb:focus-visible .nmk { opacity: 0; }
+  .nb:hover .nwd, .nb:focus-visible .nwd { opacity: 1; }
+  .nb.nav-id .nwd { font-family: var(--display); font-size: 16px; font-weight: 500;
+        color: var(--ink); letter-spacing: -0.01em; }
+  .nb.sens .nmk { border-radius: 0; clip-path: path("M14.00 0.00 L14.73 0.13 L15.42 0.47 L16.06 0.96 L16.66 1.48 L17.24 1.92 L17.83 2.21 L18.48 2.32 L19.21 2.31 L19.99 2.24 L20.80 2.22 L21.57 2.35 L22.23 2.67 L22.74 3.20 L23.10 3.89 L23.33 4.67 L23.51 5.44 L23.72 6.13 L24.03 6.71 L24.49 7.19 L25.09 7.60 L25.76 8.01 L26.42 8.47 L26.97 9.02 L27.31 9.67 L27.42 10.40 L27.30 11.17 L27.04 11.94 L26.73 12.66 L26.49 13.35 L26.40 14.00 L26.49 14.65 L26.73 15.34 L27.04 16.06 L27.30 16.83 L27.42 17.60 L27.31 18.33 L26.97 18.98 L26.42 19.53 L25.76 19.99 L25.09 20.40 L24.49 20.81 L24.03 21.29 L23.72 21.87 L23.51 22.56 L23.33 23.33 L23.10 24.11 L22.74 24.80 L22.23 25.33 L21.57 25.65 L20.80 25.78 L19.99 25.76 L19.21 25.69 L18.48 25.68 L17.83 25.79 L17.24 26.08 L16.66 26.52 L16.06 27.04 L15.42 27.53 L14.73 27.87 L14.00 28.00 L13.27 27.87 L12.58 27.53 L11.94 27.04 L11.34 26.52 L10.76 26.08 L10.17 25.79 L9.52 25.68 L8.79 25.69 L8.01 25.76 L7.20 25.78 L6.43 25.65 L5.77 25.33 L5.26 24.80 L4.90 24.11 L4.67 23.33 L4.49 22.56 L4.28 21.87 L3.97 21.29 L3.51 20.81 L2.91 20.40 L2.24 19.99 L1.58 19.53 L1.03 18.98 L0.69 18.33 L0.58 17.60 L0.70 16.83 L0.96 16.06 L1.27 15.34 L1.51 14.65 L1.60 14.00 L1.51 13.35 L1.27 12.66 L0.96 11.94 L0.70 11.17 L0.58 10.40 L0.69 9.67 L1.03 9.02 L1.58 8.47 L2.24 8.01 L2.91 7.60 L3.51 7.19 L3.97 6.71 L4.28 6.13 L4.49 5.44 L4.67 4.67 L4.90 3.89 L5.26 3.20 L5.77 2.67 L6.43 2.35 L7.20 2.22 L8.01 2.24 L8.79 2.31 L9.52 2.32 L10.17 2.21 L10.76 1.92 L11.34 1.48 L11.94 0.96 L12.58 0.47 L13.27 0.13 Z"); }
+  @media (prefers-reduced-motion: reduce) { .nb, .nb .nmk, .nb .nwd { transition: none; } }
+
+  .wide { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .eyebrow { font-family: var(--display); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); }
+
+  header { padding: 96px 0 48px; }
+  header h1 {
+    font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4.6vw, 54px);
+    line-height: 1.12; letter-spacing: -.03em; margin: 18px 0 22px; max-width: 18ch;
+  }
+  header .sub { color: var(--muted); max-width: 58ch; font-size: 18px; }
+  header .note { margin-top: 26px; font-size: 14px; color: var(--faint); max-width: 62ch; }
+
+  .board { padding: 56px 0; border-top: 1px solid var(--line); }
+  .board-head { display: grid; grid-template-columns: 64px 1fr 1fr; gap: 24px 32px; align-items: start; margin-bottom: 28px; }
+  .board .n { font-family: var(--display); font-size: 13px; color: var(--faint); letter-spacing: .08em; padding-top: 6px; }
+  .board h2 { font-family: var(--display); font-weight: 400; font-size: 26px; line-height: 1.25; letter-spacing: -.02em; }
+  .board .what { color: var(--muted); font-size: 16px; }
+  .board .what b { color: var(--ink); font-weight: 500; }
+  /* the old heading, demoted: it still carries the argument, so it keeps
+     the ink and leads the paragraph the feature name now opens */
+  .board .what .wl { color: var(--ink); }
+  .plate {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(25,26,24,.04), 0 18px 40px -30px rgba(25,26,24,.25);
+  }
+  .plate img { width: 100%; height: auto; border-radius: 6px; cursor: zoom-in; }
+
+  .foot { padding: 56px 0 52px; border-top: 1px solid var(--line); }
+  .foot p { color: var(--muted); max-width: 62ch; }
+  .foot .links { margin-top: 26px; display: flex; gap: 22px; flex-wrap: wrap; font-size: 14.5px; }
+  .foot .links a { color: var(--accent); }
+  .foot .links a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .credit { margin-top: 0; font-size: 13px; color: var(--faint); }
+
+  /* enlarge */
+  .lb { position: fixed; inset: 0; background: rgba(25,26,24,.92); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 60; cursor: zoom-out; }
+  .lb.on { display: flex; }
+  .lb img { max-width: 100%; max-height: 100%; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+  .lb .esc { position: absolute; top: 18px; right: 22px; color: #B9BBB5; font-size: 13px; }
+
+  .r { opacity: 0; transform: translateY(12px); transition: opacity .72s ease, transform .72s ease; }
+  .r.on { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .r { transition: none; opacity: 1; transform: none; } html { scroll-behavior: auto; } }
+
+  @media (max-width: 860px) {
+    .board-head { grid-template-columns: 1fr; gap: 10px; }
+    .board .n { padding-top: 0; }
+  }
+  @media (max-width: 700px) {
+    .wide { padding: 0 24px; }
+    .nav-inner { padding: 16px 24px 14px; }
+    header { padding: 64px 0 36px; }
+    .board { padding: 40px 0; }
+    .board h2 { font-size: 22px; }
+    .plate { padding: 8px; border-radius: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="nav-inner">
+    <a class="nav-id nb" href="index.html" aria-label="Home"><i class="nmk" aria-hidden="true"></i><span class="nwd">Amrit Kumar</span></a>
+    <div class="nav-mid">
+      <a class="nb abt" href="about.html" aria-label="About"><i class="nmk" aria-hidden="true"></i><span class="nwd">About</span></a>
+      <a class="nb sens" href="sensitivity.html" aria-label="Sensitivity"><i class="nmk" aria-hidden="true"></i><span class="nwd">Sensitivity</span></a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wide">
+    <span class="eyebrow r">Details &middot; Interface work up close</span>
+    <h1 class="r">The case studies argue. These are the screens.</h1>
+    <p class="sub r">Components and states from enterprise contract software with AI in it, 2023 to 2026.
+    Each board is one pattern: how an agent shows its reasoning, how a relationship sits on a row,
+    how a person confirms what the machine grouped, what a date says when it moves itself.</p>
+    <p class="note r">Design files, not production screenshots. Company and people names in these boards
+    are placeholder data. Click any board to enlarge it.</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">01</span>
+        <h2>Extracted fields with their source</h2>
+        <p class="what"><span class="wl">The agent shows its work before it asks for trust.</span> A task typed in plain language comes back with the fields it found <b>and the passage each one came
+        from</b>, page number included. Accept, discard or refine sit under the answer, and the input for the
+        next instruction stays in view.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-01.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="An agent panel: a typed request, the extracted fields it found, and the source passage for each with a page reference. Accept, discard and refine controls under a generated clause." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">02</span>
+        <h2>Confidence, clause history, signatories</h2>
+        <p class="what"><span class="wl">Where a value came from, and how sure the machine is.</span> Three answers to the same question. A value the model could not find, carrying its
+        confidence and the clauses it searched. A value that <b>changed</b>, with every version and the document
+        each one came from. And a relationship that says what it amends, what it touches, and who signed it.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-10.webp" width="2000" height="807" loading="lazy" decoding="async"
+               alt="Three dark cards: a low-confidence extraction showing 60 per cent and the clauses searched with no clause found; an amended payment term listing four dated values with the source document for each; and a relationship card naming what a pricing cap amends, the agreements it impacts, and the four people who signed it." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">03</span>
+        <h2>Counterparty match reasoning</h2>
+        <p class="what"><span class="wl">Reasoning, not a score.</span> When the agent maps a counterparty, the panel says <b>why</b>: which names matched, which suffixes it
+        ignored, and the extracted evidence it worked from. Progress is stepped and named. The unmapped state
+        offers two ways forward rather than an error.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-02.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="A reasoning panel explaining a counterparty match with the evidence passage, a three-step progress card, and a hierarchy dialog offering two ways to handle unmapped documents." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">04</span>
+        <h2>Applies to, modifies, replaces</h2>
+        <p class="what"><span class="wl">Relationships on the face of a row.</span> <b>Applies to, modifies, replaces</b>, read directly on the record instead of reconstructed from a
+        folder. Alongside: insights with their reasoning, thinking states, and the two error states a
+        counterparty mapping can end in.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-03.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="Relationship chips on a contract row reading applies to, modifies, replaces; an insights panel with reasoning; thinking and task-completed states; two error cards for unmapped counterparties." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">05</span>
+        <h2>Batch counterparty review</h2>
+        <p class="what"><span class="wl">A person confirms what the machine grouped.</span> The agent normalises counterparty names across a batch. The reviewer sees each group with
+        its document count, can <b>revert</b> any grouping in place, and confirms the batch once. The empty
+        hierarchy state tells you what will appear and why.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-04.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="Assign counterparty flow: a searchable list with document counts, a review step with grouped names and revert links, a propose-new-counterparty dialog, and an empty hierarchy state." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">06</span>
+        <h2>Non-renewal dates that recalculate</h2>
+        <p class="what"><span class="wl">A date that explains itself.</span> A non-renewal notice is calculated from the term end, so when the term moved, the deadline moved
+        with it. The card shows the rule, the clauses it came from, and a <b>history</b> of every change,
+        including the ones nobody made by hand. Next to it, a record card that states what it governs and
+        sits under, and a filter that counts AI status.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-05.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="A record card stating what the contract governs and sits under, an AI-status filter with counts, and a non-renewal notice panel showing a recalculated date with its rule and history." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">07</span>
+        <h2>Pipeline evaluation</h2>
+        <p class="what"><span class="wl">Evaluating the pipeline instead of trusting it.</span> A new pipeline version arrives as <b>pending</b>, not live. Three steps: pick the data that looks like
+        real work, pick what to score, run it. Saved versions carry their result, and the system says out loud
+        that it does not auto-save.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-06.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="A pipeline evaluation screen: a pending version, three numbered steps to evaluate it, and a sidebar of saved versions each marked high, low or not evaluated." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">08</span>
+        <h2>Notices, menus and bulk actions</h2>
+        <p class="what"><span class="wl">The quiet parts.</span> Processing notices in two sizes, a multi-select with search, a view menu with delete kept apart, a
+        destructive confirm, a bulk bar that counts. None of it is the story; all of it is where products
+        usually fall apart.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-07.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="System components: processing notices, an upload area, a stakeholder multi-select with search, a view menu, a delete confirmation, filter chips and a bulk-selection bar." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">09</span>
+        <h2>Sharing, columns and accuracy</h2>
+        <p class="what"><span class="wl">States and gauges.</span> Sharing with system contacts and external stakeholders in one list, a column picker, and an accuracy
+        gauge that reads as a level (<b>medium, low</b>) rather than a bare percentage. A processing state that
+        tells you what happens next.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-08.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="A share dialog with contacts and external stakeholders, a column picker, a processing card with an illustration, and two factual-accuracy gauges reading medium and low." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="wide">
+      <div class="board-head r">
+        <span class="n">10</span>
+        <h2>Search, project setup, stakeholders</h2>
+        <p class="what"><span class="wl">Search that suggests fields, projects that name their agent.</span> Typing a value offers the fields it could belong to. Creating a project asks, in plain words, whether
+        the <b>linking agent</b> should run and what it will do. Profiles are chosen by role, and stakeholders
+        are people, not IDs.</p>
+      </div>
+      <figure class="plate r">
+        <picture>
+          <img src="details-09.webp" width="2000" height="1250" loading="lazy" decoding="async"
+               alt="A search field offering field suggestions for a typed value, a create-project form with a toggle for the parent-child linking agent, a profile chooser, and a stakeholder list." />
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wide">
+    <p class="credit">&copy; <span id="year"></span> Amrit Kumar. Designed and written by me. Coded with Claude.</p>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged board">
+  <span class="esc">Esc to close</span>
+  <img id="lbimg" alt="" />
+</div>
+
+<script>
+(function () {
+  "use strict";
+  document.getElementById("year").textContent = new Date().getFullYear();
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll(".r").forEach(function (el, i) { el.style.transitionDelay = (i % 2) * 60 + "ms"; io.observe(el); });
+
+  var lb = document.getElementById("lb"), lbimg = document.getElementById("lbimg");
+  function close() { lb.classList.remove("on"); lbimg.src = ""; document.body.style.overflow = ""; }
+  document.querySelectorAll(".plate img").forEach(function (img) {
+    img.setAttribute("tabindex", "0"); img.setAttribute("role", "button");
+    function open() { lbimg.src = img.currentSrc || img.src; lbimg.alt = img.alt; lb.classList.add("on"); document.body.style.overflow = "hidden"; }
+    img.addEventListener("click", open);
+    img.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  });
+  lb.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+})();
+</script>
+
+<script>
+/* Each mark opens to the width of its own word. Measured from the word in place,
+   after the fonts have landed, and again on resize - never guessed. */
+(function(){
+  var items=[].slice.call(document.querySelectorAll('.nb'));
+  if(!items.length) return;
+  function measure(){
+    items.forEach(function(a){
+      var w=a.querySelector('.nwd'); if(!w) return;
+      var prev=a.style.width; a.style.width='auto';
+      var px=Math.ceil(w.getBoundingClientRect().width);
+      a.style.width=prev;
+      a.style.setProperty('--w', px+'px');
+    });
+  }
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure);
+  else addEventListener('load', measure);
+  var rz; addEventListener('resize', function(){ clearTimeout(rz); rz=setTimeout(measure,140); });
+
+  document.body.classList.add('nav-arrive');
+  items.forEach(function(a,i){ a.style.setProperty('--d',(i*70)+'ms'); });
+  setTimeout(function(){
+    document.body.classList.add('nav-in');
+    setTimeout(function(){ document.body.classList.add('nav-lit'); }, items.length*70+80);
+  }, 180);
+})();
+</script>
+
+<script>
+/* The pane behind the marks. Every edge of it is measured from the marks themselves,
+   and re-measured every frame while the pointer is in the nav, because a mark that
+   opens into its word has to take the glass with it. */
+(function(){
+  var inner=document.querySelector('.nav-inner');
+  function fit(){
+    if(!inner) return;
+    var marks=[].slice.call(inner.querySelectorAll('.nb'));
+    if(!marks.length) return;
+    var host=inner.getBoundingClientRect();
+    var l=Infinity,r=-Infinity,t=Infinity,b=-Infinity;
+    marks.forEach(function(m){
+      var k=m.getBoundingClientRect();
+      if(k.left<l) l=k.left; if(k.right>r) r=k.right;
+      if(k.top<t) t=k.top;   if(k.bottom>b) b=k.bottom;
+    });
+    var px=13, py=9;
+    inner.style.setProperty('--pane-x', Math.round(l-host.left-px)+'px');
+    inner.style.setProperty('--pane-y', Math.round(t-host.top -py)+'px');
+    inner.style.setProperty('--pane-w', Math.round(r-l+px*2)+'px');
+    inner.style.setProperty('--pane-h', Math.round(b-t+py*2)+'px');
+  }
+  addEventListener('resize', fit); addEventListener('load', fit); fit();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  var raf=0, hot=false, until=0;
+  function loop(){ fit(); raf=(hot||Date.now()<until)?requestAnimationFrame(loop):0; }
+  function run(){ if(!raf) raf=requestAnimationFrame(loop); }
+  if(inner){
+    inner.addEventListener('pointerenter',function(){ hot=true; run(); });
+    inner.addEventListener('focusin',      function(){ hot=true; run(); });
+    inner.addEventListener('pointerleave', function(){ hot=false; until=Date.now()+900; run(); });
+    inner.addEventListener('focusout',     function(){ hot=false; until=Date.now()+900; run(); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -368,10 +368,27 @@ function onWidth(fn){
       morph(host, cur, next); cur = next;
     }
     var trigger = host.closest('[data-morph-host]') || host;
-    trigger.addEventListener('pointerenter', function () { set(true); });
-    trigger.addEventListener('pointerleave', function () { set(false); });
-    trigger.addEventListener('focus', function () { set(true); });
-    trigger.addEventListener('blur', function () { set(false); });
+    /* Wait for intent before committing.
+       ----------------------------------------------------------------------
+       A sweep down a list of rows used to start a morph on every row it
+       crossed - five going in and five coming back out, all in flight at once,
+       and each one animates a box per letter. Measured: with this running, a
+       third of the frames in a sweep were dropped; with it off, three percent.
+       That is the whole reason the same hover felt smooth one time and not the
+       next - it depended on how many were still moving.
+
+       The tabs further down this file already wait 90ms for intent before they
+       commit. A pair does the same now, on the 120ms the picture beside it
+       waits, so passing over a row starts nothing and the two halves of a row
+       you actually stop on start together instead of one chasing the other.
+       Keyboard focus is deliberate by definition and still lands at once. */
+    var intent;
+    trigger.addEventListener('pointerenter', function () {
+      clearTimeout(intent); intent = setTimeout(function () { set(true); }, 120);
+    });
+    trigger.addEventListener('pointerleave', function () { clearTimeout(intent); set(false); });
+    trigger.addEventListener('focus', function () { clearTimeout(intent); set(true); });
+    trigger.addEventListener('blur', function () { clearTimeout(intent); set(false); });
   }
 
   /* B. several states, chosen by tabs: buttons carry data-v, the value morphs between them */

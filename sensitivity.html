@@ -1517,6 +1517,15 @@
   .stages .stage:has(.open) { padding-bottom: 68px; }
   .stages .stage:has(#amWrap.open) { padding-bottom: 124px; }
   .stages .stage:has(#hsWrap.open) { padding-bottom: 100px; }
+  /* The room is given back when the card closes, which moves everything below it up.
+     That is fine when you close a card and stop - but during a hand-over the specimen
+     you are reaching for is one of the things that would move, and it would slide out
+     from under your hand before the glass reached it. So the stage that just handed
+     over keeps its room for as long as the hand is still among the specimens, and
+     gives it back when the hand leaves. Same numbers, held a moment longer. */
+  .stages .stage.held { padding-bottom: 68px; }
+  .stages .stage.held:has(#amWrap) { padding-bottom: 124px; }
+  .stages .stage.held:has(#hsWrap) { padding-bottom: 100px; }
   @media (prefers-reduced-motion: reduce) { .stages .stage { transition: none; } }
   .stage { position: relative; z-index: 0; }
   .stage:has(.open), .stage:has(.lit), .stage:has(.busy), .stage:focus-within { z-index: 6; }
@@ -1558,6 +1567,13 @@
      under it steps aside so there is one sheet of glass, not two edges */
   .stage .obj:has(.deckwrap.lit)::before, .stage .obj:has(.lift.open)::before,
   .stage .obj:has(.wkwrap.open)::before, .stage .obj:has(.histwrap.open)::before { opacity: 0 !important; }
+  /* And never two specimens at once. The rule above only ever asked one specimen about
+     itself, so an open card held its glass while the cursor lit a second pane somewhere
+     else on the page - two sheets, two edges, the interface saying "live" in two places.
+     While anything is open, it is the only thing that can be lit: reaching for another
+     specimen does nothing until the open one is closed. */
+  body:has(.stage :is(.open, .deckwrap.lit)) .stage .obj:not(:has(:is(.open, .deckwrap.lit)))::before
+      { opacity: 0 !important; }
   /* the deck under an open card keeps the same material, and also shows on reach */
   .deckwrap > .deck { background: rgba(247,247,245,.48);
      -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); }
@@ -1656,6 +1672,15 @@
      marks the host data-ml-busy) the chevron is held back; it appears once the letters
      have landed, every time, so it never seems to arrive early or late. */
   [data-ml-busy] ~ .cv, .beat:has([data-ml-busy]) ~ .cv, .wkline:has([data-ml-busy]) ~ .cv, .hero:has([data-ml-busy]) ~ .cv{opacity:0!important;transition:none}
+  /* The same rule, asked of the specimen instead of the neighbour. On the admin
+     specimen the chevron sits inside .beat while the headline that morphs is outside
+     it, so no sibling selector could ever reach it - the mark stood there through the
+     whole morph, and through the wait as well. A mark waits for its line wherever it
+     sits: while anything in the specimen is still morphing, or the beat is running,
+     the mark is not there. It comes back when the line lands, which is also when it
+     starts telling the truth about what pressing will do. */
+  .stage :is(.apwrap,.wkwrap,.histwrap,.askwrap,.chipwrap,.lift):has([data-ml-busy]) .cv,
+  .stage :is(.apwrap,.wkwrap,.histwrap,.askwrap,.chipwrap,.lift).busy .cv{opacity:0!important;transition:none}
 
   /* ── The clause card: three things, in the order a reader needs them ───────
        1. which document the change came from, with the way to walk the run
@@ -3191,6 +3216,54 @@ function onWidth(fn){
   wrap.addEventListener('click', soon);
   wrap.addEventListener('pointerleave', function(){ clearTimeout(t); });
 });
+</script>
+<script>
+/* ── Handing the glass over ───────────────────────────────────────────────
+   One specimen is live at a time. That rule on its own made the page go deaf:
+   with a card open, reaching for another specimen did nothing at all, so the
+   thing under your hand read as dead until you closed the first one.
+
+   It hands over instead. Reach for another specimen and the open one rests
+   back on its own after a beat, and the glass arrives under your hand. The
+   beat is 180ms - the same short wait the page already uses before it commits
+   to what a pointer meant - so passing over a specimen on the way somewhere
+   else never closes anything, and the pane on every other specimen stays down
+   for that beat, so the hand-over is one sheet leaving and one arriving.
+
+   The stage that hands over keeps its room until the hand leaves the specimens
+   (.held, above), because giving the room back mid-hand-over would pull the
+   specimen you are reaching for up and out from under the pointer.
+
+   Resting back goes through Escape, which is each specimen's own way out -
+   nothing here reaches inside one to close it. A phone has its own rule: a
+   tap anywhere else puts the lit specimen back, so this is pointers only. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: hover)').matches) return;
+  var stages = document.querySelector('.stages'); if (!stages) return;
+  var OPEN = '.open, .deckwrap.lit', t;
+  function openObj(){
+    var el = stages.querySelector('.stage .obj :is(.open, .deckwrap.lit)');
+    return el && el.closest('.obj');
+  }
+  [].slice.call(stages.querySelectorAll('.stage .obj')).forEach(function(obj){
+    obj.addEventListener('pointerenter', function(){
+      clearTimeout(t);
+      if (obj.querySelector(OPEN)) return;      /* this is the one that is open */
+      var live = openObj(); if (!live) return;  /* nothing to hand over */
+      t = setTimeout(function(){
+        if (!obj.matches(':hover') || obj.querySelector(OPEN)) return;
+        var st = live.closest('.stage'); if (st) st.classList.add('held');
+        dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      }, 180);
+    });
+    obj.addEventListener('pointerleave', function(){ clearTimeout(t); });
+  });
+  stages.addEventListener('pointerleave', function(){
+    clearTimeout(t);
+    [].slice.call(stages.querySelectorAll('.stage.held')).forEach(function(s){
+      s.classList.remove('held'); });
+  });
+})();
 </script>
 </body>
 </html>

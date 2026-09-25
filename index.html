@@ -77,6 +77,11 @@
      bar, and four links each carrying filter: blur(.7px). So the frosting moves to its own
      layer behind the links, and carries both spellings. The bar looks the same. */
   nav { position: sticky; top: 0; z-index: 20; background: transparent; }
+  /* The nav sticks to the top and its bottom edge sits at 92px. Each section carries
+     more top padding than that (96, 132, 172), so a jump lands clear on its own and
+     needs no offset. The header is the exception - its first line is 72px in, which
+     the nav would cover - so a jump to #top goes all the way back to the page top. */
+  #top { scroll-margin-top: 140px; }
   /* No frosted bar any more. The nav is four small marks in a corner, so a full-width
      sheet of blur across the top was doing nothing but smearing the title as it scrolled
      past underneath. The marks sit on the paper. */
@@ -93,6 +98,68 @@
     color: var(--ink); letter-spacing: -0.01em;
   }
   .nav-mid { display: flex; gap: 8px; }
+  /* ── Glass under the marks ─────────────────────────────────────────────
+     The marks sit on the paper, which is right while paper is the only thing
+     under them. Once the page moves, a screen can pass beneath and the marks
+     land on a photograph - three grey glyphs on a sky. A pane of the same glass
+     the rest of the site uses arrives behind the cluster as soon as the page has
+     scrolled, and it is only as wide as the marks: the old full-width bar was
+     removed because it smeared the title, and this cannot, because it never
+     reaches it. */
+  /* on .nav-inner, not on .nav-mid: the home mark sits outside that group, and a
+     pane that covered two of the three marks read as a stray chip */
+  .nav-inner { position: relative; z-index: 0; }
+  /* Every edge of this pane is measured from the marks themselves and handed over
+     as a variable. It used to be pinned with `right: 40px` while the page gutter
+     had become `var(--axis)`, so on a wide window the pane drifted out to the right
+     of the marks it was meant to sit under and read as a stray chip. Nothing about
+     its position is written here any more. */
+  /* ── Two surfaces, not one ─────────────────────────────────────────────
+     Measured off the reference at 5.9x rather than eyeballed, and the thing I
+     had been missing is that it is not one pill. It is two: the glass face, and
+     a second surface the same size sitting 13px right and 15px under it, so a
+     crescent of it shows past the bottom-right edge. That doubled edge is what
+     reads as thickness - as a piece of glass with a back to it rather than a
+     white chip printed on the page.
+
+     The numbers, against a ground of 241:
+       outer rim        +12  (1px, near-white, all the way round)
+       just inside it    -8  from the top-left, fading to -1 over ~17px
+       middle            -1  which is to say: the page, seen through it
+       the crescent      +1 rising to +6, with a +12 rim of its own
+     There is no dark shadow anywhere in it. That was the error. */
+
+  /* the surface behind */
+  .nav-inner::after {
+    content: ""; position: absolute; z-index: -2;
+    left: calc(var(--pane-x, 0px) + 10px);
+    top:  calc(var(--pane-y, 0px) + 11px);
+    width: var(--pane-w, 0px); height: var(--pane-h, 0px);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,255,255,0) 44%, rgba(255,255,255,.92));
+    /* its own edge is blurred rather than drawn. In the reference the back surface
+       is 720px wide and its rim is a pixel or two - scaled down to 122 that rim is
+       less than a pixel, so drawing it as a line made two pills instead of one
+       piece of glass. Blurred, it is the bloom it is meant to be. */
+    filter: blur(5px);
+    pointer-events: none;
+  }
+
+  /* the glass face */
+  .nav-inner::before {
+    content: ""; position: absolute; z-index: -1;
+    left: var(--pane-x, 0px); top: var(--pane-y, 0px);
+    width: var(--pane-w, 0px); height: var(--pane-h, 0px);
+    border-radius: 999px;
+    background: rgba(255,255,255,.14);
+    -webkit-backdrop-filter: blur(26px) saturate(1.05) brightness(1.03);
+            backdrop-filter: blur(26px) saturate(1.05) brightness(1.03);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.97),
+      inset 7px 8px 17px -5px rgba(25,26,24,.075),
+      inset 0 1px 1px rgba(255,255,255,.85);
+    pointer-events: none;
+  }
   .nav-end { display: flex; gap: 8px; }
   /* This is what was eating the marks' animation. `.nav-inner a` outranks `.nb`, so its
      one-property transition list replaced the width, opacity and transform transitions
@@ -134,9 +201,9 @@
   header h1 {
     position: relative; z-index: 2;
     font-family: var(--display);
-    font-size: clamp(56px, 9.6vw, 132px);
-    font-weight: 400; line-height: 0.94;
-    letter-spacing: -0.05em; max-width: 13ch;
+    font-size: 24px;
+    font-weight: 500; line-height: 32px;
+    letter-spacing: -0.02em; max-width: none;
   }
   header h1 b { font-weight: 500; box-shadow: inset 0 -0.14em 0 var(--mark); }
   #about { padding: 112px 0 104px; border-bottom: 1px solid var(--line); }
@@ -158,6 +225,12 @@
   .hero-copy .sub {
     font-size: 17.5px; color: var(--ink); max-width: 44ch; line-height: 1.72;
     margin-top: 40px; border-top: 1px solid var(--line); padding-top: 28px;
+  }
+  /* the three facts used to be tabs. One quiet line says the same thing and
+     asks nothing of the reader. */
+  .hero-copy .hero-line {
+    font-family: var(--font); font-size: 15px; line-height: 24px;
+    color: var(--faint); margin-top: 30px; max-width: 62ch;
   }
   .avail {
     display: inline-flex; align-items: center; gap: 9px; margin-top: 26px;
@@ -853,7 +926,7 @@
     .nb { font-size: 13.5px; line-height: 28px; }
     .nav-mid { font-size: 13px; gap: 16px; }
     header { padding: 72px 0 0; }
-    header h1 { font-size: clamp(56px, 17vw, 84px); }
+    header h1 { font-size: 22px; line-height: 30px; }
     /* Work and About used to be dropped here. Now that the nav is words on touch,
        all four fit across a phone, so nothing has to be hidden. */
     .nav-mid { display: flex; }
@@ -943,6 +1016,89 @@
   setTimeout(function(){ d.classList.remove('ldr-boot'); }, 6000);
 })();
 </script>
+
+<style>
+/* ── The work you are reading about, on the right ─────────────────────────
+   The rows say what each piece of work is; the screen says what it looks like.
+   Reaching for a row brings its screen up in the space beside the column - the
+   field of nothing that was always there to the right of the text. It follows
+   the row rather than sitting in one place, so the picture and the line you are
+   reading are on the same level, and it goes when your hand leaves.
+
+   A pointer only. A thumb has no hover, and a phone has no room beside the
+   column either, so below 1100 there is nothing to show and nothing loads. */
+  #work .wrap { position: relative; }
+  /* It sat flush against the window, 170px past the margin every other thing on
+     the page keeps - the nav marks, the text, the footer all stop there. It is
+     bounded by that margin on the right and by the list on the left instead, so
+     it takes whatever room is between them and lines up with the rest. */
+  /* ── The list and the picture, side by side ────────────────────────────
+     The picture used to be absolutely positioned and placed by script. With a
+     fifth row the list grew taller than a window, so a picture pinned to the
+     top of the list was a picture you could not see by the time you reached
+     the bottom of it. It is a real column now, and it sticks: it holds its
+     place beside the list and stays in view while you read down. */
+  #work .wrap { display: grid; grid-template-columns: 520px 1fr; gap: 0 72px;
+                align-items: start; }
+  #work .ix-lbl { grid-column: 1 / -1; }
+  #work .ixl { grid-column: 1; }
+  .wshot { grid-column: 2; position: sticky; top: 108px; width: auto;
+           /* the page caps every child of this wrap at the reading measure; the picture
+              is not reading, so it opts out or it can never be wider than a paragraph */
+           max-width: none;
+           opacity: 0; pointer-events: none;
+           /* ── Why this is only two properties ──────────────────────────────
+              It used to animate clip-path as well, and to declare a transition
+              on `top` for a sticky element. Opacity and transform are the only
+              two the browser can hand to the compositor and forget about; a
+              clip-path that moves has to be re-painted every frame, and with a
+              2800px screenshot and a 60px shadow under it that is enough work to
+              drop frames on some hovers and not others. That is the whole reason
+              it was smooth sometimes and not others. Both are gone.
+
+              What is left is a rise and a fade, on Morphline's own curve and
+              clock, so the picture and the line beside it still speak the same
+              language - just with nothing in it that can stutter. */
+           transform: translateY(14px);
+           will-change: opacity, transform;
+           --ml-c: var(--effect, cubic-bezier(.33,0,.2,1));
+           transition: opacity   calc(var(--effect-ms, 300ms) * 0.55) var(--ml-c),
+                       transform calc(var(--effect-ms, 300ms) * 0.55) var(--ml-c); }
+  /* Arriving takes longer than leaving, but only by 1.75x. The spring that
+     overshot is gone too: an overshoot interrupted halfway restarts over its
+     full length from wherever it had reached, and that restart was the jerk. One
+     curve, no overshoot, so a reversal mid-flight simply turns around. */
+  .wshot.on { opacity: 1; transform: none;
+              transition: opacity   calc(var(--effect-ms, 300ms) * 1.2) var(--ml-c),
+                          transform calc(var(--effect-ms, 300ms) * 1.2) var(--ml-c); }
+  /* ── One frame, one size ──────────────────────────────────────────────
+     The four screenshots are four different shapes - 1.36, 1.58, 1.71, 1.64 -
+     and the box used to take the shape of whichever one was in it. Moving down
+     the list, the picture's bottom edge jumped 534 -> 460 -> 426 -> 443 -> 290.
+     That is the jerk: a fade and a resize arriving together, every row.
+
+     So the frame is fixed at 4:3 - tall enough that the tallest of them fills it
+     edge to edge, exactly as before - and the others sit inside it at their own
+     shape with air above and below. Nothing moves when the picture changes. */
+  .wshot .wframe { aspect-ratio: 4 / 3; display: grid; place-items: center; }
+  .wshot img { display: block; max-width: 100%; max-height: 100%;
+      width: auto; height: auto; border-radius: 10px;
+      background: var(--paper);
+      box-shadow: 0 2px 4px rgba(25,26,24,.06), 0 36px 60px -30px rgba(25,26,24,.45); }
+  /* Some screens arrive already sitting on something - a card with its own corner
+     and its own shadow baked in. Ours on top of theirs is two corners and two
+     shadows. Those get neither: the corner in the file is the only corner. */
+  .wshot.flat img { box-shadow: none; border-radius: 26px; }
+  /* no picture below 1100, so no column for it either - the list goes back to
+     being an ordinary block or it keeps a 520px track on a 390 screen */
+  @media (hover: none), (max-width: 1100px) {
+    .wshot { display: none; }
+    #work .wrap { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wshot, .wshot.on { transition: opacity .3s ease; transform: none; }
+  }
+</style>
 </head>
 <style>
   /* the index: text only */
@@ -966,6 +1122,22 @@
   .ix-n { position: relative; display: block; width: 30px; height: 24px; color: var(--faint);
         font-family: var(--display); font-size: 14px; letter-spacing: .02em; line-height: 24px; }
   .ix-n i { position: absolute; left: 0; top: 0; font-style: normal; }
+  /* ── The mark instead of the count ────────────────────────────────────
+     A number told you how many pieces of work there were, which nobody needed
+     counting. The tilted arrow says the one thing worth saying in that slot:
+     this opens. It sits where the number sat, at the same weight and colour.
+
+     The row already has a mark - the one that lands after the full stop when
+     you reach for it. Two arrows at once would be the interface saying the
+     same thing twice at opposite ends of a line, so they hand over: the one on
+     the left is there at rest, and it steps back the moment the other arrives. */
+  .ix-ne { display: block; color: var(--faint); margin-top: 6px;
+           transition: color .22s ease; }
+  /* the mark stays with its row: it is what tells you this line is a piece of
+     work rather than a paragraph, and that is true whether you are reaching for
+     it or not. It comes into ink with the rest of the row. */
+  .ix-b.lit .ix-ne, .ix-b:focus-visible .ix-ne { color: var(--ink); }
+  @media (hover: hover) { .ix-b:hover .ix-ne { color: var(--ink); } }
   /* The number used to swap for an arrow on hover. Two marks were saying the same
      thing at opposite ends of the row, and the one by the number was a column away
      from where the reading finishes. The number just stays a number; the arrow after
@@ -1009,7 +1181,7 @@
      and by then you have read a sentence and stopped. The mark goes where the
      reading ends instead - straight after the full stop, on whichever line it
      lands on. */
-  .ix-go { position: absolute; opacity: 0; pointer-events: none;
+  .ix-go { display: none; position: absolute; opacity: 0; pointer-events: none;
         width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
 
         transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1);
@@ -1133,7 +1305,17 @@
   @media (prefers-reduced-motion: reduce) { .ov, .md { transition: none; } }
 
   /* ---- one column, placed left of centre; the field around it is the design ---- */
-  :root { --col: 620px; --axis: max(24px, calc(50% - 550px)); }
+  /* The page box goes to 1400 (was 1100): with a screen beside the rows there is a
+     second column to hold, and 1100 was measured for a page that only had text.
+     The reading measure itself stays at 680 - lines do not get longer, the page
+     gets wider around them. */
+  /* The page box tops out at 1320 and the gutter never drops under 40px. There is no
+     breakpoint here on purpose: max() already steps the box down as the window narrows,
+     which is what the old 24px floor was doing badly. On a 1366 laptop - the next real
+     width below 1440 - that floor put the text 24px from the glass; now the column comes
+     in at 1286 with 40 either side, and at 1440 it is 1320 with 60. Nothing jumps at any
+     width. It was 1400 and read too wide for a page this quiet, so it lost 80. */
+  :root { --col: 680px; --axis: max(40px, calc(50% - 660px)); }
   :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
   :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
 
@@ -1210,14 +1392,16 @@
   .ldr{touch-action:none;overscroll-behavior:none}
 
   header .wide, #work .wrap, #live .wrap, #contact .wrap, footer, .nav-inner {
-    max-width: none; width: auto; margin: 0; padding-left: var(--axis); padding-right: max(24px, calc(50% - 550px));
+    max-width: none; width: auto; margin: 0; padding-left: var(--axis); padding-right: var(--axis);
   }
   header .wide > *, #work .wrap > *, #live .wrap > *, #contact .wrap > * { max-width: var(--col); }
-  header .wide > .hero-copy > .hero-facts { max-width: var(--col); }
+  header .wide > .hero-copy > .hero-line { max-width: var(--col); }
   header { padding: 150px 0 0; min-height: 0; display: block; }
-  header h1 { font-size: clamp(56px, 8.2vw, 114px); line-height: 0.95; letter-spacing: -0.046em; max-width: 8ch; }
+  header h1 { font-size: 24px; line-height: 32px; letter-spacing: -0.02em; max-width: none; }
   .hero-copy .role { font-size: 17.5px; color: var(--muted); margin-top: 22px; letter-spacing: 0; font-family: var(--font); }
-  .hero-copy .sub { font-size: 17.5px; line-height: 28px; color: var(--muted); max-width: 44ch; margin-top: 40px; border-top: 0; padding-top: 0; }
+  /* the measure moved 620 to 680, so the one paragraph that has its own cap moves
+     with it - otherwise the column is wider and nothing in it looks any different */
+  .hero-copy .sub { font-size: 17.5px; line-height: 28px; color: var(--muted); max-width: 48ch; margin-top: 40px; border-top: 0; padding-top: 0; }
   .avail { margin-top: 26px; font-size: 14px; }
   /* Morphline — shared glyph layer (used by the facts tabs) */
   .ml-probe, .ml-layer { font: inherit; line-height: inherit; letter-spacing: inherit; }
@@ -1773,21 +1957,107 @@ function onWidth(fn){
 <header id="top">
   <div class="wide hero-grid">
     <div class="hero-copy r">
-      <h1>Amrit<br />Kumar</h1>
+      <h1>Amrit Kumar</h1>
       <p class="role">Product Designer, AI systems</p>
       <p class="sub">I design how humans and AI agents share judgment in enterprise work,
       especially where decisions are hard and being wrong is expensive.</p>
-      <div class="hero-facts" data-morph-tabs>
-        <div class="ftabs" role="tablist" aria-label="About me">
-          <button class="ftab" type="button" data-v="Product Designer, Sirion &middot; 5 years">Currently</button>
-          <button class="ftab" type="button" data-v="13 years in design &middot; 6 in product &middot; 3 in AI-native products">Experience</button>
-          <button class="ftab" type="button" data-v="Noida, India">Based in</button>
-        </div>
-        <div class="fval" data-morph-value></div>
-      </div>
+      <p class="hero-line">5 years at Sirion &middot; 13 years in design, 6 in product, 3 in AI-native products &middot; Noida, India</p>
     </div>
   </div>
 </header>
+
+
+<section id="work" aria-label="Selected work">
+  <div class="wrap">
+    <p class="ix-lbl r">Latest work</p>
+    <ol class="ixl">
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="0" data-shot="cr-shot.webp" data-sw="1412" data-sh="1036" data-flat="1" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><svg class="ix-ne" width="13" height="13" viewBox="0 0 13 13"><path d="M3.4 9.6 9.6 3.4M4.6 3.4h5v5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Contract Relationships</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Contract systems&nbsp;&middot; Sirion&nbsp;&middot; 2025&ndash;26</i>
+              <i class="b">A folder tells you where a document sits. Not what it changes.</i>
+            </span>
+            <span class="vh">A folder tells you where a document sits. Not what it changes.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="1" data-shot="onb-shot.webp" data-sw="1140" data-sh="720" data-flat="1" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><svg class="ix-ne" width="13" height="13" viewBox="0 0 13 13"><path d="M3.4 9.6 9.6 3.4M4.6 3.4h5v5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Contract Onboarding</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">AI onboarding review&nbsp;&middot; Sirion&nbsp;&middot; Shipped</i>
+              <i class="b">The agent groups the contracts. A person decides the groups are right.</i>
+            </span>
+            <span class="vh">The agent groups the contracts. A person decides the groups are right.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="2" data-shot="phx-shot.webp" data-sw="1500" data-sh="879" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><svg class="ix-ne" width="13" height="13" viewBox="0 0 13 13"><path d="M3.4 9.6 9.6 3.4M4.6 3.4h5v5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Phoenix Listing</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</i>
+              <i class="b">A question reshapes the listing into the answer.</i>
+            </span>
+            <span class="vh">A question reshapes the listing into the answer.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <button class="ix-b" type="button" data-i="3" data-shot="ae-shot.webp" data-sw="1500" data-sh="914" data-morph-host aria-haspopup="dialog">
+          <span class="ix-n" aria-hidden="true"><svg class="ix-ne" width="13" height="13" viewBox="0 0 13 13"><path d="M3.4 9.6 9.6 3.4M4.6 3.4h5v5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Auto Extraction</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</i>
+              <i class="b">An AI can extract 128 fields. A lawyer still has to check every one.</i>
+            </span>
+            <span class="vh">An AI can extract 128 fields. A lawyer still has to check every one.</span>
+          </span>
+        </button>
+      </li>
+      <li class="ix r">
+        <a class="ix-b" href="details.html" data-fan="1" data-morph-host>
+          <span class="ix-n" aria-hidden="true"><svg class="ix-ne" width="13" height="13" viewBox="0 0 13 13"><path d="M3.4 9.6 9.6 3.4M4.6 3.4h5v5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="ix-t">
+            <span class="ix-top"><b>Interface details</b></span>
+            <span class="ix-sw mline" data-morph>
+              <i class="a">Components and states&nbsp;&middot; Sirion&nbsp;&middot; 2023&ndash;26</i>
+              <i class="b">The case studies argue. These are the screens.</i>
+            </span>
+            <span class="vh">The case studies argue. These are the screens.</span>
+          </span>
+        </a>
+      </li>
+    </ol>
+    <div class="wshot" id="wshot" aria-hidden="true"><div class="wframe"><img alt="" decoding="async">
+      <div class="wfan">
+        <span class="dc dc1">
+          <span class="dc-k">Low confidence</span>
+          <span class="dc-n">60%<i>below the 80% threshold</i></span>
+          <span class="dc-bar"><i></i></span>
+        </span>
+        <span class="dc dc2">
+          <span class="dc-h">Net 30 days</span>
+          <span class="dc-k amber">Amended</span>
+          <span class="dc-row"><b>31 Mar 2026</b><em>Net 45 days</em></span>
+          <span class="dc-row"><b>2 Feb 2024</b><em>Net 45 days</em></span>
+        </span>
+        <span class="dc dc3">
+          <span class="dc-k">Relationship</span>
+          <span class="dc-h2">&ldquo;Pricing cap&rdquo; <u>amends</u> &ldquo;Asset Purchase Agreement&rdquo;</span>
+          <span class="dc-chips"><i>MA</i><i>SOW</i><i>SOW</i></span>
+        </span>
+      </div></div></div>
+  </div>
+</section>
 
 <section id="live" aria-label="One idea, live">
   <div class="wrap">
@@ -1856,65 +2126,6 @@ function onWidth(fn){
   </div>
 </section>
 
-<section id="work" aria-label="Selected work">
-  <div class="wrap">
-    <p class="ix-lbl r">Latest work</p>
-    <ol class="ixl">
-      <li class="ix r">
-        <button class="ix-b" type="button" data-i="0" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">01</i></span>
-          <span class="ix-t">
-            <span class="ix-top"><b>Contract Relationships</b></span>
-            <span class="ix-sw mline" data-morph>
-              <i class="a">Contract systems&nbsp;&middot; Sirion&nbsp;&middot; 2025&ndash;26</i>
-              <i class="b">A folder tells you where a document sits. Not what it changes.</i>
-            </span>
-            <span class="vh">A folder tells you where a document sits. Not what it changes.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ix r">
-        <button class="ix-b" type="button" data-i="1" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">02</i></span>
-          <span class="ix-t">
-            <span class="ix-top"><b>Contract Onboarding</b></span>
-            <span class="ix-sw mline" data-morph>
-              <i class="a">AI onboarding review&nbsp;&middot; Sirion&nbsp;&middot; Shipped</i>
-              <i class="b">The agent groups the contracts. A person decides the groups are right.</i>
-            </span>
-            <span class="vh">The agent groups the contracts. A person decides the groups are right.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ix r">
-        <button class="ix-b" type="button" data-i="2" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">03</i></span>
-          <span class="ix-t">
-            <span class="ix-top"><b>Phoenix Listing</b></span>
-            <span class="ix-sw mline" data-morph>
-              <i class="a">Agent in the contract listing&nbsp;&middot; Sirion&nbsp;&middot; In development</i>
-              <i class="b">A question reshapes the listing into the answer.</i>
-            </span>
-            <span class="vh">A question reshapes the listing into the answer.</span>
-          </span>
-        </button>
-      </li>
-      <li class="ix r">
-        <button class="ix-b" type="button" data-i="3" data-morph-host aria-haspopup="dialog">
-          <span class="ix-n" aria-hidden="true"><i class="num">04</i></span>
-          <span class="ix-t">
-            <span class="ix-top"><b>Auto Extraction</b></span>
-            <span class="ix-sw mline" data-morph>
-              <i class="a">AI review interface&nbsp;&middot; Sirion&nbsp;&middot; Shipped 2024</i>
-              <i class="b">An AI can extract 128 fields. A lawyer still has to check every one.</i>
-            </span>
-            <span class="vh">An AI can extract 128 fields. A lawyer still has to check every one.</span>
-          </span>
-        </button>
-      </li>
-    </ol>
-  </div>
-</section>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Project">
   <button class="ov-close" id="ovClose" type="button" aria-label="Close">Close</button>
@@ -2295,13 +2506,15 @@ function onWidth(fn){
   }
   /* The sentence is drawn as loose glyphs that travel into place, so where it ends
      is only known once they have landed. Measured then, from the last one. */
-  function mark(btn){
-    var sw = btn.querySelector('.ix-sw'); if (!sw) return;
-    var go = sw.querySelector('.ix-go');
-    if (!go){ go = document.createElement('span'); go.className = 'ix-go';
-              go.setAttribute('aria-hidden','true'); sw.appendChild(go); }
-    nudgeMark(sw, go);
-  }
+  /* The arrow that used to follow the sentence is gone.
+     ------------------------------------------------------------------------
+     It was placed from where the last glyph landed, which is only knowable once
+     the morph has settled. When the sentence wrapped to a second line the
+     measurement and the settled text disagreed and the arrow came down in the
+     middle of a word. The row already carries an arrow of its own at the left,
+     and the whole row is the target, so a second one was saying nothing the
+     first had not. */
+  function mark(){ }
   function litten(b){
     if (lit === b) return;
     light(lit, false); lit = b; light(b, true);
@@ -2502,6 +2715,36 @@ function onWidth(fn){
 </script>
 
 <script>
+/* Arriving on index.html#work from a case study used to land at the top of the page.
+   The loader holds the document still (overflow:hidden on html and body) for the few
+   seconds it runs, and the browser's own jump to the anchor is thrown away with it.
+   Nothing puts it back, so the URL said #work and the reader was at #top. This waits
+   for the hold to lift and does the jump itself, once. */
+(function(){
+  var id = (location.hash || '').slice(1);
+  if (!id) return;
+  var fired = false, t0 = Date.now();
+  function go(){
+    if (fired) return;
+    var target = document.getElementById(id);
+    if (!target) { fired = true; return; }
+    fired = true;
+    var root = document.documentElement, was = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';           /* the page scrolls smoothly; a jump should not */
+    target.scrollIntoView({ block: 'start' });    /* honours scroll-margin-top above */
+    root.style.scrollBehavior = was;
+  }
+  var held = function(){
+    var c = document.documentElement.classList;
+    return c.contains('ldr-on') || c.contains('ldr-boot');
+  };
+  var w = setInterval(function(){
+    if (!held() || Date.now() - t0 > 12000) { clearInterval(w); setTimeout(go, 60); }
+  }, 120);
+})();
+</script>
+
+<script>
 /* Each mark opens to the width of its own word. Measured from the word in place,
    after the fonts have landed, and again on resize — never guessed. */
 (function(){
@@ -2551,6 +2794,193 @@ function onWidth(fn){
   q.addEventListener('pointerenter', function(){ clearTimeout(t); t = setTimeout(mark, 430); });
   q.addEventListener('focus', function(){ clearTimeout(t); t = setTimeout(mark, 430); });
   q.addEventListener('pointerleave', function(){ clearTimeout(t); });
+})();
+</script>
+<script>
+/* The screen beside the rows. Its column holds it in place and CSS makes it stick;
+   all this does is decide what is inside it. The four are preloaded
+   once, on the first reach, so the first one does not arrive late and the rest never
+   blink. Pointers only - a phone never loads them. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: hover) and (min-width: 1101px)').matches) return;
+  var host=document.getElementById('wshot'); if(!host) return;
+  var img=host.querySelector('img'), wrap=host.parentNode;
+  var rows=[].slice.call(document.querySelectorAll('#work .ix-b[data-shot], #work .ix-b[data-fan]'));
+  var warmed=false, cur=null, t;
+  function warm(){ if(warmed) return; warmed=true;
+    rows.forEach(function(r){ if(!r.dataset.shot) return; var i=new Image(); i.src=r.dataset.shot; }); }
+
+  /* A picture that appears the instant the pointer touches a row turns a sweep down
+     the list into four flashes. So the first one waits: the pointer has to settle on
+     a row before anything arrives. Once one is up the wait is gone - moving between
+     rows has to keep up with the reading, and the picture slides rather than blinks.
+     120ms, not 190: the row lights at 40ms and its line starts morphing straight
+     after, so a longer wait left the picture arriving as a separate event. They
+     overlap now for most of their motion, which is what makes them one. */
+  /* Timings come off Morphline's own clock so the picture and the line never drift
+     apart. 300ms base: 165 out, 360 in. */
+  var EF = parseFloat(getComputedStyle(document.documentElement)
+             .getPropertyValue('--effect-ms')) || 300;
+  var OUT = Math.round(EF * 0.55);
+  var ENTER = 120, LEAVE = 200;
+
+  /* The size is set from the numbers on the row, not from the file. A screenshot that
+     has not decoded yet has no height, so the box used to be one height and then jump
+     to another the moment the bitmap landed - and swapping between rows of different
+     shapes jumped again. Setting the ratio first means the frame is the right size
+     before there is anything in it, and it never resizes twice. */
+  function fill(row){
+    var fan = row.dataset.fan === '1';
+    host.classList.toggle('fan', fan);
+    host.classList.toggle('flat', row.dataset.flat === '1');
+    if (!fan) {
+      var w = parseFloat(row.dataset.sw), h = parseFloat(row.dataset.sh);
+      img.style.aspectRatio = (w && h) ? (w + ' / ' + h) : '';
+      if (img.getAttribute('src') !== row.dataset.shot) img.src = row.dataset.shot;
+    }
+    cur = row;
+  }
+
+  /* One picture at a time, and never two states at once.
+     ---------------------------------------------------------------------------
+     It used to change the src underneath a picture that was still on screen. The
+     four screenshots are different shapes, so the frame changed height in the
+     middle of a fade - a fade and a resize arriving together, which is the jump.
+     Now it goes out first, is refilled while there is nothing to see, and comes
+     back - and because the frame no longer changes size, the whole exchange costs
+     about what the old cross-fade cost. */
+  var swapT;
+  function put(row){
+    clearTimeout(swapT);
+    if (cur === row) { host.classList.add('on'); return; }
+    if (host.classList.contains('on')) {
+      host.classList.remove('on');
+      swapT = setTimeout(function(){ fill(row); host.classList.add('on'); }, OUT);
+      return;
+    }
+    fill(row); host.classList.add('on');
+  }
+  function show(row){
+    warm(); clearTimeout(t);
+    t = setTimeout(function(){ put(row); }, host.classList.contains('on') ? 0 : ENTER);
+  }
+  /* Leaving gets a grace, so crossing the gap between two rows is not a blink -
+     and at 200ms a wobble, or a glance away and straight back, never starts the
+     leave at all. */
+  function hide(){ clearTimeout(t); clearTimeout(swapT);
+    t = setTimeout(function(){ host.classList.remove('on'); }, LEAVE); }
+  rows.forEach(function(r){
+    r.addEventListener('pointerenter', function(){ show(r); });
+    r.addEventListener('focus', function(){ show(r); });
+    r.addEventListener('pointerleave', hide);
+    r.addEventListener('blur', hide);
+  });
+})();
+</script>
+<style>
+  /* ── Room for the screen ───────────────────────────────────────────────
+     The rows were the full 620 measure, which left the picture beside them
+     squeezed against the right margin. The list takes a shorter measure of its
+     own - 520, still about 38 characters a line - and the picture takes the
+     width that gives back. Nothing else on the page changes measure. Last in
+     the sheet because the page sets .ixl to the full measure further down. */
+  #work .ixl { max-width: 520px; }
+  /* and the picture opts out of the reading cap entirely - it is not a paragraph */
+  #work .wrap > .wshot { max-width: none; }
+
+  /* ── The fan, as the fifth row's picture ──────────────────────────────────
+     It used to be a block of its own under the list, hard against the left
+     margin, which read as a stray. It is a row now like the other four, and
+     what it shows on the right is the same three components - drawn in markup
+     rather than photographed, so they stay sharp and carry the site's type. */
+  .wshot .wfan { display: none; position: relative; width: 100%; height: 290px; }
+  .wshot.fan .wfan { display: block; }
+  .wshot.fan img { display: none; }
+
+  .dc {
+    position: absolute; top: 40px; left: calc(50% - 254px);
+    display: block; width: 250px; height: 168px; padding: 17px 19px; overflow: hidden;
+    background: #1E1F1D; border-radius: 18px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.07),
+                0 2px 4px rgba(25,26,24,.10),
+                0 26px 46px -22px rgba(25,26,24,.55);
+    transform-origin: 50% 88%;
+  }
+  .dc1 { transform: translateX(0)     rotate(-8deg); z-index: 1; }
+  .dc2 { transform: translateX(130px) rotate(-1deg); z-index: 2; }
+  .dc3 { transform: translateX(256px) rotate(7deg);  z-index: 3; }
+
+  .dc-k { display: block; font-family: var(--display); font-size: 10px; font-weight: 500;
+          letter-spacing: .13em; text-transform: uppercase; color: #E06A5E; }
+  .dc-k.amber { color: #E0B14E; }
+  .dc-n { display: flex; align-items: baseline; gap: 7px; margin-top: 7px;
+          font-family: var(--display); font-size: 27px; font-weight: 500; color: #fff;
+          letter-spacing: -.02em; line-height: 1; }
+  .dc-n i { font-style: normal; font-size: 10px; font-weight: 400; color: #8D8F88;
+            letter-spacing: 0; line-height: 1.3; }
+  .dc-bar { display: block; height: 5px; margin-top: 13px; border-radius: 99px;
+            background: #34352F; overflow: hidden; }
+  .dc-bar i { display: block; width: 60%; height: 100%; border-radius: 99px; background: #E06A5E; }
+  .dc-h { display: block; font-family: var(--display); font-size: 16px; font-weight: 500;
+          color: #fff; letter-spacing: -.01em; margin-bottom: 11px; }
+  .dc-h2 { display: block; font-size: 12px; line-height: 1.45; color: #E7E7E3; margin: 7px 0 11px; }
+  .dc-h2 u { text-decoration: none; color: #E0B14E; }
+  .dc-row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0;
+            border-top: 1px solid rgba(255,255,255,.07); font-size: 11px; line-height: 1.3; }
+  .dc-row:first-of-type { border-top: 0; }
+  .dc-row b { font-weight: 400; color: #fff; }
+  .dc-row em { font-style: normal; color: #8D8F88; }
+  .dc-row + .dc-row b, .dc-row + .dc-row em { color: #6E706A; }
+  .dc-chips { display: flex; gap: 6px; }
+  .dc-chips i { font-style: normal; font-size: 9.5px; letter-spacing: .06em; color: #B9BBB4;
+                background: #2C2E29; border-radius: 5px; padding: 4px 7px; line-height: 1; }
+
+
+</style>
+<script>
+/* The pane behind the marks. Always there now, so all this does is measure it. The
+   scroll watcher that used to fade it in is gone: there was one class left to toggle
+   and nothing reading it. */
+(function(){
+  var inner = document.querySelector('.nav-inner');
+  /* the pane is as wide as the marks themselves, measured from the first one to the
+     last, so it never reaches across the page */
+  function fit(){
+    if (!inner) return;
+    var marks = [].slice.call(inner.querySelectorAll('.nb'));
+    if (!marks.length) return;
+    var host = inner.getBoundingClientRect();
+    var l = Infinity, r = -Infinity, t = Infinity, b = -Infinity;
+    marks.forEach(function (m) {
+      var k = m.getBoundingClientRect();
+      if (k.left < l) l = k.left; if (k.right > r) r = k.right;
+      if (k.top < t) t = k.top;   if (k.bottom > b) b = k.bottom;
+    });
+    var px = 13, py = 9;
+    inner.style.setProperty('--pane-x', Math.round(l - host.left - px) + 'px');
+    inner.style.setProperty('--pane-y', Math.round(t - host.top  - py) + 'px');
+    inner.style.setProperty('--pane-w', Math.round(r - l + px * 2) + 'px');
+    inner.style.setProperty('--pane-h', Math.round(b - t + py * 2) + 'px');
+  }
+  addEventListener('resize', fit); fit();
+  addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+  /* A mark grows when you reach for it - the word slides out - and the glass has to
+     grow with it, or the word ends up sitting outside the pane that is meant to hold
+     it. Measuring once was the bug. While the pointer is in the nav the box is
+     re-measured every frame, and for a beat after it leaves, so the mark closing
+     again is followed all the way back. */
+  var raf = 0, hot = false, until = 0;
+  function loop(){
+    fit();
+    raf = (hot || Date.now() < until) ? requestAnimationFrame(loop) : 0;
+  }
+  function run(){ if (!raf) raf = requestAnimationFrame(loop); }
+  inner.addEventListener('pointerenter', function(){ hot = true; run(); });
+  inner.addEventListener('focusin',      function(){ hot = true; run(); });
+  inner.addEventListener('pointerleave', function(){ hot = false; until = Date.now() + 900; run(); });
+  inner.addEventListener('focusout',     function(){ hot = false; until = Date.now() + 900; run(); });
 })();
 </script>
 </body>
