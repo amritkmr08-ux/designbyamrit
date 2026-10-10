@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sketchbook · Amrit Kumar</title>
+<meta name="description" content="A collection of screens Amrit Kumar designed for AI-powered contract software, 2023 to 2026: where AI gets its answers, why it made a match, how contracts connect, and the small states in between." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{--paper:#F4F4F1; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --accent:#3D5A45;
+  --display:"Poppins",-apple-system,sans-serif; --font:"Inter",-apple-system,sans-serif}
+*{margin:0; padding:0; box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper); color:var(--ink); font-family:var(--font); font-size:17.5px; line-height:28px; -webkit-font-smoothing:antialiased; overflow-x:clip}
+body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:90; opacity:.10; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit; text-decoration:none}
+img{display:block; max-width:100%; height:auto}
+/* the site nav: the same mark and menu as the landing page */
+.site-nav{height:92px}
+.site-mark{position:fixed; z-index:40; top:40px; left:max(24px, calc(50% - 660px)); width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--paper); display:grid; place-items:center; font-family:var(--display); font-weight:500; font-size:16px; line-height:1}
+.site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-size:13px; line-height:20px; color:var(--muted)}
+.site-menu a:hover, .site-menu a[aria-current]{color:var(--ink)}
+@media (max-width:760px){ .site-mark{position:absolute; top:28px} .site-menu{top:38px; gap:18px} .site-nav{height:80px} }
+.col{max-width:1080px; margin:0 auto; padding:0 24px}
+.hero{padding:140px 0 120px}
+.hero h1{font-family:var(--display); font-weight:500; font-size:114px; line-height:1; letter-spacing:-.03em}
+.hero .line{font-family:var(--display); font-weight:500; font-size:24px; line-height:34px; letter-spacing:-.01em; max-width:22ch; margin-top:40px}
+.hero .body{max-width:480px; margin-top:24px; color:var(--muted)}
+.hero .small{font-size:14px; line-height:22px; color:var(--faint); max-width:480px; margin-top:16px}
+.idea{padding:0 0 200px}
+.lbl{font-size:14px; line-height:22px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}
+.lbl b{font-weight:400; margin-right:14px}
+.line{font-family:var(--display); font-weight:500; font-size:24px; line-height:34px; letter-spacing:-.01em; max-width:30ch; margin-top:14px}
+.frames{columns:3; column-gap:36px; margin:48px 0 40px; padding:40px 40px 12px; background:#FFFFFF; border-radius:16px}
+.frames img{width:auto; height:auto; max-width:100%; break-inside:avoid; margin:0 0 28px; cursor:zoom-in; display:block}
+@media (max-width:980px){ .frames{columns:2} }
+.body{max-width:480px; color:var(--muted)}
+footer{padding:60px 0 56px; border-top:1px solid var(--line); font-size:14px; line-height:22px; color:var(--faint); display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap}
+footer a:hover{color:var(--ink)}
+.r{opacity:0; transform:translateY(12px); transition:opacity .7s ease, transform .7s ease} .r.on{opacity:1; transform:none}
+.lb{position:fixed; inset:0; background:rgba(25,26,24,.92); display:none; align-items:center; justify-content:center; padding:24px; z-index:100; cursor:zoom-out}
+.lb.on{display:flex} .lb img{max-width:100%; max-height:100%; border-radius:6px}
+@media (prefers-reduced-motion:reduce){ .r{transition:none; opacity:1; transform:none} html{scroll-behavior:auto} }
+@media (max-width:760px){ .hero{padding:100px 0 80px} .hero h1{font-size:min(64px,14.5vw)} .idea{padding-bottom:120px} .frames{columns:1; padding:20px 20px 0; margin:36px -4px 32px} }
+</style>
+</head>
+<body>
+<div class="site-nav"><a class="site-mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
+<nav class="site-menu" aria-label="Main"><a href="index.html#work">Work</a><a href="about.html">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Résumé</a></nav></div>
+
+<main class="col">
+<header class="hero">
+  <h1 class="r">Sketchbook.</h1>
+  <p class="line r">The small screens behind the big case studies.</p>
+  <p class="body r">Screens from contract software with AI in it, designed between 2023 and 2026. The case studies tell the story. This page shows the parts: a card, a panel, a message, a confirm step. Eight groups, one idea each.</p>
+  <p class="small r">Design files, not screenshots of the live product. Company and people names are made up. Click any image to see it bigger.</p>
+</header>
+
+<section class="idea">
+  <p class="lbl r"><b>01</b>The answer comes with its source</p>
+  <p class="line r">Ask in plain words. Get the answer, the exact text it came from, and a way to say no.</p>
+  <div class="frames r">
+      <img src="details/work-01.webp" width="411" height="602" loading="lazy" decoding="async" alt="">
+      <img src="details/work-02.webp" width="544" height="722" loading="lazy" decoding="async" alt="">
+      <img src="details/work-03.webp" width="470" height="358" loading="lazy" decoding="async" alt="">
+      <img src="details/work-04.webp" width="536" height="387" loading="lazy" decoding="async" alt="">
+      <img src="details/work-05.webp" width="470" height="244" loading="lazy" decoding="async" alt="">
+      <img src="details/work-06.webp" width="532" height="317" loading="lazy" decoding="async" alt="">
+      <img src="details/work-07.webp" width="464" height="164" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">When AI pulls a value out of a contract, the page and passage sit right next to it, so you can check before you trust. A clause the AI wrote has accept, discard and refine under it. You never leave the screen to decide.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>02</b>Why, not just what</p>
+  <p class="line r">When AI says two company names are the same company, it shows its reasoning.</p>
+  <div class="frames r">
+      <img src="details/reason-01.webp" width="504" height="729" loading="lazy" decoding="async" alt="">
+      <img src="details/reason-02.webp" width="484" height="320" loading="lazy" decoding="async" alt="">
+      <img src="details/reason-03.webp" width="448" height="316" loading="lazy" decoding="async" alt="">
+      <img src="details/reason-04.webp" width="572" height="497" loading="lazy" decoding="async" alt="">
+      <img src="details/reason-05.webp" width="444" height="369" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">Which words matched, which ones it ignored (Ltd, Inc, Pvt), and the evidence it used. Progress is shown as named steps, not a spinner. When nothing matches, the screen offers two next moves instead of an error.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>03</b>A person gets the last word</p>
+  <p class="line r">AI groups the different spellings of a company. A person checks each group and confirms once.</p>
+  <div class="frames r">
+      <img src="details/confirm-01.webp" width="448" height="920" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-02.webp" width="448" height="920" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-03.webp" width="446" height="469" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-04.webp" width="498" height="484" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-05.webp" width="506" height="285" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-06.webp" width="426" height="164" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-07.webp" width="712" height="300" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-08.webp" width="282" height="138" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-09.webp" width="364" height="160" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-10.webp" width="559" height="166" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-11.webp" width="235" height="138" loading="lazy" decoding="async" alt="">
+      <img src="details/confirm-12.webp" width="458" height="195" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">Every group shows how many documents it holds. Any group can be undone on the spot. A missing company can be added without leaving the flow, and the empty state says what will show up here and why.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>04</b>How contracts relate, on the row itself</p>
+  <p class="line r">Applies to, changes, replaces. Read it on the record instead of guessing from a folder.</p>
+  <div class="frames r">
+      <img src="details/rows-01.webp" width="559" height="267" loading="lazy" decoding="async" alt="">
+      <img src="details/rows-02.webp" width="444" height="460" loading="lazy" decoding="async" alt="">
+      <img src="details/rows-03.webp" width="964" height="180" loading="lazy" decoding="async" alt="">
+      <img src="details/rows-04.webp" width="1179" height="237" loading="lazy" decoding="async" alt="">
+      <img src="details/rows-05.webp" width="684" height="214" loading="lazy" decoding="async" alt="">
+      <img src="details/rows-06.webp" width="559" height="224" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">A contract card says what it governs, what it sits under, how long it runs, and what an amendment changed. A clause review counts how much has been checked. One screen explains itself without a second one.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>05</b>A date that explains itself</p>
+  <p class="line r">The notice deadline is worked out from the end date. When the end date moved, the deadline moved with it, and the screen says so.</p>
+  <div class="frames r">
+      <img src="details/dates-01.webp" width="439" height="723" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-02.webp" width="428" height="476" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-03.webp" width="324" height="324" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-04.webp" width="324" height="324" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-05.webp" width="270" height="160" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-06.webp" width="241" height="144" loading="lazy" decoding="async" alt="">
+      <img src="details/dates-07.webp" width="448" height="212" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">The card shows the rule, the clauses behind it, and a history of every change, including the ones the system made on its own. Confidence is shown as high, medium or low rather than a percentage, and a filter counts the items that still need a human look.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>06</b>Check the AI before switching it on</p>
+  <p class="line r">A new AI version arrives as pending. It goes live only after a test.</p>
+  <div class="frames r">
+      <img src="details/pipeline-01.webp" width="1031" height="891" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-02.webp" width="466" height="887" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-03.webp" width="536" height="205" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-04.webp" width="531" height="292" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-05.webp" width="803" height="629" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-06.webp" width="417" height="379" loading="lazy" decoding="async" alt="">
+      <img src="details/pipeline-07.webp" width="539" height="367" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">Three steps: pick data that looks like real work, pick what to score, run it. Each saved version keeps its result. When a project is created, the setup asks in plain words whether the agent should run and what it will do.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>07</b>The moments in between</p>
+  <p class="line r">Thinking, working, done. The states where most products go quiet.</p>
+  <div class="frames r">
+      <img src="details/states-01.webp" width="393" height="147" loading="lazy" decoding="async" alt="">
+      <img src="details/states-02.webp" width="442" height="148" loading="lazy" decoding="async" alt="">
+      <img src="details/states-03.webp" width="198" height="134" loading="lazy" decoding="async" alt="">
+      <img src="details/states-04.webp" width="187" height="142" loading="lazy" decoding="async" alt="">
+      <img src="details/states-05.webp" width="440" height="389" loading="lazy" decoding="async" alt="">
+      <img src="details/states-06.webp" width="539" height="438" loading="lazy" decoding="async" alt="">
+      <img src="details/states-07.webp" width="442" height="152" loading="lazy" decoding="async" alt="">
+      <img src="details/states-08.webp" width="251" height="269" loading="lazy" decoding="async" alt="">
+      <img src="details/states-09.webp" width="662" height="307" loading="lazy" decoding="async" alt="">
+      <img src="details/states-10.webp" width="662" height="307" loading="lazy" decoding="async" alt="">
+      <img src="details/states-11.webp" width="539" height="162" loading="lazy" decoding="async" alt="">
+      <img src="details/states-12.webp" width="431" height="306" loading="lazy" decoding="async" alt="">
+      <img src="details/states-13.webp" width="474" height="201" loading="lazy" decoding="async" alt="">
+      <img src="details/states-14.webp" width="442" height="277" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">A thinking line that says what it is thinking about. Working notices in two sizes that say what comes next. A done message that names what got done. Small text, but it is where trust is kept or lost.</p>
+</section>
+
+<section class="idea">
+  <p class="lbl r"><b>08</b>The boring parts, done carefully</p>
+  <p class="line r">Menus, filters, bulk actions, sharing.</p>
+  <div class="frames r">
+      <img src="details/quiet-01.webp" width="439" height="467" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-02.webp" width="292" height="322" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-03.webp" width="538" height="281" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-04.webp" width="472" height="144" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-05.webp" width="262" height="144" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-06.webp" width="206" height="144" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-07.webp" width="567" height="576" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-08.webp" width="356" height="273" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-09.webp" width="640" height="423" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-10.webp" width="367" height="138" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-11.webp" width="595" height="704" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-12.webp" width="266" height="138" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-13.webp" width="953" height="260" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-14.webp" width="239" height="128" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-15.webp" width="160" height="144" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-16.webp" width="94" height="32" loading="lazy" decoding="async" alt="">
+      <img src="details/quiet-17.webp" width="407" height="798" loading="lazy" decoding="async" alt="">
+  </div>
+  <p class="body r">A column picker you can search. A view menu with delete kept away from the rest. A confirm step before anything is destroyed. A bulk bar that counts what is selected. A share dialog with internal and outside people in one list. Nothing clever, which is the point.</p>
+</section>
+
+<footer><span>&copy; <span id="year"></span> Amrit Kumar &nbsp;&middot;&nbsp; <a href="index.html#work">All work</a></span><span>Built with Claude</span></footer>
+</main>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged"><img id="lbimg" alt=""></div>
+<script>
+(function(){
+  document.getElementById('year').textContent=new Date().getFullYear();
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{threshold:.08});
+  document.querySelectorAll('.r').forEach(function(el,i){el.style.transitionDelay=(i%2)*60+'ms';io.observe(el);});
+  var lb=document.getElementById('lb'), im=document.getElementById('lbimg');
+  function close(){lb.classList.remove('on'); im.src=''; document.body.style.overflow='';}
+  document.querySelectorAll('.frames img').forEach(function(x){x.setAttribute('tabindex','0'); x.setAttribute('role','button');
+    function open(){im.src=x.currentSrc||x.src; lb.classList.add('on'); document.body.style.overflow='hidden';}
+    x.addEventListener('click',open); x.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});
+  lb.addEventListener('click',close); document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+</body>
+</html>
