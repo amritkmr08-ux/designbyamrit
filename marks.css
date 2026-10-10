@@ -1,0 +1,513 @@
+/* ------------------------------------------------------------------
+   Reader marks — pin a section, open its summary, leave a note.
+   Shared across every page of the portfolio. No network, no AI calls.
+   ------------------------------------------------------------------ */
+
+:root {
+  --mk-ink:   #191A18;
+  --mk-muted: #5F625C;
+  --mk-faint: #8B8D87;
+  --mk-line:  #E3E3DF;
+  --mk-soft:  #EDEDEA;
+  --mk-bg:    #F7F7F5;
+  --mk-acc:   #3D5A45;
+  --mk-acc-bd:#C4D2C8;
+  --mk-acc-bg:#F1F6F2;
+  --mk-font:  "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mk-disp:  "Poppins", -apple-system, sans-serif;
+}
+
+/* ---------- section heading row: title left, tools pinned right ---------- */
+.mk-h2 {
+  display: flex !important; align-items: flex-start; justify-content: space-between;
+  gap: 28px; max-width: none !important; width: 100%;
+}
+.mk-h2 > .mk-title { max-width: 26ch; }
+
+/* one chip, so the row reads as an object rather than three loose marks */
+.mk-tools {
+  flex: none; display: flex; align-items: center; gap: 2px;
+  margin-top: 4px; padding: 3px;
+  background: #fff; border: 1px solid var(--mk-line); border-radius: 9px;
+  box-shadow: 0 1px 2px rgba(25,26,24,.04);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.mk-tools:hover { border-color: #C9CBC4; box-shadow: 0 1px 3px rgba(25,26,24,.07); }
+.mk-tools.has { border-color: var(--mk-acc-bd); }
+
+.mk-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0;
+  background: none; border: 0; border-radius: 6px;
+  cursor: pointer; color: var(--mk-muted);
+  transition: color .16s ease, background .16s ease;
+}
+.mk-btn:hover { color: var(--mk-ink); background: var(--mk-soft); }
+.mk-btn.on { color: var(--mk-acc); background: var(--mk-acc-bg); }
+.mk-btn.on:hover { background: #E4EFE7; }
+.mk-btn.on svg .fillable { fill: currentColor; }
+.mk-btn svg { pointer-events: none; }
+
+/* the one expressive beat: a section just got kept. everything else on this
+   panel stays quiet, but this specific moment — committing something to
+   memory — earns a little life. plays once, on the transition to "on" only. */
+@keyframes mk-pin-settle {
+  0%   { transform: scale(1) rotate(0deg); }
+  30%  { transform: scale(1.32) rotate(-10deg); }
+  55%  { transform: scale(0.9) rotate(6deg); }
+  78%  { transform: scale(1.08) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes mk-pin-bloom {
+  0%   { box-shadow: 0 0 0 0 var(--mk-acc-bg); }
+  100% { box-shadow: 0 0 0 9px rgba(61,90,69,0); }
+}
+.mk-btn.pin-settle svg { animation: mk-pin-settle .55s cubic-bezier(.34,1.56,.64,1); transform-origin: 50% 82%; }
+.mk-btn.pin-settle { animation: mk-pin-bloom .55s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-btn.pin-settle svg, .mk-btn.pin-settle { animation: none; }
+}
+
+/* tooltip */
+.mk-btn { position: relative; }
+.mk-btn::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 7px); right: 0;
+  background: var(--mk-ink); color: var(--mk-bg);
+  font-family: var(--mk-font); font-size: 11.5px; line-height: 1;
+  white-space: nowrap; padding: 6px 9px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity .16s ease;
+}
+.mk-btn:hover::after { opacity: 1; }
+.mk-tools:hover .mk-btn:not(:hover)::after { opacity: 0; }
+
+/* ---------- inline summary + note, under the heading ---------- */
+.mk-drawer {
+  overflow: hidden; max-height: 0;
+  transition: max-height .40s cubic-bezier(.22,.61,.36,1);
+}
+.mk-drawer.open { max-height: 520px; }
+.mk-drawer-in {
+  margin: 16px 0 4px; padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--mk-acc);
+}
+
+/* ---------- the short version ----------------------------------------------
+   Two things had to change here. It did not say who wrote it, and it sat
+   flush against the paragraph it is meant to save you from, so it read as a
+   run-up to that paragraph instead of an alternative to it.
+
+   Now it is a panel with room around it, it says on its face that a model
+   wrote it, and it arrives the way a machine answer arrives on the
+   sensitivity page: a beat, then the line. The text holds its place while the
+   beat runs, so nothing below it moves when the words land.
+   -------------------------------------------------------------------------- */
+.mk-drawer-in.mk-sum {
+  position: relative;
+  margin: 26px 0 38px; padding: 20px 24px 20px;
+  border-left: 0; border-radius: 14px;
+  background: var(--mk-soft);
+}
+
+.mk-sum .hd { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; }
+.mk-sum .hd .sp { display: block; flex: none; color: var(--mk-muted); }
+.mk-drawer-in.mk-sum p.k {
+  font-family: var(--mk-disp); font-size: 11.5px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mk-muted); margin: 0;
+}
+
+/* the beat sits over the line it will replace, so waiting costs no layout */
+.mk-sum .body { position: relative; }
+.mk-drawer-in.mk-sum p.s {
+  font-family: var(--mk-disp); font-size: 16.5px; font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.55; color: var(--mk-ink); margin: 0;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .34s ease, transform .34s cubic-bezier(.22,.61,.36,1);
+}
+.mk-sum.ready p.s { opacity: 1; transform: none; }
+
+.mk-sum .dots {
+  position: absolute; left: 0; top: 6px;
+  display: inline-flex; align-items: center; gap: 5px;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+}
+.mk-sum.busy .dots { opacity: 1; }
+.mk-sum .dots i {
+  display: block; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--mk-muted); animation: mk-dot 1.1s ease infinite;
+}
+.mk-sum .dots i:nth-child(2) { animation-delay: .18s; }
+.mk-sum .dots i:nth-child(3) { animation-delay: .36s; }
+@keyframes mk-dot {
+  0%, 100% { opacity: .22; transform: translateY(0); }
+  40%      { opacity: 1;   transform: translateY(-2px); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-sum .dots i { animation: none; }
+  .mk-drawer-in.mk-sum p.s { transition: none; }
+}
+@media (max-width: 700px) {
+  .mk-drawer-in.mk-sum { margin: 22px 0 30px; padding: 17px 18px 17px; }
+}
+.mk-drawer-in p.k {
+  font-family: var(--mk-disp); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mk-faint); margin: 0 0 6px;
+}
+.mk-drawer-in p.s {
+  font-family: var(--mk-disp); font-size: 16.5px; font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.5; color: var(--mk-ink); margin: 0;
+}
+.mk-note textarea {
+  display: block; width: 100%; min-height: 74px; resize: vertical;
+  font-family: var(--mk-font); font-size: 14.5px; line-height: 1.55; color: var(--mk-ink);
+  background: transparent; border: 0; padding: 0; outline: none;
+}
+.mk-note textarea::placeholder { color: var(--mk-faint); }
+.mk-note .row {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--mk-soft);
+  font-size: 12px; color: var(--mk-faint);
+}
+.mk-note .row button {
+  background: none; border: 0; cursor: pointer; padding: 0;
+  font-family: var(--mk-font); font-size: 12px; color: var(--mk-muted);
+}
+.mk-note .row button:hover { color: var(--mk-ink); }
+.mk-note .row .said { margin-left: auto; }
+
+/* ---------- reading dock: same corner on every page ---------- */
+.mk-dock {
+  position: fixed; right: 24px; bottom: 24px; z-index: 50;
+  width: 244px; max-width: calc(100vw - 48px);
+  padding: 15px 16px;
+  background: #fff; border: 1px solid var(--mk-line); border-radius: 16px;
+  box-shadow: 0 12px 32px -14px rgba(25,26,24,.22), 0 2px 8px -2px rgba(25,26,24,.08);
+  cursor: pointer; text-align: left;
+  font-family: var(--mk-font); color: var(--mk-ink);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.mk-dock:hover { box-shadow: 0 16px 38px -14px rgba(25,26,24,.28), 0 3px 10px -2px rgba(25,26,24,.1); transform: translateY(-1px); }
+.mk-dock .glyph { display: none; }
+.mk-dock .t {
+  display: block;
+  font-family: var(--mk-disp); font-size: 14px; font-weight: 500;
+  letter-spacing: -0.01em; line-height: 1.3;
+}
+.mk-dock .s {
+  display: block; margin-top: 3px;
+  font-size: 12px; line-height: 1.5; color: var(--mk-muted);
+}
+.mk-dock .kbd {
+  position: absolute; top: 14px; right: 14px;
+  font-size: 10px; color: var(--mk-faint);
+  border: 1px solid var(--mk-line); border-radius: 6px; padding: 1px 5px; line-height: 15px;
+}
+.mk-dock .t, .mk-dock .s { padding-right: 24px; }
+
+/* One shape, always. It used to become a white card the moment anything was kept,
+   which meant the control the reader had just learnt to find turned into something
+   else. Now the button stays the button and a yellow dot says there is something
+   inside. The card's title and count live in the panel, which is where you go to
+   read them anyway. */
+.mk-dock {
+  width: auto; height: 46px; padding: 0 18px 0 15px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--mk-ink); border-color: var(--mk-ink);
+  box-shadow: 0 14px 34px -14px rgba(25,26,24,.45), 0 2px 8px -2px rgba(25,26,24,.22);
+}
+.mk-dock .glyph { display: flex; color: #fff; }
+.mk-dock .glyph svg { width: 18px; height: 18px; }
+/* A glyph on its own asked the reader to guess. The words say what it is, and they
+   are part of the button rather than a tooltip, so they are there before anyone
+   reaches for it. The card that replaces this once something is kept carries its
+   own title, so the label belongs only to the resting state. */
+.mk-dock::after {
+  content: "Quick read";
+  font-family: var(--mk-disp); font-size: 13.5px; font-weight: 500;
+  letter-spacing: -0.01em; line-height: 1; color: #fff; white-space: nowrap;
+}
+.mk-dock:hover { background: #000; border-color: #000; }
+.mk-dock:hover .glyph { color: #fff; }
+.mk-dock .txt, .mk-dock .kbd { display: none; }
+
+/* something is kept */
+.mk-dock.has::before {
+  content: ""; position: absolute; top: -3px; right: 9px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #F2C14E;
+  /* it straddles the top edge, so the ring is paper: that is what separates it
+     from the ink underneath without putting a hole in the button */
+  box-shadow: 0 0 0 2.5px var(--mk-bg);
+}
+
+@media (max-width: 1080px) { .mk-dock { width: auto; } }
+@media (max-width: 560px) { .mk-dock { right: 14px; left: auto; bottom: 14px; } }
+
+/* ---------- panel: the site's own language, not app chrome ---------- */
+.mk-veil {
+  position: fixed; inset: 0; background: rgba(25,26,24,.28);
+  opacity: 0; pointer-events: none; transition: opacity .24s ease; z-index: 49;
+}
+.mk-veil.on { opacity: 1; pointer-events: auto; }
+
+.mk-panel {
+  position: fixed; top: 10px; right: 10px; bottom: 10px; z-index: 51;
+  width: min(480px, calc(100vw - 20px)); height: calc(100vh - 20px);
+  background: #fff; border-radius: 22px;
+  box-shadow: 0 24px 60px -20px rgba(25,26,24,.28), 0 4px 18px -6px rgba(25,26,24,.12);
+  display: flex; flex-direction: column; overflow: hidden;
+  font-family: var(--mk-font); color: var(--mk-ink);
+  /* same physics as the pin settling in — one motion signature for the
+     whole feature, not a generic drawer slide. arriving gets the spring;
+     leaving is quick and gets out of the way, on purpose — asymmetric,
+     the way a real object would move. */
+  transform: translateX(calc(100% + 20px)) scale(.96);
+  opacity: 0;
+  transition: transform .22s cubic-bezier(.4,0,1,1), opacity .18s ease;
+}
+.mk-panel.on {
+  transform: none; opacity: 1;
+  transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .28s ease;
+}
+.mk-panel[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-panel { transition: opacity .2s ease; transform: none; }
+}
+.mk-dock.hidden { opacity: 0; pointer-events: none; }
+
+/* head: eyebrow over a Poppins title, closed by a hairline — like every section on the site */
+.mk-head {
+  display: block; position: relative;
+  padding: 32px 34px 0; flex: none;
+}
+.mk-head .glyph { display: none; }
+.mk-head .ttl { display: block; }
+.mk-head h2 {
+  font-family: var(--mk-disp); font-weight: 400; font-size: 24px;
+  letter-spacing: -0.025em; line-height: 1.2; margin: 0; max-width: none;
+}
+.mk-head .desc {
+  display: block; margin-top: 8px;
+  font-size: 13.5px; line-height: 1.6; color: var(--mk-muted); max-width: 44ch;
+}
+.mk-x {
+  position: absolute; top: 30px; right: 30px;
+  background: var(--mk-soft); border: 0; border-radius: 8px; cursor: pointer;
+  font-family: var(--mk-font); font-size: 12.5px; color: var(--mk-muted); padding: 7px 12px;
+  transition: background .15s ease, color .15s ease;
+}
+.mk-x:hover { color: var(--mk-ink); background: var(--mk-line); }
+
+/* tabs: quiet text, ink underline for the active one — nav language, not app tabs */
+.mk-tabs {
+  display: flex; gap: 24px; padding: 26px 34px 0;
+  flex: none;
+}
+.mk-tab {
+  background: none; border: 0; cursor: pointer; padding: 0 0 12px;
+  font-family: var(--mk-font); font-size: 13.5px; color: var(--mk-faint);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .18s ease;
+}
+.mk-tab:hover { color: var(--mk-ink); }
+.mk-tab.on { color: var(--mk-ink); border-bottom-color: var(--mk-ink); }
+.mk-tab .n { color: var(--mk-faint); font-weight: 400; }
+
+.mk-body { overflow-y: auto; padding: 30px 34px 40px; flex: 1; }
+.mk-pane { display: none; }
+.mk-pane.on { display: block; }
+
+.mk-foot {
+  flex: none; padding: 18px 34px 22px; margin: 0 14px 14px; border-radius: 16px;
+  background: var(--mk-soft);
+  font-size: 12px; color: var(--mk-faint);
+}
+.mk-foot .where { display: block; margin-bottom: 8px; line-height: 1.6; }
+.mk-foot .row { display: flex; align-items: center; gap: 18px; }
+.mk-send {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: none; border: 0; padding: 0 0 1px; cursor: pointer; text-decoration: none;
+  font-family: var(--mk-font); font-size: 13px; color: var(--mk-ink);
+  border-bottom: 1px solid var(--mk-ink);
+}
+.mk-send:hover { color: var(--mk-acc); border-bottom-color: var(--mk-acc); }
+.mk-send svg { width: 13px; height: 13px; }
+.mk-hint { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mk-muted); }
+.mk-hint kbd {
+  font-family: var(--mk-font); font-size: 10.5px; color: var(--mk-faint);
+  border: 1px solid var(--mk-line); border-radius: 3px; padding: 0 4px; line-height: 15px;
+}
+.mk-foot .reset {
+  margin-left: auto; background: none; border: 0; cursor: pointer; padding: 0;
+  font-family: var(--mk-font); font-size: 12px; color: var(--mk-faint);
+  border-bottom: 1px solid var(--mk-line);
+}
+.mk-foot .reset:hover { color: #9A4A38; border-bottom-color: #D9B4AC; }
+.mk-foot .confirm { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.mk-foot .confirm span { color: var(--mk-ink); }
+.mk-foot .confirm button {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--mk-font); font-size: 12px;
+}
+.mk-foot .confirm .yes { color: #9A4A38; font-weight: 500; }
+.mk-foot .confirm .no { color: var(--mk-muted); }
+
+/* quick-read content: the site's type scale */
+.mk-lede {
+  font-family: var(--mk-disp); font-size: 18px; font-weight: 400; line-height: 1.42;
+  letter-spacing: -0.018em; margin-bottom: 26px;
+}
+.mk-b { margin-bottom: 24px; }
+/* Uppercase earns its place here — these are one-line labels separating the blocks of
+   the short version, and a reader scans past them rather than reading them. But they
+   were set at 11px on 0.2em, where the rest of the site sets an uppercase label at
+   0.1em: at four and five words that extra tracking pulls each label into a long
+   sparse strip that outruns the sentence underneath it. Site tracking, one size up,
+   and the weight the small rung uses so it stays legible at that size. */
+.mk-b h3 {
+  font-family: var(--mk-disp); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mk-faint); margin-bottom: 8px;
+}
+.mk-b p { font-size: 14.5px; line-height: 1.65; margin: 0; color: var(--mk-ink); }
+.mk-b p + p { margin-top: 7px; }
+.mk-jump {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 8px; font-size: 13px; color: var(--mk-acc); text-decoration: none;
+}
+.mk-jump:hover { text-decoration: underline; text-underline-offset: 3px; }
+.mk-num {
+  display: flex; gap: 26px; flex-wrap: wrap; margin: 10px 0 4px;
+  padding: 16px 18px; border-radius: 14px; background: var(--mk-soft);
+}
+.mk-num div { font-size: 12.5px; color: var(--mk-muted); line-height: 1.45; }
+.mk-num b {
+  display: block; font-family: var(--mk-disp); font-size: 26px; font-weight: 400;
+  color: var(--mk-ink); letter-spacing: -0.03em;
+}
+
+/* An empty state is a hint, not content. It was set in the same grey as the writing,
+   at body size, so it read as something to take in rather than something explaining
+   that there is nothing here yet. */
+.mk-empty { font-size: 13.5px; line-height: 1.65; color: var(--mk-faint); max-width: 40ch; }
+.mk-group { margin-bottom: 24px; }
+/* This is the page a pin came from, and on the case studies a page title is a whole
+   sentence. Uppercase at 0.2em is for a two-word label; a sentence set that way is
+   twice as wide, wraps, and is slower to read than the pin titles underneath it —
+   which is backwards, since it is the quieter of the two. Sentence case, small, faint. */
+.mk-group > p.pg {
+  font-family: var(--mk-font); font-size: 12.5px; font-weight: 400;
+  letter-spacing: 0; text-transform: none; line-height: 1.5;
+  color: var(--mk-faint); margin-bottom: 6px; max-width: 46ch;
+}
+.mk-item {
+  position: relative; display: flex; align-items: flex-start; gap: 8px;
+  border-bottom: 1px solid var(--mk-soft);
+}
+/* the whole row navigates — that is what someone actually wants later */
+.mk-item .go {
+  flex: 1; min-width: 0; display: block; padding: 12px 8px 12px 0;
+  text-decoration: none; color: inherit;
+}
+.mk-item .go .h {
+  display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--mk-disp); font-size: 16px; font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.4; color: var(--mk-ink);
+}
+.mk-item .go:hover .h { color: var(--mk-acc); }
+.mk-item .go .h .arw {
+  flex: none; color: var(--mk-faint); opacity: 0; transform: translateX(-3px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.mk-item .go:hover .h .arw { opacity: 1; transform: none; color: var(--mk-acc); }
+.mk-item .go p {
+  margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--mk-muted);
+  white-space: pre-wrap;
+}
+
+/* overflow menu */
+.mk-morewrap { position: relative; flex: none; align-self: center; display: inline-flex; }
+.mk-more {
+  flex: none; width: 28px; height: 28px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  cursor: pointer; color: var(--mk-faint);
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.mk-more:hover, .mk-more[aria-expanded="true"] {
+  color: var(--mk-ink); background: #EFEFEC;
+}
+.mk-menu {
+  position: absolute; z-index: 5; min-width: 172px;
+  background: var(--mk-bg); border: 1px solid var(--mk-line); border-radius: 3px;
+  box-shadow: 0 14px 30px -20px rgba(25,26,24,.35);
+  padding: 5px; display: none;
+}
+.mk-menu.on { display: block; }
+.mk-menu button {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  background: none; border: 0; border-radius: 5px; padding: 8px 10px;
+  cursor: pointer; text-align: left;
+  font-family: var(--mk-font); font-size: 13px; color: var(--mk-ink);
+}
+.mk-menu button:hover { background: #EFEFEC; }
+.mk-menu button svg { flex: none; width: 13px; height: 13px; }
+.mk-menu .sep { height: 1px; background: var(--mk-line); margin: 5px 4px; }
+.mk-menu .danger { color: #9A4A38; }
+.mk-menu .danger:hover { background: #FBEFEC; }
+
+.mk-actions { display: flex; align-items: center; gap: 18px; margin-top: 20px; flex-wrap: wrap; }
+.mk-do {
+  background: none; border: 0; padding: 0 0 1px; cursor: pointer;
+  font-family: var(--mk-font); font-size: 13.5px; color: var(--mk-ink);
+  border-bottom: 1px solid var(--mk-ink);
+}
+.mk-do:hover { color: var(--mk-acc); border-bottom-color: var(--mk-acc); }
+/* the second action is the quieter one; it removes rather than produces */
+.mk-do.quiet { color: var(--mk-muted); border-bottom-color: var(--mk-line); }
+.mk-do.quiet:hover { color: #A0422C; border-bottom-color: #A0422C; }
+.mk-actions { align-items: center; }
+.mk-actions .mk-morewrap { margin-left: 2px; }
+
+@media (max-width: 1080px) {
+  .mk-open { width: auto; margin: 0; }
+  .mk-open .kbd { display: none; }
+    .mk-h2 { display: block; }
+  .mk-tools { margin-top: 12px; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-panel, .mk-veil, .mk-drawer { transition: none; }
+}
+
+/* controls attached to a small label: same size, centred instead of top-aligned */
+.mk-h2.mk-small { align-items: center !important; gap: 16px; }
+.mk-h2.mk-small > .mk-title { max-width: none; }
+.mk-h2.mk-small .mk-tools { margin-top: 0; }
+.mk-h2.mk-small { gap: 16px !important; }
+
+/* case-study rail: the dock sits in the opposite (bottom-right) corner,
+   so the rail foot needs no reserve — it sits on the rail's own padding */
+.rail .foot { padding-bottom: 0; }
+
+/* ---------- remembering: pick up where you left off ---------- */
+.mk-resume {
+  position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); z-index: 50;
+  padding: 10px 16px; border-radius: 999px; border: 1px solid var(--mk-line); background: #fff;
+  font-family: var(--mk-font); font-size: 13.5px; color: var(--mk-ink); cursor: pointer;
+  box-shadow: 0 12px 32px -14px rgba(25,26,24,.22); opacity: 0;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.mk-resume.on { opacity: 1; transform: translate(-50%, 0); }
+.mk-resume:hover { border-color: var(--mk-ink); }
+@media (max-width: 560px) { .mk-resume { bottom: 72px; } }
+@media (prefers-reduced-motion: reduce) { .mk-resume { transition: none; transform: translate(-50%, 0); } }
+
+/* per-section controls stay quiet until the reader is in that section, or has used them */
+@media (hover: hover) and (min-width: 1081px) {
+  .mk-tools { opacity: 0; transition: opacity .22s ease, border-color .18s ease, box-shadow .18s ease; }
+  [data-mk]:hover .mk-tools, .mk-tools.has, .mk-tools:focus-within, .mk-h2:hover .mk-tools { opacity: 1; }
+}

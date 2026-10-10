@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About · Amrit Kumar · Product Designer, AI systems</title>
+<meta name="description" content="About Amrit Kumar, product designer for AI systems at SirionLabs, Noida." />
+<meta property="og:title" content="Amrit Kumar · Product Designer" />
+<meta property="og:description" content="AI can answer. A person still has to decide. Case studies in human-guided AI for enterprise software." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
+<meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/" />
+<meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #FFFFFF;
+    --ink: #191A18;
+    --muted: #5F625C;
+    --faint: #6F716A;
+    --line: #E3E3DF;
+    --soft: #EDEDEA;
+    --mark: #DCE5D3;
+    --accent: #3D5A45; --rule: #C9CAC4; --lift: 0 1px 3px rgba(25,26,24,.06), 0 18px 40px -18px rgba(25,26,24,.22);
+    --dark: #191A18;
+    --display: "Poppins", -apple-system, sans-serif;
+    --font: "Inter", -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90;
+    opacity: .10; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  html { scroll-behavior: smooth; }
+  body { overflow-x: clip; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size:16px;
+    font-weight: 400;
+    line-height:26px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mark); color: var(--ink); }
+  :focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+
+  .wrap  { max-width: 700px;  margin: 0 auto; padding: 0 40px; }
+
+  /* ================= Nav ================= */
+  /* Safari paints a solid block where a blurred element sits inside a backdrop-filtered box,
+     and it needs the -webkit- prefix for backdrop-filter at all. The nav has both: a frosted
+     bar, and four links each carrying filter: blur(.7px). So the frosting moves to its own
+     layer behind the links, and carries both spellings. The bar looks the same. */
+  nav { position: sticky; top: 0; z-index: 20; background: transparent; }
+  /* No frosted bar any more. The nav is four small marks in a corner, so a full-width
+     sheet of blur across the top was doing nothing but smearing the title as it scrolled
+     past underneath. The marks sit on the paper. */
+
+  /* 80px of air above the marks, so the cluster sits down from the edge rather than on it.
+     The nav is in flow, so everything below comes down with it. */
+  .nav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 44px 40px 20px;
+    display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+    font-size:13px; color: var(--muted); font-weight: 400;
+  }
+  /* ── Nav as four marks ────────────────────────────────────────────────────
+     The same cluster as the homepage, in the same corner: home, Work, About,
+     Contact. At rest none of them says anything — present, unlabelled, costing
+     nothing to look past. Reach for one and that block opens into its word. The
+     page you are on keeps its word open, because it has already earned it.
+     The cluster is anchored to the right edge, so opening a word pushes the
+     others left and the right edge never moves. Each width is measured from the
+     word itself once the fonts have landed, never hard-coded.
+     Where there is no hover to reach with, the words are simply there: a block
+     nobody can reach is a door with no handle. */
+  .nb{position:relative;display:block;width:28px;height:28px;overflow:hidden;flex:none;
+      filter:none;
+      --wd:620ms;--we:cubic-bezier(.22,.61,.36,1);--wl:120ms;
+      --md:420ms;--ml:240ms;--td:260ms;--tl:0ms;
+      transition:width var(--wd) var(--we) var(--wl),
+                 opacity 560ms ease var(--d,0ms),
+                 transform 560ms cubic-bezier(.22,.61,.36,1) var(--d,0ms)}
+  /* The marks arrive one after another once the page has settled, then the one for this
+     page darkens. Hidden only by script, so with no JavaScript they are simply there.
+     The delay is on the arrival alone — reaching for a mark still answers immediately,
+     because a pointer that waits reads as a fault, not as care. */
+  body.nav-arrive .nb{opacity:0;transform:translateY(-5px)}
+  /* ── One icon, and only one ───────────────────────────────────────────
+     Five marks and no words until you reach for one, which leaves a reader
+     guessing at all five. An icon on the page you are already on answers the
+     question you are not asking, and four of these five have no symbol anybody
+     would read the same way. Home does, and it shows only where it can be read:
+     knocked out of the dark block, on the page that block belongs to. On the other
+     pages the home mark is a grey box like the rest. It leaves with the mark when
+     the mark opens into its word. */
+  .nb.nav-id .nmk::after, .nb.id .nmk::after {
+        content: ""; position: absolute; inset: 0; opacity: 0;
+        background-color: var(--paper);
+        -webkit-mask: var(--home) no-repeat center / 13px 13px;
+        mask: var(--home) no-repeat center / 13px 13px;
+        transition: opacity 420ms ease; }
+  /* Reaching for a mark, and letting it go, are two different moves and are timed
+     differently. Reaching: the box opens straight away, its fill leaves quickly, and the
+     word arrives once there is room for it — so the word is never caught half-clipped.
+     Letting go: the word leaves first and fast, then the box closes and its fill returns
+     behind it. Nothing is asked to fade and travel at the same moment, which is what made
+     it feel like a snap. */
+  .nb:hover,.nb:focus-visible{width:var(--w,28px);outline:none;
+      --wd:560ms;--we:cubic-bezier(.22,.61,.36,1);--wl:90ms;
+      --md:340ms;--ml:90ms;--td:360ms;--tl:300ms}
+  /* Sensitivity gets a shape of its own — a circle with six soft lobes, drawn as a clip
+     path so underneath it is still just a coloured box. Same size, same greys, same dark
+     when it is the page you are on, same opening into its word. Only the outline differs,
+     because that project is the one piece of work here that is also an argument. */
+  .nb.sens .nmk{border-radius:0;clip-path:path("M14.00 0.00 L14.73 0.13 L15.42 0.47 L16.06 0.96 L16.66 1.48 L17.24 1.92 L17.83 2.21 L18.48 2.32 L19.21 2.31 L19.99 2.24 L20.80 2.22 L21.57 2.35 L22.23 2.67 L22.74 3.20 L23.10 3.89 L23.33 4.67 L23.51 5.44 L23.72 6.13 L24.03 6.71 L24.49 7.19 L25.09 7.60 L25.76 8.01 L26.42 8.47 L26.97 9.02 L27.31 9.67 L27.42 10.40 L27.30 11.17 L27.04 11.94 L26.73 12.66 L26.49 13.35 L26.40 14.00 L26.49 14.65 L26.73 15.34 L27.04 16.06 L27.30 16.83 L27.42 17.60 L27.31 18.33 L26.97 18.98 L26.42 19.53 L25.76 19.99 L25.09 20.40 L24.49 20.81 L24.03 21.29 L23.72 21.87 L23.51 22.56 L23.33 23.33 L23.10 24.11 L22.74 24.80 L22.23 25.33 L21.57 25.65 L20.80 25.78 L19.99 25.76 L19.21 25.69 L18.48 25.68 L17.83 25.79 L17.24 26.08 L16.66 26.52 L16.06 27.04 L15.42 27.53 L14.73 27.87 L14.00 28.00 L13.27 27.87 L12.58 27.53 L11.94 27.04 L11.34 26.52 L10.76 26.08 L10.17 25.79 L9.52 25.68 L8.79 25.69 L8.01 25.76 L7.20 25.78 L6.43 25.65 L5.77 25.33 L5.26 24.80 L4.90 24.11 L4.67 23.33 L4.49 22.56 L4.28 21.87 L3.97 21.29 L3.51 20.81 L2.91 20.40 L2.24 19.99 L1.58 19.53 L1.03 18.98 L0.69 18.33 L0.58 17.60 L0.70 16.83 L0.96 16.06 L1.27 15.34 L1.51 14.65 L1.60 14.00 L1.51 13.35 L1.27 12.66 L0.96 11.94 L0.70 11.17 L0.58 10.40 L0.69 9.67 L1.03 9.02 L1.58 8.47 L2.24 8.01 L2.91 7.60 L3.51 7.19 L3.97 6.71 L4.28 6.13 L4.49 5.44 L4.67 4.67 L4.90 3.89 L5.26 3.20 L5.77 2.67 L6.43 2.35 L7.20 2.22 L8.01 2.24 L8.79 2.31 L9.52 2.32 L10.17 2.21 L10.76 1.92 L11.34 1.48 L11.94 0.96 L12.58 0.47 L13.27 0.13 Z")}
+    /* All five stay marks. The page you are on is the one in colour - the only colour
+     on the page, so it reads as a state rather than as a darker box. Which one that is
+     comes from the address, not from the scroll-spy, so it never changes as you read. */
+@media (prefers-reduced-motion:reduce){.nb,.nb .nmk,.nb .nwd{transition:none}}
+  /* ── The navigation on a phone: a pile, not a row ──────────────────────
+     Five words will not fit a 390 column, and shrinking them to fit made the
+     bar the loudest thing on the page. On touch the marks stay marks: a tight
+     overlapping pile in the corner, the current page's mark dark and last in
+     the stack. Tap it and the pile falls open into a right-aligned column,
+     each mark with its word beside it; tap a word to go, tap anywhere else to
+     close. It is the same widening the pointer gets on a desktop, turned on
+     its side, so there is one nav on this site and not two. */
+  @media (hover:none), (max-width:760px){
+    /* !important because an earlier rule pins the bar to transparent with
+       !important of its own; this is the one screen size where it has to win. */
+    /* At 88% the paper was a window: a headline passing behind the bar showed
+       through it, right across the pile, which is what made the marks look like
+       they were changing as you scrolled. The bar is paper now, and a short fade
+       under it lets a line dissolve into that paper instead of being sliced by an
+       edge halfway up its letters. */
+    body nav{background:rgba(247,247,245,.97)!important;
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    body nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
+        pointer-events:none;
+        background:linear-gradient(to bottom,rgba(247,247,245,.97),rgba(247,247,245,0))}
+    /* One axis, both states. The pile used to be a row and the open list a column,
+       and flex-direction cannot be animated - it flips in a single frame. So on close
+       every card jumped to its row position first and only then slid its width back,
+       which is the lurch to the left you could see. Here the bar is a column either
+       way: closed, each card is pulled up onto the one before it by a negative margin
+       and nudged by its depth; open, the margins go to zero and the gap opens. Margin,
+       width, height and transform all interpolate, so the pile falls into a list and
+       gathers back up without a single jump. */
+    .nav-inner.nav-inner{display:flex;flex-direction:column;flex-wrap:nowrap;
+        justify-content:flex-start;align-items:flex-end;gap:0;
+        padding:18px 24px 14px;white-space:normal;max-width:none;
+        transition:gap .34s cubic-bezier(.22,.61,.36,1),
+                   padding .34s cubic-bezier(.22,.61,.36,1)}
+    /* The two groups have to dissolve so all five marks are siblings of one
+       flex row - otherwise the overlap only applies inside each group and the
+       pile comes out in three pieces. Scoped through .nav-inner so it outranks
+       the later .nav-end{display:flex;gap:8px} that was quietly winning. */
+    .nav-inner .nav-mid,.nav-inner .nav-end{display:contents}
+    .nb.nb{position:relative;display:block;width:30px;height:30px;overflow:hidden;flex:none;
+        font-family:var(--display);font-size:13px;line-height:27px;padding:0;
+        margin:-30px 0 0;
+        /* declared again below at .nav-inner strength: body.nav-in .nb sets
+           transform:none for the arrival animation and was cancelling the deck */
+        transition:width .34s cubic-bezier(.22,.61,.36,1),
+                   height .34s cubic-bezier(.22,.61,.36,1),
+                   line-height .34s cubic-bezier(.22,.61,.36,1),
+                   margin .34s cubic-bezier(.22,.61,.36,1),
+                   transform .34s cubic-bezier(.22,.61,.36,1)}
+    /* Only the mark that actually starts the row loses its overlap. :first-child
+       on its own matched the first mark inside each group too, because
+       display:contents changes layout and not the tree, which is why the pile
+       came out with two seams in it. */
+    .nav-inner > .nb:first-child{margin-top:0}
+    /* Overlapping marks of the same grey fused into one slab. A ring of paper
+       around each one draws the edge of the card behind it, which is what makes
+       a pile read as a pile rather than a smear. */
+    /* Only the card in front is filled. The ones behind it are drawn as outlines
+       on the same paper, which is what keeps four stacked cards reading as four
+       clean edges instead of a grey smear with a shadow under it. */
+    .nb .nmk{display:block;position:absolute;top:0;right:0;left:auto;width:30px;height:30px;
+        opacity:1;border-radius:8px}
+    .nb.back .nmk{background:var(--paper)!important;box-sizing:border-box;
+        border:1px solid var(--rule);box-shadow:none}
+    /* The page you are on is the dark card, wherever it lands in the deck. The
+       scroll-spy moves .cur as you read, and the outline styling above carries
+       !important, so without this the newly current mark went white. */
+    .nb.here .nmk{background:var(--ink)!important;border-color:var(--ink)}
+    /* the dark does not wait for the bar to light up here, so neither does the house */
+    .nb.nav-id.here .nmk::after,.nb.id.here .nmk::after{opacity:1}
+    .nb:not(.back) .nmk{box-shadow:0 0 0 1px var(--paper)}
+    body.nav-open .nb .nmk{box-shadow:none}
+    /* open, every card is its own row again, so they all take their real fill */
+    body.nav-open .nb.back:not(.here) .nmk{background:var(--line)!important}
+    /* a way out that does not depend on guessing where the backdrop is */
+    .nav-x{display:none}
+    body:not(.nav-in) .nav-x{display:none!important}
+    body.nav-open .nav-x{display:block;order:99;margin:6px 0 0;padding:10px 0;
+        font-family:var(--display);font-size:13px;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--faint);background:none;border:0;cursor:pointer}
+    /* No z-index games: the cards stack in the order they are written, each one
+       showing six pixels of the card behind it, and the dark one sits wherever
+       that page falls in the run. Lifting the current card to the front buried
+       three of the others behind it and the pile stopped looking like a pile. */
+    .nb .nwd{position:absolute;top:0;right:40px;left:auto;height:30px;line-height:30px;
+        white-space:nowrap;opacity:0;transition:opacity .22s ease}
+
+    /* open: the pile falls into a column, each mark wearing its word */
+    body.nav-open .nav-inner.nav-inner{gap:8px;padding-bottom:20px}
+    .nav-inner .nb.nb{transform:translate(calc(var(--k,0) * -3px), calc(var(--k,0) * 3px))}
+    body.nav-open .nav-inner .nb.nb{transform:none}
+    body.nav-open .nb.nb{margin-top:0;width:calc(var(--w, 70px) + 44px)}
+    body.nav-open .nb .nwd{opacity:1;transition:opacity .26s ease .10s}
+    /* a 30px mark is not a 44px target; the row it sits in is */
+    body.nav-open .nb.nb{height:38px;line-height:38px}
+    body.nav-open .nb .nmk,body.nav-open .nb .nwd{top:4px}
+  }
+  /* This is what was eating the marks' animation. `.nav-inner a` outranks `.nb`, so its
+     one-property transition list replaced the width, opacity and transform transitions
+     entirely — the marks were snapping open and shut with nothing running. Left over from
+     when the nav was words. */
+  .nav-inner a:hover { color: var(--ink); }
+  @media (max-width: 860px) {
+    /* name and Contact on the first row, section links underneath */
+    .nav-inner {
+      padding: 44px 24px 20px; gap: 20px;
+    }
+    /* Five marks and five words do not fit one phone row. The two wrapper divs are the flex
+       items, so the row could only break between groups — four ragged lines. display:contents
+       hands the five links straight to the nav, which then wraps into two tidy right-aligned
+       rows instead. */
+    .nav-mid, .nav-end { display: contents; }
+    /* one size across the row, or the taller name word knocks its neighbours 3px out of line */
+    .nb .nwd, .nb.nav-id .nwd, .nb.id .nwd { font-size:13px; line-height:26px; }
+  }
+  #about { padding: 112px 0 104px; border-bottom: 1px solid var(--line); }
+  #about .wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  @keyframes pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
+  @media (max-width: 700px) {
+    /* a 1100px-wide prototype is unusable inside a phone frame: show the poster, link to the real thing */
+    .bshot { height: auto; }
+  }
+  /* artwork presented on a surface, so screenshots and diagrams read alike */
+  .thumb {
+    aspect-ratio: 16 / 11; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--line); background: #fff; box-shadow: var(--lift);
+  }
+
+
+  /* ---- stages: every screen sits on a soft colour field, inset, with real depth ---- */
+  .stage { position: relative; border: 0; background: var(--field); aspect-ratio: 16 / 10; }
+
+  /* wide card uses a full-bleed device shot, not a cropped plate */
+  .item.wideitem .thumb {
+    border-radius: 16px; box-shadow: var(--lift);
+  }
+  /* the whole screen, never cropped: the plate keeps the screen's proportions inside the field */
+  .item.wideitem .thumb.stage .plate { position: absolute; left: 50%; right: auto; top: 8%; bottom: auto; transform: translateX(-50%); height: 84% !important; width: auto; aspect-ratio: 16 / 10; max-width: 88%; }
+  /* what I changed: visible by default, roman text, a small label so it never competes with the headline */
+  .item p.changed { color: var(--ink); font-size:16px; line-height:26px; }
+
+  /* the 606-node test, drawn live */
+  .lab {
+    border: 1px solid var(--line); border-radius: 16px; background: #fff;
+    padding: 28px 30px 24px; margin: 8px 0 0;
+    box-shadow: var(--lift);
+  }
+
+  /* ---- Care, in the interaction ---- */
+  .care { margin-top: 56px; display: block; }
+  /* the whole prototype, inside the field on every side */
+  .care-frame { position: relative; width: 100%; height: 100%; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: var(--lift); }
+  /* a component shown on its own: centred on the field, natural size, room around it */
+  .care-crop--cmp { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 10; padding: 26px; }
+
+  /* ================= About ================= */
+  #about .wrap { max-width: 1180px; }
+  #about b { font-weight: 500; }
+
+  footer { text-align: left; max-width: 1180px; margin: 0 auto; padding: 64px 40px 44px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size:13px; color: var(--faint); }
+  /* Said once, in the quietest place on the page, because it is true and because the work
+     this site is about is people and models sharing the job. Plain text, not a badge. */
+  .fbuilt { color: var(--faint); }
+
+  footer .floot { border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: color 0.25s ease; }
+  footer .floot:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ================= Reveal + motion prefs ================= */
+  .r { opacity: 0; transform: translateY(12px); transition: opacity 0.72s ease, transform 0.72s ease; }
+  .r.on { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .r { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 700px) {
+    .wrap, .wide, .photo, .manifesto, .infl-wrap, footer { padding-left: 24px; padding-right: 24px; }
+  }
+
+  @media (max-width: 760px) {
+    /* Work and About used to be dropped here. The nav is words on touch and all
+       four fit across a phone, so nothing has to be hidden. */
+    .nav-mid { display: flex; }
+  }
+  /* ===== Editorial · paper, hairlines, one quiet field ===== */
+  :root { --paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --soft:#EDEDEA; --mark:#DCE5D3; --accent:#3D5A45; --field:#F2F2F0; }
+  :root { --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 10 10' fill='none' stroke='%23000' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h8'/%3E%3Cpath d='M8.4 4.4 12 8l-3.6 3.6'/%3E%3C/svg%3E"); }
+  :root { --home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='1.3' stroke-linejoin='round' d='M8 2.4 13.6 7.3V13a.9.9 0 0 1-.9.9H10.1V9.5H5.9v4.4H3.3a.9.9 0 0 1-.9-.9V7.3Z'/%3E%3C/svg%3E"); }
+  body { background: var(--paper); color: var(--ink); }
+  body::after { opacity: .10; }
+  nav { background: transparent !important; border-bottom: 0 !important; }
+  /* featured band: paper, hairlines; the prototype keeps its own dark screen */
+  .band { background: var(--paper); color: var(--ink); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  /* screens sit flat on the paper: cropped to the working area, a hairline, nothing else */
+  .item.wideitem .thumb.stage { aspect-ratio: auto; background: none !important; border-radius: 0; overflow: visible; }
+  /* care: paper section, grey fields */
+  #thinking { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 0; }
+  footer, footer .floot, .copylink, .links a { color: var(--faint); } footer { border-color: var(--line); }
+</style>
+<style>
+/* ── the site nav: the same mark and menu as the landing page ── */
+.site-nav{height:92px}
+.site-mark{position:fixed; z-index:40; top:40px; left:max(24px, calc(50% - 660px)); width:44px; height:44px; border-radius:50%;
+  background:var(--ink,#191A18); color:var(--paper,#FFFFFF); display:grid; place-items:center; font-family:"Poppins",-apple-system,sans-serif; font-weight:500; font-size:16px; line-height:1; text-decoration:none}
+.site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-family:"Inter",-apple-system,sans-serif; font-size:13px; line-height:20px; color:var(--muted,#5F625C)}
+.site-menu a{color:inherit; text-decoration:none} .site-menu a:hover, .site-menu a[aria-current]{color:var(--ink,#191A18)}
+@media (max-width:760px){ .site-mark{position:absolute; top:28px} .site-menu{top:38px; gap:18px} .site-nav{height:80px} }
+</style>
+</head>
+<style>
+  /* About, as a studio profile page: a narrow left column that says who, a wide right
+     column that says what. One bold thing per block; everything else pale. Air does the
+     rest. The statement at top, then a long silence before the body, like a letter. */
+  .about-page { padding: 168px 0 140px; }
+  .about-page .wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .ab-grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 0 128px; align-items: start; }
+  /* The column used to pin while the page ran past it. The page is one piece of writing,
+     so it scrolls as one. */
+  .ab-side { position: static; }
+  .ab-portrait { display: block; width: 100%; max-width: 260px; }
+  .ab-portrait img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
+  .ab-role { font-size:13px; line-height:20px; color: var(--faint); margin: 22px 0 0; }
+  .ab-name { font-family: var(--display); font-size:21px; font-weight: 500; line-height:30px; color: var(--ink); margin: 6px 0 0; }
+  .ab-cred { list-style: none; padding: 0; margin: 22px 0 0; }
+  .ab-cred li { font-size:16px; line-height:26px; color: var(--faint); }
+
+  .about-page h1 { font-family: var(--display); font-size:21px; line-height:30px; font-weight: 500; color: var(--ink); max-width: 30ch; margin: 0; }
+  .ab-text { max-width: 66ch; margin-top: 96px; }
+  .ab-text p { font-size:16px; line-height:26px; color: var(--faint); margin: 0 0 22px; }
+
+  /* The photo runs the full width of the main column rather than the 66ch reading measure:
+     it is the evidence for the section under it, not a paragraph. The caption drops back to
+     the reading measure, where it belongs. */
+  /* The photo closes the page. It runs the full width of the main column rather than the
+     66ch reading measure, because it is a photograph and not a paragraph; the caption drops
+     back to the reading measure, where it belongs. */
+  .ab-photo { margin: 104px 0 0; }
+  .ab-photo img { display: block; width: 100%; height: auto; border-radius: 12px; background: var(--field); }
+  .ab-photo figcaption { margin-top: 16px; font-size:13px; line-height:20px; color: var(--faint); max-width: 56ch; }
+  @media (max-width: 700px) { .ab-photo { margin-top: 72px; } }
+
+  /* the same label the homepage uses over Latest work */
+  .ab-h { font-family: var(--display); font-size:13px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); font-weight: 400; margin: 104px 0 46px; }
+  .ab-scope { font-size:16px; line-height:26px; color: var(--faint); max-width: 66ch; margin: 30px 0 0; }
+
+  /* the record, as a year list: the year in the margin, the role beside it, one outcome under it */
+  .ab-years { list-style: none; padding: 0; margin: 0; max-width: 66ch; }
+  .ab-years li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 0 20px; align-items: baseline; }
+  .ab-years li + li { margin-top: 14px; }
+  /* The date is the cheapest thing on the line until you are actually reading that line.
+     So it sits faint, and comes up to ink when the line is reached for — the same two
+     states the tabs use, without the blur, because 14px tracked type turns to mush at
+     .7 of a pixel. It leaves the way the marks do: a shade slower than it arrives, and
+     after a beat, so running the cursor down the list does not strobe. */
+  .ab-years .y { font-family: var(--display); font-size:13px; color: var(--faint); line-height:20px; white-space: nowrap;
+        transition: color 420ms ease 80ms; }
+  .ab-years li:hover .y, .ab-years li:focus-within .y { color: var(--ink);
+        transition: color 260ms ease; }
+  @media (prefers-reduced-motion: reduce) { .ab-years .y { transition: none; } }
+  .ab-years .r0 { font-size:16px; line-height:26px; color: var(--ink); }
+  .ab-years .g { grid-column: 2; font-size:16px; line-height:26px; color: var(--faint); margin: 2px 0 0; }
+  .ab-years .g b { font-weight: 500; color: var(--muted); }
+  /* actions as plain words */
+  .ab-acts { list-style: none; padding: 0; margin: 30px 0 0; }
+  .ab-acts li { font-size:16px; line-height:26px; }
+  .ab-acts a { color: var(--muted); border-bottom: 1px solid var(--line); transition: color .25s ease, border-color .25s ease; }
+  .ab-acts a:hover { color: var(--ink); border-color: var(--ink); }
+  /* The year column is 96px because Education and Recognition put a bare year in it.
+     The route puts a year and a place there - "2013-2017 - Lee Cooper" - which ran straight
+     under the title beside it. Same rows, a column wide enough for what this section holds. */
+  .route-lede { margin-bottom: 44px; }
+  .ab-years.route li { grid-template-columns: 190px minmax(0, 1fr); align-items: start; }
+  .ab-years.route .y { white-space: normal; line-height: 24px; padding-right: 8px; }
+  .ab-years.route li + li { margin-top: 30px; }
+  .ab-years.route .g { margin-top: 5px; max-width: 62ch; }
+  @media (max-width: 760px) { .ab-years.route li { grid-template-columns: 1fr; }
+        .ab-years.route .g { grid-column: 1; } .ab-years.route li + li { margin-top: 26px; } }
+  @media (max-width: 560px) { .ab-years li { grid-template-columns: 1fr; } .ab-years .g { grid-column: 1; } .ab-years li + li { margin-top: 20px; } }
+  /* Sensitivity, applied to the record. A row states the fact at rest. Reach for it and the
+     second line becomes the evidence, in the same place; nothing else moves. Rows that lead
+     somewhere show it the way the homepage does: the number becomes the arrow. */
+  .ab-rows { list-style: none; padding: 0; margin: 0; max-width: 66ch; }
+  .ab-rows li + li { margin-top: 26px; }
+  .ab-rows li.thin + li.thin { margin-top: 4px; }
+  .ab-rows .rw { position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 0 20px; align-items: start;
+                 width: calc(100% + 28px); margin-left: -14px; padding: 8px 14px 6px; border-radius: 12px;
+                 text-align: left; background: none; border: 0; font: inherit; color: inherit; }
+  .ab-rows .rw:focus-visible { outline: none; }
+  .ab-rows .n { position: relative; display: block; height: 24px; font-family: var(--display); font-size:13px; color: var(--faint); line-height:20px; white-space: nowrap; }
+  .ab-rows .n i { position: absolute; left: 0; top: 0; font-style: normal; }
+  /* No arrow by the year here either - the one after the sentence carries it. */
+  .ab-rows .t { display: block; min-width: 0; }
+  .ab-rows .t b { display: block; font-size:16px; font-weight: 500; color: var(--ink); line-height:26px; }
+  .ab-rows .t b span { color: var(--faint); font-weight: 400; }
+  .co::before { content: "\00a0\00b7\00a0"; }
+  .ab-rows .sw { position: relative; display: block; margin-top: 10px; height: 56px; font-size:16px; line-height:26px; }
+  .ab-rows .sw.one { height: 25px; }
+  .ab-rows .sw.plain { height: auto; color: var(--muted); }
+  .ab-edu { margin-top: 36px; }
+  .ab-note { margin: 40px 0 0; max-width: 46ch; font-size:16px; line-height:26px; color: var(--ink); }
+  /* ── Where the next tap goes ──────────────────────────────────────────
+     The number on the left turns into an arrow, but by the time the line has
+     morphed your eye is at the end of a sentence, a column away from it. The
+     nudge goes where the reading stops instead. Same drawn arrow as Work. */
+  .ab-rows .rw-go { position: absolute; opacity: 0; pointer-events: none;
+        width: 14px; height: 14px; color: var(--ink); display:inline-block;font-size:0;line-height:0;background-color:currentColor;-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain;
+        transform: translate(-5px, 5px);
+        transition: opacity .26s ease, transform .4s cubic-bezier(.22,.61,.36,1), left .34s cubic-bezier(.22,.61,.36,1), top .34s cubic-bezier(.22,.61,.36,1); }
+  /* ── These rows on a phone ─────────────────────────────────────────────
+     Hover can add, it cannot carry. On a desktop each row rests on a short
+     line and opens to the full one when you reach for it. A phone has no
+     reach, and tapping did nothing, so the line that carries the reasoning
+     was unreadable on half the devices that will ever load this page. On
+     touch the rows sit at the long line from the start: no gesture to
+     discover, nothing withheld. The slot stops being a fixed two lines,
+     because the full line runs to four or five in a phone column. */
+  @media (hover:none), (max-width:760px){
+    .ab-rows .sw{height:auto;min-height:0}
+    .ab-rows .sw i.a{display:none}
+    .ab-rows .sw i.b{display:inline;color:var(--muted)}
+    .ab-rows a.rw .sw i.b::after{content:"";display:inline-block;width:14px;height:14px;margin-left:8px;vertical-align:-2px;background-color:var(--ink);-webkit-mask:var(--arw) no-repeat center/contain;mask:var(--arw) no-repeat center/contain}
+    /* the screen-reader copy would now be read twice */
+    .ab-rows .t .vh{display:none}
+    .ab-rows li + li, .ab-rows li.thin + li.thin{margin-top:36px}
+    /* year, role, company: three short lines, never a company split across two */
+    .ab-rows .t b .co, .ab-years .r0 .co{display:block;margin-top:2px}
+    .co::before{content:none}
+  }
+  @media (max-width: 560px) { .ab-rows .rw { grid-template-columns: 1fr; gap: 0; } .ab-rows .n { height: 24px; line-height: 24px; margin-bottom: 2px; } .ab-rows .sw, .ab-rows .sw.one { height: auto; min-height: 0; } }
+  @media (max-width: 900px) {
+    .ab-grid { grid-template-columns: 1fr; gap: 56px 0; }
+    .ab-side { position: static; }
+    .ab-portrait { max-width: 200px; }
+    .ab-text { margin-top: 64px; }
+    .ab-h { margin-top: 80px; }
+  }
+  @media (max-width: 700px) { .about-page { padding: 120px 0 80px; } .about-page .wrap { padding: 0 24px; } }
+
+  /* soft until you reach for it, sharp where you are — the same as the tabs */
+  /* the nav is marks now, not blurred words — a blurred block is just a smudge */
+  .nav-mid a, .nav-end .cta{font-weight:500}
+
+
+  /* ── Tab: one component, everywhere ───────────────────────────────────────
+     Every switch on this site reads the same way. At rest a tab is out of focus,
+     grey and a shade heavier than body text — the extra weight is what keeps a
+     blurred word legible instead of turning it into a smudge. Reached for, or
+     selected, it is sharp and in ink. Nothing else marks it: no pill, no ring,
+     no underline. Blur .7px, weight 500, the site's own grey and ink.
+     These four selectors are the same component wearing four names. */
+
+  /* ── The type system ──────────────────────────────────────────────────
+     Measured across all three pages before this: three near-identical sizes
+     doing one job, four leadings at the body size, three trackings at 14px,
+     and a title sitting one pixel above its description. Now one ramp, one
+     leading per job, and a beat wherever a title has a description under it.
+
+       page title       114 / 62 / 32   one per page, as they were
+       section head      24 / 32        heads, the contact question, case-study titles
+       body            17.5 / 28        a paragraph
+       title line      17.5 / 24  500   the name of a thing
+       description     17.5 / 25        the line under a title, 10px below it
+       small             14 / 24        labels, meta, captions, footnotes, footer
+
+     Uppercase labels carry .1em. Small Poppins numerals carry .02em. Inter at
+     14 carries nothing. Nothing else is tracked. Specimens on Sensitivity keep
+     their own internal type: those are product screens, not this site. */
+  .about-page h1 { line-height: 34px; }
+  .ab-text p, .ab-list p, .ab-lines li { line-height: 28px; }
+  /* a career chapter is a title with a description under it: same pattern as a Work row */
+  .ab-years .r0 { font-size:16px; font-weight: 500; line-height:26px; }
+  .ab-years .g { font-size:16px; line-height:26px; margin-top: 10px; }
+  .ab-years .y, .ab-h, .ab-rows .n, .num { line-height: 24px; }
+  .ab-role { letter-spacing: 0; line-height: 24px; }
+  .ab-cred li, .ab-scope, .ab-acts li, .ab-acts a, .ab-acts b { font-size:13px; line-height:22px; }
+  .ab-photo figcaption { line-height: 24px; }
+  footer, footer div, footer span, footer .floot { font-size:13px; line-height:22px; }
+
+  /* ── Three pages, three shapes ────────────────────────────────────────
+     Sensitivity already had a form of its own. The other two get one too: a
+     house for home, a circle for the person. The block is the shape of the
+     place it goes to, so the bar reads at rest without a word, and the house
+     drawn inside the square is no longer needed - the square is the house.
+     Same greys, same dark when it is the page you are on, same opening into
+     its word on hover. */
+  .nb.nav-id .nmk, .nb.id .nmk { border-radius: 0;
+        clip-path: path("M2.4 9.4 L12.9 1.8 Q14 1 15.1 1.8 L25.6 9.4 Q26.4 10 26.4 11 V24.8 Q26.4 27 24.2 27 H3.8 Q1.6 27 1.6 24.8 V11 Q1.6 10 2.4 9.4 Z") }
+  /* the phone pile draws marks at 30px; the two drawn shapes are 28px paths inside that
+     box, so the circle is brought to 28 as well and the three sit at one size */
+
+  /* ── The three marks, sized to sit together ───────────────────────────
+     Drawn full-bleed in a 28px box they read heavy against the type, and the
+     three shapes carry different amounts of ink - a house fills its box, a
+     person does not - so at one scale they looked like three sizes. Each is
+     scaled inside its box to a similar visual weight, and the boxes sit 12px
+     apart instead of 8. The box itself is unchanged, so the hit area and the
+     opening into the word are exactly as they were. */
+  @media (hover:hover) and (min-width:761px) {
+    /* one size for all three: the shapes are drawn to balance each other, so no
+       per-shape correction. .86 of 28px is a 24px mark; the flex gap plus the
+       scaled-off edge on each side reads as a 10px gap. */
+    .nav-inner, .nav-mid { gap: 6px; }
+    .nb .nmk { transform: scale(.86); transform-origin: 50% 50%; }
+    .nb:hover .nmk, .nb:focus-visible .nmk { transform: scale(1); }
+  }
+  /* ── Phone nav, plain version ─────────────────────────────────────────────
+     Closed: the three marks sit in a row, all of them visible, the page you are
+     on dark. Open: the same three marks with their words, as a list laid OVER the
+     page. The list used to grow the bar itself, which pushed the page down on open
+     and pulled it back up on close - that is the "auto scroll" you saw. The bar
+     keeps one height now, so the page never moves. The paper-outline trick for
+     the cards behind is gone too: a shape drawn with clip-path clips its own
+     border away, so those marks were paper on paper - invisible. */
+  @media (hover:none), (max-width:760px) {
+    /* Phone nav: three marks in a row, each on a 40px touch box, tap goes to the page.
+       The bar is in flow and keeps one height (60px), so nothing under it ever moves. */
+    .nav-inner.nav-inner { flex-direction: row; align-items: center; justify-content: flex-end;
+        gap: 0; padding: 10px 18px 10px; transition: none; }
+    .nb.nb, .nb.nb:hover, .nb.nb:focus-visible { margin: 0; width: 42px; height: 40px; line-height: 40px;
+        transition: none; transform: none; }
+    /* The marks were a touch heavy for the bar and sat close enough to read as one strip.
+       Scaled rather than resized: the Sensitivity mark is a drawn path in absolute pixels,
+       so shrinking its box would have cut the scallop off instead of making it smaller.
+       Each mark comes down to 26px. The touch box is 2px wider than it is tall, which
+       is where the space between two marks comes from: 16px, not 14. */
+    .nb.nb .nmk, .nb.nb:hover .nmk, .nb.nb:focus-visible .nmk { width: 28px; height: 28px; top: 6px; right: 7px;
+        opacity: 1; border: 0 !important; box-shadow: none !important; background: var(--rule) !important;
+        -webkit-transform: scale(.929) translateZ(0); transform: scale(.929) translateZ(0); }
+    .nb.nb.here .nmk, body.nav-lit .nb.nb.here .nmk { background: var(--ink) !important; }
+    .nb .nwd { opacity: 0; }
+    .nav-x { display: none !important; }
+  }
+  /* ── Three levels of text, and only three ─────────────────────────────
+       1. Ink at body size or heading size: what you read. Headings, statements, body.
+       2. Grey at body size (17.5/28): a sentence that supports what is above it - a
+          description under a title, the line that introduces a section.
+       3. Faint at label size (14/24): not a sentence. A year, a section label, a
+          caption, a line of metadata. It does not react to the pointer.
+     A sentence is never set at label size; a label is never set at body size. */
+  .ab-text { margin-top: 40px; }
+  .ab-text p { color: var(--ink); line-height:28px; }
+  .ab-h { margin: 96px 0 14px; }
+  .ab-years .y, .ab-years li:hover .y, .ab-years li:focus-within .y { color: var(--faint); transition: none; }
+  .ab-years .g { line-height:28px; color: var(--muted); }
+  .ab-years .g b { color: var(--ink); }
+  .ab-edu { font-size:13px; line-height:22px; color: var(--faint); }
+  /* a label that wraps to two lines must not push the body down: it spans both rows */
+  .ab-years.route .y { grid-row: 1 / span 2; }
+  .ab-years.route .r0 { grid-column: 2; grid-row: 1; }
+  .ab-years.route .g { grid-row: 2; }
+  @media (max-width:560px) { .ab-years.route .y { grid-row: auto; } .ab-years.route .r0, .ab-years.route .g { grid-column: 1; grid-row: auto; } }
+  @media (max-width:900px) { .ab-text { margin-top: 32px; } .ab-h { margin-top: 80px; } }
+  /* Experience: one rhythm. The rows with a line under them and the rows without
+     were spaced differently (26px against 4px), so the list read as two lists. One gap
+     for every row; a description, where there is one, sits inside its row. */
+  .ab-rows li + li, .ab-rows li.thin + li.thin { margin-top: 28px; }
+  /* ── Glass on reach ─────────────────────────────────────────────────────
+     The same pane as the work rows on the home page and the cards on Sensitivity:
+     same tint, same blur, same highlight along the top edge, same corner. One
+     material on the site. Only a row that goes somewhere gets it, so the glass
+     means "this is reachable", not "this one matters more". The padding is paid
+     back in negative margin, so the row keeps the space it already had and
+     nothing under it moves. */
+  .ab-rows a.rw { padding: 16px 18px 18px; margin: -16px -18px -18px; border-radius: 16px; transition: background .25s ease, box-shadow .25s ease; }
+  /* the education line is one line of metadata, not a two-line paragraph */
+  .ab-edu { max-width: none; margin-top: 44px; }
+
+  /* ── The loader ───────────────────────────────────────────────────────────
+     The same curtain the home page uses. One sentence, arriving a word at a
+     time in the page's own type, on paper that drains away rather than fades.
+     Nothing spins and nothing counts down - the wait is the sentence. Hidden
+     until a script turns it on, so a browser with no JavaScript never meets a
+     curtain it cannot lift, and reduced motion skips it outright. */
+  .ldr{display:none;position:fixed;inset:0;z-index:80;background:none;isolation:isolate}
+  .ldr::before{content:"";position:absolute;inset:0;z-index:-1;
+       background-color:rgba(255,255,255,1);
+       -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+       transition:background-color 1000ms cubic-bezier(.22,.61,.36,1),
+                  -webkit-backdrop-filter 1000ms cubic-bezier(.22,.61,.36,1),
+                  backdrop-filter 1000ms cubic-bezier(.22,.61,.36,1)}
+  .ldr.gone::before{background-color:rgba(255,255,255,0);
+       -webkit-backdrop-filter:blur(0px);backdrop-filter:blur(0px)}
+  .ldr.run{display:block}
+  body.ldr-on .r{opacity:1;transform:none;transition:none}
+  .ldr.gone{pointer-events:none}
+  html.ldr-boot{overflow:hidden}
+  html.ldr-boot .ldr{display:block}
+  html.ldr-boot .ldr-t{visibility:hidden}
+  /* The sentence is not placed by the stylesheet. The script measures where that
+     exact paragraph will sit once the page is up - same column, same line, same
+     type, same colour - and puts it there. So when the paper lifts nothing moves:
+     the sentence stays and the page arrives around it. */
+  .ldr-t{position:absolute;margin:0;color:var(--rule)}
+  .ldr-t i{font-style:normal;color:var(--rule);transition:color 400ms ease}
+  .ldr-t i.on{color:var(--ink-on,var(--ink))}
+  html.ldr-on{overflow:hidden;overscroll-behavior:none;touch-action:none;height:100%}
+  body.ldr-on{overflow:hidden;overscroll-behavior:none;touch-action:none;
+              position:fixed;top:0;left:0;right:0;width:100%}
+  .ldr{touch-action:none;overscroll-behavior:none}
+</style>
+<script>
+/* before the first paint, not after it */
+(function(){var d=document.documentElement;
+  try{ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  d.classList.add('ldr-boot');
+  setTimeout(function(){ d.classList.remove('ldr-boot'); }, 7000);
+})();
+</script>
+<body>
+<div class="ldr" id="ldr" aria-hidden="true" data-over="#ab-lede"><p class="ldr-t">I came to product through graphic design, fashion, and a denim label I co-founded. That route still shapes how I work.</p></div>
+
+<script>
+/* ── A phone's address bar is not a resize ──────────────────────────────────
+   Everything below that listens for resize is asking one question: how much
+   width is there? The column, the glyph layout, where a panel sits. None of it
+   cares how tall the window is. But a phone slides its address bar in and out
+   as you scroll, firing resize the whole way - so the page was re-measuring
+   itself while you were reading. The reserved room under each specimen dropped
+   to zero and came back, roughly three thousand pixels of the page collapsing
+   and re-expanding under your thumb. A resize that changed only the height is
+   the address bar, and nothing here needs to hear about it. */
+function onWidth(fn){
+  var w = innerWidth;
+  addEventListener('resize', function(){
+    if (innerWidth === w) return;
+    w = innerWidth; fn();
+  });
+}
+</script>
+
+<div class="site-nav"><a class="site-mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
+<nav class="site-menu" aria-label="Main"><a href="index.html#work">Work</a><a href="about.html" aria-current="page">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav></div>
+
+<main id="about" class="about-page">
+  <div class="wrap">
+    <div class="ab-grid">
+      <aside class="ab-side">
+        <picture class="ab-portrait r">
+<img src="portrait-cutout.webp" width="1262" height="1300" alt="Amrit Kumar, black and white portrait." loading="eager" decoding="async" />
+        </picture>
+        <p class="ab-role r">Product Designer, AI systems</p>
+        <p class="ab-name r">Amrit Kumar</p>
+        <ul class="ab-cred r">
+          <li>Sirion &middot; 5 years</li>
+          <li>13 years in design &middot; 6 in product &middot; 3 on AI-native products</li>
+          <li>Noida, India</li>
+        </ul>
+        <ul class="ab-acts r">
+          <li><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute; as PDF</a></li>
+          <li><a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">Medium</a></li>
+          <li><a href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a></li>
+        </ul>
+      </aside>
+
+      <article class="ab-main">
+        <h1 class="r" id="ab-title">I design for difficult decisions.</h1>
+
+        <div class="ab-text">
+          <p class="r" id="ab-lede">I came to product through graphic design, fashion, and a denim label I co-founded. That route still shapes how I work: I look for the structure beneath the interface, reduce what competes for attention, and make difficult decisions easier to see.</p>
+        </div>
+
+        <h2 class="ab-h r">A career made of different materials</h2>
+        <ul class="ab-years route">
+          <li class="r"><span class="y">2013&ndash;2017 &middot; NIFT Chennai, Lee Cooper</span><span class="r0">Visual foundations</span>
+            <p class="g">Composition is not decoration. It decides what gets seen first, what waits
+            and what disappears. A beautiful direction still has to survive production and
+            the hands that make it. <b>What stayed:</b> hierarchy, typography, rhythm, respect for
+            constraints, and the difference between a concept and a thing that ships.</p></li>
+          <li class="r"><span class="y">2019&ndash;2021 &middot; Airtel</span><span class="r0">Consumer scale</span>
+            <p class="g">At scale, one unclear choice becomes millions of moments of friction.
+            <b>What stayed:</b> behavioural evidence, support that answers what someone meant rather
+            than what they typed, and the knowledge that small interface choices compound.</p></li>
+          <li class="r"><span class="y">2021&ndash;now &middot; Sirion.ai</span><span class="r0">Enterprise AI</span>
+            <p class="g">AI can answer. A person still has to judge the evidence, consequence and
+            next move. <b>What stayed:</b> decision systems, provenance, actions you can undo, human
+            checkpoints, and interfaces that stay steady when the model is unsure.</p></li>
+        </ul>
+
+        <h2 class="ab-h r" id="experience">Experience</h2>
+        <ul class="ab-rows">
+      <li class="r"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2021 &ndash; now</i></span>
+        <span class="t"><b>Product Designer <span class="co">Sirion.ai</span></b>
+        <span class="sw one plain">Enterprise contract management, used by global legal teams.</span></span>
+      </div></li>
+      <li class="r"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2019 &ndash; 2021</i></span>
+        <span class="t"><b>UX Designer <span class="co">Bharti Airtel</span></b>
+        <span class="sw one plain">Airtel Thanks, one of India&rsquo;s largest consumer apps.</span></span>
+      </div></li>
+      <li class="r thin"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2019</i></span>
+        <span class="t"><b>UI/UX Designer <span class="co">Think Matra</span></b></span>
+      </div></li>
+      <li class="r thin"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2018 &ndash; 2019</i></span>
+        <span class="t"><b>Senior Creative UI Designer <span class="co">Great Place to Study</span></b></span>
+      </div></li>
+      <li class="r thin"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2017 &ndash; 2018</i></span>
+        <span class="t"><b>Co-founder and Creative Director <span class="co">Zhero Denim</span></b></span>
+      </div></li>
+      <li class="r thin"><div class="rw">
+        <span class="n" aria-hidden="true"><i class="num">2013 &ndash; 2017</i></span>
+        <span class="t"><b>Graphic and Product Designer <span class="co">Lee Cooper</span></b></span>
+      </div></li>
+        </ul>
+        <p class="ab-scope ab-edu r">Bachelor of Design, NIFT Chennai &middot; Design Thinking, Stanford Graduate School of Business (online).</p>
+
+        <figure class="ab-photo r">
+          <picture>
+<img src="process-whiteboard.webp" width="1900" height="1255" loading="lazy" decoding="async"
+                 alt="Amrit at a whiteboard mapping smart data capture for real-world contracts: upload and OCR, extraction, key attributes, an AI engine, reasoning that explains why a value was extracted, human-in-the-loop review with confidence scores, repository, integrations and continuous learning, all radiating from a single starting point." />
+          </picture>
+          <figcaption>Most of the hard calls are settled on a wall like this, weeks before
+          anyone opens a design tool.</figcaption>
+        </figure>
+        <p class="ab-note r">Some of it I learn at home. My daughter rarely explains where an experience
+        failed. She pauses, tries something else, or leaves. It left me a sharper eye for where
+        confidence breaks, and respect for what people do instead of what they say.</p>
+      </article>
+    </div>
+  </div>
+</main>
+<footer>
+  <div>© <span id="year"></span> Amrit Kumar
+    &nbsp;·&nbsp; <a class="floot" href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    &nbsp;·&nbsp; <a class="floot" href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a>
+    &nbsp;·&nbsp; <a class="floot" href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">Medium</a>
+  </div>
+  <div class="fbuilt">Built with Claude</div>
+</footer>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".r").forEach(function (el, i) {
+    el.style.transitionDelay = (i % 3) * 60 + "ms";
+    io.observe(el);
+  });
+
+  /* cards: mark the click, hold a beat, then go */
+  document.querySelectorAll(".item[href]").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      e.preventDefault();
+      a.classList.add("going");
+      setTimeout(function () { location.href = a.href; }, 260);
+    });
+  });
+
+  /* evidence unfolds from the number it explains */
+  (function () {
+    var b = document.querySelector(".evi-btn"), box = document.getElementById("evi");
+    if (!b || !box) return;
+    b.addEventListener("click", function () {
+      var open = box.classList.toggle("open");
+      box.hidden = false;
+      b.setAttribute("aria-expanded", open ? "true" : "false");
+      b.firstChild.textContent = open ? "Fold it back " : "How this was measured ";
+    });
+  })();
+
+  /* nav: you are here */
+  (function () {
+    var links = [].slice.call(document.querySelectorAll(".nav-mid a"));
+    if (!links.length) return;
+    var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+    if (!secs.every(Boolean)) return;
+    var spy = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = secs.indexOf(e.target);
+        links.forEach(function (a, j) { a.classList.toggle("cur", j === i); });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    secs.forEach(function (sc) { spy.observe(sc); });
+    var top = new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) links.forEach(function (a) { a.classList.remove("cur"); });
+    }, { threshold: 0.4 });
+    top.observe(document.getElementById("top"));
+  })();
+
+  /* copy email */
+  var btn = document.getElementById("copymail");
+  var txt = document.getElementById("copytxt");
+  var EMAIL = "amritkmr08@gmail.com";
+  var timer = null;
+  if (btn) btn.addEventListener("click", function () {
+    function done(ok) {
+      txt.textContent = ok ? "\u2713 copied" : "select it above";
+      btn.classList.add("ok");
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        txt.textContent = ok ? "copy again" : "copy";
+        btn.classList.remove("ok");
+      }, 2400);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(function () { done(true); },
+        function () { done(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = EMAIL;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      done(ok);
+    }
+  });
+})();
+</script>
+<script>
+/* Morphline animates between the short line and the long one. On touch there is
+   nothing to animate between - the row shows the long line and stays there - so
+   these rows are unwired before Morphline mounts rather than left holding a
+   gesture nobody can perform. Runs before morphline.js on purpose. */
+(function(){
+  if (!window.matchMedia || !matchMedia('(hover: none), (max-width: 760px)').matches) return;
+  [].slice.call(document.querySelectorAll('.ab-rows [data-morph]')).forEach(function(sw){
+    sw.removeAttribute('data-morph');
+    var host = sw.closest ? sw.closest('[data-morph-host]') : null;
+    if (host) host.removeAttribute('data-morph-host');
+  });
+})();
+</script>
+<script>
+/* ── One word, so the marks can be read ───────────────────────────────────
+   Five unlabelled blocks in the corner say nothing until you hover one, and a
+   reader has no reason to try. The page you are on wears its word instead of a
+   dark fill: one label in ink tells you these are pages and which one this is,
+   and the other four stay marks that open when you reach for them.
+
+   Which one is "here" comes from the address, not from the scroll-spy. On the
+   home page the spy moves as you pass each section, and a word that changed
+   length while you read would shuffle the whole cluster sideways. The word
+   names the page. It does not move. */
+(function(){
+  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var here = [].slice.call(document.querySelectorAll('.nb')).filter(function(a){
+    var h = (a.getAttribute('href') || '').split('/').pop().split('#')[0].toLowerCase();
+    if (!h) h = 'index.html';
+    return h === file || (file === '' && h === 'index.html');
+  })[0];
+  if (here) here.classList.add('here');
+})();
+</script>
+<script>
+/* The pile. One listener: while it is closed, the first tap anywhere in the bar
+   opens it instead of following a link - otherwise a stacked mark would fire a
+   link the reader cannot even see the name of. Once open the links behave
+   normally, and a tap outside closes it. Pointer devices never run any of this. */
+(function(){
+  /* Retired: the three marks sit in a row on a phone and a tap goes straight to the
+     page, the same as a pointer. No pile, no list, nothing to open or close. */
+  return;
+  var bar = document.querySelector('.nav-inner');
+  if (!bar) return;
+  /* The pile grows the bar from 62px to about 320px, and the browser keeps the
+     text you were reading still by moving the scroll position under it. That
+     counts as a scroll, so the baseline is taken once the bar has finished
+     opening rather than at the moment of the tap - otherwise the pile closed
+     itself a frame after it opened. */
+  var startY = 0, armed = false, arm;
+  var open = function(on){
+    document.body.classList.toggle('nav-open', on);
+    bar.setAttribute('aria-expanded', on ? 'true' : 'false');
+    clearTimeout(arm); armed = false;
+    if (on) arm = setTimeout(function(){ startY = window.scrollY; armed = true; }, 420);
+    /* the page is back where it was; anything that stopped measuring can start again */
+    if (!on) setTimeout(function(){ dispatchEvent(new Event('nav:closed')); }, 380);
+  };
+  bar.setAttribute('aria-label', 'Pages');
+  open(false);
+  /* Deal the deck. Every card sits on the same spot and is pushed back down and
+     to the left by its depth, so what you see is four corners behind one face.
+     The face is the page you are on: a collapsed pile still has to say where
+     you are, and colour alone cannot do it from under another card. Depth is
+     set once at load rather than tracking the scroll-spy, because a stack that
+     reshuffles itself while you read is a distraction, not a signal. */
+  var cards = [].slice.call(document.querySelectorAll('.nb'));
+  var front = cards.filter(function(a){ return a.classList.contains('here'); })[0] || cards[cards.length-1];
+  var depth = 1;
+  cards.forEach(function(a){
+    var k = (a === front) ? 0 : depth++;
+    a.style.setProperty('--k', k);
+    a.style.zIndex = String(20 - k);
+    a.classList.toggle('back', k > 0);
+  });
+  bar.addEventListener('click', function(e){
+    if (!document.body.classList.contains('nav-in')) { e.preventDefault(); return; }
+    if (!document.body.classList.contains('nav-open')) { e.preventDefault(); open(true); }
+  }, true);
+  document.addEventListener('click', function(e){
+    if (document.body.classList.contains('nav-open') && !bar.contains(e.target)) open(false);
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') open(false); });
+
+  /* A Close of its own. Tapping the paper behind it works, but on a phone the
+     open list covers most of what there is to tap, so the way out has to be
+     inside the thing that is open. */
+  var x = document.createElement('button');
+  x.type = 'button'; x.className = 'nav-x'; x.textContent = 'Close';
+  x.addEventListener('click', function(e){ e.stopPropagation(); open(false); });
+  bar.appendChild(x);
+
+  /* Starting to read closes it. Nobody scrolls the page in order to keep a menu
+     open, and a list that sits over the page while it moves is just in the way. */
+  addEventListener('scroll', function(){
+    if (!armed || !document.body.classList.contains('nav-open')) return;
+    if (Math.abs(window.scrollY - startY) > 6) open(false);
+  }, {passive: true});
+})();
+</script>
+<script src="morphline.js"></script>
+<script>
+/* Each mark opens to the width of its own word. Measured from the word in place,
+   after the fonts have landed, and again on resize — never guessed. */
+(function(){
+  var items=[].slice.call(document.querySelectorAll('.nb'));
+  if(!items.length) return;
+  function measure(){
+    items.forEach(function(a){
+      var w=a.querySelector('.nwd'); if(!w) return;
+      var prev=a.style.width; a.style.width='auto';
+      var px=Math.ceil(w.getBoundingClientRect().width);
+      a.style.width=prev;
+      a.style.setProperty('--w', px+'px');
+    });
+  }
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure); else addEventListener('load',measure);
+  onWidth(function(){ measure(); });
+
+  /* The block that marks this page does not arrive dark. It darkens a beat after the page
+     has settled, so the state reads as something the page did rather than something that
+     was always sitting there. */
+  document.body.classList.add('nav-arrive');
+  items.forEach(function(a,i){ a.style.setProperty('--d', (i*70)+'ms'); });
+  function arrive(){
+    document.body.classList.add('nav-in');
+    setTimeout(function(){ document.body.classList.add('nav-lit'); }, items.length*70 + 80);
+  }
+  if(!document.getElementById('ldr')) setTimeout(arrive, 180);
+  else {
+    var w = setInterval(function(){
+      if(!document.getElementById('ldr')){ clearInterval(w); setTimeout(arrive, 120); }
+    }, 100);
+  }
+})();
+</script>
+
+<script>
+/* The sentence is drawn as loose glyphs that travel into place, so where it ends is
+   only known once they have landed. Measured then, from the last one. Touch never
+   morphs these rows, so there the arrow just follows the line in CSS. */
+(function(){
+  var rows = [].slice.call(document.querySelectorAll('.ab-rows a.rw'));
+  if (!rows.length) return;
+  function mark(row){
+    var sw = row.querySelector('.sw'); if (!sw) return;
+    var go = sw.querySelector('.rw-go');
+    if (!go){ go = document.createElement('span'); go.className = 'rw-go';
+              go.setAttribute('aria-hidden','true'); sw.appendChild(go);
+              /* the line can start morphing after the mark was placed from the old end;
+                 whenever it settles, place the mark again from the settled text */
+              sw.addEventListener('ml:rest', function(){ nudgeMark(sw, go); }); }
+    nudgeMark(sw, go);
+  }
+  rows.forEach(function(row){
+    var t;
+    row.addEventListener('pointerenter', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 40); });
+    row.addEventListener('focus', function(){
+      clearTimeout(t); t = setTimeout(function(){ mark(row); }, 40); });
+    row.addEventListener('pointerleave', function(){ clearTimeout(t); });
+  });
+})();
+</script>
+
+<script>
+/* The loader does not put the sentence somewhere of its own. It measures where that
+   exact paragraph will sit once the page is up - same column, same line, same type,
+   same colour - and puts it there, then hides the real one until the paper has gone.
+   Re-measured on resize and once the fonts have landed, never guessed at. */
+(function(){
+  var lift=function(){ document.documentElement.classList.remove('ldr-boot'); };
+  var el=document.getElementById('ldr'); if(!el){ lift(); return; }
+  var t=el.querySelector('.ldr-t');
+  var target=document.querySelector(el.getAttribute('data-over'));
+  if(!t||!target){ lift(); if(el.parentNode) el.parentNode.removeChild(el); return; }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ lift(); el.parentNode.removeChild(el); return; }
+
+  function place(){
+    var r=target.getBoundingClientRect(), cs=getComputedStyle(target);
+    t.style.top=(r.top+scrollY)+'px';
+    t.style.left=(r.left+scrollX)+'px';
+    t.style.width=r.width+'px';
+    t.style.fontFamily=cs.fontFamily; t.style.fontSize=cs.fontSize; t.style.fontWeight=cs.fontWeight; t.style.lineHeight=cs.lineHeight; t.style.fontStyle=cs.fontStyle;
+    t.style.letterSpacing=cs.letterSpacing;
+    t.style.textWrap=cs.textWrap;
+    t.style.setProperty('--ink-on', cs.color);
+  }
+  place();
+  target.style.visibility='hidden';
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
+  if(typeof onWidth==='function') onWidth(function(){ place(); });
+
+  el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
+  document.documentElement.classList.remove('ldr-boot');
+  var src=t.textContent.replace(/\s+/g,' ').trim();
+  t.textContent='';
+  src.split(/(\s+)/).forEach(function(c){
+    if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
+    else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
+  });
+  var ws=[].slice.call(t.querySelectorAll('i'));
+  var STEP=Math.max(110, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
+  ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 300+k*STEP); });
+  setTimeout(function(){
+    el.classList.add('gone');
+    document.body.classList.remove('ldr-on'); document.documentElement.classList.remove('ldr-on');
+    /* given back only once the paper is clear, when the sentence on it and the one
+       under it are the same pixels */
+    setTimeout(function(){
+      target.style.visibility='';
+      if(el.parentNode) el.parentNode.removeChild(el);
+    }, 1060);
+  }, 300 + ws.length*STEP + 700);
+})();
+</script>
+</body>
+</html>
