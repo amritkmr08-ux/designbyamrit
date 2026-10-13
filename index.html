@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='44' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 @property --k{syntax:'<number>'; inherits:true; initial-value:0}
 /* Amrit's tokens and four sizes (114 / 24 / 17.5 / 14). Layout after bek.is: one narrow reading column, the work wider than the words. */
@@ -39,9 +39,117 @@ h1,h2{text-wrap:balance} p{text-wrap:pretty}
 .col{width:var(--col); margin:0 auto}
 
 /* opening */
-.hero{padding-top:200px; padding-bottom:200px}
-.hero h1{max-width:var(--read); font-family:var(--display); font-size:21px; line-height:30px; font-weight:500}
-.hero p{max-width:var(--read); margin-top:18px; color:var(--muted)}
+.hero{padding-top:200px; padding-bottom:24px}
+.closing{padding-bottom:200px}
+.closing p{max-width:var(--read); font-family:var(--display); font-size:34px; line-height:42px; font-weight:500; letter-spacing:-.02em}
+@media (max-width:760px){ .closing{padding-bottom:120px} .closing p{font-size:30px; line-height:38px} }
+/* the bridge between the hero's question and the first chapter */
+.bridge{padding-bottom:200px}
+.bridge h2{margin-top:18px; font-family:var(--display); font-size:34px; line-height:42px; font-weight:500; letter-spacing:-.02em}
+.bridge-dek{margin-top:16px; max-width:var(--read); color:var(--muted); font-size:17px; line-height:27px}
+.bridge-list{list-style:none; margin-top:40px; max-width:640px; border-top:1px solid var(--line)}
+.bridge-list li{border-bottom:1px solid var(--line)}
+.bridge-list a{display:grid; grid-template-columns:40px 1fr; column-gap:8px; padding:18px 0; transition:color .25s}
+.bridge-list b{grid-row:span 2; font-family:var(--display); font-weight:400; font-size:13px; line-height:28px; color:var(--faint)}
+.bridge-list .q{font-family:var(--display); font-size:21px; line-height:28px; font-weight:500; color:var(--ink)}
+.bridge-list .why{margin-top:2px; font-size:15px; line-height:22px; color:var(--faint)}
+.bridge-list a:hover .q{text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px}
+.bridge-list li:nth-child(2){transition-delay:.06s} .bridge-list li:nth-child(3){transition-delay:.12s}
+.bridge-list li:nth-child(4){transition-delay:.18s} .bridge-list li:nth-child(5){transition-delay:.24s}
+@media (max-width:760px){ .bridge{padding-bottom:120px} .bridge h2{font-size:30px; line-height:38px} .bridge-list .q{font-size:18px; line-height:25px} }
+/* the bridge as a scroll scene: the stage stays put while the page scrolls past it */
+.cine{position:relative}
+.cine-stage{position:relative; margin-bottom:160px; padding:48px 56px; --bleed:0px; margin-left:calc(-1 * var(--bleed)); margin-right:calc(-1 * var(--bleed)); padding-left:calc(56px + var(--bleed)); padding-right:calc(56px + var(--bleed)); background:#EFEFEB; border-radius:24px; display:grid; grid-template-columns:280px 1fr; gap:40px; align-items:center; overflow:hidden}
+.cine-text{position:relative; height:200px}
+.cine-line{position:absolute; left:0; right:0; top:50%; transform:translateY(-40%); opacity:0; transition:opacity .2s ease, transform .2s ease; pointer-events:none}
+.cine-line.on{opacity:1; transform:translateY(-50%); pointer-events:auto; transition:opacity .55s var(--ease) .2s, transform .7s var(--ease) .2s}
+.cine-line h2{margin-top:10px; font-family:var(--display); font-size:30px; line-height:38px; font-weight:500; letter-spacing:-.03em}
+.cine-sub{margin-top:10px; color:var(--muted); font-size:15px; line-height:24px}
+.cine-q{margin-top:10px; font-family:var(--display); font-size:22px; line-height:30px; font-weight:500; letter-spacing:-.02em; max-width:15ch}
+.cine-tag{color:inherit; transition:color .2s}
+.cine-tag:hover{color:var(--ink)}
+.cine-go{display:inline-block; margin-top:18px; font-size:14px; color:var(--faint); border-bottom:1px solid var(--rule); padding-bottom:2px; transition:color .2s}
+.cine-go:hover{color:var(--ink)}
+.cine-nav{position:absolute; top:20px; right:20px; z-index:2; display:flex; gap:8px}
+.cine-arrow{width:34px; height:34px; border-radius:50%; border:1px solid rgba(25,26,24,.1); background:rgba(255,255,255,.6); color:var(--muted); display:grid; place-items:center; padding:0; cursor:pointer; transition:background .2s, color .2s, border-color .2s}
+.cine-arrow:hover{background:#fff; color:var(--ink); border-color:rgba(25,26,24,.2)}
+.cine-arrow svg{width:14px; height:14px}
+@media (max-width:900px){ .cine-nav{top:14px; right:14px} .cine-arrow{width:30px; height:30px} }
+.cine-prog{position:absolute; left:0; right:0; bottom:0; height:2px; background:rgba(25,26,24,.05)}
+.cine-prog i{display:block; height:100%; width:0; background:rgba(25,26,24,.22)}
+.cine-ticks{display:none}
+.cine-ticks i{width:18px; height:2px; background:var(--line); transition:background .4s}
+.cine-ticks i.on{background:var(--ink)}
+.cine-viz{position:relative; aspect-ratio:4/3; min-height:360px}
+.cine-viz canvas{position:absolute; inset:0; width:100%; height:100%}
+.cine-list{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}   /* read by screen readers; shown when motion is off */
+@media (max-width:900px){
+  .cine-stage{grid-template-columns:minmax(0,1fr); gap:8px; align-content:center; padding:28px 20px; border-radius:18px; margin-bottom:120px}
+  .cine-text{height:110px}
+  .cine-viz{aspect-ratio:1/1; min-height:0; max-height:60vh}
+  .cine-line h2{font-size:26px; line-height:33px} .cine-q{font-size:20px; line-height:27px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cine-stage{display:none} .cine{height:auto !important; padding-bottom:160px}
+  .cine-list{position:static; width:auto; height:auto; clip:auto; max-width:640px}
+}
+.cine-n{font-family:var(--display); font-size:22px; line-height:30px; font-weight:500; letter-spacing:-.02em; max-width:14ch}
+.cine-viz .hero-viz{position:absolute; inset:0; aspect-ratio:auto; min-height:0; transition:opacity .5s}
+#cine-cv{opacity:0; transition:opacity .5s}
+@media (max-width:900px){ .cine-n{font-size:20px; line-height:27px} }
+/* chapters as one stage: one case study at a time, the dashes are the tabs */
+.chapters > .piece{scroll-margin-top:96px}
+.chapters > .piece{display:block}
+
+@keyframes chapIn{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+.chap-pips i{cursor:pointer; transition:width .3s var(--ease), background .3s}
+.chap-pips i:not(.on):hover{background:var(--rule)}
+.chap-next{display:inline-block; margin-top:56px; font-size:15px; color:var(--faint); border-bottom:1px solid var(--rule); padding-bottom:3px; transition:color .2s}
+.chap-next b{font-weight:500; color:var(--ink); text-transform:uppercase; letter-spacing:.05em; font-size:13px}
+.chap-next:hover{color:var(--ink)}
+
+/* chapter head: big number, the name in small caps with five pips, then the question as the title */
+.chap-head{position:relative; display:flex; align-items:flex-start; gap:0}
+.chap-n{position:absolute; right:calc(100% + 28px); top:-8px; font-family:var(--display); font-weight:300; font-size:56px; line-height:1; letter-spacing:-.03em; color:var(--ink)}
+.chap-name{font-family:var(--display); font-size:15px; line-height:20px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint)}
+.chap-pips{display:flex; gap:6px; margin-top:10px}
+.chap-pips i{width:18px; height:5px; border-radius:3px; background:var(--line)}
+.chap-pips i.on{width:32px; background:var(--ink)}
+.piece h2.chap-q + .dek{margin-top:20px; font-size:18px; line-height:28px; color:var(--ink)}
+.piece h2.chap-q{margin-top:22px; max-width:22ch; font-size:34px; line-height:42px; letter-spacing:-.02em}
+@media (max-width:1180px){ .chap-n{position:static; margin-right:20px; font-size:44px} }
+@media (min-width:1181px){ .cine-stage{--bleed:76px} }
+@media (max-width:760px){ .piece h2.chap-q{font-size:30px; line-height:38px} .chap-n{font-size:36px; margin-right:16px} }
+.hero-words,.hero-viz{min-width:0}
+.hero-viz{position:relative; aspect-ratio:5/4; min-height:300px}
+.hero-viz canvas{position:absolute; inset:0; width:100%; height:100%}
+.hero-viz .cap{position:absolute; left:0; right:0; bottom:-52px; text-align:center; font-family:var(--display); font-size:16px; line-height:24px; letter-spacing:0; color:var(--ink)}
+/* Morphline, shared glyph layer (same rules as sensitivity.html) */
+.ml-probe,.ml-layer{font:inherit; line-height:inherit; letter-spacing:inherit}
+.ml-probe{display:block}
+.ml-probe .ml-w{display:inline-block; white-space:nowrap}
+.ml-probe .ml-c{display:inline-block; font-style:normal; white-space:pre}
+.ml-layer{position:absolute; inset:0; pointer-events:none}
+.ml-layer .ml-g{position:absolute; display:inline-block; font-style:normal; white-space:pre}
+.ml-layer .ml-in{opacity:0; transform:translateY(.32em); filter:blur(3px)}
+[data-morph-text]{position:relative; display:inline-block; height:24px; vertical-align:top; text-align:center}
+#hv-cap{display:block !important; width:100% !important; min-width:0 !important}   /* the box is the whole column, so the line is never squeezed and never resized */
+/* The desktop page is drawn at zoom .9. Morphline measures letters in zoomed pixels and places them in
+   unzoomed ones, so in flight the line sat at 90% and snapped to full size on landing. The caption
+   undoes the page zoom for itself (and scales its type back down), so measured and placed agree. */
+#hv-cap{zoom:calc(1 / var(--z,1)); font-size:calc(16px * var(--z,1)); line-height:calc(24px * var(--z,1)); height:calc(24px * var(--z,1))}
+#hv-cap .ml-g{color:var(--ink)}
+
+/* the engine measures letters one box each, then rests the line as one run of text. A kerned run
+   is a hair narrower than its boxes, and the difference showed as a small jerk when the line settled.
+   No kerning or ligatures here, so the boxes and the run agree to the pixel. */
+#hv-cap, #hv-cap *{font-kerning:none; font-variant-ligatures:none; font-feature-settings:"kern" 0, "liga" 0; text-rendering:optimizeSpeed}
+html.ldr-on .hero-viz{opacity:0}
+@media (max-width:900px){ .hero{grid-template-columns:minmax(0,1fr); gap:48px} .hero-viz{aspect-ratio:4/3; max-width:560px} }
+.hero h1{max-width:var(--read); font-family:var(--display); font-size:34px; line-height:42px; font-weight:500; letter-spacing:-.02em}
+.hero p{max-width:var(--read); margin-top:20px; color:var(--muted); font-size:17px; line-height:27px}
+.hero .hero-kick{margin:0 0 16px; font-family:var(--display); font-size:13px; line-height:20px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}
+.hero .hero-meta{margin-top:28px; font-size:13px; line-height:20px; color:var(--faint); letter-spacing:.02em}
 
 /* a piece reads like an article: label, one word, the question, the work, two paragraphs */
 .piece{padding-bottom:200px}
@@ -188,14 +296,28 @@ footer{display:flex; justify-content:space-between; gap:16px; padding:26px 0 48p
 
 @media (max-width:760px){
   .mark{position:absolute; top:28px} .menu{top:38px; gap:18px}
-  .hero{padding-top:216px; padding-bottom:120px}
-  .hero h1{font-size:29px; line-height:37px; letter-spacing:-.01em}   /* on a phone the opening line leads; the paragraph under it supports */
+  .hero{padding-top:160px; padding-bottom:8px}
+  .hero h1{font-size:30px; line-height:38px; letter-spacing:-.015em}   /* on a phone the opening line leads; the paragraph under it supports */
   .hero p{margin-top:22px}
   .piece{padding-bottom:120px}
   .piece h2{font-size:60px}
   .card{padding:40px 24px 44px}
 }
 @media (prefers-reduced-motion:reduce){ .r{opacity:1; transform:none; transition:none} .dot{animation:none} html{scroll-behavior:auto} }
+
+
+/* the thread: the five questions from the opening line, the one being read lit */
+.thread{position:fixed; z-index:40; left:28px; top:50%; transform:translateY(-50%); display:none; flex-direction:column; gap:14px; width:calc(50% - 540px - 60px); font-family:var(--display); font-size:12px; line-height:17px; color:var(--faint); opacity:0; transition:opacity .5s var(--ease)}
+.thread.show{opacity:1}
+.thread a{display:flex; gap:10px; align-items:flex-start; transition:color .3s}
+.thread a b{font-weight:400; flex:0 0 18px}
+.thread a span{position:relative}
+.thread a span::after{content:""; position:absolute; left:0; bottom:-3px; height:1px; width:0; background:var(--ink); transition:width .4s var(--ease)}
+.thread a.on{color:var(--ink)}
+.thread a.on span::after{width:100%}
+.thread a:hover{color:var(--ink)}
+@media (min-width:1500px){ .thread#thread{display:none} }
+html.ldr-on .thread{opacity:0}
 
 /* live status sits above each loop, aligned to its top-right corner */
 .piece figure{display:flex; flex-direction:column}
@@ -263,7 +385,18 @@ p.fmeta{order:1; align-self:flex-end; display:flex; align-items:center; gap:12px
      exact paragraph will sit once the page is up - same column, same line, same
      type, same colour - and puts it there. So when the paper lifts nothing moves:
      the sentence stays and the page arrives around it. */
-  .ldr-t{position:absolute;margin:0;color:var(--rule)}
+  .ldr-row{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:56px}
+  .ldr-row.col{flex-direction:column;gap:32px}
+  .ldr-loop{flex:none;width:360px;height:360px;overflow:visible;transition:opacity 420ms ease}
+  .ldr-loop text{fill:#1d1e1c;font-family:inherit}
+  .ldr-loop .h{font-size:17.5px;font-weight:600}
+  .ldr-loop .s{font-size:14px;fill:#55574f}
+  .ldr-loop .c{font-size:12px;letter-spacing:.14em;fill:#55574f}
+  .ldr-arrow{transform-box:view-box;transform-origin:180px 180px;animation:ldr-spin 4.8s linear infinite}
+  @keyframes ldr-spin{to{transform:rotate(360deg)}}
+  .ldr.gone .ldr-loop{opacity:0}
+  html.ldr-boot .ldr-loop{visibility:hidden}
+  .ldr-t{position:relative;margin:0;color:var(--rule)}
   .ldr-t i{font-style:normal;color:var(--rule);transition:color 400ms ease}
   .ldr-t i.on{color:var(--ink-on,var(--ink))}
   html.ldr-on{overflow:hidden;overscroll-behavior:none;touch-action:none;height:100%}
@@ -364,6 +497,38 @@ html, body{background:#101110}
 @media (min-width:1200px){ html{zoom:.9; --z:.9} }
 /* the write-up pop-ups are read up close: on the zoomed-out desktop page they come back to full size, so they feel near rather than far */
 @media (min-width:1200px){ .ov .card{zoom:1.11} }
+/* Search card: three chapters, each opens on the evidence */
+.ov #w4 .tension{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); max-width:24ch; margin-top:0; letter-spacing:-.01em}
+.ov #w4 .ch{margin-top:64px}
+.ov #w4 .ch-n{font-size:13px; line-height:20px; color:var(--faint); margin:0; letter-spacing:.04em}
+.ov #w4 .ch h3{margin-top:2px}
+.ov #w4 figure.wide img{max-width:100%}
+.ov #w4 figure.strip img{max-width:440px}
+.ov #w4 .fam{margin:16px 0 20px; padding:28px 20px 18px; border:1px solid var(--line); border-radius:12px}
+.ov #w4 .fam-top, .ov #w4 .fam-kids > div{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border:1px solid var(--rule); border-radius:8px; background:var(--paper); font-size:13px; line-height:19px; position:relative}
+.ov #w4 .fam-top{width:max-content; min-width:190px; margin:0 auto}
+.ov #w4 .d{color:var(--ink)}
+.ov #w4 .t{color:var(--muted)}
+.ov #w4 .none .t{color:var(--faint)}
+.ov #w4 .fam-kids{position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:36px}
+.ov #w4 .fam-top::after{content:""; position:absolute; left:50%; bottom:-19px; height:18px; border-left:1px solid var(--rule)}
+.ov #w4 .fam-kids::before{content:""; position:absolute; top:-18px; left:12.5%; right:12.5%; border-top:1px solid var(--rule)}
+.ov #w4 .fam-kids > div::before{content:""; position:absolute; left:50%; top:-19px; height:18px; border-left:1px solid var(--rule)}
+.ov #w4 p.fam-cap{font-size:13px; line-height:19px; color:var(--faint); margin:18px 0 0; max-width:none}
+.ov #w4 .pair{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; margin:14px 0 20px}
+.ov #w4 .pair figure{margin:0}
+.ov #w4 .pair img{max-width:100%}
+.ov #w4 .take{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); margin-top:72px; letter-spacing:-.01em}
+.ov #w4 .note{font-size:13px; line-height:20px; color:var(--faint); margin-top:10px}
+.ov #w4 .note a{color:var(--muted); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px}
+@media (max-width:600px){
+  .ov #w4 .fam-kids{grid-template-columns:1fr 1fr}
+  .ov #w4 .fam-kids::before, .ov #w4 .fam-kids > div::before{display:none}
+  .ov #w4 .fam-top::after{display:none}
+  .ov #w4 .fam-kids{margin-top:10px}
+  .ov #w4 .pair{grid-template-columns:1fr}
+}
+
 /* viewport units are not scaled by zoom, so the footer measures the window in page units */
 .rf{height:calc(100vh / var(--z,1)); --cw:min(calc(100vw / var(--z,1) - 48px), max(1080px, calc(68vw / var(--z,1))))}
 .piece.note h2{font-size:48px}
@@ -383,6 +548,71 @@ html, body{background:#101110}
 .card .end.idx a.back:hover i{transform:translateX(-4px)}
 @media (max-width:560px){ .card .end.idx a.row{flex-direction:column; gap:2px} .card .end.idx a.row span{text-align:left} }
 @media (prefers-reduced-motion:reduce){ .card .end.idx a.row, .card .end.idx a.back i{transition:none} }
+
+/* ===== final layout: words left, picture right, narration under the picture; a rule, then the chapters ===== */
+.hero{display:grid !important; grid-template-columns:var(--read) minmax(0,1fr); gap:56px; align-items:center; padding-top:170px; padding-bottom:110px !important; border-bottom:1px solid var(--line); margin-bottom:120px}
+.hero .cine{height:auto !important}
+.hero .cine-stage{display:flex !important; flex-direction:column; align-items:stretch !important; gap:22px; width:100%; background:none !important; padding:0 !important; margin:0 !important; border-radius:0 !important; --bleed:0px !important}
+.hero .cine-viz{order:1; width:100%; aspect-ratio:5/4; min-height:0}
+.hero .cine-text{width:100%}
+.hero .cine-text{order:2; height:92px; text-align:center}
+.hero .cine-line{left:0; right:0}
+.hero .cine-n, .hero .cine-q{max-width:none; margin-left:auto; margin-right:auto; font-size:21px; line-height:29px}
+.hero .cine-line h2{font-size:26px; line-height:34px; margin-top:0}
+.hero .cine-line .lbl{font-size:12px}
+.hero .cine-nav{top:0; right:0}
+.hero .cine-prog{bottom:-14px}
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr); gap:36px; padding-top:150px; margin-bottom:80px}
+  .hero .cine-text{height:96px}
+}
+/* details from the layout: narrower words (headline on three lines), more air, no arrows, caption in ink */
+.hero{grid-template-columns:440px minmax(0,1fr) !important; gap:110px !important}
+.hero .hero-words h1{max-width:400px}
+.hero .hero-words #hero-sub{max-width:440px}
+.hero .cine-nav, .hero .cine-prog{display:none !important}
+.hero .cine-stage{gap:44px !important}
+.hero .cine-n, .hero .cine-q{font-size:20px !important; line-height:28px !important; font-weight:500; color:var(--ink)}
+@media (max-width:1100px){ .hero{grid-template-columns:minmax(0,1fr) !important; gap:40px !important} }
+/* one type system: chapter descriptions match the hero paragraph (Inter, 17px, grey) */
+.piece h2.chap-q + .dek, .piece .chap-head + .dek{font-family:var(--font) !important; font-size:17px !important; line-height:27px !important; font-weight:400 !important; letter-spacing:0 !important; color:var(--muted) !important; max-width:var(--read)}
+.hero{border-bottom:0 !important; position:relative}
+.hero::after{content:""; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:min(1320px, calc(100vw / var(--z,1) - 48px)); height:1px; background:var(--rule)}
+/* chapter head, as in the layout: "01 SEARCH" in small grey caps, then the question */
+.chap-head{display:block}
+.chap-n{position:static !important; display:inline; font-family:var(--display); font-weight:400 !important; font-size:15px !important; line-height:20px; letter-spacing:.06em; color:var(--faint) !important; margin-right:4px}
+.chap-meta{display:inline}
+.chap-name{display:inline}
+.chap-pips{display:none !important}
+.piece h2.chap-q{margin-top:26px}
+.piece h2.chap-q + .dek{color:var(--muted)}
+
+.chapters > .piece:not(:last-child){position:relative}
+.chapters > .piece:not(:last-child)::after{content:""; position:absolute; bottom:100px; left:50%; transform:translateX(-50%); width:min(1320px, calc(100vw / var(--z,1) - 48px)); height:1px; background:var(--rule)}
+@media (max-width:900px){.chapters > .piece:not(:last-child)::after{bottom:60px}}
+.hero .hero-meta{font-family:var(--font) !important; font-size:17px !important; line-height:27px !important; letter-spacing:0 !important; color:var(--muted) !important}
+/* hint pill: a little more edge so it doesn't melt into the page */
+.hint{background:linear-gradient(180deg,#E7E7E3,#F4F4F1) !important;
+  box-shadow:inset 0 1px 3px rgba(25,26,24,.10), 0 0 0 1px rgba(25,26,24,.07), 0 2px 6px rgba(25,26,24,.05) !important}
+.hint span{color:#77756F}
+/* chapter label always sits flush left over its question, at every width */
+.piece .chap-head{display:block !important; margin-left:0 !important; padding-left:0 !important; left:auto !important; text-indent:0 !important}
+.piece .chap-head .chap-n{position:static !important; right:auto !important; margin:0 6px 0 0 !important}
+.piece .chap-head .chap-meta, .piece .chap-head .chap-name{display:inline !important; margin:0 !important; padding:0 !important}
+/* movie caption closer to the graph */
+.hero .cine-stage{gap:8px !important}
+/* movie: question label centred on the same axis as its question */
+.hero .cine-line .lbl{width:100% !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important; padding:0 !important}
+.hero .cine-line .lbl b{margin-right:8px}
+.hero .hero-meta .meta-yrs{color:#3E403B}
+.hero .hero-meta .meta-ai{font-weight:500}
+/* Sensitivity: the two way-outs, also on the page (same rows as in the card) */
+.piece .out-idx{margin-top:56px; border-top:1px solid var(--line)}
+.piece .out-idx a.row{position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin:0 -12px; padding:18px 12px; border-radius:10px; font-size:17.5px; line-height:26px; color:var(--accent); text-decoration:none; transition:background-color .25s cubic-bezier(.22,.61,.36,1), padding .32s cubic-bezier(.22,.61,.36,1)}
+.piece .out-idx a.row::after{content:""; position:absolute; left:12px; right:12px; bottom:0; border-bottom:1px solid var(--line)}
+.piece .out-idx a.row:hover, .piece .out-idx a.row:focus-visible{background:#EFEFEB; padding-left:18px; outline:none}
+.piece .out-idx a.row span{font-size:14px; line-height:24px; color:var(--faint); text-align:right}
+@media (max-width:560px){ .piece .out-idx a.row{flex-direction:column; gap:2px} .piece .out-idx a.row span{text-align:left} }
 </style>
 <script>
 /* before the first paint, not after it */
@@ -394,22 +624,83 @@ html, body{background:#101110}
 </script>
 </head>
 <body>
-<div class="ldr" id="ldr" aria-hidden="true" data-over="#hero-sub"><p class="ldr-t">I sit with the people doing the work, build what we find as working prototypes, and learn from each round.</p></div>
+<div class="ldr" id="ldr" aria-hidden="true" data-over="#hero-sub"><div class="ldr-row"><svg class="ldr-loop" viewBox="0 0 360 360" aria-hidden="true">
+<defs><marker id="ldr-ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1d1e1c"/></marker></defs>
+<circle cx="180" cy="180" r="166" fill="none" stroke="#1d1e1c" stroke-opacity=".1" stroke-width="1"/>
+<g class="ldr-arrow"><path d="M 109.8 29.6 A 166 166 0 0 1 250.2 29.6" fill="none" stroke="#1d1e1c" stroke-width="1.5" stroke-linecap="round" marker-end="url(#ldr-ah)"/></g>
+<g class="ldr-n" text-anchor="middle">
+<circle cx="180" cy="76" r="52" fill="#d2dce7"/><text x="180" y="70" class="h">Hypothesis</text><text x="180" y="89" class="s">What do I</text><text x="180" y="105" class="s">believe?</text>
+<circle cx="284" cy="180" r="52" fill="#d6e2cd"/><text x="284" y="176" class="h">Build</text><text x="284" y="196" class="s">Make it real</text>
+<circle cx="180" cy="284" r="52" fill="#f1dfcd"/><text x="180" y="278" class="h">Test</text><text x="180" y="297" class="s">What actually</text><text x="180" y="313" class="s">happens?</text>
+<circle cx="76" cy="180" r="52" fill="#dcd4e5"/><text x="76" y="168" class="h">Iterate</text><text x="76" y="188" class="s">Change the</text><text x="76" y="204" class="s">solution</text>
+<text x="180" y="176" class="c">LEARNING</text><text x="180" y="194" class="c">LOOP</text>
+</g></svg><p class="ldr-t">I sit with the people doing the work, build what we find as working prototypes, and learn from each round.</p></div></div>
 
 <a class="mark" href="#top" aria-label="Amrit Kumar, top">a</a>
-<nav class="menu"><a href="#work">Work</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
+<nav class="menu"><a href="#work">Work</a><a href="sensitivity.html">Sensitivity</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
 
 <div class="sheet" id="sheet">
 <div class="col" id="top">
   <section class="hero">
-    <h1 class="r" id="hero-line">I design contract software at Sirion, helping lawyers work with AI and make informed decisions.</h1>
-    <p class="r" id="hero-sub">A lawyer won&#8217;t act on an answer they can&#8217;t check. So my work shows where an answer came from, what has changed, and what needs their attention first. 13 years in design, the last 3 on AI.</p>
+    <div class="hero-words">
+    <h1 class="r" id="hero-line">Enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
+    <p class="r" id="hero-sub">So my work shows which contracts an answer touches, where it came from, what has changed, what else it affects, and what needs their attention first.</p>
+    <p class="r hero-meta">Product designer at Sirion<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
+    </div>
+  <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
+    <section class="cine" id="cine" aria-labelledby="cine-h">
+      <div class="cine-stage" id="cine-stage">
+        <div class="cine-text">
+          <div class="cine-line on" data-i="0"><p class="cine-n">One company,<br>40,000 contracts.</p></div>
+          <div class="cine-line" data-i="s"><p class="cine-n">Spread across many documents.</p></div>
+          <div class="cine-line" data-i="2"><p class="cine-n">But now the scattered pieces are connected with AI.</p></div>
+          <div class="cine-line" data-i="3"><p class="cine-n">Now they mean more to the business.</p></div>
+          <div class="cine-line" data-i="4"><p class="cine-n">But is that enough to earn the user&rsquo;s trust?</p></div>
+          <div class="cine-line" data-i="5">
+            <h2 id="cine-h">Not yet.</h2>
+          </div>
+          <div class="cine-line" data-i="u"><p class="cine-n">The user still asks&hellip;</p></div>
+          <div class="cine-line" data-i="6"><p class="lbl"><a class="cine-tag" href="#q1"><b>01</b>Search</a></p><p class="cine-q">Did it find every contract that matters?</p></div>
+          <div class="cine-line" data-i="7"><p class="lbl"><a class="cine-tag" href="#q2"><b>02</b>Proof</a></p><p class="cine-q">Can I see the exact words it used?</p></div>
+          <div class="cine-line" data-i="8"><p class="lbl"><a class="cine-tag" href="#q3"><b>03</b>Lineage</a></p><p class="cine-q">Is this information still true today?</p></div>
+          <div class="cine-line" data-i="9"><p class="lbl"><a class="cine-tag" href="#q4"><b>04</b>Reach</a></p><p class="cine-q">If I accept it, what else changes?</p></div>
+          <div class="cine-line" data-i="10"><p class="lbl"><a class="cine-tag" href="#q5"><b>05</b>Sensitivity</a></p><p class="cine-q">Does it need me now, or can it wait?</p></div>
+          
+        </div>
+        <div class="cine-nav">
+          <button type="button" class="cine-arrow" id="cine-prev" aria-label="Previous step"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button>
+          <button type="button" class="cine-arrow" id="cine-next" aria-label="Next step"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3.5 4.5 4.5L6 12.5"/></svg></button>
+        </div>
+        <div class="cine-prog" aria-hidden="true"><i id="cine-prog"></i></div>
+        <div class="cine-viz">
+          <div class="hero-viz" id="hero-viz" aria-label="One company, 40,000 contracts, and the layers of data inside them"><canvas id="hv"></canvas></div>
+          <canvas id="cine-cv" aria-hidden="true"></canvas>
+        </div>
+      </div>
+      <ol class="bridge-list cine-list">
+        <li><a href="#q1"><b>01</b><span class="q">Did it find every contract that matters?</span><span class="why">Not just the ones it happened to read.</span></a></li>
+        <li><a href="#q2"><b>02</b><span class="q">Can I see the exact words it used?</span><span class="why">Not a score or a page number.</span></a></li>
+        <li><a href="#q3"><b>03</b><span class="q">Is this information still true today?</span><span class="why">A later amendment may have changed it.</span></a></li>
+        <li><a href="#q4"><b>04</b><span class="q">If I accept it, what else changes?</span><span class="why">One edit can break a clause pages away.</span></a></li>
+        <li><a href="#q5"><b>05</b><span class="q">Does it need me now, or can it wait?</span><span class="why">Not everything it finds needs a person.</span></a></li>
+      </ol>
+    </section>
   </section>
 
-  <main id="work">
-  <article class="piece" data-unit="search">
-    <p class="lbl r"><b>01</b>Finding the contracts</p>
-    <h2 class="r">Search.</h2>
+
+
+  <nav class="thread" id="thread" aria-label="The five questions">
+  <a href="#q1"><b>01</b><span>Did it find every contract that matters?</span></a>
+  <a href="#q2"><b>02</b><span>Can I see the exact words it used?</span></a>
+  <a href="#q3"><b>03</b><span>Is this information still true today?</span></a>
+  <a href="#q4"><b>04</b><span>If I accept it, what else changes?</span></a>
+  <a href="#q5"><b>05</b><span>Does it need me now, or can it wait?</span></a>
+</nav>
+<main id="work">
+  <div class="chapters" id="chapters">
+  <article class="piece" data-unit="search" id="q1">
+    <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
+    <h2 class="r chap-q">Did it find every contract that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
     <figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -1442,12 +1733,12 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Live &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Partly live &middot; Prototyped with Claude</p></figure>
     <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In contracts, it costs a breach nobody was told about in&nbsp;time.</p><p>So it asks how to judge before it reads, reads each contract family whole, and when two documents disagree it says so instead of picking&nbsp;one.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
   </article>
-  <article class="piece" data-unit="proof">
-    <p class="lbl r"><b>02</b>What the AI read</p>
-    <h2 class="r">Proof.</h2>
+  <article class="piece" data-unit="proof" id="q2">
+    <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
+    <h2 class="r chap-q">Can I see the exact words it used?</h2>
     <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
     <figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -2173,12 +2464,12 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Shipped &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Iterate &middot; Shipped &middot; Prototyped with Claude</p></figure>
     <div class="prose r"><p>A confidence score and page number still left people searching for evidence. I made the exact source passage available in one&nbsp;click.</p><p>After four months, 23% of users were still using it, up&nbsp;from 5%&nbsp;before.</p><p class="end"><a href="#" data-open="w3">Why it&rsquo;s built this way</a></p></div>
   </article>
-  <article class="piece" data-unit="lineage">
-    <p class="lbl r"><b>03</b>A clause&rsquo;s past</p>
-    <h2 class="r">Lineage.</h2>
+  <article class="piece" data-unit="lineage" id="q3">
+    <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
+    <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">To know what a clause says today, someone had to find every relevant contract document and work out what each one&nbsp;changed.</p>
     <figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -2939,12 +3230,12 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Approved &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Approved &middot; Prototyped with Claude</p></figure>
     <div class="prose r"><p>One paragraph shows what the clause means today. Every change stays marked in the text with its date and the document it came from, so people can trace each part back, even when two parts of one sentence changed years&nbsp;apart.</p><p>One click opens the signed document at the exact paragraph that made the change. Reading the original wording is what lets people trust what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="w1">Why it&rsquo;s built this way</a></p></div>
   </article>
-  <article class="piece" data-unit="editor">
-    <p class="lbl r"><b>04</b>What one edit touches</p>
-    <h2 class="r">Reach.</h2>
+  <article class="piece" data-unit="editor" id="q4">
+    <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
+    <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Lawyers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t touch.</p>
     <figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -4204,12 +4495,12 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Concept &middot; Built with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Concept &middot; Built with Claude</p></figure>
     <div class="prose r"><p>Change one clause and something three pages away can stop matching it: a definition, a cross-reference, a notice period that hangs off a date.</p><p>Here the redline lands in the text, says where its wording came from, and marks the other clause it just put out of step, with the fix already written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
   </article>
-  <article class="piece static note">
-    <p class="lbl r"><b>05</b>How I think</p>
-    <h2 class="r">Sensitivity.</h2>
+  <article class="piece static note" id="q5">
+    <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
+    <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
     <figure class="r"><div class="fit" data-h="640" data-w="760"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -6783,9 +7074,14 @@ window.nudgeMark = function (host, go) {
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta">Own work &middot; Built with Claude</p></figure>
+" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta">Hypothesis &middot; Own work &middot; Built with Claude</p></figure>
     <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">Why I think this way</a></p></div>
+    <div class="out-idx r"><a class="row" href="sensitivity.html" target="_blank" rel="noopener">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a></div>
   </article>
+  </div>
+    <section class="closing r" aria-label="Closing">
+    <p>That&#8217;s what it takes to act on an answer.</p>
+  </section>
   </main>
 
 
@@ -6895,41 +7191,60 @@ window.nudgeMark = function (host, go) {
     </article>
     <article class="card" id="w4" hidden>
       <h2>Search</h2>
-      <p class="k">Contract search &middot; Sirion &middot; Live</p>
+      <p class="k">Contract search &middot; Sirion &middot; Partly live</p>
       <hr>
-      <p class="lead">Finding a convincing answer is only part of the job. What happens if a contract is missing from&nbsp;it?</p>
-      <p>A policy changes. Suppliers now need to report a data breach within 24 hours. Someone has to find the contracts that fall&nbsp;short.</p>
-      <p>An incorrect result could send a lawyer towards an agreement that needs no change. A missed result is quieter: an agreement that needs attention never reaches&nbsp;them.</p>
-      <p>Testing changed what I designed for. A convincing answer wasn&rsquo;t enough: people needed to know how far to trust it, and where each finding came from. So before presenting a list, the interface makes the interpretation visible, shows what was reviewed, and holds back where the documents do not support a settled&nbsp;answer.</p>
-      <h3>Agree on what counts as a miss</h3>
-      <figure><img src="search-ask.webp" style="max-width:100%" alt="The search asks how a miss should be judged, with three readings: notice over 24 hours or no clause, no clause at all, or signed before the policy date" loading="lazy"></figure>
-      <p>&ldquo;Which contracts don&rsquo;t meet our policy?&rdquo; sounds clear until you try to judge each&nbsp;agreement.</p>
-      <p>Does a miss mean a notice period longer than 24 hours? Does having no breach-notice clause count too? Or is the person asking about contracts signed before the policy&nbsp;changed?</p>
-      <p>Those interpretations produce different&nbsp;lists.</p>
-      <p>The search proposes a reading of the request and lets the reviewer confirm or change it. I accepted an extra step here because silently choosing the wrong criterion could make every result that follows&nbsp;misleading.</p>
-      <h3>Read the relationship around the clause</h3>
-      <figure><img src="search-family.webp" style="max-width:420px" alt="One contract family opened: its master agreement, data processing addendum and SOWs, with the breach-notice term each one sets" loading="lazy"></figure>
-      <p>Testing also showed how much the history of a clause matters: which document set the wording, and what changed it&nbsp;later.</p>
-      <p>The relevant wording may sit in a master agreement, a statement of work, or a later&nbsp;amendment.</p>
-      <p>A passage can be quoted correctly and still give an incomplete picture of the&nbsp;agreement.</p>
-      <p>So the search reviews the related documents together and checks which wording applies before reporting a position. The result represents a contract family, with its supporting documents available to&nbsp;inspect.</p>
-      <h3>Show what was checked</h3>
-      <figure><img src="search-work.webp" style="max-width:100%" alt="What it checks while it reads: families scoped, documents read, which terms govern, what misses 24 hours, with the four-step plan beside it" loading="lazy"><figcaption>Each step shows what it covered, with the plan beside&nbsp;it.</figcaption></figure>
-      <p>A broader review takes time. I wanted that wait to explain something&nbsp;useful.</p>
-      <p>The interface shows the families in scope, the documents reviewed, and the step of checking which terms govern. This gives the reviewer a way to question the coverage as well as the&nbsp;answer.</p>
-      <p>A list is easier to assess when you can see what it was drawn&nbsp;from.</p>
-      <h3>Keep different findings different</h3>
-      <figure><img src="search-list.webp" style="max-width:100%" alt="The list of families, each marked with its own finding: terms conflict, clause missing, or over 24 hours" loading="lazy"></figure>
-      <p>A deadline over 24 hours, an absent clause, and conflicting terms need different&nbsp;follow-up.</p>
-      <p>I kept those findings separate rather than reducing everything to &ldquo;doesn&rsquo;t comply.&rdquo; The list tells the reviewer why each family needs&nbsp;attention.</p>
-      <h3>Leave disagreement visible</h3>
-      <figure><img src="search-conflict.webp" style="max-width:100%" alt="A family where three documents set different notice periods; the card says the position is not settled and quotes the passage" loading="lazy"></figure>
-      <p>In the example, three documents contain three different notice periods. The search shows the passages together and says the position is not&nbsp;settled.</p>
-      <p>All three exceed 24 hours, so the family can still be flagged against that criterion. Deciding which document needs changing first remains a lawyer&rsquo;s&nbsp;call.</p>
-      <p>The system can make a supported finding without pretending it has resolved every question around&nbsp;it.</p>
-      <h3>Where it stands</h3>
-      <p><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener" style="color:var(--ink); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px">AskSirion</a> is live in Sirion today. Reading a contract family as a whole, with its context and what its terms mean, is the part now in&nbsp;development.</p>
-      <p>Coverage is part of the answer. In CLM, hiding a gap is worse than showing one. If some documents could not be read, the search says so. &ldquo;No clause found&rdquo; should never quietly stand in for &ldquo;we could not finish reviewing the&nbsp;documents.&rdquo;</p>
+      <p class="tension">A search can return the right answer and still miss the contract that&nbsp;matters.</p>
+
+      <section class="ch">
+        <p class="ch-n">01</p>
+        <h3>Ask before searching</h3>
+        <figure class="wide"><img src="search-c-ask.webp" alt="A search asking what counts as a miss: notice over 24 hours, no clause, or contracts signed before the policy date." loading="lazy"></figure>
+        <p>A new policy requires suppliers to report a data breach within 24&nbsp;hours.</p>
+        <p>Someone asks, &ldquo;Which contracts don&rsquo;t meet&nbsp;it?&rdquo;</p>
+        <p>But what counts as a miss? A longer notice period? No clause at all? Does the date the contract was signed&nbsp;matter?</p>
+        <p>Each interpretation could produce a different&nbsp;list.</p>
+        <p>So I made the search check what the person means before it starts. It adds one step, but avoids building an entire result on the wrong&nbsp;assumption.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">02</p>
+        <h3>Read the family, not the file</h3>
+        <div class="fam" role="img" aria-label="One contract family from the prototype: Master agreement, 72 hours. DPA, 48 hours. Support SOW, 5 business days. Hosting SOW, no clause. Implementation SOW, no clause.">
+          <div class="fam-top"><span class="d">Master agreement</span><span class="t">72 hours</span></div>
+          <div class="fam-kids">
+            <div><span class="d">DPA</span><span class="t">48 hours</span></div>
+            <div><span class="d">Support SOW</span><span class="t">5 business days</span></div>
+            <div class="none"><span class="d">Hosting SOW</span><span class="t">No clause</span></div>
+            <div class="none"><span class="d">Implementation SOW</span><span class="t">No clause</span></div>
+          </div>
+          <p class="fam-cap">One contract family from the prototype. Several documents, different terms. Which one&nbsp;applies?</p>
+        </div>
+        <p>In testing, I found that the relevant wording often sat in a different document from the one being&nbsp;quoted.</p>
+        <p>A contract might have a master agreement, several SOWs and later changes. Reading just one document can miss the bigger&nbsp;picture.</p>
+        <p>So I made the search read the related documents together, not just the one containing a&nbsp;match.</p>
+        <p>It takes longer, but finding the right words isn&rsquo;t enough if they&rsquo;re taken from the wrong&nbsp;document.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">03</p>
+        <h3>Show what was checked, and what remains unclear</h3>
+        <figure class="wide strip"><img src="search-c-checked.webp" alt="The search shows its progress: 74 contract families in scope, 318 documents read, and which terms apply." loading="lazy"></figure>
+        <p>I wanted the wait to tell people something&nbsp;useful.</p>
+        <p>So the search shows what it&rsquo;s checking, how much it has covered, and how it decides which terms&nbsp;apply.</p>
+        <div class="pair">
+          <figure><img src="search-c-findings.webp" alt="Results separate notice periods over 24 hours, missing clauses and conflicting terms." loading="lazy"><figcaption>Results separate notice periods over 24 hours, missing clauses and conflicting&nbsp;terms.</figcaption></figure>
+          <figure><img src="search-c-conflict.webp" alt="When documents disagree, the search shows the different passages instead of choosing one." loading="lazy"><figcaption>When documents disagree, the search shows the different passages instead of choosing&nbsp;one.</figcaption></figure>
+        </div>
+        <p>Not every finding means the same&nbsp;thing.</p>
+        <p>A notice period that&rsquo;s too long, a missing clause and documents that disagree all need different attention. I kept them separate rather than calling everything &ldquo;non-compliant.&rdquo;</p>
+        <p>Sometimes the documents don&rsquo;t give a clear&nbsp;answer.</p>
+        <p>In those cases, the search still flags the contract and shows where the disagreement is. It doesn&rsquo;t pretend to know which document should take&nbsp;priority.</p>
+        <p>That decision stays with the person reviewing&nbsp;it.</p>
+      </section>
+
+      <p class="take">Coverage is part of the&nbsp;answer.</p>
+      <p>Finding something is useful. Knowing what was checked, what wasn&rsquo;t found, and what remains uncertain makes the result easier to&nbsp;trust.</p>
+      <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> is live in Sirion. Reading whole contract families is in development. The screens shown here are from my&nbsp;prototype.</p>
       <p class="end"><a href="#" data-close>Back to the work</a></p>
     </article>
     <article class="card" id="w5" hidden>
@@ -7138,8 +7453,11 @@ function onWidth(fn){
     /* the page may be drawn at a zoom; rects come back zoomed, styles are set unzoomed */
     var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
     var cs=getComputedStyle(target);
-    var W=Math.min(560, innerWidth/z-48);
-    t.style.top='50%'; t.style.left='50%'; t.style.transform='translate(-50%,-50%)';
+    var vw=innerWidth/z, row=el.querySelector('.ldr-row'), loop=el.querySelector('.ldr-loop');
+    var col=vw<900, L=col?Math.min(280, vw-48):360;
+    var W=col?Math.min(560, vw-48):Math.min(560, vw-L-56-96);
+    if(row) row.classList.toggle('col', col);
+    if(loop){ loop.style.width=L+'px'; loop.style.height=L+'px'; loop.style.fontFamily=cs.fontFamily; }
     t.style.width=W+'px';
     t.style.fontFamily=cs.fontFamily; t.style.fontWeight=cs.fontWeight; t.style.fontStyle=cs.fontStyle;
     t.style.fontSize='24px'; t.style.lineHeight='34px';
@@ -7277,6 +7595,504 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     },650);
   });
 });
+</script>
+<script>
+/* the thread lights the question being read, and only shows once the work is on screen */
+(function(){
+  var th=document.getElementById('thread'); if(!th) return;
+  var links=[].slice.call(th.querySelectorAll('a'));
+  var pieces=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function tick(){
+    var y=innerHeight*0.4, cur=-1;
+    pieces.forEach(function(p,i){ if(p && p.getBoundingClientRect().top<=y) cur=i; });
+    links.forEach(function(a,i){ a.classList.toggle('on', i===cur); });
+    var work=document.getElementById('work'), r=work?work.getBoundingClientRect():null;
+    th.classList.toggle('show', !!r && r.top<innerHeight*0.6 && r.bottom>innerHeight*0.4);
+  }
+  addEventListener('scroll', tick, {passive:true}); addEventListener('resize', tick); tick();
+})();
+</script>
+<script>
+/* ===== HERO VISUAL =====
+   One company on the left. Its contracts, documents, clauses and data points
+   fan out to the right, layer by layer, each with its count. Then the pieces
+   scatter, and the meaning shows up only when pieces from different contracts
+   are connected. Each of those pieces is then traced back to its own source.
+   Last, what nobody connected comes forward: is that enough to act on?
+   Loops. ~19s. Canvas, no library. */
+(function(){
+  var box=document.getElementById('hero-viz'), cv=document.getElementById('hv'), cap=document.getElementById('hv-cap');
+  if(!box||!cv) return;
+  var ctx=cv.getContext('2d'), W=0,H=0,DPR=1;
+  var INK='#191A18', ACC='#3D5A45';
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* deterministic random so the picture is the same every visit */
+  var seed=11; function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+
+  var L=[
+    {k:'company',   n:'1',      say:'One company',    cnt:1,   x:.08, r:26},
+    {k:'contracts', n:'40K+',   say:'Contracts',      cnt:14,  x:.30, r:5.5},
+    {k:'documents', n:'200K+',  say:'Documents',      cnt:30,  x:.52, r:4},
+    {k:'clauses',   n:'670K+',  say:'Clauses',        cnt:60,  x:.74, r:2.8},
+    {k:'data',      n:'1.1M+',  say:'Data points',    cnt:110, x:.94, r:1.8}
+  ];
+  var nodes=[];
+  L.forEach(function(l,li){
+    for(var i=0;i<l.cnt;i++){
+      var parent=null;
+      if(li>0){ var prev=nodes.filter(function(n){return n.li===li-1;}); parent=prev[Math.floor(rnd()*prev.length)]; }
+      var spread=[0,.8,.42,.28,.2][li];
+      var ty = li===0 ? .5 : Math.min(.95, Math.max(.05, parent.ty + (rnd()-.5)*spread + (rnd()-.5)*.08));
+      nodes.push({li:li, tx:l.x, ty:ty, r:l.r, parent:parent, j:rnd(), jx:(rnd()-.5), jy:(rnd()-.5)});
+    }
+  });
+  function anc(n,li){ while(n && n.li>li) n=n.parent; return n; }
+
+  /* the pieces of one answer: four clauses, each from a different contract, spread down the column */
+  var clauses=nodes.filter(function(n){return n.li===3;}).sort(function(a,b){return a.ty-b.ty;});
+  var pieces=[], usedK=[];
+  [.22,.5,.78].forEach(function(q){
+    var best=null, bd=1e9;
+    clauses.forEach(function(c){ var k=anc(c,1); if(usedK.indexOf(k)>=0) return;
+      var d=Math.abs(c.ty-q)+Math.abs(anc(c,2).ty-q)+Math.abs(k.ty-q);   /* the whole lane stays near q */
+      if(d<bd){bd=d;best=c;} });
+    if(best){ pieces.push(best); usedK.push(anc(best,1)); }
+  });
+  var chains=pieces.map(function(p){ var ch=[]; for(var c=p;c;c=c.parent) ch.push(c); return ch; });
+  var mainK=1;   /* the second of four: nearest the middle of the column */
+  var onPath=[]; chains.forEach(function(ch){ ch.forEach(function(n){ if(onPath.indexOf(n)<0) onPath.push(n); }); });
+
+  /* what nobody connected: in each layer, a node near the traced paths that was not followed */
+  var ghosts=[];
+  [1,2,3].forEach(function(li,i){
+    var from=chains[mainK].filter(function(n){return n.li===li;})[0];
+    var best=null, bd=1e9;
+    nodes.forEach(function(n){ if(n.li!==li || onPath.indexOf(n)>=0) return;
+      var d=Math.abs(n.ty-from.ty); if(d<.12) return; if(d<bd){bd=d;best=n;} });
+    if(best) ghosts.push({node:best, from:from});
+  });
+  (function(){ /* a data point inside one of the pieces that nobody read */
+    for(var i=mainK;i<pieces.length;i++){ var kid=nodes.filter(function(n){return n.parent===pieces[i];})[0]; if(kid){ ghosts.push({node:kid, from:pieces[i]}); return; } }
+  })();
+
+  function size(){
+    var r=box.getBoundingClientRect(); DPR=Math.min(2, devicePixelRatio||1);
+    W=Math.max(1,Math.round(r.width)); H=Math.max(1,Math.round(r.height));
+    cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  addEventListener('resize',size); size();
+
+  var ease=function(t){ t=Math.max(0,Math.min(1,t)); return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; };
+  var lerp=function(a,b,t){ return a+(b-a)*t; };
+  var clamp=function(v){ return Math.max(0,Math.min(1,v)); };
+
+  /* timeline in seconds */
+  var LD=[2.4,2.0,1.3,1.3,1.3];                /* the company gets time on its own */
+  var T_HOLD=2.6, T_SCATTER=1.6, T_CONNECT=3.4, T_TRACE=4.0, T_ASK=4.5;
+  var t0=LD.reduce(function(a,b){return a+b;},0), t1=t0+T_HOLD, tc=t1+T_SCATTER, t2=tc+T_CONNECT, t3=t2+T_TRACE, DUR=t3+T_ASK;
+  function layAt(t){ var acc=0; for(var i=0;i<5;i++){ if(t<acc+LD[i]) return i+(t-acc)/LD[i]; acc+=LD[i]; } return 5; }
+  var PAD=36, padR=56;
+
+  function raw(n, sc){
+    var x=PAD+n.tx*(W-PAD-padR), y=PAD+n.ty*(H-PAD*2);
+    if(sc>0 && n.li>0){ x+=n.jx*80*sc; y+=n.jy*60*sc; }
+    return [x,y];
+  }
+
+  function curve(p,q,f){
+    var mx=(p[0]+q[0])/2;
+    ctx.beginPath(); ctx.moveTo(p[0],p[1]);
+    if(f>=1){ ctx.bezierCurveTo(mx,p[1],mx,q[1],q[0],q[1]); ctx.stroke(); return; }
+    for(var i=1;i<=12;i++){ var u=(i/12)*f, v=1-u;
+      ctx.lineTo(v*v*v*p[0]+3*v*v*u*mx+3*v*u*u*mx+u*u*u*q[0], v*v*v*p[1]+3*v*v*u*p[1]+3*v*u*u*q[1]+u*u*u*q[1]); }
+    ctx.stroke();
+  }
+  function glow(p, r, rgb, a){
+    if(a<=0) return;
+    var g=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],r);
+    g.addColorStop(0,'rgba('+rgb+','+a.toFixed(3)+')'); g.addColorStop(1,'rgba('+rgb+',0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill();
+  }
+  /* one segment of a smooth curve through a row of points (Catmull-Rom), drawn f of the way */
+  function smooth(P, i, f){
+    var p0=P[Math.max(0,i-1)], p1=P[i], p2=P[i+1], p3=P[Math.min(P.length-1,i+2)];
+    var c1=[p1[0]+(p2[0]-p0[0])/6, p1[1]+(p2[1]-p0[1])/6], c2=[p2[0]-(p3[0]-p1[0])/6, p2[1]-(p3[1]-p1[1])/6];
+    ctx.beginPath(); ctx.moveTo(p1[0],p1[1]);
+    for(var k=1;k<=16;k++){ var u=(k/16)*f, v=1-u;
+      ctx.lineTo(v*v*v*p1[0]+3*v*v*u*c1[0]+3*v*u*u*c2[0]+u*u*u*p2[0], v*v*v*p1[1]+3*v*v*u*c1[1]+3*v*u*u*c2[1]+u*u*u*p2[1]); }
+    ctx.stroke();
+  }
+  function line(p,q,f){ ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(lerp(p[0],q[0],f), lerp(p[1],q[1],f)); ctx.stroke(); }
+
+  var MAIN='Users won’t act on answers they can’t verify.', T_INTRO=0, SKIP=0;
+  function draw(T){
+    var t = T<T_INTRO ? Math.min(T*.6, SKIP) : T-T_INTRO+SKIP;   /* during the intro only the company grows */
+    ctx.clearRect(0,0,W,H);
+    var lay = layAt(t);
+    var cur = lay<5 ? Math.floor(lay) : -1;
+    function wOf(li){ return lay>=5 ? 0 : ease(clamp(1-Math.abs(lay-(li+.55))/1.05)); }   /* 0..1, peaks while li grows in */
+    var settle = ease((lay-4.4)/.6);                    /* all layers come to equal weight at the end */
+    var base = .7 + .3*settle;
+
+    /* scatter rises, holds through the connecting, and settles back as the tracing starts */
+    var sc = ease((t-t1)/T_SCATTER);
+    var pull = 0;                                      /* dots never move while they are connected */
+    var focus = ease((t-tc)/.8)*.9;                    /* everything off the answer steps back, a little */
+    var conn  = clamp((t-tc)/(T_CONNECT*.98));         /* how far the joining has got: it keeps growing for the whole AI step */
+    var trace = ease((t-t2)/(T_TRACE*.9));
+    var ask   = t>t3 ? ease((t-t3)/(T_ASK*.22)) : 0;
+
+    var ringA=0;
+    var mid=[0,0]; pieces.forEach(function(p){ var q=raw(p,sc); mid[0]+=q[0]/pieces.length; mid[1]+=q[1]/pieces.length; });
+    function pos(n){ var q=raw(n,sc); if(pieces.indexOf(n)>=0 && pull>0){ q=[lerp(q[0],mid[0],.35*pull), lerp(q[1],mid[1],.35*pull)]; } return q; }
+
+    /* links */
+    ctx.lineWidth=1;
+    nodes.forEach(function(n){
+      if(!n.parent) return;
+      var a = ease((lay - n.li - n.j*.5)*1.6); if(a<=0) return;
+      var on = onPath.indexOf(n)>=0;
+      var keep = n.j<.3;
+      var alpha = (.16 - sc*.11) * a * (on ? 1 : Math.max(0, 1-focus*(keep?.8:1.12)));
+      ctx.strokeStyle='rgba(25,26,24,'+alpha.toFixed(3)+')';
+      curve(pos(n.parent), pos(n), a);
+    });
+
+    /* dots */
+    nodes.forEach(function(n){
+      var a = ease((lay - n.li - n.j*.5)*1.6); if(a<=0) return;
+      var p=pos(n), r=n.r*(.4+.6*a);
+      ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2);
+      if(n.li===0) return;                           /* drawn last, over the lines */
+      var on = onPath.indexOf(n)>=0;
+      var em = base + 1.2*wOf(n.li);
+      ctx.fillStyle='rgba(25,26,24,'+Math.min(.85,(.18+.12*n.j)*em*(1-sc*.5)*(on?1:Math.max(0,1-focus*(n.j<.3?.8:1.12)))).toFixed(3)+')'; ctx.fill();
+    });
+
+    /* the answer: the pieces light one after another and are joined into one shape */
+    if(t>=tc){
+      var order=pieces.slice().sort(function(a,b){return a.ty-b.ty;});
+      ctx.lineWidth=1; ctx.strokeStyle='rgba(25,26,24,'+(.3*(1-trace*.85)).toFixed(3)+')';
+      var P=order.map(pos);
+      for(var i=0;i<P.length-1;i++){
+        var f=clamp(conn*(P.length-1)-i); if(f<=0) break;
+        smooth(P, i, ease(f));
+      }
+      /* while the pieces are joined, the threads under each piece keep growing: the picture never stands still in this step */
+      ctx.lineWidth=.8;
+      nodes.forEach(function(n){
+        if(!n.parent || pieces.indexOf(n.parent)<0) return;
+        var f=ease(clamp((conn-.15-n.j*.55)/.4)); if(f<=0) return;
+        ctx.strokeStyle='rgba(25,26,24,'+(.22*f*(1-trace*.85)).toFixed(3)+')';
+        curve(pos(n.parent), pos(n), f);
+        if(f>.6){ var q=pos(n); ctx.beginPath(); ctx.arc(q[0],q[1],n.r*.9,0,Math.PI*2); ctx.fillStyle='rgba(25,26,24,'+(.3*(f-.6)/.4*(1-trace*.85)).toFixed(3)+')'; ctx.fill(); }
+      });
+      ctx.lineWidth=1; ctx.strokeStyle='rgba(25,26,24,'+(.3*(1-trace*.85)).toFixed(3)+')';
+      order.forEach(function(n,i){
+        var f=clamp(conn*(order.length-1)-i+1); if(f<=0) return;
+        var p=pos(n), main=(n===pieces[mainK] && trace>0);
+        glow(p, main?16:10, main?'61,90,69':'25,26,24', (main?.28:.10)*ease(f));
+        ctx.beginPath(); ctx.arc(p[0],p[1],n.r+(main?2.5:.8)*ease(f),0,Math.PI*2); ctx.fillStyle=main?ACC:'rgba(25,26,24,'+(trace>0?.2:.4)+')'; ctx.fill();
+      });
+    }
+
+    /* each piece, traced back to its own source: four threads, meeting at the company */
+    if(trace>0){
+      ctx.save(); ctx.globalAlpha=1-.62*ask;
+      chains.forEach(function(ch,k){
+        var main=(k===mainK);
+        var tr=clamp(trace*1.15-(main?0:.08)), done=tr*(ch.length-1);
+        for(var i=0;i<ch.length-1;i++){
+          var f=clamp(done-i); if(f<=0) break;
+          ctx.lineWidth=main?2:.7; ctx.strokeStyle=main?ACC:'rgba(25,26,24,.16)';
+          curve(pos(ch[i]), pos(ch[i+1]), f);
+          if(f>=1 && ch[i+1].li>0){ var p=pos(ch[i+1]); if(main) glow(p, ch[i+1].r*3+10, '61,90,69', .26); ctx.beginPath(); ctx.arc(p[0],p[1],main?ch[i+1].r+2.5:ch[i+1].r*.8,0,Math.PI*2); ctx.fillStyle=main?ACC:'rgba(25,26,24,.18)'; ctx.fill(); }
+        }
+      });
+      ctx.restore();
+      var arrive=clamp(trace*1.15-.2);
+      if(arrive>.9) ringA=(arrive-.9)*10*(1-ask);
+    }
+
+    /* what nobody connected comes forward beside the traced paths */
+    if(ask>0){
+      var pulse=.55+.45*Math.sin((t-t3)*3.2);
+      ghosts.forEach(function(g,i){
+        var f=clamp(ask*3-i*.6); if(f<=0) return;
+        var a=pos(g.from), b=pos(g.node);
+        ctx.save(); ctx.setLineDash([2,4]); ctx.lineWidth=1; ctx.strokeStyle='rgba(25,26,24,'+(.42*f).toFixed(3)+')';
+        curve(a,b,f); ctx.restore();
+        var R=9+2.5*pulse;
+        glow(b, R*2.4, '25,26,24', .06*f);
+        ctx.beginPath(); ctx.arc(b[0],b[1], R, 0, Math.PI*2); ctx.fillStyle='rgba(239,239,235,'+(.95*f).toFixed(3)+')'; ctx.fill();
+        ctx.save(); ctx.setLineDash([3,3]); ctx.lineWidth=1.2; ctx.strokeStyle='rgba(25,26,24,'+(.55*f).toFixed(3)+')'; ctx.stroke(); ctx.restore();
+        ctx.font='500 11px Poppins, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='rgba(25,26,24,'+(.7*f).toFixed(3)+')'; ctx.fillText('?', b[0], b[1]+.5);
+      });
+    }
+
+    /* the company, over everything that reaches it */
+    if(lay>0){
+      var c0=pos(nodes[0]), ca=ease(lay*1.6);
+      glow(c0, nodes[0].r*1.9, '25,26,24', .07*ca);
+      ctx.beginPath(); ctx.arc(c0[0],c0[1],nodes[0].r*(.4+.6*ca),0,Math.PI*2); ctx.fillStyle=INK; ctx.fill();
+      if(ringA>0){ ctx.beginPath(); ctx.arc(c0[0],c0[1],nodes[0].r+4,0,Math.PI*2); ctx.lineWidth=1.5; ctx.strokeStyle='rgba(61,90,69,'+Math.min(1,ringA).toFixed(2)+')'; ctx.stroke(); }
+    }
+
+    /* counts under each column */
+    ctx.textAlign='center'; ctx.textBaseline='top';
+    /* on a phone the five columns sit too close for the words to share one row: smaller type, and neighbours on alternate rows */
+    var colGap=(L[1].x-L[0].x)*(W-PAD-padR), tight=colGap<64;
+    L.forEach(function(l,li){
+      var a = ease((lay - li - .3)*1.5); if(a<=0) return;
+      var x=PAD+l.x*(W-PAD-padR), y=H-PAD+6-(tight?12:0);
+      var al = (1 - sc*.55) * a * (1-focus*.7);
+      var w = wOf(li), tone = Math.max(w, .45+.55*settle);
+      ctx.fillStyle='rgba(25,26,24,'+(al*tone).toFixed(3)+')';
+      ctx.font='500 '+((tight?13:15)+3*w).toFixed(2)+'px Poppins, sans-serif'; ctx.fillText(l.n, x, y-2*w);
+      ctx.fillStyle='rgba('+Math.round(lerp(111,25,w))+','+Math.round(lerp(113,26,w))+','+Math.round(lerp(106,24,w))+','+(al*tone).toFixed(3)+')';
+      ctx.font='400 '+(tight?10:11)+'px Inter, sans-serif'; ctx.fillText(l.say, x, y+(tight?17:20)+(tight&&(li%2)?12:0));
+    });
+
+    /* five lines of narration; everything else is told by the picture */
+    var say='';
+    if(lay<2) say='One company, 40,000 contracts';
+    else if(t<t1) say='Over a million pieces inside them';
+    else if(t<t2) say='The answer is in how they connect';
+    else if(t<t3) say='Each piece, traced to its source';
+    else say='But is that enough to act on?';
+    if(cap){ if(cap._mlCur!==undefined){ if(cap._mlCur!==say) Morphline.to(cap, say); } else if(!window.Morphline && cap.textContent!==say) cap.textContent=say; }
+  }
+
+  /* the movie below drives this picture by scroll: it asks for a moment in the story and gets that frame */
+  window.heroScene={ draw:draw, size:size, marks:[0, t0-LD[2]-LD[3]-LD[4], t1, t2, t3, DUR], million:t0-LD[3]-LD[4], spread:tc };
+  if(reduce) draw(t3-.05);
+})();
+
+</script>
+<script src="morphline.js"></script>
+<script>/* ===== MOVIE: one company to the five questions =====
+   Six beats, scrubbed by scroll while the stage stays pinned. Same dot language as the hero.
+   0 Not yet: the traced answer, and five things beside it nobody has checked
+   1 Search: a sweep reads every contract; two matches lie past where it stopped, then it goes on and finds them
+   2 Proof: the answer draws a line back to the exact line in the document
+   3 Lineage: a marker walks the amendment timeline and the clause rewrites itself
+   4 Reach: one edit ripples to a clause far down the page, which is flagged, then fixed
+   5 Sensitivity: of many things found, one rises and asks for you; the rest settle and wait */
+(function(){
+  var sec=document.getElementById('cine'), stage=document.getElementById('cine-stage'), cv=document.getElementById('cine-cv');
+  if(!sec||!stage||!cv) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ctx=cv.getContext('2d'), W=1, H=1, N=11, STEP=.8, HN=5;   /* 5 beats of the company picture, then 6 of the questions */
+  var hv=document.getElementById('hv'), progEl=document.getElementById('cine-prog');           /* one beat per ~95% of a screen of scrolling */
+  var INK='25,26,24', ACC='61,90,69';
+  var lines=[].slice.call(sec.querySelectorAll('.cine-line')), ticks=[].slice.call(sec.querySelectorAll('.cine-ticks i'));
+  var clamp=function(v){return Math.max(0,Math.min(1,v));}, ease=function(t){t=clamp(t);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}, lerp=function(a,b,t){return a+(b-a)*t;};
+  var seg=function(u,a,b){return ease((u-a)/(b-a));};
+
+  function zoom(){ return parseFloat(getComputedStyle(document.documentElement).zoom)||1; }
+  function size(){
+    var z=zoom(), vh=innerHeight/z;
+
+    var r=cv.getBoundingClientRect(), d=Math.min(2,devicePixelRatio||1);
+    W=Math.max(1,r.width/z); H=Math.max(1,r.height/z);
+    cv.width=Math.round(W*d); cv.height=Math.round(H*d); ctx.setTransform(d,0,0,d,0,0);
+    if(window.heroScene) heroScene.size();
+  }
+
+  function P(x,y){ return [x*W, y*H]; }
+  /* the question scenes read too faint: every drawn alpha gets lifted, capped at 1 */
+  var BOOST=1.45, bA=function(a){ return Math.min(1,a*BOOST); };
+  function bz(c){ return typeof c!=='string' ? c : c.replace(/rgba\(([^)]*?),\s*([\d.]+)\)/, function(m,rgb,a){ return 'rgba('+rgb+','+bA(parseFloat(a)).toFixed(3)+')'; }); }
+  function dot(p,r,c,a){ if(a<=0||r<=0) return; a=bA(a); ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fillStyle='rgba('+c+','+a.toFixed(3)+')'; ctx.fill(); }
+  function ring(p,r,c,a,w){ if(a<=0) return; a=bA(a); ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.lineWidth=w||1.2; ctx.strokeStyle='rgba('+c+','+a.toFixed(3)+')'; ctx.stroke(); }
+  function glow(p,r,c,a){ if(a<=0) return; var g=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],r); g.addColorStop(0,'rgba('+c+','+a.toFixed(3)+')'); g.addColorStop(1,'rgba('+c+',0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill(); }
+  function rr(x,y,w,h,r,fill,stroke,lw){ fill=bz(fill); stroke=bz(stroke); ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x,y,w,h,r); else ctx.rect(x,y,w,h); if(fill){ctx.fillStyle=fill; ctx.fill();} if(stroke){ctx.lineWidth=lw||1; ctx.strokeStyle=stroke; ctx.stroke();} }
+  function curve(p,q,f,c,a,w,dash){ if(f<=0||a<=0) return; a=bA(a); var mx=(p[0]+q[0])/2; ctx.save(); if(dash) ctx.setLineDash(dash); ctx.lineWidth=w||1; ctx.strokeStyle='rgba('+c+','+a.toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(p[0],p[1]);
+    for(var k=1;k<=20;k++){ var u=(k/20)*f, v=1-u; ctx.lineTo(v*v*v*p[0]+3*v*v*u*mx+3*v*u*u*mx+u*u*u*q[0], v*v*v*p[1]+3*v*v*u*p[1]+3*v*u*u*q[1]+u*u*u*q[1]); } ctx.stroke(); ctx.restore(); }
+  function text(s,p,size,c,a,align,weight){ if(a<=0) return; a=bA(a); ctx.font=(weight||400)+' '+size+'px '+(weight>=500?'Poppins':'Inter')+', sans-serif'; ctx.textAlign=align||'center'; ctx.textBaseline='middle'; ctx.fillStyle='rgba('+c+','+a.toFixed(3)+')'; ctx.fillText(s,p[0],p[1]); }
+
+  /* 0 — Not yet */
+  var path=[[.1,.5],[.32,.4],[.52,.56],[.72,.44]];
+  var ghosts=[[.32,.16,1],[.52,.84,2],[.72,.2,3],[.86,.66,0],[.9,.34,3]];   /* x, y, node it hangs off */
+  function s0(u,A,T){
+    for(var i=0;i<3;i++) curve(P(path[i][0],path[i][1]),P(path[i+1][0],path[i+1][1]),1,ACC,A,2);
+    path.forEach(function(n,i){ var p=P(n[0],n[1]); if(i===0){ dot(p,16,INK,A); return; } glow(p,16,ACC,.22*A); dot(p,5,ACC,A); });
+    ghosts.forEach(function(g,i){
+      var f=seg(u,.08+i*.11,.3+i*.11); if(f<=0) return;
+      var from=P(path[g[2]][0],path[g[2]][1]), p=P(g[0],g[1]), pulse=.5+.5*Math.sin(T*2.4+i);
+      curve(from,p,f,INK,.35*A,1,[2,4]);
+      dot(p,4+1.5*pulse,INK,(.18+.14*pulse)*A*f);
+      text('0'+(i+1),[p[0]+14,p[1]],10,INK,.45*A*f,'left');
+    });
+  }
+
+  /* 1 — Search */
+  var cells=[]; (function(){ var s=7; for(var r=0;r<5;r++) for(var c=0;c<9;c++){ s=(s*9301+49297)%233280; cells.push({x:.1+c*.095, y:.2+r*.15, m:(s/233280)<.2}); } })();
+  cells[8].m=true; cells[35].m=true; cells[44].m=true; cells[26].m=true;           /* matches past the first stop */
+  function s1(u,A,T){
+    var front = u<.55 ? lerp(.04,.66,seg(u,0,.5)) : lerp(.66,1,seg(u,.62,.92));
+    var pause = clamp((u-.5)/.06)*(1-clamp((u-.62)/.06));
+    cells.forEach(function(c){
+      var p=P(c.x,c.y), read=c.x<front, w=13, h=17;
+      var col = read ? (c.m ? 'rgba('+ACC+','+(.9*A)+')' : 'rgba('+INK+','+(.22*A)+')') : 'rgba('+INK+','+(.08*A)+')';
+      ctx.beginPath(); ctx.arc(p[0],p[1],5.5,0,Math.PI*2); ctx.fillStyle=bz(col); ctx.fill();
+      if(!read && c.m && u>.45){ var pulse=.5+.5*Math.sin(T*4); ring(p,12+3*pulse,INK,(.25+.25*pulse)*A*clamp((u-.45)/.08)); }
+      if(read && c.m) glow(p,16,ACC,.16*A);
+    });
+    var fx=front*W; var g=ctx.createLinearGradient(fx-40,0,fx,0); g.addColorStop(0,'rgba('+ACC+',0)'); g.addColorStop(1,'rgba('+ACC+','+(.12*A)+')');
+    if(front<.99){ ctx.fillStyle=g; ctx.fillRect(fx-40,.1*H,40,.8*H); ctx.fillStyle='rgba('+ACC+','+(.55*A)+')'; ctx.fillRect(fx-1,.1*H,1.5,.8*H); }
+    text(pause>.5?'2 not read yet':'', [W*.83,H*.08],11,INK,.55*A*pause,'center');
+  }
+
+  /* 2 — Proof */
+  var rows=[.82,.9,.7,.86,.62,.88,.78,.92,.66,.84,.5];
+  function s2(u,A,T){
+    var x0=.08*W, y0=.14*H, w=.5*W, h=.72*H;
+    rr(x0,y0,w,h,10,'rgba(255,255,255,'+(.9*A)+')','rgba('+INK+','+(.1*A)+')');
+    var hl=seg(u,.5,.75);
+    rows.forEach(function(rw,i){ var y=y0+28+i*(h-50)/rows.length;
+      if(i===6 && hl>0) rr(x0+14,y-7,(w-36)*rw*hl+8,14,3,'rgba(220,229,211,'+(.95*A)+')');
+      rr(x0+18,y-2.5,(w-36)*rw,5,2.5,'rgba('+INK+','+((i===6?.45:.14)*A)+')'); });
+    var chip=[.8*W,.5*H], ty=y0+28+6*(h-50)/rows.length, tgt=[x0+18+(w-36)*rows[6]+10,ty];
+    var ca=seg(u,.02,.2);
+    rr(chip[0]-52,chip[1]-17,104,34,17,'rgba('+ACC+','+(.95*A*ca)+')');
+    text('Answer',chip,12,'255,255,255',A*ca,'center',500);
+    curve([chip[0]-52,chip[1]],tgt,seg(u,.2,.5),ACC,A,1.5);
+    if(hl>0){ glow(tgt,14,ACC,.3*A*hl); dot(tgt,3.5,ACC,A*hl); }
+    text('p. 4 · clause 9.2',[x0+w/2,y0+h+18],11,INK,.5*A*seg(u,.7,.85),'center');
+  }
+
+  /* 3 — Lineage */
+  function s3(u,A,T){
+    var y=.68*H, xs=[.18,.5,.82], labels=['Signed','2020','2022'], m=lerp(.18,.82,seg(u,.08,.82));
+    ctx.lineWidth=1.5; ctx.strokeStyle='rgba('+INK+','+(.14*A)+')'; ctx.beginPath(); ctx.moveTo(.18*W,y); ctx.lineTo(.82*W,y); ctx.stroke();
+    ctx.strokeStyle='rgba('+ACC+','+(.9*A)+')'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(.18*W,y); ctx.lineTo(m*W,y); ctx.stroke();
+    xs.forEach(function(x,i){ var on=m>=x-.005; dot([x*W,y],on?6:5,on?ACC:INK,(on?1:.25)*A); text(labels[i],[x*W,y+24],11,INK,(on?.75:.4)*A,'center'); });
+    glow([m*W,y],18,ACC,.25*A); dot([m*W,y],4,'255,255,255',A);
+    /* the clause, as it reads at the marker */
+    var cx=.5*W, cy=.32*H, bw=.74*W;
+    rr(cx-bw/2,cy-30,bw,60,10,'rgba(255,255,255,'+(.92*A)+')','rgba('+INK+','+(.1*A)+')');
+    ctx.font='500 17px Poppins, sans-serif'; ctx.textBaseline='middle';
+    if(m<.5){ text('No notice requirement',[cx,cy],17,INK,.45*A,'center',500); }
+    else {
+      var a='Notice within ', b=' days', old='10', nw='5', after=m>=.815;
+      var wa=ctx.measureText(a).width, wo=ctx.measureText(old).width, wn=ctx.measureText(nw).width, wb=ctx.measureText(b).width;
+      var tw=wa+wo+(after?wn+6:0)+wb, x=cx-tw/2;
+      ctx.textAlign='left'; ctx.fillStyle='rgba('+INK+','+A+')'; ctx.fillText(a,x,cy); x+=wa;
+      ctx.fillStyle='rgba('+INK+','+((after?.35:1)*A)+')'; ctx.fillText(old,x,cy);
+      if(after){ ctx.fillRect(x,cy,wo,1.5); x+=wo+6; ctx.fillStyle='rgba('+ACC+','+A+')'; ctx.fillText(nw,x,cy); x+=wn; } else x+=wo;
+      ctx.fillStyle='rgba('+INK+','+A+')'; ctx.fillText(b,x,cy);
+    }
+  }
+
+  /* 4 — Reach */
+  var bars=[.9,.7,.86,.6,.92,.74,.82,.66,.88];
+  function s4(u,A,T){
+    var x0=.1*W, y0=.1*H, w=.5*W, h=.8*H, n=bars.length, gap=(h-40)/n;
+    rr(x0,y0,w,h,10,'rgba(255,255,255,'+(.9*A)+')','rgba('+INK+','+(.1*A)+')');
+    var ed=seg(u,.05,.18), flag=seg(u,.58,.7), fix=seg(u,.8,.92);
+    bars.forEach(function(bw,i){ var y=y0+28+i*gap, c=INK, a=.14;
+      if(i===1){ c=ACC; a=.14+.76*ed; } if(i===7){ c=fix>0?ACC:INK; a=.14+.5*flag+.26*fix; }
+      rr(x0+18,y-3,(w-36)*bw,6,3,'rgba('+c+','+(a*A)+')'); });
+    var e=[x0+18+(w-36)*bars[1]+10, y0+28+gap], f=[x0+18+(w-36)*bars[7]+10, y0+28+7*gap];
+    for(var k=0;k<3;k++){ var rp=clamp((u-.12-k*.07)/.3); if(rp>0&&rp<1) ring(e,6+rp*60,ACC,(1-rp)*.4*A,1); }
+    if(ed>0){ glow(e,14,ACC,.3*A*ed); dot(e,4,ACC,A*ed); }
+    /* the reach: out past the page edge and back in, far below */
+    var bend=[.82*W,(e[1]+f[1])/2], lf=seg(u,.3,.58);
+    curve(e,bend,clamp(lf*2),ACC,.8*A,1.4); curve(bend,f,clamp(lf*2-1),ACC,.8*A,1.4);
+    if(flag>0){ var pulse=.5+.5*Math.sin(T*4); ring(f,9+2*pulse*(1-fix),fix>0?ACC:INK,(.5*(1-fix)+.4*fix)*A*flag,1.4); dot(f,4,fix>0?ACC:INK,A*flag); }
+    text(fix>.5?'fix ready':'out of step',[.84*W,f[1]],11,fix>.5?ACC:INK,.65*A*flag,'left');
+    text('§2.1 edited',[.84*W,e[1]],11,ACC,.65*A*ed,'left');
+  }
+
+  /* 5 — Sensitivity */
+  var items=[[.22,.3],[.46,.22],[.7,.34],[.34,.55],[.6,.5],[.82,.6],[.48,.74]];
+  function s5(u,A,T){
+    var sort=seg(u,.2,.65), lab=seg(u,.65,.8), top=4;
+    items.forEach(function(it,i){
+      var tx,ty,isTop=(i===top);
+      if(isTop){ tx=.5; ty=.26; } else { var k=i<top?i:i-1; tx=.17+k*.133; ty=.74; }
+      var p=P(lerp(it[0],tx,sort), lerp(it[1],ty,sort)), w=isTop?lerp(64,150,sort):lerp(64,54,sort), h=isTop?lerp(18,40,sort):18;
+      var a=isTop?1:lerp(1,.75,sort);
+      rr(p[0]-w/2,p[1]-h/2,w,h,h/2,'rgba(255,255,255,'+(A*a)+')','rgba('+(isTop?ACC:INK)+','+((isTop?.35+.65*sort:.26)*A*a)+')', isTop?1.6:1);
+      rr(p[0]-w/2+10,p[1]-2,(w-20)*(isTop?.7:.6),4,2,'rgba('+(isTop?ACC:INK)+','+((isTop?.45+.55*sort:.32)*A*a)+')');
+      if(isTop && sort>.6){ var pulse=.5+.5*Math.sin(T*3); glow(p,90,ACC,.12*A*pulse*sort); }
+    });
+    text('Needs you now',[.5*W,.13*H],13,ACC,A*lab,'center',500);
+    text('Can wait',[.5*W,.88*H],12,INK,.7*A*lab,'center');
+  }
+
+  var scenes=[s0,s1,s2,s3,s4,s5], cur=-1, prog=0, T0=performance.now();
+  /* autoplay: each beat has its own length in seconds; the company beats keep the hero's natural timing */
+  /* autoplay: every line gets the same time on screen */
+  var STEPS=['0','s','2','3','4','5','u','6','7','8','9','10'], EACH=4.2, TOT=STEPS.length*EACH, clock=null;
+  function measure(){}
+  /* arrows: jump to the start of the previous or next line, then keep playing from there */
+  var lastSi=0;
+  function jump(d){
+    var now=performance.now(), el=clock===null?0:((now-clock)/1000)%TOT, si=Math.floor(el/EACH);
+    var to=(si+d+STEPS.length)%STEPS.length;
+    clock=now-to*EACH*1000;
+  }
+  var pb=document.getElementById('cine-prev'), nb=document.getElementById('cine-next');
+  if(pb) pb.addEventListener('click',function(){ jump(-1); });
+  if(nb) nb.addEventListener('click',function(){ jump(1); });
+  function frame(now){
+    var dc=document.documentElement.classList; if(dc.contains('ldr-on')||dc.contains('ldr-boot')) clock=null;   /* hold on the first frame while the loader is up */
+    if(clock===null) clock=now;
+    var el=((now-clock)/1000)%TOT, si=Math.min(STEPS.length-1,Math.floor(el/EACH)), u=(el-si*EACH)/EACH, T=(now-T0)/1000;
+    if(progEl) progEl.style.width=(el/TOT*100).toFixed(2)+'%';
+    var show=STEPS[si];
+    if(show!==cur){ cur=show; lines.forEach(function(l){ l.classList.toggle('on',l.dataset.i===show); }); }
+    /* first act: the company picture, each line paired with its own stretch of the picture */
+    var H_=window.heroScene, inHero=si<5;
+    if(hv) hv.parentNode.style.opacity = inHero ? 1 : 0;
+    cv.style.opacity = inHero ? 0 : 1;
+    if(H_ && inHero){
+      var mk=H_.marks, seg=[[0,mk[2]],[mk[2],H_.spread],[H_.spread,mk[3]],[mk[3],mk[4]],[mk[4],mk[5]-.01]][si];
+      H_.draw(lerp(seg[0],seg[1],u)); raf=requestAnimationFrame(frame); return;
+    }
+    /* Not yet, and User still asks: the picture steps away, the words carry it */
+    ctx.clearRect(0,0,W,H);
+    if(si===5||si===6){ raf=requestAnimationFrame(frame); return; }
+    /* then the five questions */
+    var k=si-6;
+    var last=(k===scenes.length-1), out= last ? clamp((u-.95)/.05) : clamp((u-.88)/.12);   /* the last scene holds, then a quick fade before the loop restarts */
+    scenes[k](clamp(u/.88), 1-out, T);
+    if(out>0 && k<scenes.length-1) scenes[k+1](0, out, T);
+    raf=requestAnimationFrame(frame);
+  }
+  var raf=null, live=false;
+  addEventListener('scroll', measure, {passive:true});
+  addEventListener('resize', function(){ size(); measure(); });
+  size(); measure();
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){ var v=en[0].isIntersecting; if(v&&!live){ live=true; clock=null; raf=requestAnimationFrame(frame); } if(!v&&live){ live=false; cancelAnimationFrame(raf); } },{threshold:.4}).observe(sec);
+  } else { raf=requestAnimationFrame(frame); }
+})();
+</script>
+<script>
+/* chapters: one at a time; #q1..#q5 links, the dashes and "Next" all switch the stage */
+(function(){
+  var wrap=document.getElementById('chapters'); if(!wrap) return;
+  var arts=[].slice.call(wrap.querySelectorAll(':scope > .piece')), names=['Search','Proof','Lineage','Reach','Sensitivity'];
+  function show(k, scroll){
+    if(scroll===false && !arguments[2]) {}
+    try{ history.replaceState(null,'','#q'+(k+1)); }catch(e){}
+    arts[k].scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  arts.forEach(function(a){
+    [].slice.call(a.querySelectorAll('.chap-pips i')).forEach(function(p,i){ p.title=names[i]; p.addEventListener('click',function(){ show(i,true); }); });
+  });
+  document.addEventListener('click',function(e){
+    var l=e.target.closest && e.target.closest('a[href^="#q"]'); if(!l) return;
+    var m=l.getAttribute('href').match(/^#q([1-5])$/); if(!m) return;
+    e.preventDefault(); show(+m[1]-1, true);
+  });
+  var m=location.hash.match(/^#q([1-5])$/);
+  if(m) setTimeout(function(){ show(+m[1]-1, true); }, 300);
+})();
 </script>
 </body>
 </html>
