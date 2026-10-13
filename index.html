@@ -613,6 +613,11 @@ html, body{background:#101110}
 .piece .out-idx a.row:hover, .piece .out-idx a.row:focus-visible{background:#EFEFEB; padding-left:18px; outline:none}
 .piece .out-idx a.row span{font-size:14px; line-height:24px; color:var(--faint); text-align:right}
 @media (max-width:560px){ .piece .out-idx a.row{flex-direction:column; gap:2px} .piece .out-idx a.row span{text-align:left} }
+/* Sensitivity's question had an old 48px rule winning over the chapter size: same as the other four */
+.piece.note h2.chap-q{font-size:34px !important; line-height:42px !important; letter-spacing:-.02em}
+@media (max-width:760px){ .piece.note h2.chap-q{font-size:30px !important; line-height:38px !important} }
+/* the two way-out rows: as wide as the prototype above them, not the whole page */
+.piece .out-idx{max-width:648px}
 </style>
 <script>
 /* before the first paint, not after it */
@@ -4877,7 +4882,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
          white-space:nowrap}
   .obj{padding:0}
   /* the one thing being looked at sits a step up the scale — the same step a heading uses */
-  .hero{font-family:var(--display);font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.34;color:var(--ink)}
+  .hero{font-family:var(--display);font-size:20px;font-weight:500;letter-spacing:-.015em;line-height:1.34;color:var(--ink)}
 
   /* shared demo language */
   .ttl{font-weight:600;letter-spacing:-.012em}
@@ -8055,7 +8060,12 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     }
     /* Not yet, and User still asks: the picture steps away, the words carry it */
     ctx.clearRect(0,0,W,H);
-    if(si===5||si===6){ raf=requestAnimationFrame(frame); return; }
+    /* Not yet: the traced answer stays, and five dashed branches nobody has checked appear beside it.
+       The user still asks: all five are there, numbered, then the first question takes over */
+    if(si===5||si===6){
+      var v = si===5 ? u*.45 : .45+u*.55, o6 = si===6 ? clamp((u-.88)/.12) : 0;
+      s0(v, 1-o6, T); if(o6>0) s1(0, o6, T);
+      raf=requestAnimationFrame(frame); return; }
     /* then the five questions */
     var k=si-6;
     var last=(k===scenes.length-1), out= last ? clamp((u-.95)/.05) : clamp((u-.88)/.12);   /* the last scene holds, then a quick fade before the loop restarts */
