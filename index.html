@@ -7737,7 +7737,14 @@ function onWidth(fn){
   d.classList.add('intro-hold');
   addEventListener('scroll',function(){ if(!raf) raf=requestAnimationFrame(tick); },{passive:true});
   var w=innerWidth; addEventListener('resize',function(){ if(innerWidth!==w){ w=innerWidth; size(); } });
+  /* a link that ends in #top (the mark, shared or bookmarked) made the browser jump past the intro on arrival.
+     Arriving always starts at the intro; the mark takes you to the top of the page content, without a hash. */
+  var stripped=false;
+  if(location.hash==='#top'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} stripped=true; }
   scrollTo(0,0); size();
+  if(stripped){ addEventListener('load',function(){ scrollTo(0,0); }); requestAnimationFrame(function(){ scrollTo(0,0); }); }
+  var mk=document.querySelector('a.mark');
+  if(mk) mk.addEventListener('click',function(e){ e.preventDefault(); scrollTo({top:Math.round(H*z), behavior:'smooth'}); });
   (document.fonts?document.fonts.ready:Promise.resolve()).then(size);
 })();
 </script>
