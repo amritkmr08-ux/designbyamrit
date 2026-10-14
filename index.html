@@ -618,6 +618,32 @@ html, body{background:#101110}
 @media (max-width:760px){ .piece.note h2.chap-q{font-size:30px !important; line-height:38px !important} }
 /* the two way-out rows: as wide as the prototype above them, not the whole page */
 .piece .out-idx{max-width:648px}
+/* phone: more air between groups, less between things that belong together, and every size scaled down
+   by the same step (about 0.85): question > lead line > body > small print */
+@media (max-width:760px){
+  .hero{gap:64px !important}
+  .hero h1{font-size:26px !important; line-height:33px !important}
+  .hero #hero-sub{margin-top:16px; font-size:15px; line-height:23px}
+  .hero .hero-meta{margin-top:18px !important; font-size:14px !important; line-height:21px !important}
+  .hero .cine-n, .hero .cine-q{font-size:17px !important; line-height:24px !important; max-width:16em !important; margin-left:auto !important; margin-right:auto !important; text-wrap:balance}   /* long lines break into two even lines */
+  .hero .cine-line h2{font-size:22px !important; line-height:29px !important}
+  .piece{padding-bottom:168px !important}
+  .chapters > .piece:not(:last-child)::after{bottom:84px !important}
+  .chap-n, .chap-name{font-size:13px !important; line-height:18px !important}
+  .piece h2.chap-q, .piece.note h2.chap-q{margin-top:12px !important; font-size:25px !important; line-height:32px !important}
+  .piece h2.chap-q + .dek{margin-top:12px !important; font-size:15px !important; line-height:23px !important; color:#3E403B !important}
+  .piece figure{margin-top:40px !important}
+  .piece .prose{margin-top:36px !important}
+  .piece .prose p{font-size:14px; line-height:22px}
+  .piece .prose p + p{margin-top:12px}
+  .piece .prose p.end{margin-top:24px; font-size:13px}
+  .piece .out-idx{margin-top:40px}
+  .piece .out-idx a.row{font-size:15px; line-height:22px; padding-top:15px; padding-bottom:15px}
+  .piece .out-idx a.row span{font-size:12.5px}
+  .closing p{font-size:25px !important; line-height:32px !important}   /* same size as the chapter questions */
+  .chapters > .piece:last-child{padding-bottom:104px !important}   /* closing line sits with equal air above and below */
+  .closing{padding-bottom:104px !important}
+}
 </style>
 <script>
 /* before the first paint, not after it */
@@ -7459,13 +7485,13 @@ function onWidth(fn){
     var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
     var cs=getComputedStyle(target);
     var vw=innerWidth/z, row=el.querySelector('.ldr-row'), loop=el.querySelector('.ldr-loop');
-    var col=vw<900, L=col?Math.min(280, vw-48):360;
+    var col=vw<900, phone=vw<561, L=phone?Math.min(220, vw-48):col?Math.min(280, vw-48):360;   /* a phone gets a smaller loop */
     var W=col?Math.min(560, vw-48):Math.min(560, vw-L-56-96);
     if(row) row.classList.toggle('col', col);
     if(loop){ loop.style.width=L+'px'; loop.style.height=L+'px'; loop.style.fontFamily=cs.fontFamily; }
     t.style.width=W+'px';
     t.style.fontFamily=cs.fontFamily; t.style.fontWeight=cs.fontWeight; t.style.fontStyle=cs.fontStyle;
-    t.style.fontSize='24px'; t.style.lineHeight='34px';
+    t.style.fontSize=phone?'19px':'24px'; t.style.lineHeight=phone?'28px':'34px';
     t.style.letterSpacing=cs.letterSpacing;
     t.style.textWrap='pretty';
     t.style.setProperty('--ink-on', cs.color);
