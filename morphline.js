@@ -59,9 +59,14 @@ function onWidth(fn){
      is a beat between the old line leaving and the new one landing. The whole
      morph is about a second and a half, which is long enough to watch. */
   var T_SP = 520, T_EF = 300;          /* base travel, and the fade */
+  /* a page can ask for a calmer version (<html data-ml-soft>): no bounce, a little slower, less grain */
+  var SOFT = document.documentElement.hasAttribute('data-ml-soft');
+  if (SOFT) { SPATIAL = SPRING ? 'linear(0.0000, 0.0118, 0.0431, 0.0888, 0.1444, 0.2065, 0.2722, 0.3390, 0.4054, 0.4697, 0.5312, 0.5890, 0.6428, 0.6921, 0.7370, 0.7775, 0.8136, 0.8455, 0.8736, 0.8980, 0.9191, 0.9371, 0.9524, 0.9652, 0.9759, 0.9846, 0.9916, 0.9973, 1.0016, 1.0050, 1.0074, 1.0091, 1.0102, 1.0109, 1.0111, 1.0110, 1.0107, 1.0102, 1.0097, 1.0090, 1.0083, 1.0075, 1.0000)' : 'cubic-bezier(.22,.61,.36,1)';
+    T_SP = 700; T_EF = 420; }
   var PER_PX = 1.10, MAX_EXTRA = 380;  /* distance adds time, up to this much */
   var SPAN_MOVE = 260, SPAN_OUT = 200, SPAN_IN = 340, IN_BASE = 260;  /* the sweeps, and the beat */
   var JITTER = 55, T_REST = 1550;      /* per-letter offset; when the layer is redrawn clean */
+  if (SOFT) { JITTER = 28; T_REST = 1900; MAX_EXTRA = 300; }
   function jit(i) { var h = ((i * 7919) % 97) / 97; return Math.round((h - 0.5) * 2 * JITTER); }
 
   /* Where a laid-out string ends: the last letter in reading order, as a box
