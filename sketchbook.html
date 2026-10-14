@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-:root{--paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --accent:#3D5A45;
+:root{--paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --accent:#3D5A45;
   --display:"Poppins",-apple-system,sans-serif; --font:"Inter",-apple-system,sans-serif}
 *{margin:0; padding:0; box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -25,6 +25,12 @@ img{display:block; max-width:100%; height:auto}
 .site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-size:13px; line-height:20px; color:var(--muted)}
 .site-menu a:hover, .site-menu a[aria-current]{color:var(--ink)}
 @media (max-width:760px){ .site-mark{position:absolute; top:28px} .site-menu{top:38px; gap:18px} .site-nav{height:80px} }
+/* match the homepage, which is drawn at 90% on wide screens: same mark and menu size and position */
+@media (min-width:761px){ .site-mark{width:38px; height:38px; font-size:15px} }
+@media (min-width:1200px){
+  .site-mark{width:34.2px; height:34.2px; font-size:13.5px; top:36px; left:max(21.6px, calc(50% - 594px))}
+  .site-menu{font-size:11.7px; line-height:18px; gap:25.2px; top:45px; right:max(21.6px, calc(50% - 486px))}
+}
 .col{max-width:1080px; margin:0 auto; padding:0 24px}
 .hero{padding:140px 0 120px}
 .hero h1{font-family:var(--display); font-weight:500; font-size:114px; line-height:1; letter-spacing:-.03em}
@@ -52,6 +58,9 @@ footer a:hover{color:var(--ink)}
 @media (hover:hover){ .lb .hint{display:none} }
 @media (prefers-reduced-motion:reduce){ .r{transition:none; opacity:1; transform:none} html{scroll-behavior:auto} }
 @media (max-width:760px){ .hero{padding:100px 0 80px} .hero h1{font-size:min(64px,14.5vw)} .idea{padding-bottom:120px} .frames.board{margin-top:28px} .frames.board img{border-radius:10px} }
+
+/* same page colour as the homepage (--page) */
+html, body{background:#F8F8F6}
 </style>
 </head>
 <body>

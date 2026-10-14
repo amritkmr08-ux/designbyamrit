@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-  :root{--paper:#FFFFFF;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--soft:#EDEDEA;
+  :root{--paper:#FFFFFF;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#D7D8D2;--soft:#EDEDEA;
         --mark:#D1EFDB;--accent:#3D5A45;--rule:#C9CAC4;
         --display:"Poppins",-apple-system,sans-serif;--font:"Inter",-apple-system,sans-serif;
         /* --faint was #8B8D87 here and #6F716A on every other page. It carries real 14px
@@ -302,6 +302,14 @@
      something to be measured from. */
   .seprule{max-width:var(--col);height:1px;background:var(--line);margin:28px 0 0}
   @media (max-width:700px){ .seplbl{margin-top:112px} }
+  /* the five questions the specimens answer, so a reader knows what they are looking at */
+  .seplbl .sq-lead{font-size:16px;line-height:26px;color:var(--muted);margin:28px 0 0;max-width:46ch}
+  .seplbl .sq{list-style:none;margin:14px 0 0;padding:0;max-width:640px}
+  .seplbl .sq li{display:grid;grid-template-columns:44px 1fr;align-items:baseline;padding:13px 0;border-top:1px solid var(--line)}
+  .seplbl .sq li:last-child{border-bottom:1px solid var(--line)}
+  .seplbl .sq-n{font-size:13px;line-height:20px;color:var(--faint);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+  .seplbl .sq-q{font-family:var(--display);font-weight:500;font-size:19px;line-height:28px;color:var(--ink);letter-spacing:-.01em}
+  @media (max-width:700px){ .seplbl .sq-q{font-size:16px;line-height:24px} .seplbl .sq li{grid-template-columns:36px 1fr;padding:11px 0} }
   /* Every specimen used to be a 440px frame with its content floating in the middle,
      so a specimen with two lines in it sat in the same box as one with a card, and the
      short ones opened a hole three hundred pixels deep. Each one reserves what it
@@ -847,6 +855,7 @@
 
   /* close */
   .close{padding-top:120px;max-width:var(--col)}
+
   .cq{font-family:var(--display);font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.34;max-width:24ch}
   .spine{font-size:16px;color:var(--ink);margin-top:34px}
 
@@ -1682,6 +1691,157 @@
 .mhint span.pre{opacity:0; transform:translateY(7px); filter:blur(3px); transition:none}
 @media (max-width:760px){ .mhint{display:none} }
 @media (prefers-reduced-motion:reduce){ .mhint, .mhint span{transition:none !important} }
+/* the reading behind "Why I think this way": the same card as the homepage */
+ .ov .w5c h2{font-family:var(--display); font-size:21px; line-height:29px; font-weight:500}
+ .ov .w5c .k{font-size:13px; line-height:20px; color:var(--faint); margin-top:4px}
+ .ov .w5c hr{border:0; border-top:1px solid var(--line); margin:28px 0}
+ .ov .w5c .lead{color:var(--ink)}
+ .ov .w5c .ev{font-size:13px; line-height:20px; color:var(--faint); margin-top:16px}
+ .ov .w5c h3{font-family:var(--display); font-size:16px; line-height:26px; font-weight:500; margin-top:48px}
+ .ov .w5c p{color:var(--muted); margin-top:10px}
+ .ov .w5c .end{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); font-size:13px}
+ .ov .w5c .end a{color:var(--accent)}
+ .ov .w5c figure{margin:14px 0 10px} .ov .w5c figure img{display:block; width:100%; max-width:560px; border-radius:10px; border:1px solid var(--rule)}
+ .ov .w5c .trio{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0 10px} .ov .w5c .trio figure{margin:0} .ov .w5c .trio img{max-width:none; aspect-ratio:1/1.05; object-fit:cover; object-position:top left}
+ .ov .w5c figure > figcaption{font-size:12px; line-height:18px; color:var(--faint); margin-top:8px}
+ .ov .w5c .trio figcaption{font-size:12px; line-height:18px; color:var(--faint); margin-top:8px}
+@media (max-width:560px){ .ov .w5c .trio{grid-template-columns:1fr} .ov .w5c .trio img{aspect-ratio:auto} }
+ .ov .w5c{padding:64px 76px 60px}
+ .ov .w5c h2{font-size:24px; line-height:32px; letter-spacing:-.01em}
+ .ov .w5c .k{margin-top:6px}
+ .ov .w5c hr{margin:26px 0 30px}
+ .ov .w5c .lead{font-size:17px; line-height:27px; max-width:56ch; margin-top:0}
+ .ov .w5c p{font-size:15.5px; line-height:26px; max-width:60ch; margin-top:12px}
+ .ov .w5c h3{font-size:17px; line-height:26px; margin-top:52px}
+ .ov .w5c figure, .ov .w5c .trio{margin:16px 0 20px}
+ .ov .w5c .trio figure{margin:0}
+ .ov .w5c figure img{border-color:var(--line); border-radius:12px}
+ .ov .w5c .end{max-width:none; margin-top:56px}
+ .ov .w5c figure > figcaption, .ov .w5c .trio figcaption{display:block; padding:0; margin:12px 0 0; font-size:13px; line-height:19px; color:var(--faint); text-align:left}
+ .ov .w5c figure:has(> figcaption){margin-bottom:32px}   /* a captioned picture keeps clear of the paragraph after it */
+ .ov .w5c .trio{margin-bottom:28px}
+@media (max-width:760px){ .ov .w5c{padding:40px 24px 44px} }
+ .ov .w5c .tension{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); max-width:24ch; margin-top:0; letter-spacing:-.01em}
+ .ov .w5c .ch{margin-top:64px}
+ .ov .w5c .ch-n{font-size:13px; line-height:20px; color:var(--faint); margin:0; letter-spacing:.04em}
+ .ov .w5c .ch h3{margin-top:2px}
+ .ov .w5c .ch a{color:var(--muted); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px}
+ .ov .w5c .q4{color:var(--ink); font-weight:500}
+ .ov .w5c .take{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); margin-top:72px; letter-spacing:-.01em}
+ .ov .w5c .st4{margin:18px 0 28px; padding:22px 22px 8px; border:1px solid var(--line); border-radius:12px}
+ .ov .w5c .st4-find{font-size:14px; line-height:21px; color:var(--ink); padding-bottom:18px}
+ .ov .w5c .st4-find .lab, .ov .w5c .st4-after{display:block; font-size:12px; line-height:18px; color:var(--faint); letter-spacing:.02em; margin:0 0 4px}
+ .ov .w5c .st4-row{display:grid; grid-template-columns:150px 1fr; gap:18px; padding:16px 0; border-top:1px solid var(--line); align-items:start}
+ .ov .w5c .st4-l b{display:block; font-family:var(--display); font-weight:500; font-size:14px; line-height:20px; color:var(--ink)}
+ .ov .w5c .st4-l span{display:block; font-size:12px; line-height:18px; color:var(--faint); margin-top:2px}
+ .ov .w5c .st4-ui{font-size:13px; line-height:19px; color:var(--muted); background:var(--paper); border:1px solid var(--rule); border-radius:8px; padding:10px 12px}
+ .ov .w5c .st4-ui p{margin:0 0 10px; color:var(--ink); font-size:13px; line-height:19px}
+ .ov .w5c .st4-ui.q{display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline; border-style:dashed}
+ .ov .w5c .st4-ui .fld{color:var(--faint)} .ov .w5c .st4-ui .val{color:var(--ink)}
+ .ov .w5c .st4-ui .src{flex-basis:100%; font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .st4-ui.i{border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent)}
+ .ov .w5c .st4-ui .btn{display:inline-block; font-size:12px; line-height:18px; padding:4px 10px; margin:0 6px 4px 0; border:1px solid var(--rule); border-radius:999px; color:var(--ink)}
+ .ov .w5c .st4-ui .btn.pri{background:var(--accent); border-color:var(--accent); color:#fff}
+ .ov .w5c .st4-after{margin:10px 0 0; padding-top:14px; border-top:1px dashed var(--rule); max-width:none}
+ .ov .w5c .st4-ui.q{row-gap:2px}
+ .ov .w5c .st4-after + .st4-row{border-top:0; padding-top:6px}
+ .ov .w5c .st4-ui.d .chk{display:block; color:var(--accent)}
+ .ov .w5c .st4-ui.d .src{display:block}
+@media (max-width:600px){ .ov .w5c .st4{padding:18px 16px 6px} .ov .w5c .st4-row{grid-template-columns:1fr; gap:8px} }
+
+/* Sensitivity card: small pictures, so the argument can be read at a glance */
+ .ov .w5c .v200, .ov .w5c .vtl, .ov .w5c .vren, .ov .w5c .vk, .ov .w5c .vfl, .ov .w5c .vmx{margin:20px 0 28px}
+ .ov .w5c .v200 .dots{display:grid; grid-template-columns:repeat(25,1fr); gap:7px; padding:22px; border:1px solid var(--line); border-radius:12px}
+ .ov .w5c .dt{display:block; aspect-ratio:1; border-radius:50%; background:#D6D7D2}
+ .ov .w5c .dt.on{background:var(--accent); box-shadow:0 0 0 3px rgba(61,90,69,.14)}
+ .ov .w5c .vtl{padding:22px; border:1px solid var(--line); border-radius:12px}
+ .ov .w5c .tl-ev{display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:baseline; padding-bottom:14px}
+ .ov .w5c .tl-ev .tm{font-size:12px; line-height:19px; color:var(--faint); font-variant-numeric:tabular-nums}
+ .ov .w5c .tl-ev .tx{position:relative; padding-left:20px; font-size:13px; line-height:19px; color:var(--muted)}
+ .ov .w5c .tl-ev .tx::before{content:""; position:absolute; left:0; top:6px; width:7px; height:7px; border-radius:50%; background:var(--rule)}
+ .ov .w5c .tl-ev .tx::after{content:""; position:absolute; left:3px; top:17px; bottom:-14px; border-left:1px solid var(--rule)}
+ .ov .w5c .tl-ev.hot .tx{color:var(--ink)} .ov .w5c .tl-ev.hot .tx::before{background:var(--accent)}
+ .ov .w5c .tl-fork{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-left:56px}
+ .ov .w5c .tl-br{border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--paper)}
+ .ov .w5c .tl-br .sit, .ov .w5c .tl-br .out{display:block; font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .tl-br b{display:block; font-family:var(--display); font-weight:500; font-size:14px; line-height:20px; color:var(--ink); margin:6px 0 2px}
+ .ov .w5c .tl-br.hot{border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent)} .ov .w5c .tl-br.hot b{color:var(--accent)}
+ .ov .w5c .vren{padding:16px 22px 14px; border:1px solid var(--line); border-radius:12px}
+ .ov .w5c .rn-row{display:grid; grid-template-columns:86px 1fr; gap:12px; align-items:start; padding:8px 0}
+ .ov .w5c .rn-n{font-size:13px; line-height:19px; color:var(--ink)}
+ .ov .w5c .rn-bar{height:6px; margin-top:6px; border-radius:3px; background:var(--line)}
+ .ov .w5c .rn-bar i{display:block; height:100%; border-radius:3px; background:#B9BBB4}
+ .ov .w5c .rn-bar i.b{background:var(--accent)}
+ .ov .w5c .rn-t{display:block; font-size:12px; line-height:18px; color:var(--faint); margin-top:6px}
+ .ov .w5c .rn-f{display:flex; gap:28px; margin-top:8px; padding-top:12px; border-top:1px solid var(--line); font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .rn-f b{font-weight:500; color:var(--muted); margin-left:6px} .ov .w5c .rn-f .hot b{color:var(--accent)}
+ .ov .w5c .vk{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+ .ov .w5c .k-p{border:1px solid var(--line); border-radius:12px; padding:16px 18px}
+ .ov .w5c .k-p p{margin:0; max-width:none}
+ .ov .w5c .k-h{font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .k-dots{display:grid; grid-template-columns:repeat(10,1fr); gap:5px; margin:12px 0 10px; max-width:150px}
+ .ov .w5c .dt.miss{background:transparent; border:1px dashed var(--accent)}
+ .ov .w5c .k-miss{font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .k-chips{list-style:none; margin:12px 0 0; padding:0}
+ .ov .w5c .k-chips li{display:inline-block; font-size:12px; line-height:18px; padding:3px 10px; margin:0 6px 6px 0; border:1px solid var(--rule); border-radius:999px; color:var(--muted)}
+ .ov .w5c .k-chips li.key{border-color:var(--accent); color:var(--accent)}
+ .ov .w5c .k-out{margin-top:12px !important; font-size:13px; line-height:19px; color:var(--ink)}
+ .ov .w5c .k-p.ok{border-color:rgba(61,90,69,.35)} .ov .w5c .k-p.ok .k-out{color:var(--accent)}
+ .ov .w5c .vfl{display:grid; grid-template-columns:1fr 20px 1.7fr 20px .9fr; gap:8px; align-items:center; padding:20px; border:1px solid var(--line); border-radius:12px}
+ .ov .w5c .fl-c{display:flex; flex-direction:column; gap:6px}
+ .ov .w5c .fl-t{font-size:12px; line-height:18px; color:var(--faint)}
+ .ov .w5c .fl-f{font-size:13px; line-height:19px; color:var(--ink); border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--paper)}
+ .ov .w5c .fl-ar{font-size:14px; color:var(--faint); text-align:center}
+ .ov .w5c .fl-q{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+ .ov .w5c .fl-q div{border:1px solid var(--rule); border-radius:8px; padding:8px 10px; background:var(--paper)}
+ .ov .w5c .fl-q b{display:block; font-weight:500; font-size:12px; line-height:18px; color:var(--ink)}
+ .ov .w5c .fl-q span{display:block; font-size:11.5px; line-height:16px; color:var(--faint)}
+ .ov .w5c .fl-r{font-size:12px; line-height:18px; padding:3px 10px; border:1px solid var(--rule); border-radius:999px; color:var(--muted); width:max-content}
+ .ov .w5c .fl-r.hot{border-color:var(--accent); color:var(--accent)}
+ .ov .w5c .fl-loop{grid-column:1 / -1; margin:6px 0 0; padding-top:12px; border-top:1px dashed var(--rule); font-size:12px; line-height:18px; color:var(--faint); max-width:none}
+ .ov .w5c .vmx table{width:100%; border-collapse:collapse; font-size:12px; line-height:18px}
+ .ov .w5c .vmx th{font-weight:400; color:var(--faint); text-align:center; padding:0 4px 8px}
+ .ov .w5c .vmx td{padding:9px 4px; border-top:1px solid var(--line); text-align:center}
+ .ov .w5c .vmx td:first-child{text-align:left; color:var(--muted); font-size:13px}
+ .ov .w5c .vmx .c{display:inline-block; width:11px; height:11px; border-radius:50%; border:1px solid var(--rule)}
+ .ov .w5c .v200 figcaption, .ov .w5c .vmx figcaption{font-size:12px; line-height:18px; color:var(--faint); margin-top:8px}
+@media (max-width:600px){
+  .ov .w5c .v200 .dots{grid-template-columns:repeat(20,1fr); gap:5px; padding:16px}
+  .ov .w5c .vtl{padding:18px 16px} .ov .w5c .tl-fork{grid-template-columns:1fr; margin-left:0}
+  .ov .w5c .vren{padding:14px 16px 12px} .ov .w5c .rn-row{grid-template-columns:1fr; gap:4px}
+  .ov .w5c .vk{grid-template-columns:1fr}
+  .ov .w5c .vfl{grid-template-columns:1fr; padding:16px} .ov .w5c .fl-ar{transform:rotate(90deg)} .ov .w5c .fl-c{flex-flow:row wrap} .ov .w5c .fl-t, .ov .w5c .fl-f{flex-basis:100%}
+  .ov .w5c .vmx td:first-child{font-size:12px}
+}
+
+ .ov .w5c .end.idx a.row{position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin:0 -12px; padding:18px 12px;
+  border-radius:10px; font-size:17.5px; line-height:26px; color:var(--accent); text-decoration:none;
+  transition:background-color .25s cubic-bezier(.22,.61,.36,1), padding .32s cubic-bezier(.22,.61,.36,1)}
+ .ov .w5c .end.idx a.row::after{content:""; position:absolute; left:12px; right:12px; bottom:0; border-bottom:1px solid var(--line)}
+ .ov .w5c .end.idx a.row:hover, .ov .w5c .end.idx a.row:focus-visible{background:#F3F3F0; padding-left:18px; outline:none}
+ .ov .w5c .end.idx a.row span{font-size:14px; line-height:24px; color:var(--faint); text-align:right}
+ .ov .w5c .end.idx a.back{display:inline-block; margin-top:22px; font-size:14px; line-height:24px; color:var(--faint); text-decoration:none}
+ .ov .w5c .end.idx a.back i{font-style:normal; display:inline-block; transition:transform .32s cubic-bezier(.22,.61,.36,1)}
+ .ov .w5c .end.idx a.back:hover i{transform:translateX(-4px)}
+@media (max-width:560px){ .ov .w5c .end.idx a.row{flex-direction:column; gap:2px} .ov .w5c .end.idx a.row span{text-align:left} }
+@media (prefers-reduced-motion:reduce){ .ov .w5c .end.idx a.row, .ov .w5c .end.idx a.back i{transition:none} }
+.ov .md.old{display:none}
+.ov .md.w5c{max-width:780px; padding:64px 76px 60px}
+.ov .w5c p{color:var(--muted); font-size:15.5px; line-height:26px; max-width:60ch; margin-top:12px}
+.ov .w5c .k{margin-top:6px}
+.ov .w5c img{display:block; height:auto}
+.ov .w5c .end.idx a.row{color:var(--accent)}
+@media (max-width:760px){ .ov .md.w5c{padding:40px 24px 44px} }
+
+
+/* landing: less air above the title; the dot picture on the right */
+header.wrap{position:relative}
+@media (min-width:701px){ header{padding-top:128px !important} }
+.sdots{display:none}
+@media (min-width:1100px){
+  .sdots{display:block; position:absolute; top:40px; left:calc(var(--axis) + var(--col) + 8px); right:max(64px, 10vw); height:560px; pointer-events:none}
+  .sdots canvas{display:block; width:100%; height:100%}
+}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -1691,6 +1851,12 @@
 .site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-family:"Inter",-apple-system,sans-serif; font-size:13px; line-height:20px; color:var(--muted,#5F625C)}
 .site-menu a{color:inherit; text-decoration:none} .site-menu a:hover, .site-menu a[aria-current]{color:var(--ink,#191A18)}
 @media (max-width:760px){ .site-mark{position:absolute; top:28px} .site-menu{top:38px; gap:18px} .site-nav{height:80px} }
+/* match the homepage, which is drawn at 90% on wide screens: same mark and menu size and position */
+@media (min-width:761px){ .site-mark{width:38px; height:38px; font-size:15px} }
+@media (min-width:1200px){
+  .site-mark{width:34.2px; height:34.2px; font-size:13.5px; top:36px; left:max(21.6px, calc(50% - 594px))}
+  .site-menu{font-size:11.7px; line-height:18px; gap:25.2px; top:45px; right:max(21.6px, calc(50% - 486px))}
+}
 
 /* open, the card sits on top of the closed reading — hide what is under it so the glass
    never shows two titles at once; the arrows in the card take over stepping */
@@ -1756,6 +1922,152 @@
   box-shadow:4px 0 0 var(--mark), -4px 0 0 var(--mark); margin:0 4px}
 .hscard .after{margin-left:0}
 .hscard .after{margin-left:.3em}
+
+/* ===== Visual pass: Figma frames 158:1147 and 168:3012 as reference, snapped to the homepage tokens
+   (--page, --paper, --ink, --muted, --faint, --line, --display, --font, 16/26 body, 34/42 heading). Looks only. ===== */
+header.wrap h1{font-family:var(--display); font-size:34px; line-height:42px; font-weight:500; letter-spacing:-.02em}
+header.wrap .lede, header.wrap .lede-more p{font-size:16px; line-height:26px; color:var(--muted,#5F625C)}
+header.wrap .lede{margin-top:24px}
+header.wrap .lede-more p, header.wrap .lede-more p:last-child{margin-top:20px}
+header.wrap .why{margin-top:48px; font-family:var(--display); font-weight:500; font-size:16px; line-height:26px}
+header.wrap .why a{color:var(--ink,#191A18); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; text-decoration-color:var(--rule,#C9CAC4); border:0}
+header.wrap .why a:hover{text-decoration-color:var(--ink,#191A18)}
+.stages .stage.sp + .stage.sp, .stages .field-stage + .stage.sp{margin-top:200px}
+.stage.sp{background:#EFEFED; border-radius:20px; padding:16px; max-width:580px; box-sizing:border-box}
+.stage.sp > .story{grid-column:1/-1; margin:0 0 24px; padding:4px 16px 0; max-width:30em; font-family:var(--font); font-size:16px; line-height:26px; color:var(--faint,#6F716A)}
+.stage.sp > .obj{position:relative; background:var(--paper,#fff); border-radius:14px; padding:20px 20px 20px 68px}
+.stage.sp-g{padding:16px}
+.stage.sp-g > .story{margin-bottom:16px}
+.stage.sp-g > .obj{padding:48px 40px; border-radius:14px; background:url(sens-bg-green.webp) center/cover no-repeat, radial-gradient(110% 90% at 0% 0%, #DCE9F3 0%, rgba(220,233,243,0) 45%), radial-gradient(80% 90% at 100% 100%, #1F4D2B 0%, rgba(31,77,43,0) 60%), radial-gradient(70% 80% at 85% 90%, #5AA0D6 0%, rgba(90,160,214,0) 55%), linear-gradient(135deg,#B9D39A 0%,#7FB06A 45%,#3F7A3F 100%)}
+.stage.sp-g #wkWrap{background:var(--paper,#fff); border-radius:14px; padding:20px 20px 20px 68px}
+.stage.sp-d{padding:28px 16px 16px; background:url(sens-bg-dusk.webp) center 60%/cover no-repeat, linear-gradient(180deg,#56607E 0%,#77809E 50%,#3A3F52 80%,#1F2230 100%)}
+.stage.sp-d > .story{color:rgba(255,255,255,.78)}
+.close .spinewrap{display:none}
+.close .endp{font-family:var(--font); font-size:16px; line-height:26px; color:var(--ink,#191A18); max-width:46ch; margin:0}
+.close .endrow{position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:24px; margin:16px -12px 0; max-width:580px; padding:18px 12px; font-family:var(--font); font-size:16px; line-height:26px; color:var(--ink,#191A18); text-decoration:none; transition:background .2s, padding .32s cubic-bezier(.22,.61,.36,1)}
+.close .endrow::after{content:""; position:absolute; left:12px; right:12px; bottom:0; border-bottom:1px solid var(--line,#D7D8D2)}
+.close .endrow span{font-size:14px; line-height:24px; color:var(--faint,#6F716A)}
+.close .endrow:hover, .close .endrow:focus-visible{background:#F3F3F0; padding-left:18px; outline:none}
+@media (max-width:760px){
+  header.wrap h1{font-size:26px; line-height:33px}
+  header.wrap .lede, header.wrap .lede-more p{font-size:15px; line-height:23px}
+  .stages .stage.sp + .stage.sp, .stages .field-stage + .stage.sp{margin-top:104px}
+  .stage.sp{padding:12px; border-radius:18px}
+  .stage.sp > .story{font-size:14px; line-height:22px; padding:2px 10px 0; margin-bottom:16px}
+  .stage.sp > .obj{background-position:14px 18px; background-size:24px 24px; padding:16px 14px 16px 50px; border-radius:12px}
+  .stage.sp-g > .obj{padding:28px 12px; background-size:cover,auto,auto,auto,auto; background-position:center}
+  .stage.sp-g #wkWrap{background-position:14px 18px; background-size:24px 24px; padding:16px 14px 16px 50px; border-radius:12px}
+  .stage.sp-d{padding:20px 12px 12px}
+}
+
+/* Reaching for a specimen opens it in the same white box: no frosted pane, no floating
+   glass, and the agent mark stays visible on the left the whole time. */
+.stage.sp .obj::before{display:none !important}
+.stage.sp > .obj::after, .stage.sp-g #wkWrap::after{content:""; position:absolute; z-index:6; left:20px; top:22px; width:28px; height:28px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234F86C6'/%3E%3Cstop offset='1' stop-color='%23D16A8A'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23g)' stroke-width='1.3'%3E%3Cellipse cx='12' cy='12' rx='9' ry='5.2'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='5.2' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='5.2' transform='rotate(120 12 12)'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat; pointer-events:none}
+.stage.sp-g > .obj::after{display:none}
+.stage.sp-g #wkWrap{position:relative}
+.stage.sp > .obj{transition:box-shadow .25s ease}
+/* reaching for a specimen lifts its white box a little, nothing else */
+@media (hover:hover){ .stage.sp > .obj:hover, .stage.sp-g #wkWrap:hover{box-shadow:0 2px 4px rgba(25,26,24,.04), 0 14px 30px -12px rgba(25,26,24,.20)} }
+.stage.sp-g #wkWrap{transition:box-shadow .25s ease}
+.stage.sp-g > .obj:hover, .stage.sp-g > .obj.reach{box-shadow:none}
+.stage.sp > .obj.reach, .stage.sp-g #wkWrap:focus-within{box-shadow:0 2px 4px rgba(25,26,24,.04), 0 14px 30px -12px rgba(25,26,24,.20)}
+.stage.sp .lift{width:100%}
+.stage.sp .glass.under, .stage.sp .glass.hscard{left:-68px; width:calc(100% + 88px); max-width:none; padding-left:68px; padding-right:20px}
+.stage.sp .glass.hscard{top:-20px; padding-top:16px}
+.stage.sp .glass.wkcard{left:0; top:0; width:100%; max-width:none; padding:16px 20px 20px 68px}
+.stage.sp .glass.under, .stage.sp .glass.hscard, .stage.sp .glass.wkcard, .stage.sp .deckwrap > .deck{
+  background:var(--paper,#fff); -webkit-backdrop-filter:none; backdrop-filter:none; border-radius:14px;
+  box-shadow:0 16px 32px -22px rgba(25,26,24,.28)}
+@media (max-width:760px){
+  .stage.sp > .obj::after, .stage.sp-g #wkWrap::after{left:14px; top:18px; width:24px; height:24px}
+  .stage.sp .glass.under, .stage.sp .glass.hscard{left:-50px; width:calc(100% + 64px); padding-left:50px; padding-right:14px}
+  .stage.sp .glass.wkcard{padding:12px 14px 16px 50px; border-radius:12px}
+}
+
+/* the raised card a decision opens onto fills the white box edge to edge, inside the grey,
+   and leaves the agent mark showing */
+.stage.sp .deckwrap > .deck{left:-68px; right:-20px; top:-20px; border-radius:14px}
+.stage.sp .deckwrap.lit .cv{opacity:0 !important}
+.stage.sp .deckwrap, .stage.sp #hoDeckWrap{width:100%; max-width:none}
+@media (max-width:760px){ .stage.sp .deckwrap > .deck{left:-50px; right:-14px; top:-16px; border-radius:12px} }
+/* type on wide screens: the homepage is drawn at 90%, so this page sets its own sizes to match */
+@media (min-width:1200px){
+  header.wrap h1{font-size:31px; line-height:38px}
+  header.wrap .lede, header.wrap .lede-more p{font-size:14.5px; line-height:23.5px}
+  header.wrap .why{font-size:14.5px; line-height:23.5px; margin-top:44px}
+  .stage.sp > .story{font-size:14.5px; line-height:23.5px}
+  .stage.sp .hero, .stage.sp .wlt{font-size:19px; line-height:29px}
+  .stage.sp .sec.sm, .stage.sp .srcl, .stage.sp .spine i, .stage.sp i.a, .stage.sp i.b{font-size:12px}
+  .close .endp, .close .endrow{font-size:14.5px; line-height:23.5px}
+  .close .endrow span{font-size:12.5px}
+}
+
+/* no agent mark: the white box starts at the text, and the grey frame around it is thinner */
+.stage.sp > .obj::after, .stage.sp-g #wkWrap::after{display:none}
+.stage.sp{padding:10px}
+.stage.sp > .story{padding:8px 14px 0; margin-bottom:12px}
+.stage.sp > .obj, .stage.sp-g #wkWrap{padding-left:20px}
+.stage.sp-g > .obj{padding:40px 32px}
+.stage.sp-d{padding:20px 10px 10px}
+.stage.sp .glass.under, .stage.sp .glass.hscard{left:-20px; width:calc(100% + 40px); padding-left:20px}
+.stage.sp .glass.wkcard{padding-left:20px}
+.stage.sp .deckwrap > .deck{left:-20px}
+@media (max-width:760px){
+  .stage.sp{padding:8px}
+  .stage.sp > .story{padding:6px 10px 0; margin-bottom:10px}
+  .stage.sp > .obj, .stage.sp-g #wkWrap{padding-left:14px}
+  .stage.sp-g > .obj{padding:24px 12px}
+  .stage.sp .glass.under, .stage.sp .glass.hscard{left:-14px; width:calc(100% + 28px); padding-left:14px}
+  .stage.sp .glass.wkcard{padding-left:14px}
+  .stage.sp .deckwrap > .deck{left:-14px}
+}
+
+/* the grey card never changes size. Whatever a specimen opens floats above it and above the
+   page, instead of the card growing to make room */
+.stages .stage.sp, .stages .stage.sp:has(.open), .stages .stage.sp.held{padding-bottom:0 !important}
+.stages .stage.sp{position:relative; z-index:1}
+.stages .stage.sp:has(.open), .stages .stage.sp:has(.lit), .stages .stage.sp.held{z-index:30}
+
+
+/* same page colour as the homepage (--page) */
+html, body{background:#F8F8F6}
+
+/* Figma 157:758 - no grey frame. The situation sits on the page in light grey; the specimen is a
+   plain white card under it. Same for every specimen. */
+.stage.sp{background:none !important; padding:0 !important; border-radius:0; max-width:580px}
+.stage.sp > .story{padding:0 24px; margin:0 0 24px; max-width:30em; font-size:14px; line-height:21px; color:#949494}
+.stage.sp > .obj{background:var(--paper,#fff); border-radius:20px; padding:24px}
+.stage.sp .glass.under, .stage.sp .glass.hscard{left:-24px; width:calc(100% + 48px); padding-left:24px; padding-right:24px}
+.stage.sp .glass.hscard{top:-24px; padding-top:20px}
+.stage.sp .glass.wkcard{left:-24px; top:-24px; width:calc(100% + 48px); padding:20px 24px 24px}
+.stage.sp .glass.under, .stage.sp .glass.hscard, .stage.sp .glass.wkcard, .stage.sp .deckwrap > .deck{border-radius:20px}
+.stage.sp .deckwrap > .deck{left:-24px; right:-24px; top:-24px}
+@media (min-width:1200px){ .stage.sp > .story{font-size:13px; line-height:20px} }
+@media (max-width:760px){
+  .stage.sp > .story{padding:0 18px; margin-bottom:16px; font-size:13.5px}
+  .stage.sp > .obj{padding:18px; border-radius:16px}
+  .stage.sp .glass.under, .stage.sp .glass.hscard{left:-18px; width:calc(100% + 36px); padding-left:18px; padding-right:18px}
+  .stage.sp .glass.wkcard{left:-18px; top:-18px; width:calc(100% + 36px); padding:16px 18px 18px}
+  .stage.sp .deckwrap > .deck{left:-18px; right:-18px; top:-18px}
+}
+
+/* the Alex question sits 24px from the top of its card, the same as the sides */
+.stage.sp #amWrap > .apcard{margin-top:0}
+
+/* the hint pill wraps the mark exactly, at every size the mark takes (it was drawn for a 44px mark) */
+@media (min-width:761px){
+  .mhint{top:40px; height:38px; border-radius:19px; left:calc(max(24px, calc(50% - 660px)) + 38px - var(--hw,38px))}
+  .mhint span{left:15px; line-height:38px}
+}
+@media (min-width:1200px){
+  .mhint{top:36px; height:34.2px; border-radius:17.1px; left:calc(max(21.6px, calc(50% - 594px)) + 34.2px - var(--hw,34.2px))}
+  .mhint span{left:13.5px; line-height:34.2px; font-size:9.5px}
+}
+
+/* more air between the intro and the first specimen */
+.stages{margin-top:200px !important}
+@media (max-width:760px){ .stages{margin-top:120px !important} }
 </style>
 </head>
 <body>
@@ -1779,46 +2091,26 @@ function onWidth(fn){
 </script>
 
 <div class="site-nav"><a class="site-mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
-<nav class="site-menu" aria-label="Main"><a href="index.html#work">Work</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav></div>
+<nav class="site-menu" aria-label="Main"><a href="index.html#work">Work</a><a href="sensitivity.html" aria-current="page">Sensitivity</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav></div>
 
 <header class="wrap">
   <h1>Sensitivity</h1>
   <!-- The one description, and the only thing that moves on this page before you touch it. -->
-  <p class="lede" id="lede">Interfaces keep getting better at producing more: more answers, more states, more&nbsp;explanations.</p>
+  <p class="lede" id="lede">Interfaces are getting good at producing more: more answers, more states, more&nbsp;explanations.</p>
   <!-- The rest of the argument, in the writer's own line breaks. The loader traces only the
        first paragraph; these arrive with the page. -->
   <div class="lede-more">
-    <p>People did not get more attention. At Sirion, one contract field went from saying one thing to saying seven. So the question is no longer how much the interface can show, but how much this moment&nbsp;deserves.</p>
-    <p>Sensitivity is a way of deciding that amount, then using the least interface to&nbsp;spend&nbsp;it.</p>
+    <p>Our attention hasn&rsquo;t grown with them. At Sirion I watched one contract field go from having one thing to say to having seven. It made me wonder whether the better question is less about how much an interface can show, and more about how much a given moment&nbsp;needs.</p>
+    <p>Sensitivity is my working idea for that: judge how much the moment asks for, then use as little interface as it takes. It&rsquo;s still a sketch. The specimens below are where I&rsquo;m trying it&nbsp;out.</p>
   </div>
+  <p class="why"><a href="#" id="whyLink">Why I think this way</a></p>
+  <div class="sdots" aria-hidden="true"><canvas id="sdots"></canvas></div>
 </header>
 
-<!-- The same separator the work list uses, doing the same job: naming what is below and
-     saying it is live. Without it the page opens on a screenful of paper and the first
-     specimen arrives with nothing to introduce it. -->
-<div class="seplbl wrap">
-  <p class="lbl">Specimens</p>
-  <p class="lbl-s">Each one is a moment where the interface has to decide how much to say. Reach for one and see what it chose.</p>
-  <div class="seprule" aria-hidden="true"></div>
-</div>
-
 <main class="wrap stages">
-  <!-- The problem, before any answer: the field as it is today. It does not move. -->
-  <section class="stage field-stage">
-    <p class="plate">The field</p>
-    <div class="obj">
-      <div class="fieldpair" aria-label="The same contract field, then and now">
-        <div class="fcard"><p class="flbl">Then</p><p class="fk">Notice period</p><p class="fv">30 days</p><p class="fn">One thing to say.</p></div>
-        <div class="fcard now"><p class="flbl">Now</p><p class="fk">Notice period</p><p class="fv"><i class="fdot"></i>90 days</p><p class="fs">Amended 3 times</p>
-          <p class="fchips"><span>Extracted</span><span>Inferred</span><span>Calculated</span><span>Amended</span><span>Inherited</span><span>In conflict</span><span>Low confidence</span></p>
-          <p class="fn">Seven things it could say.</p></div>
-      </div>
-      <p class="fsay">Sensitivity decides which of these to show, when, how strongly, and for how&nbsp;long.</p>
-    </div>
-  </section>
-
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Transform</p>
+    <p class="story">A renewal is a week away, and the notice period has changed three times since signing.</p>
     <div class="obj">
       <div class="histwrap" id="hsWrap">
         <button class="histb" id="histBtn" type="button" aria-expanded="false" aria-controls="hsCard">
@@ -1851,8 +2143,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Preview</p>
+    <p class="story">A vendor asks for 12% more at renewal. The agent suggests countering at 6%.</p>
     <div class="obj">
       <div class="lift" id="wallWrap" tabindex="0" role="button" aria-haspopup="true"
            aria-expanded="false" aria-controls="wall" data-morph-host>
@@ -1871,8 +2164,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Expand</p>
+    <p class="story">An agent renaming your files stops halfway, because six of them need admin access.</p>
     <div class="obj">
       <div class="deckwrap" id="hoDeckWrap">
         <span class="deck" id="hoDeck" aria-hidden="true"></span>
@@ -1893,8 +2187,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage tall">
+  <section class="stage tall sp">
     <p class="plate">Expand</p>
+    <p class="story">An agent has drafted an update to 42 customers, and it goes out at 4 PM.</p>
     <div class="obj">
       <div class="deckwrap" id="apDeckWrap">
         <span class="deck" id="apDeck" aria-hidden="true"></span>
@@ -1933,8 +2228,9 @@ function onWidth(fn){
     </div>
   </section>
 
-    <section class="stage">
+    <section class="stage sp">
     <p class="plate">Preview</p>
+    <p class="story">You ask to share a draft with Alex, and there are two of them.</p>
     <div class="obj">
       <div class="deckwrap" id="amDeckWrap">
         <span class="deck" id="amDeck" aria-hidden="true"></span>
@@ -1959,8 +2255,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Transform</p>
+    <p class="story">You&rsquo;re back after a day off, and all you need to know is whether the deadline moved.</p>
     <div class="obj">
       <div class="wkwrap" id="wkWrap">
         <p class="hero" id="wkV" data-morph-text>18 unread messages</p>
@@ -1981,8 +2278,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage" id="upd">
+  <section class="stage sp" id="upd">
     <p class="plate">Transform</p>
+    <p class="story">An amendment changed the liability cap. What was it before?</p>
     <div class="obj">
       <div class="updwrap" id="updWrap">
         <p class="hero" id="capV" data-morph-text>Liability cap &middot; $2,000,000</p>
@@ -1994,8 +2292,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Transform</p>
+    <p class="story">The AI has read the payment term, but it isn&rsquo;t fully sure.</p>
     <div class="obj peek" data-morph-host tabindex="0">
       <p class="hero">Payment term &middot; Net-45</p>
       <span class="mline" data-morph>
@@ -2006,8 +2305,9 @@ function onWidth(fn){
     </div>
   </section>
 
-    <section class="stage">
+    <section class="stage sp">
     <p class="plate">Expand</p>
+    <p class="story">If you don&rsquo;t respond by the 22nd, the review counts as accepted.</p>
     <div class="obj">
       <div class="deckwrap" id="askDeckWrap">
         <span class="deck" id="askDeck" aria-hidden="true"></span>
@@ -2049,8 +2349,9 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
+  <section class="stage sp">
     <p class="plate">Preview</p>
+    <p class="story">You searched for &ldquo;Europe&rdquo;, but you might mean the EU only, or EMEA.</p>
     <div class="obj">
       <span class="sec sm">Understood as</span>
       <div style="display:flex;gap:2px;flex-wrap:wrap;margin-top:14px;margin-left:-10px">
@@ -2075,16 +2376,7 @@ function onWidth(fn){
     </div>
   </section>
 
-  <section class="stage">
-    <p class="plate">Transform</p>
-    <div class="obj">
-      <button class="addr hero" id="copyBtn"><span id="cw" data-morph-text>amrit@example.com</span><svg
-        class="cv cpcv" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none"
-        stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><rect
-        x="4.8" y="4.8" width="8.4" height="8.4" rx="2"/><path
-        d="M9.2 4.8V2.4a1.6 1.6 0 0 0-1.6-1.6H2.4A1.6 1.6 0 0 0 .8 2.4v5.2a1.6 1.6 0 0 0 1.6 1.6h2.4"/></svg></button>
-    </div>
-  </section>
+  
 
 
 <section class="close">
@@ -2100,14 +2392,132 @@ function onWidth(fn){
       </span>
       </span>
     </div>
-      <p class="paper end-paper"><a href="sensitivity-paper.html" target="_blank" rel="noopener">Read the paper</a><span>A ten-screen story, with the full fifty pages behind it: how an agent reads a situation, the five levels, and where the idea breaks.</span></p>
+      <p class="endp">A longer write-up, ten screens with fuller notes behind them: how an agent might read a situation, the five levels, and the places where the idea doesn&rsquo;t hold up&nbsp;yet.</p>
+      <a class="endrow" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a>
   </section>
 
 </main>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Sensitivity">
   <button class="ov-x" id="ovX" type="button" aria-label="Close">&times;</button>
-  <div class="ov-in"><div class="md"><picture class="md-banner">
+  <div class="ov-in"><div class="md w5c">
+      <h2>Sensitivity</h2>
+      <p class="k">How I think &middot; Own work &middot; 2023&ndash;26</p>
+      <hr>
+      <p class="tension">The same information can mean something very different depending on when it reaches&nbsp;you.</p>
+      <figure><img src="sens-3am-call.webp" style="max-width:100%" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
+      <p>Imagine your wife calling at 2 in the afternoon. You might answer or call back&nbsp;later.</p>
+      <p>Now imagine the same call at 3 in the morning. You would probably pick up immediately, expecting something&nbsp;serious.</p>
+      <p>Same person. Same phone call. The situation changes what it means. Not because the phone knows something different. Because you&nbsp;do.</p>
+      <p>You know who is calling, her routine, the hour, what has been happening in her life. You don&rsquo;t weigh these one by one. You read them together. And you might still be wrong: it could be an accidental&nbsp;call.</p>
+      <p>I started wondering whether AI agents need a similar sense of when to speak and when to stay&nbsp;quiet.</p>
+
+      <section class="ch">
+        <p class="ch-n">01</p>
+        <h3>Where this question came from</h3>
+        <figure><img src="sens-contract-page.webp" style="max-width:100%" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
+        <p>While exploring an AI-first contract experience, I moved away from presenting contracts as pages, fields and documents. The agent does the reading, connects agreements and amendments, and brings forward what someone needs to know or act&nbsp;on.</p>
+        <p>Agents can now do what used to take a team: link a clause in one agreement to an amendment in another, to an invoice, to an email. Every link is a possible finding. What the system can tell us keeps growing. What a person can take in&nbsp;doesn&rsquo;t.</p>
+        <p>By morning, an agent might have reached 200 conclusions. Show all of them, and the work has only moved from reading contracts to reading&nbsp;AI.</p>
+        <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 conclusions by morning. A person can act on a&nbsp;handful.</figcaption></figure>
+        <p>Showing the five most important seems like the obvious answer. But importance alone doesn&rsquo;t say whether someone needs to see something&nbsp;now.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">02</p>
+        <h3>One finding, different situations</h3>
+        <p>A contract&rsquo;s payment terms have changed through amendments. At 9 AM, the agent reads the governing term as Net&nbsp;60. At 11 AM, a newly uploaded amendment shows it is actually Net&nbsp;45.</p>
+        <div class="vtl" role="img" aria-label="Timeline: at 9:00 the agent reads Net 60; at 11:00 Amendment 3 shows Net 45. If the next payment is months away, it stays quiet. If Finance pays at noon, it interrupts.">
+          <div class="tl-ev"><span class="tm">9:00</span><span class="tx">The agent reads the payment term as Net&nbsp;60</span></div>
+          <div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. The term is Net&nbsp;45</span></div>
+          <div class="tl-fork">
+            <div class="tl-br"><span class="sit">If the next payment is three months away</span><b>Quiet</b><span class="out">Update, keep the evidence, tell no&nbsp;one</span></div>
+            <div class="tl-br hot"><span class="sit">If Finance pays at 12:00 on the old term</span><b>Interrupt</b><span class="out">Show it before the payment goes&nbsp;out</span></div>
+          </div>
+        </div>
+        <p>The finding hasn&rsquo;t changed. What changed is what someone was about to do with&nbsp;it.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">03</p>
+        <h3>Same finding, four responses</h3>
+        <div class="st4" role="group" aria-label="One finding shown four ways: quiet, interrupt, ask, and adapt after a person responds">
+          <div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes the payment term for Acme from Net&nbsp;60 to Net&nbsp;45.</div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Quiet</b><span>Next payment is three months away</span></div>
+            <div class="st4-ui q"><span class="fld">Payment term</span><span class="val">Net 45</span><span class="src">Updated 11:02 from Amendment&nbsp;3</span></div>
+          </div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Interrupt</b><span>A payment is being processed at noon</span></div>
+            <div class="st4-ui i"><p>Today&rsquo;s payment to Acme uses Net&nbsp;60. Amendment&nbsp;3 changed it to Net&nbsp;45.</p><span class="btn pri">Review before paying</span><span class="btn">Already handled</span></div>
+          </div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Ask</b><span>The agent can&rsquo;t see payment activity</span></div>
+            <div class="st4-ui a"><p>Is a payment to Acme planned this week? The term changed to Net&nbsp;45, and I can&rsquo;t see your payment&nbsp;schedule.</p><span class="btn">Yes, this week</span><span class="btn">No</span><span class="btn">Not mine</span></div>
+          </div>
+          <p class="st4-after">After a person responds</p>
+          <div class="st4-row">
+            <div class="st4-l"><b>Adapt</b><span>Finance confirms it&rsquo;s already handled</span></div>
+            <div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won&rsquo;t raise this again unless the payment details&nbsp;change.</span></div>
+          </div>
+        </div>
+        <p>The first three are the agent&rsquo;s own judgment. The fourth is what it does after a person adds something it couldn&rsquo;t know. Sensitivity doesn&rsquo;t end when information reaches someone. It also covers how the system changes after they&nbsp;answer.</p>
+        <p>Not knowing enough doesn&rsquo;t always mean asking. If a payment might go out wrong in fifteen minutes, waiting for an answer is itself a risk, and an interruption is cheaper than the mistake. If a minor field changed, the agent can wait. What decides it is the cost of waiting, whether the decision can be undone, and the cost of breaking someone&rsquo;s&nbsp;focus.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">04</p>
+        <h3>Where judgment fails</h3>
+        <p>Two contracts approach renewal. One expires in two days, another in ten. By date, the first looks more urgent. But the first vendor is already being offboarded, and the second is in a negotiation that needs a decision much&nbsp;earlier.</p>
+        <div class="vren" role="img" aria-label="Contract A expires in 2 days but its vendor is being offboarded. Contract B expires in 10 days but a negotiation needs a decision this week. By date A comes first; by situation B does.">
+          <div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">2 days left &middot; vendor already being&nbsp;offboarded</span></div></div>
+          <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">10 days left &middot; negotiation needs a decision this&nbsp;week</span></div></div>
+          <div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
+        </div>
+        <p>An agent could read every document correctly and still bring the wrong one to the top. Not because its calculations were wrong. Because its picture of the situation was&nbsp;incomplete.</p>
+        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance is paying at noon. Another that knows only three, the payment, the amended term and who owns it, makes the right call. What counts is whether the agent has the fact that changes the&nbsp;decision.</p>
+        <div class="vk" role="img" aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call.">
+          <div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at&nbsp;noon</p><p class="k-out">Stays quiet. Wrong&nbsp;call.</p></div>
+          <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Right&nbsp;call.</p></div>
+        </div>
+        <p>Some of those facts never reach the system. A renewal decided on a phone call. A supplier being replaced after an offline conversation. The agent can&rsquo;t judge with information it doesn&rsquo;t have, so its reading can be reasonable and still wrong for the person receiving&nbsp;it.</p>
+        <p>So it should show its reasoning, separate what it knows from what it has inferred, and let people correct it. &ldquo;We&rsquo;re already handling this&rdquo; isn&rsquo;t a dismissal. It&rsquo;s context the agent was missing. But ignoring, acknowledging, handing to someone else and correcting the agent are different intentions, and each should be easy to&nbsp;say.</p>
+        <p>Sometimes what the agent doesn&rsquo;t know is exactly why a person needs to be&nbsp;involved.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">05</p>
+        <h3>What the agent weighs</h3>
+        <p>Not a scoring formula. Four questions, asked before deciding how to&nbsp;speak:</p>
+        <div class="vfl" role="img" aria-label="A finding passes through four questions: consequence, time, enough to judge, and people. The answer picks a response: quiet, surface, ask or interrupt. A person's reply goes back in as context.">
+          <div class="fl-c"><span class="fl-t">Finding</span><span class="fl-f">An amendment changes the payment&nbsp;term</span></div>
+          <span class="fl-ar" aria-hidden="true">&rarr;</span>
+          <div class="fl-q"><div><b>Consequence</b><span>What if it&rsquo;s missed? Can it be&nbsp;undone?</span></div><div><b>Time</b><span>When does it start to&nbsp;matter?</span></div><div><b>Enough to judge</b><span>Is the deciding fact&nbsp;missing?</span></div><div><b>People</b><span>Who decides? Has someone taken&nbsp;it?</span></div></div>
+          <span class="fl-ar" aria-hidden="true">&rarr;</span>
+          <div class="fl-c"><span class="fl-t">Response</span><span class="fl-r">Quiet</span><span class="fl-r">Surface</span><span class="fl-r">Ask</span><span class="fl-r hot">Interrupt</span></div>
+          <p class="fl-loop">&#8634;&ensp;A person&rsquo;s reply goes back in as context, and the next decision&nbsp;changes</p>
+        </div>
+        <p>My earlier exploration proposed five levels of attention: Nothing, Hint, Reveal, Emphasize, Interrupt. They still hold, but they are the visible end of the judgment, not the judgment itself. The agent may need to ask before it can safely pick a&nbsp;level.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">06</p>
+        <h3>What I want to test</h3>
+        <p>I haven&rsquo;t run this yet. The plan is small: three to five experienced contract reviewers, the same payment finding, and a different piece of context each time. For each, they decide whether to surface it now, defer it, ask, or treat it as&nbsp;handled.</p>
+        <figure class="vmx"><table><thead><tr><th></th><th>Now</th><th>Later</th><th>Ask</th><th>Handled</th></tr></thead><tbody><tr><td>The finding alone</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ payment at noon</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ vendor being offboarded</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ Finance says it&rsquo;s done</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr></tbody></table><figcaption>The study grid. Each reviewer marks one column per row. Empty until it&nbsp;runs.</figcaption></figure>
+        <p>The useful part won&rsquo;t be which answer wins. It&rsquo;s which piece of information changes someone&rsquo;s mind. If their decisions contradict the four questions above, that&rsquo;s evidence&nbsp;too.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">07</p>
+        <h3>Where this stands</h3>
+        <p>This isn&rsquo;t a new idea in general. Horvitz and colleagues weighed the cost of interrupting against the cost of delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999). Dey defined context for computing in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001). Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Guidelines for Human-AI Interaction</a> (2019) cover timing, correction and&nbsp;explanation.</p>
+        <p>What changes with agents is that the system now creates its own findings, across many connected documents, without knowing what people decided offline. That&rsquo;s the part I&rsquo;m&nbsp;exploring.</p>
+      </section>
+
+      <p class="take">How does an agent know whether it understands enough of a situation to deserve someone&rsquo;s&nbsp;attention?</p>
+      <div class="end idx"><a class="row" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a><a class="back" href="#" id="w5back"><i>&larr;</i>&nbsp;Back to the samples</a></div>
+</div><div class="md old"><picture class="md-banner">
 <img src="sens-banner-plain.webp" width="1360" height="754" loading="lazy" decoding="async"
         alt="One profile repeated four times along a single horizontal line, from a dark point
         at one end to a light one at the other." />
@@ -2771,7 +3181,7 @@ function onWidth(fn){
   /* Instead · the address */
   const cb=$('#copyBtn'), cw=$('#cw'); let ct;
   const EMAIL='amrit@example.com';
-  cb.addEventListener('click',()=>{
+  if(cb) cb.addEventListener('click',()=>{
     say(cw,'copied'); cb.classList.add('ok');
     if(navigator.clipboard) navigator.clipboard.writeText(EMAIL).catch(()=>{});
     clearTimeout(ct); ct=setTimeout(()=>{ say(cw,EMAIL); cb.classList.remove('ok'); },2200);
@@ -3279,7 +3689,7 @@ function onWidth(fn){
   var mark=document.querySelector('.site-mark'); if(!mark) return;
   var el=document.createElement('div'); el.className='mhint'; el.setAttribute('aria-hidden','true'); document.body.appendChild(el);
   var ms=document.createElement('span'); ms.style.visibility='hidden'; el.appendChild(ms);
-  var W=44; function need(w){ ms.textContent=w; return 17+ms.offsetWidth+10+W; }
+  var W=mark.getBoundingClientRect().width||44; addEventListener('resize',function(){ W=mark.getBoundingClientRect().width||44; }); function need(w){ ms.textContent=w; return 17+ms.offsetWidth+10+W; }
   var ov=document.getElementById('ov'), head=document.querySelector('header.wrap'), close=document.querySelector('section.close'),
       stages=[].slice.call(document.querySelectorAll('main .stage'));
   var cur='', want='', tmr=0, hov=null, raw='', since=Date.now(), lastMove=Date.now();
@@ -3308,6 +3718,101 @@ function onWidth(fn){
   stages.forEach(function(s){ s.addEventListener('pointerenter',function(){ hov=s; tick(); }); s.addEventListener('pointerleave',function(){ if(hov===s) hov=null; tick(); }); });
   addEventListener('scroll',function(){ lastMove=Date.now(); },{passive:true});
   setInterval(tick,400); tick();
+})();
+</script>
+<script>
+/* the link under the lede opens the same reading as the closing line */
+(function(){ var w=document.getElementById('whyLink'), sp=document.getElementById('spine'); if(!w||!sp) return;
+  w.addEventListener('click',function(e){ e.preventDefault(); sp.click(); }); })();
+</script>
+<script>(function(){var b=document.getElementById("w5back"),x=document.getElementById("ovX");if(b&&x)b.addEventListener("click",function(e){e.preventDefault();x.click();});})();</script>
+<script>
+/* ===== Sensitivity, the film =====
+   A person. One thing worth knowing. Then everything. The person does not grow.
+   Most of it waits; one thing comes close, then steps back. Then the name. Loops. */
+(function(){
+  var cv=document.getElementById('sdots'), box=cv, cap=null, pp=null;
+  if(!box||!cv) return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx=cv.getContext('2d'), W=1,H=1;
+  var INK='25,26,24', ACC='61,90,69';
+  var CAPS=['You.','One thing worth your attention.','Now the system knows a hundred things.','You did not get more attention.','Most of it can wait.','This one needs you now.','Then it steps back.','Sensitivity'];
+  var D=[2.6,3.6,4.2,4.0,4.0,5.2,3.6,2.2], T0=[0]; for(var i=0;i<D.length;i++) T0.push(T0[i]+D[i]); var TOT=T0[D.length];
+  var seed=7; function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+  var pts=[]; for(var k=0;k<140;k++){ var ang=(k/140)*Math.PI*2+rnd()*.5; pts.push({a:ang, r:.16+Math.sqrt(rnd())*.42, j:rnd(), d:rnd()}); }
+  var ONE=pts[5], NEAR=[pts[11],pts[23],pts[41]], GREEN=pts[23];
+  function size(){ var r=cv.getBoundingClientRect(), d=Math.min(2,devicePixelRatio||1); W=Math.max(1,r.width); H=Math.max(1,r.height); cv.width=Math.round(W*d); cv.height=Math.round(H*d); ctx.setTransform(d,0,0,d,0,0); }
+  var clamp=function(v){return Math.max(0,Math.min(1,v));}, ease=function(t){t=clamp(t);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}, lerp=function(a,b,t){return a+(b-a)*t;};
+  function dot(x,y,r,c,a){ if(a<=0||r<=0) return; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle='rgba('+c+','+a.toFixed(3)+')'; ctx.fill(); }
+  function glow(x,y,r,c,a){ if(a<=0) return; var g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,'rgba('+c+','+a.toFixed(3)+')'); g.addColorStop(1,'rgba('+c+',0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+  function seg(t,i){ return clamp((t-T0[i])/D[i]); }
+  function pos(p,spread,T){ var rr=p.r*spread, drift=Math.sin(T*.6+p.j*6)*.012, S=Math.min(W*.38,H*.62); return [W*.5+Math.cos(p.a+drift)*rr*S*1.6, H*.5+Math.sin(p.a+drift)*rr*S]; }
+
+  function draw(t,T){
+    ctx.clearRect(0,0,W,H);
+    var si=0; for(var i=0;i<D.length;i++) if(t>=T0[i]) si=i;
+    var u=seg(t,si);
+    var you=[W*.5,H*.5], R=Math.max(9,Math.min(13,W*.012));
+    var arrive  = si<2?0 : si===2?ease(u) : 1;                      /* the crowd pours in */
+    var close   = si<3?0 : si===3?ease(u) : 1;                      /* it presses in */
+    var away    = si<4?0 : si===4?ease(u) : 1;                      /* it drifts back and fades */
+    var comeIn  = si<5?0 : si===5?ease(u/.6) : 1;                   /* the green one comes close, slowly */
+    var pulse   = si===5 && u>.6 ? Math.sin((u-.6)/.4*Math.PI) : 0;
+    var hush    = si===5 ? ease(u/.6) : si===6 ? 1-ease(u) : 0;      /* the rest of the crowd steps further back */
+    var recede  = si<6?0 : si===6?ease(u) : 1;
+    var name    = si===7 ? ease(u/.5) : 0;
+    var out     = si===7 ? clamp((u-.92)/.08) : 0;
+    var A=(1-out)*(1-name*.92);
+    if(cap) cap.classList.toggle('big', si===7);
+
+    /* frame 2: one dot approaches with a dashed thread */
+    if(si===1){ var f=ease(u/.75), p1=pos(ONE,2.2,T), tx=lerp(p1[0],you[0]+R+26,f), ty=lerp(p1[1],you[1]-10,f);
+      ctx.save(); ctx.setLineDash([2,4]); ctx.lineWidth=1; ctx.strokeStyle='rgba('+INK+','+(.28*ease((u-.5)/.4)).toFixed(3)+')'; ctx.beginPath(); ctx.moveTo(you[0]+R+3,you[1]-2); ctx.lineTo(tx-5,ty+1); ctx.stroke(); ctx.restore();
+      dot(tx,ty,4.5,INK,.7*ease(u/.3)); }
+
+    /* the crowd */
+    if(arrive>0){
+      var spread = lerp(1.35, lerp(1, .78, close), 1); spread=lerp(spread, 1.4, away);
+      pts.forEach(function(p,i){
+        var f=ease(clamp(arrive*1.6 - p.d*.6)); if(f<=0) return;
+        var q=pos(p,spread,T), a=(.38+.34*p.j)*f*(1-away*.84)*A;
+        var isNear=NEAR.indexOf(p)>=0, isG=(p===GREEN);
+        if(isG && comeIn>0) return;                          /* drawn below, on its way to you */
+        if(isNear && away>0) a=Math.max(a,(.3)*A*(1-recede*.4));
+        a*=1-hush*.6;
+        dot(q[0],q[1],(2.6+p.j*2.2)*1,INK,a);
+      });
+    }
+    /* frame 4: the crowd touches you; a faint ring says the dot did not change */
+    if(close>0 && away<1){ ctx.save(); ctx.setLineDash([2,4]); ctx.lineWidth=1; ctx.strokeStyle='rgba('+INK+','+(.22*close*(1-away)*A).toFixed(3)+')'; ctx.beginPath(); ctx.arc(you[0],you[1],R+6,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
+
+    /* the green one */
+    if(comeIn>0){
+      var g0=pos(GREEN,1.4,T), gx=lerp(g0[0], you[0]+R+9, comeIn), gy=lerp(g0[1], you[1]-6, comeIn);
+      if(recede>0){ var g1=pos(GREEN,1.4,T); gx=lerp(you[0]+R+9,g1[0],recede); gy=lerp(you[1]-6,g1[1],recede); }
+      var gA=(1-recede)*A, gr=5.5+3*comeIn+2.5*pulse;
+      glow(gx,gy,44+16*pulse,ACC,.34*gA*(comeIn)); dot(gx,gy,gr,ACC,gA); 
+      if(recede>0) dot(gx,gy,3.5,INK,.4*recede*A);
+      if(pulse>0) { ctx.beginPath(); ctx.arc(you[0],you[1],R+3+10*pulse,0,Math.PI*2); ctx.lineWidth=1.2; ctx.strokeStyle='rgba('+ACC+','+(.5*(1-pulse)).toFixed(3)+')'; ctx.stroke(); }
+    }
+    /* you, always the same size */
+    glow(you[0],you[1],R*2.2,INK,.06*A);
+    dot(you[0],you[1],R,INK,A);
+    /* caption */
+    var say=CAPS[si];
+    if(cap){ if(cap._mlCur!==undefined){ if(cap._mlCur!==say) Morphline.to(cap,say); } else if(!window.Morphline && cap.textContent!==say) cap.textContent=say; }
+  }
+  size(); addEventListener('resize',size);
+  if(reduce){ draw(T0[5]+2,0); if(pp) pp.style.display='none'; return; }
+  var PAUSE_I='<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M3.5 2v6M6.5 2v6"/></svg>';
+  var PLAY_I='<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M3.4 2.1v5.8c0 .3.3.5.6.3l4.3-2.9c.2-.2.2-.5 0-.6L4 1.8c-.3-.2-.6 0-.6.3Z"/></svg>';
+  var paused=false, el=0, last=performance.now(), live=true;
+  function drawPP(){ if(!pp) return; pp.innerHTML=paused?PLAY_I:PAUSE_I; pp.setAttribute('aria-label',paused?'Play':'Pause'); }
+  if(pp) pp.addEventListener('click',function(){ paused=!paused; last=performance.now(); drawPP(); });
+  drawPP();
+  function frame(now){ if(!live) return; var dc=document.documentElement.classList, hold=false; if(!paused&&!hold) el+=now-last; last=now; draw(el/1000%TOT, now/1000); requestAnimationFrame(frame); }
+  requestAnimationFrame(frame);
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(en){ var v=en[0].isIntersecting; if(v&&!live){ live=true; last=performance.now(); requestAnimationFrame(frame);} if(!v) live=false; }).observe(box); }
 })();
 </script>
 </body>

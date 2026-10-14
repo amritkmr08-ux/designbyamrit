@@ -218,6 +218,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .site-mark:focus-visible{outline:1px solid #191A18; outline-offset:3px}
 /* where the pages fill the screen, the mark sits above the first page and scrolls away with it instead of covering the text */
 @media (max-width:1180px){ .site-mark{position:fixed; top:14px; left:16px; width:36px; height:36px; font-size:13px; box-shadow:0 0 0 3px var(--bg)} html body{padding-top:92px} }
+/* match the homepage mark on wide screens */
+@media (min-width:1200px){ .site-mark{width:34.2px; height:34.2px; font-size:13.5px; top:36px; left:max(21.6px, calc(50% - 594px))} }
 
 /* no single word left alone on the last line */
 p, li, blockquote{text-wrap:pretty}
@@ -363,7 +365,14 @@ figure.fg.half{max-width:560px}
 .fcard.hot svg,.fcard.hot h3{color:var(--l4)}
 .lchip{display:inline-block;font-family:"Inter",-apple-system,sans-serif;font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
 .lchip.l0{background:var(--l0);color:var(--ink)} .lchip.l1{background:var(--l1);color:#fff} .lchip.l2{background:var(--l2);color:#fff} .lchip.l3{background:var(--l3);color:#fff} .lchip.l4{background:var(--l4);color:#fff}
-</style><style>.claims{counter-reset:none;padding-left:24px}.claims li{margin-bottom:10px;font-size:16px}</style><style>.hov .pv{font-weight:400}.hov .pv b{font-weight:600}</style>
+</style><style>.claims{counter-reset:none;padding-left:24px}.claims li{margin-bottom:10px;font-size:16px}</style><style>.hov .pv{font-weight:400}.hov .pv b{font-weight:600}
+/* same page colour as the homepage (--page) */
+html, body{background:#F8F8F6}
+
+/* the mark is the same size as on every other page: 38px on tablets and small laptops, 44px on phones */
+@media (max-width:1199px){ .site-mark{width:38px; height:38px; font-size:15px; top:40px; left:24px} }
+@media (max-width:760px){ .site-mark{width:44px; height:44px; font-size:16px; top:28px; left:24px} }
+</style>
 
 </head>
 <body>

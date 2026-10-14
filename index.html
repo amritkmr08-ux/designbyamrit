@@ -12,7 +12,7 @@
 @property --k{syntax:'<number>'; inherits:true; initial-value:0}
 /* Amrit's tokens and four sizes (114 / 24 / 17.5 / 14). Layout after bek.is: one narrow reading column, the work wider than the words. */
 :root{
-  --paper:#FFFFFF; --page:#F8F8F6; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --rule:#C9CAC4;
+  --paper:#FFFFFF; --page:#F8F8F6; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --rule:#C9CAC4;
   --mark:#DCE5D3; --accent:#3D5A45;
   --lift:0 1px 3px rgba(25,26,24,.06), 0 18px 40px -18px rgba(25,26,24,.22); --pop:0 24px 48px -20px rgba(25,26,24,.24);
   --display:"Poppins",-apple-system,sans-serif;
@@ -385,17 +385,23 @@ p.fmeta{order:1; align-self:flex-end; display:flex; align-items:center; gap:12px
      exact paragraph will sit once the page is up - same column, same line, same
      type, same colour - and puts it there. So when the paper lifts nothing moves:
      the sentence stays and the page arrives around it. */
-  .ldr-row{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:56px}
-  .ldr-row.col{flex-direction:column;gap:32px}
+  .ldr-row{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:96px}
+  .ldr-row.col{flex-direction:column;gap:44px}
   .ldr-loop{flex:none;width:360px;height:360px;overflow:visible;transition:opacity 420ms ease}
   .ldr-loop text{fill:#1d1e1c;font-family:inherit}
   .ldr-loop .h{font-size:17.5px;font-weight:600}
   .ldr-loop .s{font-size:14px;fill:#55574f}
   .ldr-loop .c{font-size:12px;letter-spacing:.14em;fill:#55574f}
-  .ldr-arrow{transform-box:view-box;transform-origin:180px 180px;animation:ldr-spin 4.8s linear infinite}
+  .ldr-arrow{transform-box:view-box;transform-origin:180px 180px}   /* static: it only says this is a loop */
   @keyframes ldr-spin{to{transform:rotate(360deg)}}
   .ldr.gone .ldr-loop{opacity:0}
   html.ldr-boot .ldr-loop{visibility:hidden}
+  .ldr-loop{display:none !important}   /* the sentence alone, on every screen */
+  .ldr-tw{display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+  .ldr-row.col .ldr-tw{align-items:flex-start}
+  .ldr-pp{width:28px;height:28px;padding:0;border-radius:50%;border:1px solid var(--rule);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:border-color .2s ease,color .2s ease,opacity .42s ease}
+  .ldr-pp:hover{border-color:var(--ink);color:var(--ink)}
+  .ldr.gone .ldr-pp{opacity:0;pointer-events:none}
   .ldr-t{position:relative;margin:0;color:var(--rule)}
   .ldr-t i{font-style:normal;color:var(--rule);transition:color 400ms ease}
   .ldr-t i.on{color:var(--ink-on,var(--ink))}
@@ -529,11 +535,105 @@ html, body{background:#101110}
   .ov #w4 .pair{grid-template-columns:1fr}
 }
 
+/* Sensitivity card: same chapter grammar as Search, with one specimen at its centre */
+.ov #w5 .tension{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); max-width:24ch; margin-top:0; letter-spacing:-.01em}
+.ov #w5 .ch{margin-top:64px}
+.ov #w5 .ch-n{font-size:13px; line-height:20px; color:var(--faint); margin:0; letter-spacing:.04em}
+.ov #w5 .ch h3{margin-top:2px}
+.ov #w5 .ch a{color:var(--muted); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px}
+.ov #w5 .q4{color:var(--ink); font-weight:500}
+.ov #w5 .take{font-family:var(--display); font-size:24px; line-height:33px; font-weight:500; color:var(--ink); margin-top:72px; letter-spacing:-.01em}
+.ov #w5 .st4{margin:18px 0 28px; padding:22px 22px 8px; border:1px solid var(--line); border-radius:12px}
+.ov #w5 .st4-find{font-size:14px; line-height:21px; color:var(--ink); padding-bottom:18px}
+.ov #w5 .st4-find .lab, .ov #w5 .st4-after{display:block; font-size:12px; line-height:18px; color:var(--faint); letter-spacing:.02em; margin:0 0 4px}
+.ov #w5 .st4-row{display:grid; grid-template-columns:150px 1fr; gap:18px; padding:16px 0; border-top:1px solid var(--line); align-items:start}
+.ov #w5 .st4-l b{display:block; font-family:var(--display); font-weight:500; font-size:14px; line-height:20px; color:var(--ink)}
+.ov #w5 .st4-l span{display:block; font-size:12px; line-height:18px; color:var(--faint); margin-top:2px}
+.ov #w5 .st4-ui{font-size:13px; line-height:19px; color:var(--muted); background:var(--paper); border:1px solid var(--rule); border-radius:8px; padding:10px 12px}
+.ov #w5 .st4-ui p{margin:0 0 10px; color:var(--ink); font-size:13px; line-height:19px}
+.ov #w5 .st4-ui.q{display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline; border-style:dashed}
+.ov #w5 .st4-ui .fld{color:var(--faint)} .ov #w5 .st4-ui .val{color:var(--ink)}
+.ov #w5 .st4-ui .src{flex-basis:100%; font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .st4-ui.i{border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent)}
+.ov #w5 .st4-ui .btn{display:inline-block; font-size:12px; line-height:18px; padding:4px 10px; margin:0 6px 4px 0; border:1px solid var(--rule); border-radius:999px; color:var(--ink)}
+.ov #w5 .st4-ui .btn.pri{background:var(--accent); border-color:var(--accent); color:#fff}
+.ov #w5 .st4-after{margin:10px 0 0; padding-top:14px; border-top:1px dashed var(--rule); max-width:none}
+.ov #w5 .st4-ui.q{row-gap:2px}
+.ov #w5 .st4-after + .st4-row{border-top:0; padding-top:6px}
+.ov #w5 .st4-ui.d .chk{display:block; color:var(--accent)}
+.ov #w5 .st4-ui.d .src{display:block}
+@media (max-width:600px){ .ov #w5 .st4{padding:18px 16px 6px} .ov #w5 .st4-row{grid-template-columns:1fr; gap:8px} }
+
+/* Sensitivity card: small pictures, so the argument can be read at a glance */
+.ov #w5 .v200, .ov #w5 .vtl, .ov #w5 .vren, .ov #w5 .vk, .ov #w5 .vfl, .ov #w5 .vmx{margin:20px 0 28px}
+.ov #w5 .v200 .dots{display:grid; grid-template-columns:repeat(25,1fr); gap:7px; padding:22px; border:1px solid var(--line); border-radius:12px}
+.ov #w5 .dt{display:block; aspect-ratio:1; border-radius:50%; background:#D6D7D2}
+.ov #w5 .dt.on{background:var(--accent); box-shadow:0 0 0 3px rgba(61,90,69,.14)}
+.ov #w5 .vtl{padding:22px; border:1px solid var(--line); border-radius:12px}
+.ov #w5 .tl-ev{display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:baseline; padding-bottom:14px}
+.ov #w5 .tl-ev .tm{font-size:12px; line-height:19px; color:var(--faint); font-variant-numeric:tabular-nums}
+.ov #w5 .tl-ev .tx{position:relative; padding-left:20px; font-size:13px; line-height:19px; color:var(--muted)}
+.ov #w5 .tl-ev .tx::before{content:""; position:absolute; left:0; top:6px; width:7px; height:7px; border-radius:50%; background:var(--rule)}
+.ov #w5 .tl-ev .tx::after{content:""; position:absolute; left:3px; top:17px; bottom:-14px; border-left:1px solid var(--rule)}
+.ov #w5 .tl-ev.hot .tx{color:var(--ink)} .ov #w5 .tl-ev.hot .tx::before{background:var(--accent)}
+.ov #w5 .tl-fork{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-left:56px}
+.ov #w5 .tl-br{border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--paper)}
+.ov #w5 .tl-br .sit, .ov #w5 .tl-br .out{display:block; font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .tl-br b{display:block; font-family:var(--display); font-weight:500; font-size:14px; line-height:20px; color:var(--ink); margin:6px 0 2px}
+.ov #w5 .tl-br.hot{border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent)} .ov #w5 .tl-br.hot b{color:var(--accent)}
+.ov #w5 .vren{padding:16px 22px 14px; border:1px solid var(--line); border-radius:12px}
+.ov #w5 .rn-row{display:grid; grid-template-columns:86px 1fr; gap:12px; align-items:start; padding:8px 0}
+.ov #w5 .rn-n{font-size:13px; line-height:19px; color:var(--ink)}
+.ov #w5 .rn-bar{height:6px; margin-top:6px; border-radius:3px; background:var(--line)}
+.ov #w5 .rn-bar i{display:block; height:100%; border-radius:3px; background:#B9BBB4}
+.ov #w5 .rn-bar i.b{background:var(--accent)}
+.ov #w5 .rn-t{display:block; font-size:12px; line-height:18px; color:var(--faint); margin-top:6px}
+.ov #w5 .rn-f{display:flex; gap:28px; margin-top:8px; padding-top:12px; border-top:1px solid var(--line); font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .rn-f b{font-weight:500; color:var(--muted); margin-left:6px} .ov #w5 .rn-f .hot b{color:var(--accent)}
+.ov #w5 .vk{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.ov #w5 .k-p{border:1px solid var(--line); border-radius:12px; padding:16px 18px}
+.ov #w5 .k-p p{margin:0; max-width:none}
+.ov #w5 .k-h{font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .k-dots{display:grid; grid-template-columns:repeat(10,1fr); gap:5px; margin:12px 0 10px; max-width:150px}
+.ov #w5 .dt.miss{background:transparent; border:1px dashed var(--accent)}
+.ov #w5 .k-miss{font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .k-chips{list-style:none; margin:12px 0 0; padding:0}
+.ov #w5 .k-chips li{display:inline-block; font-size:12px; line-height:18px; padding:3px 10px; margin:0 6px 6px 0; border:1px solid var(--rule); border-radius:999px; color:var(--muted)}
+.ov #w5 .k-chips li.key{border-color:var(--accent); color:var(--accent)}
+.ov #w5 .k-out{margin-top:12px !important; font-size:13px; line-height:19px; color:var(--ink)}
+.ov #w5 .k-p.ok{border-color:rgba(61,90,69,.35)} .ov #w5 .k-p.ok .k-out{color:var(--accent)}
+.ov #w5 .vfl{display:grid; grid-template-columns:1fr 20px 1.7fr 20px .9fr; gap:8px; align-items:center; padding:20px; border:1px solid var(--line); border-radius:12px}
+.ov #w5 .fl-c{display:flex; flex-direction:column; gap:6px}
+.ov #w5 .fl-t{font-size:12px; line-height:18px; color:var(--faint)}
+.ov #w5 .fl-f{font-size:13px; line-height:19px; color:var(--ink); border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--paper)}
+.ov #w5 .fl-ar{font-size:14px; color:var(--faint); text-align:center}
+.ov #w5 .fl-q{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.ov #w5 .fl-q div{border:1px solid var(--rule); border-radius:8px; padding:8px 10px; background:var(--paper)}
+.ov #w5 .fl-q b{display:block; font-weight:500; font-size:12px; line-height:18px; color:var(--ink)}
+.ov #w5 .fl-q span{display:block; font-size:11.5px; line-height:16px; color:var(--faint)}
+.ov #w5 .fl-r{font-size:12px; line-height:18px; padding:3px 10px; border:1px solid var(--rule); border-radius:999px; color:var(--muted); width:max-content}
+.ov #w5 .fl-r.hot{border-color:var(--accent); color:var(--accent)}
+.ov #w5 .fl-loop{grid-column:1 / -1; margin:6px 0 0; padding-top:12px; border-top:1px dashed var(--rule); font-size:12px; line-height:18px; color:var(--faint); max-width:none}
+.ov #w5 .vmx table{width:100%; border-collapse:collapse; font-size:12px; line-height:18px}
+.ov #w5 .vmx th{font-weight:400; color:var(--faint); text-align:center; padding:0 4px 8px}
+.ov #w5 .vmx td{padding:9px 4px; border-top:1px solid var(--line); text-align:center}
+.ov #w5 .vmx td:first-child{text-align:left; color:var(--muted); font-size:13px}
+.ov #w5 .vmx .c{display:inline-block; width:11px; height:11px; border-radius:50%; border:1px solid var(--rule)}
+.ov #w5 .v200 figcaption, .ov #w5 .vmx figcaption{font-size:12px; line-height:18px; color:var(--faint); margin-top:8px}
+@media (max-width:600px){
+  .ov #w5 .v200 .dots{grid-template-columns:repeat(20,1fr); gap:5px; padding:16px}
+  .ov #w5 .vtl{padding:18px 16px} .ov #w5 .tl-fork{grid-template-columns:1fr; margin-left:0}
+  .ov #w5 .vren{padding:14px 16px 12px} .ov #w5 .rn-row{grid-template-columns:1fr; gap:4px}
+  .ov #w5 .vk{grid-template-columns:1fr}
+  .ov #w5 .vfl{grid-template-columns:1fr; padding:16px} .ov #w5 .fl-ar{transform:rotate(90deg)} .ov #w5 .fl-c{flex-flow:row wrap} .ov #w5 .fl-t, .ov #w5 .fl-f{flex-basis:100%}
+  .ov #w5 .vmx td:first-child{font-size:12px}
+}
+
 /* viewport units are not scaled by zoom, so the footer measures the window in page units */
 .rf{height:calc(100vh / var(--z,1)); --cw:min(calc(100vw / var(--z,1) - 48px), max(1080px, calc(68vw / var(--z,1))))}
 .piece.note h2{font-size:48px}
-.piece.note figure{max-width:720px}
-.piece.note .fit .specimen{width:760px}
+.piece.note figure{max-width:none}   /* same width as the other four prototypes */
+/* Sensitivity specimen: same 1080 canvas as the others, so it fills the frame */
 @media (max-width:760px){ .piece.note h2{font-size:40px} }
 /* Sensitivity card ending: two index rows, then the way back */
 .card .end.idx{display:block; padding-top:0; margin-top:56px}
@@ -646,55 +746,115 @@ html, body{background:#101110}
   .chapters > .piece:last-child{padding-bottom:104px !important}   /* closing line sits with equal air above and below */
   .closing{padding-bottom:104px !important}
 }
+/* morphing caption line: measured unzoomed, like #hv-cap */
+#cine-ml{zoom:calc(1 / var(--z,1)); font-size:calc(20px * var(--z,1)) !important; line-height:calc(28px * var(--z,1)) !important; max-width:none !important}
+#cine-ml, #cine-ml *{font-kerning:none; font-variant-ligatures:none; font-feature-settings:"kern" 0, "liga" 0}
+#cine-ml .ml-g{color:var(--ink)}
+@media (max-width:760px){ #cine-ml{font-size:17px !important; line-height:24px !important; max-width:16em !important; margin-left:auto !important; margin-right:auto !important} }
+/* chapter bar: a quiet floating row at the bottom, only while the five chapters are on screen */
+.chbar{position:fixed; left:50%; bottom:24px; z-index:60; transform:translate(-50%,16px); opacity:0; pointer-events:none;
+  display:flex; gap:2px; padding:4px; border-radius:16px; background:rgba(244,244,241,.88); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  box-shadow:0 0 0 1px rgba(25,26,24,.07), 0 10px 30px -12px rgba(25,26,24,.25); transition:opacity .35s ease, transform .45s cubic-bezier(.22,.61,.36,1)}
+.chbar.on{opacity:1; transform:translate(-50%,0); pointer-events:auto}
+.chbar a{display:flex; align-items:baseline; gap:7px; padding:9px 14px; border-radius:12px; font-family:var(--display); font-size:13px; line-height:18px; color:var(--muted); white-space:nowrap; transition:background-color .2s ease, color .2s ease}
+.chbar a i{font-style:normal; font-size:11px; color:#A5A49F}
+.chbar a:hover{color:var(--ink); background:rgba(25,26,24,.04)}
+.chbar a.cur{color:var(--ink); background:#fff; box-shadow:0 0 0 1px rgba(25,26,24,.06), 0 1px 2px rgba(25,26,24,.05)}
+body.foot-on .chbar{opacity:0 !important; pointer-events:none !important}
+@media (max-width:760px){ .chbar{bottom:14px; padding:3px; border-radius:14px} .chbar a{padding:8px 10px; font-size:12px} .chbar a i{display:none} }
+@media (prefers-reduced-motion:reduce){ .chbar{transition:none} }
+/* chapter bar: dark so it reads against the page; only there while you scroll, gone when you rest */
+.chbar{background:rgba(25,26,24,.92); box-shadow:0 10px 30px -12px rgba(25,26,24,.45)}
+.chbar a{color:#BDBFBA}
+.chbar a i{color:#6F716A}
+.chbar a:hover{color:#F7F7F5; background:rgba(255,255,255,.08)}
+.chbar a.cur{color:var(--ink); background:#F8F8F6; box-shadow:none}
+.chbar a.cur i{color:var(--faint)}
+.chbar.on.rest:not(:hover):not(:focus-within){opacity:0; transform:translate(-50%,16px); pointer-events:none}
+
+
+/* more air between and inside the chapters on wide screens */
+@media (min-width:901px){
+  .piece{padding-bottom:360px}
+  .chapters > .piece:not(:last-child)::after{bottom:180px}
+  .piece h2.chap-q{margin-top:36px}
+  .piece h2.chap-q + .dek{margin-top:28px}
+  .piece figure{margin-top:64px}
+  .piece .prose{margin-top:48px}
+  .piece .out-idx{margin-top:72px}
+}
+
+
+/* phone: more air between and inside the chapters */
+@media (max-width:760px){
+  .piece{padding-bottom:264px !important}
+  .chapters > .piece:not(:last-child)::after{bottom:132px !important}
+  .piece h2.chap-q, .piece.note h2.chap-q{margin-top:18px !important}
+  .piece h2.chap-q + .dek{margin-top:18px !important}
+  .piece figure{margin-top:56px !important}
+  .piece .prose{margin-top:44px !important}
+  .piece .prose .end{margin-top:36px}
+  .piece .out-idx{margin-top:52px}
+}
+/* ===== The intro: a dark drawing with one sentence, under the page. The page lifts over it. ===== */
+.rf{z-index:0}
+.intro{position:fixed; inset:0; z-index:1; background:#0A0907 url(intro-drawing.webp) left center/cover no-repeat; overflow:hidden;
+  filter:brightness(calc(1 - .55 * var(--ip,0))); transform:translateY(calc(var(--ip,0) * -40px))}
+html:not(.intro-done) .rf{visibility:hidden}
+html.intro-done .intro{visibility:hidden}
+.intro-t{position:absolute; left:50%; top:30%; width:min(440px, calc(100vw / var(--z,1) - 48px)); margin:0;
+  font-family:var(--display); font-weight:400; font-size:36px; line-height:46px; letter-spacing:-.01em; text-wrap:pretty; color:#4A4844}
+.intro-t i{font-style:normal; color:#4A4844; transition:color 500ms ease}
+.intro-t i.on{color:#E8E7E3}
+.intro-cue{position:absolute; left:50%; bottom:auto; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:10px;
+  font-family:var(--display); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:#8B8985;
+  opacity:0; transition:opacity 1s ease; pointer-events:none}
+.intro-cue.on{opacity:calc(1 - var(--ip,0) * 3)}
+.intro-cue i{display:block; width:1px; height:36px; background:linear-gradient(#8B8985,#8B8985) 0 0/1px 12px no-repeat; background-color:rgba(139,137,133,.25); animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%{background-position:0 -12px}70%,100%{background-position:0 36px}}
+@media (prefers-reduced-motion:reduce){ .intro-cue i{animation:none; background-position:0 12px} }
+.sheet{z-index:2; border-top-left-radius:var(--tr,0px); border-top-right-radius:var(--tr,0px);
+  box-shadow:0 -24px 60px -20px rgba(0,0,0,.6)}
+html.intro-done .sheet:not(.lifting){box-shadow:none}
+.sheet > .menu{position:absolute}
+@media (max-width:760px){
+  .intro{background-position:left 0 bottom 16%; background-size:auto 58%}
+  .intro-t{left:24px; top:13%; width:min(290px, calc(100vw - 48px)); font-size:26px; line-height:34px}
+  .intro-cue{left:auto; right:24px; transform:none}
+}
 </style>
-<script>
-/* before the first paint, not after it */
-(function(){var d=document.documentElement;
-  try{ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
-  d.classList.add('ldr-boot');
-  setTimeout(function(){ d.classList.remove('ldr-boot'); }, 7000);
-})();
-</script>
 </head>
 <body>
-<div class="ldr" id="ldr" aria-hidden="true" data-over="#hero-sub"><div class="ldr-row"><svg class="ldr-loop" viewBox="0 0 360 360" aria-hidden="true">
-<defs><marker id="ldr-ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1d1e1c"/></marker></defs>
-<circle cx="180" cy="180" r="166" fill="none" stroke="#1d1e1c" stroke-opacity=".1" stroke-width="1"/>
-<g class="ldr-arrow"><path d="M 109.8 29.6 A 166 166 0 0 1 250.2 29.6" fill="none" stroke="#1d1e1c" stroke-width="1.5" stroke-linecap="round" marker-end="url(#ldr-ah)"/></g>
-<g class="ldr-n" text-anchor="middle">
-<circle cx="180" cy="76" r="52" fill="#d2dce7"/><text x="180" y="70" class="h">Hypothesis</text><text x="180" y="89" class="s">What do I</text><text x="180" y="105" class="s">believe?</text>
-<circle cx="284" cy="180" r="52" fill="#d6e2cd"/><text x="284" y="176" class="h">Build</text><text x="284" y="196" class="s">Make it real</text>
-<circle cx="180" cy="284" r="52" fill="#f1dfcd"/><text x="180" y="278" class="h">Test</text><text x="180" y="297" class="s">What actually</text><text x="180" y="313" class="s">happens?</text>
-<circle cx="76" cy="180" r="52" fill="#dcd4e5"/><text x="76" y="168" class="h">Iterate</text><text x="76" y="188" class="s">Change the</text><text x="76" y="204" class="s">solution</text>
-<text x="180" y="176" class="c">LEARNING</text><text x="180" y="194" class="c">LOOP</text>
-</g></svg><p class="ldr-t">I sit with the people doing the work, build what we find as working prototypes, and learn from each round.</p></div></div>
+<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.</p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span></div>
 
-<a class="mark" href="#top" aria-label="Amrit Kumar, top">a</a>
-<nav class="menu"><a href="#work">Work</a><a href="sensitivity.html">Sensitivity</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
+
 
 <div class="sheet" id="sheet">
+<a class="mark" href="#top" aria-label="Amrit Kumar, top">a</a>
+<nav class="menu"><a href="#work">Work</a><a href="sensitivity.html">Sensitivity</a><a href="about.html" target="_blank" rel="noopener">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
 <div class="col" id="top">
   <section class="hero">
     <div class="hero-words">
     <h1 class="r" id="hero-line">Enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
-    <p class="r" id="hero-sub">So my work shows which contracts an answer touches, where it came from, what has changed, what else it affects, and what needs their attention first.</p>
+    <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
     <p class="r hero-meta">Product designer at Sirion<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
       <div class="cine-stage" id="cine-stage">
         <div class="cine-text">
-          <div class="cine-line on" data-i="0"><p class="cine-n">One company,<br>40,000 contracts.</p></div>
+          <div class="cine-line on" data-i="ml"><p class="cine-n" id="cine-ml" data-morph-text>One company, 40,000 contracts.</p></div>
+          <div class="cine-line" data-i="0"><p class="cine-n">One company, <br>40,000 contracts.</p></div>
           <div class="cine-line" data-i="s"><p class="cine-n">Spread across many documents.</p></div>
-          <div class="cine-line" data-i="2"><p class="cine-n">But now the scattered pieces are connected with AI.</p></div>
-          <div class="cine-line" data-i="3"><p class="cine-n">Now they mean more to the business.</p></div>
+          <div class="cine-line" data-i="2"><p class="cine-n">Now AI can connect the scattered pieces.</p></div>
+          <div class="cine-line" data-i="3"><p class="cine-n">And that brings powerful insights to the business.</p></div>
           <div class="cine-line" data-i="4"><p class="cine-n">But is that enough to earn the user&rsquo;s trust?</p></div>
           <div class="cine-line" data-i="5">
             <h2 id="cine-h">Not yet.</h2>
           </div>
           <div class="cine-line" data-i="u"><p class="cine-n">The user still asks&hellip;</p></div>
-          <div class="cine-line" data-i="6"><p class="lbl"><a class="cine-tag" href="#q1"><b>01</b>Search</a></p><p class="cine-q">Did it find every contract that matters?</p></div>
-          <div class="cine-line" data-i="7"><p class="lbl"><a class="cine-tag" href="#q2"><b>02</b>Proof</a></p><p class="cine-q">Can I see the exact words it used?</p></div>
+          <div class="cine-line" data-i="6"><p class="lbl"><a class="cine-tag" href="#q1"><b>01</b>Search</a></p><p class="cine-q">Did it find every piece of data that matters?</p></div>
+          <div class="cine-line" data-i="7"><p class="lbl"><a class="cine-tag" href="#q2"><b>02</b>Proof</a></p><p class="cine-q">Can I see the exact words a person wrote?</p></div>
           <div class="cine-line" data-i="8"><p class="lbl"><a class="cine-tag" href="#q3"><b>03</b>Lineage</a></p><p class="cine-q">Is this information still true today?</p></div>
           <div class="cine-line" data-i="9"><p class="lbl"><a class="cine-tag" href="#q4"><b>04</b>Reach</a></p><p class="cine-q">If I accept it, what else changes?</p></div>
           <div class="cine-line" data-i="10"><p class="lbl"><a class="cine-tag" href="#q5"><b>05</b>Sensitivity</a></p><p class="cine-q">Does it need me now, or can it wait?</p></div>
@@ -711,8 +871,8 @@ html, body{background:#101110}
         </div>
       </div>
       <ol class="bridge-list cine-list">
-        <li><a href="#q1"><b>01</b><span class="q">Did it find every contract that matters?</span><span class="why">Not just the ones it happened to read.</span></a></li>
-        <li><a href="#q2"><b>02</b><span class="q">Can I see the exact words it used?</span><span class="why">Not a score or a page number.</span></a></li>
+        <li><a href="#q1"><b>01</b><span class="q">Did it find every piece of data that matters?</span><span class="why">Not just the ones it happened to read.</span></a></li>
+        <li><a href="#q2"><b>02</b><span class="q">Can I see the exact words a person wrote?</span><span class="why">Not a score or a page number.</span></a></li>
         <li><a href="#q3"><b>03</b><span class="q">Is this information still true today?</span><span class="why">A later amendment may have changed it.</span></a></li>
         <li><a href="#q4"><b>04</b><span class="q">If I accept it, what else changes?</span><span class="why">One edit can break a clause pages away.</span></a></li>
         <li><a href="#q5"><b>05</b><span class="q">Does it need me now, or can it wait?</span><span class="why">Not everything it finds needs a person.</span></a></li>
@@ -723,8 +883,8 @@ html, body{background:#101110}
 
 
   <nav class="thread" id="thread" aria-label="The five questions">
-  <a href="#q1"><b>01</b><span>Did it find every contract that matters?</span></a>
-  <a href="#q2"><b>02</b><span>Can I see the exact words it used?</span></a>
+  <a href="#q1"><b>01</b><span>Did it find every piece of data that matters?</span></a>
+  <a href="#q2"><b>02</b><span>Can I see the exact words a person wrote?</span></a>
   <a href="#q3"><b>03</b><span>Is this information still true today?</span></a>
   <a href="#q4"><b>04</b><span>If I accept it, what else changes?</span></a>
   <a href="#q5"><b>05</b><span>Does it need me now, or can it wait?</span></a>
@@ -733,7 +893,7 @@ html, body{background:#101110}
   <div class="chapters" id="chapters">
   <article class="piece" data-unit="search" id="q1">
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
-    <h2 class="r chap-q">Did it find every contract that matters?</h2>
+    <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
     <figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -750,9 +910,9 @@ html, body{background:#101110}
 /* Sirion DS 2.0, light. Ask, agree how to judge, read whole contract families, list, and say so when documents disagree.
    Sample data; every company, contract and clause is made up. */
 :root{
-  --paper:#FFFFFF; --ink:#191A18; --faint:#6F716A; --line:#E3E3DF; --accent:#3D5A45;
+  --paper:#FFFFFF; --ink:#191A18; --faint:#6F716A; --line:#D7D8D2; --accent:#3D5A45;
   --font:&quot;Geist&quot;,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif;
-  --brand:#0d5e68; --brand-alt:#357981; --border:#e2e1db; --bg:#fafafa; --t2:#444341; --t3:#5f5e5a; --t4:#888782;
+  --brand:#0d5e68; --brand-alt:#357981; --border:#D5D4CD; --bg:#fafafa; --t2:#444341; --t3:#5f5e5a; --t4:#888782;
   --mark:#D1EFDB; --ease:cubic-bezier(.22,.61,.36,1);
 }
 *{margin:0; padding:0; box-sizing:border-box}
@@ -1767,11 +1927,11 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Partly live &middot; Prototyped with Claude</p></figure>
-    <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In contracts, it costs a breach nobody was told about in&nbsp;time.</p><p>So it asks how to judge before it reads, reads each contract family whole, and when two documents disagree it says so instead of picking&nbsp;one.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
+    <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads the whole contract family, and flags disagreement instead of&nbsp;guessing.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
-    <h2 class="r chap-q">Can I see the exact words it used?</h2>
+    <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
     <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
     <figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -1787,7 +1947,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;style&gt;
 /* Amrit&#x27;s tokens. One card, one reading column, one margin. Everything lines up on those three edges. */
 :root{
-  --paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#E3E3DF; --rule:#C9CAC4;
+  --paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --rule:#C9CAC4;
   --mark:#DCE5D3; --accent:#3D5A45; --wrong:#F3E3DA;
   --display:&quot;Geist&quot;,-apple-system,sans-serif; --font:&quot;Geist&quot;,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif;
   /* Sirion DS 2.0 tokens (from the Buttons page in Figma) */
@@ -1931,21 +2091,21 @@ html.bare .demobar{display:none}
 /* the three tools sit together as one quiet group, apart from Accept */
 .acts{gap:0}
 .acc{margin-right:12px}
-.tools{display:inline-flex; align-items:center; height:30px; padding:0 2px; border:1px solid #E3E3DF; border-radius:8px; background:#fff}
+.tools{display:inline-flex; align-items:center; height:30px; padding:0 2px; border:1px solid #D7D8D2; border-radius:8px; background:#fff}
 .tools .ic{width:28px; height:26px; border-radius:6px; color:#5F625C}
 .tools .ic + .ic{margin-left:2px}
 .tools .ic:hover, .tools .ic.fhover{background:#F1F1EE; color:#191A18}
 .tools .ic.on{background:#E6EEF0; color:#0d5e68}
 .tools .rj:hover, .tools .rj.fhover{background:#FBEDEB; color:#B42318}
 /* where it came from: a quiet outlined link, not a filled badge */
-.bar.open .ref{padding:1px 9px; background:transparent; border:1px solid #E3E3DF; color:#5F625C; font-size:11.5px; line-height:16px; font-weight:500; transition:border-color .2s, color .2s}
+.bar.open .ref{padding:1px 9px; background:transparent; border:1px solid #D7D8D2; color:#5F625C; font-size:11.5px; line-height:16px; font-weight:500; transition:border-color .2s, color .2s}
 .bar .ref:hover, .bar .ref.fhover{background:transparent; border-color:#191A18; color:#191A18}
 .src.first.hot::after{background:#191A18}
 /* the open card takes more room to the right, so the value and reason read on fewer lines */
 .bar.open{right:-56px}
 
 /* while the reader holds it, the frame&#x27;s edge goes light: the outline steps back and the lift from the page says it is theirs */
-.stage{border-color:#E3E3DF; transition:border-color .25s ease}
+.stage{border-color:#D7D8D2; transition:border-color .25s ease}
 html:hover .stage{border-color:#C2C4BD}
 /* the document fades out before the card edge, so text never runs into the border */
 .stage::after{content:&quot;&quot;; position:absolute; left:1px; right:1px; bottom:0; height:48px; background:linear-gradient(rgba(255,255,255,0), #FFFFFF 80%); border-radius:0 0 15px 15px; pointer-events:none; z-index:5}
@@ -2498,7 +2658,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Iterate &middot; Shipped &middot; Prototyped with Claude</p></figure>
-    <div class="prose r"><p>A confidence score and page number still left people searching for evidence. I made the exact source passage available in one&nbsp;click.</p><p>After four months, 23% of users were still using it, up&nbsp;from 5%&nbsp;before.</p><p class="end"><a href="#" data-open="w3">Why it&rsquo;s built this way</a></p></div>
+    <div class="prose r"><p>A confidence score and a page number still left people searching for evidence, so I put the exact source passage one click away. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="#" data-open="w3">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
@@ -2522,8 +2682,8 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
   --panel:#0E0E0E;
   --card:#181818;
   --card-2:#232323;
-  --line:#2A2A2A;
-  --line-2:#3A3A3A;
+  --line:#383838;
+  --line-2:#4A4A4A;
   --ink:#F2F2F0;
   --body:#C9C9C5;
   --muted:#8E8E89;
@@ -2564,7 +2724,7 @@ body{margin:0; background:#0B0B0B; font-family:var(--sans); -webkit-font-smoothi
 .file.lit .f-name{color:var(--ink)}
 
 /* the after: the live thing */
-.stage{position:relative; border:1px solid #E3E3DF; border-radius:16px; background:var(--panel); transition:border-color .25s ease}
+.stage{position:relative; border:1px solid #D7D8D2; border-radius:16px; background:var(--panel); transition:border-color .25s ease}
 html:hover .stage{border-color:#191A18}
 @media (max-width:760px){ .row{grid-template-columns:1fr} .stored{flex-direction:row; flex-wrap:wrap} .file{flex:1 1 140px} }
 
@@ -2744,7 +2904,7 @@ html.demoing .canvas, html.demoing .scroll{overflow:hidden !important}
 
 /* ---------- on the site: paper around the product, the site&#x27;s type and colour on the chrome; the dark panel is the product ---------- */
 html.paper .lbl{color:#6F716A; font-family:&quot;Poppins&quot;,-apple-system,sans-serif; letter-spacing:.1em}
-html.paper .file{background:#FFFFFF; border-color:#E3E3DF}
+html.paper .file{background:#FFFFFF; border-color:#D7D8D2}
 html.paper .file svg{color:#6F716A}
 html.paper .file .f-name{color:#191A18}
 html.paper .file .f-date{color:#6F716A}
@@ -2757,7 +2917,7 @@ html.paper .fly{box-shadow:0 18px 40px rgba(25,26,24,.18)}
 html.paper .demobar{font-family:&quot;Inter&quot;,-apple-system,sans-serif}
 html.paper .demobar .steps span{color:#6F716A}
 html.paper .demobar .steps b{font-family:&quot;Poppins&quot;,-apple-system,sans-serif; font-size:11.5px; color:#6F716A}
-html.paper .demobar .steps i{background:#E3E3DF}
+html.paper .demobar .steps i{background:#D7D8D2}
 html.paper .demobar .steps i::after{background:#3D5A45}
 html.paper .demobar .steps span.on{color:#191A18}
 html.paper .demobar .steps span.on b{color:#3D5A45}
@@ -2765,9 +2925,9 @@ html.paper .demobar .steps span.done{color:#5F625C}
 html.paper .dstat{color:#6F716A; font-family:&quot;Inter&quot;,-apple-system,sans-serif}
 html.paper .dstat .sdot{background:#3D5A45; animation-name:dpulseP}
 html.paper .demobar.driving .dstat .sdot{background:#191A18}
-html.paper .dstat .replay{background:#fff; border-color:#E3E3DF; color:#191A18}
+html.paper .dstat .replay{background:#fff; border-color:#D7D8D2; color:#191A18}
 html.paper .dstat .replay:hover{background:#fff; border-color:#C9CAC4}
-html.paper .dline{background:#E3E3DF}
+html.paper .dline{background:#D7D8D2}
 html.paper .dline i{background:#3D5A45}
 html.paper .dlab{font-family:&quot;Inter&quot;,-apple-system,sans-serif; color:#6F716A}
 html.paper .dlab b{font-family:&quot;Poppins&quot;,-apple-system,sans-serif; color:#3D5A45}
@@ -2776,7 +2936,7 @@ html.paper .dtry{font-family:&quot;Poppins&quot;,-apple-system,sans-serif; color
 html.embed.paper, html.embed.paper body{background:#F8F8F6}
 
 /* the whole lineage sits in one card, drawn the same way as the other two: one hairline, no fill of its own */
-html.embed.paper .row{background:transparent; border:1px solid #E3E3DF; border-radius:16px; padding:28px; transition:border-color .25s ease}
+html.embed.paper .row{background:transparent; border:1px solid #D7D8D2; border-radius:16px; padding:28px; transition:border-color .25s ease}
 html.embed.paper:hover .row{border-color:#C2C4BD}
 html.embed.paper .stage, html.embed.paper:hover .stage{border-color:transparent; box-shadow:none}
 html.embed.paper .unit{padding:0 0 3px}
@@ -3264,12 +3424,12 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Approved &middot; Prototyped with Claude</p></figure>
-    <div class="prose r"><p>One paragraph shows what the clause means today. Every change stays marked in the text with its date and the document it came from, so people can trace each part back, even when two parts of one sentence changed years&nbsp;apart.</p><p>One click opens the signed document at the exact paragraph that made the change. Reading the original wording is what lets people trust what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="w1">Why it&rsquo;s built this way</a></p></div>
+    <div class="prose r"><p>One paragraph shows what the clause says today, with every change marked by its date and source. One click opens the signed document at the paragraph that made the change, so people can check what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="w1">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
-    <p class="dek r">Lawyers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t touch.</p>
+    <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
     <figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -3601,7 +3761,7 @@ html.demoing .canvas, html.demoing .scroll{overflow:hidden !important}
 #prompt .mitem .mt .pb{margin-top:0}
 
 /* at rest the frame&#x27;s edge is light; when the reader takes over it darkens, and with the lift from the page it says this is theirs now */
-.stage{border-color:#E3E3DF; transition:border-color .25s ease}
+.stage{border-color:#D7D8D2; transition:border-color .25s ease}
 html:hover .stage{border-color:#C2C4BD}
 .stage::after{content:&quot;&quot;; position:absolute; left:1px; right:1px; bottom:0; height:40px; background:linear-gradient(rgba(240,239,237,0), #f0efed); border-radius:0 0 15px 15px; pointer-events:none; z-index:5}
 
@@ -4529,7 +4689,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Concept &middot; Built with Claude</p></figure>
-    <div class="prose r"><p>Change one clause and something three pages away can stop matching it: a definition, a cross-reference, a notice period that hangs off a date.</p><p>Here the redline lands in the text, says where its wording came from, and marks the other clause it just put out of step, with the fix already written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
+    <div class="prose r"><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already&nbsp;written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
@@ -4545,7 +4705,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin /&gt;
 &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&amp;family=Inter:wght@400;500&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
 &lt;style&gt;
-  :root{--paper:#FFFFFF;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--wait:#AFB0A9;--soft:#EDEDEA;
+  :root{--paper:#FFFFFF;--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#D7D8D2;--wait:#AFB0A9;--soft:#EDEDEA;
         --mark:#D1EFDB;--accent:#3D5A45; --here: #EC613E;
         --display:&quot;Poppins&quot;,-apple-system,sans-serif;--font:&quot;Inter&quot;,&quot;Poppins&quot;,-apple-system,sans-serif;
         /* --faint was #8B8D87 here and #6F716A on every other page. It carries real 14px
@@ -7141,7 +7301,7 @@ window.nudgeMark = function (host, go) {
       <p class="k">Clause history &middot; Sirion &middot; My design prototype</p>
       <hr>
       <p class="lead">What does this clause say today&mdash;and when did it change?</p>
-      <p>To answer that, lawyers often have to read the original contract alongside its amendments and piece the changes together. I wanted to bring the current wording and its history into one view, while keeping the source close enough to&nbsp;verify.</p>
+      <p>To answer that, reviewers often have to read the original contract alongside its amendments and piece the changes together. I wanted to bring the current wording and its history into one view, while keeping the source close enough to&nbsp;verify.</p>
       <h3>A paragraph can have more than one history</h3>
       <figure><img src="lineage-markers.webp" style="max-width:560px" alt="One paragraph with two markers: the notice sentence added in 2020 carries a 1, and the deadline changed in 2022 carries a 2" loading="lazy"></figure>
       <p>A sentence might be added in one amendment, then changed in another. Giving the whole paragraph one citation would hide that&nbsp;distinction.</p>
@@ -7171,7 +7331,7 @@ window.nudgeMark = function (host, go) {
       <hr>
       <p class="lead">Change one clause. See what else it touches.</p>
       <p class="ev">Own design, concept stage. The suggestions, the contracts they cite and the links between clauses are scripted sample&nbsp;data.</p>
-      <p>Lawyers check every AI edit. The edit they worry about is not the one they can see. It is the definition three pages up that no longer matches, or the cross-reference that now points at the wrong clause.</p>
+      <p>Reviewers check every AI edit. The edit they worry about is not the one they can see. It is the definition three pages up that no longer matches, or the cross-reference that now points at the wrong clause.</p>
       <h3>The edit lands where the words are</h3>
       <p>No side panel. Select a paragraph, say what should change, and the redline appears in the text, the way tracked changes already do.</p>
       <h3>Every change keeps its reason</h3>
@@ -7189,7 +7349,7 @@ window.nudgeMark = function (host, go) {
       <p class="k">Auto Extraction &middot; Sirion &middot; Shipped</p>
       <hr>
       <p class="lead">The AI had found the values. Reviewers still had to find the evidence.</p>
-      <p>A contract could have 128 extracted fields, and a lawyer was still accountable for checking every one. A confidence score and a page number gave them somewhere to start, but left much of the verification work to&nbsp;them.</p>
+      <p>A contract could have 128 extracted fields, and a reviewer was still accountable for checking every one. A confidence score and a page number gave them somewhere to start, but left much of the verification work to&nbsp;them.</p>
       <p>I owned the review redesign from research synthesis through interaction design and handover. The question I kept returning to was: how much work does someone have to do before they can accept an&nbsp;answer?</p>
       <h3>Keep the answer close to its source</h3>
       <figure><img src="ae-review-screen.webp" style="max-width:560px" alt="The review screen: contract text on the left, a panel of extracted fields on the right with accept and edit controls" loading="lazy"></figure>
@@ -7226,22 +7386,39 @@ window.nudgeMark = function (host, go) {
       <h2>Search</h2>
       <p class="k">Contract search &middot; Sirion &middot; Partly live</p>
       <hr>
-      <p class="tension">A search can return the right answer and still miss the contract that&nbsp;matters.</p>
+      <p class="tension">Finding the right passage, knowing which terms apply, and showing the answer at the right level are three different&nbsp;problems.</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
-        <h3>Ask before searching</h3>
-        <figure class="wide"><img src="search-c-ask.webp" alt="A search asking what counts as a miss: notice over 24 hours, no clause, or contracts signed before the policy date." loading="lazy"></figure>
-        <p>A new policy requires suppliers to report a data breach within 24&nbsp;hours.</p>
-        <p>Someone asks, &ldquo;Which contracts don&rsquo;t meet&nbsp;it?&rdquo;</p>
-        <p>But what counts as a miss? A longer notice period? No clause at all? Does the date the contract was signed&nbsp;matter?</p>
-        <p>Each interpretation could produce a different&nbsp;list.</p>
-        <p>So I made the search check what the person means before it starts. It adds one step, but avoids building an entire result on the wrong&nbsp;assumption.</p>
+        <h3>Before the question</h3>
+        <p>The landing page offered common questions to help people start, like &ldquo;Which contracts expire this year?&rdquo;</p>
+        <p>But if agents have already read the contracts, search can offer something better than generic prompts. I explored using that context to suggest questions worth asking: a renewal coming up, a missing obligation, two documents that&nbsp;disagree.</p>
+        <p>The hard part is choosing. A hundred findings shown as a hundred suggestions is just another inbox. This is where Search meets&nbsp;Sensitivity.</p>
+        <p>Let search answer what people ask, and help them see what may be worth&nbsp;asking.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">02</p>
-        <h3>Read the family, not the file</h3>
+        <h3>Know when to ask</h3>
+        <figure class="wide"><img src="search-c-ask.webp" alt="A search asking what counts as a miss: notice over 24 hours, no clause, or contracts signed before the policy date." loading="lazy"></figure>
+        <p>A new policy requires suppliers to report a data breach within 24 hours. Someone asks, &ldquo;Which contracts don&rsquo;t meet&nbsp;it?&rdquo;</p>
+        <p>A longer notice period, a missing clause, or a contract signed before the policy could each change what comes&nbsp;back.</p>
+        <p>Asking every time would slow people down. So I looked at when the search should go ahead and when it should stop and check. If the meaning is clear, it proceeds and shows the assumption it made. If different readings would give materially different lists, it asks&nbsp;first.</p>
+        <p>Confidence alone doesn&rsquo;t decide it. The cost of a wrong assumption&nbsp;does.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">03</p>
+        <h3>Let the question decide the view</h3>
+        <p>&ldquo;Which contract families are affected?&rdquo; shouldn&rsquo;t land on a flat list of matching&nbsp;documents.</p>
+        <p>In Phoenix testing, even the family listing needed more context. A family ID alone wasn&rsquo;t useful. The row had to show what was inside it, such as 3 contracts and 14&nbsp;documents.</p>
+        <p>So the result starts at the level of the question: families for a family question, agreements for an agreement question, clauses for a clause question. People can still drill down to the source&nbsp;passage.</p>
+        <p>The risk is that grouping hides exceptions. If one of five agreements is affected, the family summary shouldn&rsquo;t make the whole family look&nbsp;non-compliant.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">04</p>
+        <h3>Read beyond the match</h3>
         <div class="fam" role="img" aria-label="One contract family from the prototype: Master agreement, 72 hours. DPA, 48 hours. Support SOW, 5 business days. Hosting SOW, no clause. Implementation SOW, no clause.">
           <div class="fam-top"><span class="d">Master agreement</span><span class="t">72 hours</span></div>
           <div class="fam-kids">
@@ -7250,105 +7427,146 @@ window.nudgeMark = function (host, go) {
             <div class="none"><span class="d">Hosting SOW</span><span class="t">No clause</span></div>
             <div class="none"><span class="d">Implementation SOW</span><span class="t">No clause</span></div>
           </div>
-          <p class="fam-cap">One contract family from the prototype. Several documents, different terms. Which one&nbsp;applies?</p>
+          <p class="fam-cap">One family from the prototype. Five documents, three notice periods, two with no clause at&nbsp;all.</p>
         </div>
-        <p>In testing, I found that the relevant wording often sat in a different document from the one being&nbsp;quoted.</p>
-        <p>A contract might have a master agreement, several SOWs and later changes. Reading just one document can miss the bigger&nbsp;picture.</p>
-        <p>So I made the search read the related documents together, not just the one containing a&nbsp;match.</p>
-        <p>It takes longer, but finding the right words isn&rsquo;t enough if they&rsquo;re taken from the wrong&nbsp;document.</p>
+        <p>In testing, the wording that applied often sat in a different document from the one being quoted. A missing clause in an SOW doesn&rsquo;t mean the obligation is missing. The master agreement or DPA might cover&nbsp;it.</p>
+        <p>So the search reads the related documents together before it reports a finding. It takes longer, but a correct quote from the wrong document is still a wrong&nbsp;answer.</p>
+        <p>How much the search reads and what the person sees first are two separate&nbsp;decisions.</p>
       </section>
 
       <section class="ch">
-        <p class="ch-n">03</p>
-        <h3>Show what was checked, and what remains unclear</h3>
+        <p class="ch-n">05</p>
+        <h3>Keep uncertainty visible</h3>
         <figure class="wide strip"><img src="search-c-checked.webp" alt="The search shows its progress: 74 contract families in scope, 318 documents read, and which terms apply." loading="lazy"></figure>
-        <p>I wanted the wait to tell people something&nbsp;useful.</p>
-        <p>So the search shows what it&rsquo;s checking, how much it has covered, and how it decides which terms&nbsp;apply.</p>
+        <p>A progress bar tells people how long they&rsquo;ve waited. It doesn&rsquo;t tell them whether the search covered what matters. So the wait shows what was checked and what&nbsp;remains.</p>
         <div class="pair">
           <figure><img src="search-c-findings.webp" alt="Results separate notice periods over 24 hours, missing clauses and conflicting terms." loading="lazy"><figcaption>Results separate notice periods over 24 hours, missing clauses and conflicting&nbsp;terms.</figcaption></figure>
           <figure><img src="search-c-conflict.webp" alt="When documents disagree, the search shows the different passages instead of choosing one." loading="lazy"><figcaption>When documents disagree, the search shows the different passages instead of choosing&nbsp;one.</figcaption></figure>
         </div>
-        <p>Not every finding means the same&nbsp;thing.</p>
-        <p>A notice period that&rsquo;s too long, a missing clause and documents that disagree all need different attention. I kept them separate rather than calling everything &ldquo;non-compliant.&rdquo;</p>
-        <p>Sometimes the documents don&rsquo;t give a clear&nbsp;answer.</p>
-        <p>In those cases, the search still flags the contract and shows where the disagreement is. It doesn&rsquo;t pretend to know which document should take&nbsp;priority.</p>
-        <p>That decision stays with the person reviewing&nbsp;it.</p>
+        <p>A notice period that&rsquo;s too long, a missing clause and documents that disagree need different work, so I kept them apart instead of one &ldquo;non-compliant&rdquo;&nbsp;label.</p>
+        <p>Where documents disagree, the search shows the passages side by side. It can find the disagreement. It shouldn&rsquo;t invent the legal conclusion. That decision stays with the person reviewing&nbsp;it.</p>
       </section>
 
       <p class="take">Coverage is part of the&nbsp;answer.</p>
-      <p>Finding something is useful. Knowing what was checked, what wasn&rsquo;t found, and what remains uncertain makes the result easier to&nbsp;trust.</p>
-      <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> is live in Sirion. Reading whole contract families is in development. The screens shown here are from my&nbsp;prototype.</p>
+      <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> is live in Sirion. Contract-family search is in development. Suggested starting questions, when to ask, and question-led views are design explorations. The screens shown here are from my&nbsp;prototype.</p>
       <p class="end"><a href="#" data-close>Back to the work</a></p>
     </article>
     <article class="card" id="w5" hidden>
       <h2>Sensitivity</h2>
       <p class="k">How I think &middot; Own work &middot; 2023&ndash;26</p>
       <hr>
-      <p class="lead">The same information can mean something very different depending on when it reaches&nbsp;you.</p>
+      <p class="tension">The same information can mean something very different depending on when it reaches&nbsp;you.</p>
       <figure><img src="sens-3am-call.webp" style="max-width:100%" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
       <p>Imagine your wife calling at 2 in the afternoon. You might answer or call back&nbsp;later.</p>
-      <p>Now imagine the same call at 3 in the morning. You would probably pick up immediately, perhaps expecting something&nbsp;serious.</p>
-      <p>Same person. Same phone call. But the situation changes what it means to&nbsp;you.</p>
-      <p>Not because the phone knows something different. Because you&nbsp;do.</p>
+      <p>Now imagine the same call at 3 in the morning. You would probably pick up immediately, expecting something&nbsp;serious.</p>
+      <p>Same person. Same phone call. The situation changes what it means. Not because the phone knows something different. Because you&nbsp;do.</p>
       <p>You know who is calling, her routine, the hour, what has been happening in her life. You don&rsquo;t weigh these one by one. You read them together. And you might still be wrong: it could be an accidental&nbsp;call.</p>
       <p>I started wondering whether AI agents need a similar sense of when to speak and when to stay&nbsp;quiet.</p>
-      <h3>Where this question came from</h3>
-      <figure><img src="sens-contract-page.webp" style="max-width:100%" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
-      <p>While exploring an AI-first contract experience, I moved away from presenting contract information as pages, fields, and&nbsp;documents.</p>
-      <p>The idea was to let the agent do the reading, connect information across agreements and amendments, and bring forward what someone needs to know or act&nbsp;on.</p>
-      <p>By morning, an agent might have reached 200 conclusions. Show all of them, and the work has only moved from reading contracts to reading&nbsp;AI.</p>
-      <p>The software has become smarter. The experience hasn&rsquo;t necessarily become&nbsp;easier.</p>
-      <p>Showing the five most important findings seems like an obvious answer. But importance alone doesn&rsquo;t tell us whether someone needs to see something&nbsp;now.</p>
-      <p>An agent can know something important without needing to tell us&nbsp;immediately.</p>
-      <h3>Knowing something isn&rsquo;t the same as knowing when it matters</h3>
-      <p>Consider a contract whose payment terms have changed through&nbsp;amendments.</p>
-      <p>At 9 AM, the agent understands the governing payment term as Net&nbsp;60.</p>
-      <p>At 11 AM, a newly uploaded amendment reveals that the applicable term is actually Net&nbsp;45.</p>
-      <p>The agent has discovered something important. But what should it do with that&nbsp;discovery?</p>
-      <p><strong>Situation A</strong><br>The next relevant payment is three months&nbsp;away.</p>
-      <p>The agent can update its understanding, preserve the evidence, and make the change available without interrupting&nbsp;anyone.</p>
-      <p><strong>Situation B</strong><br>Finance is about to process a payment at noon using the earlier&nbsp;interpretation.</p>
-      <p>Now the same discovery could affect an immediate decision. The agent may need to bring it to someone&rsquo;s attention before they&nbsp;act.</p>
-      <p>The finding hasn&rsquo;t&nbsp;changed.</p>
-      <p>What changed is what someone was about to do with&nbsp;it.</p>
-      <p>The agent needs to understand not only what it has discovered, but what else is happening, who might be affected, and what could happen if the information is&nbsp;missed.</p>
-      <h3>The context that changes judgment</h3>
-      <p>Think of two contracts approaching&nbsp;renewal.</p>
-      <p>One expires in two days. Another in&nbsp;ten.</p>
-      <p>Looking only at dates, the first seems more&nbsp;urgent.</p>
-      <p>But the first vendor may already be scheduled for offboarding. The second may be strategically important, with negotiations underway and a decision needed much&nbsp;earlier.</p>
-      <p>An agent could read every document correctly, calculate every deadline, and still bring the wrong one to the top. Not because its calculations were wrong. Because its understanding of the situation was&nbsp;incomplete.</p>
-      <p>Timing, consequences, relationships, ownership, ongoing activity, and the possibility of reversing a decision can all change what deserves&nbsp;attention.</p>
-      <p>These factors don&rsquo;t operate independently. Their meaning often comes from how they relate to one&nbsp;another.</p>
-      <p>This is the part of Sensitivity I&rsquo;m most interested in: how an agent interprets a situation before deciding what a person needs to&nbsp;know.</p>
-      <h3>But an agent won&rsquo;t know everything</h3>
-      <p>There is an important&nbsp;limitation.</p>
-      <p>A renewal decision might have been made during a phone call. A supplier may be getting replaced after an offline discussion. Someone may already be handling an issue without recording their&nbsp;progress.</p>
-      <p>The agent cannot judge using information it doesn&rsquo;t have. The limitation isn&rsquo;t always intelligence. Sometimes it&rsquo;s missing&nbsp;information.</p>
-      <p>That means its interpretation can be reasonable based on available evidence and still be wrong for the person receiving&nbsp;it.</p>
-      <p>I don&rsquo;t think the answer is to expect perfect&nbsp;judgment.</p>
-      <p>The agent should make its reasoning understandable, distinguish what it knows from what it has inferred, and allow someone to correct its&nbsp;understanding.</p>
-      <p>A person saying &ldquo;We&rsquo;re already handling this&rdquo; or &ldquo;This vendor is being offboarded&rdquo; adds context the agent was&nbsp;missing.</p>
-      <p>But not every dismissal is a correction. Someone may wave away something important simply because they&rsquo;re busy. Ignoring, acknowledging, handing it to someone else and correcting the agent are different intentions, and the interface should make each one easy to&nbsp;say.</p>
-      <p>Good judgment may not always mean acting independently. Sometimes it means knowing when human understanding is&nbsp;needed.</p>
-      <h3>From judgment to interaction</h3>
-      <p>My original Sensitivity exploration proposed five levels of&nbsp;attention:</p>
-      <p>Nothing &rarr; Hint &rarr; Reveal &rarr; Emphasise &rarr;&nbsp;Interrupt</p>
-      <p>These describe different ways information can enter an interface, from remaining in the background to actively demanding&nbsp;attention.</p>
-      <p>But the deeper question comes before choosing a&nbsp;level.</p>
-      <p>What does the agent understand about the current situation? What are the consequences of missing something? How reliable is its interpretation? Is a person about to make a decision? Has someone already taken&nbsp;responsibility?</p>
-      <p>The answers may influence whether the agent stays quiet, offers a hint, presents evidence, asks for confirmation, or&nbsp;interrupts.</p>
-      <p>The attention levels are only the visible expression of that&nbsp;judgment.</p>
-      <p>The real challenge is deciding which response the situation&nbsp;deserves.</p>
-      <p>And there is a second pull. The more work the agent does out of sight, the more a person needs to check before trusting it. Why +6%? Where did $134K come from? AI compresses the work. Trust sometimes requires unpacking it. That is what the UI samples are&nbsp;for.</p>
-      <h3>Where this thinking stands</h3>
-      <p>I don&rsquo;t see Sensitivity as a finished algorithm or a proven model of human&nbsp;judgment.</p>
-      <p>Existing work in context-aware computing, intelligent notifications, and human-AI interaction already explores parts of this&nbsp;problem.</p>
-      <p>What interests me is how these ideas come together as AI agents gain the ability to discover information, interpret changes, and act across complex enterprise&nbsp;workflows.</p>
-      <p>I want to understand which contextual signals matter, where automated judgment differs from human judgment, and how interfaces should behave when the agent&rsquo;s understanding is&nbsp;incomplete.</p>
-      <p>The next step is to explore these questions through realistic contract scenarios and compare the agent&rsquo;s proposed behavior with the decisions experienced users would&nbsp;make.</p>
-      <p>Maybe the future of AI interaction design isn&rsquo;t only about what the machine can tell us. It&rsquo;s about whether it understands enough of our situation to know when telling us would actually&nbsp;help.</p>
-      <p>That&rsquo;s the question I&rsquo;m exploring through&nbsp;Sensitivity.</p>
+
+      <section class="ch">
+        <p class="ch-n">01</p>
+        <h3>Where this question came from</h3>
+        <figure><img src="sens-contract-page.webp" style="max-width:100%" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
+        <p>While exploring an AI-first contract experience, I moved away from presenting contracts as pages, fields and documents. The agent does the reading, connects agreements and amendments, and brings forward what someone needs to know or act&nbsp;on.</p>
+        <p>Agents can now do what used to take a team: link a clause in one agreement to an amendment in another, to an invoice, to an email. Every link is a possible finding. What the system can tell us keeps growing. What a person can take in&nbsp;doesn&rsquo;t.</p>
+        <p>By morning, an agent might have reached 200 conclusions. Show all of them, and the work has only moved from reading contracts to reading&nbsp;AI.</p>
+        <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 conclusions by morning. A person can act on a&nbsp;handful.</figcaption></figure>
+        <p>Showing the five most important seems like the obvious answer. But importance alone doesn&rsquo;t say whether someone needs to see something&nbsp;now.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">02</p>
+        <h3>One finding, different situations</h3>
+        <p>A contract&rsquo;s payment terms have changed through amendments. At 9 AM, the agent reads the governing term as Net&nbsp;60. At 11 AM, a newly uploaded amendment shows it is actually Net&nbsp;45.</p>
+        <div class="vtl" role="img" aria-label="Timeline: at 9:00 the agent reads Net 60; at 11:00 Amendment 3 shows Net 45. If the next payment is months away, it stays quiet. If Finance pays at noon, it interrupts.">
+          <div class="tl-ev"><span class="tm">9:00</span><span class="tx">The agent reads the payment term as Net&nbsp;60</span></div>
+          <div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. The term is Net&nbsp;45</span></div>
+          <div class="tl-fork">
+            <div class="tl-br"><span class="sit">If the next payment is three months away</span><b>Quiet</b><span class="out">Update, keep the evidence, tell no&nbsp;one</span></div>
+            <div class="tl-br hot"><span class="sit">If Finance pays at 12:00 on the old term</span><b>Interrupt</b><span class="out">Show it before the payment goes&nbsp;out</span></div>
+          </div>
+        </div>
+        <p>The finding hasn&rsquo;t changed. What changed is what someone was about to do with&nbsp;it.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">03</p>
+        <h3>Same finding, four responses</h3>
+        <div class="st4" role="group" aria-label="One finding shown four ways: quiet, interrupt, ask, and adapt after a person responds">
+          <div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes the payment term for Acme from Net&nbsp;60 to Net&nbsp;45.</div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Quiet</b><span>Next payment is three months away</span></div>
+            <div class="st4-ui q"><span class="fld">Payment term</span><span class="val">Net 45</span><span class="src">Updated 11:02 from Amendment&nbsp;3</span></div>
+          </div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Interrupt</b><span>A payment is being processed at noon</span></div>
+            <div class="st4-ui i"><p>Today&rsquo;s payment to Acme uses Net&nbsp;60. Amendment&nbsp;3 changed it to Net&nbsp;45.</p><span class="btn pri">Review before paying</span><span class="btn">Already handled</span></div>
+          </div>
+          <div class="st4-row">
+            <div class="st4-l"><b>Ask</b><span>The agent can&rsquo;t see payment activity</span></div>
+            <div class="st4-ui a"><p>Is a payment to Acme planned this week? The term changed to Net&nbsp;45, and I can&rsquo;t see your payment&nbsp;schedule.</p><span class="btn">Yes, this week</span><span class="btn">No</span><span class="btn">Not mine</span></div>
+          </div>
+          <p class="st4-after">After a person responds</p>
+          <div class="st4-row">
+            <div class="st4-l"><b>Adapt</b><span>Finance confirms it&rsquo;s already handled</span></div>
+            <div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won&rsquo;t raise this again unless the payment details&nbsp;change.</span></div>
+          </div>
+        </div>
+        <p>The first three are the agent&rsquo;s own judgment. The fourth is what it does after a person adds something it couldn&rsquo;t know. Sensitivity doesn&rsquo;t end when information reaches someone. It also covers how the system changes after they&nbsp;answer.</p>
+        <p>Not knowing enough doesn&rsquo;t always mean asking. If a payment might go out wrong in fifteen minutes, waiting for an answer is itself a risk, and an interruption is cheaper than the mistake. If a minor field changed, the agent can wait. What decides it is the cost of waiting, whether the decision can be undone, and the cost of breaking someone&rsquo;s&nbsp;focus.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">04</p>
+        <h3>Where judgment fails</h3>
+        <p>Two contracts approach renewal. One expires in two days, another in ten. By date, the first looks more urgent. But the first vendor is already being offboarded, and the second is in a negotiation that needs a decision much&nbsp;earlier.</p>
+        <div class="vren" role="img" aria-label="Contract A expires in 2 days but its vendor is being offboarded. Contract B expires in 10 days but a negotiation needs a decision this week. By date A comes first; by situation B does.">
+          <div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">2 days left &middot; vendor already being&nbsp;offboarded</span></div></div>
+          <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">10 days left &middot; negotiation needs a decision this&nbsp;week</span></div></div>
+          <div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
+        </div>
+        <p>An agent could read every document correctly and still bring the wrong one to the top. Not because its calculations were wrong. Because its picture of the situation was&nbsp;incomplete.</p>
+        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance is paying at noon. Another that knows only three, the payment, the amended term and who owns it, makes the right call. What counts is whether the agent has the fact that changes the&nbsp;decision.</p>
+        <div class="vk" role="img" aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call.">
+          <div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at&nbsp;noon</p><p class="k-out">Stays quiet. Wrong&nbsp;call.</p></div>
+          <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Right&nbsp;call.</p></div>
+        </div>
+        <p>Some of those facts never reach the system. A renewal decided on a phone call. A supplier being replaced after an offline conversation. The agent can&rsquo;t judge with information it doesn&rsquo;t have, so its reading can be reasonable and still wrong for the person receiving&nbsp;it.</p>
+        <p>So it should show its reasoning, separate what it knows from what it has inferred, and let people correct it. &ldquo;We&rsquo;re already handling this&rdquo; isn&rsquo;t a dismissal. It&rsquo;s context the agent was missing. But ignoring, acknowledging, handing to someone else and correcting the agent are different intentions, and each should be easy to&nbsp;say.</p>
+        <p>Sometimes what the agent doesn&rsquo;t know is exactly why a person needs to be&nbsp;involved.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">05</p>
+        <h3>What the agent weighs</h3>
+        <p>Not a scoring formula. Four questions, asked before deciding how to&nbsp;speak:</p>
+        <div class="vfl" role="img" aria-label="A finding passes through four questions: consequence, time, enough to judge, and people. The answer picks a response: quiet, surface, ask or interrupt. A person's reply goes back in as context.">
+          <div class="fl-c"><span class="fl-t">Finding</span><span class="fl-f">An amendment changes the payment&nbsp;term</span></div>
+          <span class="fl-ar" aria-hidden="true">&rarr;</span>
+          <div class="fl-q"><div><b>Consequence</b><span>What if it&rsquo;s missed? Can it be&nbsp;undone?</span></div><div><b>Time</b><span>When does it start to&nbsp;matter?</span></div><div><b>Enough to judge</b><span>Is the deciding fact&nbsp;missing?</span></div><div><b>People</b><span>Who decides? Has someone taken&nbsp;it?</span></div></div>
+          <span class="fl-ar" aria-hidden="true">&rarr;</span>
+          <div class="fl-c"><span class="fl-t">Response</span><span class="fl-r">Quiet</span><span class="fl-r">Surface</span><span class="fl-r">Ask</span><span class="fl-r hot">Interrupt</span></div>
+          <p class="fl-loop">&#8634;&ensp;A person&rsquo;s reply goes back in as context, and the next decision&nbsp;changes</p>
+        </div>
+        <p>My earlier exploration proposed five levels of attention: Nothing, Hint, Reveal, Emphasize, Interrupt. They still hold, but they are the visible end of the judgment, not the judgment itself. The agent may need to ask before it can safely pick a&nbsp;level.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">06</p>
+        <h3>What I want to test</h3>
+        <p>I haven&rsquo;t run this yet. The plan is small: three to five experienced contract reviewers, the same payment finding, and a different piece of context each time. For each, they decide whether to surface it now, defer it, ask, or treat it as&nbsp;handled.</p>
+        <figure class="vmx"><table><thead><tr><th></th><th>Now</th><th>Later</th><th>Ask</th><th>Handled</th></tr></thead><tbody><tr><td>The finding alone</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ payment at noon</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ vendor being offboarded</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ Finance says it&rsquo;s done</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr></tbody></table><figcaption>The study grid. Each reviewer marks one column per row. Empty until it&nbsp;runs.</figcaption></figure>
+        <p>The useful part won&rsquo;t be which answer wins. It&rsquo;s which piece of information changes someone&rsquo;s mind. If their decisions contradict the four questions above, that&rsquo;s evidence&nbsp;too.</p>
+      </section>
+
+      <section class="ch">
+        <p class="ch-n">07</p>
+        <h3>Where this stands</h3>
+        <p>This isn&rsquo;t a new idea in general. Horvitz and colleagues weighed the cost of interrupting against the cost of delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999). Dey defined context for computing in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001). Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Guidelines for Human-AI Interaction</a> (2019) cover timing, correction and&nbsp;explanation.</p>
+        <p>What changes with agents is that the system now creates its own findings, across many connected documents, without knowing what people decided offline. That&rsquo;s the part I&rsquo;m&nbsp;exploring.</p>
+      </section>
+
+      <p class="take">How does an agent know whether it understands enough of a situation to deserve someone&rsquo;s&nbsp;attention?</p>
       <div class="end idx"><a class="row" href="sensitivity.html" target="_blank" rel="noopener">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
       </div>
@@ -7471,72 +7689,39 @@ function onWidth(fn){
    same colour - and puts it there, then hides the real one until the paper has gone.
    Re-measured on resize and once the fonts have landed, never guessed at. */
 (function(){
-  /* the sentence is measured where the page starts. A reload that remembered a scroll position
-     put the page somewhere else under it, and the sentence slid away when the page came back */
+  /* The intro: the sentence writes itself once on the dark drawing and stays. The page is a sheet
+     that starts low; scrolling lifts it over the intro - the footer, in reverse. */
   try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
-  scrollTo(0,0);
-  var lift=function(){ document.documentElement.classList.remove('ldr-boot'); };
-  var el=document.getElementById('ldr'); if(!el){ lift(); return; }
-  var t=el.querySelector('.ldr-t');
-  var target=document.querySelector(el.getAttribute('data-over'));
-  if(!t||!target){ lift(); if(el.parentNode) el.parentNode.removeChild(el); return; }
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ lift(); el.parentNode.removeChild(el); return; }
-
-  function place(){
-    /* the page may be drawn at a zoom; rects come back zoomed, styles are set unzoomed */
-    var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
-    var cs=getComputedStyle(target);
-    var vw=innerWidth/z, row=el.querySelector('.ldr-row'), loop=el.querySelector('.ldr-loop');
-    var col=vw<900, phone=vw<561, L=phone?Math.min(220, vw-48):col?Math.min(280, vw-48):360;   /* a phone gets a smaller loop */
-    var W=col?Math.min(560, vw-48):Math.min(560, vw-L-56-96);
-    if(row) row.classList.toggle('col', col);
-    if(loop){ loop.style.width=L+'px'; loop.style.height=L+'px'; loop.style.fontFamily=cs.fontFamily; }
-    t.style.width=W+'px';
-    t.style.fontFamily=cs.fontFamily; t.style.fontWeight=cs.fontWeight; t.style.fontStyle=cs.fontStyle;
-    t.style.fontSize=phone?'19px':'24px'; t.style.lineHeight=phone?'28px':'34px';
-    t.style.letterSpacing=cs.letterSpacing;
-    t.style.textWrap='pretty';
-    t.style.setProperty('--ink-on', cs.color);
-  }
-  /* Measure only once the fonts have landed. Measured on the fallback face, the sentence
-     was laid out once, then re-laid when the real face arrived - that second layout was
-     the small jump people saw. Wait for the fonts (never longer than a beat), then start. */
-  var started=false;
-  function begin(){ if(started) return; started=true;
-  scrollTo(0,0);
-  place();
-  target.style.visibility='hidden';
-  if(typeof onWidth==='function') onWidth(function(){ place(); });
-
-  el.classList.add('run'); document.body.classList.add('ldr-on'); document.documentElement.classList.add('ldr-on');
-  document.documentElement.classList.remove('ldr-boot');
-  var src=t.textContent.replace(/\s+/g,' ').trim();
-  t.textContent='';
-  src.split(/(\s+)/).forEach(function(c){
-    if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c));
-    else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); }
-  });
+  var intro=document.getElementById('intro'), t=document.getElementById('intro-t'), sheet=document.getElementById('sheet'), d=document.documentElement;
+  if(!intro||!t||!sheet) return;
+  var calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* the sentence, word by word */
+  var src=t.textContent.replace(/\s+/g,' ').trim(); t.textContent='';
+  src.split(/(\s+)/).forEach(function(c){ if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c)); else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); } });
   var ws=[].slice.call(t.querySelectorAll('i'));
-  var STEP=Math.max(110, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
-  ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 300+k*STEP); });
-  setTimeout(function(){
-    el.classList.add('gone');
-    document.body.classList.remove('ldr-on'); document.documentElement.classList.remove('ldr-on');
-    /* given back only once the paper is clear, when the sentence on it and the one
-       under it are the same pixels */
-    /* hand over as a crossfade, not a swap: if the two layouts ever differ by a pixel,
-       nobody sees it snap */
-    target.style.transition='none'; target.style.opacity='0'; target.style.visibility='';
-    requestAnimationFrame(function(){ target.style.transition='opacity 420ms ease'; target.style.opacity='1';
-      t.style.transition='opacity 420ms ease'; t.style.opacity='0'; });
-    setTimeout(function(){
-      target.style.transition=''; target.style.opacity='';
-      if(el.parentNode) el.parentNode.removeChild(el);
-    }, 1060);
-  }, 300 + ws.length*STEP + 700);
+  if(calm) ws.forEach(function(w){ w.classList.add('on'); });
+  else { var STEP=Math.max(110, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
+    ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 500+k*STEP); }); }
+  var cue=document.getElementById('intro-cue'); if(cue) setTimeout(function(){ cue.classList.add('on'); }, calm?0:(500+ws.length*(calm?0:Math.max(110,Math.min(300,Math.round(5200/Math.max(ws.length,1)))))+600));
+  /* where the sheet starts, and how far it has come */
+  var z=1, H=0, raf=0, held=true;
+  function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
+  function size(){ z=z0(); var vh=innerHeight/z, phone=innerWidth/z<761;
+    H=Math.round(vh*(phone?.72:.74)); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; tick(); }
+  function tick(){ raf=0;
+    var p=Math.max(0,Math.min(1,(scrollY/z)/H)), e=1-Math.pow(1-p,3);
+    if(p>=1){ sheet.style.scale=''; sheet.style.transformOrigin=''; sheet.style.removeProperty('--tr'); d.classList.add('intro-done'); }
+    else { d.classList.remove('intro-done');
+      if(!calm){ sheet.style.transformOrigin='50% 0'; sheet.style.scale=(0.94+0.06*e).toFixed(4); }
+      sheet.style.setProperty('--tr',Math.round(32*(1-e))+'px'); }
+    intro.style.setProperty('--ip',e.toFixed(3));
+    if(held && p>0.45){ held=false; d.classList.remove('intro-hold'); }
   }
-  if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(begin); setTimeout(begin, 1200); }
-  else begin();
+  d.classList.add('intro-hold');
+  addEventListener('scroll',function(){ if(!raf) raf=requestAnimationFrame(tick); },{passive:true});
+  var w=innerWidth; addEventListener('resize',function(){ if(innerWidth!==w){ w=innerWidth; size(); } });
+  scrollTo(0,0); size();
+  (document.fonts?document.fonts.ready:Promise.resolve()).then(size);
 })();
 </script>
 <script>
@@ -8072,19 +8257,27 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   if(pb) pb.addEventListener('click',function(){ jump(-1); });
   if(nb) nb.addEventListener('click',function(){ jump(1); });
   function frame(now){
-    var dc=document.documentElement.classList; if(dc.contains('ldr-on')||dc.contains('ldr-boot')) clock=null;   /* hold on the first frame while the loader is up */
+    var dc=document.documentElement.classList; if(dc.contains('ldr-on')||dc.contains('ldr-boot')||dc.contains('intro-hold')) clock=null;   /* hold on the first frame while the loader is up */
     if(clock===null) clock=now;
     var el=((now-clock)/1000)%TOT, si=Math.min(STEPS.length-1,Math.floor(el/EACH)), u=(el-si*EACH)/EACH, T=(now-T0)/1000;
     if(progEl) progEl.style.width=(el/TOT*100).toFixed(2)+'%';
     var show=STEPS[si];
-    if(show!==cur){ cur=show; lines.forEach(function(l){ l.classList.toggle('on',l.dataset.i===show); }); }
+    /* the story captions share one line and morph into each other, letter by letter (the Sensitivity line morph); the questions keep their own lines */
+    if(show!==cur){ cur=show;
+      var ml=document.getElementById('cine-ml'), useML=ml && {'0':1,'s':1,'2':1,'3':1,'4':1,'u':1}[show];
+      lines.forEach(function(l){ l.classList.toggle('on', useML ? l.dataset.i==='ml' : l.dataset.i===show); });
+      if(useML){ var src=sec.querySelector('.cine-line[data-i="'+show+'"] .cine-n'), txt=src?src.textContent.replace(/\s+/g,' ').trim():'';
+        if(ml._mlCur!==undefined && window.Morphline) Morphline.to(ml, txt); else ml.textContent=txt; }
+    }
     /* first act: the company picture, each line paired with its own stretch of the picture */
     var H_=window.heroScene, inHero=si<5;
     if(hv) hv.parentNode.style.opacity = inHero ? 1 : 0;
     cv.style.opacity = inHero ? 0 : 1;
     if(H_ && inHero){
       var mk=H_.marks, seg=[[0,mk[1]],[mk[1],mk[2]+.8],[mk[2]+.8,mk[3]],[mk[3],mk[4]],[mk[4],mk[5]-.01]][si];   /* step 1 builds only the company and its contracts, at natural speed; the other layers grow under 'Spread across many documents' */
-      H_.draw(lerp(seg[0],seg[1],u)); raf=requestAnimationFrame(frame); return;
+      /* step 1: the company grows in quickly (first 30% of the step), so the contract lines start sooner; the lines then grow at an easy pace */
+      var ht = si===0 ? (u<.3 ? (u/.3)*2.4 : 2.4+(u-.3)/.7*(seg[1]-2.4)) : lerp(seg[0],seg[1],u);
+      H_.draw(ht); raf=requestAnimationFrame(frame); return;
     }
     /* Not yet, and User still asks: the picture steps away, the words carry it */
     ctx.clearRect(0,0,W,H);
@@ -8130,6 +8323,28 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   });
   var m=location.hash.match(/^#q([1-5])$/);
   if(m) setTimeout(function(){ show(+m[1]-1, true); }, 300);
+})();
+</script>
+<nav class="chbar" id="chbar" aria-label="Chapters"><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a></nav>
+<script>
+/* chapter bar: shows while a chapter fills the middle of the screen, marks that chapter, jumps on click */
+(function(){
+  var bar=document.getElementById('chbar'); if(!bar) return;
+  var links=[].slice.call(bar.querySelectorAll('a')), arts=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function tick(){
+    var mid=innerHeight*.5, cur=-1;
+    arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<=mid && r.bottom>mid) cur=k; });
+    var ov=document.querySelector('.ov.on, .ov.open'); 
+    bar.classList.toggle('on', cur>=0 && !ov);
+    links.forEach(function(a,k){ a.classList.toggle('cur', k===cur); if(k===cur) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
+  }
+  var raf=0, rt=0; bar.classList.add('rest');
+  addEventListener('scroll',function(){ bar.classList.remove('rest'); clearTimeout(rt); rt=setTimeout(function(){ bar.classList.add('rest'); },1400);
+    if(!raf) raf=requestAnimationFrame(function(){ raf=0; tick(); }); },{passive:true});
+  addEventListener('resize',tick); tick();
+  links.forEach(function(a,k){ a.addEventListener('click',function(e){ var el=arts[k]; if(!el) return; e.preventDefault();
+    var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
+    scrollTo({top:(el.getBoundingClientRect().top+scrollY)-60/z, behavior:'smooth'}); }); });
 })();
 </script>
 </body>
