@@ -656,6 +656,14 @@ html, body{background:#F8F8F6}
   .ab-loop-l b::before{content:"0" counter(abl) "  ";color:var(--faint);font-weight:400;white-space:pre}
   @media (max-width:760px){ .ab-loop{grid-template-columns:1fr;gap:36px} .ab-loop-d{max-width:240px;margin:0 auto} }
   @media (prefers-reduced-motion:reduce){ .abl-arrow{transform:none !important;transition:none !important} }
+/* phone paragraphs: one size across the site, 15/24 */
+@media (max-width:760px){ p.r, p.g, p.ab-note{font-size:15px !important; line-height:24px !important} }
+/* the letter in the mark: a size up, so it reads as a letter and not a dot */
+a.site-mark{font-size:21px !important} @media (min-width:761px){ a.site-mark{font-size:18px !important} } @media (min-width:1200px){ a.site-mark{font-size:16.2px !important} }
+/* the mark, a size up on every page: 42 on a laptop, 37.8 on the zoomed desktop, 48 on a phone */
+a.site-mark{width:48px !important; height:48px !important; font-size:23px !important}
+@media (min-width:761px){ a.site-mark{width:42px !important; height:42px !important; font-size:20px !important} }
+@media (min-width:1200px){ a.site-mark{width:37.8px !important; height:37.8px !important; font-size:18px !important} }
 </style>
 <script>
 /* before the first paint, not after it */

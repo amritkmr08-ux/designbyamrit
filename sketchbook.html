@@ -61,6 +61,23 @@ footer a:hover{color:var(--ink)}
 
 /* same page colour as the homepage (--page) */
 html, body{background:#F8F8F6}
+
+/* phone type: same scale as the homepage chapters */
+@media (max-width:760px){
+  body{font-size:15px; line-height:24px}
+  .line{font-size:22px; line-height:30px}
+  .hero .line{font-size:20px; line-height:28px; margin-top:28px}
+  .hero .small{font-size:13px; line-height:20px}
+  .lbl{font-size:12px; line-height:18px}
+  .story{margin-top:12px}
+  .idea{padding-bottom:140px}
+}
+/* the letter in the mark: a size up, so it reads as a letter and not a dot */
+a.site-mark{font-size:21px !important} @media (min-width:761px){ a.site-mark{font-size:18px !important} } @media (min-width:1200px){ a.site-mark{font-size:16.2px !important} }
+/* the mark, a size up on every page: 42 on a laptop, 37.8 on the zoomed desktop, 48 on a phone */
+a.site-mark{width:48px !important; height:48px !important; font-size:23px !important}
+@media (min-width:761px){ a.site-mark{width:42px !important; height:42px !important; font-size:20px !important} }
+@media (min-width:1200px){ a.site-mark{width:37.8px !important; height:37.8px !important; font-size:18px !important} }
 </style>
 </head>
 <body>

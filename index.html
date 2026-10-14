@@ -785,6 +785,12 @@ body.foot-on .chbar{opacity:0 !important; pointer-events:none !important}
 }
 
 
+/* phone footer: the line wraps short of the drawing; the links get room before the copyright */
+@media (max-width:760px){
+  .rf-d{max-width:250px}
+  .rf-row{gap:28px}
+  .rf-links{gap:10px 20px}
+}
 /* phone: more air between and inside the chapters */
 @media (max-width:760px){
   .piece{padding-bottom:264px !important}
@@ -822,6 +828,14 @@ html.intro-done .sheet:not(.lifting){box-shadow:none}
   .intro-t{left:24px; top:13%; width:min(290px, calc(100vw - 48px)); font-size:26px; line-height:34px}
   .intro-cue{left:auto; right:24px; transform:none}
 }
+/* phone paragraphs: one size across the site, 15/24 */
+@media (max-width:760px){ .piece .prose p{font-size:15px !important; line-height:24px !important} .ov .card p{font-size:15px; line-height:24px} .ov .card .lead{font-size:16px; line-height:25px} }
+/* the letter in the mark: a size up, so it reads as a letter and not a dot */
+a.mark{font-size:21px !important} @media (min-width:761px){ a.mark{font-size:18px !important} }
+/* the mark, a size up on every page: 42 on a laptop, 37.8 on the zoomed desktop, 48 on a phone */
+a.mark{width:48px !important; height:48px !important; font-size:23px !important}
+@media (min-width:761px){ a.mark{width:42px !important; height:42px !important; font-size:20px !important}
+  .hint{height:42px; border-radius:21px; width:var(--hw,42px); left:calc(max(24px, calc(50% - 660px)) + 42px)} .hint span{line-height:40px} }
 </style>
 </head>
 <body>
@@ -4694,7 +4708,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
-    <figure class="r"><div class="fit" data-h="640" data-w="760"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -7614,8 +7628,10 @@ addEventListener('message', e => {
 
 
 /* the two older loops are drawn at 1080px wide; on a narrower column they shrink as a picture would, rather than reflow */
-function fit(){ document.querySelectorAll('.fit').forEach(w => { const f = w.firstElementChild, k = Math.min(1, w.clientWidth / +(w.dataset.w || 1080)), h = +w.dataset.h, cut = +(w.dataset.cut || 0);
-  f.style.transform = k < 1 ? 'scale(' + k + ')' : ''; w.style.height = ((h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
+function fit(){ document.querySelectorAll('.fit').forEach(w => { const f = w.firstElementChild, cw = w.clientWidth, h = +w.dataset.h, cut = +(w.dataset.cut || 0);
+  /* on a phone, a specimen marked data-sm is shown up close: scaled to that width and centred, so its card stays big instead of shrinking with the whole scene */
+  const sm = w.dataset.sm && cw < 600, k = Math.min(1, cw / +(sm ? w.dataset.sm : (w.dataset.w || 1080))), dx = sm ? (cw - 1080 * k) / 2 : 0;
+  f.style.transform = k < 1 ? (dx ? 'translateX(' + dx + 'px) ' : '') + 'scale(' + k + ')' : ''; w.style.height = ((h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
 fit(); addEventListener('resize', fit);
 
 /* the retention chart: a crosshair and one tooltip, both lines at that month */
@@ -7758,11 +7774,11 @@ function onWidth(fn){
   var cur='', want='', tmr=0, hov=null, welcomed=false, shownAt=0, lastMove=Date.now(), raw='', since=Date.now();
   function put(w){ if(w===cur) return; cur=w;
     var old=el.querySelector('span:not(.out):not(.m)'), s=document.createElement('span'); s.className='pre'; s.textContent=w; el.appendChild(s);
-    el.style.setProperty('--hw',(15+s.offsetWidth+8+38)+'px');
+    el.style.setProperty('--hw',(15+s.offsetWidth+8+42)+'px');
     if(old){ old.classList.add('out'); setTimeout(function(){ old.remove(); },500); }
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ s.classList.remove('pre'); }); });
   }
-  function rest(){ clearTimeout(tmr); want=''; cur=''; el.classList.remove('on'); el.style.setProperty('--hw','38px');
+  function rest(){ clearTimeout(tmr); want=''; cur=''; el.classList.remove('on'); el.style.setProperty('--hw','42px');
     [].forEach.call(el.querySelectorAll('span:not(.m)'),function(x){ x.classList.add('out'); setTimeout(function(){ x.remove(); },500); }); }
   function ask(w){ if(w===want) return; want=w; clearTimeout(tmr); tmr=setTimeout(function(){ put(want); }, cur?280:0); }
   function seen(r){ return r.bottom>0 && r.top<innerHeight; }
