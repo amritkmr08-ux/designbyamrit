@@ -627,6 +627,8 @@ html, body{background:#101110}
   .hero .hero-meta{margin-top:18px !important; font-size:14px !important; line-height:21px !important}
   .hero .cine-n, .hero .cine-q{font-size:17px !important; line-height:24px !important; max-width:16em !important; margin-left:auto !important; margin-right:auto !important; text-wrap:balance}   /* long lines break into two even lines */
   .hero .cine-line h2{font-size:22px !important; line-height:29px !important}
+  .hero .cine-text{height:120px !important}   /* room for the label plus a two-line question, so nothing is clipped */
+  .hero .cine-line .cine-q{margin-top:8px !important}
   .piece{padding-bottom:168px !important}
   .chapters > .piece:not(:last-child)::after{bottom:84px !important}
   .chap-n, .chap-name{font-size:13px !important; line-height:18px !important}
@@ -8081,7 +8083,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     if(hv) hv.parentNode.style.opacity = inHero ? 1 : 0;
     cv.style.opacity = inHero ? 0 : 1;
     if(H_ && inHero){
-      var mk=H_.marks, seg=[[0,mk[2]],[mk[2],H_.spread],[H_.spread,mk[3]],[mk[3],mk[4]],[mk[4],mk[5]-.01]][si];
+      var mk=H_.marks, seg=[[0,mk[1]],[mk[1],mk[2]+.8],[mk[2]+.8,mk[3]],[mk[3],mk[4]],[mk[4],mk[5]-.01]][si];   /* step 1 builds only the company and its contracts, at natural speed; the other layers grow under 'Spread across many documents' */
       H_.draw(lerp(seg[0],seg[1],u)); raf=requestAnimationFrame(frame); return;
     }
     /* Not yet, and User still asks: the picture steps away, the words carry it */
