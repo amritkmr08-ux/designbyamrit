@@ -851,7 +851,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 @media (prefers-reduced-motion:reduce){ .intro-chip i::after{animation:none; opacity:.5} }
 @media (min-width:761px){
   .intro{background-image:none}
-  .intro::before{content:""; position:absolute; left:0; bottom:0; height:100%; aspect-ratio:3344/2090; pointer-events:none;
+  .intro::before{content:""; position:absolute; left:-3%; bottom:-6%; height:136%; aspect-ratio:3344/2090; pointer-events:none;
     background:url(intro-drawing.webp) left bottom/cover no-repeat;
     -webkit-mask-image:linear-gradient(to right,#000 70%,transparent 100%), linear-gradient(to top,#000 62%,transparent 98%); -webkit-mask-composite:source-in;
     mask-image:linear-gradient(to right,#000 70%,transparent 100%), linear-gradient(to top,#000 62%,transparent 98%); mask-composite:intersect}
@@ -928,6 +928,12 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 /* less air between a prototype and the paragraph under it */
 @media (min-width:901px){ .piece .prose{margin-top:16px !important} }
 @media (max-width:760px){ .piece .prose{margin-top:24px !important} }
+
+/* desktop drawing: back to the full-size version from before (fills the screen, as on the live site) */
+@media (min-width:761px){
+  .intro{background-image:url(intro-drawing.webp) !important; background-position:left center !important; background-size:cover !important}
+  .intro::before{display:none !important}
+}
 </style>
 </head>
 <body>
