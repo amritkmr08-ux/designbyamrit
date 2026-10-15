@@ -4801,7 +4801,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Concept</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Partially built</p></figure>
     <div class="prose r"><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already&nbsp;written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece static note" id="q5">
@@ -8449,9 +8449,10 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var links=[].slice.call(bar.querySelectorAll('a')), arts=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
   function tick(){
     var mid=innerHeight*.5, cur=-1;
-    arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<=mid && r.bottom>mid) cur=k; });
+    /* a chapter counts as current as soon as its top is in the upper 70% of the screen */
+    arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<innerHeight*.7 && r.bottom>innerHeight*.2) cur=k; });
     /* never while the opening is on screen: the bar belongs to the chapters, not the top of the page */
-    var hero=document.querySelector('.hero'), phone=innerWidth<761, inHero=scrollY<5 || (hero && hero.getBoundingClientRect().bottom > mid*.5);
+    var hero=document.querySelector('.hero'), phone=innerWidth<761, inHero=scrollY<5 || (hero && hero.getBoundingClientRect().bottom > innerHeight*.3);
     if(inHero) cur=-1;
     var ov=document.querySelector('.ov.on, .ov.open'); 
     /* shows as soon as the white page has come up over the intro, not only once it has fully landed */
