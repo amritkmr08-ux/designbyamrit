@@ -203,6 +203,9 @@ footer{display:flex; justify-content:space-between; gap:16px; padding:26px 0 48p
 .ov{position:fixed; inset:0; z-index:95; background:rgba(222,222,218,.7); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
   overflow-y:auto; overscroll-behavior:contain; opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s ease}
 .ov.on{opacity:1; visibility:visible}
+/* the write-up pop-up: a plain dimmed page behind it, no blur (blur smeared dark bands at the screen edges and around the prototypes behind), and a wider card */
+.ov{background:rgba(232,232,228,.94) !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+@media (min-width:901px){ .ov .card{max-width:920px} }
 .ov-in{display:flex; justify-content:center; padding:56px 24px 120px; min-height:100%}
 .card{width:100%; max-width:780px; align-self:flex-start; background:var(--paper); border-radius:16px; padding:72px 88px 64px;
   box-shadow:0 0 0 1px var(--line), var(--pop); transform:translateY(16px); transition:transform .36s var(--ease)}
@@ -879,15 +882,12 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 /* phone: no bar on the line; the floating one stays at the bottom */
 @media (max-width:760px){
   .chbar-in{display:none !important}
-  .chbar.on.rest:not(:hover):not(:focus-within){opacity:1; transform:translate(-50%,0); pointer-events:auto}
 }
 
 /* desktop: the opening fills the screen, so the "My work" bar lands near the bottom of the first view */
 .chbar-in a:hover{background:rgba(255,255,255,.08); color:#F7F7F5}
 .chbar-in a:focus{outline:none}
 
-/* the floating bar stays once it appears; it no longer fades when you stop scrolling */
-.chbar.on.rest:not(:hover):not(:focus-within){opacity:1 !important; transform:translate(-50%,0) !important; pointer-events:auto !important}
 
 /* one navigator: always at the bottom once the page is up; nothing marked until you are in a chapter */
 .chbar-in{display:none !important}
@@ -921,12 +921,14 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 }
 
 /* the prototypes carry a soft shadow at rest; hover still lifts them further */
-.piece[data-unit] .fit{box-shadow:0 1px 3px rgba(25,26,24,.05), 0 10px 28px -12px rgba(25,26,24,.16)}
+.piece[data-unit] .fit{box-shadow:none}
+/* at rest: no shadow, one darker grey hairline drawn on top of the frame edge; hover and trying keep their lift shadow */
+.piece[data-unit] .fit::after{content:""; position:absolute; inset:0; border:1px solid #B9B8B2; border-radius:inherit; pointer-events:none; z-index:5}
 .piece[data-unit].trying .fit{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)}
 @media (hover:hover){ .piece[data-unit] .fit:hover{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)} }
 
 /* less air between a prototype and the paragraph under it */
-@media (min-width:901px){ .piece .prose{margin-top:16px !important} }
+@media (min-width:901px){ .piece .prose{margin-top:40px !important} }
 @media (max-width:760px){ .piece .prose{margin-top:24px !important} }
 
 /* desktop drawing: back to the full-size version from before (fills the screen, as on the live site) */
@@ -948,17 +950,67 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 @media (max-width:760px){ p.fmeta{white-space:normal} }
 
 /* the hint pill beside the mark: flat, no glass or inner shadow */
-.hint{background:#ECECE8 !important; border:0 !important; box-shadow:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+.hint{background:none !important; border:0 !important; box-shadow:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
 
 /* intro sentence: words light up one by one; the chip arrives after */
 .intro-t i{font-style:normal; color:#4A4844 !important; transition:color 500ms ease}
 .intro-t i.on{color:#E8E7E3 !important}
 .intro-chip{transition:opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1)}
-.intro-chip.wait{opacity:0; transform:translateY(6px)}
+/* the availability chip is on screen from the first frame, it does not wait for the sentence */
+.intro-chip.wait{opacity:1; transform:none}
 
 /* the longer headline wraps evenly into three lines */
-@media (min-width:761px){ #hero-line{max-width:440px !important; text-wrap:pretty !important} }
+@media (min-width:761px){ #hero-line{max-width:400px !important; text-wrap:pretty !important} }
+
+/* intro sentence: Poppins Regular 36 / 54, as in Figma */
+@media (min-width:761px){ .intro-t{font-family:'Poppins',var(--display),sans-serif !important; font-weight:400 !important; font-size:36px !important; line-height:54px !important; letter-spacing:0 !important} }
+
+/* more air between the hero picture's caption and the line under the opening */
+@media (min-width:901px){ .hero{padding-bottom:150px !important; padding-top:190px !important} }
+
+/* intro sentence a touch greyer, not bright white */
+.intro-t i.on{color:#C9C8C3 !important}
+
+/* intro, matched to the Figma frame: drawing a little smaller (its right edge fades into the dark), sentence larger.
+   The desktop page is drawn at 90%, so 40/60 here shows as 36/54 on screen */
+@media (min-width:761px){
+  .intro{background-image:none !important}
+  .intro::before{display:block !important; content:""; position:absolute; left:0; top:0; bottom:auto; height:auto; aspect-ratio:auto; width:93%; height:100%;
+    background:url(intro-drawing.webp) left 0 top 42%/100% auto no-repeat !important;
+    -webkit-mask-image:linear-gradient(to right,#000 82%,transparent 100%); mask-image:linear-gradient(to right,#000 82%,transparent 100%); -webkit-mask-composite:source-over; mask-composite:add; pointer-events:none}
+  .intro-t{z-index:1; top:24% !important}
+}
+
+/* the drawing's leaves touch the top edge; the grey light at the top right reaches the screen's right edge again; the scroll cue sits at the right edge */
+@media (min-width:761px){
+  .intro::before{height:auto !important; aspect-ratio:3344/2090 !important; margin-top:-3.8% !important; background-position:left 0 top 0 !important}
+  .intro::after{content:""; position:absolute; left:0; top:0; width:100%; aspect-ratio:3344/2090; margin-top:-4.1%; pointer-events:none;
+    background:url(intro-drawing.webp) left 0 top 0/100% auto no-repeat;
+    -webkit-mask-image:linear-gradient(to right,transparent 62%,#000 82%); mask-image:linear-gradient(to right,transparent 62%,#000 82%)}
+  .intro-cue{z-index:2}
+}
+
+
+/* the pause before the questions: the stage is empty and 'The user still asks…' rises slowly in the middle */
+.cine-line[data-i="u"]{transition:opacity 1.1s ease .15s, transform 1.4s cubic-bezier(.22,.61,.36,1) .15s !important}
+/* lift it from the caption slot into the middle of the empty picture (margin % follows the width, and the picture is 5:4) */
+.hero .cine-line[data-i="u"]{margin-top:calc(-40% - 68px)}
+
+/* at-a-glance facts under a write-up's title */
+.ov .card .glance{display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; margin:24px 0 0; padding:18px 0 0; border-top:1px solid var(--line)}
+.ov .card .glance dt{font-size:12px; line-height:18px; letter-spacing:.04em; color:var(--faint); margin:0}
+.ov .card .glance dd{font-size:14px; line-height:21px; color:var(--ink); margin:2px 0 0}
+@media (max-width:600px){ .ov .card .glance{grid-template-columns:1fr} }
 </style>
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
+<meta property="og:title" content="Amrit Kumar — product designer" />
+<meta property="og:description" content="I watch how people decide what to do with an AI answer, then design for that moment. Product designer at Sirion, ex Airtel." />
+<meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span></div>
@@ -974,6 +1026,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
     <h1 class="r" id="hero-line">I&#8217;ve learnt enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
     <p class="r hero-meta">Product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
+    <p class="r hero-live"><span class="live-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
@@ -988,7 +1041,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
           <div class="cine-line" data-i="5">
             <h2 id="cine-h">Not yet.</h2>
           </div>
-          <div class="cine-line" data-i="u"><p class="cine-n">The user still asks&hellip;</p></div>
+          <div class="cine-line" data-i="u"><p class="cine-n">Users ask&hellip;</p></div>
           <div class="cine-line" data-i="6"><p class="lbl"><a class="cine-tag" href="#q1"><b>01</b>Search</a></p><p class="cine-q">Did it find every piece of data that matters?</p></div>
           <div class="cine-line" data-i="7"><p class="lbl"><a class="cine-tag" href="#q2"><b>02</b>Proof</a></p><p class="cine-q">Can I see the exact words a person wrote?</p></div>
           <div class="cine-line" data-i="8"><p class="lbl"><a class="cine-tag" href="#q3"><b>03</b>Lineage</a></p><p class="cine-q">Is this information still true today?</p></div>
@@ -1496,6 +1549,45 @@ html.bare .demobar{display:none}
 /* the chat a little narrower once the list opens; the 40px goes to the list, where the counterparty names were being cut */
 .listp{width:680px}
 .stage.asked.listing .thread, .stage.listing .thread{right:696px}
+
+/* drawer cards: one white card per group, actions side by side */
+.why2{background:#fff; border:1px solid #E6E5E0; border-radius:12px; padding:12px 14px 13px; box-shadow:0 1px 2px rgba(26,26,25,.04); margin-bottom:6px}
+.why2.c{background:#fff; border-color:#E6E5E0}
+.why2 .wl{display:inline-flex; align-items:center; gap:6px; font-size:10px; letter-spacing:.07em; line-height:18px; padding:0 8px 0 7px; border-radius:999px; background:#FBEDEB; color:#B23A2E; margin-bottom:8px}
+.why2 .wl::before{content:&quot;&quot;; width:5px; height:5px; border-radius:50%; background:currentColor}
+.why2.c .wl{background:#FBF1DC; color:#8A5A00}
+.why2 h5{font-size:13px; line-height:19px}
+.why2 .ws{margin:2px 0 10px}
+.why2 blockquote{border-left:0; background:#F5F5F2; border-radius:8px; padding:9px 11px; color:var(--t2)}
+.sec2{font-size:10px; letter-spacing:.08em; margin:16px 2px 6px}
+.sec2.f{margin-top:16px}
+.kvc{background:#fff; border:1px solid #E6E5E0; border-radius:12px; overflow:hidden}
+.kvc .kv{padding:9px 12px; border-top:1px solid #F0EFEB}
+.kvc .kv:first-child{border-top:0}
+.kvc .kv.worst{background:#F4F8F8; box-shadow:inset 2px 0 0 var(--brand-alt)}
+.kvc .kv i{background:#fff; box-shadow:0 0 0 1px #CFE0E1}
+.dact{display:flex; gap:8px; margin-top:16px}
+.dact .dbtn{flex:1 1 0; min-width:0; margin:0; height:36px; border-radius:10px; transition:background-color .18s ease, border-color .18s ease}
+.dact .dbtn.s{background:#fff; border-color:#DAD9D3}
+.dact .dbtn.s:hover{background:#F5F5F2}
+.dact .dbtn.p:hover{background:var(--brand-alt)}
+
+/* the question card folds into the follow-up box without the box turning into a stretched oval:
+   the corner radius stays a real number (24px is already a pill at this height), so it never jumps from 999px */
+.composer, .composer:has(.qcard.on){border-radius:24px}
+.composer:has(.qcard.on){border-radius:20px}
+.composer{transition:border-radius .45s cubic-bezier(.22,.61,.36,1), background-color .4s ease, box-shadow .4s ease}
+.qcard{transition:max-height .45s cubic-bezier(.22,.61,.36,1), opacity .18s ease, padding .45s cubic-bezier(.22,.61,.36,1) !important}
+.qcard.on{transition:max-height .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease .12s, padding .45s cubic-bezier(.22,.61,.36,1) !important}
+
+/* chat pane a little narrower again once the list opens */
+.listp{width:720px}
+.stage.asked.listing .thread, .stage.listing .thread{right:736px}
+
+/* the list and the drawer wait just off the right edge; their shadows only show once they slide in, so nothing smudges the frame&#x27;s edge at rest */
+.listp, .det{box-shadow:none !important; transition-property:transform, box-shadow !important}
+.stage.listing .listp{box-shadow:-18px 0 36px -28px rgba(25,26,24,.22) !important}
+.stage.detail .det{box-shadow:-12px 0 32px -18px rgba(26,26,25,.22) !important}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -1657,18 +1749,18 @@ function openRow(i){
   let h = &#x27;&#x27;;
   if(r.f === &#x27;m&#x27;){
     h += &#x27;&lt;div class=&quot;why2&quot;&gt;&lt;p class=&quot;wl&quot;&gt;FROM THIS ANSWER&lt;/p&gt;&lt;h5&gt;No breach-notice clause, policy is 24 hours&lt;/h5&gt;&lt;p class=&quot;ws&quot;&gt;Read across all &#x27; + r.docs.length + &#x27; documents in the family&lt;/p&gt;&lt;blockquote&gt;Nothing obliges this vendor to tell you about a breach at all. Silence counts as a miss under the rule you picked.&lt;/blockquote&gt;&lt;/div&gt;&#x27;;
-    h += &#x27;&lt;p class=&quot;sec2&quot;&gt;BREACH-NOTICE TERMS &amp;middot; NONE FOUND&lt;/p&gt;&#x27; + r.docs.map(d =&gt; &#x27;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;&#x27; + d + &#x27;&lt;/span&gt;&lt;b&gt;No clause found&lt;/b&gt;&lt;/p&gt;&#x27;).join(&#x27;&#x27;);
-    h += &#x27;&lt;p class=&quot;sec2 f&quot;&gt;FAMILY&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Composition&lt;/span&gt;&lt;b&gt;&#x27; + r.docs.length + &#x27; documents&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Records&lt;/span&gt;&lt;b&gt;&#x27; + r.docs.length + &#x27; &amp;middot; &lt;u class=&quot;prot&quot; data-p=&quot;agreements&quot;&gt;view agreements&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&#x27;;
+    h += &#x27;&lt;p class=&quot;sec2&quot;&gt;BREACH-NOTICE TERMS &amp;middot; NONE FOUND&lt;/p&gt;&lt;div class=&quot;kvc&quot;&gt;&#x27; + r.docs.map(d =&gt; &#x27;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;&#x27; + d + &#x27;&lt;/span&gt;&lt;b&gt;No clause found&lt;/b&gt;&lt;/p&gt;&#x27;).join(&#x27;&#x27;) + &#x27;&lt;/div&gt;&#x27;;
+    h += &#x27;&lt;p class=&quot;sec2 f&quot;&gt;FAMILY&lt;/p&gt;&lt;div class=&quot;kvc&quot;&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Composition&lt;/span&gt;&lt;b&gt;&#x27; + r.docs.length + &#x27; documents&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Records&lt;/span&gt;&lt;b&gt;&#x27; + r.docs.length + &#x27; &amp;middot; &lt;u class=&quot;prot&quot; data-p=&quot;agreements&quot;&gt;view agreements&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;/div&gt;&#x27;;
   } else {
     const F2 = FAM[i] || {terms:[[r.bw, r.bn, 1]], comp:&#x27;—&#x27;, rec:r.n || 1, key:&#x27;—&#x27;}, q = pickQ(r), conflict = r.f === &#x27;c&#x27;;
     const why = r.why || (conflict ? &#x27;One of competing terms in this family; none of them says which one wins.&#x27; : r.bw === &#x27;SOW overrides the MSA&#x27; ? &#x27;The SOW says it prevails over the master, so its term governs.&#x27; : &#x27;The only term in the family, and it runs past 24 hours.&#x27;);
     h += &#x27;&lt;div class=&quot;why2&#x27; + (conflict ? &#x27; c&#x27; : &#x27;&#x27;) + &#x27;&quot;&gt;&lt;p class=&quot;wl&quot;&gt;FROM THIS ANSWER&lt;/p&gt;&lt;h5&gt;Breach notice: &#x27; + r.bn + &#x27;, policy is 24 hours&lt;/h5&gt;&lt;p class=&quot;ws&quot;&gt;&#x27; + q[0] + &#x27; &amp;middot; &#x27; + q[1] + &#x27;&lt;/p&gt;&lt;blockquote&gt;&#x27; + q[2] + &#x27; &#x27; + why + &#x27;&lt;/blockquote&gt;&lt;/div&gt;&#x27;;
     const n = F2.terms.filter(x =&gt; x[1] !== &#x27;No clause found&#x27;).length;
-    h += &#x27;&lt;p class=&quot;sec2&quot;&gt;BREACH-NOTICE TERMS&#x27; + (n &gt; 1 ? &#x27; &amp;middot; &#x27; + n + (conflict ? &#x27; COMPETE&#x27; : &#x27; FOUND&#x27;) : &#x27;&#x27;) + &#x27;&lt;/p&gt;&#x27; +
-      F2.terms.map(x =&gt; &#x27;&lt;p class=&quot;kv&#x27; + (x[2] ? &#x27; worst&#x27; : &#x27;&#x27;) + &#x27;&quot;&gt;&lt;span&gt;&#x27; + x[0] + &#x27;&lt;/span&gt;&lt;b&gt;&#x27; + x[1] + (x[2] ? &#x27;&lt;i&gt;&#x27; + (conflict ? &#x27;Worst term&#x27; : &#x27;Governs&#x27;) + &#x27;&lt;/i&gt;&#x27; : &#x27;&#x27;) + &#x27;&lt;/b&gt;&lt;/p&gt;&#x27;).join(&#x27;&#x27;);
-    h += &#x27;&lt;p class=&quot;sec2 f&quot;&gt;FAMILY&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Composition&lt;/span&gt;&lt;b&gt;&#x27; + F2.comp + &#x27;&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Records&lt;/span&gt;&lt;b&gt;&#x27; + F2.rec + &#x27; &amp;middot; &lt;u class=&quot;prot&quot; data-p=&quot;agreements&quot;&gt;view agreements&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Next key date&lt;/span&gt;&lt;b&gt;&#x27; + F2.key + &#x27;&lt;/b&gt;&lt;/p&gt;&#x27;;
+    h += &#x27;&lt;p class=&quot;sec2&quot;&gt;BREACH-NOTICE TERMS&#x27; + (n &gt; 1 ? &#x27; &amp;middot; &#x27; + n + (conflict ? &#x27; COMPETE&#x27; : &#x27; FOUND&#x27;) : &#x27;&#x27;) + &#x27;&lt;/p&gt;&lt;div class=&quot;kvc&quot;&gt;&#x27; +
+      F2.terms.map(x =&gt; &#x27;&lt;p class=&quot;kv&#x27; + (x[2] ? &#x27; worst&#x27; : &#x27;&#x27;) + &#x27;&quot;&gt;&lt;span&gt;&#x27; + x[0] + &#x27;&lt;/span&gt;&lt;b&gt;&#x27; + x[1] + (x[2] ? &#x27;&lt;i&gt;&#x27; + (conflict ? &#x27;Worst term&#x27; : &#x27;Governs&#x27;) + &#x27;&lt;/i&gt;&#x27; : &#x27;&#x27;) + &#x27;&lt;/b&gt;&lt;/p&gt;&#x27;).join(&#x27;&#x27;) + &#x27;&lt;/div&gt;&#x27;;
+    h += &#x27;&lt;p class=&quot;sec2 f&quot;&gt;FAMILY&lt;/p&gt;&lt;div class=&quot;kvc&quot;&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Composition&lt;/span&gt;&lt;b&gt;&#x27; + F2.comp + &#x27;&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Records&lt;/span&gt;&lt;b&gt;&#x27; + F2.rec + &#x27; &amp;middot; &lt;u class=&quot;prot&quot; data-p=&quot;agreements&quot;&gt;view agreements&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;p class=&quot;kv&quot;&gt;&lt;span&gt;Next key date&lt;/span&gt;&lt;b&gt;&#x27; + F2.key + &#x27;&lt;/b&gt;&lt;/p&gt;&lt;/div&gt;&#x27;;
   }
-  h += &#x27;&lt;button class=&quot;dbtn p prot&quot; data-p=&quot;family&quot; type=&quot;button&quot;&gt;Open contract family&lt;/button&gt;&lt;button class=&quot;dbtn s&quot; type=&quot;button&quot;&gt;Ask about this family&lt;/button&gt;&#x27;;
+  h += &#x27;&lt;div class=&quot;dact&quot;&gt;&lt;button class=&quot;dbtn s&quot; type=&quot;button&quot;&gt;Ask about this family&lt;/button&gt;&lt;button class=&quot;dbtn p prot&quot; data-p=&quot;family&quot; type=&quot;button&quot;&gt;Open contract family&lt;/button&gt;&lt;/div&gt;&#x27;;
   $(&#x27;dp&#x27;).innerHTML = h; stage.classList.add(&#x27;detail&#x27;);
 }
 function applyRule(k){ sumK = k; filt = null; if(typeof $ === &#x27;function&#x27; &amp;&amp; $(&#x27;fline&#x27;)){ $(&#x27;fline&#x27;).classList.remove(&#x27;on&#x27;); $(&#x27;listp&#x27;).classList.remove(&#x27;filtered&#x27;); document.querySelectorAll(&#x27;.counts&#x27;).forEach(c =&gt; c.classList.remove(&#x27;filtering&#x27;)); document.querySelectorAll(&#x27;.cnt&#x27;).forEach(c =&gt; c.classList.remove(&#x27;act&#x27;)); }
@@ -7522,6 +7614,12 @@ window.nudgeMark = function (host, go) {
     <article class="card" id="w4" hidden>
       <h2>Search</h2>
       <p class="k">Contract search &middot; Sirion &middot; Partly live</p>
+      <dl class="glance">
+        <div><dt>My role</dt><dd>Designer, alongside a co-designer</dd></div>
+        <div><dt>Worked with</dt><dd>Product managers, legal engineers and subject-matter experts</dd></div>
+        <div><dt>Feedback from</dt><dd>IBM&rsquo;s legal team, a Sirion partner working across very large contract sets</dd></div>
+        <div><dt>Status</dt><dd>Shipped: contract-family search and charts for data questions. Next phase, in development: generated columns and conformance checks.</dd></div>
+      </dl>
       <hr>
       <p class="tension">Finding the right passage, knowing which terms apply, and showing the answer at the right level are three different&nbsp;problems.</p>
 
@@ -7541,6 +7639,8 @@ window.nudgeMark = function (host, go) {
         <p>A new policy requires suppliers to report a data breach within 24 hours. Someone asks, &ldquo;Which contracts don&rsquo;t meet&nbsp;it?&rdquo;</p>
         <p>A longer notice period, a missing clause, or a contract signed before the policy could each change what comes&nbsp;back.</p>
         <p>Asking every time would slow people down. So I looked at when the search should go ahead and when it should stop and check. If the meaning is clear, it proceeds and shows the assumption it made. If different readings would give materially different lists, it asks&nbsp;first.</p>
+        <p>We didn&rsquo;t start here. Early on, the search followed up with three suggested next questions, the way early AI search tools did, and a thumbs up or down to learn from. Almost nobody used the thumbs. And the suggestions only guessed at what to ask next; they couldn&rsquo;t clear up what the person had&nbsp;meant.</p>
+        <p>So clarifying became its own card: pick one or more readings, or write your own. Later, as Sirion began handling more complex searches, we added a plan card that shows which contract data the search will use before it runs. On a long search, getting that right matters more than getting it&nbsp;fast.</p>
         <p>Confidence alone doesn&rsquo;t decide it. The cost of a wrong assumption&nbsp;does.</p>
       </section>
 
@@ -7549,6 +7649,11 @@ window.nudgeMark = function (host, go) {
         <h3>Let the question decide the view</h3>
         <p>&ldquo;Which contract families are affected?&rdquo; shouldn&rsquo;t land on a flat list of matching&nbsp;documents.</p>
         <p>In Phoenix testing, even the family listing needed more context. A family ID alone wasn&rsquo;t useful. The row had to show what was inside it, such as 3 contracts and 14&nbsp;documents.</p>
+        <p>Feedback from IBM&rsquo;s legal team showed me the scale problem: at their volume, a list of matching documents tells you almost nothing. The answer has to start at the&nbsp;family.</p>
+        <p>We also studied a large set of real questions collected by the legal engineers. The patterns in what people asked told us what shape each answer should take. A question like &ldquo;Show me total contract value by region&rdquo; is really asking for a comparison, so the search now answers it with a chart, not a list. That part is&nbsp;shipped.</p>
+        <figure><img src="search-charts.webp" style="max-width:100%" alt="A shipped Sirion search answer: the question asks for contracts needing background checks and annual audits; the answer finds 69 of 789 contracts and shows them as a bar chart by customer and a donut chart by region" loading="lazy"><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click&nbsp;away.</figcaption></figure>
+        <p>Where results should land was a real debate. Engineering wanted the contract list: the word &ldquo;breach&rdquo; sits in a specific contract, so matching there is simpler to compute. I argued for families. Contract information runs from counterparty to family to contract to clause to data, and a breach is a family-level idea; whether one happened can depend on terms spread across several contracts in the&nbsp;family.</p>
+        <p>We took both views into a session with a legal subject-matter expert. The answer was neither of ours alone: it depends on the question. &ldquo;Which contracts have a breach?&rdquo; wants families first. &ldquo;When do these contracts expire?&rdquo; doesn&rsquo;t, because each contract has its own&nbsp;date.</p>
         <p>So the result starts at the level of the question: families for a family question, agreements for an agreement question, clauses for a clause question. People can still drill down to the source&nbsp;passage.</p>
         <p>The risk is that grouping hides exceptions. If one of five agreements is affected, the family summary shouldn&rsquo;t make the whole family look&nbsp;non-compliant.</p>
       </section>
@@ -7584,8 +7689,25 @@ window.nudgeMark = function (host, go) {
         <p>Where documents disagree, the search shows the passages side by side. It can find the disagreement. It shouldn&rsquo;t invent the legal conclusion. That decision stays with the person reviewing&nbsp;it.</p>
       </section>
 
+      <section class="ch">
+        <p class="ch-n">06</p>
+        <h3>What changed</h3>
+        <p>Search and filters work as one. When someone types a question, the system breaks it into filter chips, each a field and a value. That shows people how their words were read, and whether the right filters were&nbsp;applied.</p>
+        <p>We designed this part in detail. Each field gets one chip. Click a chip and the advanced filters open on that row; &times; removes it, with undo. A saved view shows as a locked&nbsp;chip.</p>
+        <p>We also tried writing the criteria as a plain sentence, the way Jira does, in five versions. The one I recommended reads like text at rest. The condition under your cursor turns into a chip you can&nbsp;remove.</p>
+        <figure class="wide"><img src="search-c-sentence.webp" alt="A criteria line that reads as a sentence: Status is Active and Region is any of Asia, EMEA, LATAM and Value over 1 million. The Region condition under the cursor shows as a chip with a remove button." loading="lazy"><figcaption>Criteria as a sentence. Only the condition you point at becomes a&nbsp;chip.</figcaption></figure>
+        <p>When the filters cancel each other out, the bar doesn&rsquo;t just say zero. It names the filter that&rsquo;s blocking and gives two ways&nbsp;out.</p>
+        <figure class="wide"><img src="search-c-zero.webp" alt="Zero of 8,940 contracts. Chips: Text contains salesforce, Counterparty is IBM. Message: Nothing named salesforce inside your IBM filter. Buttons: Search all 8,940, Drop the IBM filter." loading="lazy"><figcaption>Zero results name what&rsquo;s blocking them. The chips stay where they&nbsp;are.</figcaption></figure>
+        <p>Empty tables got the same care. An empty result can mean two very different things. Either the search missed what the person meant, or the real answer is none. The page says which one it&nbsp;is.</p>
+        <div class="pair">
+          <figure><img src="search-c-empty-hidden.webp" alt="Empty table: Meridian Logistics is here, one chip is hiding it. The Active chip leaves it out because that family ended on 14 March. Button: Lift Active, adds 7 families." loading="lazy"><figcaption>The search missed: the family exists, but one chip hides it. Lift that chip and it comes&nbsp;back.</figcaption></figure>
+          <figure><img src="search-c-empty-none.webp" alt="Empty table: Nothing breaks the 24-hour rule. Phoenix read 63 families and 318 contracts; three families have no clause at all. Buttons: Show the 3 with no clause, Loosen to 48 hours, Save this view." loading="lazy"><figcaption>The answer is none: the page shows what it read, and flags the three it couldn&rsquo;t&nbsp;check.</figcaption></figure>
+        </div>
+        <p>We don&rsquo;t have an exact figure yet. But since it shipped, fewer people go to the advanced filters first. More of them simply type what they want, and check the chips the search&nbsp;builds.</p>
+      </section>
+
       <p class="take">Coverage is part of the&nbsp;answer.</p>
-      <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> is live in Sirion. Contract-family search is in development. Suggested starting questions, when to ask, and question-led views are design explorations. The screens shown here are from my&nbsp;prototype.</p>
+      <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a>, the contract-family view and charts for data questions are live in Sirion. The next phase, now in development, fills in the table itself: columns the AI generates in real time, such as a check that marks a family as conflicting, rather than showing stored data. Clause lineage and conformance checks are also still being built. Suggested starting questions and question-led views are design explorations. The screens here are from my&nbsp;prototype.</p>
       <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
     <article class="card" id="w5" hidden>
@@ -7851,13 +7973,13 @@ function onWidth(fn){
   var z=1, H=0, raf=0, held=true;
   function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
   function size(){ z=z0(); var vh=innerHeight/z, phone=innerWidth/z<761;
-    H=Math.round(vh*(phone?.72:.74)); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; tick(); }
+    H=Math.round(vh*(phone?.72:.74))-(phone?0:40); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; tick(); }
   function tick(){ raf=0;
     var p=Math.max(0,Math.min(1,(scrollY/z)/H)), e=1-Math.pow(1-p,3);
     if(p>=1){ sheet.style.scale=''; sheet.style.transformOrigin=''; sheet.style.removeProperty('--tr'); d.classList.add('intro-done'); }
     else { d.classList.remove('intro-done');
-      if(!calm){ sheet.style.transformOrigin='50% 0'; sheet.style.scale=(0.94+0.06*e).toFixed(4); }
-      sheet.style.setProperty('--tr',Math.round(32*(1-e))+'px'); }
+      if(!calm){ sheet.style.transformOrigin='50% 0'; sheet.style.scale=(0.87+0.13*e).toFixed(4); }
+      sheet.style.setProperty('--tr',Math.round(44*(1-e))+'px'); }
     intro.style.setProperty('--ip',e.toFixed(3));
     if(held && p>0.45){ held=false; d.classList.remove('intro-hold'); }
   }
@@ -7873,6 +7995,25 @@ function onWidth(fn){
   var mk=document.querySelector('a.mark');
   if(mk) mk.addEventListener('click',function(e){ e.preventDefault(); scrollTo({top:Math.round(H*z), behavior:'smooth'}); });
   (document.fonts?document.fonts.ready:Promise.resolve()).then(size);
+  /* once the sentence has finished writing, wait a second, then glide the white page up over the intro */
+  /* auto slide paused for now: set AUTO_SLIDE to true to bring it back */
+  var AUTO_SLIDE=false;
+  if(AUTO_SLIDE) (function(){
+    var n=t.querySelectorAll('i').length, STEPW=Math.max(110, Math.min(300, Math.round(5200/Math.max(n,1))));
+    var done=(calm?0:500+n*STEPW)+1000, moved=false;
+    addEventListener('wheel',function(){ moved=true; },{passive:true,once:true});
+    addEventListener('touchstart',function(){ moved=true; },{passive:true,once:true});
+    addEventListener('keydown',function(){ moved=true; },{once:true});
+    setTimeout(function(){
+      if(moved || scrollY>5 || d.classList.contains('intro-done')) return;
+      var target=Math.round(H*z), start=scrollY, dur=calm?0:1500, t0=performance.now(), root=document.documentElement, prevSB=root.style.scrollBehavior;
+      if(!dur){ scrollTo(0,target); return; }
+      /* a gentle slide: eases in softly, glides, and comes to rest without any bounce. The page's smooth-scroll setting is paused so it doesn't fight each step */
+      root.style.scrollBehavior='auto';
+      var ease=function(x){ return x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; };
+      (function step(now){ if(moved){ root.style.scrollBehavior=prevSB; return; } var k=Math.min(1,(now-t0)/dur); scrollTo(0,start+(target-start)*ease(k)); if(k<1) requestAnimationFrame(step); else root.style.scrollBehavior=prevSB; })(t0);
+    }, done);
+  })();
 })();
 </script>
 <script>
@@ -8395,14 +8536,18 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var scenes=[s0,s1,s2,s3,s4,s5], cur=-1, prog=0, T0=performance.now();
   /* autoplay: each beat has its own length in seconds; the company beats keep the hero's natural timing */
   /* autoplay: every line gets the same time on screen */
-  var STEPS=['0','s','2','3','4','5','u','6','7','8','9','10'], EACH=4.2, TOT=STEPS.length*EACH, clock=null;
+  /* 'Not yet' and 'The user still asks' are gone: the company story ends, the stage stays empty for two seconds, then the questions begin */
+  var STEPS=['0','s','2','3','4','u','6','7','8','9','10'], DUR=STEPS.map(function(x){ return x==='u'?2.5:4.2; }), START=[0];
+  for(var q=0;q<DUR.length;q++) START.push(START[q]+DUR[q]);
+  var TOT=START[DUR.length], clock=null;
+  function stepAt(el){ for(var q=DUR.length-1;q>=0;q--) if(el>=START[q]) return q; return 0; }
   function measure(){}
   /* arrows: jump to the start of the previous or next line, then keep playing from there */
   var lastSi=0;
   function jump(d){
-    var now=performance.now(), el=clock===null?0:((now-clock)/1000)%TOT, si=Math.floor(el/EACH);
+    var now=performance.now(), el=clock===null?0:((now-clock)/1000)%TOT, si=stepAt(el);
     var to=(si+d+STEPS.length)%STEPS.length;
-    clock=now-to*EACH*1000;
+    clock=now-START[to]*1000;
   }
   var pb=document.getElementById('cine-prev'), nb=document.getElementById('cine-next');
   if(pb) pb.addEventListener('click',function(){ jump(-1); });
@@ -8410,12 +8555,12 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   function frame(now){
     var dc=document.documentElement.classList; if(dc.contains('ldr-on')||dc.contains('ldr-boot')||dc.contains('intro-hold')) clock=null;   /* hold on the first frame while the loader is up */
     if(clock===null) clock=now;
-    var el=((now-clock)/1000)%TOT, si=Math.min(STEPS.length-1,Math.floor(el/EACH)), u=(el-si*EACH)/EACH, T=(now-T0)/1000;
+    var el=((now-clock)/1000)%TOT, si=stepAt(el), u=(el-START[si])/DUR[si], T=(now-T0)/1000;
     if(progEl) progEl.style.width=(el/TOT*100).toFixed(2)+'%';
     var show=STEPS[si];
     /* the story captions share one line and morph into each other, letter by letter (the Sensitivity line morph); the questions keep their own lines */
     if(show!==cur){ cur=show;
-      var ml=document.getElementById('cine-ml'), useML=ml && {'0':1,'s':1,'2':1,'3':1,'4':1,'u':1}[show];
+      var ml=document.getElementById('cine-ml'), useML=ml && {'0':1,'s':1,'2':1,'3':1,'4':1}[show];
       lines.forEach(function(l){ l.classList.toggle('on', useML ? l.dataset.i==='ml' : l.dataset.i===show); });
       if(useML){ var src=sec.querySelector('.cine-line[data-i="'+show+'"] .cine-n'), txt=src?src.textContent.replace(/\s+/g,' ').trim():'';
         if(ml._mlCur!==undefined && window.Morphline) Morphline.to(ml, txt); else ml.textContent=txt; }
@@ -8434,12 +8579,9 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     ctx.clearRect(0,0,W,H);
     /* Not yet: the traced answer stays, and five dashed branches nobody has checked appear beside it.
        The user still asks: all five are there, numbered, then the first question takes over */
-    if(si===5||si===6){
-      var v = si===5 ? u*.45 : .45+u*.55, o6 = si===6 ? clamp((u-.88)/.12) : 0;
-      s0(v, 1-o6, T); if(o6>0) s1(0, o6, T);
-      raf=requestAnimationFrame(frame); return; }
+    if(si===5){ raf=requestAnimationFrame(frame); return; }   /* the pause: nothing on stage */
     /* then the five questions */
-    var k=si-6;
+    var k=si-5;
     var last=(k===scenes.length-1), out= last ? clamp((u-.95)/.05) : clamp((u-.88)/.12);   /* the last scene holds, then a quick fade before the loop restarts */
     scenes[k](clamp(u/.88), 1-out, T);
     if(out>0 && k<scenes.length-1) scenes[k+1](0, out, T);
