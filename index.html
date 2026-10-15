@@ -934,6 +934,30 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
   .intro{background-image:url(intro-drawing.webp) !important; background-position:left center !important; background-size:cover !important}
   .intro::before{display:none !important}
 }
+
+/* the line under each prototype: no pause button; it alternates, by morph, between the status and what the prototype is about */
+p.fmeta .pp{display:none !important}
+p.fmeta .fm-t{position:relative; display:inline-block; height:20px; white-space:nowrap; vertical-align:top; transition:width .7s cubic-bezier(.22,.61,.36,1)}
+p.fmeta .fm-t > span{position:absolute; right:0; top:0; white-space:nowrap; opacity:0; filter:blur(5px); transform:translateY(5px);
+  transition:opacity .6s ease, filter .6s ease, transform .7s cubic-bezier(.22,.61,.36,1)}
+p.fmeta .fm-t > span.on{opacity:1; filter:none; transform:none; transition-delay:.25s}
+p.fmeta .fm-t > span.out{transform:translateY(-5px)}
+p.fmeta a{transition:opacity .4s ease}
+p.fmeta a{white-space:nowrap}
+p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color:var(--faint); text-decoration:none}
+@media (max-width:760px){ p.fmeta{white-space:normal} }
+
+/* the hint pill beside the mark: flat, no glass or inner shadow */
+.hint{background:#ECECE8 !important; border:0 !important; box-shadow:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+
+/* intro sentence: words light up one by one; the chip arrives after */
+.intro-t i{font-style:normal; color:#4A4844 !important; transition:color 500ms ease}
+.intro-t i.on{color:#E8E7E3 !important}
+.intro-chip{transition:opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1)}
+.intro-chip.wait{opacity:0; transform:translateY(6px)}
+
+/* the longer headline wraps evenly into three lines */
+@media (min-width:761px){ #hero-line{max-width:440px !important; text-wrap:pretty !important} }
 </style>
 </head>
 <body>
@@ -947,7 +971,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 <div class="col" id="top">
   <section class="hero">
     <div class="hero-words">
-    <h1 class="r" id="hero-line">Enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
+    <h1 class="r" id="hero-line">I&#8217;ve learnt enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
     <p class="r hero-meta">Product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
     </div>
@@ -1008,7 +1032,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
-    <p class="fig-k r">AI-assisted contract review &middot; Extraction accuracy and human verification</p><figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2039,14 +2063,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Shipped partly &middot; <a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Shipped partly</span><span class="fm-b" aria-hidden="true">AI-assisted contract review · Extraction accuracy and human verification</span></span><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
     <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads the whole contract family, and flags disagreement instead of&nbsp;guessing.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
     <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
-    <p class="fig-k r">AI-assisted contract review &middot; Source evidence for every extracted value</p><figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2770,14 +2794,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Iterate &middot; Shipped</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Iterate &middot; Shipped</span><span class="fm-b" aria-hidden="true">AI-assisted contract review · Source evidence for every extracted value</span></span></p></figure>
     <div class="prose r"><p>A confidence score and a page number still left people searching for evidence, so I put the exact source passage one click away. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="#" data-open="w3">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">To know what a clause says today, someone had to find every relevant contract document and work out what each one&nbsp;changed.</p>
-    <p class="fig-k r">Clause history &middot; Amendments traced back to the signed document</p><figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -3536,14 +3560,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Approved</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Approved</span><span class="fm-b" aria-hidden="true">Clause history · Amendments traced back to the signed document</span></span></p></figure>
     <div class="prose r"><p>One paragraph shows what the clause says today, with every change marked by its date and source. One click opens the signed document at the paragraph that made the change, so people can check what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="w1">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
-    <p class="fig-k r">Contract editing &middot; Clauses that depend on each other kept in step</p><figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -4801,13 +4825,13 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Partially built</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Partially built</span><span class="fm-b" aria-hidden="true">Contract editing · Clauses that depend on each other kept in step</span></span></p></figure>
     <div class="prose r"><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already&nbsp;written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
-    <p class="fig-k r">AI agents &middot; When to interrupt, ask, or stay quiet</p><figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -7380,7 +7404,7 @@ window.nudgeMark = function (host, go) {
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta">Hypothesis &middot; Own work</p></figure>
+" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Own work</span><span class="fm-b" aria-hidden="true">AI agents · When to interrupt, ask, or stay quiet</span></span></p></figure>
     <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">Why I think this way</a></p></div>
     <div class="out-idx r"><a class="row" href="sensitivity.html" target="_blank" rel="noopener">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a></div>
   </article>
@@ -7436,7 +7460,7 @@ window.nudgeMark = function (host, go) {
       <h3>What I would work on next</h3>
       <p>This becomes harder to read when a clause has many amendments. Too much crossed-out text starts competing with the wording someone came to&nbsp;understand.</p>
       <p>The next step is to keep the current clause clear, with older changes available to expand when&nbsp;needed.</p>
-      <p class="end"><a href="#" data-close>Back to the work</a></p>
+      <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
     <article class="card" id="w2" hidden>
       <h2>Editing with AI</h2>
@@ -7455,7 +7479,7 @@ window.nudgeMark = function (host, go) {
       <p>When a change leaves another clause out of step, both are marked. One click opens the other clause with the fix already written.</p>
       <h3>Not solved yet</h3>
       <p>Here the links between clauses are scripted. Finding them for real needs the contract&rsquo;s definitions and cross-references mapped first.</p>
-      <p class="end"><a href="#" data-close>Back to the work</a></p>
+      <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
     <article class="card" id="w3" hidden>
       <h2>Proof</h2>
@@ -7493,7 +7517,7 @@ window.nudgeMark = function (host, go) {
       <figure><img src="ae-retention.webp" style="max-width:560px" alt="Two analytics tables showing month-over-month return rates for the module before and after the redesign" loading="lazy"></figure>
       <p>Month-four retention rose from 5% to 23%. More people were still returning to the module after the initial&nbsp;use.</p>
       <p>The customer mix and AI model also changed during that period, so I would not attribute the whole increase to the redesign. The result is encouraging; the full case explains the comparison and its&nbsp;limits.</p>
-      <p class="end"><a href="auto-extraction.html" target="_blank" rel="noopener">Read the full case</a><a href="#" data-close style="margin-left:28px; color:var(--faint)">Back to the work</a></p>
+      <div class="end idx"><a class="row" href="auto-extraction.html" target="_blank" rel="noopener">Read the full case<span>Auto Extraction</span></a><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
     <article class="card" id="w4" hidden>
       <h2>Search</h2>
@@ -7562,7 +7586,7 @@ window.nudgeMark = function (host, go) {
 
       <p class="take">Coverage is part of the&nbsp;answer.</p>
       <p class="note"><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> is live in Sirion. Contract-family search is in development. Suggested starting questions, when to ask, and question-led views are design explorations. The screens shown here are from my&nbsp;prototype.</p>
-      <p class="end"><a href="#" data-close>Back to the work</a></p>
+      <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
     <article class="card" id="w5" hidden>
       <h2>Sensitivity</h2>
@@ -7810,7 +7834,18 @@ function onWidth(fn){
   var intro=document.getElementById('intro'), t=document.getElementById('intro-t'), sheet=document.getElementById('sheet'), d=document.documentElement;
   if(!intro||!t||!sheet) return;
   var calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* the sentence is simply there, no writing effect */
+  /* the sentence writes itself word by word on the drawing; the chip fades in after */
+  (function(){
+    var nodes=[].filter.call(t.childNodes,function(n){ return n.nodeType===3; }), ws=[];
+    nodes.forEach(function(n){ var f=document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(function(c){ if(!c) return; if(/^\s+$/.test(c)) f.appendChild(document.createTextNode(c)); else { var i=document.createElement('i'); i.textContent=c; f.appendChild(i); ws.push(i); } });
+      n.parentNode.replaceChild(f,n); });
+    var chip=t.querySelector('.intro-chip');
+    if(calm){ ws.forEach(function(w){ w.classList.add('on'); }); return; }
+    var STEP=Math.max(110, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
+    ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 500+k*STEP); });
+    if(chip){ chip.classList.add('wait'); setTimeout(function(){ chip.classList.remove('wait'); }, 500+ws.length*STEP+200); }
+  })();
   var cue=document.getElementById('intro-cue'); if(cue) setTimeout(function(){ cue.classList.add('on'); }, calm?0:900);
   /* where the sheet starts, and how far it has come */
   var z=1, H=0, raf=0, held=true;
@@ -8469,6 +8504,23 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   links.forEach(function(a,k){ a.addEventListener('click',function(e){ var el=arts[k]; if(!el) return; e.preventDefault();
     var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
     scrollTo({top:(el.getBoundingClientRect().top+scrollY)-60/z, behavior:'smooth'}); }); });
+})();
+</script>
+<script>
+/* every few seconds the line under each prototype changes between its status and what it is about: the old words lift away and soften, the new ones settle in */
+(function(){
+  var hs=[].slice.call(document.querySelectorAll('p.fmeta .fm-t')); if(!hs.length) return;
+  function fit(h){ var on=h.querySelector('.on'); h.style.width=on.offsetWidth+'px'; }
+  hs.forEach(fit); (document.fonts?document.fonts.ready:Promise.resolve()).then(function(){ hs.forEach(fit); });
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var alt=false;
+  setInterval(function(){
+    if(innerWidth<761 && !alt) return;            /* a phone keeps the short line */
+    alt=!alt;
+    hs.forEach(function(h){ var a=h.querySelector('.fm-a'), b=h.querySelector('.fm-b'), cur=alt?a:b, nxt=alt?b:a;
+      cur.classList.remove('on'); cur.classList.add('out'); nxt.classList.remove('out'); nxt.classList.add('on'); fit(h);
+      setTimeout(function(){ cur.classList.remove('out'); },700); });
+  },4500);
 })();
 </script>
 </body>
