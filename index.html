@@ -993,6 +993,8 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 
 /* the pause before the questions: the stage is empty and 'The user still asks…' rises slowly in the middle */
 .cine-line[data-i="u"]{transition:opacity 1.1s ease .15s, transform 1.4s cubic-bezier(.22,.61,.36,1) .15s !important}
+/* leaving: it goes quickly, before the first question appears */
+.cine-line[data-i="u"]:not(.on){transition:opacity .4s ease, transform .5s ease !important}
 /* lift it from the caption slot into the middle of the empty picture (margin % follows the width, and the picture is 5:4) */
 .hero .cine-line[data-i="u"]{margin-top:calc(-40% - 68px)}
 
@@ -1085,7 +1087,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
-    <figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2162,7 +2164,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
     <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
-    <figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="693" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2893,7 +2895,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">To know what a clause says today, someone had to find every relevant contract document and work out what each one&nbsp;changed.</p>
-    <figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -3659,7 +3661,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
-    <figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -8583,7 +8585,9 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     /* then the five questions */
     var k=si-5;
     var last=(k===scenes.length-1), out= last ? clamp((u-.95)/.05) : clamp((u-.88)/.12);   /* the last scene holds, then a quick fade before the loop restarts */
-    scenes[k](clamp(u/.88), 1-out, T);
+    /* the first question waits until 'Users ask…' has left, then fades in, so the two never sit on top of each other */
+    var enter = k===0 ? clamp(((el-START[si])-0.6)/0.5) : 1;
+    scenes[k](clamp(u/.88), (1-out)*enter, T);
     if(out>0 && k<scenes.length-1) scenes[k+1](0, out, T);
     raf=requestAnimationFrame(frame);
   }
