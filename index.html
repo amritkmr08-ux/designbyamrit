@@ -924,6 +924,10 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 .piece[data-unit] .fit{box-shadow:0 1px 3px rgba(25,26,24,.05), 0 10px 28px -12px rgba(25,26,24,.16)}
 .piece[data-unit].trying .fit{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)}
 @media (hover:hover){ .piece[data-unit] .fit:hover{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)} }
+
+/* less air between a prototype and the paragraph under it */
+@media (min-width:901px){ .piece .prose{margin-top:16px !important} }
+@media (max-width:760px){ .piece .prose{margin-top:24px !important} }
 </style>
 </head>
 <body>
@@ -939,7 +943,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
     <div class="hero-words">
     <h1 class="r" id="hero-line">Enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
-    <p class="r hero-meta">Product designer at Sirion<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
+    <p class="r hero-meta">Product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
