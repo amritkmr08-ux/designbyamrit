@@ -665,6 +665,8 @@ a.site-mark{width:48px !important; height:48px !important; font-size:23px !impor
 @media (min-width:761px){ a.site-mark{width:42px !important; height:42px !important; font-size:20px !important} }
 @media (min-width:1200px){ a.site-mark{width:37.8px !important; height:37.8px !important; font-size:18px !important} }
 @media (max-width:760px){ html body a.site-mark{top:25px !important} }
+/* phone: the page a shade greyer, so white cards lift off it */
+@media (max-width:760px){ html, body{background:#EFEFEC !important} .ldr::before{background-color:rgba(239,239,236,1)} .ldr.gone::before{background-color:rgba(239,239,236,0)} }
 </style>
 <script>
 /* before the first paint, not after it */

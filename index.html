@@ -837,6 +837,8 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 @media (min-width:761px){ a.mark{width:42px !important; height:42px !important; font-size:20px !important}
   .hint{height:42px; border-radius:21px; width:var(--hw,42px); left:calc(max(24px, calc(50% - 660px)) + 42px)} .hint span{line-height:40px} }
 @media (max-width:760px){ html body a.mark{top:25px !important} }
+/* phone: the page a shade greyer, so white cards lift off it */
+@media (max-width:760px){ :root{--page:#EFEFEC} .sheet{background:#EFEFEC} }
 </style>
 </head>
 <body>
