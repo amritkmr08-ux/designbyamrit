@@ -839,10 +839,95 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 @media (max-width:760px){ html body a.mark{top:25px !important} }
 /* phone: the page a shade greyer, so white cards lift off it */
 @media (max-width:760px){ :root{--page:#EFEFEC} .sheet{background:#EFEFEC} }
+
+/* intro: the sentence is just there; a live chip under it; the drawing a little smaller */
+.intro-t{color:#E8E7E3}
+.intro-chip{display:flex; width:max-content; align-items:center; gap:10px; margin-top:28px; padding:7px 16px 7px 12px; border-radius:999px;
+  background:rgba(92,201,126,.09); border:1px solid rgba(92,201,126,.30);
+  font-family:var(--font); font-weight:500; font-size:14px; line-height:20px; letter-spacing:0; color:#7FD39A}
+.intro-chip i{position:relative; display:block; width:9px; height:9px; border-radius:50%; background:#5CC97E; flex:none}
+.intro-chip i::after{content:""; position:absolute; inset:-4px; border-radius:50%; background:rgba(92,201,126,.35); animation:chipLive 2s ease-out infinite}
+@keyframes chipLive{0%{transform:scale(.5); opacity:.9} 100%{transform:scale(1.6); opacity:0}}
+@media (prefers-reduced-motion:reduce){ .intro-chip i::after{animation:none; opacity:.5} }
+@media (min-width:761px){
+  .intro{background-image:none}
+  .intro::before{content:""; position:absolute; left:0; bottom:0; height:100%; aspect-ratio:3344/2090; pointer-events:none;
+    background:url(intro-drawing.webp) left bottom/cover no-repeat;
+    -webkit-mask-image:linear-gradient(to right,#000 70%,transparent 100%), linear-gradient(to top,#000 62%,transparent 98%); -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,#000 70%,transparent 100%), linear-gradient(to top,#000 62%,transparent 98%); mask-composite:intersect}
+}
+@media (max-width:760px){ .intro-chip{margin-top:20px; font-size:13px; padding:6px 14px 6px 10px} }
+
+/* "My work" — the chapter bar sits on the line under the opening, then follows you as you read */
+.chbar-lbl{display:flex; align-items:center; padding:0 14px 0 14px; margin-right:4px; font-family:var(--display); font-size:13px; line-height:18px; color:#8B8985; white-space:nowrap; border-right:1px solid rgba(255,255,255,.12)}
+.chbar-in{position:absolute !important; left:50% !important; bottom:0 !important; transform:translate(-50%,50%) !important; opacity:1 !important; pointer-events:auto !important; z-index:2;
+  box-shadow:0 0 0 36px var(--page) !important}
+@media (max-width:760px){
+  .chbar-lbl{display:none}
+  .chbar-in{box-shadow:0 0 0 12px var(--page) !important; max-width:calc(100vw - 32px)}
+}
+
+/* the live chip under the career line (light page) */
+.hero .hero-live{margin-top:24px}
+.live-chip{display:inline-flex; align-items:center; gap:10px; padding:6px 14px 6px 11px; border-radius:999px;
+  background:rgba(63,167,101,.08); border:1px solid rgba(63,167,101,.28);
+  font-family:var(--font); font-weight:500; font-size:13.5px; line-height:20px; color:#2E7446}
+.live-chip i{position:relative; display:block; width:8px; height:8px; border-radius:50%; background:#3FA765; flex:none}
+.live-chip i::after{content:""; position:absolute; inset:-4px; border-radius:50%; background:rgba(63,167,101,.35); animation:chipLive 2s ease-out infinite}
+@keyframes chipLive{0%{transform:scale(.5); opacity:.9} 100%{transform:scale(1.6); opacity:0}}
+@media (prefers-reduced-motion:reduce){ .live-chip i::after{animation:none; opacity:.5} }
+/* phone: no bar on the line; the floating one stays at the bottom */
+@media (max-width:760px){
+  .chbar-in{display:none !important}
+  .chbar.on.rest:not(:hover):not(:focus-within){opacity:1; transform:translate(-50%,0); pointer-events:auto}
+}
+
+/* desktop: the opening fills the screen, so the "My work" bar lands near the bottom of the first view */
+.chbar-in a:hover{background:rgba(255,255,255,.08); color:#F7F7F5}
+.chbar-in a:focus{outline:none}
+
+/* the floating bar stays once it appears; it no longer fades when you stop scrolling */
+.chbar.on.rest:not(:hover):not(:focus-within){opacity:1 !important; transform:translate(-50%,0) !important; pointer-events:auto !important}
+
+/* one navigator: always at the bottom once the page is up; nothing marked until you are in a chapter */
+.chbar-in{display:none !important}
+
+/* a quiet line above each prototype, right-aligned: the area it belongs to, and what it is about */
+.piece .fig-k{max-width:none; margin:32px 0 0; text-align:right; font-family:var(--font); font-size:14px; line-height:20px; color:var(--muted)}
+.piece .fig-k + figure{margin-top:14px !important}
+@media (max-width:760px){ .piece .fig-k{margin-top:28px; text-align:left; font-size:13px; line-height:19px} .piece .fig-k + figure{margin-top:10px !important} }
+
+/* bar numbers and label easier to read on the dark bar */
+.chbar a i{color:#9A9C96 !important}
+.chbar a.cur i{color:var(--faint) !important}
+.chbar-lbl{color:#A8AAA4 !important}
+
+/* a live green dot before "My work" */
+.chbar-lbl{gap:9px}
+.chbar-lbl::before{content:""; width:7px; height:7px; border-radius:50%; background:#5CC97E; flex:none;
+  box-shadow:0 0 0 0 rgba(92,201,126,.5); animation:barDot 2s ease-out infinite}
+@keyframes barDot{0%{box-shadow:0 0 0 0 rgba(92,201,126,.55)} 100%{box-shadow:0 0 0 7px rgba(92,201,126,0)}}
+@media (prefers-reduced-motion:reduce){ .chbar-lbl::before{animation:none} }
+
+.fmeta a{color:inherit; text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px}
+.fmeta a:hover{color:var(--ink); text-decoration-color:var(--ink)}
+
+/* the navigator a size up on desktop: roomier tabs, slightly larger type */
+@media (min-width:761px){
+  .chbar{padding:5px; border-radius:18px}
+  .chbar a{padding:11px 18px; font-size:14.5px; line-height:20px; border-radius:13px; gap:8px}
+  .chbar a i{font-size:12px}
+  .chbar-lbl{font-size:14.5px; padding:0 18px 0 16px}
+}
+
+/* the prototypes carry a soft shadow at rest; hover still lifts them further */
+.piece[data-unit] .fit{box-shadow:0 1px 3px rgba(25,26,24,.05), 0 10px 28px -12px rgba(25,26,24,.16)}
+.piece[data-unit].trying .fit{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)}
+@media (hover:hover){ .piece[data-unit] .fit:hover{box-shadow:0 2px 6px rgba(25,26,24,.06), 0 18px 44px -10px rgba(25,26,24,.22), 0 40px 80px -30px rgba(25,26,24,.18)} }
 </style>
 </head>
 <body>
-<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.</p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span></div>
+<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span></div>
 
 
 
@@ -895,6 +980,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
         <li><a href="#q5"><b>05</b><span class="q">Does it need me now, or can it wait?</span><span class="why">Not everything it finds needs a person.</span></a></li>
       </ol>
     </section>
+    <nav class="chbar chbar-in" id="chbarIn" aria-label="My work"><span class="chbar-lbl">My work</span><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a></nav>
   </section>
 
 
@@ -912,7 +998,7 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
-    <figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
+    <p class="fig-k r">AI-assisted contract review &middot; Extraction accuracy and human verification</p><figure class="r"><div class="fit" data-h="676" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -1943,14 +2029,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Partly live &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Shipped partly &middot; <a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
     <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads the whole contract family, and flags disagreement instead of&nbsp;guessing.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
     <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
-    <figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
+    <p class="fig-k r">AI-assisted contract review &middot; Source evidence for every extracted value</p><figure class="r"><div class="fit" data-h="740" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2674,14 +2760,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Iterate &middot; Shipped &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Iterate &middot; Shipped</p></figure>
     <div class="prose r"><p>A confidence score and a page number still left people searching for evidence, so I put the exact source passage one click away. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="#" data-open="w3">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">To know what a clause says today, someone had to find every relevant contract document and work out what each one&nbsp;changed.</p>
-    <figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
+    <p class="fig-k r">Clause history &middot; Amendments traced back to the signed document</p><figure class="r"><div class="fit" data-h="660"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -3440,14 +3526,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Approved &middot; Prototyped with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Build &middot; Approved</p></figure>
     <div class="prose r"><p>One paragraph shows what the clause says today, with every change marked by its date and source. One click opens the signed document at the paragraph that made the change, so people can check what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="w1">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
-    <figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
+    <p class="fig-k r">Contract editing &middot; Clauses that depend on each other kept in step</p><figure class="r"><div class="fit" data-h="660" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -4705,13 +4791,13 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Concept &middot; Built with Claude</p></figure>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta">Hypothesis &middot; Concept</p></figure>
     <div class="prose r"><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already&nbsp;written.</p><p class="end"><a href="#" data-open="w2">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
-    <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
+    <p class="fig-k r">AI agents &middot; When to interrupt, ask, or stay quiet</p><figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -7284,7 +7370,7 @@ window.nudgeMark = function (host, go) {
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta">Hypothesis &middot; Own work &middot; Built with Claude</p></figure>
+" title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta">Hypothesis &middot; Own work</p></figure>
     <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">Why I think this way</a></p></div>
     <div class="out-idx r"><a class="row" href="sensitivity.html" target="_blank" rel="noopener">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html" target="_blank" rel="noopener">Read the idea<span>The full paper</span></a></div>
   </article>
@@ -7714,14 +7800,8 @@ function onWidth(fn){
   var intro=document.getElementById('intro'), t=document.getElementById('intro-t'), sheet=document.getElementById('sheet'), d=document.documentElement;
   if(!intro||!t||!sheet) return;
   var calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* the sentence, word by word */
-  var src=t.textContent.replace(/\s+/g,' ').trim(); t.textContent='';
-  src.split(/(\s+)/).forEach(function(c){ if(/^\s+$/.test(c)) t.appendChild(document.createTextNode(c)); else { var i=document.createElement('i'); i.textContent=c; t.appendChild(i); } });
-  var ws=[].slice.call(t.querySelectorAll('i'));
-  if(calm) ws.forEach(function(w){ w.classList.add('on'); });
-  else { var STEP=Math.max(110, Math.min(300, Math.round(5200/Math.max(ws.length,1))));
-    ws.forEach(function(w,k){ setTimeout(function(){ w.classList.add('on'); }, 500+k*STEP); }); }
-  var cue=document.getElementById('intro-cue'); if(cue) setTimeout(function(){ cue.classList.add('on'); }, calm?0:(500+ws.length*(calm?0:Math.max(110,Math.min(300,Math.round(5200/Math.max(ws.length,1)))))+600));
+  /* the sentence is simply there, no writing effect */
+  var cue=document.getElementById('intro-cue'); if(cue) setTimeout(function(){ cue.classList.add('on'); }, calm?0:900);
   /* where the sheet starts, and how far it has come */
   var z=1, H=0, raf=0, held=true;
   function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
@@ -7742,7 +7822,7 @@ function onWidth(fn){
   /* a link that ends in #top (the mark, shared or bookmarked) made the browser jump past the intro on arrival.
      Arriving always starts at the intro; the mark takes you to the top of the page content, without a hash. */
   var stripped=false;
-  if(location.hash==='#top'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} stripped=true; }
+  if(location.hash){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} stripped=true; }
   scrollTo(0,0); size();
   if(stripped){ addEventListener('load',function(){ scrollTo(0,0); }); requestAnimationFrame(function(){ scrollTo(0,0); }); }
   var mk=document.querySelector('a.mark');
@@ -8351,7 +8431,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   if(m) setTimeout(function(){ show(+m[1]-1, true); }, 300);
 })();
 </script>
-<nav class="chbar" id="chbar" aria-label="Chapters"><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a></nav>
+<nav class="chbar" id="chbar" aria-label="Chapters"><span class="chbar-lbl">My work</span><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a></nav>
 <script>
 /* chapter bar: shows while a chapter fills the middle of the screen, marks that chapter, jumps on click */
 (function(){
@@ -8360,14 +8440,21 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   function tick(){
     var mid=innerHeight*.5, cur=-1;
     arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<=mid && r.bottom>mid) cur=k; });
+    /* never while the opening is on screen: the bar belongs to the chapters, not the top of the page */
+    var hero=document.querySelector('.hero'), phone=innerWidth<761, inHero=scrollY<5 || (hero && hero.getBoundingClientRect().bottom > mid*.5);
+    if(inHero) cur=-1;
     var ov=document.querySelector('.ov.on, .ov.open'); 
-    bar.classList.toggle('on', cur>=0 && !ov);
+    /* shows as soon as the white page has come up over the intro, not only once it has fully landed */
+    var sh=document.getElementById('sheet'), past=sh ? sh.getBoundingClientRect().top < innerHeight*.5 : true;
+    bar.classList.toggle('on', (cur>=0 || (inHero && past)) && !ov);
     links.forEach(function(a,k){ a.classList.toggle('cur', k===cur); if(k===cur) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
   }
   var raf=0, rt=0; bar.classList.add('rest');
   addEventListener('scroll',function(){ bar.classList.remove('rest'); clearTimeout(rt); rt=setTimeout(function(){ bar.classList.add('rest'); },1400);
     if(!raf) raf=requestAnimationFrame(function(){ raf=0; tick(); }); },{passive:true});
   addEventListener('resize',tick); tick();
+  [].slice.call(document.querySelectorAll('#chbarIn a')).forEach(function(a,k){ a.addEventListener('click',function(e){ var el=arts[k]; if(!el) return; e.preventDefault();
+    var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1; scrollTo({top:(el.getBoundingClientRect().top+scrollY)-60/z, behavior:'smooth'}); }); });
   links.forEach(function(a,k){ a.addEventListener('click',function(e){ var el=arts[k]; if(!el) return; e.preventDefault();
     var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
     scrollTo({top:(el.getBoundingClientRect().top+scrollY)-60/z, behavior:'smooth'}); }); });
