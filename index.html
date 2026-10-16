@@ -204,7 +204,7 @@ footer{display:flex; justify-content:space-between; gap:16px; padding:26px 0 48p
   overflow-y:auto; overscroll-behavior:contain; opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s ease}
 .ov.on{opacity:1; visibility:visible}
 /* the write-up pop-up: a plain dimmed page behind it, no blur (blur smeared dark bands at the screen edges and around the prototypes behind), and a wider card */
-.ov{background:#000 !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+.ov{background:#1A1A19 !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
 .ov .card{box-shadow:0 40px 100px -40px rgba(0,0,0,.7)}
 @media (min-width:901px){ .ov .card{max-width:920px}
 /* the confidential card: the drawing on the left, a short note on the right, for case studies that are not public yet */
@@ -8197,7 +8197,8 @@ function onWidth(fn){
       if(z==='Viewing' && now-since>3200) z='Reading';
       if((z==='Viewing'||z==='Reading') && now-lastMove>9000) z='Scroll'; }
     /* the margin left of the mark must hold the whole word; if it cannot, the mark stays alone rather than cover the page */
-    if(need(z)-38>mark.offsetLeft-16){ if(cur||want) rest(); return; }
+    /* when the margin is too narrow for the long form, fall back to a shorter word before giving up */
+    if(need(z)-38>mark.offsetLeft-16){ var shortOf={'Try prototype':'Try','Trying prototype':'Trying'}[z]; if(shortOf && need(shortOf)-38<=mark.offsetLeft-16) z=shortOf; else { if(cur||want) rest(); return; } }
     el.classList.add('on'); ask(z);
   }
   for(var k in P) (function(p){
