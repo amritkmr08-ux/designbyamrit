@@ -219,6 +219,7 @@ footer{display:flex; justify-content:space-between; gap:16px; padding:26px 0 48p
 .ov .card.conf .conf-back{display:inline-block; margin-top:22px; font-size:15px; color:#111; text-decoration:none}
 .ov .card.conf .conf-back:hover{text-decoration:underline; text-underline-offset:4px}
 .ov:has(#wc:not([hidden])) .ov-in{align-items:center; padding-bottom:56px}
+.ov .card.conf[hidden]{display:none !important}   /* its grid display must not beat the hidden attribute, or it sits beside whichever card is open */
 .ov .card.conf{align-self:center !important; margin:auto 0; max-width:1190px; width:min(1190px, 100%); min-height:0; aspect-ratio:1190/580}
 @media (max-width:760px){ .ov .card.conf{aspect-ratio:auto} }
 @media (max-width:760px){ .ov .card.conf{grid-template-columns:1fr; min-height:0} .ov .card.conf .conf-art{min-height:260px} .ov .card.conf .conf-body{grid-template-rows:auto auto; gap:40px; padding:40px 28px} .ov .card.conf .conf-head{grid-row:1} .ov .card.conf .conf-foot{grid-row:2} } }
