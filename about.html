@@ -667,6 +667,30 @@ a.site-mark{width:48px !important; height:48px !important; font-size:23px !impor
 @media (max-width:760px){ html body a.site-mark{top:25px !important} }
 /* phone: the page a shade greyer, so white cards lift off it */
 @media (max-width:760px){ html, body{background:#EFEFEC !important} .ldr::before{background-color:rgba(239,239,236,1)} .ldr.gone::before{background-color:rgba(239,239,236,0)} }
+
+/* the arrow keeps travelling round the loop; the four steps stay upright and readable */
+.ab-loop-d .abl-arrow{transform-box:view-box; transform-origin:180px 180px; animation:ablSpin 14s linear infinite !important; transition:none !important}
+@keyframes ablSpin{from{transform:rotate(0deg)} to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .ab-loop-d .abl-arrow{animation:none !important} }
+
+/* Experience: a quiet, even list. One rhythm for every row, a hairline between rows, dates on the title's baseline */
+#experience + .ab-rows{list-style:none; margin:28px 0 0; padding:0; border-top:1px solid var(--line)}
+#experience + .ab-rows > li{margin:0 !important; padding:0 !important; border-bottom:1px solid var(--line)}
+#experience + .ab-rows .rw{display:grid !important; grid-template-columns:150px minmax(0,1fr); column-gap:32px; align-items:start; padding:20px 0 !important; margin:0 !important; min-height:0 !important}
+#experience + .ab-rows .n{position:static !important; width:auto !important; margin:0 !important; padding:0 !important}
+#experience + .ab-rows .n .num{position:static !important; display:block; transform:none !important; font-style:normal; font-size:14px; line-height:24px; color:var(--faint); font-variant-numeric:tabular-nums; white-space:nowrap}
+#experience + .ab-rows .t{display:block; margin:0 !important; padding:0 !important; transform:none !important}
+#experience + .ab-rows .t b{display:block; font-family:var(--font); font-weight:500; font-size:16px; line-height:24px; color:var(--ink); letter-spacing:0}
+#experience + .ab-rows .t b .co{font-weight:400; color:var(--muted); margin-left:0}
+#experience + .ab-rows .t b .co::before{content:"\00b7"; margin:0 8px; color:var(--faint)}
+#experience + .ab-rows .sw{display:block !important; position:static !important; opacity:1 !important; transform:none !important; max-height:none !important; margin:4px 0 0 !important; padding:0 !important; font-size:14px; line-height:22px; color:var(--faint)}
+.ab-edu{margin-top:24px !important; font-size:14px !important; line-height:22px !important}
+@media (max-width:760px){
+  #experience + .ab-rows .rw{grid-template-columns:1fr; row-gap:2px; padding:16px 0 !important}
+  #experience + .ab-rows .t b .co{display:block}
+  #experience + .ab-rows .t b .co::before{content:none}
+  #experience + .ab-rows .t, #experience + .ab-rows .sw{width:auto !important; max-width:100% !important}
+}
 </style>
 <script>
 /* before the first paint, not after it */
