@@ -8111,17 +8111,17 @@ function onWidth(fn){
   if(mk) mk.addEventListener('click',function(e){ e.preventDefault(); scrollTo({top:Math.round(H*z), behavior:'smooth'}); });
   (document.fonts?document.fonts.ready:Promise.resolve()).then(size);
   /* once the sentence has finished writing, wait a second, then glide the white page up over the intro */
-  /* auto slide paused for now: set AUTO_SLIDE to true to bring it back */
-  var AUTO_SLIDE=false;
+  /* once the sentence has written itself, a pause, then the white page glides up on its own (any scroll or touch cancels it) */
+  var AUTO_SLIDE=true;
   if(AUTO_SLIDE) (function(){
     var n=t.querySelectorAll('i').length, STEPW=Math.max(110, Math.min(300, Math.round(5200/Math.max(n,1))));
-    var done=(calm?0:500+n*STEPW)+1000, moved=false;
+    var done=(calm?0:500+n*STEPW)+2200, moved=false;
     addEventListener('wheel',function(){ moved=true; },{passive:true,once:true});
     addEventListener('touchstart',function(){ moved=true; },{passive:true,once:true});
     addEventListener('keydown',function(){ moved=true; },{once:true});
     setTimeout(function(){
       if(moved || scrollY>5 || d.classList.contains('intro-done')) return;
-      var target=Math.round(H*z), start=scrollY, dur=calm?0:1500, t0=performance.now(), root=document.documentElement, prevSB=root.style.scrollBehavior;
+      var target=Math.round(H*z), start=scrollY, dur=calm?0:1800, t0=performance.now(), root=document.documentElement, prevSB=root.style.scrollBehavior;
       if(!dur){ scrollTo(0,target); return; }
       /* a gentle slide: eases in softly, glides, and comes to rest without any bounce. The page's smooth-scroll setting is paused so it doesn't fight each step */
       root.style.scrollBehavior='auto';
@@ -8379,7 +8379,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
       var a = ease((lay - n.li - n.j*.7)*1.25); if(a<=0) return;   /* each node starts at its own moment across the layer and grows slowly, so a layer fills like water, not all at once */
       var on = onPath.indexOf(n)>=0;
       var keep = n.j<.3;
-      var alpha = (.16 - sc*.11) * a * (on ? 1 : Math.max(0, 1-focus*(keep?.8:1.12)));
+      var alpha = (.20 - sc*.10) * a * (on ? 1 : Math.max(0, 1-focus*(keep?.45:.62)));
       ctx.strokeStyle='rgba(25,26,24,'+alpha.toFixed(3)+')';
       curve(pos(n.parent), pos(n), a);
     });
@@ -8393,7 +8393,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
       if(n.li===0) return;                           /* drawn last, over the lines */
       var on = onPath.indexOf(n)>=0;
       var em = base + 1.2*wOf(n.li);
-      ctx.fillStyle='rgba(25,26,24,'+Math.min(.85,a*(.18+.12*n.j)*em*(1-sc*.5)*(on?1:Math.max(0,1-focus*(n.j<.3?.8:1.12)))).toFixed(3)+')'; ctx.fill();
+      ctx.fillStyle='rgba(25,26,24,'+Math.min(.85,a*(.24+.14*n.j)*em*(1-sc*.4)*(on?1:Math.max(0,1-focus*(n.j<.3?.45:.62)))).toFixed(3)+')'; ctx.fill();
     });
 
     /* the answer: the pieces light one after another and are joined into one shape */
@@ -8446,7 +8446,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
        the company and the counts come after and keep their ink */
     (function(){
       var g=ctx.createLinearGradient(PAD,0,W-padR,0);
-      g.addColorStop(0,'#2E6B66'); g.addColorStop(.35,'#4E7BAE'); g.addColorStop(.68,'#8A79D6'); g.addColorStop(1,'#D4707E');
+      g.addColorStop(0,'#1F524E'); g.addColorStop(.35,'#2F5C8E'); g.addColorStop(.68,'#5E4FA8'); g.addColorStop(1,'#A6435C');
       ctx.save(); ctx.globalCompositeOperation='source-atop'; ctx.fillStyle=g; ctx.fillRect(0,0,W,H-PAD-8); ctx.restore();
     })();
 
@@ -8481,7 +8481,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     L.forEach(function(l,li){
       var a = ease((lay - li - .3)*1.5); if(a<=0) return;
       var x=PAD+l.x*(W-PAD-padR), y=H-PAD+6-(tight?12:0);
-      var al = (1 - sc*.55) * a * (1-focus*.7);
+      var al = (1 - sc*.4) * a * (1-focus*.5);
       var w = wOf(li), tone = Math.max(w, .45+.55*settle);
       ctx.fillStyle='rgba(25,26,24,'+(al*tone).toFixed(3)+')';
       ctx.font='500 '+((tight?13:15)+3*w).toFixed(2)+'px Poppins, sans-serif'; ctx.fillText(l.n, x, y-2*w);
@@ -8689,6 +8689,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
       lines.forEach(function(l){ l.classList.toggle('on', useML ? l.dataset.i==='ml' : l.dataset.i===show); });
       if(useML){ var src=sec.querySelector('.cine-line[data-i="'+show+'"] .cine-n'), txt=src?src.textContent.replace(/\s+/g,' ').trim():'';
         if(ml._mlCur!==undefined && window.Morphline) Morphline.to(ml, txt); else ml.textContent=txt; }
+      else if(ml){ clearTimeout(ml._mlT); var fly=ml.querySelector('.ml-layer'); if(fly){ fly.style.transition='opacity .18s ease'; fly.style.opacity='0'; } }
     }
     /* first act: the company picture, each line paired with its own stretch of the picture */
     var H_=window.heroScene, inHero=si<5;
