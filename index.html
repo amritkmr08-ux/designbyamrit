@@ -12,7 +12,7 @@
 @property --k{syntax:'<number>'; inherits:true; initial-value:0}
 /* Amrit's tokens and four sizes (114 / 24 / 17.5 / 14). Layout after bek.is: one narrow reading column, the work wider than the words. */
 :root{
-  --paper:#FFFFFF; --page:#F8F8F6; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --rule:#C9CAC4;
+  --paper:#FFFFFF; --page:#EDEDEA; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --rule:#C9CAC4;
   --mark:#DCE5D3; --accent:#3D5A45;
   --lift:0 1px 3px rgba(25,26,24,.06), 0 18px 40px -18px rgba(25,26,24,.22); --pop:0 24px 48px -20px rgba(25,26,24,.24);
   --display:"Poppins",-apple-system,sans-serif;
@@ -33,7 +33,7 @@ h1,h2{text-wrap:balance} p{text-wrap:pretty}
 /* the mark and the menu */
 .mark{position:fixed; z-index:40; top:40px; left:max(24px, calc(50% - 660px)); width:44px; height:44px; border-radius:50%;
   background:var(--ink); color:var(--paper); display:grid; place-items:center; font-family:var(--display); font-weight:500; font-size:16px; line-height:1}
-.menu{position:absolute; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-size:13px; line-height:20px; color:var(--muted)}
+.menu{position:absolute; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-size:14px; line-height:20px; color:var(--muted)}
 .menu a:hover{color:var(--ink)}
 
 .col{width:var(--col); margin:0 auto}
@@ -709,12 +709,13 @@ html, body{background:#101110}
   .hero .cine-text{height:96px}
 }
 /* details from the layout: narrower words (headline on three lines), more air, no arrows, caption in ink */
-.hero{grid-template-columns:440px minmax(0,1fr) !important; gap:110px !important}
+.hero{grid-template-columns:400px minmax(0,1fr) !important; gap:70px !important}   /* the picture takes the room: 80px more than before */
 .hero .hero-words h1{max-width:400px}
 .hero .hero-words #hero-sub{max-width:440px}
 .hero .cine-nav, .hero .cine-prog{display:none !important}
 .hero .cine-stage{gap:44px !important}
-.hero .cine-n, .hero .cine-q{font-size:20px !important; line-height:28px !important; font-weight:500; color:var(--ink)}
+.hero .cine-n, .hero .cine-q{font-size:23px !important; line-height:31px !important; font-weight:500; color:var(--ink)}
+.hero .cine-line .lbl{font-size:13px}
 @media (max-width:1100px){ .hero{grid-template-columns:minmax(0,1fr) !important; gap:40px !important} }
 /* one type system: chapter descriptions match the hero paragraph (Inter, 17px, grey) */
 .piece h2.chap-q + .dek, .piece .chap-head + .dek{font-family:var(--font) !important; font-size:17px !important; line-height:27px !important; font-weight:400 !important; letter-spacing:0 !important; color:var(--muted) !important; max-width:var(--read)}
@@ -789,7 +790,7 @@ html, body{background:#101110}
   .closing{padding-bottom:104px !important}
 }
 /* morphing caption line: measured unzoomed, like #hv-cap */
-#cine-ml{zoom:calc(1 / var(--z,1)); font-size:calc(20px * var(--z,1)) !important; line-height:calc(28px * var(--z,1)) !important; max-width:none !important}
+#cine-ml{zoom:calc(1 / var(--z,1)); font-size:calc(23px * var(--z,1)) !important; line-height:calc(31px * var(--z,1)) !important; max-width:none !important}
 #cine-ml, #cine-ml *{font-kerning:none; font-variant-ligatures:none; font-feature-settings:"kern" 0, "liga" 0}
 #cine-ml .ml-g{color:var(--ink)}
 @media (max-width:760px){ #cine-ml{font-size:17px !important; line-height:24px !important; max-width:16em !important; margin-left:auto !important; margin-right:auto !important} }
@@ -822,7 +823,9 @@ body.foot-on .chbar{opacity:0 !important; pointer-events:none !important}
   .piece h2.chap-q{margin-top:36px}
   .piece h2.chap-q + .dek{margin-top:28px}
   .piece figure{margin-top:64px}
-  .piece .prose{margin-top:48px}
+  .piece .prose{margin-top:48px; max-width:560px}
+  .piece .prose p{font-size:16px; line-height:25px; color:var(--ink); text-wrap:pretty}
+  .piece .prose p.end{margin-top:28px; font-size:15px}
   .piece .out-idx{margin-top:72px}
 }
 
@@ -8317,7 +8320,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var T_HOLD=2.6, T_SCATTER=1.6, T_CONNECT=3.4, T_TRACE=4.0, T_ASK=4.5;
   var t0=LD.reduce(function(a,b){return a+b;},0), t1=t0+T_HOLD, tc=t1+T_SCATTER, t2=tc+T_CONNECT, t3=t2+T_TRACE, DUR=t3+T_ASK;
   function layAt(t){ var acc=0; for(var i=0;i<5;i++){ if(t<acc+LD[i]) return i+(t-acc)/LD[i]; acc+=LD[i]; } return 5; }
-  var PAD=36, padR=56;
+  var PAD=24, padR=36;   /* the network reaches closer to the edges of its box */
 
   function raw(n, sc){
     var x=PAD+n.tx*(W-PAD-padR), y=PAD+n.ty*(H-PAD*2);
