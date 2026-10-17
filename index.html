@@ -539,6 +539,53 @@ html, body{background:#101110}
 .ov #w4 .glance dd{font-size:13.5px; line-height:21px; color:var(--ink); margin:0}
 .ov #w4 p.pq{border-left:2px solid var(--ink); padding:4px 0 4px 18px; margin:22px 0; font-weight:600; color:var(--muted); max-width:60ch}
 .ov #w4 p.bq{font-weight:600; color:var(--muted)}
+/* the rule panel, written as text so it reads at any size */
+.ov #w4 .rulebox{margin:28px 0}
+.ov #w4 .rulebox :where(p){max-width:none; margin:0}
+.ov #w4 .rb-rule{padding:16px 20px; border-left:2px solid #191A18; background:#EAF3FC}
+.ov #w4 .rb-k, .ov #w4 .rb-h{font-size:16px; line-height:24px; font-weight:600; color:#3A3B38}
+.ov #w4 .rb-k{text-transform:uppercase; letter-spacing:.02em}
+.ov #w4 .rb-s{margin-top:4px; font-size:16px; line-height:24px; color:#5F625C}
+.ov #w4 .rb-ask{padding:22px 0; margin-top:14px; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.ov #w4 .rb-q{display:flex; align-items:center; flex-wrap:wrap; gap:10px 12px}
+.ov #w4 .rb-lbl{font-size:12px; line-height:18px; letter-spacing:.1em; text-transform:uppercase; color:#6F716A}
+.ov #w4 .rb-said{font-size:19px; line-height:26px; color:#191A18}
+.ov #w4 .rb-could{margin-top:16px; font-size:15px; line-height:22px; color:#5F625C}
+.ov #w4 .rb-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+.ov #w4 .rb-chips span{padding:6px 14px; border:1px solid #D7D8D2; border-radius:999px; background:#fff; font-size:14px; line-height:20px; color:#3A3B38}
+.ov #w4 .rb-opts{margin-top:18px; padding:26px 28px 28px; border-radius:22px; background:linear-gradient(180deg,#E6F2E9 0%,#DCE5D6 45%,#E4DDD6 75%,#F3D9D8 100%)}
+.ov #w4 .rb-opt + .rb-opt{margin-top:28px; padding-top:28px; border-top:1px solid rgba(25,26,24,.1)}
+.ov #w4 .rb-n{font-size:12px; line-height:18px; letter-spacing:.14em; text-transform:uppercase; color:#6F716A}
+.ov #w4 .rb-t{display:flex; align-items:center; gap:12px; margin-top:14px; font-size:13px; line-height:18px; letter-spacing:.12em; text-transform:uppercase}
+.ov #w4 .rb-t i{flex:none; width:30px; height:30px; border-radius:50%; display:grid; place-items:center; font-style:normal; font-size:14px; letter-spacing:0}
+.ov #w4 .rb-yes .rb-t{color:#3E8A3A} .ov #w4 .rb-yes .rb-t i{background:#B2DCC0; color:#3E7A50}
+.ov #w4 .rb-no .rb-t{color:#B5553A} .ov #w4 .rb-no .rb-t i{background:#D7804F; color:#fff}
+.ov #w4 .rb-t b{font-weight:700}
+.ov #w4 .rb-d{margin:12px 0 0 42px; font-size:16px; line-height:25px; color:#5F625C}
+.ov #w4 .rb-card{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:16px; padding:16px 20px; border:1px solid #E3E3DE; border-radius:12px; background:#fff}
+.ov #w4 .rb-ck{font-size:12px; line-height:18px; letter-spacing:.1em; text-transform:uppercase; color:#6F716A}
+.ov #w4 .rb-cv{margin-top:2px; font-size:16px; line-height:24px; font-weight:600; color:#2A2B28}
+.ov #w4 .rb-no .rb-cv{margin-top:0}
+.ov #w4 .rb-chg{flex:none; font-size:15px; line-height:22px; color:#4A6C80}
+@media (max-width:760px){
+  .ov #w4 .rb-rule{padding:14px 16px}
+  .ov #w4 .rb-said{font-size:18px; line-height:25px}
+  .ov #w4 .rb-opts{padding:22px 18px 20px; border-radius:18px}
+  .ov #w4 .rb-t{align-items:flex-start; letter-spacing:.08em}
+  .ov #w4 .rb-d{margin-left:0; font-size:16px; line-height:24px}
+  .ov #w4 .rb-card{flex-direction:column; align-items:flex-start; gap:8px; padding:14px 16px}
+}
+/* the SME panel, written as text so it reads at any size */
+.ov #w4 .smebox{margin:28px 0; padding:26px 24px 24px; border-radius:22px; background:#1E474E; color:#fff}
+.ov #w4 .smebox :where(p){max-width:none; margin:0}
+.ov #w4 .smebox .smebox-k{font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; color:#A9E4E6}
+.ov #w4 .smebox .smebox-h{margin-top:16px; font-size:19px; line-height:26px; font-weight:600; color:#F09087}
+.ov #w4 .smebox-row{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:16px 18px; border-radius:12px; background:#FAFAFA}
+.ov #w4 .smebox-row:first-of-type{margin-top:20px}
+.ov #w4 .smebox .q{font-size:16px; line-height:23px; color:#191A18}
+.ov #w4 .smebox .w{margin-top:4px; font-size:14px; line-height:20px; color:#5F625C}
+.ov #w4 .smebox .tag{flex:none; padding:3px 12px; border-radius:999px; background:#EDEDEA; font-size:14px; line-height:20px; color:#191A18}
+@media (max-width:760px){ .ov #w4 .smebox{padding:22px 18px 18px; border-radius:18px} .ov #w4 .smebox .smebox-h{font-size:18px; line-height:25px} .ov #w4 .smebox-row{flex-direction:column; align-items:flex-start; gap:10px; padding:14px 16px} .ov #w4 .smebox .q{font-size:16px; line-height:23px} .ov #w4 .smebox .w{font-size:15px; line-height:21px} }
 .ov #w4 figure.fv figcaption:first-child{margin:0 32px 12px}
 .ov #w4 figure.fv img[src="search-v-hero.webp"]{aspect-ratio:768/550; object-fit:cover}
 .ov #w4 figure.sel{margin-top:24px; margin-bottom:8px; width:auto}
@@ -791,7 +838,8 @@ html, body{background:#101110}
 }
 /* morphing caption line: measured unzoomed, like #hv-cap */
 #cine-ml{zoom:calc(1 / var(--z,1)); font-size:calc(23px * var(--z,1)) !important; line-height:calc(31px * var(--z,1)) !important; max-width:none !important}
-#cine-ml{transition:width 1.1s cubic-bezier(.22,.61,.36,1)}   /* the centred box widens or narrows with the letters, instead of snapping to the new line's width */
+#cine-ml{transition:width 1.1s cubic-bezier(.22,.61,.36,1)}
+@media (min-width:1101px){ .hero .cine-line{left:-72px; right:-72px} .hero .cine-stage{overflow:visible} }   /* the captions may run a little past the picture's edges, so the longest one still sits on a single line */   /* the centred box widens or narrows with the letters, instead of snapping to the new line's width */
 #cine-ml, #cine-ml *{font-kerning:none; font-variant-ligatures:none; font-feature-settings:"kern" 0, "liga" 0}
 #cine-ml .ml-g{color:var(--ink)}
 @media (max-width:760px){ #cine-ml{font-size:17px !important; line-height:24px !important; max-width:16em !important; margin-left:auto !important; margin-right:auto !important} }
@@ -1080,7 +1128,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
           <div class="cine-line on" data-i="ml"><p class="cine-n" id="cine-ml" data-morph-text>One company, 40,000 contracts.</p></div>
           <div class="cine-line" data-i="0"><p class="cine-n">One company, <br>40,000 contracts.</p></div>
           <div class="cine-line" data-i="s"><p class="cine-n">Spread across many documents.</p></div>
-          <div class="cine-line" data-i="2"><p class="cine-n">Now AI can connect the scattered pieces.</p></div>
+          <div class="cine-line" data-i="2"><p class="cine-n">Now AI can connect meaning within the scattered pieces.</p></div>
           <div class="cine-line" data-i="3"><p class="cine-n">And that brings powerful insights to the business.</p></div>
           <div class="cine-line" data-i="4"><p class="cine-n">But is that enough to earn the user&rsquo;s trust?</p></div>
           <div class="cine-line" data-i="5">
@@ -7774,7 +7822,12 @@ window.nudgeMark = function (host, go) {
         <p>Take a breach-related question. The answer might depend on terms spread across several contracts in that family. So from a user&rsquo;s point of view, I felt it made more sense to consume the result at the family level rather than start with individual&nbsp;documents.</p>
         <p class="pq">We took this into a discussion and testing session with a legal SME. And that discussion changed the&nbsp;direction.</p>
         <p>We realised that some questions naturally demand a family-level result, while others&nbsp;don&rsquo;t.</p>
-        <figure class="fv"><img src="search-v-sme.webp" alt="What changed after SME testing: we realised neither approach worked for every question. Which suppliers have breach-notification issues needs context across related contracts, so family. Which contracts expire next month: each agreement has its own expiry date, so contract." loading="lazy"></figure>
+        <div class="smebox" role="group" aria-label="What changed after SME testing">
+          <p class="smebox-k">What changed after SME testing</p>
+          <p class="smebox-h">We realised neither approach worked for every question.</p>
+          <div class="smebox-row"><div><p class="q">&ldquo;Which suppliers have breach-notification issues?&rdquo;</p><p class="w">Needs context across related contracts</p></div><span class="tag">Family</span></div>
+          <div class="smebox-row"><div><p class="q">&ldquo;Which contracts expire next month?&rdquo;</p><p class="w">Each agreement has its own expiry date</p></div><span class="tag">Contract</span></div>
+        </div>
         <p>So rather than deciding that everything should be family-first, we moved towards the idea that the nature of the question should determine where the result&nbsp;lands.</p>
         <p class="pq">We moved away from choosing one default result level for every&nbsp;question.</p>
         <p>For data questions, the answer can take another form altogether. AskSirion already generates charts for questions such as total contract value by&nbsp;region.</p>
@@ -7789,7 +7842,20 @@ window.nudgeMark = function (host, go) {
         <p class="pq">But more importantly, suggesting the next question wasn&rsquo;t solving the problem when the current question could mean different&nbsp;things.</p>
         <p>For example, &ldquo;Which contracts don&rsquo;t meet the new 24-hour policy?&rdquo; Does that mean contracts with a longer reporting period? Contracts where the clause is missing? Or older contracts signed before the new&nbsp;policy?</p>
         <p class="bq">But how does the system know when a question is clear enough or not? That needed a rule, not a&nbsp;guess.</p>
-        <figure class="fv"><img src="search-v-rule.webp" alt="The rule: I proposed a simple confidence check. Someone asks: show contract value by supplier. Contract value could mean total contract value, committed value, maximum value or estimated annual spend. Option 1, proceed, safe enough to assume: if one meaning is much more likely and getting it wrong would make little difference, the search agent makes its assumption visible, using total contract value, or change. Option 2, ask, too important to guess: several meanings remain plausible and choosing the wrong one could materially change the answer, so it shows the disambiguation card." loading="lazy"></figure>
+        <div class="rulebox" role="group" aria-label="The rule: a simple confidence check">
+          <div class="rb-rule"><p class="rb-k">The rule:</p><p class="rb-h">I proposed a simple confidence check. Take a question about &ldquo;contract value&rdquo;.</p><p class="rb-s">For agent, that could mean total contract value and more</p></div>
+          <div class="rb-ask"><p class="rb-q"><span class="rb-lbl">Someone asks</span><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#4A6C80" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><span class="rb-said">&ldquo;Show contract value by supplier&rdquo;</span></p>
+            <p class="rb-could">&ldquo;Contract value&rdquo; could mean</p>
+            <p class="rb-chips"><span>Total contract value</span><span>Committed value</span><span>Maximum value</span><span>Estimated annual spend</span></p></div>
+          <div class="rb-opts">
+            <div class="rb-opt rb-yes"><p class="rb-n">Option 1</p><p class="rb-t"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg></i><span><b>Proceed</b> &ndash; safe enough to assume</span></p>
+              <p class="rb-d">If meaning is much more likely, and getting it wrong would make little difference to the result.</p>
+              <div class="rb-card"><div><p class="rb-ck">Search agent makes its assumption visible</p><p class="rb-cv">Using: Total contract value</p></div><span class="rb-chg">Or Change &#8599;</span></div></div>
+            <div class="rb-opt rb-no"><p class="rb-n">Option 2</p><p class="rb-t"><i aria-hidden="true">?</i><span><b>Ask</b> &ndash; too important to guess</span></p>
+              <p class="rb-d">Several meanings remain plausible, and choosing the wrong one could materially change the answer.</p>
+              <div class="rb-card"><p class="rb-cv">Show Disambiguation card</p></div></div>
+          </div>
+        </div>
         <p>We explored a clarifying card where users could choose what they meant or write their own&nbsp;interpretation.</p>
         <p>The idea wasn&rsquo;t to ask users to clarify every search. When the question was clear, search could simply proceed. When different interpretations could change the result significantly, it made sense to ask&nbsp;first.</p>
         <figure class="fv"><img src="search-v-clarify.webp" alt="How should a deviation be judged? Options: notice period over 24 hours, or absent (recommended); clause absent only; executed before the policy date; or something else." loading="lazy"></figure>
