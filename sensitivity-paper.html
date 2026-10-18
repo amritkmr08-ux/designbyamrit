@@ -249,6 +249,14 @@ body.story .fo{display:none!important} body.full .so{display:none!important}
 .sidenav .swap:hover{text-decoration:underline}
 @media(min-width:1560px){.sidenav{display:block}}
 @media(max-width:600px){.modeswitch{top:auto;bottom:calc(60px + env(safe-area-inset-bottom,0px));right:18px;left:auto}.modeswitch button{padding:6px 10px}}
+
+/* page to page: the old page fades out as the new one fades up (browsers that support cross-page view transitions; others just load) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .22s ease both}
+::view-transition-new(root){animation:vt-in .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
 <style>

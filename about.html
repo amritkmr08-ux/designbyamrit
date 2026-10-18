@@ -330,20 +330,28 @@
   /* care: paper section, grey fields */
   #thinking { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 0; }
   footer, footer .floot, .copylink, .links a { color: var(--faint); } footer { border-color: var(--line); }
+
+/* page to page: the old page fades out as the new one fades up (browsers that support cross-page view transitions; others just load) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .22s ease both}
+::view-transition-new(root){animation:vt-in .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
 .site-nav{height:92px}
 .site-mark{position:fixed; z-index:40; top:40px; left:max(24px, calc(50% - 660px)); width:44px; height:44px; border-radius:50%;
   background:var(--ink,#191A18); color:var(--paper,#FFFFFF); display:grid; place-items:center; font-family:"Poppins",-apple-system,sans-serif; font-weight:500; font-size:16px; line-height:1; text-decoration:none}
-.site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-family:"Inter",-apple-system,sans-serif; font-size:13px; line-height:20px; color:var(--muted,#5F625C)}
+.site-menu{position:absolute; z-index:40; top:50px; right:max(24px, calc(50% - 540px)); display:flex; gap:28px; font-family:"Inter",-apple-system,sans-serif; font-size:14px; line-height:20px; color:var(--muted,#5F625C)}
 .site-menu a{color:inherit; text-decoration:none} .site-menu a:hover, .site-menu a[aria-current]{color:var(--ink,#191A18)}
 @media (max-width:760px){ .site-mark{position:absolute; top:28px} .site-menu{top:38px; gap:18px} .site-nav{height:80px} }
 /* match the homepage, which is drawn at 90% on wide screens: same mark and menu size and position */
 @media (min-width:761px){ .site-mark{width:38px; height:38px; font-size:15px} }
 @media (min-width:1200px){
   .site-mark{width:34.2px; height:34.2px; font-size:13.5px; top:36px; left:max(21.6px, calc(50% - 594px))}
-  .site-menu{font-size:11.7px; line-height:18px; gap:25.2px; top:45px; right:max(21.6px, calc(50% - 486px))}
+  .site-menu{font-size:12.6px; line-height:18px; gap:25.2px; top:45px; right:max(21.6px, calc(50% - 486px))}
 }
 
 /* same page colour as the homepage (--page) */
@@ -685,12 +693,22 @@ a.site-mark{width:48px !important; height:48px !important; font-size:23px !impor
 #experience + .ab-rows .t b .co::before{content:"\00b7"; margin:0 8px; color:var(--faint)}
 #experience + .ab-rows .sw{display:block !important; position:static !important; opacity:1 !important; transform:none !important; max-height:none !important; margin:4px 0 0 !important; padding:0 !important; font-size:14px; line-height:22px; color:var(--faint)}
 .ab-edu{margin-top:24px !important; font-size:14px !important; line-height:22px !important}
+.ab-edu.ab-talk{margin-top:8px !important}
 @media (max-width:760px){
   #experience + .ab-rows .rw{grid-template-columns:1fr; row-gap:2px; padding:16px 0 !important}
   #experience + .ab-rows .t b .co{display:block}
   #experience + .ab-rows .t b .co::before{content:none}
   #experience + .ab-rows .t, #experience + .ab-rows .sw{width:auto !important; max-width:100% !important}
 }
+
+/* UX India: a short note and the product film under the education line */
+.ab-talkb{margin-top:48px; max-width:760px}
+.ab-talkb h3{margin:0; font-family:var(--display, inherit); font-size:20px; line-height:28px; font-weight:500; letter-spacing:-.01em; color:var(--ink, #191A18)}
+.ab-talkb p{margin:10px 0 0; max-width:62ch; font-size:16px; line-height:26px; color:var(--faint, #6F716A)}
+.ab-vid{margin:22px 0 0; max-width:666px}
+.ab-vid video{display:block; width:100%; height:auto; aspect-ratio:1280/692; border-radius:12px; background:#F1F1EE; box-shadow:0 0 0 1px rgba(25,26,24,.08)}
+.ab-vid figcaption{margin-top:10px; font-size:13px; line-height:20px; color:var(--faint, #6F716A)}
+@media (max-width:760px){ .ab-talkb{margin-top:36px} .ab-talkb h3{font-size:18px; line-height:26px} .ab-talkb p{font-size:15px; line-height:24px} .ab-vid video{border-radius:10px} }
 </style>
 <script>
 /* before the first paint, not after it */
@@ -800,7 +818,17 @@ function onWidth(fn){
         <span class="t"><b>Graphic and Product Designer <span class="co">Lee Cooper</span></b></span>
       </div></li>
         </ul>
-        <p class="ab-scope ab-edu r">Bachelor of Design, NIFT Chennai &middot; Design Thinking, Stanford Graduate School of Business (online).</p>
+        <p class="ab-scope ab-edu r">Bachelor of Design, NIFT Chennai &middot; Executive Development Programme in Strategy and Leadership, XLRI Delhi-NCR (2025&ndash;26) &middot; Design Thinking, Stanford Graduate School of Business (online).</p>
+        <div class="ab-talkb r">
+          <h3>This idea was picked for UX India 2023</h3>
+          <p>My concept for AI-assisted contract redlining and review was selected for a Lightning Talk at UX India 2023 in Bengaluru. It pointed reviewers to the risky parts of a contract, suggested fixes, and drafted replacement clauses.</p>
+          <figure class="ab-vid">
+            <video controls playsinline preload="none" poster="auto-redline-poster.webp" width="1280" height="692" aria-label="Auto Redline in Sirion: a risk score, grouped suggestions, redlines in the contract, and asking the AI to rewrite a clause">
+              <source src="auto-redline.mp4" type="video/mp4">
+            </video>
+            <figcaption>Auto Redline in Sirion, from Sirion&rsquo;s product film.</figcaption>
+          </figure>
+        </div>
 
         <h2 class="ab-h r" id="process">How I work now</h2>
         <div class="ab-loop r">

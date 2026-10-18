@@ -199,6 +199,14 @@
   @media (prefers-reduced-motion: reduce){
     mark,.fbody,.fin,.val,.tick,.fcard{transition:none}
   }
+
+/* page to page: the old page fades out as the new one fades up (browsers that support cross-page view transitions; others just load) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .22s ease both}
+::view-transition-new(root){animation:vt-in .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
 </style>
 </head>
 <body>

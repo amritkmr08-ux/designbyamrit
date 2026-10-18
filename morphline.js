@@ -62,11 +62,11 @@ function onWidth(fn){
   /* a page can ask for a calmer version (<html data-ml-soft>): no bounce, a little slower, less grain */
   var SOFT = document.documentElement.hasAttribute('data-ml-soft');
   if (SOFT) { SPATIAL = SPRING ? 'linear(0.0000, 0.0118, 0.0431, 0.0888, 0.1444, 0.2065, 0.2722, 0.3390, 0.4054, 0.4697, 0.5312, 0.5890, 0.6428, 0.6921, 0.7370, 0.7775, 0.8136, 0.8455, 0.8736, 0.8980, 0.9191, 0.9371, 0.9524, 0.9652, 0.9759, 0.9846, 0.9916, 0.9973, 1.0016, 1.0050, 1.0074, 1.0091, 1.0102, 1.0109, 1.0111, 1.0110, 1.0107, 1.0102, 1.0097, 1.0090, 1.0083, 1.0075, 1.0000)' : 'cubic-bezier(.22,.61,.36,1)';
-    T_SP = 700; T_EF = 420; }
+    T_SP = 1000; T_EF = 620; }
   var PER_PX = 1.10, MAX_EXTRA = 380;  /* distance adds time, up to this much */
   var SPAN_MOVE = 260, SPAN_OUT = 200, SPAN_IN = 340, IN_BASE = 260;  /* the sweeps, and the beat */
   var JITTER = 55, T_REST = 1550;      /* per-letter offset; when the layer is redrawn clean */
-  if (SOFT) { JITTER = 28; T_REST = 1900; MAX_EXTRA = 300; }
+  if (SOFT) { JITTER = 28; T_REST = 3000; MAX_EXTRA = 360; SPAN_MOVE = 600; SPAN_OUT = 520; SPAN_IN = 720; IN_BASE = 420; }   /* the sweep across the line takes longer, so the old words clear and the new ones arrive as a wave */
   function jit(i) { var h = ((i * 7919) % 97) / 97; return Math.round((h - 0.5) * 2 * JITTER); }
 
   /* Where a laid-out string ends: the last letter in reading order, as a box
@@ -120,8 +120,8 @@ function onWidth(fn){
   /* lay a string out as characters, keeping words unbroken, and report each box */
   function layout(host, text) {
     /* measure against the natural width, never a width we set on a previous pass */
-    var lock = host.style.width;
-    if (lock) host.style.width = 'auto';
+    var lock = host.style.width, lockT = host.style.transition;
+    if (lock) { host.style.transition = 'none'; host.style.width = 'auto'; }   /* measure without the width easing in, or the box visibly jumps before the letters move */
     var probe = document.createElement('span');
     probe.className = 'ml-probe';
     probe.style.cssText = 'display:block;position:static;visibility:hidden';
@@ -174,7 +174,7 @@ function onWidth(fn){
     var pr = probe.getBoundingClientRect();
     var w = pr.width, h = pr.height;
     host.removeChild(probe);
-    if (lock) host.style.width = lock;
+    if (lock) { host.style.width = lock; void host.offsetWidth; host.style.transition = lockT; }
     pos.w = w;
     /* How tall the string actually came out. On a desktop every one of these lines fits
        on one, so the boxes were given a fixed height and nothing needed to ask. A phone

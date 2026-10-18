@@ -1094,6 +1094,293 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .ov .card .glance dt{font-size:12px; line-height:18px; letter-spacing:.04em; color:var(--faint); margin:0}
 .ov .card .glance dd{font-size:14px; line-height:21px; color:var(--ink); margin:2px 0 0}
 @media (max-width:600px){ .ov .card .glance{grid-template-columns:1fr} }
+
+/* intro: the credentials line just above the sheet, small and grey */
+.intro-creds{position:absolute; left:50%; transform:translateX(-50%); z-index:2; margin:0; display:flex; align-items:center; gap:28px; white-space:nowrap;
+  font-family:var(--font); font-weight:400; font-size:14px; line-height:20px; letter-spacing:0; color:#8B8985;
+  opacity:calc(1 - var(--ip,0) * 3)}
+.intro-creds b{display:block; width:1px; height:16px; background:rgba(139,137,133,.35)}
+/* the scroll cue moves to the right edge so it doesn't sit on the line */
+@media (min-width:761px){ .intro-cue{left:auto !important; right:48px !important; transform:none !important} }
+@media (max-width:760px){
+  .intro-creds{left:24px; right:76px; transform:none; flex-wrap:wrap; gap:6px 14px; white-space:normal; font-size:12.5px; line-height:18px}
+  .intro-creds span:first-child{flex-basis:100%}
+  .intro-creds b{height:12px}
+  .intro-creds b:nth-of-type(1){display:none}
+  .intro-cue{display:none !important}
+  .intro-creds{right:24px}
+  .intro-creds{text-shadow:0 0 6px #0A0907, 0 0 12px #0A0907}
+}
+
+/* Search card: a small response bar under the title, clap and comment on the left, listen on the right */
+.tbar{display:flex; align-items:center; gap:22px; margin:22px 0 30px; padding:9px 2px; border-top:1px solid #E6E6E2; border-bottom:1px solid #E6E6E2}
+.tb-sp{flex:1}
+/* chapter openings: question, line under it, then the prototype, in tighter and even steps */
+.piece h2.chap-q + .dek{margin-top:14px !important}
+.piece h2.chap-q + .dek + figure{margin-top:36px !important}
+.ov #w4 .tbar + .glance{border-top:0; margin-top:0; padding-top:24px}
+.tb{position:relative; display:inline-flex; align-items:center; gap:6px; padding:4px; margin:-4px; color:#6B6B6B; text-decoration:none; background:none; border:0; cursor:pointer; border-radius:8px; transition:color .15s ease}
+.tb:hover{color:#191A18}
+.tb svg{display:block}
+.tb-play .i-pause{display:none}
+.tb-play.on .i-play{display:none} .tb-play.on .i-pause{display:block}
+.tb-play.on, .tb-play.paused{color:#191A18}
+.tb-play[hidden]{display:none}
+.tb-l{font-family:var(--font); font-size:13px; line-height:18px; white-space:nowrap}
+/* read-along: the paragraph being read is tinted, the word being spoken is marked */
+.ov #w4 .rd-on{background:rgba(61,90,69,.07); box-shadow:0 0 0 6px rgba(61,90,69,.07); border-radius:4px; transition:background-color .3s ease, box-shadow .3s ease}
+::highlight(readw){background-color:#CFE3D4; color:#191A18}
+
+/* while it reads, a small player stays at the bottom of the screen so it can be paused or stopped from anywhere */
+.rd-mini{position:fixed; left:50%; bottom:24px; z-index:200; display:flex; align-items:center; gap:4px; padding:5px 6px; border-radius:999px; background:#191A18; color:#F1F1EE;
+  box-shadow:0 12px 32px -12px rgba(0,0,0,.55); font-family:var(--font); font-size:13px; line-height:18px;
+  opacity:0; visibility:hidden; transform:translate(-50%,12px); transition:opacity .25s ease, transform .3s cubic-bezier(.22,.61,.36,1), visibility .25s}
+.rd-mini.on{opacity:1; visibility:visible; transform:translate(-50%,0)}
+.rd-mini button{display:grid; place-items:center; width:32px; height:32px; border-radius:50%; background:none; border:0; color:inherit; cursor:pointer}
+.rd-mini button:hover{background:rgba(255,255,255,.12)}
+.rd-mini .i-play{display:none} .rd-mini.paused .i-play{display:block} .rd-mini.paused .i-pause{display:none}
+.rd-mini .rd-lbl{padding:0 6px 0 2px; white-space:nowrap}
+.rd-mini button.rd-go{display:none; width:auto; height:28px; padding:0 12px; margin-right:2px; border-radius:999px; background:#F1F1EE; color:#191A18; font:inherit; font-size:12.5px; font-weight:500; white-space:nowrap}
+.rd-mini button.rd-go:hover{background:#fff}
+.rd-mini.away button.rd-go{display:block}
+.rd-mini svg{display:block}
+@media (prefers-reduced-motion:reduce){ .rd-mini{transition:opacity .2s ease, visibility .2s} }
+
+/* Reach card: the walkthrough film under the bar, a little wider than the text */
+.ov #w6 .w6-tag{margin:0 0 10px; font-family:var(--display); font-size:17px; line-height:24px; color:var(--ink)}
+.ov #w6 .w6-tag b{font-weight:400; margin-right:8px}
+.ov #w6 .w6-vid{margin:30px -48px 8px}
+.ov #w6 .w6-vid video{display:block; width:100%; height:auto; aspect-ratio:16/9; border-radius:14px; background:#141414; box-shadow:0 0 0 1px rgba(25,26,24,.1); cursor:pointer}
+.ov #w6 .glance{display:grid; grid-template-columns:1fr 1fr; gap:22px 28px; margin:44px 0 8px; padding:0; border-top:0}
+.ov #w6 .glance dt{font-size:10.5px; line-height:16px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin:0 0 6px}
+.ov #w6 .glance dd{font-size:13.5px; line-height:21px; color:var(--ink); margin:0}
+@media (max-width:600px){ .ov #w6 .glance{grid-template-columns:1fr} }
+.tb-walk .i-pause{display:none} .tb-walk.on .i-play{display:none} .tb-walk.on .i-pause{display:block} .tb-walk.on{color:#191A18}
+@media (max-width:760px){ .ov #w6 .w6-vid{margin:24px -8px 4px} .ov #w6 .w6-vid video{border-radius:10px} }
+
+/* layout toggle for the work: full-width chapters (default) or side-by-side cards, same content */
+.layt{display:flex; gap:4px; width:max-content; margin:-68px 0 28px auto; padding:4px; border:1.5px solid #D3D3CE; border-radius:14px; background:transparent}
+.layt button{display:grid; place-items:center; width:42px; height:38px; border:0; border-radius:10px; background:none; color:#1E1F1D; cursor:pointer; transition:background-color .15s ease, color .15s ease, box-shadow .15s ease}
+.layt button:hover{color:var(--ink)}
+.layt button.on{background:#F6F6F3; color:#1E1F1D; box-shadow:0 2px 8px -2px rgba(25,26,24,.12)}
+.layt svg{stroke-width:1.6; width:17px; height:17px}
+.layt button{width:36px !important; height:32px !important; border-radius:9px !important}
+.layt button:focus{outline:none} .layt button:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
+@media (max-width:900px){ .layt{display:none} }
+@media (min-width:901px){ #chapters.lay-rows .piece .fit{background:#fff} }
+#chapters:not(.lay-rows) .q5dek{display:none} @media (max-width:900px){ #chapters .q5dek{display:none} }
+/* chapter openings, as in the reference: "01 Search" in sentence case, the question a step heavier on wider lines, the line under it in the display face */
+#chapters .piece .chap-n, #chapters .piece .chap-name{font-family:var(--display) !important; font-size:17px !important; line-height:24px !important; letter-spacing:0 !important; text-transform:none !important; color:var(--muted) !important; font-weight:400 !important}
+#chapters .piece h2.chap-q{font-weight:500 !important; max-width:13.4em !important; text-wrap:wrap !important; margin-top:14px !important}
+#chapters .piece h2.chap-q + .dek{font-family:var(--display) !important; max-width:31em !important; font-size:17px !important; line-height:27px !important; color:var(--muted) !important}
+@media (max-width:760px){ #chapters .piece .chap-n, #chapters .piece .chap-name{font-size:15px !important; line-height:22px !important} #chapters .piece h2.chap-q{max-width:none !important} }
+@media (min-width:901px){
+  .chapters.lay-rows .piece{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); grid-template-rows:1fr auto auto auto auto 1fr; column-gap:56px;
+    border:1px solid var(--line); border-radius:36px; padding:30px 48px 30px 30px; margin:0 0 32px; padding-bottom:30px !important; box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+  .chapters.lay-rows .piece > *{grid-column:2; min-width:0}
+  .chapters.lay-rows .piece > .chap-head{grid-row:2} .chapters.lay-rows .piece > h2{grid-row:3} .chapters.lay-rows .piece > .dek{grid-row:4} .chapters.lay-rows .piece > .prose{grid-row:5}
+  .chapters.lay-rows .piece > figure{grid-column:1; grid-row:1 / 7; margin:0 !important; align-self:center}
+  .chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); padding:30px 30px 30px 48px}
+  .chapters.lay-rows .piece:nth-child(even) > *{grid-column:1}
+  .chapters.lay-rows .piece:nth-child(even) > figure{grid-column:2}
+  .chapters.lay-rows .piece > .prose{max-width:none; margin-top:20px}
+  .chapters.lay-rows .piece h2.chap-q{max-width:none}
+  .chapters.lay-rows .piece::after{display:none !important}
+  .chapters.lay-rows .piece{position:relative}
+  .chapters.lay-rows .piece p.fmeta{max-width:100%; margin-right:0; flex-wrap:wrap; white-space:normal; justify-content:flex-end; text-align:right}
+}
+/* side-by-side, as designed: prototype + number, question and line only; one quiet card edge; the whole text side opens the case study */
+@media (min-width:901px){
+  .chapters.lay-rows .piece{grid-template-columns:minmax(0,1fr) minmax(0,.94fr) !important; column-gap:68px !important; padding:36px 56px 36px 36px !important;
+    border:1.5px solid #CFCFCA !important; border-radius:40px !important; box-shadow:0 2px 6px -2px rgba(25,26,24,.12) !important; margin-bottom:36px !important; cursor:pointer}
+  .chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,.94fr) minmax(0,1fr) !important; padding:36px 36px 36px 56px !important}
+  .chapters.lay-rows .piece > .prose, .chapters.lay-rows .piece p.fmeta, .chapters.lay-rows .piece figcaption{display:none !important}
+  .chapters.lay-rows .piece > figure{cursor:default}
+  .chapters.lay-rows .piece .fit{border-radius:10px; overflow:hidden}
+  .chapters.lay-rows .piece:hover{border-color:#B9B9B3 !important}
+}
+
+/* side-by-side cards hug the prototype: one row, equal padding, the text block centred; inner corners follow the outer curve */
+.ptxt{display:contents}
+@media (min-width:901px){
+  .chapters.lay-rows .piece{grid-template-rows:auto !important; align-items:center; padding:36px 56px 36px 36px !important}
+  .chapters.lay-rows .piece:nth-child(even){padding:36px 36px 36px 56px !important}
+  .chapters.lay-rows .piece > figure{grid-row:1 !important; grid-column:1 !important}
+  .chapters.lay-rows .piece > .ptxt{display:block; grid-row:1; grid-column:2}
+  .chapters.lay-rows .piece:nth-child(even) > figure{grid-column:2 !important}
+  .chapters.lay-rows .piece:nth-child(even) > .ptxt{grid-column:1}
+  .chapters.lay-rows .piece > .out-idx{display:none !important}
+  .chapters.lay-rows .piece .fit{border-radius:14px !important}
+  .chapters.lay-rows #q5 > figure{width:100%; justify-self:stretch}
+  .chapters.lay-rows #q5 .fit{border-radius:14px !important}
+}
+
+/* card view, polished: lighter card surface, quieter edge, soft depth; smaller question; a small number chip; the prototype lifted off the card */
+@media (min-width:901px){
+  .chapters.lay-rows .piece{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.28)) !important; border:1px solid rgba(25,26,24,.09) !important; border-radius:32px !important;
+    box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 1px 2px rgba(25,26,24,.04), 0 18px 40px -28px rgba(25,26,24,.22) !important;
+    padding:24px 64px 24px 24px !important; column-gap:64px !important; margin-bottom:28px !important;
+    transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease, border-color .35s ease}
+  .chapters.lay-rows .piece:nth-child(even){padding:24px 24px 24px 64px !important}
+  .chapters.lay-rows .piece:hover{transform:translateY(-2px); border-color:rgba(25,26,24,.14) !important; box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 2px 4px rgba(25,26,24,.04), 0 28px 56px -30px rgba(25,26,24,.3) !important}
+  .chapters.lay-rows .piece .fit{border-radius:12px !important; box-shadow:0 0 0 1px rgba(25,26,24,.06), 0 10px 30px -18px rgba(25,26,24,.35)}
+  .chapters.lay-rows .piece > .ptxt{max-width:380px}
+  .chapters.lay-rows .piece .chap-head{display:inline-flex !important; align-items:center; gap:8px; padding:5px 12px 5px 6px; border-radius:999px; background:rgba(255,255,255,.7); box-shadow:0 0 0 1px rgba(25,26,24,.07)}
+  .chapters.lay-rows .piece .chap-head .chap-n{display:inline-grid !important; place-items:center; min-width:24px; height:24px; padding:0 6px; border-radius:999px; background:#1E1F1D; color:#F3F3EF !important; font-size:11.5px !important; line-height:24px !important; margin:0 !important; letter-spacing:.02em !important}
+  .chapters.lay-rows .piece .chap-head .chap-name{font-size:13.5px !important; line-height:20px !important; color:#3C3D3A !important}
+  #chapters.lay-rows .piece .chap-head .chap-n{color:#F3F3EF !important; font-family:var(--font) !important; font-weight:500 !important; font-size:11px !important}
+  .chapters.lay-rows .piece h2.chap-q{font-size:26px !important; line-height:34px !important; letter-spacing:-.015em !important; margin-top:20px !important; max-width:15em !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{color:#85867F !important}
+  .chapters.lay-rows .piece h2.chap-q + .dek{font-size:15px !important; line-height:24px !important; margin-top:12px !important; max-width:30em !important}
+}
+
+/* card view matched to the Figma frame: card on the wall colour, thin grey edge, soft drop; 21px inset; prototype ~46%, text centred; plain "01 Search"; regular-weight question */
+@media (min-width:901px){
+  #chapters.lay-rows .piece{background:transparent !important; border:1.5px solid #D2D2CD !important; border-radius:22px !important;
+    box-shadow:0 2px 3px -1px rgba(25,26,24,.10), 0 10px 22px -16px rgba(25,26,24,.22) !important;
+    grid-template-columns:minmax(0,36fr) minmax(0,64fr) !important; column-gap:48px !important; padding:18px 44px 18px 18px !important; margin-bottom:20px !important}
+  #chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,64fr) minmax(0,36fr) !important; padding:18px 18px 18px 44px !important}
+  #chapters.lay-rows .piece:hover{transform:none; border-color:#C2C2BC !important}
+  #chapters.lay-rows .piece .fit{border-radius:6px !important; box-shadow:0 0 0 1px rgba(25,26,24,.05) !important}
+  #chapters.lay-rows .piece > .ptxt{max-width:none}
+  #chapters.lay-rows .piece .chap-head{display:block !important; padding:0 !important; background:none !important; box-shadow:none !important}
+  #chapters.lay-rows .piece .chap-head .chap-n{display:inline !important; min-width:0; height:auto; padding:0 !important; background:none !important; color:var(--muted) !important; font-family:var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:24px !important; margin:0 5px 0 0 !important}
+  #chapters.lay-rows .piece .chap-head .chap-name{font-size:16px !important; line-height:24px !important; color:var(--muted) !important}
+  #chapters.lay-rows .piece h2.chap-q{font-size:28px !important; line-height:34px !important; font-weight:500 !important; letter-spacing:-.01em !important; margin-top:12px !important; max-width:none !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{font-size:16px !important; line-height:24px !important; margin-top:8px !important; max-width:none !important; color:#7A7B75 !important}
+}
+
+/* card states: flat at rest, a soft lift on hover (and when focused from the keyboard) */
+@media (min-width:901px){
+  #chapters.lay-rows .piece{background:#F6F6F3 !important; box-shadow:none !important; transform:none !important; border-color:#D2D2CD !important;
+    transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important}
+  #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{border-color:#C6C6C0 !important; transform:translateY(-2px) !important;
+    box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important}
+  @media (prefers-reduced-motion:reduce){ #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{transform:none !important} }
+}
+
+/* case-study headers, one hierarchy on every card: small grey label, the title, then a smaller lighter meta line */
+html body .ov .card p.k{font-size:14px !important; line-height:20px !important; color:#8A8B85 !important; margin-top:8px !important; letter-spacing:.005em}
+html body .ov #w6 .w6-tag{font-size:14px !important; line-height:20px !important; color:#6F716A !important; margin-bottom:12px !important}
+html body .ov #w6 .w6-tag b{font-weight:500; color:#191A18}
+@media (max-width:760px){ html body .ov .card p.k{font-size:13px !important} }
+
+
+/* toggle as in the reference: a soft grey tray, no outline; the chosen view on a raised off-white tile */
+.layt{border:0 !important; background:#E6E6E3 !important; padding:4px !important; gap:2px !important; border-radius:13px !important}
+.layt button{width:36px !important; height:32px !important; border-radius:9px !important; color:#1E1F1D !important; background:transparent !important; box-shadow:none !important}
+.layt button.on{background:#F6F6F3 !important; box-shadow:0 1px 2px rgba(25,26,24,.08), 0 4px 10px -4px rgba(25,26,24,.18) !important}
+.layt button:not(.on):hover{background:rgba(255,255,255,.35) !important}
+
+/* lighter strokes: card edge thinner and paler; toggle icons a touch finer and greyer */
+@media (min-width:901px){
+  #chapters.lay-rows .piece{border-width:1px !important; border-color:#DEDED9 !important}
+  #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{border-color:#D2D2CD !important}
+}
+.layt svg{stroke-width:1.4 !important}
+.layt button{color:#55564F !important} .layt button.on{color:#1E1F1D !important}
+
+/* card view: every prototype on the left, text on the right */
+@media (min-width:901px){
+  #chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,36fr) minmax(0,64fr) !important; padding:18px 44px 18px 18px !important}
+  #chapters.lay-rows .piece:nth-child(even) > figure{grid-column:1 !important}
+  #chapters.lay-rows .piece:nth-child(even) > .ptxt{grid-column:2 !important}
+}
+
+/* Search card: same opening as Reach — label, title, meta, a bar with "Ask Mira to explain" and the narrated walkthrough; "Ask Mira to read" sits under the facts */
+.ov #w4 .w4-tag{display:block; margin:0 0 12px; font-family:var(--display); font-size:14px; line-height:20px; color:#6F716A}
+.ov #w4 .w4-tag b{font-weight:500; color:#191A18; margin-right:8px}
+.ov #w4 .w4-vid{margin:30px -48px 8px}
+.ov #w4 .w4-vid video{display:block; width:100%; height:auto; aspect-ratio:1920/1166; border-radius:14px; background:#fff; box-shadow:0 0 0 1px rgba(25,26,24,.1); cursor:pointer}
+.ov #w4 .w4-top + .w4-vid + .glance{margin-top:40px}
+.ov #w4 .w4-read{border-top:1px solid #E6E6E2; border-bottom:0; margin:28px 0 8px; padding-top:14px}
+@media (max-width:760px){ .ov #w4 .w4-vid{margin:24px -8px 4px} .ov #w4 .w4-vid video{border-radius:10px} }
+
+/* the chapter bar stays on while you are in the work, and carries the layout toggle */
+.chbar.on.rest:not(:hover):not(:focus-within){opacity:1 !important; transform:translate(-50%,0) !important; pointer-events:auto !important}
+.chbar{align-items:center}
+html body.foot-on .chbar.on{opacity:0 !important; pointer-events:none !important; transform:translate(-50%,16px) !important}
+.chbar .layt{margin:0 0 0 6px !important; padding:3px !important; gap:2px !important; background:rgba(255,255,255,.08) !important; border:0 !important; border-radius:12px !important}
+.chbar .layt button{width:34px !important; height:30px !important; color:#BDBFBA !important; border-radius:9px !important}
+.chbar .layt button:not(.on):hover{background:rgba(255,255,255,.08) !important; color:#F7F7F5 !important}
+.chbar .layt button.on{background:rgba(255,255,255,.16) !important; color:#F7F7F5 !important; box-shadow:none !important}
+.chbar .layt svg{width:16px; height:16px}
+@media (max-width:900px){ .chbar .layt{display:none !important} }
+@media (min-width:901px){
+  /* list view: every chapter is already on screen, so the tabs fold away and the bar keeps only My work and the view switch. they fold rather than vanish, so the bar shrinks and grows smoothly */
+  #chbar > a{max-width:220px; overflow:hidden; transition:max-width .45s cubic-bezier(.22,.61,.36,1), padding .45s cubic-bezier(.22,.61,.36,1), margin .45s cubic-bezier(.22,.61,.36,1), opacity .25s ease, background-color .2s ease, color .2s ease}
+  #chbar.slim > a{max-width:0 !important; padding-left:0 !important; padding-right:0 !important; margin-left:0 !important; margin-right:0 !important; opacity:0; pointer-events:none}
+  #chbar.slim .chbar-lbl{margin-right:6px}
+  #chbar .chbar-lbl{transition:margin .45s cubic-bezier(.22,.61,.36,1)}
+}
+@media (min-width:901px) and (prefers-reduced-motion:reduce){ #chbar > a, #chbar .chbar-lbl{transition:none} }   /* list view: every chapter is already on screen, so the bar keeps only My work and the view switch */
+/* more air before the closing line */
+section.closing{margin-top:160px !important}
+@media (max-width:760px){ section.closing{margin-top:96px !important} }
+/* case-study walkthroughs sit on a soft grey band that runs down to the line above the facts */
+.ov #w4 .w4-vid, .ov #w6 .w6-vid{background:#F1F1EE; padding:28px 32px; margin-left:-76px !important; margin-right:-76px !important; margin-bottom:0 !important}
+.ov #w4 .w4-top, .ov #w6 .tbar{margin-bottom:0 !important}
+.ov #w4 .w4-vid + .glance, .ov #w6 .w6-vid + .glance{margin-top:0 !important; padding-top:28px !important; border-top:1px solid #E6E6E2 !important}
+@media (max-width:760px){ .ov #w4 .w4-vid, .ov #w6 .w6-vid{padding:16px; margin-left:-24px !important; margin-right:-24px !important} }
+
+/* "Ask Mira to explain" beside a chapter, and the pop-up that holds only the walkthrough */
+.ex-btn{display:flex; align-items:center; gap:8px; margin:18px 0 14px auto; padding:6px 10px 6px 6px; border:0; border-radius:999px; background:none; color:#6B6B6B; font-family:var(--font); font-size:14px; line-height:20px; cursor:pointer; transition:color .15s ease, background-color .15s ease}
+.ex-btn:hover{color:#191A18; background:rgba(25,26,24,.04)} .ex-btn svg{display:block; flex:none}
+.ex-btn:focus{outline:none} .ex-btn:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
+@media (min-width:901px){ #chapters.lay-rows .ex-btn{margin:16px 0 0 -6px} }
+.ov #wv .wv-vid{margin:28px -48px 0}
+.ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#141414; box-shadow:0 0 0 1px rgba(25,26,24,.1)}
+.ov #wv .wv-more{display:flex; justify-content:space-between; align-items:center; margin:40px 0 0; padding:20px 24px; border-radius:12px; background:#EEEEEA; color:#3C4A3F; text-decoration:none; font-family:var(--display); font-size:20px; line-height:28px; transition:background-color .15s ease}
+.ov #wv .wv-more:hover{background:#E6E6E1}
+.ov #wv .w4-tag b{margin-right:8px}
+.ov #w4 .glance + .tension, .ov #w4 dl.glance{margin-bottom:56px !important}
+.ov #wv .wv-more .wv-r{font-family:var(--font); font-size:15px; color:#6F716A}
+@media (max-width:760px){ .ov #wv .wv-vid{margin:20px -8px 0} .ov #wv .wv-more{font-size:17px; padding:16px 18px} }
+
+/* hero: "Ask Mira to explain this diagram" under the caption; the diagram pop-up sits on the page colour */
+.hero .hero-ex{margin:22px auto 0; position:relative; z-index:3}
+@media (min-width:1101px){ .hero > .hero-ex{grid-column:2; justify-self:center} }
+.hero .ex-btn.hero-ex{padding:4px 14px 4px 5px; gap:8px; background:rgba(25,26,24,.045); color:#6B6B6B; font-size:14px; line-height:20px; font-weight:400}
+.hero .ex-btn.hero-ex:hover{background:rgba(25,26,24,.08); color:#191A18}
+.ov #wv .wv-vid video{cursor:pointer}
+.ov #wv .wv-end{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:28px; padding-top:28px} .ov #wv .wv-end a.back{margin-top:0} .ov .card#wv{padding-bottom:28px !important}   /* same space above and below the back / player row */
+.wv-ctl{position:relative; display:flex; align-items:center; gap:4px; width:max-content; margin:0 3px 0 0; padding:3px 4px; border-radius:999px; background:rgba(25,26,24,.06); color:#3A3B37; font-family:var(--font); font-size:12.5px; line-height:16px}
+.wv-ctl button{display:grid; place-items:center; width:26px; height:26px; border-radius:50%; border:0; padding:0; background:none; color:inherit; cursor:pointer; position:relative; z-index:1}
+.wv-ctl button:hover{background:rgba(25,26,24,.07); color:#191A18}
+.wv-ctl button:focus{outline:none} .wv-ctl button:focus-visible{outline:none; background:rgba(25,26,24,.1)}
+.wv-ctl svg{display:block} .wv-ctl button svg{width:12px; height:12px}
+.wc-pp svg{display:none !important} .wv-ctl[data-s="paused"] .i-play, .wv-ctl[data-s="playing"] .i-pause, .wv-ctl[data-s="ended"] .i-again{display:block !important}
+.wc-lbl{padding:0 2px 0 4px; white-space:nowrap}
+.wc-t{padding:0 6px 0 4px; color:#8A8B85; font-variant-numeric:tabular-nums; white-space:nowrap}
+.wc-ring{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
+.wc-ring path{fill:none; stroke-width:1.5}
+.wc-track{stroke:none}
+.wc-prog{stroke:rgba(25,26,24,.6); stroke-linecap:round; stroke-dasharray:0 100; transition:stroke-dasharray .25s linear}
+.ov #wv, .ov #wv.dg{background:#EEEEEA}   /* every walkthrough card sits on the page grey */
+.ov #wv .wv-more{background:#E5E5E0} .ov #wv .wv-more:hover{background:#DDDDD7}
+.ov #wv.dg .wv-vid{margin:20px auto 0; max-width:min(640px, calc(100vh - 300px))}
+.ov #wv.dg .wv-vid video{background:#EEEEEA; box-shadow:none; border-radius:10px}
+.ov #wv .wv-more[hidden], .ov #wv .w4-tag[hidden]{display:none !important}
+/* intro: the credentials line sits to the left */
+@media (min-width:761px){ .intro-creds{transform:none !important} }
+
+/* full-width view: "Ask Mira to explain" sits close under the line, and the prototype close under it */
+#chapters:not(.lay-rows) .piece .ex-btn{margin:2px 0 0 auto !important}
+@media (min-width:901px){ #chapters:not(.lay-rows) .piece > .ptxt + figure{margin-top:32px !important} }
+@media (min-width:901px){ #chapters:not(.lay-rows) .piece > figure + .prose{margin-top:18px !important} }   /* the write-up sits closer under its prototype */   /* one even gap between each chapter's text and its prototype */
+p.fmeta .ex-btn.ex-fm{margin:0 0 0 -2px !important; padding:2px 8px 2px 4px; gap:6px; font-size:13px; line-height:20px; color:#6B6B6B} p.fmeta .ex-btn.ex-fm svg{width:18px; height:18px}
+@media (min-width:901px){ #chapters:not(.lay-rows) .piece .ex-btn.ex-top{display:none !important} }
+@media (max-width:900px){ p.fmeta .ex-btn.ex-fm{display:none !important} }
+@media (max-width:900px){ #chapters .piece .ptxt:has(.ex-btn) + figure{margin-top:8px !important} }
+@media (max-width:900px){ #chapters .piece .ex-btn{margin:2px 0 0 auto !important} #chapters .piece .ex-btn + figure{margin-top:8px !important} }
+
+/* page to page: the old page fades out as the new one fades up (browsers that support cross-page view transitions; others just load) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .22s ease both}
+::view-transition-new(root){animation:vt-in .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
@@ -1106,13 +1393,13 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 <meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
 </head>
 <body>
-<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span></div>
+<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
 <div class="sheet" id="sheet">
 <a class="mark" href="#top" aria-label="Amrit Kumar, top">a</a>
-<nav class="menu"><a href="#work">Work</a><a href="sensitivity.html">Sensitivity</a><a href="about.html">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
+<nav class="menu"><a href="about.html">About</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a></nav>
 <div class="col" id="top">
   <section class="hero">
     <div class="hero-words">
@@ -1125,8 +1412,8 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
     <section class="cine" id="cine" aria-labelledby="cine-h">
       <div class="cine-stage" id="cine-stage">
         <div class="cine-text">
-          <div class="cine-line on" data-i="ml"><p class="cine-n" id="cine-ml" data-morph-text>One company, 40,000 contracts.</p></div>
-          <div class="cine-line" data-i="0"><p class="cine-n">One company, <br>40,000 contracts.</p></div>
+          <div class="cine-line" data-i="ml"><p class="lbl"><a class="cine-tag" id="cine-mlt" href="#q1"><b>01</b>Search</a></p><p class="cine-q" id="cine-ml" data-morph-text>Did it find every piece of data that matters?</p></div>
+          <div class="cine-line on" data-i="0"><p class="cine-n">One company, 40,000 contracts.</p></div>
           <div class="cine-line" data-i="s"><p class="cine-n">Spread across many documents.</p></div>
           <div class="cine-line" data-i="2"><p class="cine-n">Now AI can connect meaning within the scattered pieces.</p></div>
           <div class="cine-line" data-i="3"><p class="cine-n">And that brings powerful insights to the business.</p></div>
@@ -1152,6 +1439,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
           <canvas id="cine-cv" aria-hidden="true"></canvas>
         </div>
       </div>
+      <button type="button" class="ex-btn hero-ex" data-open="wv" data-ex="diagram" aria-label="Ask Mira to explain this diagram with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
       <ol class="bridge-list cine-list">
         <li><a href="#q1"><b>01</b><span class="q">Did it find every piece of data that matters?</span><span class="why">Not just the ones it happened to read.</span></a></li>
         <li><a href="#q2"><b>02</b><span class="q">Can I see the exact words a person wrote?</span><span class="why">Not a score or a page number.</span></a></li>
@@ -1178,6 +1466,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="search" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
     <figure class="r"><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -1703,9 +1992,9 @@ html.bare .demobar{display:none}
 .card{display:block; padding:0; border-radius:12px; background:#f7f7f6; border:0; transition:box-shadow .2s ease, transform .2s ease}
 .card:hover{box-shadow:0 0 0 1px var(--border), 0 10px 24px -18px rgba(25,26,24,.35); transform:translateY(-1px)}
 .card i{display:block; width:auto; height:60px; border-radius:0; background-size:cover; background-position:center}
-.card:nth-child(1) i{background-image:url(&quot;data:image/webp;base64,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&quot;)}
-.card:nth-child(2) i{background-image:url(&quot;data:image/webp;base64,UklGRpoGAABXRUJQVlA4II4GAADQPQCdASp4AVQAPlEkjkYjoaEkpThZ6JAKCWdqiruNh+TMCfCDJsTrAA6ubV6xKm9zY+mc/2wqxQVtAHrHpPOsKW1Gpqx5x8qgh4LGXtmrRLk+LDzHccQSF7CPxIzbD24sZdHPHj/LVeIlZY5SHfNNbaaQzhv/5L0fmZL9KpMiqS1IQ+gkZdGKKNa6o5iJgBwF3cuaq6RitmFlCmQr4zrEJWkVxE1YW/eJ4NXXQ/F8K+YeD6KTkDG+CFMW/UYy1zCav+Z2AQ9GNKk7IsFNXboGxAtsjIkGoKhxg+/IxPKRflE09QT23k7XWXEstenSPTKa2//nFLrkXqeTYVZ8W1Dsc65uDCNSSQpIaMFcB/Vw3JI1UbYemv/tKBXokLvMRR+Kqdsgafe+iPwmSf1a1BiZkvvB78DGbvCxH354yCSjSuzwb8aJO1fhcpBmTOnEXPMb3Jl6KP+LSamZCzokDee9GNkp/xcuxpkLGPfS2vb179ZDe/sx36TBe2bvylMpCAYalIX2YtD6lhcxPRrid62Y4+/Q1cHxPBJjiAgty2DiS3beSkf4/+yTYPiP4OmxtdWiPCStKCYu84LHTAlkJNNfLU3D2o3VoGCf1JQr5E5ObmBosEz/7m7uXvELFQqUoQ3VygSY3HYhUjlbgembM6NI6lVfWdy6AAD+sbIW3iA1V/t/LOrm7T5//DNfma/iJh3Hb/AhdZ0xMhh858D7KWyeX5gBns0th8C9ZzqJi1NAzBQaXQ8tEaNdMLIhSCXqcRCQlnmy0MLL33xXyXfox3UqM3PaxjHb7MSKirVsk19ds9hNXcC8IW+isThxyIjp+76HPDAIn+1XzwRmiAOMNG3K6Sbt4qm3zq/tDr+pvxN9zOobhbXXPW2AMfBr+dhEHKWOj+tcUUXuMDUshKK18w3d/T1XPF7W82Dr/rSF61FhkTCTyHfCSeMK1HYnDEPbWT05/pg+K9LOUW6svCSDkfQbuYzMhtzRNKQft7RzMHMHHW7RbNBbYLP+3Gi8Zgt2gx7h8I9hGCdlhf9HtL3YBIbuDwUq0AG2wE8LWKRtjjMHC25PLd/Ty3KtwM3/lNuHTdTyCgGjaGdFW7HhrbDuVU5uH8S/DNvfeoYYJ8CzlgJsxbSH2u+ToLeWyuuAFtmAT/8SGQoy6NClpFk6+AmLeglblhAPxvBG9Hhhy8Nw+5Db82SWWDnQxuW7y47N0YEAC2e1E3psaXO4at6+yaLVBLJoTyp9KaucmFbXvhe+3TEmtQeeEDbPBOT2BJ1dMoB9E69KDG/glDlCoJvcYTZFUGbPB+crB6GegftuF838X2KsS1Zy1Xqi8ZWOGMSdVokbwsM1VYqr5oV50nfgUL5Ay/Wgdw0+I4ZfL+DZjXu4Luueia85zz3Z1q0QnEzNzG6eyp3Ok6c2ccKrezyKhU9WkA33X9Lh0K5UZ6xWP7XWFjROsFBRzCeOXVMrFvAlkiieqhoNHe5ebkjI9T47fHpqEFX1lzv0BPWRzg6Jqdchh3uLdGGnWdXXIoOVjPyq9mYrWIYp0MS47kVuiemebNt8Yc6+l8XI0TE3qqF5lLcNt2yRWPVB/T/5AcPbugIogInZB0Asn2hrCohG/zTp2ktWvAnzr9oKwCnjvXbjjzBpq7lX6nHc/Dn/Yi2tgMSaCxpF3pJq3sYHT3NKWMBMgzFgGpgWJMg0vEsVXpGNSssk9h5z1JhvLfIADcmWyjBhmU0Iz6g8q28gEpXFm367953nQ3v5ja0zT2mT2i+B1O+8o8uWQlArhCyU7AgV3Adww3qv0wyE1/YsRGxmXCg2zvJhlQ3ocoeWueliK93oWHjbStr5GnDhTVIc9PUL9U+JvI9iSS2UtR7LgndVfx/EzFpS/aODDPPDqMY3pz41FOeyMjDkV5vciemLg0JtEJKs1TvUYXp7Kdid5HhyjZky6n0rKQRp5QhuFwSevvoP0gZUwsQQtsl7g6bq9s9V2vSb3HIx4QeALgHE9O1YNgiqZl6FT3eInr/Db4wTnCU5lqXQ9YRjKapIndXjLl4T40+p3lTq7eoFHllurOTZK2lAaK42ERMlBshFVuMonnMJc2hZa8ZAstXpWU0iUYf5i9Hccy8baeuLSdY41LTNlb/Cn+Z7hOeCe4kt43mc5wfepDCxIITKjjUPdQntpgOu6DYcR9mwKaP420Mc6O+Q2T00INMk6+tTthEvPAXi3wmmZvASRi1lhj9dfsz6PmSMLp4AAAAA&quot;)}
-.card:nth-child(3) i{background-image:url(&quot;data:image/webp;base64,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&quot;)}
+.card:nth-child(3n+1) i{background-image:url(&quot;data:image/webp;base64,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&quot;)}
+.card:nth-child(3n+2) i{background-image:url(&quot;data:image/webp;base64,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&quot;)}
+.card:nth-child(3n) i{background-image:url(&quot;data:image/webp;base64,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&quot;)}
 .card b{display:block; padding:11px 14px 15px; font-size:13px; line-height:19px; color:var(--t2)}
 .card::after{content:none}
 
@@ -1742,12 +2031,54 @@ html.bare .demobar{display:none}
 .qcard.on .qhead{transition-delay:.15s} .qcard.on .sub{transition-delay:.25s}
 .qcard.on .opt:nth-of-type(1){transition-delay:.4s} .qcard.on .opt:nth-of-type(2){transition-delay:.55s} .qcard.on .opt:nth-of-type(3){transition-delay:.7s}
 .qcard.min .qhead{opacity:1; transform:none}
+
+/* chat history on the right of the start screen; it folds away from the top bar, and steps aside once a question is asked */
+.hbtn{width:30px; height:30px; border-radius:8px; display:grid; place-items:center; color:var(--t3); transition:background-color .15s ease, color .15s ease, opacity .2s ease}
+.hbtn:hover{background:#f3f3f2; color:var(--ink)}
+.stage:not(.hclosed) .hbtn{background:#f3f3f2; color:var(--ink)}
+.stage.asked .hbtn{opacity:0; pointer-events:none}
+.hist{position:absolute; top:0; right:0; bottom:0; width:232px; padding:20px 14px; border-left:1px solid var(--border); background:#fbfbfa; overflow-y:auto; scrollbar-width:none;
+  transition:transform .55s var(--ease), opacity .35s ease}
+.hist::-webkit-scrollbar{display:none}
+.stage.hclosed .hist, .stage.asked .hist{transform:translateX(100%); opacity:0; pointer-events:none}
+.stage.asked .hist{transition:none}
+.newt{display:flex; align-items:center; gap:8px; height:34px; padding:0 14px 0 12px; margin:0 0 6px 4px; border:1px solid var(--border); border-radius:999px; background:#fff; font-size:12.5px; color:var(--t2); transition:border-color .15s ease}
+.newt:hover{border-color:#B9B8B2}
+.hg{font-size:11.5px; line-height:16px; color:var(--t4); margin:18px 0 4px 8px}
+.hi{display:block; width:100%; padding:7px 8px; border-radius:8px; font-size:12.5px; line-height:18px; color:var(--t2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:background-color .15s ease}
+.hi:hover{background:#efefed}
+.askwrap{transition:opacity .35s ease, transform .5s var(--ease), left .55s var(--ease), right .55s var(--ease)}
+.stage:not(.hclosed):not(.asked) .askwrap{left:96px; right:328px}
+
+/* starter prompts: a row that scrolls sideways, a part of the next card showing, and a quiet arrow */
+.crow{position:relative}
+.cards{display:flex !important; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; margin:-4px; padding:4px}
+.cards::-webkit-scrollbar{display:none}
+.card{flex:0 0 calc((100% - 30px) / 3.2); scroll-snap-align:start; cursor:pointer}
+.crow::after{content:&quot;&quot;; position:absolute; top:0; bottom:0; right:-4px; width:56px; background:linear-gradient(to right, rgba(255,255,255,0), #fff 85%); pointer-events:none; opacity:0; transition:opacity .2s ease}
+.crow.more::after{opacity:1}
+.crow::before{content:&quot;&quot;; position:absolute; top:0; bottom:0; left:-4px; width:56px; z-index:1; background:linear-gradient(to left, rgba(255,255,255,0), #fff 85%); pointer-events:none; opacity:0; transition:opacity .2s ease}
+.crow.less::before{opacity:1}
+.carr{position:absolute; top:50%; z-index:2; width:30px; height:30px; margin-top:-15px; border-radius:50%; background:#fff; color:var(--t2); display:grid; place-items:center;
+  box-shadow:0 0 0 1px var(--border), 0 6px 14px -8px rgba(25,26,24,.35); opacity:0; pointer-events:none; transition:opacity .2s ease, box-shadow .15s ease}
+.carr:hover{box-shadow:0 0 0 1px #B9B8B2, 0 6px 14px -8px rgba(25,26,24,.45)}
+.carr.on{opacity:1; pointer-events:auto}
+.carr.nx{right:-15px} .carr.pv{left:-15px}
+.card:nth-child(n+4) i{filter:hue-rotate(28deg) saturate(.9)}
+
+/* flat, as in the design: no rule beside the history, no fades, the arrow a plain chevron outside the row */
+.hist{border-left:0; background:#fff}
+.crow::before, .crow::after{display:none !important}
+.carr{background:none; box-shadow:none; width:24px; height:24px; margin-top:-12px; color:#55544f}
+.carr:hover{box-shadow:none; color:var(--ink)}
+.carr.nx{right:-34px} .carr.pv{left:-34px}
+.carr svg{width:14px; height:14px}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;section class=&quot;unit&quot;&gt;
   &lt;div class=&quot;stage&quot; id=&quot;stage&quot;&gt;
-    &lt;div class=&quot;top&quot;&gt;&lt;b&gt;Contracts&lt;/b&gt;&lt;span class=&quot;sp&quot;&gt;&lt;/span&gt;&lt;button class=&quot;av&quot; id=&quot;av&quot; type=&quot;button&quot; aria-label=&quot;Account&quot;&gt;AK&lt;/button&gt;&lt;/div&gt;
+    &lt;div class=&quot;top&quot;&gt;&lt;b&gt;Contracts&lt;/b&gt;&lt;span class=&quot;sp&quot;&gt;&lt;/span&gt;&lt;button class=&quot;hbtn&quot; id=&quot;hbtn&quot; type=&quot;button&quot; aria-label=&quot;Show or hide chat history&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.3&quot;&gt;&lt;rect x=&quot;1.75&quot; y=&quot;2.25&quot; width=&quot;12.5&quot; height=&quot;11.5&quot; rx=&quot;2.5&quot;/&gt;&lt;path d=&quot;M10 2.5v11&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;button class=&quot;av&quot; id=&quot;av&quot; type=&quot;button&quot; aria-label=&quot;Account&quot;&gt;AK&lt;/button&gt;&lt;/div&gt;
     &lt;div class=&quot;body&quot;&gt;
       &lt;div class=&quot;askwrap&quot;&gt;
         &lt;p class=&quot;hello&quot;&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;strong&gt;How can I help you?&lt;/strong&gt;&lt;/p&gt;
@@ -1757,12 +2088,29 @@ html.bare .demobar{display:none}
           &lt;input id=&quot;qin&quot; type=&quot;text&quot; aria-label=&quot;Ask Sirion&quot; autocomplete=&quot;off&quot;&gt;
           &lt;svg class=&quot;send&quot; width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M10 15.5v-11M5.5 9 10 4.5 14.5 9&quot;/&gt;&lt;/svg&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;starts&quot;&gt;&lt;p&gt;Pick a place to start&lt;/p&gt;&lt;div class=&quot;cards&quot;&gt;
+        &lt;div class=&quot;starts&quot;&gt;&lt;p&gt;Pick a place to start&lt;/p&gt;&lt;div class=&quot;crow&quot; id=&quot;crow&quot;&gt;&lt;div class=&quot;cards&quot; id=&quot;cards&quot;&gt;
           &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;Help me draft a non-disclosure agreement&lt;/b&gt;&lt;/div&gt;
           &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;Which contracts expire this year?&lt;/b&gt;&lt;/div&gt;
           &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;What is the termination notice in my contracts?&lt;/b&gt;&lt;/div&gt;
-        &lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;Which supplier contracts renew on their own in the next 90 days?&lt;/b&gt;&lt;/div&gt;
+          &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;Show contracts missing a data-processing addendum&lt;/b&gt;&lt;/div&gt;
+          &lt;div class=&quot;card&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;b&gt;Compare liability caps across my vendor agreements&lt;/b&gt;&lt;/div&gt;
+        &lt;/div&gt;&lt;button class=&quot;carr pv&quot; id=&quot;cpv&quot; type=&quot;button&quot; aria-label=&quot;Previous prompts&quot;&gt;&lt;svg width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 12 12&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M7.5 2.5 4 6l3.5 3.5&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;button class=&quot;carr nx&quot; id=&quot;cnx&quot; type=&quot;button&quot; aria-label=&quot;More prompts&quot;&gt;&lt;svg width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 12 12&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M4.5 2.5 8 6l-3.5 3.5&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
       &lt;/div&gt;
+
+      &lt;aside class=&quot;hist&quot; id=&quot;hist&quot; aria-label=&quot;Chat history&quot;&gt;
+        &lt;button class=&quot;newt&quot; type=&quot;button&quot;&gt;&lt;svg width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 12 12&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.4&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M6 1.5v9M1.5 6h9&quot;/&gt;&lt;/svg&gt;New thread&lt;/button&gt;
+        &lt;p class=&quot;hg&quot;&gt;Today&lt;/p&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Breach notice over 24 hours&lt;/button&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Supplier contracts renewing in Q1&lt;/button&gt;
+        &lt;p class=&quot;hg&quot;&gt;Yesterday&lt;/p&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Governing law in EU supplier deals&lt;/button&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Draft an NDA for Northwind&lt;/button&gt;
+        &lt;p class=&quot;hg&quot;&gt;Previous 30 days&lt;/p&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Liability caps across vendors&lt;/button&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Contracts missing a data-processing addendum&lt;/button&gt;
+        &lt;button class=&quot;hi&quot; type=&quot;button&quot;&gt;Termination notice in my contracts&lt;/button&gt;
+      &lt;/aside&gt;
 
       &lt;div class=&quot;thread&quot; id=&quot;thread&quot;&gt;
         &lt;div class=&quot;msgs&quot; id=&quot;msgs&quot;&gt;
@@ -1965,6 +2313,16 @@ const syncSend = () =&gt; ask.classList.toggle(&#x27;has&#x27;, !!qin.value.trim
 qin.addEventListener(&#x27;input&#x27;, syncSend); setInterval(syncSend, 120);
 document.querySelector(&#x27;.ask .send&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { if(demo.running || stage.classList.contains(&#x27;asked&#x27;)) return; e.stopPropagation(); submitQ(qin.value.trim() || QUERY); });
 document.querySelectorAll(&#x27;.card&#x27;).forEach(c =&gt; c.addEventListener(&#x27;click&#x27;, () =&gt; { if(!demo.running &amp;&amp; !stage.classList.contains(&#x27;asked&#x27;)) submitQ(c.querySelector(&#x27;b&#x27;).textContent); }));
+/* history: fold it away and back; an old thread opens the way a new question does */
+$(&#x27;hbtn&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { e.stopPropagation(); const c = stage.classList.toggle(&#x27;hclosed&#x27;); $(&#x27;hbtn&#x27;).setAttribute(&#x27;aria-expanded&#x27;, String(!c)); setTimeout(carr, 600); });
+document.querySelectorAll(&#x27;.hi&#x27;).forEach(h =&gt; h.addEventListener(&#x27;click&#x27;, () =&gt; { if(!demo.running &amp;&amp; !stage.classList.contains(&#x27;asked&#x27;)) submitQ(h.textContent); }));
+/* starter prompts: arrows show only when there is more that way */
+const cards = $(&#x27;cards&#x27;);
+function carr(){ const m = cards.scrollWidth - cards.clientWidth, x = cards.scrollLeft;
+  $(&#x27;cpv&#x27;).classList.toggle(&#x27;on&#x27;, x &gt; 4); $(&#x27;cnx&#x27;).classList.toggle(&#x27;on&#x27;, x &lt; m - 4); $(&#x27;crow&#x27;).classList.toggle(&#x27;more&#x27;, x &lt; m - 4); $(&#x27;crow&#x27;).classList.toggle(&#x27;less&#x27;, x &gt; 4); }
+cards.addEventListener(&#x27;scroll&#x27;, carr, {passive:true}); addEventListener(&#x27;resize&#x27;, carr); setTimeout(carr, 50);
+$(&#x27;cnx&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { e.stopPropagation(); cards.scrollBy({left: cards.clientWidth * .66, behavior:&#x27;smooth&#x27;}); });
+$(&#x27;cpv&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { e.stopPropagation(); cards.scrollBy({left: -cards.clientWidth * .66, behavior:&#x27;smooth&#x27;}); });
 const MAILTO = &#x27;amritkmr08@gmail.com&#x27;;
 const mailHref = q =&gt; &#x27;mailto:&#x27; + MAILTO + &#x27;?subject=&#x27; + encodeURIComponent(&#x27;From your portfolio: &#x27; + (q.length &gt; 70 ? q.slice(0, 67) + &#x27;…&#x27; : q)) +
   &#x27;&amp;body=&#x27; + encodeURIComponent(&#x27;Hi Amrit,\n\nI tried the search demo on your portfolio and asked:\n\n“&#x27; + q + &#x27;”\n\nI’d like to talk about how this would work for &#x27;);
@@ -2324,7 +2682,8 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
-    <p class="dek r">The AI read every value. Reviewers still went back to the contract to verify each one.</p>
+    <p class="dek r">Even when AI gives the answer, people in CLM still want the original. So every value opens on the exact words in the contract, and they can check it before they trust&nbsp;it.</p>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="proof" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
     <figure class="r"><div class="fit" data-h="693" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -3055,7 +3414,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
-    <p class="dek r">To know what a clause says today, someone had to find every relevant contract document and work out what each one&nbsp;changed.</p>
+    <p class="dek r">AI can trace a clause&rsquo;s history. Showing it to the user was the tricky part, because the clause they read today is pieced together from several documents and every change made&nbsp;since.</p>
     <figure class="r"><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -3822,6 +4181,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="reach" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
     <figure class="r"><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -5086,6 +5446,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
+    <p class="dek r q5dek">Not everything an AI agent finds needs a person. Some things can wait, some need you now.</p>
     <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -7782,15 +8143,38 @@ window.nudgeMark = function (host, go) {
       <p>The customer mix and AI model also changed during that period, so I would not attribute the whole increase to the redesign. The result is encouraging; the full case explains the comparison and its&nbsp;limits.</p>
       <div class="end idx"><a class="row" href="auto-extraction.html">Read the full case<span>Auto Extraction</span></a><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
+    <article class="card vcard" id="wv" hidden aria-label="Walkthrough">
+      <div class="w6-tag w4-tag" id="wv-tag"><b>01</b>Search</div>
+      <h2 id="wv-h">Did it find every piece of data that matters?</h2>
+      <p class="k" id="wv-k" hidden></p>
+      <figure class="wv-vid"><video id="wvv" playsinline preload="none"></video>
+</figure>
+      <a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Why it&rsquo;s built this way</span><span class="wv-r">Read more</span></a>
+      <div class="end idx wv-end"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a>
+        <div class="wv-ctl" id="wv-ctl" data-s="paused">
+          <svg class="wc-ring" aria-hidden="true"><path class="wc-track"/><path class="wc-prog" pathLength="100"/></svg>
+          <button type="button" class="wc-pp" aria-label="Play"><svg class="i-play" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 2.2v9.6L11.5 7z" fill="currentColor"/></svg><svg class="i-pause" width="14" height="14" viewBox="0 0 14 14"><rect x="3" y="2.5" width="2.6" height="9" rx="1" fill="currentColor"/><rect x="8.4" y="2.5" width="2.6" height="9" rx="1" fill="currentColor"/></svg><svg class="i-again" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 8a5.2 5.2 0 1 0 1.6-3.8"/><path d="M2.6 2.2v2.6h2.6"/></svg></button>
+          <span class="wc-lbl">Paused</span><span class="wc-t">0:00</span>
+          <button type="button" class="wc-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
+        </div>
+      </div>
+    </article>
     <article class="card fvcard" id="w4" hidden>
-      <h2>Search</h2>
+      <div class="w6-tag w4-tag"><b>01</b>Search</div>
+      <h2>Did it find every piece of data that matters?</h2>
       <p class="k">Sirion &middot; Enterprise search &middot; Partly shipped</p>
+      <div class="tbar" id="tbar4" role="toolbar" aria-label="Respond to this case study">
+        <a class="tb tb-com" href="mailto:amritkmr08@gmail.com?subject=On%20your%20Search%20case%20study" aria-label="Email me about this case study" title="Email me about this"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"><rect x="3.5" y="5.75" width="17" height="12.5" rx="2"/><path d="M4.2 7.2 12 12.8l7.8-5.6" stroke-linecap="round"/></svg></a>
+        <span class="tb-sp"></span>
+        <button class="tb tb-play" type="button" aria-label="Ask Mira to read this case study aloud"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Ask Mira to read</span></button>
+      </div>
       <dl class="glance">
         <div><dt>My role</dt><dd>Designer, alongside a co-designer</dd></div>
         <div><dt>Worked with</dt><dd>PMs, engineers, legal engineers, SMEs, and feedback from IBM&rsquo;s legal team</dd></div>
         <div><dt>Live today</dt><dd>AskSirion search, charts and family-level listing</dd></div>
         <div><dt>What&rsquo;s next</dt><dd>Generated columns, lineage and conformance checks in development</dd></div>
       </dl>
+
       <figure class="fv"><img src="search-v-hero.webp" alt="A note explaining that people in Sirion search across large numbers of contracts, surrounded by the things they look for: suppliers, obligations, deadlines, risks, with a short summary underneath." loading="lazy"><figcaption>The search CLM queries explained</figcaption></figure>
 
       <p class="tension">Where should a search result actually&nbsp;land?</p>
@@ -7895,6 +8279,24 @@ window.nudgeMark = function (host, go) {
       <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     
 </article>
+    <article class="card fvcard" id="w6" hidden aria-label="Reach case study">
+      <p class="w6-tag"><b>04</b>Reach</p>
+      <h2>If I accept it, what else changes?</h2>
+      <p class="k">Sirion &middot; Contract editing &middot; Hypothesis, partly built</p>
+      <div class="tbar" role="toolbar" aria-label="Respond to this case study">
+        <a class="tb tb-com" href="mailto:amritkmr08@gmail.com?subject=On%20your%20Reach%20case%20study" aria-label="Email me about this case study" title="Email me about this"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"><rect x="3.5" y="5.75" width="17" height="12.5" rx="2"/><path d="M4.2 7.2 12 12.8l7.8-5.6" stroke-linecap="round"/></svg></a>
+        <span class="tb-sp"></span>
+        <button class="tb tb-walk" type="button" aria-label="Play the walkthrough with narration"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Play walkthrough</span></button>
+      </div>
+      <figure class="w6-vid"><video id="w6v" playsinline preload="none" poster="reach-walkthrough-poster.webp" width="1920" height="1080" aria-label="Walkthrough: selecting clause 8.1, asking AI to make it mutual, the change landing in place, the clause it affects in 1.1 being fixed, and a question about payment terms answered from past contracts"><source src="reach-walkthrough.mp4" type="video/mp4"></video></figure>
+      <dl class="glance">
+        <div><dt>My role</dt><dd>Concept, interaction design and the prototype</dd></div>
+        <div><dt>Status</dt><dd>A concept. Not in the product yet</dd></div>
+        <div><dt>Built as</dt><dd>A working HTML prototype, built with AI tools</dd></div>
+        <div><dt>What&rsquo;s next</dt><dd>Joining it with clause lineage, so an edit shows its history as well as what else it changes</dd></div>
+      </dl>
+      <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
+    </article>
     <article class="card" id="w5" hidden>
       <h2>Sensitivity</h2>
       <p class="k">How I think &middot; Own work &middot; 2023&ndash;26</p>
@@ -8060,8 +8462,11 @@ addEventListener('message', e => {
 /* the two older loops are drawn at 1080px wide; on a narrower column they shrink as a picture would, rather than reflow */
 function fit(){ document.querySelectorAll('.fit').forEach(w => { const f = w.firstElementChild, cw = w.clientWidth, h = +w.dataset.h, cut = +(w.dataset.cut || 0);
   /* on a phone, a specimen marked data-sm is shown up close: scaled to that width and centred, so its card stays big instead of shrinking with the whole scene */
-  const sm = w.dataset.sm && cw < 600, k = Math.min(1, cw / +(sm ? w.dataset.sm : (w.dataset.w || 1080))), dx = sm ? (cw - 1080 * k) / 2 : 0;
-  f.style.transform = k < 1 ? (dx ? 'translateX(' + dx + 'px) ' : '') + 'scale(' + k + ')' : ''; w.style.height = ((h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
+  /* in the card view a phone specimen gets a phone-sized frame of its own, so its layout is the real narrow one, not a crop of the wide one */
+  const narrow = w.dataset.sm && cw < 600 && w.closest('.lay-rows') && innerWidth > 900, NW = 740, NH = 452; if(!f.dataset.h0) f.dataset.h0 = f.style.height || (h + 'px'); f.style.width = narrow ? NW + 'px' : ''; f.style.height = narrow ? NH + 'px' : f.dataset.h0;
+  const sm = w.dataset.sm && cw < 600 && !narrow, k = Math.min(1, cw / (narrow ? NW : +(sm ? w.dataset.sm : (w.dataset.w || 1080)))), dx = sm ? (cw - 1080 * k) / 2 : 0;
+  f.style.transform = k < 1 ? (dx ? 'translateX(' + dx + 'px) ' : '') + 'scale(' + k + ')' : ''; /* card view: every prototype frame the same shape, so every card is the same height */
+  const same = w.closest('.lay-rows') && innerWidth > 900; w.style.height = (same ? cw * .61 : (narrow ? NH : h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
 fit(); addEventListener('resize', fit);
 
 /* the retention chart: a crosshair and one tooltip, both lines at that month */
@@ -8089,8 +8494,22 @@ document.querySelectorAll('.r').forEach(el => io.observe(el));
 /* the write-up: a centred pop-up. the page behind is held exactly where it was */
 (function(){
   const ov = document.getElementById('ov'), inn = document.getElementById('ovin'); let y = 0, last = null;
+  function show(id){ document.querySelectorAll('.card').forEach(c => c.hidden = c.id !== id); }
   function open(id, from){
-    document.querySelectorAll('.card').forEach(c => c.hidden = c.id !== id);
+    /* already open (e.g. Read more inside a walkthrough): fade the current card out, swap, fade the next one up, so nothing jumps */
+    if(ov.classList.contains('on')){
+      const cur = [...document.querySelectorAll('.ov .card')].find(c => !c.hidden);
+      if(cur && cur.id === id) return;
+      if(cur){ cur.style.transition = 'opacity .18s ease, transform .18s ease'; cur.style.opacity = '0'; cur.style.transform = 'translateY(-8px)'; }
+      setTimeout(() => {
+        if(cur){ cur.style.transition = ''; cur.style.opacity = ''; cur.style.transform = ''; }
+        show(id); ov.scrollTop = 0;
+        const nx = document.getElementById(id);
+        if(nx && nx.animate) nx.animate([{opacity:0, transform:'translateY(16px)'},{opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.22,.61,.36,1)'});
+      }, 180);
+      return;
+    }
+    show(id);
     last = from; y = scrollY; ov.classList.add('on'); ov.scrollTop = 0;
     /* the page is drawn at a zoom: scrollY comes back zoomed, top is set unzoomed. without this the page behind jumped as the card opened */
     const z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
@@ -8104,7 +8523,7 @@ document.querySelectorAll('.r').forEach(el => io.observe(el));
     requestAnimationFrame(() => { r.style.scrollBehavior = prev; });
     if(last) last.focus({preventScroll:true});
   }
-  document.querySelectorAll('[data-open]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); open(a.dataset.open, a); }));
+  document.querySelectorAll('[data-open]').forEach(a => a.addEventListener('click', e => { if(!a.dataset.open) return; e.preventDefault(); open(a.dataset.open, a); }));   /* a link whose data-open was removed (Proof's Read more goes to a page) just navigates */
   document.querySelectorAll('[data-close]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); close(); }));
   ov.addEventListener('click', e => { if(e.target === ov || e.target === inn) close(); });
   addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
@@ -8158,7 +8577,7 @@ function onWidth(fn){
   var z=1, H=0, raf=0, held=true;
   function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
   function size(){ z=z0(); var vh=innerHeight/z, phone=innerWidth/z<761;
-    H=Math.round(vh*(phone?.72:.74))-(phone?0:40); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; tick(); }
+    H=Math.round(vh*(phone?.72:.74))-(phone?0:40); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; var cr=document.getElementById('intro-creds'); if(cr){ cr.style.top=(H-(phone?cr.offsetHeight+22:48))+'px'; var it=document.getElementById('intro-t'); cr.style.left = (!phone && it) ? it.offsetLeft+'px' : ''; } tick(); }
   function tick(){ raf=0;
     var p=Math.max(0,Math.min(1,(scrollY/z)/H)), e=1-Math.pow(1-p,3);
     if(p>=1){ sheet.style.scale=''; sheet.style.transformOrigin=''; sheet.style.removeProperty('--tr'); d.classList.add('intro-done'); }
@@ -8770,11 +9189,14 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     var show=STEPS[si];
     /* the story captions share one line and morph into each other, letter by letter (the Sensitivity line morph); the questions keep their own lines */
     if(show!==cur){ cur=show;
-      var ml=document.getElementById('cine-ml'), useML=ml && {'0':1,'s':1,'2':1,'3':1,'4':1}[show];
+      var ml=document.getElementById('cine-ml'), useML=ml && {'6':1,'7':1,'8':1,'9':1,'10':1}[show];
       lines.forEach(function(l){ l.classList.toggle('on', useML ? l.dataset.i==='ml' : l.dataset.i===show); });
-      if(useML){ var src=sec.querySelector('.cine-line[data-i="'+show+'"] .cine-n'), txt=src?src.textContent.replace(/\s+/g,' ').trim():'';
+      if(useML){ clearTimeout(ml._mlT); var srcL=sec.querySelector('.cine-line[data-i="'+show+'"]'), src=srcL&&srcL.querySelector('.cine-q'), tg=srcL&&srcL.querySelector('.cine-tag'), mt=document.getElementById('cine-mlt'), txt=src?src.textContent.replace(/\s+/g,' ').trim():'';
+        if(tg && mt){ mt.innerHTML=tg.innerHTML; mt.setAttribute('href', tg.getAttribute('href')); }
         if(ml._mlCur!==undefined && window.Morphline) Morphline.to(ml, txt); else ml.textContent=txt; }
-      else if(ml){ clearTimeout(ml._mlT); var fly=ml.querySelector('.ml-layer'); if(fly){ fly.style.transition='opacity .18s ease'; fly.style.opacity='0'; } }
+      else if(ml){ clearTimeout(ml._mlT); var fly=ml.querySelector('.ml-layer'); if(fly){ fly.style.transition='opacity .18s ease'; fly.style.opacity='0'; }
+        /* while the questions are off stage, quietly reset the line to the first question, so the next loop starts on it without a morph */
+        ml._mlT=setTimeout(function(){ var f=sec.querySelector('.cine-line[data-i="6"] .cine-q'), ft=f?f.textContent.replace(/\s+/g,' ').trim():''; if(ft && ml._mlCur!==undefined && ml._mlCur!==ft && window.Morphline) Morphline.to(ml, ft); }, 900); }
     }
     /* first act: the company picture, each line paired with its own stretch of the picture */
     var H_=window.heroScene, inHero=si<5;
@@ -8833,7 +9255,10 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   if(m) setTimeout(function(){ show(+m[1]-1, true); }, 300);
 })();
 </script>
-<nav class="chbar" id="chbar" aria-label="Chapters"><span class="chbar-lbl">My work</span><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a></nav>
+<nav class="chbar" id="chbar" aria-label="Chapters"><span class="chbar-lbl">My work</span><a href="#q1"><i>01</i>Search</a><a href="#q2"><i>02</i>Proof</a><a href="#q3"><i>03</i>Lineage</a><a href="#q4"><i>04</i>Reach</a><a href="#q5"><i>05</i>Sensitivity</a><div class="layt" role="group" aria-label="Layout of the work">
+    <button type="button" class="on" data-lay="stack" aria-pressed="true" aria-label="Full-width chapters" title="Full width"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M10 3.5H5A1.5 1.5 0 0 0 3.5 5v12A1.5 1.5 0 0 0 5 18.5h12a1.5 1.5 0 0 0 1.5-1.5v-5"/><path d="M3.5 11h15M11 3.5v15"/><path d="M16 2.5v6M13 5.5h6" stroke-linecap="round"/></svg></button>
+    <button type="button" data-lay="rows" aria-pressed="false" aria-label="Side-by-side chapters" title="Side by side"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h10M8 11h10M8 16h10"/><circle cx="4" cy="6" r=".6" fill="currentColor"/><circle cx="4" cy="11" r=".6" fill="currentColor"/><circle cx="4" cy="16" r=".6" fill="currentColor"/></svg></button>
+  </div></nav>
 <script>
 /* chapter bar: shows while a chapter fills the middle of the screen, marks that chapter, jumps on click */
 (function(){
@@ -8842,7 +9267,11 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   function tick(){
     var mid=innerHeight*.5, cur=-1;
     /* a chapter counts as current as soon as its top is in the upper 70% of the screen */
-    arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<innerHeight*.7 && r.bottom>innerHeight*.2) cur=k; });
+    /* the current chapter is the one sitting across a line a third of the way down the screen. this holds for tall full-width
+       chapters and for the short list rows, where several show at once and the old rule marked the lowest one */
+    var line=innerHeight*.35;
+    arts.forEach(function(el,k){ if(!el) return; var r=el.getBoundingClientRect(); if(r.top<=line && r.bottom>innerHeight*.15) cur=k; });
+    if(cur<0) arts.forEach(function(el,k){ if(!el || cur>=0) return; var r=el.getBoundingClientRect(); if(r.top<innerHeight*.7 && r.bottom>innerHeight*.2) cur=k; });
     /* never while the opening is on screen: the bar belongs to the chapters, not the top of the page */
     var hero=document.querySelector('.hero'), phone=innerWidth<761, inHero=scrollY<5 || (hero && hero.getBoundingClientRect().bottom > innerHeight*.3);
     if(inHero) cur=-1;
@@ -8880,5 +9309,188 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   },4500);
 })();
 </script>
+<script>
+/* Search card bar: email, and listen. Listen reads the card aloud with the best voice this browser has,
+   tints the paragraph being read and, where the browser reports word timing, marks each word as it is spoken */
+(function(){
+  var bar=document.getElementById('tbar4'); if(!bar) return;
+  var card=document.getElementById('w4'), play=bar.querySelector('.tb-play'), ss=window.speechSynthesis;
+  if(!ss || !window.SpeechSynthesisUtterance){ play.hidden=true; return; }
+  var HL=!!(window.Highlight && window.CSS && CSS.highlights), follow=true, state='idle', cur=null, voice=null, run=0;
+  var BAD=/compact|eloquence|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|whisper|zarvox|trinoids|jester|organ|superstar|wobble|grandma|grandpa|rocko|shelley|junior|ralph|fred|kathy|good news/i;
+  var MALE=/\bmale\b|daniel|\balex\b|\btom\b|aaron|arthur|oliver|rishi|evan|nathan|\bguy\b|ryan|christopher|\beric\b|andrew|brian|davis|roger|steffan|thomas|liam|william|prabhat|george|james|david|mark|jacob|tony|\bsam\b|gordon|lee\b/i;
+  var FEMALE=/female|samantha|karen|moira|tessa|serena|\bava\b|allison|zoe|libby|sonia|aria|jenny|victoria|susan|veena|fiona|\bkate\b|neerja|hazel|zira|heera|catherine|emma|olivia|natasha|clara|michelle|ana\b|sara|joanna|amy|nicky|kendra|kimberly|salli|ivy|martha|maisie|isla|aurora|ava\b|jane|nancy|sonia|ashley|cora|elizabeth|monica|siri female/i;
+  function score(v){ var n=v.name, s=0;
+    if(MALE.test(n) && !/female/i.test(n)) s-=10;   /* same order as the first version, with male voices just behind */
+    if(/natural|neural/i.test(n)) s+=60; if(/premium|enhanced/i.test(n)) s+=50; if(/^google/i.test(n)) s+=30;
+    if(/en[-_](GB|US|IN|AU|IE)/i.test(v.lang)) s+=5; if(v.default) s+=2; if(BAD.test(n)) s-=200; return s; }
+  function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
+    vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
+  pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
+  function blocks(){ var out=[], els=card.querySelectorAll('h2, p, h3, li');
+    for(var i=0;i<els.length;i++){ var el=els[i];
+      if(el.closest('figure, .smebox, .rulebox, dl, .tbar, .end') || el.classList.contains('k') || el.classList.contains('ch-n')) continue;
+      if((el.textContent||'').trim()) out.push(el); }
+    return out; }
+  function rangeAt(el, start, len){ var tw=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), pos=0, n, r=document.createRange(), on=false;
+    while((n=tw.nextNode())){ var L=n.data.length;
+      if(!on && start<pos+L){ r.setStart(n, start-pos); on=true; }
+      if(on && start+len<=pos+L){ r.setEnd(n, start+len-pos); return r; }
+      pos+=L; }
+    return null; }
+  function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL) CSS.highlights.delete('readw'); }
+  function inView(el){ var b=el.getBoundingClientRect(); return b.top>80 && b.bottom<innerHeight-80; }
+  function setUI(){ play.classList.toggle('on', state==='playing'); play.classList.toggle('paused', state==='paused');
+    var l = state==='playing' ? 'Pause Mira' : state==='paused' ? 'Ask Mira to carry on' : 'Ask Mira to read this case study aloud';
+    play.setAttribute('aria-label', l);
+    play.querySelector('.tb-l').textContent = state==='playing' ? 'Mira is reading' : state==='paused' ? 'Paused' : 'Ask Mira to read'; }
+  var mini=document.createElement('div'); mini.className='rd-mini'; mini.setAttribute('role','group'); mini.setAttribute('aria-label','Narration');
+  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><span class="rd-lbl">Mira is reading</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+  document.body.appendChild(mini);
+  mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
+  mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
+  /* the page follows the reading until you scroll yourself; then a button takes you back to it */
+  function away(){ if(state==='idle' || !follow) return; follow=false; mini.classList.add('away'); }
+  ['wheel','touchmove'].forEach(function(ev){ addEventListener(ev, function(e){ if(!mini.contains(e.target)) away(); }, {passive:true}); });
+  addEventListener('keydown', function(e){ if(/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(e.key)) away(); });
+  mini.querySelector('.rd-go').addEventListener('click', function(){ follow=true; mini.classList.remove('away'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'}); });
+  var setUI0=setUI; setUI=function(){ setUI0(); mini.classList.toggle('on', state!=='idle'); mini.classList.toggle('paused', state==='paused');
+    mini.querySelector('.rd-pp').setAttribute('aria-label', state==='paused'?'Resume':'Pause');
+    mini.querySelector('.rd-lbl').textContent = state==='paused' ? 'Paused' : 'Mira is reading'; };
+  /* a hard stop: Chrome can ignore cancel() on a paused or online voice, so resume first and cancel again a beat later */
+  function stop(){ run++; clearTimeout(dog); clearInterval(alive); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ ss.cancel(); }, 60); setTimeout(function(){ if(state==='idle') ss.cancel(); }, 300); state='idle'; clearMarks(); setUI(); }
+  document.addEventListener('visibilitychange', function(){ if(document.hidden && state!=='idle') stop(); });
+  /* long paragraphs go out as sentence-sized pieces: Chrome's online voices stall on long text, and a stall should never stop the reading */
+  function pieces(text){ var out=[], re=/[^.!?]+(?:[.!?]+["'’”)]*\s*|$)/g, m;
+    while((m=re.exec(text)) && m[0]){ var t=m[0], s=m.index;
+      while(t.length>220){ var cut=t.lastIndexOf(', ',200); if(cut<60) cut=t.lastIndexOf(' ',200); if(cut<1) break; out.push({t:t.slice(0,cut+1), o:s}); s+=cut+1; t=t.slice(cut+1); }
+      if(t.trim()) out.push({t:t, o:s}); }
+    return out.length?out:[{t:text,o:0}]; }
+  var dog=0, alive=0;
+  function start(){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; mini.classList.remove('away');
+    var q=[]; list.forEach(function(el){ pieces(el.textContent).forEach(function(p){ q.push({el:el, t:p.t, o:p.o}); }); });
+    state='playing'; setUI();
+    clearInterval(alive); if(voice && voice.localService===false) alive=setInterval(function(){ if(id!==run){ clearInterval(alive); return; } if(state==='playing' && ss.speaking){ ss.pause(); ss.resume(); } }, 9000);
+    function say(k){ if(id!==run) return; if(k>=q.length){ clearInterval(alive); state='idle'; clearMarks(); setUI(); return; }
+      var it=q[k], el=it.el, u=new SpeechSynthesisUtterance(it.t), done=false;
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang='en-GB'; u.rate=1; u.pitch=1;
+      function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); say(k+1); }
+      function arm(){ clearTimeout(dog); dog=setTimeout(function(){ if(id!==run || done) return; if(state==='paused'){ arm(); return; } ss.cancel(); next(); }, 3000 + it.t.length*80); }
+      u.onstart=function(){ if(id!==run) return; arm(); if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
+        if(follow && !inView(el)) el.scrollIntoView({block:'center', behavior:'smooth'}); } };
+      u.onboundary=function(e){ if(id!==run) return; arm(); if(!HL || (e.name && e.name!=='word')) return;
+        var len=e.charLength || ((it.t.slice(e.charIndex).match(/^\S+/)||[''])[0].replace(/[.,;:!?)’”]+$/,'').length);
+        if(!len) return; var r=rangeAt(el, it.o+e.charIndex, len); if(r) CSS.highlights.set('readw', new Highlight(r)); };
+      u.onend=function(){ if(id===run) next(); };
+      u.onerror=function(e){ if(id===run && e.error!=='interrupted' && e.error!=='canceled') next(); };
+      ss.speak(u); arm(); }
+    say(0); }
+  play.addEventListener('click', function(){
+    if(state==='playing'){ ss.pause(); state='paused'; setUI(); return; }
+    if(state==='paused'){ ss.resume(); state='playing'; setUI(); return; }
+    start(); });
+  var ovl=card.closest('.ov'); function gone(){ return card.hidden || (ovl && !ovl.classList.contains('on')); }
+  new MutationObserver(function(){ if(gone() && state!=='idle') stop(); }).observe(card, {attributes:true, attributeFilter:['hidden']});
+  if(ovl) new MutationObserver(function(){ if(gone() && state!=='idle') stop(); }).observe(ovl, {attributes:true, attributeFilter:['class']});
+  addEventListener('pagehide', function(){ ss.cancel(); });
+})();
+</script>
+<script>
+/* Reach card: Play walkthrough plays the narrated film; it stops when the card closes */
+(function(){
+  var card=document.getElementById('w6'); if(!card) return;
+  var v=document.getElementById('w6v'), b=card.querySelector('.tb-walk'), l=b.querySelector('.tb-l');
+  function ui(){ var on=!v.paused && !v.ended; b.classList.toggle('on',on); l.textContent = on ? 'Pause walkthrough' : (v.currentTime>0 && !v.ended ? 'Resume walkthrough' : 'Play walkthrough'); b.setAttribute('aria-label', l.textContent); }
+  function go(){ if(v.paused || v.ended){ v.muted=false; v.controls=true; var p=v.play(); if(p && p.catch) p.catch(function(){}); var r=v.getBoundingClientRect(); if(r.top<0 || r.bottom>innerHeight) v.scrollIntoView({block:'center', behavior:'smooth'}); } else v.pause(); }
+  b.addEventListener('click', go);
+  v.addEventListener('click', function(e){ if(!v.controls){ e.preventDefault(); go(); } });
+  ['play','pause','ended','timeupdate'].forEach(function(ev){ v.addEventListener(ev, ui); });
+  v.addEventListener('ended', function(){ v.currentTime=0; ui(); });
+  var ovl=card.closest('.ov'); function gone(){ return card.hidden || (ovl && !ovl.classList.contains('on')); }
+  new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(card,{attributes:true, attributeFilter:['hidden']});
+  if(ovl) new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(ovl,{attributes:true, attributeFilter:['class']});
+})();
+</script>
+<script>
+/* the layout toggle: remembers the choice in this browser, and refits the prototypes to their new width */
+(function(){
+  var box=document.querySelector('.layt'), ch=document.getElementById('chapters'); if(!box || !ch) return;
+  ch.querySelectorAll('.piece').forEach(function(p){ var f=p.querySelector(':scope > figure'); if(!f || p.querySelector(':scope > .ptxt')) return;
+    var w=document.createElement('div'); w.className='ptxt';
+    [].slice.call(p.children).forEach(function(c){ if(c!==f && (c.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING)) w.appendChild(c); });
+    p.insertBefore(w, f); });
+  function set(l, save){ ch.classList.toggle('lay-rows', l==='rows'); var cb=document.getElementById('chbar'); if(cb) cb.classList.toggle('slim', l==='rows');
+    box.querySelectorAll('button').forEach(function(b){ var on=b.dataset.lay===l; b.classList.toggle('on',on); b.setAttribute('aria-pressed', String(on)); });
+    requestAnimationFrame(function(){ if(typeof fit==='function') fit(); dispatchEvent(new Event('resize')); }); }
+  /* switching layout changes the page height, so the reader could land in the footer. fade the work out, switch,
+     go back to the top of the work, then fade it in again */
+  var busy=false;
+  box.addEventListener('click', function(e){ var b=e.target.closest('button[data-lay]'); if(!b || busy) return;
+    var l=b.dataset.lay; if(ch.classList.contains('lay-rows') === (l==='rows')) return;
+    var calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(calm){ set(l, true); ch.scrollIntoView({block:'start', behavior:'auto'}); return; }
+    busy=true; ch.style.transition='opacity .2s ease, transform .2s ease'; ch.style.opacity='0'; ch.style.transform='translateY(6px)';
+    setTimeout(function(){
+      set(l, true);
+      var r=document.documentElement, prev=r.style.scrollBehavior; r.style.scrollBehavior='auto';
+      ch.scrollIntoView({block:'start', behavior:'auto'}); scrollBy(0,-24);
+      requestAnimationFrame(function(){ r.style.scrollBehavior=prev;
+        ch.style.transition='opacity .45s cubic-bezier(.22,.61,.36,1), transform .45s cubic-bezier(.22,.61,.36,1)'; ch.style.opacity='1'; ch.style.transform='none';
+        setTimeout(function(){ ch.style.transition=''; ch.style.opacity=''; ch.style.transform=''; busy=false; }, 480); });
+    }, 210); });
+  /* every load starts on the cards; the choice only lasts for the visit */
+  try{ localStorage.removeItem('work-layout'); }catch(e){} set('stack', false);
+})();
+</script>
+<script>
+/* side-by-side cards: a click on the text side opens that chapter's case study, the same as its "Why it's built this way" link */
+(function(){ var ch=document.getElementById('chapters'); if(!ch) return;
+  ch.addEventListener('click', function(e){ if(!ch.classList.contains('lay-rows') || innerWidth<901) return;
+    var p=e.target.closest('.piece'); if(!p || e.target.closest('figure, a, button')) return;
+    var l=p.querySelector('.prose a[data-open], .prose a[href]'); if(l) l.click(); });
+})();
+</script>
+<script>
+/* the walkthrough pop-up: one card, filled for Search or Reach; Read more opens the case study (Reach is confidential) */
+(function(){
+  var card=document.getElementById('wv'); if(!card) return;
+  var v=document.getElementById('wvv'), tag=document.getElementById('wv-tag'), h=document.getElementById('wv-h'), more=document.getElementById('wv-more');
+  var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', read:'w4'},
+            proof:{n:'02', name:'Proof', q:'Can I see the exact words a person wrote?', src:'proof-walkthrough.mp4', poster:'proof-walkthrough-poster.webp', href:'auto-extraction.html'},
+            reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc'},
+            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4', poster:'diagram-walkthrough-poster.webp', rest:12} };
+  var kEl=document.getElementById('wv-k');
+  document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return;
+    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
+    if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); }
+    try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
+  more.addEventListener('click', function(){ v.pause(); });
+  var ctl=document.getElementById('wv-ctl'), pp=ctl.querySelector('.wc-pp'), lbl=ctl.querySelector('.wc-lbl'), tEl=ctl.querySelector('.wc-t'), xb=ctl.querySelector('.wc-x'), ring=ctl.querySelector('.wc-ring'), trk=ctl.querySelector('.wc-track'), prg=ctl.querySelector('.wc-prog'), cur=null, done=false;
+  document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ cur=SET[b.dataset.ex]||cur; done=false; draw(); }); });
+  function mmss(x){ x=Math.max(0,Math.floor(x||0)); return Math.floor(x/60)+':'+String(x%60).padStart(2,'0'); }
+  /* the border is the progress bar: a rounded outline that fills clockwise as the film plays */
+  function fit(){ var w=ctl.offsetWidth, h=ctl.offsetHeight; if(!w) return; ring.setAttribute('viewBox','0 0 '+w+' '+h);
+    var i=-2.5, r=(h-2*i)/2, L=i+r, R=w-i-r, T=i, B=h-i;   /* inset a little so the line sits on the dark pill; it starts top centre and runs clockwise */
+    var d='M'+(w/2)+' '+T+' H'+R+' A'+r+' '+r+' 0 0 1 '+R+' '+B+' H'+L+' A'+r+' '+r+' 0 0 1 '+L+' '+T+' Z';
+    trk.setAttribute('d',d); prg.setAttribute('d',d); }
+  function draw(){ var d=v.duration||0, t=done?d:v.currentTime, f=d?Math.min(1,t/d):0;
+    prg.style.strokeDasharray=(f*100).toFixed(2)+' 100';
+    var st = done ? 'ended' : (v.paused ? 'paused' : 'playing'); ctl.dataset.s=st;
+    lbl.textContent = done ? 'Watch again' : (v.paused ? 'Paused' : 'Playing'); tEl.textContent = d ? mmss(t)+' / '+mmss(d) : '';
+    pp.setAttribute('aria-label', done ? 'Play again' : (v.paused ? 'Play' : 'Pause')); fit(); }
+  function toggle(){ if(done || v.ended){ done=false; v.currentTime=0; } if(v.paused){ var q=v.play(); if(q&&q.catch) q.catch(function(){}); } else v.pause(); draw(); }
+  pp.addEventListener('click', toggle); v.addEventListener('click', toggle);
+  ['timeupdate','play','pause','loadedmetadata','durationchange','seeked'].forEach(function(e){ v.addEventListener(e, draw); });
+  v.addEventListener('playing', function(){ done=false; draw(); });
+  v.addEventListener('ended', function(){ done=true; if(cur && cur.rest!=null){ v.currentTime=cur.rest; } draw(); });
+  xb.addEventListener('click', function(){ v.pause(); var c=card.querySelector('[data-close]'); if(c) c.click(); });
+  if('ResizeObserver' in window) new ResizeObserver(fit).observe(ctl);
+  draw();
+  var ovl=card.closest('.ov'); function gone(){ return card.hidden || (ovl && !ovl.classList.contains('on')); }
+  new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(card,{attributes:true, attributeFilter:['hidden']});
+  if(ovl) new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(ovl,{attributes:true, attributeFilter:['class']});
+})();
+</script>
+<script>(function(){document.querySelectorAll('#chapters .piece .ex-btn[data-ex]').forEach(function(b){var f=b.closest('.piece').querySelector('figure p.fmeta'); if(!f) return; var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r'); c.classList.add('ex-fm'); b.classList.add('ex-top'); c.addEventListener('click',function(e){e.preventDefault(); e.stopPropagation(); b.click();}); f.appendChild(c);});})();</script>
 </body>
 </html>
