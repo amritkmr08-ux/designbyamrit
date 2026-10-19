@@ -1886,6 +1886,11 @@ header.wrap{position:relative}
 /* while a card reaches over the next story, that story steps back under the glass */
 .stage.sp > .story{transition:opacity var(--effect-ms,184ms) var(--effect,ease), filter var(--effect-ms,184ms) var(--effect,ease)}
 .stage.sp:has(.deckwrap.lit) + .stage.sp > .story, .stage.sp:has(.open) + .stage.sp > .story{opacity:.18; filter:blur(3px)}
+/* more air between the card's edge and its text on desktop */
+@media (min-width:761px){ .stage.sp .deckwrap>.deck{left:-36px !important; right:-36px !important} }
+/* the 52ch cap pushed the trailing chevron onto an empty second line under the summary */
+:is(#apCard,#apCard-e) .sumline{max-width:none !important}
+.sumline .sumcv{margin-left:8px}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -3237,7 +3242,7 @@ function onWidth(fn){
       card.style.height='auto'; const h=card.offsetHeight;
       card.style.height=from+'px'; void card.offsetHeight;
       card.style.height=h+'px';
-      deck.style.height=(24+dw.offsetHeight+18+h+(sent?10:18))+'px'; };
+      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
     const shut=()=>{ wrap.classList.remove('open'); dw.classList.remove('lit');
       opn.setAttribute('aria-expanded','false'); deck.style.height='0px'; card.style.height=''; };
     /* one slot, and the word in it always says what pressing will do */

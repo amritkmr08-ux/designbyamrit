@@ -553,9 +553,13 @@ window.nudgeMark = function (host, go) {
     host.removeEventListener('ml:start', arm); host.removeEventListener('ml:rest', onRest);
     clearTimeout(t1); clearTimeout(t2); host._nmOff = null;
   }
-  if (!host.hasAttribute('data-ml-busy')) { show(); return; }
+  /* Not busy yet: show at the end we know, but keep listening. A hover both places the mark
+     and starts a morph, and the morph can begin after the mark was placed (the reach has an
+     intent delay) - the mark then sat at the end of the old sentence, mid-line of the new
+     one. Staying armed lets the settled text place it again. */
+  if (!host.hasAttribute('data-ml-busy')) { show(); }
   /* the end is known already; place it now so it never appears anywhere else */
-  put(true);
+  else put(true);
   var arm = function () {
     var wait = Math.max(0, (host._mlLands || performance.now()) - performance.now());
     clearTimeout(t1); t1 = setTimeout(show, wait);
