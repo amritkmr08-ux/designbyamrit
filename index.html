@@ -951,6 +951,15 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
     mask-image:linear-gradient(to right,#000 70%,transparent 100%), linear-gradient(to top,#000 62%,transparent 98%); mask-composite:intersect}
 }
 @media (max-width:760px){ .intro-chip{margin-top:20px; font-size:13px; padding:6px 14px 6px 10px} }
+/* the drawing arrives smoothly: it waits until the image is decoded, then fades in on its own layer.
+   the scroll dimming is a cheap dark layer on top, not a filter that repaints the whole drawing every frame */
+.intro{filter:none !important; will-change:transform}
+.intro-dim{position:absolute; inset:0; z-index:3; background:#000; opacity:calc(.55 * var(--ip,0)); pointer-events:none}
+@media (min-width:761px){
+  .intro::before, .intro::after{opacity:0; transform:translateZ(0); will-change:opacity; transition:opacity 1.2s cubic-bezier(.22,.61,.36,1)}
+  html.art-in .intro::before, html.art-in .intro::after{opacity:1}
+}
+@media (prefers-reduced-motion:reduce){ .intro::before, .intro::after{transition:none !important} }
 
 /* "My work" — the chapter bar sits on the line under the opening, then follows you as you read */
 .chbar-lbl{display:flex; align-items:center; padding:0 14px 0 14px; margin-right:4px; font-family:var(--display); font-size:13px; line-height:18px; color:#8B8985; white-space:nowrap; border-right:1px solid rgba(255,255,255,.12)}
@@ -1357,8 +1366,30 @@ section.closing{margin-top:160px !important}
 .wc-track{stroke:none}
 .wc-prog{stroke:rgba(25,26,24,.6); stroke-linecap:round; stroke-dasharray:0 100; transition:stroke-dasharray .25s linear}
 .ov #wv, .ov #wv.dg{background:#EEEEEA}   /* every walkthrough card sits on the page grey */
+.ov .card#wv{padding-top:44px !important}
+@media (min-width:901px){ .ov .card#wv{max-width:min(1320px, calc(100vw - 120px)) !important; padding-left:48px !important; padding-right:48px !important} }   /* the walkthrough is what people watch, so its card takes most of the screen width */   /* walkthrough card: less air above the title */
+.ov #wv .wv-vid{margin:24px 0 0 !important} .ov #wv .wv-vid video{border-radius:12px !important}   /* the film lines up with the title and the rows below, edge to edge */
 .ov #wv .wv-more{font-size:17px !important; line-height:24px; padding:16px 0 !important; background:none !important; border-radius:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); transition:color .2s ease} .ov #wv .wv-more .wv-r{font-size:14px !important} .ov #wv .wv-more:hover{background:none !important; color:var(--ink)} .ov #wv .wv-more:hover .wv-r{color:var(--ink)}
-.ov #wv .wv-more:not([hidden]) + .wv-end{border-top:0; margin-top:0}   /* the link's own bottom line is the separator */
+
+.ov #wv .wv-more{margin-top:28px !important}
+/* the case-study link, styled like the Sensitivity index rows: title over a quiet line, one rule above and below */
+.ov #wv .wv-more{position:relative; flex-direction:column !important; align-items:flex-start !important; justify-content:flex-start !important; gap:2px;
+  margin-left:0 !important; margin-right:0 !important; padding:18px 0 !important; border-radius:0 !important;
+  font-family:var(--font) !important; font-size:17.5px !important; line-height:26px !important; color:var(--accent) !important;
+  transition:background-color .25s ease, padding .25s ease}
+.ov #wv .wv-more:hover, .ov #wv .wv-more:focus-visible{background:none !important; padding-left:6px !important; outline:none}
+.ov #wv .wv-more .wv-r{font-size:14px !important; line-height:24px; color:var(--faint) !important; transform:none !important}
+@media (max-width:760px){
+  .ov #wv .wv-more{font-size:15px !important; line-height:22px !important; padding-top:15px !important; padding-bottom:15px !important}
+  .ov #wv .wv-more .wv-r{font-size:12.5px !important}
+  .ov #wv .wv-end a.back{white-space:nowrap; font-size:14px}
+  .ov #wv .wv-end{gap:12px}
+}
+.ov #wv .wv-more:not([hidden]) + .wv-end{border-top:0 !important; margin-top:0 !important}   /* the link's own bottom line is the separator */
+.ov #wv .wv-end{padding-top:20px !important}
+/* the card is never taller than the screen: its width follows the height left over for a 16:9 film */
+@media (min-width:901px){ .ov .card#wv:not(.dg){max-width:min(1320px, calc(100vw - 120px), calc((100vh - 330px) * var(--ar, 1.7778) + 96px)) !important} }
+
 .ov #wv.dg .wv-vid{margin:20px auto 0; max-width:min(640px, calc(100vh - 300px))}
 .ov #wv.dg .wv-vid video{background:#EEEEEA; box-shadow:none; border-radius:10px}
 .ov #wv .wv-more[hidden], .ov #wv .w4-tag[hidden]{display:none !important}
@@ -1392,9 +1423,11 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 -2px !important; padding:2px 8px 2px 4px; gap
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
+<link rel="preload" as="image" href="intro-drawing.webp">
+<script>(function(){ var d=document.documentElement, done=function(){ d.classList.add('art-in'); }, im=new Image(); im.onerror=done; im.src='intro-drawing.webp'; if(im.decode) im.decode().then(done, done); else im.onload=done; setTimeout(done, 3000); })();</script>
 </head>
 <body>
-<div class="intro" id="intro" aria-label="Introduction"><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
+<div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
@@ -8817,10 +8850,11 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var t0=LD.reduce(function(a,b){return a+b;},0), t1=t0+T_HOLD, tc=t1+T_SCATTER, t2=tc+T_CONNECT, t3=t2+T_TRACE, DUR=t3+T_ASK;
   function layAt(t){ var acc=0; for(var i=0;i<5;i++){ if(t<acc+LD[i]) return i+(t-acc)/LD[i]; acc+=LD[i]; } return 5; }
   var PAD=24, padR=36;   /* the network reaches closer to the edges of its box */
+  function padFit(){ var ph=innerWidth<=760; PAD=ph?14:24; padR=ph?20:36; } padFit(); addEventListener('resize',padFit);   /* phone: the picture uses nearly the full width */
 
   function raw(n, sc){
-    var x=PAD+n.tx*(W-PAD-padR), y=PAD+n.ty*(H-PAD*2-26);
-    if(sc>0 && n.li>0){ var room=Math.min(x-PAD, W-padR-x); x+=n.jx*Math.min(80,room*1.6)*sc; y+=n.jy*60*sc; x=Math.max(PAD,Math.min(W-padR,x)); }
+    var x=PAD+n.tx*(W-PAD-padR), y=24+n.ty*(H-48-26-(innerWidth<=760?26:0));   /* vertical room stays fixed; on a phone a little extra for the labels */
+    if(sc>0 && n.li>0){ var room=Math.min(x-PAD, W-padR-x); x+=n.jx*Math.min(80,room*1.6)*sc; y+=n.jy*60*sc; x=Math.max(PAD,Math.min(W-padR,x)); y=Math.max(14, Math.min(H-(innerWidth<=760?84:62), y)); }   /* drifting pieces never sink into the number row */
     return [x,y];
   }
 
@@ -8980,17 +9014,17 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
 
     /* counts under each column */
     ctx.textAlign='center'; ctx.textBaseline='top';
-    /* on a phone the five columns sit too close for the words to share one row: smaller type, and neighbours on alternate rows */
-    var colGap=(L[1].x-L[0].x)*(W-PAD-padR), tight=colGap<64;
+    /* on a phone: smaller type, still one row */
+    var colGap=(L[1].x-L[0].x)*(W-PAD-padR), tight=colGap<76, stack=colGap<70;
     L.forEach(function(l,li){
       var a = ease((lay - li - .3)*1.5); if(a<=0) return;
-      var x=PAD+l.x*(W-PAD-padR), y=H-PAD-20-(tight?12:0);   /* room under the number for its word, inside the canvas */
+      var x=PAD+l.x*(W-PAD-padR), y=H-24-20-(stack?12:0)+(innerWidth<=760?5:0);   /* fixed room at the bottom, so a stacked label never runs off the canvas */   /* room under the number for its word, inside the canvas */
       var al = (1 - sc*.15) * a * (1-focus*.2);
       var w = wOf(li), tone = Math.max(w, .6+.4*settle);
       ctx.fillStyle='rgba(25,26,24,'+(al*tone).toFixed(3)+')';
       ctx.font='500 '+((tight?13:15)+3*w).toFixed(2)+'px Poppins, sans-serif'; ctx.fillText(l.n, x, y-2*w);
       ctx.fillStyle='rgba('+Math.round(lerp(111,25,w))+','+Math.round(lerp(113,26,w))+','+Math.round(lerp(106,24,w))+','+(al*tone).toFixed(3)+')';
-      ctx.font='400 '+(tight?10:11)+'px Inter, sans-serif'; ctx.fillText(l.say, x, y+(tight?17:20)+(tight&&(li%2)?12:0));
+      ctx.font='400 '+(tight?(colGap<60?8.5:9.5):11)+'px Inter, sans-serif'; (stack ? l.say.split(' ') : [l.say]).forEach(function(t,ti){ var sw=ctx.measureText(t).width/2, sx=Math.max(sw+2, Math.min(W-sw-2, x)); ctx.fillText(t, sx, y+(tight?15:20)+ti*12); });   /* on a phone, two-word labels stack (One / company), so every label stays under its own column */
     });
 
     /* five lines of narration; everything else is told by the picture */
@@ -9466,6 +9500,26 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); }
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
+  /* the card's width follows the film's own shape, so a taller film gets a narrower card and the footer stays on screen */
+  v.addEventListener('loadedmetadata', function(){ if(v.videoWidth && v.videoHeight) card.style.setProperty('--ar', (v.videoWidth/v.videoHeight).toFixed(4)); });
+  /* fit the whole card inside the window and centre it: the film takes whatever height is left once the title and footer are placed */
+  var AR={search:1.6466, proof:1.5661, reach:1.7778, diagram:1.0714}, ar=1.7778, vid=card.querySelector('.wv-vid');
+  function fitCard(){
+    if(card.hidden || !ovl || !ovl.classList.contains('on') || innerWidth<901){ card.style.removeProperty('max-width'); card.style.removeProperty('margin-top'); if(vid) vid.style.removeProperty('max-width'); return; }
+    if(vid) vid.style.setProperty('max-width','none','important');
+    var M=28, cr=card.getBoundingClientRect(), vr=vid.getBoundingClientRect(), s=cr.width/card.offsetWidth, z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
+    var H=innerHeight, W=innerWidth;   /* rects already come back in window pixels */
+    var extraH=cr.height-vr.height, extraW=cr.width-vr.width;
+    if(vr.width>40 && vr.height>40) ar=vr.width/vr.height;   /* trust the shape the film is actually drawn at */
+    var vh=Math.max(160, H-2*M-extraH), vw=vh*ar;
+    var cw=Math.min(vw+extraW, W-2*M, 1320*s);
+    card.style.setProperty('max-width', (cw/s)+'px', 'important');
+    requestAnimationFrame(function(){ var r=card.getBoundingClientRect(), ty=(new DOMMatrixReadOnly(getComputedStyle(card).transform)).m42||0, top=Math.max(M, (H-r.height)/2), cur=parseFloat(getComputedStyle(card).marginTop)||0; r={top:r.top-ty, height:r.height};
+      card.style.setProperty('margin-top', (cur + (top - r.top)/s)+'px', 'important'); });
+  }
+  document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ ar=AR[b.dataset.ex]||1.7778; card.style.removeProperty('margin-top'); requestAnimationFrame(function(){ fitCard(); setTimeout(fitCard, 120); setTimeout(fitCard, 650); });   /* once more after the card has slid in, so the centring is measured at rest */ }); });
+  v.addEventListener('loadedmetadata', function(){ if(v.videoWidth && v.videoHeight){ ar=v.videoWidth/v.videoHeight; fitCard(); } });
+  addEventListener('resize', fitCard);
   var ctl=document.getElementById('wv-ctl'), pp=ctl.querySelector('.wc-pp'), lbl=ctl.querySelector('.wc-lbl'), tEl=ctl.querySelector('.wc-t'), xb=ctl.querySelector('.wc-x'), ring=ctl.querySelector('.wc-ring'), trk=ctl.querySelector('.wc-track'), prg=ctl.querySelector('.wc-prog'), cur=null, done=false;
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ cur=SET[b.dataset.ex]||cur; done=false; draw(); }); });
   function mmss(x){ x=Math.max(0,Math.floor(x||0)); return Math.floor(x/60)+':'+String(x%60).padStart(2,'0'); }
@@ -9493,5 +9547,39 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
 })();
 </script>
 <script>(function(){document.querySelectorAll('#chapters .piece .ex-btn[data-ex]').forEach(function(b){var f=b.closest('.piece').querySelector('figure p.fmeta'); if(!f) return; var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r'); c.classList.add('ex-fm'); b.classList.add('ex-top'); c.addEventListener('click',function(e){e.preventDefault(); e.stopPropagation(); b.click();}); f.appendChild(c);});})();</script>
+<style>
+/* phone: the chapter's "Ask Mira to explain" moves to the end of the chapter, as the same centred grey pill as under the diagram; the intro line and the write-up share one size */
+.ex-mob{display:none}
+@media (max-width:900px){
+  #chapters .piece .ex-btn.ex-top{display:none !important}
+  #chapters .piece .ex-btn.ex-mob{display:flex !important; margin:66px auto 0 !important; gap:8px; padding:5px 16px 5px 6px; border-radius:999px; background:rgba(25,26,24,.045); color:#6B6B6B; font-size:14px; line-height:20px; padding:4px 14px 4px 5px} #chapters .piece .ex-btn.ex-mob svg{width:22px; height:22px}
+  #chapters .piece .ex-btn.ex-mob:hover{background:rgba(25,26,24,.08); color:#191A18}
+  #chapters .piece .ptxt:has(.ex-top) + figure{margin-top:20px !important}
+  #chapters .piece h2.chap-q + .dek{font-family:var(--font) !important; font-size:15px !important; line-height:24px !important; color:var(--muted) !important}
+}
+</style>
+<script>(function(){ document.querySelectorAll('#chapters .piece .ex-btn.ex-top').forEach(function(b){ var p=b.closest('.piece'), pr=p.querySelector(':scope > .prose'); if(!pr) return;
+  var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r','ex-top'); c.classList.add('ex-mob');
+  c.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); b.click(); }); pr.insertAdjacentElement('afterend', c); }); })();</script>
+<style>
+/* phone: the credits sit under the green chip, on the plain dark, not over the drawing */
+@media (max-width:760px){
+  #intro-t #intro-creds{position:relative !important; left:0 !important; right:auto !important; top:0 !important; bottom:auto !important; margin-top:20px !important; width:auto !important}
+  #intro-t #intro-creds span{color:#B9B8B3 !important}
+}
+/* phone: the diagram breaks out of the text column to 12px from each screen edge, so its columns and labels have room */
+@media (max-width:760px){ .hero .cine-text{margin-top:-5px !important} }
+/* phone footer: the drawing fades to dark behind the words at the top and the contacts at the bottom; the words a shade brighter */
+@media (max-width:760px){
+  .rf-art::after{background:linear-gradient(180deg, rgba(11,11,11,.92) 0, rgba(11,11,11,.78) 28%, rgba(11,11,11,0) 46%, rgba(11,11,11,0) 70%, rgba(11,11,11,.85) 86%, #0B0B0B 100%) !important}
+  .rf-d{color:#C4C5C0 !important}
+  .rf-tel, .rf-mail{color:#E4E4E0 !important}
+  .rf-cap{color:#9C9E97 !important}
+}
+@media (max-width:760px){ .hero .cine{width:calc(100vw - 24px) !important; max-width:none !important; margin-left:calc(50% - 50vw + 12px) !important; margin-right:0 !important} }
+</style>
+<script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
+  function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
+  place(); addEventListener('resize', place); })();</script>
 </body>
 </html>
