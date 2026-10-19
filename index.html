@@ -1449,6 +1449,19 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 .wv-ctl .wc-x{display:none !important}
 .wv-ctl .wc-lbl{padding-right:8px}
 .wv-ctl[data-s="playing"] .wc-wave{padding-right:10px}
+/* the walkthrough card is dark: the film is the only light thing on screen */
+.ov #wv, .ov #wv.dg{background:#1F201D !important; color:#E8E7E1; box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 30px 80px -30px rgba(0,0,0,.8)}
+.ov #wv .wv-vid video{background:#1F201D !important}
+.ov #wv h2, .ov #wv .wv-q, .ov #wv .wv-k, .ov #wv .wv-more{color:#F2F1EC !important}
+.ov #wv .wv-n, .ov #wv .wv-more .wv-r, .ov #wv .wv-end a, .ov #wv .wv-end a.back{color:#A3A49C !important}
+.ov #wv .wv-more{border-color:rgba(255,255,255,.12) !important}
+.ov #wv .wv-more:hover{color:#FFFFFF !important}
+.ov #wv .wv-end{border-color:rgba(255,255,255,.12) !important}
+.ov #wv .wv-end a:hover{color:#E8E7E1 !important}
+.ov #wv .wv-ctl{background:rgba(255,255,255,.1) !important; color:#E8E7E1 !important}
+.ov #wv .wv-ctl button:hover{background:rgba(255,255,255,.12) !important; color:#fff !important}
+.ov #wv .wc-prog{stroke:rgba(255,255,255,.75) !important}
+.ov #wv .wc-wave i{background:#8FC39A !important}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
@@ -9594,7 +9607,12 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     function arm(){ if(!t && ctl.dataset.s==='playing') tick(); }
     v.addEventListener('playing', arm); v.addEventListener('play', function(){ setTimeout(arm,0); });
     new MutationObserver(arm).observe(ctl,{attributes:true, attributeFilter:['data-s']}); })();
-  v.addEventListener('ended', function(){ done=true; if(cur && cur.rest!=null){ v.currentTime=cur.rest; } draw(); });
+  /* the film fades to black on its own; the resting frame then fades back in rather than snapping */
+  v.addEventListener('ended', function(){ done=true; draw();
+    if(cur && cur.rest!=null){ v.style.transition='none'; v.style.opacity='0'; void v.offsetWidth;
+      var back=function(){ v.removeEventListener('seeked', back); v.style.transition='opacity .7s ease'; v.style.opacity='1'; };
+      v.addEventListener('seeked', back); v.currentTime=cur.rest; setTimeout(back, 800); } });
+  v.addEventListener('play', function(){ v.style.transition='none'; v.style.opacity='1'; });
   xb.addEventListener('click', function(){ v.pause(); var c=card.querySelector('[data-close]'); if(c) c.click(); });
   if('ResizeObserver' in window) new ResizeObserver(fit).observe(ctl);
   draw();
