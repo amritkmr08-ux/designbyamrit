@@ -9580,7 +9580,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
 /* phone footer: taller than the screen, so the drawing has room. It scrolls in after the page instead of sitting fixed underneath it */
 @media (max-width:760px){
   .rf{position:relative !important; height:1040px !important; --peek:110px !important}
-  .rf-art img{transform:translateX(44%) !important}   /* the figure and THINK sit inside the screen */
+  .rf-art img{transform:translateX(47%) scale(.86) !important; transform-origin:50% 55% !important}   /* the figure and THINK sit inside the screen */
   .sheet{margin-bottom:-110px !important}
 }
 /* phone footer, layout C: phone and email as two pill buttons; the links in an even 3 x 2 grid; the copyright small and grey */
@@ -9592,7 +9592,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   .rf-links{display:grid !important; grid-template-columns:repeat(3, 1fr); gap:14px 12px !important; width:100%}
   .rf-c{font-size:12.5px !important; color:#7E807A !important}
   /* torch light: the middle of the drawing, where nothing is written, comes up brighter; the edges stay dark */
-  .rf-art img{opacity:.62 !important}
+  .rf-art img{opacity:.78 !important}
   .rf-art::after{background:
       radial-gradient(ellipse 62% 34% at 62% 52%, rgba(11,11,11,0) 0, rgba(11,11,11,0) 35%, rgba(11,11,11,.6) 100%),
       linear-gradient(180deg, rgba(11,11,11,.95) 0, rgba(11,11,11,.8) 30%, rgba(11,11,11,0) 46%, rgba(11,11,11,0) 72%, rgba(11,11,11,.9) 88%, #0B0B0B 100%) !important}
