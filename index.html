@@ -9603,5 +9603,18 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   place(); addEventListener('resize', place); })();</script>
 <script>(function(){ var t=document.querySelector('.rf-say .rf-tel'), m=document.querySelector('.rf-say .rf-mail'); if(!t||!m) return; var T=t.textContent, M=m.textContent;
   m.setAttribute('aria-label','Email '+M); function place(){ var ph=innerWidth<=760; t.textContent= ph ? 'Call '+T : T; m.textContent= ph ? 'Email me' : M; } place(); addEventListener('resize', place); })();</script>
+<style>
+/* desktop: the chapter bar steps aside after a few quiet seconds, and comes back when the pointer nears the bottom of the screen or the page moves */
+@media (hover:hover) and (pointer:fine) and (min-width:901px){
+  #chbar.on.away{opacity:0 !important; transform:translate(-50%,24px) !important; pointer-events:none !important; transition:opacity .45s ease, transform .5s cubic-bezier(.22,.61,.36,1) !important}
+}
+</style>
+<script>(function(){ var bar=document.getElementById('chbar'); if(!bar || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  var t=0, IDLE=2500, near=false;
+  function show(){ bar.classList.remove('away'); clearTimeout(t); t=setTimeout(function(){ if(!near && !bar.matches(':hover') && !bar.contains(document.activeElement)) bar.classList.add('away'); }, IDLE); }
+  addEventListener('scroll', show, {passive:true});
+  addEventListener('mousemove', function(e){ var n = e.clientY > innerHeight - 140; if(n!==near){ near=n; if(n) show(); else show(); } else if(n) bar.classList.remove('away'); }, {passive:true});
+  bar.addEventListener('mouseleave', show); bar.addEventListener('focusin', function(){ bar.classList.remove('away'); });
+  show(); })();</script>
 </body>
 </html>
