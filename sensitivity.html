@@ -1850,6 +1850,20 @@ header.wrap{position:relative}
 @keyframes vt-out{to{opacity:0}}
 @keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
+  /* scheduled card: tighter vertical rhythm */
+  .apwrap.sent .sumb{margin-top:2px !important}
+  .apwrap.sent .sumline{line-height:23px !important}
+  .apwrap.sent .summeta{margin-top:0 !important; line-height:19px !important}
+  .apwrap.sent :is(#apCard,#apCard-e) .ask-chips{margin-top:10px !important; padding-top:12px !important}
+/* glass that reads as glass on a light page: less white, a hairline edge */
+.stage.sp .glass, .stage.sp .deckwrap>.deck{background:rgba(255,255,255,.22) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55), 0 24px 48px -20px rgba(25,26,24,.18) !important}
+/* the Ask more panel is part of the card, not a second card */
+.stage.sp .glass.askcard{background:none !important; box-shadow:none !important;
+  -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+/* the closing note is not another specimen: clearly more air above it than between samples */
+.close{padding-top:320px !important}
+@media (max-width:760px){ .close{padding-top:240px !important} }
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -2093,6 +2107,19 @@ a.site-mark{width:48px !important; height:48px !important; font-size:23px !impor
 @media (max-width:760px){ html, body{background:#EFEFEC !important} }
 
 .mhint{background:#ECECE8 !important; border:0 !important; box-shadow:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+
+/* specimens at rest: no white card. The box, its padding and corner keep their size, so every card that opens on hold
+   still lines up; only the surface goes, and a fine rule sits between the situation line and the specimen. */
+.stage.sp > .obj{background:transparent !important; box-shadow:none !important; border-top:1px solid var(--line,#D7D8D2); border-radius:0 !important}
+.stage.sp > .story{padding-left:24px !important; padding-right:24px !important; margin-bottom:14px !important}   /* the situation line starts where the specimen text starts */
+@media (max-width:760px){ .stage.sp > .story{padding-left:18px !important; padding-right:18px !important} }
+.stage.sp > .obj::after{left:0 !important}
+@media (hover:hover){ .stage.sp > .obj:hover{box-shadow:none !important} }
+/* no solid white anywhere: every raised surface is the same glass */
+.stage.sp .chip, .stage.sp .inp, .stage.sp .menu, .stage.sp .ask, .ov-x{
+  background:rgba(255,255,255,.45) !important;
+  -webkit-backdrop-filter:blur(11px) saturate(1.9); backdrop-filter:blur(11px) saturate(1.9)}
+.stage.sp .menu button:hover, .ov-x:hover{background:rgba(255,255,255,.7) !important}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/sensitivity.html" />
@@ -3007,7 +3034,7 @@ function onWidth(fn){
       card.style.height='auto'; const h=card.offsetHeight;
       card.style.height=from+'px'; void card.offsetHeight;
       card.style.height=h+'px';
-      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
+      deck.style.height=(24+dw.offsetHeight+18+h+(sent?10:18))+'px'; };
     const line=()=>{ if(sent || wrap.classList.contains('busy')) return; say(v,REST.v);
       say(d,(near||wrap.classList.contains('open')) ? SCOPE : REST.d); };
     /* the card holds exactly one thing between the item and the actions. Four things can
@@ -3185,7 +3212,7 @@ function onWidth(fn){
       card.style.height='auto'; const h=card.offsetHeight;
       card.style.height=from+'px'; void card.offsetHeight;
       card.style.height=h+'px';
-      deck.style.height=(24+dw.offsetHeight+18+h+18)+'px'; };
+      deck.style.height=(24+dw.offsetHeight+18+h+(sent?10:18))+'px'; };
     const shut=()=>{ wrap.classList.remove('open'); dw.classList.remove('lit');
       opn.setAttribute('aria-expanded','false'); deck.style.height='0px'; card.style.height=''; };
     /* one slot, and the word in it always says what pressing will do */

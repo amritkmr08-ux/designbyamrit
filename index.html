@@ -488,7 +488,7 @@ html, body{background:#101110}
   .rf{--row:132px}
   .rf-h{font-size:28px; line-height:36px}
   .rf-art{left:0; right:0} .rf-art img{right:50%; transform:translateX(50%); opacity:.35}
-  .rf-in{grid-template-rows:auto 1fr auto auto; padding-top:32px; padding-bottom:24px}
+  .rf-in{grid-template-rows:auto 1fr auto auto; padding-top:56px; padding-bottom:24px}
   .rf-top{grid-row:1} .rf-say{grid-row:3}
   .rf-cap{position:static; grid-row:4; writing-mode:horizontal-tb; transform:none; margin-top:16px; white-space:normal}
   .rf-row{flex-direction:column; gap:12px; padding-top:20px}
@@ -758,7 +758,7 @@ html, body{background:#101110}
 /* details from the layout: narrower words (headline on three lines), more air, no arrows, caption in ink */
 .hero{grid-template-columns:400px minmax(0,1fr) !important; gap:70px !important}   /* the picture takes the room: 80px more than before */
 .hero .hero-words h1{max-width:400px}
-.hero .hero-words #hero-sub{max-width:440px}
+.hero .hero-words #hero-sub{max-width:440px} @media (min-width:761px){ .hero .hero-words #hero-sub, .hero .hero-words .hero-bio{font-size:16px; line-height:25px} }   /* same 16/25 as the chapter intros */
 .hero .cine-nav, .hero .cine-prog{display:none !important}
 .hero .cine-stage{gap:44px !important}
 .hero .cine-n, .hero .cine-q{font-size:23px !important; line-height:31px !important; font-weight:500; color:var(--ink)}
@@ -923,7 +923,7 @@ html.intro-done .sheet:not(.lifting){box-shadow:none}
   .intro-cue{left:auto; right:24px; transform:none}
 }
 /* phone paragraphs: one size across the site, 15/24 */
-@media (max-width:760px){ .piece .prose p{font-size:15px !important; line-height:24px !important} .ov .card p{font-size:15px; line-height:24px} .ov .card .lead{font-size:16px; line-height:25px} }
+@media (max-width:760px){ .piece .prose p{font-size:15px !important; line-height:24px !important; color:var(--muted)} .ov .card p{font-size:15px; line-height:24px} .ov .card .lead{font-size:16px; line-height:25px} }
 /* the letter in the mark: a size up, so it reads as a letter and not a dot */
 a.mark{font-size:21px !important} @media (min-width:761px){ a.mark{font-size:18px !important} }
 /* the mark, a size up on every page: 42 on a laptop, 37.8 on the zoomed desktop, 48 on a phone */
@@ -1114,7 +1114,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 @media (max-width:760px){
   .intro-creds{left:24px; right:76px; transform:none; flex-wrap:wrap; gap:6px 14px; white-space:normal; font-size:12.5px; line-height:18px}
   .intro-creds span:first-child{flex-basis:100%}
-  .intro-creds b{height:12px}
+  .intro-creds b{height:12px; background:rgba(201,200,195,.6)}   /* the divider reads over the drawing */
   .intro-creds b:nth-of-type(1){display:none}
   .intro-cue{display:none !important}
   .intro-creds{right:24px}
@@ -1181,7 +1181,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 /* chapter openings, as in the reference: "01 Search" in sentence case, the question a step heavier on wider lines, the line under it in the display face */
 #chapters .piece .chap-n, #chapters .piece .chap-name{font-family:var(--display) !important; font-size:17px !important; line-height:24px !important; letter-spacing:0 !important; text-transform:none !important; color:var(--muted) !important; font-weight:400 !important}
 #chapters .piece h2.chap-q{font-weight:500 !important; max-width:13.4em !important; text-wrap:wrap !important; margin-top:14px !important}
-#chapters .piece h2.chap-q + .dek{font-family:var(--display) !important; max-width:31em !important; font-size:17px !important; line-height:27px !important; color:var(--muted) !important}
+#chapters .piece h2.chap-q + .dek{font-family:var(--display) !important; max-width:560px !important; font-size:16px !important; line-height:25px !important; color:var(--muted) !important}   /* same grid as the paragraph under the prototype: 16/25, same column */
 @media (max-width:760px){ #chapters .piece .chap-n, #chapters .piece .chap-name{font-size:15px !important; line-height:22px !important} #chapters .piece h2.chap-q{max-width:none !important} }
 @media (min-width:901px){
   .chapters.lay-rows .piece{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); grid-template-rows:1fr auto auto auto auto 1fr; column-gap:56px;
@@ -1257,6 +1257,14 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
   #chapters.lay-rows .piece .chap-head .chap-name{font-size:16px !important; line-height:24px !important; color:var(--muted) !important}
   #chapters.lay-rows .piece h2.chap-q{font-size:28px !important; line-height:34px !important; font-weight:500 !important; letter-spacing:-.01em !important; margin-top:12px !important; max-width:none !important}
   #chapters.lay-rows .piece h2.chap-q + .dek{font-size:16px !important; line-height:24px !important; margin-top:8px !important; max-width:none !important; color:#7A7B75 !important}
+  /* even air: the same 18px round the prototype on every card, text centred against it, and one 12px step between label, question, line and button */
+  #chapters.lay-rows .piece{align-items:center !important}
+  #chapters.lay-rows .piece > figure{align-self:center !important; margin:0 !important}
+  #chapters.lay-rows .piece > figure figcaption, #chapters.lay-rows .piece > figure p.fmeta{display:none !important}
+  #chapters.lay-rows .piece .chap-head{margin:0 !important}
+  #chapters.lay-rows .piece h2.chap-q{margin-top:10px !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{margin-top:10px !important}
+  #chapters.lay-rows .piece .ex-btn.ex-top{margin-top:14px !important}
 }
 
 /* card states: flat at rest, a soft lift on hover (and when focused from the keyboard) */
@@ -1338,7 +1346,7 @@ section.closing{margin-top:160px !important}
 .ex-btn:focus{outline:none} .ex-btn:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
 @media (min-width:901px){ #chapters.lay-rows .ex-btn{margin:18px 0 0 0; padding:4px 14px 4px 5px; background:rgba(25,26,24,.045)} #chapters.lay-rows .ex-btn:hover{background:rgba(25,26,24,.08); color:#191A18} }
 .ov #wv .wv-vid{margin:28px -48px 0}
-.ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#141414; box-shadow:0 0 0 1px rgba(25,26,24,.1)}
+.ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#EEEEEA; box-shadow:0 0 0 1px rgba(25,26,24,.1)}
 .ov #wv .wv-more{display:flex; justify-content:space-between; align-items:center; margin:40px 0 0; padding:20px 24px; border-radius:12px; background:#EEEEEA; color:#3C4A3F; text-decoration:none; font-family:var(--display); font-size:20px; line-height:28px; transition:background-color .15s ease}
 .ov #wv .wv-more:hover{background:#E6E6E1}
 .ov #wv .w4-tag b{margin-right:8px}
@@ -1360,7 +1368,7 @@ section.closing{margin-top:160px !important}
 .wv-ctl svg{display:block} .wv-ctl button svg{width:12px; height:12px}
 .wc-pp svg{display:none !important} .wv-ctl[data-s="paused"] .i-play, .wv-ctl[data-s="playing"] .i-pause, .wv-ctl[data-s="ended"] .i-again{display:block !important}
 .wc-lbl{padding:0 2px 0 4px; white-space:nowrap}
-.wc-t{padding:0 6px 0 4px; color:#8A8B85; font-variant-numeric:tabular-nums; white-space:nowrap}
+.wc-t{display:none}   /* no timer: the ring round the chip already shows progress */
 .wc-ring{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
 .wc-ring path{fill:none; stroke-width:1.5}
 .wc-track{stroke:none}
@@ -1389,8 +1397,17 @@ section.closing{margin-top:160px !important}
 .ov #wv .wv-end{padding-top:20px !important}
 /* phone: the footer stacks, player first, so the pill never runs off the card; the time stays out to keep it short */
 @media (max-width:600px){
-  .ov #wv .wv-end{flex-direction:column !important; align-items:flex-start !important; gap:16px !important}
-  .ov #wv .wv-end .wv-ctl{order:-1; margin:0 !important; max-width:100%}
+  /* phone: the film runs edge to edge of the card and the card is tighter, so the design gets the height */
+  .ov .card#wv{padding:28px 20px 28px !important; max-width:none !important; width:calc(100vw - 16px) !important; margin-left:8px !important; margin-right:8px !important}
+  .ov #wv .wv-vid{margin:16px -20px 0 !important} .ov #wv .wv-vid video{border-radius:0 !important; width:100% !important; max-width:none !important; max-height:none !important}
+  /* the wide films are cropped to 4:3 on a phone, so the design fills the height instead of the empty sides */
+  .ov #wv:not(.dg) .wv-vid video{aspect-ratio:4/3; height:auto; object-fit:cover; object-position:50% 50%}
+  .ov #wv .w4-tag{margin-bottom:4px} .ov #wv h2{font-size:22px !important; line-height:28px !important}
+  .ov #wv .wv-more{margin-top:16px !important; padding:12px 0 !important}
+  .ov #wv .wv-end{flex-direction:row !important; align-items:center !important; justify-content:space-between !important; gap:12px !important; padding-top:14px !important}
+  .ov #wv .wv-end .wv-ctl{order:1}
+  .ov #wv .wv-end a.back{font-size:14px}
+  .ov #wv .wv-end .wv-ctl{margin:0 !important; max-width:100%}
   .ov #wv .wv-end .wc-t{display:none}
   .ov #wv .wv-end a.back{margin-top:0 !important}
 }
@@ -1407,7 +1424,7 @@ section.closing{margin-top:160px !important}
 #chapters:not(.lay-rows) .piece .ex-btn{margin:2px 0 0 auto !important}
 @media (min-width:901px){ #chapters:not(.lay-rows) .piece > .ptxt + figure{margin-top:32px !important} }
 @media (min-width:901px){ #chapters:not(.lay-rows) .piece > figure + .prose{margin-top:18px !important} }   /* the write-up sits closer under its prototype */   /* one even gap between each chapter's text and its prototype */
-p.fmeta .ex-btn.ex-fm{margin:0 0 0 -2px !important; padding:2px 8px 2px 4px; gap:6px; font-size:13px; line-height:20px; color:#6B6B6B} p.fmeta .ex-btn.ex-fm svg{width:18px; height:18px}
+p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap:6px; font-size:14px; line-height:20px; color:#6B6B6B; background:rgba(25,26,24,.045)} p.fmeta .ex-btn.ex-fm:hover{background:rgba(25,26,24,.08); color:#191A18} p.fmeta .ex-btn.ex-fm svg{width:18px; height:18px}
 @media (min-width:901px){ #chapters:not(.lay-rows) .piece .ex-btn.ex-top{display:none !important} }
 @media (max-width:900px){ p.fmeta .ex-btn.ex-fm{display:none !important} }
 @media (max-width:900px){ #chapters .piece .ptxt:has(.ex-btn) + figure{margin-top:8px !important} }
@@ -8619,7 +8636,7 @@ function onWidth(fn){
   var z=1, H=0, raf=0, held=true;
   function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
   function size(){ z=z0(); var vh=innerHeight/z, phone=innerWidth/z<761;
-    H=Math.round(vh*(phone?.72:.74))-(phone?0:40); sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; var cr=document.getElementById('intro-creds'); if(cr){ cr.style.top=(H-(phone?cr.offsetHeight+22:48))+'px'; var it=document.getElementById('intro-t'); cr.style.left = (!phone && it) ? it.offsetLeft+'px' : ''; } tick(); }
+    H=Math.round(vh*(phone?.78:.74))-(phone?0:40);   /* phone: the page starts a little lower, so the credits have air under them */ sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; var cr=document.getElementById('intro-creds'); if(cr){ cr.style.top=(H-(phone?cr.offsetHeight+22:48))+'px'; var it=document.getElementById('intro-t'); cr.style.left = (!phone && it) ? it.offsetLeft+'px' : ''; } tick(); }
   function tick(){ raf=0;
     var p=Math.max(0,Math.min(1,(scrollY/z)/H)), e=1-Math.pow(1-p,3);
     if(p>=1){ sheet.style.scale=''; sheet.style.transformOrigin=''; sheet.style.removeProperty('--tr'); d.classList.add('intro-done'); }
@@ -9507,7 +9524,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return;
     tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Why it&rsquo;s built this way'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
-    if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); }
+    if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); v.load(); }   /* load() so the cover shows at once, not a dark frame */
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
   /* the card's width follows the film's own shape, so a taller film gets a narrower card and the footer stays on screen */
@@ -9515,7 +9532,11 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   /* fit the whole card inside the window and centre it: the film takes whatever height is left once the title and footer are placed */
   var AR={search:1.6466, proof:1.5661, lineage:1.5789, reach:1.7778, sensitivity:1.4056, diagram:1.0714}, ar=1.7778, vid=card.querySelector('.wv-vid');
   function fitCard(){
-    if(card.hidden || !ovl || !ovl.classList.contains('on') || innerWidth<901){ card.style.removeProperty('max-width'); card.style.removeProperty('margin-top'); if(vid) vid.style.removeProperty('max-width'); return; }
+    if(card.hidden || !ovl || !ovl.classList.contains('on') || innerWidth<601){ card.style.removeProperty('max-width'); card.style.removeProperty('margin-top'); if(vid) vid.style.removeProperty('max-width'); return; }
+    if(innerWidth<901){   /* tablet: the card keeps its width, it is only centred on the screen */
+      card.style.removeProperty('max-width'); if(vid) vid.style.removeProperty('max-width');
+      requestAnimationFrame(function(){ var r=card.getBoundingClientRect(), ty=(new DOMMatrixReadOnly(getComputedStyle(card).transform)).m42||0, H=innerHeight, top=Math.max(28,(H-r.height)/2), cur=parseFloat(getComputedStyle(card).marginTop)||0; card.style.setProperty('margin-top',(cur+(top-(r.top-ty)))+'px','important'); });
+      return; }
     if(vid) vid.style.setProperty('max-width','none','important');
     var M=28, cr=card.getBoundingClientRect(), vr=vid.getBoundingClientRect(), s=cr.width/card.offsetWidth, z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
     var H=innerHeight, W=innerWidth;   /* rects already come back in window pixels */
@@ -9589,9 +9610,9 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
 @media (max-width:760px){ .hero .cine{width:calc(100vw - 24px) !important; max-width:none !important; margin-left:calc(50% - 50vw + 12px) !important; margin-right:0 !important} }
 /* phone footer: taller than the screen, so the drawing has room. It scrolls in after the page instead of sitting fixed underneath it */
 @media (max-width:760px){
-  .rf{position:relative !important; height:1040px !important; --peek:110px !important}
-  .rf-art img{transform:translateX(47%) scale(.86) !important; transform-origin:50% 55% !important}   /* the figure and THINK sit inside the screen */
-  .sheet{margin-bottom:-110px !important}
+  .rf{position:relative !important; height:960px !important; --peek:60px !important}
+  .rf-art img{transform:translateX(47%) scale(.80) !important; transform-origin:50% 50% !important}   /* the figure and THINK sit inside the screen */
+  .sheet{margin-bottom:-60px !important}
 }
 /* phone footer, layout C: phone and email as two pill buttons; the links in an even 3 x 2 grid; the copyright small and grey */
 @media (max-width:760px){
@@ -9607,6 +9628,12 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
       radial-gradient(ellipse 62% 34% at 62% 52%, rgba(11,11,11,0) 0, rgba(11,11,11,0) 35%, rgba(11,11,11,.6) 100%),
       linear-gradient(180deg, rgba(11,11,11,.95) 0, rgba(11,11,11,.8) 30%, rgba(11,11,11,0) 46%, rgba(11,11,11,0) 72%, rgba(11,11,11,.9) 88%, #0B0B0B 100%) !important}
 }
+/* tablet: the opening sentence and the credits start at the left edge, so nothing runs off the right */
+@media (min-width:761px) and (max-width:900px){ .intro-t{left:24px !important; width:min(440px, calc(100vw - 48px)) !important} .intro-creds{left:24px !important; right:24px !important; white-space:normal !important; flex-wrap:wrap} .intro-cue{right:24px !important} }
+/* laptops and tablets: the footer drawing stays inside the screen; on a tablet it is smaller and sits bottom right, away from the words */
+@media (min-width:761px) and (max-width:1366px){ .rf-art{right:0} .rf-art img{right:0 !important; transform:translateX(6%) !important} }
+@media (min-width:761px) and (max-width:1000px){ .rf-row{flex-wrap:wrap; row-gap:8px} .rf-b{display:none} .rf-links{flex-wrap:wrap}
+  .rf-art img{height:72% !important; top:auto !important; bottom:0 !important; transform:translateX(10%) !important; opacity:.8} }
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
