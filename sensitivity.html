@@ -1856,7 +1856,8 @@ header.wrap{position:relative}
   .apwrap.sent .summeta{margin-top:0 !important; line-height:19px !important}
   .apwrap.sent :is(#apCard,#apCard-e) .ask-chips{margin-top:10px !important; padding-top:12px !important}
 /* glass that reads as glass on a light page: less white, a hairline edge */
-.stage.sp .glass, .stage.sp .deckwrap>.deck{background:rgba(255,255,255,.22) !important;
+.stage.sp .glass, .stage.sp .deckwrap>.deck{background:rgba(255,255,255,.4) !important;
+  -webkit-backdrop-filter:blur(22px) saturate(1.6) !important; backdrop-filter:blur(22px) saturate(1.6) !important;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.55), 0 24px 48px -20px rgba(25,26,24,.18) !important}
 /* the Ask more panel is part of the card, not a second card */
 .stage.sp .glass.askcard{background:none !important; box-shadow:none !important;
@@ -1864,6 +1865,27 @@ header.wrap{position:relative}
 /* the closing note is not another specimen: clearly more air above it than between samples */
 .close{padding-top:320px !important}
 @media (max-width:760px){ .close{padding-top:240px !important} }
+/* the two-line reservation only where the value really wraps (content width = viewport - 84):
+   Paused · 14 of 20 files renamed 311px, Send summary to 42 customers 326px,
+   Three of them moved the deadline 352px */
+@media (min-width:396px) and (max-width:760px){ #hoV{min-height:33px !important} }
+@media (min-width:411px) and (max-width:760px){ :is(#apV,#apV-e){min-height:33px !important} }
+@media (min-width:437px) and (max-width:760px){ #wkV{min-height:33px !important} }
+/* phone: the region panel covers the whole chip row, so the chips under it step aside
+   instead of printing through the glass */
+@media (max-width:760px){
+  .stage.sp .chip{transition:opacity var(--effect-ms,184ms) var(--effect,ease)}
+  div:has(> #regWrap.open) > .chip, #regWrap.open > .chip{opacity:0}
+}
+.stage.sp .glass.gmenu{background:rgba(255,255,255,.5) !important}
+.stage.sp .gmenu .inp{background:transparent !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important}
+/* an open specimen sits above the one after it, so its glass covers (and blurs) what it overlaps
+   instead of the next story printing through */
+.stage.sp{position:relative}
+.stage.sp:has(.deckwrap.lit), .stage.sp:has(.open){z-index:5}
+/* while a card reaches over the next story, that story steps back under the glass */
+.stage.sp > .story{transition:opacity var(--effect-ms,184ms) var(--effect,ease), filter var(--effect-ms,184ms) var(--effect,ease)}
+.stage.sp:has(.deckwrap.lit) + .stage.sp > .story, .stage.sp:has(.open) + .stage.sp > .story{opacity:.18; filter:blur(3px)}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -2919,8 +2941,11 @@ function onWidth(fn){
 (function(){
   "use strict";
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-  const say=(el,t)=>{ if(window.Morphline && el._mlCur!==undefined) window.Morphline.to(el,t);
+  /* while a specimen forgets its state off-screen, the words land at once instead of morphing */
+  let sayNow=false;
+  const say=(el,t)=>{ if(window.Morphline && el._mlCur!==undefined) window.Morphline[sayNow?'set':'to'](el,t);
                       else el.textContent=t; };
+  const quiet=fn=>{ sayNow=true; try{ fn(); } finally{ sayNow=false; } };
 
   /* Hover · the wall — the same reach as the closing line. Resting on it turns the
      summary into a précis of what was withheld; pressing opens the whole of it on glass. */
@@ -3083,9 +3108,9 @@ function onWidth(fn){
       if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
     /* leave the stage and it forgets, so the escalation can be watched more than once */
     if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.intersectionRatio===0 && sent){ clearTimeout(bt); wrap.classList.remove('busy');
+      if(e.intersectionRatio===0 && sent)quiet(()=>{{ clearTimeout(bt); wrap.classList.remove('busy');
         sent=false; wrap.classList.remove('sent');
-        say(sendL,'Send'); mode('cons'); line(); }
+        say(sendL,'Send'); mode('cons'); line(); }});
     }),{threshold:[0]}).observe(dw);
   }
   initSend(''); initSend('-e');
@@ -3126,7 +3151,7 @@ function onWidth(fn){
     document.addEventListener('click',e=>{
       if(wrap.classList.contains('open') && !wrap.contains(e.target)) shut(); });
     if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.intersectionRatio===0) rest();
+      if(e.intersectionRatio===0) quiet(()=>{rest();});
     }),{threshold:[0]}).observe(wrap);
   })();
 
@@ -3185,8 +3210,8 @@ function onWidth(fn){
     document.addEventListener('click',e=>{
       if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
     if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.intersectionRatio===0 && done){ clearTimeout(t); wrap.classList.remove('busy');
-        done=false; near=false; face(); say(v,REST.v); say(d,REST.d); say(cons,REST.c); }
+      if(e.intersectionRatio===0 && done)quiet(()=>{{ clearTimeout(t); wrap.classList.remove('busy');
+        done=false; near=false; face(); say(v,REST.v); say(d,REST.d); say(cons,REST.c); }});
     }),{threshold:[0]}).observe(dw);
   })();
 
@@ -3234,8 +3259,8 @@ function onWidth(fn){
     document.addEventListener('click',e=>{
       if(wrap.classList.contains('open') && !dw.contains(e.target)) shut(); });
     if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.intersectionRatio===0 && asked){ clearTimeout(bt); wrap.classList.remove('busy');
-        asked=false; paint(); }
+      if(e.intersectionRatio===0 && asked)quiet(()=>{{ clearTimeout(bt); wrap.classList.remove('busy');
+        asked=false; paint(); }});
     }),{threshold:[0]}).observe(dw);
   })();
 

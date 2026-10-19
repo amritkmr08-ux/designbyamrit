@@ -472,6 +472,15 @@ function onWidth(fn){
     mounted.push({ host: host, text: function () { return host._mlCur; } });
   }
   window.Morphline = {
+    /* set: land on the string at once, no letters in flight. Used when a specimen forgets
+       its state off-screen, so nothing is seen morphing by itself on the way back. */
+    set: function (host, text) {
+      if (!host || host._mlCur === undefined) return;
+      clearTimeout(host._mlT);
+      host.setAttribute('aria-label', text);
+      host._mlCur = text;
+      rest(host, layout(host, text));
+    },
     to: function (host, text) {
       if (!host || host._mlCur === undefined || host._mlCur === text) return;
       host.setAttribute('aria-label', text);
