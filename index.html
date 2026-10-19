@@ -1369,6 +1369,14 @@ section.closing{margin-top:160px !important}
 .wc-pp svg{display:none !important} .wv-ctl[data-s="paused"] .i-play, .wv-ctl[data-s="playing"] .i-pause, .wv-ctl[data-s="ended"] .i-again{display:block !important}
 .wc-lbl{padding:0 2px 0 4px; white-space:nowrap}
 .wc-t{display:none}   /* no timer: the ring round the chip already shows progress */
+
+/* while the film plays, the chip shows a voice wave instead of the word: sound is happening.
+   The bars are driven by script with random targets and speech-like pauses, so it never loops. */
+.wc-wave{display:none; align-items:center; gap:3px; height:14px; padding:0 7px 0 7px}
+.wc-wave i{display:block; width:3px; height:4px; border-radius:2px; background:#3D5A45; transform-origin:center; transform:scaleY(1); transition:transform .14s ease-out}
+.wv-ctl[data-s="playing"] .wc-wave{display:flex}
+.wv-ctl[data-s="playing"] .wc-lbl{display:none}
+@media (prefers-reduced-motion:reduce){ .wc-wave i{transition:none; transform:scaleY(2) !important} }
 .wc-ring{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none}
 .wc-ring path{fill:none; stroke-width:1.5}
 .wc-track{stroke:none}
@@ -1437,6 +1445,10 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 @keyframes vt-out{to{opacity:0}}
 @keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-old(root),::view-transition-new(root){animation:none} }
+/* the chip is the player, not the pop-up: closing belongs to the card's own Back/close */
+.wv-ctl .wc-x{display:none !important}
+.wv-ctl .wc-lbl{padding-right:8px}
+.wv-ctl[data-s="playing"] .wc-wave{padding-right:10px}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
@@ -8213,7 +8225,7 @@ window.nudgeMark = function (host, go) {
         <div class="wv-ctl" id="wv-ctl" data-s="paused">
           <svg class="wc-ring" aria-hidden="true"><path class="wc-track"/><path class="wc-prog" pathLength="100"/></svg>
           <button type="button" class="wc-pp" aria-label="Play"><svg class="i-play" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 2.2v9.6L11.5 7z" fill="currentColor"/></svg><svg class="i-pause" width="14" height="14" viewBox="0 0 14 14"><rect x="3" y="2.5" width="2.6" height="9" rx="1" fill="currentColor"/><rect x="8.4" y="2.5" width="2.6" height="9" rx="1" fill="currentColor"/></svg><svg class="i-again" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 8a5.2 5.2 0 1 0 1.6-3.8"/><path d="M2.6 2.2v2.6h2.6"/></svg></button>
-          <span class="wc-lbl">Paused</span><span class="wc-t">0:00</span>
+          <span class="wc-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="wc-lbl">Paused</span><span class="wc-t">0:00</span>
           <button type="button" class="wc-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
         </div>
       </div>
@@ -9568,6 +9580,20 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   pp.addEventListener('click', toggle); v.addEventListener('click', toggle);
   ['timeupdate','play','pause','loadedmetadata','durationchange','seeked'].forEach(function(e){ v.addEventListener(e, draw); });
   v.addEventListener('playing', function(){ done=false; draw(); });
+  /* the voice wave: random, speech-shaped. Each bar heads for a fresh random height every
+     80-200ms; every so often the whole wave drops to a murmur for a beat, like a pause between
+     words. Runs only while the film plays. */
+  (function(){ var bars=ctl.querySelectorAll('.wc-wave i'); if(!bars.length) return; var t=null, quiet=0;
+    function tick(){ if(ctl.dataset.s!=='playing'){ t=null; return; }
+      if(quiet>0){ quiet--; } else if(Math.random()<0.06){ quiet=2+Math.floor(Math.random()*4); }
+      for(var i=0;i<bars.length;i++){ var lo=quiet?0.5:0.7, hi=quiet?1.3:3.4; var v2=lo+Math.random()*(hi-lo);
+        /* the middle bars tend taller, the ends shorter, so it reads as a wave not noise */
+        var mid=1-Math.abs((i-(bars.length-1)/2)/((bars.length-1)/2)); v2=0.6+v2*(0.55+0.45*mid);
+        bars[i].style.transform='scaleY('+v2.toFixed(2)+')'; }
+      t=setTimeout(tick, 80+Math.random()*120); }
+    function arm(){ if(!t && ctl.dataset.s==='playing') tick(); }
+    v.addEventListener('playing', arm); v.addEventListener('play', function(){ setTimeout(arm,0); });
+    new MutationObserver(arm).observe(ctl,{attributes:true, attributeFilter:['data-s']}); })();
   v.addEventListener('ended', function(){ done=true; if(cur && cur.rest!=null){ v.currentTime=cur.rest; } draw(); });
   xb.addEventListener('click', function(){ v.pause(); var c=card.querySelector('[data-close]'); if(c) c.click(); });
   if('ResizeObserver' in window) new ResizeObserver(fit).observe(ctl);
