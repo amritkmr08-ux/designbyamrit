@@ -1177,7 +1177,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .layt button:focus{outline:none} .layt button:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
 @media (max-width:900px){ .layt{display:none} }
 @media (min-width:901px){ #chapters.lay-rows .piece .fit{background:#fff} }
-#chapters:not(.lay-rows) .q5dek{display:none} @media (max-width:900px){ #chapters .q5dek{display:none} }
+/* Sensitivity's description line shows in every view, the same as the other four chapters */
 /* chapter openings, as in the reference: "01 Search" in sentence case, the question a step heavier on wider lines, the line under it in the display face */
 #chapters .piece .chap-n, #chapters .piece .chap-name{font-family:var(--display) !important; font-size:17px !important; line-height:24px !important; letter-spacing:0 !important; text-transform:none !important; color:var(--muted) !important; font-weight:400 !important}
 #chapters .piece h2.chap-q{font-weight:500 !important; max-width:13.4em !important; text-wrap:wrap !important; margin-top:14px !important}
@@ -1336,7 +1336,7 @@ section.closing{margin-top:160px !important}
 .ex-btn{display:flex; align-items:center; gap:8px; margin:18px 0 14px auto; padding:6px 10px 6px 6px; border:0; border-radius:999px; background:none; color:#6B6B6B; font-family:var(--font); font-size:14px; line-height:20px; cursor:pointer; transition:color .15s ease, background-color .15s ease}
 .ex-btn:hover{color:#191A18; background:rgba(25,26,24,.04)} .ex-btn svg{display:block; flex:none}
 .ex-btn:focus{outline:none} .ex-btn:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
-@media (min-width:901px){ #chapters.lay-rows .ex-btn{margin:16px 0 0 -6px} }
+@media (min-width:901px){ #chapters.lay-rows .ex-btn{margin:18px 0 0 0; padding:4px 14px 4px 5px; background:rgba(25,26,24,.045)} #chapters.lay-rows .ex-btn:hover{background:rgba(25,26,24,.08); color:#191A18} }
 .ov #wv .wv-vid{margin:28px -48px 0}
 .ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#141414; box-shadow:0 0 0 1px rgba(25,26,24,.1)}
 .ov #wv .wv-more{display:flex; justify-content:space-between; align-items:center; margin:40px 0 0; padding:20px 24px; border-radius:12px; background:#EEEEEA; color:#3C4A3F; text-decoration:none; font-family:var(--display); font-size:20px; line-height:28px; transition:background-color .15s ease}
@@ -1440,7 +1440,6 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 -2px !important; padding:2px 8px 2px 4px; gap
     <h1 class="r" id="hero-line">I&#8217;ve learnt enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
     <p class="r hero-meta">Product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
-    <p class="r hero-live"><span class="live-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
@@ -3449,6 +3448,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">AI can trace a clause&rsquo;s history. Showing it to the user was the tricky part, because the clause they read today is pieced together from several documents and every change made&nbsp;since.</p>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="lineage" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
     <figure class="r"><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -5481,6 +5481,7 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
     <p class="dek r q5dek">Not everything an AI agent finds needs a person. Some things can wait, some need you now.</p>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="sensitivity" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
     <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -9492,18 +9493,20 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var v=document.getElementById('wvv'), tag=document.getElementById('wv-tag'), h=document.getElementById('wv-h'), more=document.getElementById('wv-more');
   var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', read:'w4'},
             proof:{n:'02', name:'Proof', q:'Can I see the exact words a person wrote?', src:'proof-walkthrough.mp4', poster:'proof-walkthrough-poster.webp', href:'auto-extraction.html'},
+            lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc'},
+            sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Why I think this way'},
             reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc'},
             diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4', poster:'diagram-walkthrough-poster.webp', rest:12} };
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return;
-    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
+    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Why it&rsquo;s built this way'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
     if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); }
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
   /* the card's width follows the film's own shape, so a taller film gets a narrower card and the footer stays on screen */
   v.addEventListener('loadedmetadata', function(){ if(v.videoWidth && v.videoHeight) card.style.setProperty('--ar', (v.videoWidth/v.videoHeight).toFixed(4)); });
   /* fit the whole card inside the window and centre it: the film takes whatever height is left once the title and footer are placed */
-  var AR={search:1.6466, proof:1.5661, reach:1.7778, diagram:1.0714}, ar=1.7778, vid=card.querySelector('.wv-vid');
+  var AR={search:1.6466, proof:1.5661, lineage:1.5789, reach:1.7778, sensitivity:1.4056, diagram:1.0714}, ar=1.7778, vid=card.querySelector('.wv-vid');
   function fitCard(){
     if(card.hidden || !ovl || !ovl.classList.contains('on') || innerWidth<901){ card.style.removeProperty('max-width'); card.style.removeProperty('margin-top'); if(vid) vid.style.removeProperty('max-width'); return; }
     if(vid) vid.style.setProperty('max-width','none','important');
@@ -9558,7 +9561,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   #chapters .piece h2.chap-q + .dek{font-family:var(--font) !important; font-size:15px !important; line-height:24px !important; color:var(--muted) !important}
 }
 </style>
-<script>(function(){ document.querySelectorAll('#chapters .piece .ex-btn.ex-top').forEach(function(b){ var p=b.closest('.piece'), pr=p.querySelector(':scope > .prose'); if(!pr) return;
+<script>(function(){ document.querySelectorAll('#chapters .piece .ex-btn.ex-top').forEach(function(b){ var p=b.closest('.piece'), pr=p.querySelector(':scope > .out-idx') || p.querySelector(':scope > .prose'); if(!pr) return;
   var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r','ex-top'); c.classList.add('ex-mob');
   c.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); b.click(); }); pr.insertAdjacentElement('afterend', c); }); })();</script>
 <style>
