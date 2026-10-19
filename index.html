@@ -1387,6 +1387,13 @@ section.closing{margin-top:160px !important}
 }
 .ov #wv .wv-more:not([hidden]) + .wv-end{border-top:0 !important; margin-top:0 !important}   /* the link's own bottom line is the separator */
 .ov #wv .wv-end{padding-top:20px !important}
+/* phone: the footer stacks, player first, so the pill never runs off the card; the time stays out to keep it short */
+@media (max-width:600px){
+  .ov #wv .wv-end{flex-direction:column !important; align-items:flex-start !important; gap:16px !important}
+  .ov #wv .wv-end .wv-ctl{order:-1; margin:0 !important; max-width:100%}
+  .ov #wv .wv-end .wc-t{display:none}
+  .ov #wv .wv-end a.back{margin-top:0 !important}
+}
 /* the card is never taller than the screen: its width follows the height left over for a 16:9 film */
 @media (min-width:901px){ .ov .card#wv:not(.dg){max-width:min(1320px, calc(100vw - 120px), calc((100vh - 330px) * var(--ar, 1.7778) + 96px)) !important} }
 
