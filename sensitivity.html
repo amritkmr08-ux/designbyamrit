@@ -1870,7 +1870,8 @@ header.wrap{position:relative}
    Three of them moved the deadline 352px */
 @media (min-width:396px) and (max-width:760px){ #hoV{min-height:33px !important} }
 @media (min-width:411px) and (max-width:760px){ :is(#apV,#apV-e){min-height:33px !important} }
-@media (min-width:437px) and (max-width:760px){ #wkV{min-height:33px !important} }
+/* "18 unread messages" is one line on every phone; the two-line answer takes its room when it lands */
+@media (max-width:760px){ #wkV{min-height:max(33px, var(--ml-h, 33px)) !important} }
 /* phone: the region panel covers the whole chip row, so the chips under it step aside
    instead of printing through the glass */
 @media (max-width:760px){
@@ -1891,6 +1892,19 @@ header.wrap{position:relative}
 /* the 52ch cap pushed the trailing chevron onto an empty second line under the summary */
 :is(#apCard,#apCard-e) .sumline{max-width:none !important}
 .sumline .sumcv{margin-left:8px}
+/* no pointer to hover with: the pips and the chevron stay put instead of following focus */
+@media (hover:none){
+  .histwrap:not(.open) .pips, .updwrap:not(.open) .pips{opacity:1 !important}
+  .histwrap:not(.open) .cv.histcv{opacity:.3 !important}
+}
+/* the pips sit closer under the date line */
+.pips{margin-top:16px !important}
+/* touch screens: every "this opens" chevron is on at full, all the time */
+@media (hover:none){ .stage .cv{opacity:1 !important} }
+/* the instruction field is a rounded box with a hairline, not an underlined row */
+.askcard .ask-field{border:1px solid var(--line,#D7D8D2) !important; border-radius:12px !important;
+  padding:9px 14px !important; background:none !important}
+.askcard .ask-chips{margin-top:14px !important}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -3630,8 +3644,8 @@ function onWidth(fn){
   root.addEventListener('click', function(e){
     var btn = e.target.closest && e.target.closest(SEL);
     if (!btn) return;
-    if (lit === btn) return;                  /* second tap: the specimen's own handler runs */
-    e.preventDefault(); e.stopPropagation();
+    /* one tap does both: the chevron comes up and the specimen's own handler opens it.
+       (It used to take a first tap to light the mark and a second to open - a tax on phones.) */
     only(btn);
   }, true);
 
