@@ -9577,9 +9577,30 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   .rf-cap{color:#9C9E97 !important}
 }
 @media (max-width:760px){ .hero .cine{width:calc(100vw - 24px) !important; max-width:none !important; margin-left:calc(50% - 50vw + 12px) !important; margin-right:0 !important} }
+/* phone footer: taller than the screen, so the drawing has room. It scrolls in after the page instead of sitting fixed underneath it */
+@media (max-width:760px){
+  .rf{position:relative !important; height:1040px !important; --peek:110px !important}
+  .sheet{margin-bottom:-110px !important}
+}
+/* phone footer, layout C: phone and email as two pill buttons; the links in an even 3 x 2 grid; the copyright small and grey */
+@media (max-width:760px){
+  .rf-say{display:flex !important; flex-direction:row !important; flex-wrap:wrap; gap:10px !important}
+  .rf-say .rf-tel, .rf-say .rf-mail{display:inline-flex !important; align-items:center; padding:10px 18px !important; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.05);
+    font-size:14px !important; line-height:20px !important; width:auto !important; color:#E4E4E0 !important; transition:background-color .2s ease, border-color .2s ease}
+  .rf-say .rf-tel:active, .rf-say .rf-mail:active{background:rgba(255,255,255,.12)}
+  .rf-links{display:grid !important; grid-template-columns:repeat(3, 1fr); gap:14px 12px !important; width:100%}
+  .rf-c{font-size:12.5px !important; color:#7E807A !important}
+  /* torch light: the middle of the drawing, where nothing is written, comes up brighter; the edges stay dark */
+  .rf-art img{opacity:.62 !important}
+  .rf-art::after{background:
+      radial-gradient(ellipse 62% 34% at 62% 52%, rgba(11,11,11,0) 0, rgba(11,11,11,0) 35%, rgba(11,11,11,.6) 100%),
+      linear-gradient(180deg, rgba(11,11,11,.95) 0, rgba(11,11,11,.8) 30%, rgba(11,11,11,0) 46%, rgba(11,11,11,0) 72%, rgba(11,11,11,.9) 88%, #0B0B0B 100%) !important}
+}
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
   place(); addEventListener('resize', place); })();</script>
+<script>(function(){ var t=document.querySelector('.rf-say .rf-tel'), m=document.querySelector('.rf-say .rf-mail'); if(!t||!m) return; var T=t.textContent, M=m.textContent;
+  m.setAttribute('aria-label','Email '+M); function place(){ var ph=innerWidth<=760; t.textContent= ph ? 'Call '+T : T; m.textContent= ph ? 'Email me' : M; } place(); addEventListener('resize', place); })();</script>
 </body>
 </html>
