@@ -1462,6 +1462,17 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 .ov #wv .wv-ctl button:hover{background:rgba(255,255,255,.12) !important; color:#fff !important}
 .ov #wv .wc-prog{stroke:rgba(255,255,255,.75) !important}
 .ov #wv .wc-wave i{background:#8FC39A !important}
+/* one grey for every secondary line in a chapter: intro, credits, Ask Mira */
+#chapters .piece p.fmeta, #chapters .piece p.fmeta a, #chapters .piece .fm-a, #chapters .piece .fm-b,
+#chapters .piece .ex-btn, #chapters .piece .ex-btn span, .hero-ex, .hero-ex span, #chapters .piece h2.chap-q + .dek, #chapters .piece .chap-head, #chapters .piece .chap-n, #chapters .piece .chap-name{color:#767972 !important}
+/* text starts 6px in from the prototype's edge, so the glyphs line up with the card, not the box */
+@media (min-width:901px){
+  #chapters:not(.lay-rows) .piece .chap-head, #chapters:not(.lay-rows) .piece h2.chap-q, #chapters:not(.lay-rows) .piece h2.chap-q + .dek,
+  #chapters:not(.lay-rows) .piece .prose, #chapters:not(.lay-rows) .piece .ptxt{margin-left:7px !important}
+}
+/* the description reads in the same face as the question and the intro */
+#chapters .piece .prose p{font-family:var(--display) !important; font-size:16px !important; line-height:25px !important; color:#767972 !important}
+.hero-ex{top:16px !important}   /* 16px further below the diagram */
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />

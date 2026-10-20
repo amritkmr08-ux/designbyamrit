@@ -1905,6 +1905,8 @@ header.wrap{position:relative}
 .askcard .ask-field{border:1px solid var(--line,#D7D8D2) !important; border-radius:12px !important;
   padding:9px 14px !important; background:none !important}
 .askcard .ask-chips{margin-top:14px !important}
+.close .endrow::before{content:""; position:absolute; left:12px; right:12px; top:0; border-top:1px solid var(--line,#D7D8D2)}
+.close .endrow{margin-top:28px !important}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
@@ -3771,8 +3773,7 @@ function onWidth(fn){
     if(matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
     const click=sel=>{ const el=document.querySelector(sel); if(el) el.click(); };
     const shows=[
-      {stage:'#hsWrap',   touch:'#hsWrap',   steps:[[1200,'#hsStep'],[2600,'#hsNext']]},   /* closed: the value steps back one and returns; the card stays yours */
-      {stage:'#wkWrap',   touch:'#wkWrap',   steps:[[900,'#wkChk']]} ];
+      {stage:'#hsWrap',   touch:'#hsWrap',   steps:[[1200,'#hsStep'],[2600,'#hsNext']]} ];   /* closed: the value steps back one and returns; the card stays yours. Summarise waits to be asked. */
     shows.forEach(s=>{
       const st=document.querySelector(s.stage); if(!st) return;
       const sec=st.closest('.stage'); let done=false, touched=false, timers=[];
