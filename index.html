@@ -1502,6 +1502,16 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 .ov #wv .wv-row{border-bottom:0 !important}
 .ov #wv .wv-end.solo{justify-content:flex-end !important}
 @media (max-width:600px){ .ov #wv .wv-head h2#wv-h{font-size:20px !important; line-height:28px !important} .ov #wv .wv-head a.back i{font-size:20px; line-height:28px} }
+/* phone: the description matches the intro line exactly (the smaller one) */
+@media (max-width:760px){
+  html body #chapters .piece .prose p, html body #chapters .piece h2.chap-q + .dek{font-family:var(--font) !important; font-size:15px !important; line-height:24px !important; color:#767972 !important}
+}
+/* phone: the navigator sits at the bottom of the screen, within thumb reach, and keeps the top clear */
+@media (max-width:760px){
+  html body #chbar#chbar{top:auto !important; bottom:14px !important}
+  html body:not(.bar-stuck) #chbar#chbar{transform:translate(-50%,12px) !important}
+  #sheet::before{display:none !important}
+}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
@@ -9745,5 +9755,61 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   addEventListener('mousemove', function(e){ var n = e.clientY > innerHeight - 140; if(n!==near){ near=n; if(n) show(); else show(); } else if(n) bar.classList.remove('away'); }, {passive:true});
   bar.addEventListener('mouseleave', show); bar.addEventListener('focusin', function(){ bar.classList.remove('away'); });
   show(); })();</script>
+
+<style>
+/* the chapter bar sticks to the top once the banner is passed */
+#chbar{top:14px !important; bottom:auto !important; transform:translate(-50%,-16px) !important}
+#chbar.on, #chbar.on.rest, #chbar.on.away{opacity:1 !important; transform:translate(-50%,0) !important; pointer-events:auto !important}
+html body.foot-on #chbar.on{opacity:0 !important; pointer-events:none !important; transform:translate(-50%,-16px) !important}
+/* a soft band of page colour behind the bar, so content slides under it */
+#sheet::before{content:""; position:fixed; left:0; right:0; top:0; height:88px; z-index:39; pointer-events:none; opacity:0; transition:opacity .3s ease;
+  background:linear-gradient(to bottom, var(--page,#EEEEEA) 62%, rgba(238,238,234,0))}
+body:has(#chbar.on):not(.foot-on) #sheet::before{opacity:1}
+a.mark, .mhint{z-index:61 !important}
+/* scrolling settles one chapter at a time, gently (only when you stop near a chapter's start) */
+#chapters .piece{scroll-margin-top:84px}   /* no snapping: the page never pulls the scroll; this only sets where a tab click lands */
+@media (max-width:760px){ #chbar{top:10px !important} #chapters .piece{scroll-margin-top:70px} }
+</style>
+<script>
+/* a tab click slides the current chapter out to the left and the chosen one in from the right */
+(function(){
+  var bar=document.getElementById('chbar'); if(!bar) return;
+  var links=[].slice.call(bar.querySelectorAll('a')), arts=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, busy=false;
+  function current(){ var line=innerHeight*.35, c=-1; arts.forEach(function(el,k){ var r=el.getBoundingClientRect(); if(r.top<=line && r.bottom>innerHeight*.15) c=k; }); return c; }
+  links.forEach(function(a,k){ a.addEventListener('click',function(e){
+    e.preventDefault(); e.stopImmediatePropagation(); var to=arts[k]; if(!to || busy) return;
+    var from=arts[current()], dir=(current()>k)?-1:1, z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
+    var go=function(){ document.documentElement.style.scrollSnapType='none'; scrollTo({top:(to.getBoundingClientRect().top+scrollY)-84/z, behavior:'instant'}); document.documentElement.style.scrollSnapType=''; };
+    if(reduce || !from || from===to){ go(); return; }
+    busy=true;
+    from.animate([{transform:'none',opacity:1},{transform:'translateX('+(-60*dir)+'px)',opacity:0}],{duration:260,easing:'cubic-bezier(.4,0,1,1)'}).onfinish=function(){
+      go(); to.animate([{transform:'translateX('+(60*dir)+'px)',opacity:0},{transform:'none',opacity:1}],{duration:420,easing:'cubic-bezier(.22,.61,.36,1)'}).onfinish=function(){ busy=false; }; };
+  }, true); });
+})();
+</script>
+
+<style>
+/* the bar first sits on the line under the opening, then sticks to the top once it reaches it */
+#chbarIn{display:flex !important}
+html body:not(.bar-stuck) #chbar#chbar{opacity:0 !important; pointer-events:none !important; transform:translate(-50%,-12px) !important}   /* stronger than the old always-show rule, so the two bars never show together */
+body.bar-stuck:not(.foot-on) #chbar{opacity:1 !important; pointer-events:auto !important; transform:translate(-50%,0) !important}
+#chbar{transition:opacity .3s ease, transform .4s cubic-bezier(.22,.61,.36,1) !important}
+#chbarIn{visibility:hidden !important; pointer-events:none !important}   /* only marks where the line is; the navigator appears once that line reaches the top */
+body:not(.bar-stuck) #sheet::before{opacity:0 !important}
+</style>
+<script>
+(function(){
+  var bar=document.getElementById('chbar'), inb=document.getElementById('chbarIn'); if(!bar||!inb) return;
+  /* same contents as the sticky bar, so the hand-over is seamless: copy the layout switch and route its clicks */
+  var lay=bar.querySelector('.layt'); if(lay && !inb.querySelector('.layt')){ var c=lay.cloneNode(true); inb.appendChild(c);
+    [].slice.call(c.querySelectorAll('button')).forEach(function(b,i){ b.addEventListener('click',function(){ lay.querySelectorAll('button')[i].click(); }); });
+    new MutationObserver(function(){ [].slice.call(lay.querySelectorAll('button')).forEach(function(o,i){ var t=c.querySelectorAll('button')[i]; t.className=o.className; t.setAttribute('aria-pressed',o.getAttribute('aria-pressed')); }); }).observe(lay,{attributes:true,subtree:true}); }
+  var top=parseFloat(getComputedStyle(bar).top)||14;
+  function check(){ var r=inb.getBoundingClientRect(), line=r.top+r.height/2; document.body.classList.toggle('bar-stuck', line<=0.5);
+    /* mirror the current chapter into the sticky bar's twin so they match */ }
+  addEventListener('scroll',check,{passive:true}); addEventListener('resize',check); check();
+})();
+</script>
 </body>
 </html>
