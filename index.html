@@ -1473,6 +1473,35 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 /* the description reads in the same face as the question and the intro */
 #chapters .piece .prose p{font-family:var(--display) !important; font-size:16px !important; line-height:25px !important; color:#767972 !important}
 .hero-ex{top:16px !important}   /* 16px further below the diagram */
+/* progress is the line under the film, not a ring round the chip */
+.wv-ctl .wc-ring{display:none !important}
+.ov #wv .wv-row{position:relative; display:flex; align-items:center; gap:16px; margin-top:16px; border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12)}
+.ov #wv .wv-row[hidden]{display:none}
+.ov #wv .wv-row .wv-more{flex:1; min-width:0; margin:0 !important; border:0 !important}
+.ov #wv .wv-row > .wv-ctl{flex:none; margin:0 !important}
+.ov #wv .wv-end{position:relative}
+.ov #wv .wv-row::before, .ov #wv .wv-end.solo::before{content:""; position:absolute; left:0; top:-1px; height:1px; width:calc(var(--p,0) * 100%); background:rgba(255,255,255,.7); transition:width .25s linear; pointer-events:none}
+.ov #wv .wv-end:not(.solo){border-top:0 !important; margin-top:0 !important}
+.ov #wv .wv-end.solo{border-top:1px solid rgba(255,255,255,.12) !important}
+/* phone, Reach only: the document page sits in the middle of a wide film with empty grey either side,
+   so the frame goes square and crops to the page, which makes the contract text readable */
+@media (max-width:600px){
+  .ov #wv[data-film="reach"] .wv-vid video{aspect-ratio:1/1 !important; height:auto !important; object-fit:cover !important; object-position:50% 50% !important}
+}
+/* pop-up header: one line, arrow + number + question */
+.ov #wv #wv-tag{display:none !important}
+.ov #wv .wv-head{display:flex; align-items:baseline; gap:14px}
+.ov #wv .wv-head a.back{flex:none; margin:0 !important; font-size:0 !important; line-height:1; color:#8E8F88 !important; text-decoration:none; border:0 !important}
+.ov #wv .wv-head a.back i{font-style:normal; font-size:22px; line-height:30px; display:inline-block; transition:transform .2s ease, color .2s ease}
+.ov #wv .wv-head a.back:hover i{transform:translateX(-3px); color:#F2F1EC}
+.ov #wv .wv-head h2#wv-h{margin:0 !important; font-size:22px !important; line-height:30px !important}
+.ov #wv .wv-head h2#wv-h[data-n]::before{content:attr(data-n) "  "; white-space:pre; color:#8E8F88; font-weight:400}
+.ov #wv .wv-head #wv-k{margin:0 !important}
+/* footer: only the Why row (with the chip); its bottom line goes with the Back row */
+.ov #wv .wv-end:not(.solo){display:none !important}
+.ov #wv .wv-row{border-bottom:0 !important}
+.ov #wv .wv-end.solo{justify-content:flex-end !important}
+@media (max-width:600px){ .ov #wv .wv-head h2#wv-h{font-size:20px !important; line-height:28px !important} .ov #wv .wv-head a.back i{font-size:20px; line-height:28px} }
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
@@ -8244,7 +8273,7 @@ window.nudgeMark = function (host, go) {
       <p class="k" id="wv-k" hidden></p>
       <figure class="wv-vid"><video id="wvv" playsinline preload="none"></video>
 </figure>
-      <a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Why it&rsquo;s built this way</span><span class="wv-r">Read more</span></a>
+      <div class="wv-row" id="wv-row"><a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Why it&rsquo;s built this way</span><span class="wv-r">Read more</span></a></div>
       <div class="end idx wv-end"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a>
         <div class="wv-ctl" id="wv-ctl" data-s="paused">
           <svg class="wc-ring" aria-hidden="true"><path class="wc-track"/><path class="wc-prog" pathLength="100"/></svg>
@@ -9558,11 +9587,18 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
             reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc'},
             diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4', poster:'diagram-walkthrough-poster.webp', rest:12} };
   var kEl=document.getElementById('wv-k');
-  document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return;
-    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Why it&rsquo;s built this way'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
+  document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return; card.dataset.film=b.dataset.ex;
+    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Why it&rsquo;s built this way'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
     if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); v.load(); }   /* load() so the cover shows at once, not a dark frame */
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
+  /* header: the back arrow sits in front of the title and closes the pop-up; the footer Back row goes */
+  (function(){ var bk=card.querySelector('.wv-end a.back'); if(!bk) return; var hd=document.createElement('div'); hd.className='wv-head';
+    h.parentNode.insertBefore(hd,h); hd.appendChild(bk); hd.appendChild(h); hd.appendChild(kEl); bk.setAttribute('aria-label','Back to the work'); bk.title='Back to the work'; })();
+  /* the chip sits on the right of the Why row; with no Why row (the diagram) it stays in the footer */
+  (function(){ var rw=document.getElementById('wv-row'), we=card.querySelector('.wv-end'), c=document.getElementById('wv-ctl');
+    function place(){ var solo=more.hidden; rw.hidden=solo; we.classList.toggle('solo', solo); (solo?we:rw).appendChild(c); }
+    document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', place); }); place(); })();
   /* the card's width follows the film's own shape, so a taller film gets a narrower card and the footer stays on screen */
   v.addEventListener('loadedmetadata', function(){ if(v.videoWidth && v.videoHeight) card.style.setProperty('--ar', (v.videoWidth/v.videoHeight).toFixed(4)); });
   /* fit the whole card inside the window and centre it: the film takes whatever height is left once the title and footer are placed */
@@ -9597,6 +9633,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     trk.setAttribute('d',d); prg.setAttribute('d',d); }
   function draw(){ var d=v.duration||0, t=done?d:v.currentTime, f=d?Math.min(1,t/d):0;
     prg.style.strokeDasharray=(f*100).toFixed(2)+' 100';
+    var rw=document.getElementById('wv-row'), we=card.querySelector('.wv-end'); if(rw) rw.style.setProperty('--p', f.toFixed(4)); if(we) we.style.setProperty('--p', f.toFixed(4));
     var st = done ? 'ended' : (v.paused ? 'paused' : 'playing'); ctl.dataset.s=st;
     lbl.textContent = done ? 'Watch again' : (v.paused ? 'Paused' : 'Playing'); tEl.textContent = d ? mmss(t)+' / '+mmss(d) : '';
     pp.setAttribute('aria-label', done ? 'Play again' : (v.paused ? 'Play' : 'Pause')); fit(); }
