@@ -1907,6 +1907,24 @@ header.wrap{position:relative}
 .askcard .ask-chips{margin-top:14px !important}
 .close .endrow::before{content:""; position:absolute; left:12px; right:12px; top:0; border-top:1px solid var(--line,#D7D8D2)}
 .close .endrow{margin-top:28px !important}
+/* one size for the situation line and the line under each value: 13px everywhere */
+html body .stage.sp > .story{font-size:13px !important; line-height:20px !important}
+html body .stage.sp .srcl, html body .stage.sp .srcl .ml-g{font-size:13px !important}
+/* type audit: one scale on web and phone
+   situation 13 · value 19 · detail 13 · closing text 14.5 · small link 13 */
+html body .stage.sp .sec.sm, html body .stage.sp .sec.sm .ml-g{font-size:13px !important}
+@media (max-width:760px){
+  html body .stage.sp .hero, html body .stage.sp .wlt{font-size:19px !important; line-height:28px !important}
+  html body .close .endp, html body .close .endrow{font-size:14.5px !important; line-height:23.5px !important}
+  /* value boxes sized to the new 28px line: one line 28, two lines 56 */
+  html body .stage.sp .hero[data-morph-text]{min-height:28px !important}
+  html body :is(#apV,#apV-e), html body #hoV, html body #wkV, html body #amV, html body #capV{min-height:56px !important}
+}
+@media (min-width:366px) and (max-width:760px){ html body #hoV{min-height:28px !important} }
+@media (min-width:380px) and (max-width:760px){ html body :is(#apV,#apV-e){min-height:28px !important} }
+@media (min-width:360px) and (max-width:760px){ html body #amV, html body #capV{min-height:28px !important} }
+@media (max-width:760px){ html body #wkV{min-height:max(28px, var(--ml-h, 28px)) !important} }
+html body .close .endrow span{font-size:13px !important}
 </style>
 <style>
 /* ── the site nav: the same mark and menu as the landing page ── */
