@@ -1506,11 +1506,30 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 @media (max-width:760px){
   html body #chapters .piece .prose p, html body #chapters .piece h2.chap-q + .dek{font-family:var(--font) !important; font-size:15px !important; line-height:24px !important; color:#767972 !important}
 }
-/* phone: the navigator sits at the bottom of the screen, within thumb reach, and keeps the top clear */
-@media (max-width:760px){
-  html body #chbar#chbar{top:auto !important; bottom:14px !important}
-  html body:not(.bar-stuck) #chbar#chbar{transform:translate(-50%,12px) !important}
-  #sheet::before{display:none !important}
+/* the vertical footer credit ran 2px off the screen at ~1024px; tuck it closer on mid widths */
+@media (min-width:761px) and (max-width:1100px){ .rf-cap{left:calc(100% + 2px) !important} }
+/* phone, Lineage only: crop to the clause reader so the text is readable */
+@media (max-width:600px){
+  .ov #wv[data-film="lineage"] .wv-vid video{aspect-ratio:1.25/1 !important; height:auto !important; object-fit:cover !important; object-position:100% 50% !important}
+}
+/* phone: the pop-up card uses nearly the full width */
+@media (max-width:600px){
+  .ov:has(#wv:not([hidden])){padding-left:6px !important; padding-right:6px !important}
+  .ov:has(#wv:not([hidden])) #ovin{padding-left:0 !important; padding-right:0 !important}
+  .ov .card#wv{width:calc(100vw - 12px) !important; max-width:none !important; margin-left:auto !important; margin-right:auto !important}
+}
+/* phone: smaller, calmer type in the walkthrough card */
+@media (max-width:600px){
+  html body .ov #wv .wv-head h2#wv-h{font-size:17px !important; line-height:24px !important}
+  html body .ov #wv .wv-head a.back i{font-size:17px !important; line-height:24px !important}
+  html body .ov #wv .wv-head{gap:10px !important}
+  html body .ov .card#wv{padding-top:22px !important; padding-bottom:20px !important}
+  html body .ov #wv .wv-vid{margin-top:16px !important}
+  html body .ov #wv .wv-more{font-size:14px !important; line-height:20px !important; padding:10px 0 !important}
+  html body .ov #wv .wv-more .wv-r{font-size:12px !important; line-height:18px !important}
+  html body .ov #wv .wv-ctl{font-size:12px !important; padding:2px 3px !important}
+  html body .ov #wv .wv-ctl button{width:24px !important; height:24px !important}
+  html body .ov #wv .wv-ctl button svg{width:11px !important; height:11px !important}
 }
 </style>
 <meta property="og:type" content="website" />
@@ -3541,7 +3560,7 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Iterate &middot; Shipped</span><span class="fm-b" aria-hidden="true">AI-assisted contract review · Source evidence for every extracted value</span></span></p></figure>
-    <div class="prose r"><p>A confidence score and a page number still left people searching for evidence, so I put the exact source passage one click away. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="auto-extraction.html">Why it&rsquo;s built this way</a></p></div>
+    <div class="prose r"><p>Reviewers trust what both sides signed, not what the AI says. So every value on the right opens on the exact sentence it came from, and the reviewer can accept, correct or delete it. No confidence score: the sentence is the proof. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="auto-extraction.html">Why it&rsquo;s built this way</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
@@ -9755,61 +9774,5 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   addEventListener('mousemove', function(e){ var n = e.clientY > innerHeight - 140; if(n!==near){ near=n; if(n) show(); else show(); } else if(n) bar.classList.remove('away'); }, {passive:true});
   bar.addEventListener('mouseleave', show); bar.addEventListener('focusin', function(){ bar.classList.remove('away'); });
   show(); })();</script>
-
-<style>
-/* the chapter bar sticks to the top once the banner is passed */
-#chbar{top:14px !important; bottom:auto !important; transform:translate(-50%,-16px) !important}
-#chbar.on, #chbar.on.rest, #chbar.on.away{opacity:1 !important; transform:translate(-50%,0) !important; pointer-events:auto !important}
-html body.foot-on #chbar.on{opacity:0 !important; pointer-events:none !important; transform:translate(-50%,-16px) !important}
-/* a soft band of page colour behind the bar, so content slides under it */
-#sheet::before{content:""; position:fixed; left:0; right:0; top:0; height:88px; z-index:39; pointer-events:none; opacity:0; transition:opacity .3s ease;
-  background:linear-gradient(to bottom, var(--page,#EEEEEA) 62%, rgba(238,238,234,0))}
-body:has(#chbar.on):not(.foot-on) #sheet::before{opacity:1}
-a.mark, .mhint{z-index:61 !important}
-/* scrolling settles one chapter at a time, gently (only when you stop near a chapter's start) */
-#chapters .piece{scroll-margin-top:84px}   /* no snapping: the page never pulls the scroll; this only sets where a tab click lands */
-@media (max-width:760px){ #chbar{top:10px !important} #chapters .piece{scroll-margin-top:70px} }
-</style>
-<script>
-/* a tab click slides the current chapter out to the left and the chosen one in from the right */
-(function(){
-  var bar=document.getElementById('chbar'); if(!bar) return;
-  var links=[].slice.call(bar.querySelectorAll('a')), arts=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, busy=false;
-  function current(){ var line=innerHeight*.35, c=-1; arts.forEach(function(el,k){ var r=el.getBoundingClientRect(); if(r.top<=line && r.bottom>innerHeight*.15) c=k; }); return c; }
-  links.forEach(function(a,k){ a.addEventListener('click',function(e){
-    e.preventDefault(); e.stopImmediatePropagation(); var to=arts[k]; if(!to || busy) return;
-    var from=arts[current()], dir=(current()>k)?-1:1, z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
-    var go=function(){ document.documentElement.style.scrollSnapType='none'; scrollTo({top:(to.getBoundingClientRect().top+scrollY)-84/z, behavior:'instant'}); document.documentElement.style.scrollSnapType=''; };
-    if(reduce || !from || from===to){ go(); return; }
-    busy=true;
-    from.animate([{transform:'none',opacity:1},{transform:'translateX('+(-60*dir)+'px)',opacity:0}],{duration:260,easing:'cubic-bezier(.4,0,1,1)'}).onfinish=function(){
-      go(); to.animate([{transform:'translateX('+(60*dir)+'px)',opacity:0},{transform:'none',opacity:1}],{duration:420,easing:'cubic-bezier(.22,.61,.36,1)'}).onfinish=function(){ busy=false; }; };
-  }, true); });
-})();
-</script>
-
-<style>
-/* the bar first sits on the line under the opening, then sticks to the top once it reaches it */
-#chbarIn{display:flex !important}
-html body:not(.bar-stuck) #chbar#chbar{opacity:0 !important; pointer-events:none !important; transform:translate(-50%,-12px) !important}   /* stronger than the old always-show rule, so the two bars never show together */
-body.bar-stuck:not(.foot-on) #chbar{opacity:1 !important; pointer-events:auto !important; transform:translate(-50%,0) !important}
-#chbar{transition:opacity .3s ease, transform .4s cubic-bezier(.22,.61,.36,1) !important}
-#chbarIn{visibility:hidden !important; pointer-events:none !important}   /* only marks where the line is; the navigator appears once that line reaches the top */
-body:not(.bar-stuck) #sheet::before{opacity:0 !important}
-</style>
-<script>
-(function(){
-  var bar=document.getElementById('chbar'), inb=document.getElementById('chbarIn'); if(!bar||!inb) return;
-  /* same contents as the sticky bar, so the hand-over is seamless: copy the layout switch and route its clicks */
-  var lay=bar.querySelector('.layt'); if(lay && !inb.querySelector('.layt')){ var c=lay.cloneNode(true); inb.appendChild(c);
-    [].slice.call(c.querySelectorAll('button')).forEach(function(b,i){ b.addEventListener('click',function(){ lay.querySelectorAll('button')[i].click(); }); });
-    new MutationObserver(function(){ [].slice.call(lay.querySelectorAll('button')).forEach(function(o,i){ var t=c.querySelectorAll('button')[i]; t.className=o.className; t.setAttribute('aria-pressed',o.getAttribute('aria-pressed')); }); }).observe(lay,{attributes:true,subtree:true}); }
-  var top=parseFloat(getComputedStyle(bar).top)||14;
-  function check(){ var r=inb.getBoundingClientRect(), line=r.top+r.height/2; document.body.classList.toggle('bar-stuck', line<=0.5);
-    /* mirror the current chapter into the sticky bar's twin so they match */ }
-  addEventListener('scroll',check,{passive:true}); addEventListener('resize',check); check();
-})();
-</script>
 </body>
 </html>
