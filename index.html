@@ -506,7 +506,8 @@ html, body{background:#101110}
 .ov .card hr{margin:26px 0 30px}
 .ov .card .lead{font-size:17px; line-height:27px; max-width:56ch; margin-top:0}
 .ov .card p{font-size:15.5px; line-height:26px; max-width:60ch; margin-top:12px}
-.ov .card h3{font-size:17px; line-height:26px; margin-top:52px}
+.ov .card h3{font-size:21px; line-height:28px; margin-top:52px; letter-spacing:-.005em}
+@media (max-width:760px){ .ov .card h3{font-size:19px; line-height:26px} }
 .ov .card figure, .ov .card .trio{margin:16px 0 20px}
 .ov .card .trio figure{margin:0}
 .ov .card figure img{border-color:var(--line); border-radius:12px}
@@ -537,6 +538,7 @@ html, body{background:#101110}
 .ov #w4 .glance{display:grid; grid-template-columns:1fr 1fr; gap:22px 28px; margin:26px 0 8px; padding:24px 0 0; border-top:1px solid var(--line)}
 .ov #w4 .glance dt{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin:0 0 6px}
 .ov #w4 .glance dd{font-size:13.5px; line-height:21px; color:var(--ink); margin:0}
+.ov #w4 p strong, .ov #w5 p strong{font-weight:600; color:var(--ink)}
 .ov #w4 p.pq{border-left:2px solid var(--ink); padding:4px 0 4px 18px; margin:22px 0; font-weight:600; color:var(--muted); max-width:60ch}
 .ov #w4 p.bq{font-weight:600; color:var(--muted)}
 /* the rule panel, written as text so it reads at any size */
@@ -599,6 +601,19 @@ html, body{background:#101110}
 .ov #w4 .ch h3{margin-top:2px}
 .ov #w4 figure.wide img{max-width:100%}
 .ov #w4 figure.strip img{max-width:440px}
+/* more air in the case studies: paragraphs, highlights, pictures and sections get more room between them */
+@media (min-width:761px){
+  .ov #w4 p:not([class]), .ov #w5 p:not([class]){margin-top:18px}
+  .ov #w4 h3, .ov #w5 h3{margin-bottom:8px}
+  .ov #w4 p.pq{margin:36px 0}
+  .ov #w4 figure.fv, .ov #w4 .rulebox, .ov #w4 .smebox{margin-top:44px; margin-bottom:44px}
+  .ov #w4 .ch-n, .ov #w5 .ch-n{margin-top:40px}
+}
+@media (max-width:760px){
+  .ov #w4 p:not([class]), .ov #w5 p:not([class]){margin-top:16px}
+  .ov #w4 p.pq{margin:28px 0}
+  .ov #w4 .ch-n, .ov #w5 .ch-n{margin-top:24px}
+}
 .ov #w4 .fam{margin:16px 0 20px; padding:28px 20px 18px; border:1px solid var(--line); border-radius:12px}
 .ov #w4 .fam-top, .ov #w4 .fam-kids > div{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border:1px solid var(--rule); border-radius:8px; background:var(--paper); font-size:13px; line-height:19px; position:relative}
 .ov #w4 .fam-top{width:max-content; min-width:190px; margin:0 auto}
@@ -1531,11 +1546,17 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
   html body .ov #wv .wv-ctl button{width:24px !important; height:24px !important}
   html body .ov #wv .wv-ctl button svg{width:11px !important; height:11px !important}
 }
+.ov .card.conf .conf-mira{display:inline-flex; align-items:center; gap:8px; margin-top:18px; padding:5px 14px 5px 6px; border:0; border-radius:999px; background:rgba(25,26,24,.06); color:#3A3B37; font:inherit; font-size:14px; line-height:20px; cursor:pointer}
+.ov .card.conf .conf-mira i{width:20px; height:20px; border-radius:50%; border:1.3px solid currentColor; display:grid; place-items:center; font-style:normal; font-size:8px}
+.ov .card.conf .conf-mira:hover{background:rgba(25,26,24,.1)}
+.ov .card.conf .conf-mira + .conf-back{display:block}
+/* a quiet role line above a chapter's description */
+#chapters .piece .prose p.role{font-family:var(--font) !important; font-size:13px !important; line-height:20px !important; color:#767972 !important; margin:0 0 10px !important}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/index.html" />
 <meta property="og:title" content="Amrit Kumar — product designer" />
-<meta property="og:description" content="I watch how people decide what to do with an AI answer, then design for that moment. Product designer at Sirion, ex Airtel." />
+<meta property="og:description" content="I watch how people decide what to do with an AI answer, then design for that moment. Senior product designer at Sirion, ex Airtel." />
 <meta property="og:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -1557,7 +1578,7 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
     <div class="hero-words">
     <h1 class="r" id="hero-line">I&#8217;ve learnt enterprise users won&#8217;t act on answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
-    <p class="r hero-meta">Product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
+    <p class="r hero-meta">Senior product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
@@ -1590,7 +1611,7 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
           <canvas id="cine-cv" aria-hidden="true"></canvas>
         </div>
       </div>
-      <button type="button" class="ex-btn hero-ex" data-open="wv" data-ex="diagram" aria-label="Ask Mira to explain this diagram with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+      <button type="button" class="ex-btn hero-ex" data-open="wv" data-ex="diagram" aria-label="Watch a 1-minute narrated video about this diagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
       <ol class="bridge-list cine-list">
         <li><a href="#q1"><b>01</b><span class="q">Did it find every piece of data that matters?</span><span class="why">Not just the ones it happened to read.</span></a></li>
         <li><a href="#q2"><b>02</b><span class="q">Can I see the exact words a person wrote?</span><span class="why">Not a score or a page number.</span></a></li>
@@ -1617,7 +1638,7 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
     <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
-    <button type="button" class="ex-btn r" data-open="wv" data-ex="search" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="search" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
     <figure class="r"><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -2827,14 +2848,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Shipped partly</span><span class="fm-b" aria-hidden="true">AI-assisted contract review · Extraction accuracy and human verification</span></span><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
-    <div class="prose r"><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads the whole contract family, and flags disagreement instead of&nbsp;guessing.</p><p class="end"><a href="#" data-open="w4">Why it&rsquo;s built this way</a></p></div>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Shipped partly</span><span class="fm-b" aria-hidden="true">My role: end-to-end design of AskSirion&rsquo;s search and its results&nbsp;listing.</span></span><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
+    <div class="prose r"><p class="role">My role: end-to-end design of AskSirion&rsquo;s search and its results&nbsp;listing.</p><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads every contract in the deal, and flags disagreement instead of guessing. Success would mean a policy check finding every affected contract on the first ask, not after a&nbsp;follow-up.</p><p class="end"><a href="#" data-open="w4">See case study</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
     <p class="dek r">Even when AI gives the answer, people in CLM still want the original. So every value opens on the exact words in the contract, and they can check it before they trust&nbsp;it.</p>
-    <button type="button" class="ex-btn r" data-open="wv" data-ex="proof" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="proof" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
     <figure class="r"><div class="fit" data-h="693" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -3559,14 +3580,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Iterate &middot; Shipped</span><span class="fm-b" aria-hidden="true">AI-assisted contract review · Source evidence for every extracted value</span></span></p></figure>
-    <div class="prose r"><p>Reviewers trust what both sides signed, not what the AI says. So every value on the right opens on the exact sentence it came from, and the reviewer can accept, correct or delete it. No confidence score: the sentence is the proof. Month-four retention rose from 5% to&nbsp;23%.</p><p class="end"><a href="auto-extraction.html">Why it&rsquo;s built this way</a></p></div>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Iterate &middot; Shipped</span><span class="fm-b" aria-hidden="true">My role: end-to-end design of AI contract review (Auto Extraction).</span></span></p></figure>
+    <div class="prose r"><p class="role">My role: end-to-end design of AI contract review (Auto&nbsp;Extraction).</p><p>Reviewers trust what both sides signed, not what the AI says. So every value on the right opens on the exact sentence it came from, and the reviewer can accept, correct or delete it. No confidence score: the sentence is the proof. Month-four retention rose from 5% to 23% as measured users grew from 860 to&nbsp;2,380.</p><p class="end"><a href="auto-extraction.html">See case study</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
     <p class="dek r">AI can trace a clause&rsquo;s history. Showing it to the user was the tricky part, because the clause they read today is pieced together from several documents and every change made&nbsp;since.</p>
-    <button type="button" class="ex-btn r" data-open="wv" data-ex="lineage" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="lineage" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
     <figure class="r"><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -4326,14 +4347,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Approved</span><span class="fm-b" aria-hidden="true">Clause history · Amendments traced back to the signed document</span></span></p></figure>
-    <div class="prose r"><p>One paragraph shows what the clause says today, with every change marked by its date and source. One click opens the signed document at the paragraph that made the change, so people can check what the AI put&nbsp;together.</p><p class="end"><a href="#" data-open="wc">Why it&rsquo;s built this way</a></p></div>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; In development</span><span class="fm-b" aria-hidden="true">My role: end-to-end design. Being built now, to ship as a feature of the contract page.</span></span></p></figure>
+    <div class="prose r"><p class="role">My role: end-to-end design. Being built now, to ship as a feature of the contract&nbsp;page.</p><p>A reviewer reading a clause today is reading the original plus every amendment since, and they can&rsquo;t trust a version they can&rsquo;t trace. So the clause shows as one paragraph with each change marked by its date and source, and one click opens the signed document at the paragraph that made it. Success would mean reviewers opening the signed document less often to double-check a&nbsp;clause.</p><p class="end"></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
     <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
-    <button type="button" class="ex-btn r" data-open="wv" data-ex="reach" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="reach" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
     <figure class="r"><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -5592,14 +5613,14 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Partially built</span><span class="fm-b" aria-hidden="true">Contract editing · Clauses that depend on each other kept in step</span></span></p></figure>
-    <div class="prose r"><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already&nbsp;written.</p><p class="end"><a href="#" data-open="wc">Why it&rsquo;s built this way</a></p></div>
+" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Partially built</span><span class="fm-b" aria-hidden="true">My role: end-to-end design.</span></span></p></figure>
+    <div class="prose r"><p class="role">My role: end-to-end design.</p><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already written. Success would mean knock-on clauses caught before signing, not&nbsp;after.</p><p class="end"></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
     <p class="dek r q5dek">Not everything an AI agent finds needs a person. Some things can wait, some need you now.</p>
-    <button type="button" class="ex-btn r" data-open="wv" data-ex="sensitivity" aria-label="Ask Mira to explain with a narrated walkthrough"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Ask Mira to explain</span></button>
+    <button type="button" class="ex-btn r" data-open="wv" data-ex="sensitivity" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
     <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -8174,7 +8195,7 @@ window.nudgeMark = function (host, go) {
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Own work</span><span class="fm-b" aria-hidden="true">AI agents · When to interrupt, ask, or stay quiet</span></span></p></figure>
-    <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">Why I think this way</a></p></div>
+    <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">See the idea</a></p></div>
     <div class="out-idx r"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a></div>
   </article>
   </div>
@@ -8206,7 +8227,8 @@ window.nudgeMark = function (host, go) {
       <div class="conf-art" aria-hidden="true"></div>
       <div class="conf-body">
         <div class="conf-head"><h2>Confidential</h2><p class="conf-stars" aria-hidden="true">* * * *</p></div>
-        <div class="conf-foot"><p class="conf-note">This one isn&rsquo;t public yet. Happy to walk you through it in person.</p>
+        <div class="conf-foot"><p class="conf-note">My role: end-to-end design. The full case study isn&rsquo;t public yet. Mira&rsquo;s walkthrough shows the problem and the decision with no client details, and I&rsquo;m happy to go deeper in person.</p>
+        <button type="button" class="conf-mira" id="confMira"><i aria-hidden="true">&#9654;</i>Watch 1-min video</button>
         <a class="conf-back" href="#" data-close>&larr; Back to the work</a></div>
       </div>
     </article>
@@ -8302,7 +8324,7 @@ window.nudgeMark = function (host, go) {
       <p class="k" id="wv-k" hidden></p>
       <figure class="wv-vid"><video id="wvv" playsinline preload="none"></video>
 </figure>
-      <div class="wv-row" id="wv-row"><a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Why it&rsquo;s built this way</span><span class="wv-r">Read more</span></a></div>
+      <div class="wv-row" id="wv-row"><a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Read case study</span><span class="wv-r">&rarr;</span></a></div>
       <div class="end idx wv-end"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a>
         <div class="wv-ctl" id="wv-ctl" data-s="paused">
           <svg class="wc-ring" aria-hidden="true"><path class="wc-track"/><path class="wc-prog" pathLength="100"/></svg>
@@ -8319,63 +8341,64 @@ window.nudgeMark = function (host, go) {
       <div class="tbar" id="tbar4" role="toolbar" aria-label="Respond to this case study">
         <a class="tb tb-com" href="mailto:amritkmr08@gmail.com?subject=On%20your%20Search%20case%20study" aria-label="Email me about this case study" title="Email me about this"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"><rect x="3.5" y="5.75" width="17" height="12.5" rx="2"/><path d="M4.2 7.2 12 12.8l7.8-5.6" stroke-linecap="round"/></svg></a>
         <span class="tb-sp"></span>
-        <button class="tb tb-play" type="button" aria-label="Ask Mira to read this case study aloud"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Ask Mira to read</span></button>
+        <button class="tb tb-play" type="button" aria-label="Listen to this case study"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Listen</span></button>
       </div>
       <dl class="glance">
         <div><dt>My role</dt><dd>Designer, alongside a co-designer</dd></div>
-        <div><dt>Worked with</dt><dd>PMs, engineers, legal engineers, SMEs, and feedback from IBM&rsquo;s legal team</dd></div>
-        <div><dt>Live today</dt><dd>AskSirion search, charts and family-level listing</dd></div>
-        <div><dt>What&rsquo;s next</dt><dd>Generated columns, lineage and conformance checks in development</dd></div>
+        <div><dt>Worked with</dt><dd>PMs, engineers, legal engineers, legal experts, and feedback from IBM&rsquo;s legal team</dd></div>
+        <div><dt>Live today</dt><dd>AskSirion search, charts and deal-level listing</dd></div>
+        <div><dt>What&rsquo;s next</dt><dd>Generated columns, clause history and policy checks in development</dd></div>
       </dl>
 
       <figure class="fv"><img src="search-v-hero.webp" alt="A note explaining that people in Sirion search across large numbers of contracts, surrounded by the things they look for: suppliers, obligations, deadlines, risks, with a short summary underneath." loading="lazy"><figcaption>The search CLM queries explained</figcaption></figure>
 
       <p class="tension">Where should a search result actually&nbsp;land?</p>
       <p>In Sirion, people search across large numbers of contracts to find information about suppliers, obligations, deadlines and&nbsp;risks.</p>
-      <p>The challenge is that contracts don&rsquo;t always work independently. One supplier might have a master agreement, several smaller agreements, and amendments that change the original&nbsp;terms.</p>
-      <p>So finding the right text is one thing. Understanding which contract it belongs to, and how it relates to others, is&nbsp;another.</p>
-      <p>I worked on this search experience alongside a co-designer, PMs, engineers, legal engineers and SMEs. We also got feedback from IBM&rsquo;s legal team, which helped us understand the problem at a much larger&nbsp;scale.</p>
+        <p>The push for AI search came from the wider market. Once people got used to asking AI tools questions in plain language, <strong>they expected to do the same with their contracts</strong>. So search had to work from a question written the way people speak, not only from exact&nbsp;words.</p>
+      <p>The challenge is that <strong>contracts don&rsquo;t always work independently</strong>. One supplier might have a master agreement, several smaller agreements, and amendments that change the original&nbsp;terms.</p>
+      <p class="pq">So finding the right text is one thing. Understanding which contract it belongs to, and how it relates to others, is&nbsp;another.</p>
+      <p>I worked on this search experience alongside a co-designer, PMs, engineers, legal engineers and legal experts. We also got <strong>feedback from IBM&rsquo;s legal team</strong>, which helped us understand the problem at a much larger&nbsp;scale.</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
         <h3>The scale problem</h3>
         <p>One thing I understood from working with IBM&rsquo;s legal team was the scale of information people were dealing&nbsp;with.</p>
-        <p>Search could find the right text in a document. But when a supplier has multiple related contracts, a list of matching documents doesn&rsquo;t necessarily help someone understand the overall&nbsp;situation.</p>
+        <p>Search could find the right text in a document. But when a supplier has multiple related contracts, <strong>a list of matching documents doesn&rsquo;t necessarily help</strong> someone understand the overall&nbsp;situation.</p>
         <figure class="fv"><img src="search-v-scale.webp" alt="A question, which suppliers don't meet the 24-hour breach policy, connected to a master service agreement, an amendment, a SOW, a data processing agreement and a work order among many other documents." loading="lazy"></figure>
         <p>For example, a company introduces a policy that suppliers must report a data breach within 24 hours. Someone asks which contracts don&rsquo;t meet that&nbsp;policy.</p>
-        <p>The search might find different reporting periods across different documents. The person still needs to understand which terms actually&nbsp;apply.</p>
-        <p>That made us look beyond just finding the matching&nbsp;documents.</p>
+        <p>The search might find different reporting periods across different documents. The person still needs to understand <strong>which terms actually&nbsp;apply</strong>.</p>
+        <p class="pq">That made us look beyond just finding the matching&nbsp;documents.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">02</p>
-        <h3>Family first or contract first?</h3>
-        <p>There was a big debate around what should be the landing view of a search&nbsp;result.</p>
-        <p>Engineering preferred the contract-level listing. Their argument was that computation is easier because the matching text is found inside a specific&nbsp;contract.</p>
+        <h3>Deal first or contract documents first?</h3>
+        <p>There was a big debate around what should be <strong>the landing view of a search&nbsp;result</strong>.</p>
+        <p>Engineering preferred listing contract documents. Their argument was that it&rsquo;s <strong>easier for the system to find</strong>, because the matching text is found inside a specific&nbsp;contract.</p>
         <figure class="fv"><img src="search-v-compare.webp" alt="Engineering's view, contract first: the matching text is found inside a specific contract, easier to retrieve. My view, family first: the answer may depend on several related agreements, easier to understand together." loading="lazy"></figure>
-        <p>I was arguing for a family-first listing. My reasoning was that information follows a&nbsp;hierarchy:</p>
-        <p class="hier">Counterparty &rarr; Contract family &rarr; Contract &rarr; Clause &rarr; Metadata</p>
-        <p>A family simply means a group of related contracts under the same business&nbsp;relationship.</p>
-        <p>Take a breach-related question. The answer might depend on terms spread across several contracts in that family. So from a user&rsquo;s point of view, I felt it made more sense to consume the result at the family level rather than start with individual&nbsp;documents.</p>
-        <p class="pq">We took this into a discussion and testing session with a legal SME. And that discussion changed the&nbsp;direction.</p>
-        <p>We realised that some questions naturally demand a family-level result, while others&nbsp;don&rsquo;t.</p>
-        <div class="smebox" role="group" aria-label="What changed after SME testing">
-          <p class="smebox-k">What changed after SME testing</p>
+        <p>I was arguing for a deal-first listing. My reasoning was that information follows a&nbsp;hierarchy:</p>
+        <p class="hier">Supplier &rarr; Deal &rarr; Contract document &rarr; Clause &rarr; Details</p>
+        <p>A deal simply means <strong>a group of related contracts under the same business relationship</strong>. In the product, it shows up as a contract&nbsp;family.</p>
+        <p>Take a breach-related question. The answer might depend on terms spread across several contracts in that deal. So from a user&rsquo;s point of view, I felt it made more sense to <strong>consume the result at the deal level</strong> rather than start with individual&nbsp;documents.</p>
+        <p class="pq">We took this into a discussion and testing session with a legal expert. And that discussion changed the&nbsp;direction.</p>
+        <p>We realised that some questions naturally demand a deal-level result, while others&nbsp;don&rsquo;t.</p>
+        <div class="smebox" role="group" aria-label="What changed after testing with a legal expert">
+          <p class="smebox-k">What changed after testing with a legal expert</p>
           <p class="smebox-h">We realised neither approach worked for every question.</p>
-          <div class="smebox-row"><div><p class="q">&ldquo;Which suppliers have breach-notification issues?&rdquo;</p><p class="w">Needs context across related contracts</p></div><span class="tag">Family</span></div>
+          <div class="smebox-row"><div><p class="q">&ldquo;Which suppliers have breach-notification issues?&rdquo;</p><p class="w">Needs context across related contracts</p></div><span class="tag">Deal</span></div>
           <div class="smebox-row"><div><p class="q">&ldquo;Which contracts expire next month?&rdquo;</p><p class="w">Each agreement has its own expiry date</p></div><span class="tag">Contract</span></div>
         </div>
-        <p>So rather than deciding that everything should be family-first, we moved towards the idea that the nature of the question should determine where the result&nbsp;lands.</p>
+        <p>So rather than deciding that everything should be deal-first, we moved towards the idea that <strong>the nature of the question should determine where the result&nbsp;lands</strong>.</p>
         <p class="pq">We moved away from choosing one default result level for every&nbsp;question.</p>
-        <p>For data questions, the answer can take another form altogether. AskSirion already generates charts for questions such as total contract value by&nbsp;region.</p>
+        <p>For data questions, the answer can take another form altogether. <strong>AskSirion already generates charts</strong> for questions such as total contract value by&nbsp;region.</p>
         <figure class="fv"><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click&nbsp;away.</figcaption><img src="search-v-table.webp" alt="Breach notice, 14 families, judged against your 24-hour breach-notice policy: a table of contract families with counterparty, breach-notification position, scope checked and a finding such as terms conflict, clause missing or exceeds 24-hour policy." loading="lazy"></figure>
       </section>
 
       <section class="ch">
         <p class="ch-n">03</p>
-        <h3>When the question itself isn&rsquo;t clear. Solving for disambiguation</h3>
+        <h3>When a question can mean more than one thing</h3>
         <p>Another problem was how the system understood what people were&nbsp;asking.</p>
-        <p>We initially had suggested follow-up questions, similar to early AI search tools. There was also a thumbs-up and thumbs-down option for feedback. Almost nobody used the&nbsp;thumbs.</p>
+        <p>We initially had suggested follow-up questions, similar to early AI search tools. There was also a thumbs-up and thumbs-down option for feedback. <strong>Almost nobody used the&nbsp;thumbs.</strong></p>
         <p class="pq">But more importantly, suggesting the next question wasn&rsquo;t solving the problem when the current question could mean different&nbsp;things.</p>
         <p>For example, &ldquo;Which contracts don&rsquo;t meet the new 24-hour policy?&rdquo; Does that mean contracts with a longer reporting period? Contracts where the clause is missing? Or older contracts signed before the new&nbsp;policy?</p>
         <p class="bq">But how does the system know when a question is clear enough or not? That needed a rule, not a&nbsp;guess.</p>
@@ -8389,43 +8412,42 @@ window.nudgeMark = function (host, go) {
               <p class="rb-d">If meaning is much more likely, and getting it wrong would make little difference to the result.</p>
               <div class="rb-card"><div><p class="rb-ck">Search agent makes its assumption visible</p><p class="rb-cv">Using: Total contract value</p></div><span class="rb-chg">Or Change &#8599;</span></div></div>
             <div class="rb-opt rb-no"><p class="rb-n">Option 2</p><p class="rb-t"><i aria-hidden="true">?</i><span><b>Ask</b> &ndash; too important to guess</span></p>
-              <p class="rb-d">Several meanings remain plausible, and choosing the wrong one could materially change the answer.</p>
-              <div class="rb-card"><p class="rb-cv">Show Disambiguation card</p></div></div>
+              <p class="rb-d">Several meanings remain plausible, and choosing the wrong one could change the answer a lot.</p>
+              <div class="rb-card"><p class="rb-cv">Show a clarifying card</p></div></div>
           </div>
         </div>
         <p>We explored a clarifying card where users could choose what they meant or write their own&nbsp;interpretation.</p>
-        <p>The idea wasn&rsquo;t to ask users to clarify every search. When the question was clear, search could simply proceed. When different interpretations could change the result significantly, it made sense to ask&nbsp;first.</p>
+        <p>The idea wasn&rsquo;t to ask users to clarify every search. When the question was clear, search could simply proceed. <strong>When different interpretations could change the result significantly, it made sense to ask&nbsp;first.</strong></p>
         <figure class="fv"><img src="search-v-clarify.webp" alt="How should a deviation be judged? Options: notice period over 24 hours, or absent (recommended); clause absent only; executed before the policy date; or something else." loading="lazy"></figure>
-        <p>For more complicated searches, we also explored showing a plan before the system runs, so people could see what information it intended to&nbsp;check.</p>
-        <p>This connects to the next phase we&rsquo;re building: clause lineage, conformance checks and AI-generated columns. For example, a column could be generated in real time to show where contracts have conflicting terms, instead of relying only on data already stored in the&nbsp;table.</p>
-        <p>The important part is that a conflict should be visible, along with the supporting documents. The system shouldn&rsquo;t simply make the legal decision for the&nbsp;person.</p>
+        <p>For more complicated searches, we also explored <strong>showing a plan before the system runs</strong>, so people could see what information it intended to&nbsp;check.</p>
+        <p class="pq">This connects to the next phase we&rsquo;re building: clause history, checks against company policy and AI-generated columns. For example, a column could be generated in real time to show where contracts have conflicting terms, instead of relying only on data already stored in the&nbsp;table.</p>
+        <p>The important part is that <strong>a conflict should be visible, along with the supporting documents</strong>. The system shouldn&rsquo;t simply make the legal decision for the&nbsp;person.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">04</p>
-        <h3>Making search result easier to understand and correct</h3>
+        <h3>Making search results easier to understand and correct</h3>
         <p>Another part of the work was bringing search and filters together. Earlier, people often used advanced filters to narrow down the&nbsp;list.</p>
-        <p class="pq">We took this into a discussion and testing session with a legal SME. And that discussion changed the&nbsp;direction.</p>
-        <p>We explored how someone could simply type what they wanted, and the system could turn that question into filter criteria. Those criteria appear as editable chips, so people can see how search understood their&nbsp;question.</p>
+        <p>We explored how someone could simply type what they wanted, and the system could <strong>turn that question into filter criteria</strong>. Those criteria appear as editable chips, so people can see how search understood their&nbsp;question.</p>
         <p>We explored different versions of this, including a more natural sentence-like format. At rest, it reads like text. When someone interacts with a condition, it becomes&nbsp;editable.</p>
         <figure class="fv"><img src="search-v-chips.webp" alt="Search result, showing 34 of 8,940 contracts. The criteria read as a sentence: status is active and region is any of Asia, EMEA, LATAM and value over 1 million pounds. Clear all, save view." loading="lazy"></figure>
-        <p>We also spent time on empty results. Sometimes a search returns nothing because a filter is hiding the relevant contracts. Sometimes the correct answer really is that nothing&nbsp;matched.</p>
+        <p>We also spent time on empty results. Sometimes a search returns nothing because <strong>a filter is hiding the relevant contracts</strong>. Sometimes the correct answer really is that nothing&nbsp;matched.</p>
         <p>We wanted the interface to explain that difference and help people make corrections without starting&nbsp;over.</p>
         <figure class="fv"><img src="search-v-empty.webp" alt="A family row for CloudScale Technologies showing None, nowhere in the family, and Clause missing. Hovering it explains: all repository scanned, no breach-notification term anywhere, read the master, its data addendum and two SOWs." loading="lazy"></figure>
-        <p>After shipping, one observation was that fewer people seemed to go directly to advanced filters, and more started by typing what they wanted. We don&rsquo;t have an exact measurement for that&nbsp;yet.</p>
+        <p class="pq">After shipping, one observation was that fewer people seemed to go directly to advanced filters, and more started by typing what they wanted. We don&rsquo;t have an exact measurement for that&nbsp;yet.</p>
       </section>
 
       <section class="ch">
         <h3>Where the work stands</h3>
-        <p><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> search, contract-family listings and charts for data questions are&nbsp;live.</p>
-        <p>We&rsquo;re still building generated columns, lineage and conformance capabilities. Some of the clarification and question-led interactions shown here are explorations, and the screens are from my&nbsp;prototype.</p>
-        <p>One thing I still want to validate is how we represent a finding at the family level without making every contract in that family appear to have the same&nbsp;issue.</p>
-        <p>That distinction matters because the result should help someone understand the situation, not create another&nbsp;misunderstanding.</p>
+        <p><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> search, deal-level listings and charts for data questions are&nbsp;live.</p>
+        <p>We&rsquo;re still building generated columns, clause history and policy checks. Some of the clarification and question-led interactions shown here are explorations, and the screens are from my&nbsp;prototype.</p>
+        <p>One thing I still want to validate is <strong>how we represent a finding at the deal level</strong> without making every contract in that deal appear to have the same&nbsp;issue.</p>
+        <p class="pq">That distinction matters because the result should help someone understand the situation, not create another&nbsp;misunderstanding.</p>
       </section>
 
       <section class="ch">
         <h3>What next</h3>
-        <p>User can further go deeper in search and can explore agentic clm capabilities like draft me a counter negotiation document, or, Show me with the remediation plan for these breach contracts. Search is just the beginning of CLM AI. A huge list of agent capabilities are under exploratory&nbsp;stage</p>
+        <p>From a search result, people could go further and ask the AI to act on it. For example, &ldquo;Draft a counter-negotiation document for these contracts&rdquo; or &ldquo;Show me a fix plan for these breach contracts.&rdquo; <strong>Search is just the beginning.</strong> Many more AI actions on contracts are still being&nbsp;explored.</p>
         <figure class="sel"><img src="search-v-select.webp" alt="Two contract families selected in the breach results, with a bar showing 2 of 14 selected, Route to Legal and Ask about this selection" loading="lazy"></figure>
       </section>
 
@@ -8458,19 +8480,19 @@ window.nudgeMark = function (host, go) {
       <figure><img src="sens-3am-call.webp" style="max-width:100%" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
       <p>Imagine your wife calling at 2 in the afternoon. You might answer or call back&nbsp;later.</p>
       <p>Now imagine the same call at 3 in the morning. You would probably pick up immediately, expecting something&nbsp;serious.</p>
-      <p>Same person. Same phone call. The situation changes what it means. Not because the phone knows something different. Because you&nbsp;do.</p>
-      <p>You know who is calling, her routine, the hour, what has been happening in her life. You don&rsquo;t weigh these one by one. You read them together. And you might still be wrong: it could be an accidental&nbsp;call.</p>
-      <p>I started wondering whether AI agents need a similar sense of when to speak and when to stay&nbsp;quiet.</p>
+      <p>Same person. Same phone call. <strong>The situation changes what it means.</strong> Not because the phone knows something different. Because you&nbsp;do.</p>
+      <p>You know who is calling, her routine, the hour, what has been happening in her life. You don&rsquo;t weigh these one by one. <strong>You read them together.</strong> And you might still be wrong: it could be an accidental&nbsp;call.</p>
+      <p>I started wondering whether AI agents need a similar sense of <strong>when to speak and when to stay&nbsp;quiet</strong>.</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
         <h3>Where this question came from</h3>
         <figure><img src="sens-contract-page.webp" style="max-width:100%" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
         <p>While exploring an AI-first contract experience, I moved away from presenting contracts as pages, fields and documents. The agent does the reading, connects agreements and amendments, and brings forward what someone needs to know or act&nbsp;on.</p>
-        <p>Agents can now do what used to take a team: link a clause in one agreement to an amendment in another, to an invoice, to an email. Every link is a possible finding. What the system can tell us keeps growing. What a person can take in&nbsp;doesn&rsquo;t.</p>
-        <p>By morning, an agent might have reached 200 conclusions. Show all of them, and the work has only moved from reading contracts to reading&nbsp;AI.</p>
+        <p>Agents can now do what used to take a team: link a clause in one agreement to an amendment in another, to an invoice, to an email. Every link is a possible finding. What the system can tell us keeps growing. <strong>What a person can take in&nbsp;doesn&rsquo;t.</strong></p>
+        <p>By morning, an agent might have reached 200 conclusions. Show all of them, and <strong>the work has only moved from reading contracts to reading&nbsp;AI</strong>.</p>
         <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 conclusions by morning. A person can act on a&nbsp;handful.</figcaption></figure>
-        <p>Showing the five most important seems like the obvious answer. But importance alone doesn&rsquo;t say whether someone needs to see something&nbsp;now.</p>
+        <p>Showing the five most important seems like the obvious answer. But <strong>importance alone doesn&rsquo;t say whether someone needs to see something&nbsp;now</strong>.</p>
       </section>
 
       <section class="ch">
@@ -8511,7 +8533,7 @@ window.nudgeMark = function (host, go) {
             <div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won&rsquo;t raise this again unless the payment details&nbsp;change.</span></div>
           </div>
         </div>
-        <p>The first three are the agent&rsquo;s own judgment. The fourth is what it does after a person adds something it couldn&rsquo;t know. Sensitivity doesn&rsquo;t end when information reaches someone. It also covers how the system changes after they&nbsp;answer.</p>
+        <p>The first three are the agent&rsquo;s own judgment. The fourth is what it does after a person adds something it couldn&rsquo;t know. Sensitivity doesn&rsquo;t end when information reaches someone. <strong>It also covers how the system changes after they&nbsp;answer.</strong></p>
         <p>Not knowing enough doesn&rsquo;t always mean asking. If a payment might go out wrong in fifteen minutes, waiting for an answer is itself a risk, and an interruption is cheaper than the mistake. If a minor field changed, the agent can wait. What decides it is the cost of waiting, whether the decision can be undone, and the cost of breaking someone&rsquo;s&nbsp;focus.</p>
       </section>
 
@@ -8524,8 +8546,8 @@ window.nudgeMark = function (host, go) {
           <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">10 days left &middot; negotiation needs a decision this&nbsp;week</span></div></div>
           <div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
         </div>
-        <p>An agent could read every document correctly and still bring the wrong one to the top. Not because its calculations were wrong. Because its picture of the situation was&nbsp;incomplete.</p>
-        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance is paying at noon. Another that knows only three, the payment, the amended term and who owns it, makes the right call. What counts is whether the agent has the fact that changes the&nbsp;decision.</p>
+        <p>An agent could read every document correctly and still bring the wrong one to the top. Not because its calculations were wrong. <strong>Because its picture of the situation was&nbsp;incomplete.</strong></p>
+        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance is paying at noon. Another that knows only three, the payment, the amended term and who owns it, makes the right call. What counts is <strong>whether the agent has the fact that changes the&nbsp;decision</strong>.</p>
         <div class="vk" role="img" aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call.">
           <div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at&nbsp;noon</p><p class="k-out">Stays quiet. Wrong&nbsp;call.</p></div>
           <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Right&nbsp;call.</p></div>
@@ -8555,14 +8577,14 @@ window.nudgeMark = function (host, go) {
         <h3>What I want to test</h3>
         <p>I haven&rsquo;t run this yet. The plan is small: three to five experienced contract reviewers, the same payment finding, and a different piece of context each time. For each, they decide whether to surface it now, defer it, ask, or treat it as&nbsp;handled.</p>
         <figure class="vmx"><table><thead><tr><th></th><th>Now</th><th>Later</th><th>Ask</th><th>Handled</th></tr></thead><tbody><tr><td>The finding alone</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ payment at noon</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ vendor being offboarded</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ Finance says it&rsquo;s done</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr></tbody></table><figcaption>The study grid. Each reviewer marks one column per row. Empty until it&nbsp;runs.</figcaption></figure>
-        <p>The useful part won&rsquo;t be which answer wins. It&rsquo;s which piece of information changes someone&rsquo;s mind. If their decisions contradict the four questions above, that&rsquo;s evidence&nbsp;too.</p>
+        <p>The useful part won&rsquo;t be which answer wins. It&rsquo;s <strong>which piece of information changes someone&rsquo;s mind</strong>. If their decisions contradict the four questions above, that&rsquo;s evidence&nbsp;too.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">07</p>
         <h3>Where this stands</h3>
         <p>This isn&rsquo;t a new idea in general. Horvitz and colleagues weighed the cost of interrupting against the cost of delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999). Dey defined context for computing in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001). Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Guidelines for Human-AI Interaction</a> (2019) cover timing, correction and&nbsp;explanation.</p>
-        <p>What changes with agents is that the system now creates its own findings, across many connected documents, without knowing what people decided offline. That&rsquo;s the part I&rsquo;m&nbsp;exploring.</p>
+        <p>What changes with agents is that the system now creates its own findings, across many connected documents, <strong>without knowing what people decided offline</strong>. That&rsquo;s the part I&rsquo;m&nbsp;exploring.</p>
       </section>
 
       <p class="take">How does an agent know whether it understands enough of a situation to deserve someone&rsquo;s&nbsp;attention?</p>
@@ -9446,13 +9468,21 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     scrollTo({top:(el.getBoundingClientRect().top+scrollY)-60/z, behavior:'smooth'}); }); });
 })();
 </script>
+<style>
+/* the line under each prototype is fixed: status, then my role, no switching */
+p.fmeta .fm-t{width:auto !important; height:auto !important}
+p.fmeta .fm-t > span{position:static !important; opacity:1 !important; filter:none !important; transform:none !important; transition:none !important}
+p.fmeta .fm-t > span.fm-b::before{content:'\00b7'; margin:0 8px; color:var(--faint)}
+p.fmeta .fm-t > span.fm-b:not(:has(+ *)):empty{display:none}
+p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only the status; the role reads with the story on the left */
+</style>
 <script>
 /* every few seconds the line under each prototype changes between its status and what it is about: the old words lift away and soften, the new ones settle in */
 (function(){
   var hs=[].slice.call(document.querySelectorAll('p.fmeta .fm-t')); if(!hs.length) return;
   function fit(h){ var on=h.querySelector('.on'); h.style.width=on.offsetWidth+'px'; }
   hs.forEach(fit); (document.fonts?document.fonts.ready:Promise.resolve()).then(function(){ hs.forEach(fit); });
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  return; /* the line is fixed now: status and role both show, nothing switches */
   var alt=false;
   setInterval(function(){
     if(innerWidth<761 && !alt) return;            /* a phone keeps the short line */
@@ -9495,11 +9525,11 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL) CSS.highlights.delete('readw'); }
   function inView(el){ var b=el.getBoundingClientRect(); return b.top>80 && b.bottom<innerHeight-80; }
   function setUI(){ play.classList.toggle('on', state==='playing'); play.classList.toggle('paused', state==='paused');
-    var l = state==='playing' ? 'Pause Mira' : state==='paused' ? 'Ask Mira to carry on' : 'Ask Mira to read this case study aloud';
+    var l = state==='playing' ? 'Pause' : state==='paused' ? 'Carry on listening' : 'Listen to this case study';
     play.setAttribute('aria-label', l);
-    play.querySelector('.tb-l').textContent = state==='playing' ? 'Mira is reading' : state==='paused' ? 'Paused' : 'Ask Mira to read'; }
+    play.querySelector('.tb-l').textContent = state==='playing' ? 'Playing' : state==='paused' ? 'Paused' : 'Listen'; }
   var mini=document.createElement('div'); mini.className='rd-mini'; mini.setAttribute('role','group'); mini.setAttribute('aria-label','Narration');
-  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><span class="rd-lbl">Mira is reading</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><span class="rd-lbl">Playing</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
   document.body.appendChild(mini);
   mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
   mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
@@ -9510,7 +9540,7 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   mini.querySelector('.rd-go').addEventListener('click', function(){ follow=true; mini.classList.remove('away'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'}); });
   var setUI0=setUI; setUI=function(){ setUI0(); mini.classList.toggle('on', state!=='idle'); mini.classList.toggle('paused', state==='paused');
     mini.querySelector('.rd-pp').setAttribute('aria-label', state==='paused'?'Resume':'Pause');
-    mini.querySelector('.rd-lbl').textContent = state==='paused' ? 'Paused' : 'Mira is reading'; };
+    mini.querySelector('.rd-lbl').textContent = state==='paused' ? 'Paused' : 'Playing'; };
   /* a hard stop: Chrome can ignore cancel() on a paused or online voice, so resume first and cancel again a beat later */
   function stop(){ run++; clearTimeout(dog); clearInterval(alive); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ ss.cancel(); }, 60); setTimeout(function(){ if(state==='idle') ss.cancel(); }, 300); state='idle'; clearMarks(); setUI(); }
   document.addEventListener('visibilitychange', function(){ if(document.hidden && state!=='idle') stop(); });
@@ -9611,13 +9641,13 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   var v=document.getElementById('wvv'), tag=document.getElementById('wv-tag'), h=document.getElementById('wv-h'), more=document.getElementById('wv-more');
   var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', read:'w4'},
             proof:{n:'02', name:'Proof', q:'Can I see the exact words a person wrote?', src:'proof-walkthrough.mp4', poster:'proof-walkthrough-poster.webp', href:'auto-extraction.html'},
-            lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc'},
-            sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Why I think this way'},
-            reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc'},
+            lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
+            sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Read the idea'},
+            reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
             diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4', poster:'diagram-walkthrough-poster.webp', rest:12} };
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return; card.dataset.film=b.dataset.ex;
-    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Why it&rsquo;s built this way'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
+    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Read case study'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
     if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); v.load(); }   /* load() so the cover shows at once, not a dark frame */
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
@@ -9698,7 +9728,16 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   if(ovl) new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(ovl,{attributes:true, attributeFilter:['class']});
 })();
 </script>
-<script>(function(){document.querySelectorAll('#chapters .piece .ex-btn[data-ex]').forEach(function(b){var f=b.closest('.piece').querySelector('figure p.fmeta'); if(!f) return; var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r'); c.classList.add('ex-fm'); b.classList.add('ex-top'); c.addEventListener('click',function(e){e.preventDefault(); e.stopPropagation(); b.click();}); f.appendChild(c);});})();</script>
+<style>
+/* desktop: "Ask Mira to explain" sits beside "Why it's built this way", so both ways to go deeper are in one place */
+@media (min-width:901px){
+  #chapters .piece .prose p.end:has(.ex-end){display:flex !important; align-items:center; justify-content:flex-start !important; gap:20px; flex-wrap:wrap; width:auto !important}
+  #chapters .piece .prose p.end .ex-btn.ex-end{margin:0 !important; padding:4px 14px 4px 5px; gap:8px; font-size:14px; line-height:20px; border-radius:999px; background:rgba(25,26,24,.045)}
+  #chapters .piece .prose p.end .ex-btn.ex-end:hover{background:rgba(25,26,24,.08); color:#191A18 !important}
+}
+@media (max-width:900px){ #chapters .piece .prose p.end .ex-btn.ex-end{display:none !important} }
+</style>
+<script>(function(){document.querySelectorAll('#chapters .piece .ex-btn[data-ex]').forEach(function(b){var pc=b.closest('.piece'), e=pc.querySelector(':scope > .prose p.end'), f=e||pc.querySelector('figure p.fmeta'); if(!f) return; var c=b.cloneNode(true); c.removeAttribute('data-open'); c.removeAttribute('data-ex'); c.classList.remove('r'); c.classList.add('ex-fm'); if(e) c.classList.add('ex-end'); b.classList.add('ex-top'); c.addEventListener('click',function(e){e.preventDefault(); e.stopPropagation(); b.click();}); f.appendChild(c);});})();</script>
 <style>
 /* phone: the chapter's "Ask Mira to explain" moves to the end of the chapter, as the same centred grey pill as under the diagram; the intro line and the write-up share one size */
 .ex-mob{display:none}
@@ -9774,5 +9813,18 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
   addEventListener('mousemove', function(e){ var n = e.clientY > innerHeight - 140; if(n!==near){ near=n; if(n) show(); else show(); } else if(n) bar.classList.remove('away'); }, {passive:true});
   bar.addEventListener('mouseleave', show); bar.addEventListener('focusin', function(){ bar.classList.remove('away'); });
   show(); })();</script>
+<script>
+/* the confidential card offers the chapter's own narrated walkthrough: it opens the film of whichever chapter sent you here */
+(function(){
+  var btn=document.getElementById('confMira'), from=null; if(!btn) return;
+  document.querySelectorAll('[data-open="wc"]').forEach(function(a){ a.addEventListener('click',function(){ from=a.closest('.piece'); },true); });
+  btn.addEventListener('click',function(){
+    var pc=from||document.getElementById('q3'), ex=pc && pc.querySelector('.ex-btn[data-ex]');
+    if(!ex) return;
+    var all=[].slice.call(pc.querySelectorAll('.ex-btn[data-ex]')), vis=all.filter(function(b){return b.offsetParent;})[0]||ex;
+    vis.click();
+  });
+})();
+</script>
 </body>
 </html>
