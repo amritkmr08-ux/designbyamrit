@@ -8328,7 +8328,7 @@ window.nudgeMark = function (host, go) {
     <a href="#" data-open="wp" id="wp-open" hidden aria-hidden="true" tabindex="-1"></a>
     <article class="card pcard" id="wp" hidden aria-label="Prototype">
       <button type="button" class="wp-x" aria-label="Close" data-close><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
-      <div class="wp-head"><p class="wp-tag"><b id="wp-n">01</b><span id="wp-name">Search</span></p><p class="wp-stat" id="wp-stat"></p><div id="wp-ico" hidden></div></div>
+      <div class="wp-head"><p class="wp-tag"><b id="wp-n">01</b><span id="wp-name">Search</span><span class="wp-ai">AI-built prototype</span></p><p class="wp-stat" id="wp-stat"></p><div id="wp-ico" hidden></div></div>
       <div class="wp-stage" id="wp-stage"></div>
       <div class="wp-row" id="wp-row"><a class="wp-why" id="wp-why" href="#" data-open="w4">Why it&rsquo;s built this way</a><a class="wp-more" id="wp-more" href="#" data-open="w4">Key decisions</a><span class="wp-note" id="wp-note" hidden>Case study isn&rsquo;t public yet</span></div>
     </article>
@@ -8596,7 +8596,7 @@ window.nudgeMark = function (host, go) {
         <figure class="sel"><img src="search-v-select.webp" alt="Two contract families selected in the breach results, with a bar showing 2 of 14 selected, Route to Legal and Ask about this selection" loading="lazy"></figure>
       </section>
 
-      <div class="end idx"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
+      <div class="end idx"><p class="end-ai"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a><a class="ai-proto" href="#" data-proto="q1">Prototype built with AI <i aria-hidden="true">&rarr;</i></a></p></div>
     
 </article>
     <article class="card fvcard" id="w6" hidden aria-label="Reach case study">
@@ -8749,7 +8749,7 @@ window.nudgeMark = function (host, go) {
       </section>
 
       <p class="take">How can an agent judge whether a finding deserves someone&rsquo;s attention, when the most important part of the situation may be something it doesn&rsquo;t&nbsp;know?</p>
-      <div class="end idx"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
+      <div class="end idx"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a><p class="end-ai"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a><a class="ai-proto" href="#" data-proto="q5">Prototype built with AI <i aria-hidden="true">&rarr;</i></a></p></div>
     </article>
       </div>
 </div>
@@ -9675,7 +9675,7 @@ function readAloud(barId, cardId){
   function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
     vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
   pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
-  function blocks(){ var out=[], els=card.querySelectorAll('h2, p, h3, li'), SKIP='.ch-n, .cs-head .k, .st4, .vk, .vfl, .tst-note';
+  function blocks(){ var out=[], els=card.querySelectorAll('h2, p, h3, li'), SKIP='.ch-n, .cs-head .k, .st4, .vk, .vfl, .tst-note, .end';
     for(var i=0;i<els.length;i++){ var el=els[i];
       if(el.closest(SKIP)) continue;   /* section numbers, meta lines and diagram labels are for the eye, not the ear */
       if((el.textContent||'').trim()) out.push(el); }
@@ -9998,6 +9998,8 @@ body .menu{font-size:15.5px; line-height:22px}
 .ov #wv.dg .wv-vid video{width:100% !important; height:auto !important; aspect-ratio:1.45 !important; object-fit:contain !important; background:#ECEEE6 !important}
 /* cards: a soft shadow under the card on hover, so it reads as clickable */
 @media (hover:hover){ html body #chapters.lay-rows .piece{transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important} }
+/* case-study footer: back link on the left, how the prototype was made on the right */
+.ov .card .end .end-ai{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin:0; width:100%; max-width:none !important} .ov .card .end .end-ai .ai-proto{font-size:14px; line-height:20px; color:#6F716A; text-decoration:none; white-space:nowrap} .ov .card .end .end-ai .ai-proto i{font-style:normal} .ov .card .end .end-ai .ai-proto:hover{color:var(--ink); text-decoration:underline; text-underline-offset:4px}
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
@@ -10240,6 +10242,7 @@ html body .chbar a.cur{color:#191A18 !important}
 .wp-head{margin:0 0 24px}
 .ov .card .wp-head p{max-width:none}
 html body .ov .card .wp-tag{font-family:var(--display) !important; font-size:17px !important; line-height:24px !important; color:var(--ink) !important; margin:0 !important; display:flex; gap:8px} html body .ov .card .wp-tag b{font-weight:400 !important; color:#767972 !important; margin:0}
+html body .ov .card .wp-tag{align-items:baseline} html body .ov .card .wp-tag .wp-ai{margin-left:auto; font-family:var(--font); font-size:13px; line-height:18px; color:#767972}
 html body .ov .card .wp-stat{font-family:var(--font) !important; font-size:13px !important; line-height:18px !important; color:#767972 !important; margin:4px 0 0 0 !important; display:flex; gap:8px}
 html body .ov .card .wp-stat a{color:inherit !important; font-size:inherit !important; text-decoration:underline; text-underline-offset:2px; margin:0} .wp-stat a::before{content:"\00b7\00a0\00a0"; text-decoration:none; display:inline}
 .wp-stage figure{margin:0 !important; width:auto !important; max-width:none !important}
@@ -10288,6 +10291,7 @@ html body .ov .card .wp-stat a{color:inherit !important; font-size:inherit !impo
     opener.click();
     requestAnimationFrame(refit); setTimeout(refit, 120); setTimeout(refit, 500);
   }
+  window.openProto=function(id){ var p=document.getElementById(id); if(p) openProto(p); };   /* used by the write-ups' "Prototype built with AI" link */
   var LIVE={q1:true, q2:true, q3:true, q4:true, q5:true};   /* every chapter card opens its prototype in the pop-up */
   /* no write-up to link to: the button plays that chapter's 1-minute film instead */
   more.addEventListener('click', function(e){ var vn=more.dataset.vid; if(!vn) return; e.preventDefault(); e.stopImmediatePropagation();
@@ -10302,5 +10306,6 @@ html body .ov .card .wp-stat a{color:inherit !important; font-size:inherit !impo
   if(ovl) new MutationObserver(function(){ if(gone()) giveBack(); }).observe(ovl, {attributes:true, attributeFilter:['class']});
 })();
 </script>
+<script>document.addEventListener('click', function(e){ var a=e.target.closest('a.ai-proto'); if(!a || !window.openProto) return; e.preventDefault(); e.stopPropagation(); window.openProto(a.dataset.proto); });</script>
 </body>
 </html>
