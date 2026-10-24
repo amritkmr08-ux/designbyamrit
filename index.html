@@ -1657,7 +1657,7 @@ section.closing{position:relative}
 @media (min-width:901px){
   section.closing{min-height:440px; display:flex; align-items:center; padding-bottom:50px !important; margin-top:80px !important}
   section.closing p{position:relative; z-index:2}
-  .closing-bush{display:block; position:absolute; right:-90px; bottom:0; height:140px; width:auto; transform:scaleX(-1); z-index:1; pointer-events:none; -webkit-user-select:none; user-select:none}
+  .closing-bush{display:block; position:absolute; right:-90px; bottom:0; height:160px; width:auto; transform:scaleX(-1); z-index:1; pointer-events:none; -webkit-user-select:none; user-select:none}
   .closing-art{display:block; position:absolute; right:40px; bottom:-20px; height:470px; width:auto; z-index:0; pointer-events:none; clip-path:inset(0 0 20px 0); -webkit-user-select:none; user-select:none}
 }
 </style>
@@ -1730,7 +1730,7 @@ section.closing{position:relative}
   <a href="#q5"><b>05</b><span>Does it need me now, or can it wait?</span></a>
 </nav>
 <main id="work">
-  <div class="workhead"><span class="workhead-l">CLM Stories</span></div>
+  <div class="workhead"><span class="workhead-l">Five questions about contract AI</span></div>
   <div class="chapters" id="chapters">
   <article class="piece" data-unit="search" id="q1">
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
@@ -9997,7 +9997,7 @@ body .menu{font-size:15.5px; line-height:22px}
 .ov #wv.dg .wv-vid{background:#ECEEE6 !important}
 .ov #wv.dg .wv-vid video{width:100% !important; height:auto !important; aspect-ratio:1.45 !important; object-fit:contain !important; background:#ECEEE6 !important}
 /* cards: a soft shadow under the card on hover, so it reads as clickable */
-@media (hover:hover){ html body #chapters.lay-rows .piece{transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important} }
+@media (hover:hover){ html body #chapters.lay-rows .piece{transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important} }
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
@@ -10093,6 +10093,9 @@ figure.tested figcaption{margin-top:10px;font-size:13px;color:#767972}
  html body #chapters.lay-rows{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) !important; gap:24px !important; width:auto !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important}
  html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{display:flex !important; flex-direction:column !important; grid-column:auto !important; order:0 !important; padding:24px 24px 26px !important; margin:0 !important; background:transparent !important; border:1px solid rgba(25,26,24,.2) !important; border-radius:20px !important; box-shadow:none !important; transform:none !important; cursor:pointer}
  html body #chapters.lay-rows .piece:hover{border-color:rgba(25,26,24,.42) !important; box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important}   /* a soft shadow under the card on hover */
+ /* the same lift for every card: Proof and Reach had stronger rules that held them flat */
+ @media (hover:hover){ html body #chapters.lay-rows .piece:hover, html body #chapters.lay-rows .piece:nth-child(even):hover, html body #chapters.lay-rows #q2:hover, html body #chapters.lay-rows .piece:focus-within, html body #chapters.lay-rows .piece:nth-child(even):focus-within, html body #chapters.lay-rows #q2:focus-within{border-color:rgba(25,26,24,.42) !important; transform:translateY(-2px) !important; box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important} }
+ @media (prefers-reduced-motion:reduce){ html body #chapters.lay-rows .piece:hover, html body #chapters.lay-rows .piece:nth-child(even):hover, html body #chapters.lay-rows #q2:hover{transform:none !important} }
  html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{align-items:stretch !important; justify-content:flex-start !important}
  html body #chapters.lay-rows .piece > .ptxt, html body #chapters.lay-rows .piece > .prose{width:auto !important; align-self:stretch !important}
  html body #chapters.lay-rows .piece > figure, html body #chapters.lay-rows .piece .rowmeta, html body #chapters.lay-rows .piece .ex-top, html body #chapters.lay-rows .piece > .ex-mob{display:none !important}
@@ -10168,7 +10171,7 @@ figure.tested figcaption{margin-top:10px;font-size:13px;color:#767972}
 .workhead-l{font-family:'Inter',var(--font); font-size:15.5px; line-height:22px; color:#5F625C}
 .workhead .layt{margin:0 !important}
 @media (min-width:901px){ #work .workhead{position:relative; z-index:2; margin-top:-35px; margin-bottom:84px; padding-top:0} #work .workhead .workhead-l{background:#F1F1EE; padding-right:14px} #work .workhead .layt{box-shadow:0 0 0 10px #F1F1EE} }   /* the toggle and label sit on the divider line */
-/* CLM Stories shows in both layouts */ #work:has(#chapters:not(.lay-rows)) .workhead-l{padding-left:7px}   /* the label shows only in the list view */
+/* the section label shows in both layouts */ #work:has(#chapters:not(.lay-rows)) .workhead-l{padding-left:7px}   /* the label shows only in the list view */
 @media (max-width:900px){ .workhead{display:none} }
 </style>
 <script>(function(){ var h=document.querySelector('.workhead'), t=document.querySelector('#chbar .layt'); if(h && t) h.appendChild(t); })();</script>
