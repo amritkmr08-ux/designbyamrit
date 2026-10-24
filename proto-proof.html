@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof — review with assist bars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<script>(function(q,h){ if(/[?&]embed/.test(q) || location.protocol==='about:') h.classList.add('embed');
+  if(/[?&]bare/.test(q)) h.classList.add('bare'); })('?embed&bare', document.documentElement);</script>
+<style>
+/* Amrit's tokens. One card, one reading column, one margin. Everything lines up on those three edges. */
+:root{
+  --paper:#FFFFFF; --ink:#191A18; --muted:#5F625C; --faint:#6F716A; --line:#D7D8D2; --rule:#C9CAC4;
+  --mark:#DCE5D3; --accent:#3D5A45; --wrong:#F3E3DA;
+  --display:"Geist",-apple-system,sans-serif; --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  /* Sirion DS 2.0 tokens (from the Buttons page in Figma) */
+  --ds-brand:#0d5e68; --ds-brand-hover:#0b4e57; --ds-brand-alt:#357981; --ds-border:#e2e1db; --ds-bg:#fafafa; --ds-bg-hover:#e2e1db;
+  --ds-text-2:#444341; --ds-text-3:#5f5e5a; --ds-fg-4:#888782; --ds-fg-4-hover:#6e6c68;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --meta:#357981; --clause:#6FA3A8; --oblig:#6B72D6; --sla:#9C63A8;
+}
+*{margin:0; padding:0; box-sizing:border-box}
+html, body{background:var(--paper)}
+body{font-family:var(--font); color:var(--ink); -webkit-font-smoothing:antialiased}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+.unit{max-width:1080px; margin:0 auto; padding:40px 24px}
+html.embed .unit{padding:0 0 4px}
+
+/* the same document viewer as Reach: dark top bar, warm grey canvas, a white page. The margin sits on the canvas, beside the page. */
+.stage{position:relative; background:#141414; border:1px solid #2A2A2A; border-radius:16px; overflow:hidden}
+.doctoolbar{height:44px; display:flex; align-items:center; gap:24px; padding:0 24px; background:#1a1a19; border-bottom:1px solid #252523; position:relative; z-index:5; font-family:var(--font)}
+.doctoolbar .spacer{flex:1}
+.tbtn{display:flex; align-items:center; gap:6px; font-size:12px; color:#c3c2b8; background:none; border:0; padding:0; cursor:default}
+.count{display:flex; align-items:center; gap:10px; font-size:12px; line-height:20px; color:#8a8984; white-space:nowrap; font-variant-numeric:tabular-nums}
+.count b{font-weight:500; color:#fff}
+.meter{width:64px; height:3px; border-radius:3px; background:#323230; overflow:hidden}
+.meter i{display:block; height:100%; width:0; background:#86aeb3; border-radius:3px; transition:width .5s var(--ease)}
+
+.scroll{height:640px; overflow-y:auto; scrollbar-width:thin; position:relative; background:#FFFFFF}
+html.demoing .scroll{overflow-y:hidden}
+.grid{position:relative; display:grid; grid-template-columns:600px 272px; justify-content:center; column-gap:32px; padding:36px 24px 120px}
+
+/* the page, set the way Reach sets it */
+.doc{background:#fff; color:#252525; font-family:var(--font); padding:40px 56px 56px; border-radius:6px; box-shadow:0 0 0 1px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.04)}
+.doc h2{font-size:14px; line-height:20px; font-weight:600; margin:0 0 14px}
+.doc h3{font-size:12px; line-height:20px; font-weight:600; letter-spacing:.02em; margin:22px 0 10px}
+.doc p{font-size:13px; line-height:20px; color:#252525; margin:0 0 12px}
+/* quick scan, the same grammar as the template viewer: every value the AI read carries a faint fill;
+   hover lifts it and names it in a tab on its top-right corner. The open one needs no tab: its card already says what it is */
+.src{position:relative; border-radius:3px; padding:2px 0; transition:background-color .18s ease, box-shadow .18s ease; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+.src.has{background:rgba(53,121,129,.09); cursor:pointer}
+.src.has.done{background:rgba(53,121,129,.045)}
+.src.hot{background:rgba(53,121,129,.20)}
+.src.lit, .src.lit.hot{background:rgba(53,121,129,.14); box-shadow:inset 0 -2px 0 0 #357981}
+.src.first.hot::after{content:attr(data-name); position:absolute; left:0; bottom:calc(100% + 5px);
+  background:#1F4A50; color:#fff; font-family:var(--font); font-size:11px; line-height:16px; font-weight:500; letter-spacing:.1px;
+  padding:3px 8px; border-radius:6px; box-shadow:0 0 0 2px #fff, 0 6px 14px -4px rgba(25,26,24,.35); white-space:nowrap; pointer-events:none; z-index:5;
+  animation:chip .16s ease both}
+@keyframes chip{from{opacity:0; transform:translateY(3px)} to{opacity:1; transform:none}}
+.src.lit.bad{background:#F8E4D8; box-shadow:inset 0 -2px 0 0 #C9825F}
+
+.src.pulse{animation:pulse .9s ease}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 2px rgba(134,174,179,.22)} 45%{box-shadow:0 0 0 5px rgba(134,174,179,.3)}}
+.tgt{background-image:linear-gradient(rgba(134,174,179,.22),rgba(134,174,179,.22)); background-repeat:no-repeat; background-size:0% 100%}
+.tgt.drag{background-size:100% 100%; transition:background-size .8s linear}
+
+
+/* a clause is a whole passage: a quiet rule down its left edge, and on hover the passage lifts with its own tab */
+.doc p.src.cl{position:relative; padding:6px 12px; margin:0 -12px 12px; border-radius:6px; background:transparent; box-shadow:inset 2px 0 0 rgba(53,121,129,.35)}
+.doc p.src.cl.done{box-shadow:inset 2px 0 0 rgba(53,121,129,.18)}
+.doc p.src.cl.hot{background:rgba(53,121,129,.07); box-shadow:inset 2px 0 0 rgba(53,121,129,.7)}
+.doc p.src.cl.lit, .doc p.src.cl.lit.hot{background:rgba(53,121,129,.07); box-shadow:inset 3px 0 0 #357981}
+.doc p.src.cl .src.hot{background:rgba(53,121,129,.22)}
+/* a clause has room of its own: its name sits inside the passage, top right, instead of over the heading above */
+.doc p.src.cl.first.hot::after{left:auto; right:10px; bottom:auto; top:-11px; animation:none}
+
+/* the margin: quiet rows level with their words, like comments beside a page */
+.margin{position:relative}
+.bar{position:absolute; left:0; right:0; border-radius:8px; background:transparent;
+  transition:top .6s var(--ease), background-color .2s ease, box-shadow .25s ease, opacity .3s ease, transform .45s var(--ease)}
+.bar.pre{opacity:0; transform:translateX(12px)}
+.bar .row{display:flex; align-items:center; gap:12px; height:34px; padding:0 12px; cursor:pointer; border-radius:8px; transition:background-color .15s}
+.bar .nm{flex:1; min-width:0; font-size:13px; line-height:19px; color:var(--ds-text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar .st{font-size:12px; color:var(--faint); white-space:nowrap}
+.bar .st svg{display:block}
+.bar:not(.open) .row:hover{background:transparent}
+.bar.done .nm{color:var(--faint)}
+.bar.done .shape{opacity:.35}
+.bar.no .nm{color:var(--faint); text-decoration:line-through; text-decoration-color:var(--rule)}
+.bar.open{background:#fff; border-radius:12px; z-index:2; box-shadow:0 0 0 1px rgba(25,26,24,.06), 0 12px 24px -8px rgba(25,26,24,.12), 0 2px 4px -1px rgba(25,26,24,.04); animation:card .4s var(--ease) both}
+@keyframes card{from{opacity:.6; transform:translateY(4px)} to{opacity:1; transform:none}}
+.bar.open .row{cursor:default; height:40px; padding:0 18px; margin-top:2px; gap:12px}
+.bar.open .nm{font-size:12px; line-height:16px; font-weight:500; color:var(--ds-text-3); letter-spacing:.01em}
+.bar.open .st{display:none}
+
+.shape{flex:0 0 8px; width:8px; height:8px}
+.s-meta{border-radius:50%; background:var(--meta)}
+.s-clause{background:var(--clause); border-radius:1.5px}
+.s-oblig{background:var(--oblig); clip-path:polygon(50% 4%, 100% 96%, 0 96%)}
+.s-sla{background:var(--sla); transform:rotate(45deg) scale(.82); border-radius:1px}
+
+/* inside an open row: the value, the reason, where from, and one clear action */
+.body{display:none; padding:2px 18px 18px}
+.bar.open .body{display:block}
+.val{display:flex; align-items:flex-start; gap:10px}
+.v{flex:1; min-width:0; font-family:var(--font); font-size:14px; line-height:20px; font-weight:500; color:var(--ink); outline:none; border-radius:6px; margin:-2px -6px; padding:2px 6px; transition:background-color .2s, box-shadow .2s}
+.v[contenteditable="true"]{background:#fff; box-shadow:0 0 0 1.5px #0d5e68; cursor:text}
+.tick{margin-top:1px; width:18px; height:18px; flex:0 0 18px; border-radius:50%; background:#0d5e68; display:grid; place-items:center; transform:scale(0); transition:transform .45s cubic-bezier(.22,.61,.36,1)}
+.bar.ticked .tick{transform:scale(0)}
+.tick{display:none}
+.why{margin-top:6px; font-size:12.5px; line-height:19px; color:var(--ds-text-3); transition:opacity .25s ease}
+.why.swap{opacity:0}
+.bar.picking .why{color:#0d5e68}
+.bar.picking .why::before{content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:#0d5e68; margin-right:8px; vertical-align:2px; animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.bar .ref{display:none}
+.bar.open .ref{display:block; padding:2px 9px; border-radius:999px; background:rgba(53,121,129,.10); font-size:11.5px; line-height:16px; font-weight:500; color:#2A5E64; transition:background-color .2s}
+.bar .ref:hover, .bar .ref.fhover{background:rgba(53,121,129,.2)}
+.acts{display:flex; align-items:center; gap:4px; margin-top:18px}
+.acc{display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 14px; border-radius:8px; background:var(--ds-brand); color:#fff; font-size:12.5px; line-height:16px; font-weight:500; margin-right:8px; box-shadow:0 1px 2px rgba(13,94,104,.25); transition:background-color .2s, transform .15s}
+.acc kbd{font:inherit; font-size:11px; line-height:16px; padding:0 5px; border-radius:4px; background:rgba(255,255,255,.14); color:rgba(255,255,255,.75)}
+.acc:hover, .acc.fhover{background:var(--ds-brand-hover)}
+.acc:active{transform:translateY(1px)}
+.acc:focus-visible, .ic:focus-visible{outline:none; box-shadow:0 0 0 2px var(--ds-bg), 0 0 0 4px var(--ds-brand-alt)}
+.ic{width:30px; height:30px; border-radius:8px; display:grid; place-items:center; color:var(--ds-fg-4); transition:background-color .2s, color .2s}
+.ic:hover, .ic.fhover{background:var(--ds-bg); color:var(--ds-fg-4-hover)}
+.ic.on{background:rgba(134,174,179,.2); color:#0d5e68}
+.ic svg{display:block}
+
+/* the loop bar, same as the other two prototypes */
+.demobar{margin-top:14px}
+html.bare .demobar{display:none}
+.dline{position:relative; height:2px; border-radius:2px; background:var(--line); overflow:hidden}
+.dline i{position:absolute; left:0; top:0; bottom:0; width:0; background:var(--accent)}
+.drow{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:10px; min-height:28px}
+.dlab{font-size:13px; line-height:20px; color:var(--faint)}
+.dlab b{font-family:var(--display); font-weight:400; color:var(--accent); margin-right:8px}
+.dtry{font-family:var(--display); font-size:14px; font-weight:500; white-space:nowrap}
+.dtry:hover{text-decoration:underline; text-underline-offset:3px}
+.demobar.trying .dline i{width:0 !important; transition:none !important}
+
+#fcur{position:fixed; left:0; top:0; z-index:50; pointer-events:none; width:22px; height:22px; opacity:0; transition:opacity .3s ease}
+#fcur.in{opacity:1}
+#fcur svg{display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); transition:transform .12s ease}
+#fcur.down svg{transform:scale(.86)}
+
+
+@media (prefers-reduced-motion:reduce){ .bar, .tgt.drag, .src{transition:none} }
+
+/* primary action and the hover name in ink, not teal: teal stays for what the AI read */
+.acc{background:#191A18; box-shadow:0 1px 2px rgba(25,26,24,.25)}
+.acc:hover, .acc.fhover{background:#000}
+.acc:focus-visible{box-shadow:0 0 0 2px var(--ds-bg), 0 0 0 4px #191A18}
+/* the three tools sit together as one quiet group, apart from Accept */
+.acts{gap:0}
+.acc{margin-right:12px}
+.tools{display:inline-flex; align-items:center; height:30px; padding:0 2px; border:1px solid #D7D8D2; border-radius:8px; background:#fff}
+.tools .ic{width:28px; height:26px; border-radius:6px; color:#5F625C}
+.tools .ic + .ic{margin-left:2px}
+.tools .ic:hover, .tools .ic.fhover{background:#F1F1EE; color:#191A18}
+.tools .ic.on{background:#E6EEF0; color:#0d5e68}
+.tools .rj:hover, .tools .rj.fhover{background:#FBEDEB; color:#B42318}
+/* where it came from: a quiet outlined link, not a filled badge */
+.bar.open .ref{padding:1px 9px; background:transparent; border:1px solid #D7D8D2; color:#5F625C; font-size:11.5px; line-height:16px; font-weight:500; transition:border-color .2s, color .2s}
+.bar .ref:hover, .bar .ref.fhover{background:transparent; border-color:#191A18; color:#191A18}
+.src.first.hot::after{background:#191A18}
+/* the open card takes more room to the right, so the value and reason read on fewer lines */
+.bar.open{right:-56px}
+
+/* while the reader holds it, the frame's edge goes light: the outline steps back and the lift from the page says it is theirs */
+.stage{border-color:#D7D8D2; transition:border-color .25s ease}
+html:hover .stage{border-color:#C2C4BD}
+/* the document fades out before the card edge, so text never runs into the border */
+.stage::after{content:""; position:absolute; left:1px; right:1px; bottom:0; height:48px; background:linear-gradient(rgba(255,255,255,0), #FFFFFF 80%); border-radius:0 0 15px 15px; pointer-events:none; z-index:5}
+/* no running count in the bar: the ticks on the rows say what is done */
+#count{display:none}
+
+/* open and close as one movement: the card grows from its row and shrinks back into it; the done mark arrives on the row */
+.bar.open{animation:none}
+.bar.sizing{overflow:hidden; transition:top .6s var(--ease), height .6s var(--ease), background-color .25s ease, box-shadow .3s ease}
+.bar.sizing.closing{transition:top .45s var(--ease), height .45s var(--ease), background-color .25s ease, box-shadow .3s ease}
+.bar .row{transition:background-color .15s, height .3s var(--ease), padding .3s var(--ease)}
+.bar .body{transition:opacity .4s ease .18s}
+.bar.open.grow .body{opacity:0; transition:none}
+.bar.closing .body{display:block; opacity:0; transition:opacity .28s ease}
+.bar.done .st, .bar.no .st{animation:stin .34s var(--ease) .18s both}
+@keyframes stin{from{opacity:0; transform:scale(.6)} to{opacity:1; transform:none}}
+
+html.embed, html.embed body{background:transparent !important}
+
+/* a card that is simply there when the demo restarts does not arrive again */
+.bar.open.quiet{animation:none}
+
+/* the source is the card: no separate chip for it */
+.bar .ref, .bar.open .ref{display:none !important}
+/* with a card open, only its words stay marked; the rest of the contract goes quiet. pointing at a word still names it */
+#doc.focus .src.has:not(.lit):not(.hot){background:transparent; box-shadow:none}
+#doc.focus p.src.cl:not(.lit):not(.hot){background:transparent; box-shadow:none}
+
+/* a whole clause is marked the same way as a value: one soft wash, no bracket */
+.doc p.src.cl, .doc p.src.cl.done, .doc p.src.cl.hot, .doc p.src.cl.lit, .doc p.src.cl.lit.hot{box-shadow:none}
+.doc p.src.cl{background:rgba(53,121,129,.06)}
+.doc p.src.cl.done{background:rgba(53,121,129,.03)}
+.doc p.src.cl.hot{background:rgba(53,121,129,.12)}
+.doc p.src.cl.lit, .doc p.src.cl.lit.hot{background:rgba(53,121,129,.10)}
+.doc p.src.cl.lit.bad{background:#F8E4D8}
+
+/* the margin, on Sirion DS 2.0: one row height, one text size, status as a quiet pill, the open card with 16px padding and DS buttons */
+.bar .row{height:36px; padding:0 12px; gap:10px}
+.bar .nm{font-size:13px; line-height:19px; color:#444341}
+.bar.done .nm{color:#888782}
+.bar .st{font-size:12px; line-height:16px; color:#5f5e5a}
+.pill{display:inline-flex; align-items:center; gap:4px; height:20px; font-style:normal; padding:0 8px 0 6px; border-radius:999px; font-size:11px; line-height:16px; font-weight:500}
+.pill svg{width:10px; height:10px}
+.pill.ok{background:#e6eeef; color:#0b4e57}
+.pill.fix{background:#fef9c3; color:#a16207; padding-left:8px}
+.pill.fix svg{display:none}
+.pill.no{background:#f0efed; color:#5f5e5a; padding-left:8px}
+.bar.open{border-radius:12px; box-shadow:0 0 0 1px #e2e1db, 0 1px 2px rgba(26,26,25,.06), 0 12px 32px -12px rgba(26,26,25,.18)}
+.bar.open .row{height:40px; padding:0 16px; margin-top:4px}
+.bar.open .nm{font-size:12px; line-height:16px; font-weight:500; color:#5f5e5a; letter-spacing:0}
+.body{padding:0 16px 16px}
+.v{font-size:14px; line-height:20px; font-weight:500; color:#1a1a19}
+.why{margin-top:4px; font-size:12px; line-height:18px; color:#5f5e5a}
+.acts{margin-top:14px}
+.acc{height:32px; padding:0 12px; border-radius:8px; font-size:13px; line-height:19px; margin-right:8px; box-shadow:none}
+.acc, html.paper .acc{background:#0d5e68}
+.acc:hover, .acc.fhover, html.paper .acc:hover, html.paper .acc.fhover{background:#0b4e57}
+.acc:focus-visible{box-shadow:0 0 0 2px #fff, 0 0 0 4px #0d5e68}
+.tools{height:32px; padding:0 2px; border:1px solid #e2e1db; border-radius:8px; background:#fafafa}
+.tools .ic{width:28px; height:28px; border-radius:6px; color:#5f5e5a}
+.tools .ic:hover, .tools .ic.fhover{background:#f0efed; color:#1a1a19}
+.tools .ic.on{background:#e6eeef; color:#0d5e68}
+.tools .rj:hover, .tools .rj.fhover{background:#fee2e2; color:#991b1b}
+.tick{background:#0d5e68}
+
+/* card layout, after the references: air, big radius, one left edge, pills for actions */
+.bar.open{border-radius:20px; box-shadow:0 1px 2px rgba(26,26,25,.05), 0 16px 40px -16px rgba(26,26,25,.20); background:#fff}
+.bar.open .row{height:auto; padding:22px 24px 0; margin-top:0}
+.bar.open .nm{font-size:12px; line-height:16px; color:#888782}
+.body{padding:10px 24px 22px}
+.v{font-size:15px; line-height:22px; font-weight:500; color:#1a1a19; margin:0; padding:0; border-radius:0}
+.why{margin-top:6px; font-size:13px; line-height:20px; color:#5f5e5a}
+.acts{margin-top:20px; gap:8px}
+.acc{height:36px; padding:0 16px; border-radius:999px; font-size:13px; margin-right:4px}
+.tools{height:36px; padding:0 4px; border:0; border-radius:999px; background:#f0efed}
+.tools .ic{width:30px; height:28px; border-radius:999px}
+.tools .ic:hover, .tools .ic.fhover{background:#fff; color:#1a1a19; box-shadow:0 1px 2px rgba(26,26,25,.08)}
+.bar .row{padding:0 24px}
+.pill{height:22px; padding:0 10px 0 8px; font-size:12px}
+.pill.fix, .pill.no{padding-left:10px}
+
+/* the paper has no edge of its own; the canvas does the separating */
+.doc{box-shadow:none; border-radius:0}
+.acc, html.paper .acc{background:#1a1a19}
+.acc:hover, .acc.fhover, html.paper .acc:hover, html.paper .acc.fhover{background:#000}
+.acc:focus-visible{box-shadow:0 0 0 2px #fff, 0 0 0 4px #1a1a19}
+.tick{background:#1a1a19}
+/* an open value is marked by its wash alone, no underline */
+.src.lit, .src.lit.hot{box-shadow:none; background:rgba(53,121,129,.16)}
+.src.lit.bad{box-shadow:none}
+.bar.open{box-shadow:0 0 0 1px #e2e1db, 0 1px 2px rgba(26,26,25,.05), 0 16px 40px -16px rgba(26,26,25,.20)}
+
+/* a card opens in order: the box grows, the words settle, the buttons arrive last, all on one easing */
+.bar .body{transition:none; opacity:1}
+.bar .body > *{transition:opacity .32s var(--ease), transform .45s var(--ease)}
+.bar.open.grow .body > *{opacity:0; transform:translateY(6px); transition:none}
+.bar.open .body .val{transition-delay:.14s}
+.bar.open .body .why{transition-delay:.22s}
+.bar.open .body .acts{transition-delay:.32s}
+.bar.open.quiet .body > *{transition:none}
+.bar.closing .body > *{opacity:0; transform:none; transition:opacity .3s ease}
+
+/* a touch tighter: 20px all round, closer gaps inside */
+.bar.open .row{padding:18px 20px 0}
+.body{padding:8px 20px 18px}
+.why{margin-top:4px}
+.acts{margin-top:16px}
+
+/* the words a value was read from: one green, the same one the site uses for marks */
+.src.lit, .src.lit.hot{background:#D1EFDB}
+.src.hot, .doc p.src.cl .src.hot{background:#BFE6CD}
+.doc p.src.cl{background:rgba(209,239,219,.35)}
+.src.has.done{background:rgba(209,239,219,.3)}
+
+/* one icon column: closed rows and the open card share the same 20px left edge; shapes sized by eye, not by box */
+.bar .row{padding:0 20px}
+.bar.open .row{gap:10px}
+.s-oblig{clip-path:polygon(50% 0, 100% 100%, 0 100%); transform:scale(1.15) translateY(-.3px)}
+.s-clause{transform:scale(.9)}
+.s-sla{transform:rotate(45deg) scale(.76)}
+.bar.done .shape{opacity:.35}
+
+/* already tagged words keep a light grey wash, so the reader can browse the contract and see what is tagged; hover and open stay green */
+.src.has:not(.lit):not(.hot), #doc.focus .src.has:not(.lit):not(.hot){background:rgba(25,26,24,.06)}
+.doc p.src.cl:not(.lit):not(.hot), #doc.focus p.src.cl:not(.lit):not(.hot){background:rgba(25,26,24,.03)}
+</style>
+</head>
+<body>
+<section class="unit">
+  <div class="stage" id="stage">
+    <div class="doctoolbar">
+      <span class="tbtn"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3" stroke-linecap="round"/></svg>SaaS Agreement — Northbridge Retail.docx</span>
+      <div class="spacer"></div>
+      <p class="count" id="count"></p>
+      <span class="tbtn"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v7M5 7.5L8 10.5l3-3M3.5 13h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</span>
+    </div>
+    <div class="scroll" id="scroll">
+      <div class="grid" id="grid">
+        <article class="doc" id="doc">
+          <h2>Software as a Service Agreement</h2>
+          <p>This <span class="src" data-a="type" data-c="the opening line">Software as a Service Agreement</span> (&ldquo;Agreement&rdquo;) is made on <span class="src" data-a="eff" data-c="the opening line">14 March 2025</span> between <span class="src" data-a="parties" data-c="the opening line">Northbridge Retail Ltd</span> (&ldquo;Customer&rdquo;) and <span class="src" data-a="parties" data-c="the opening line">Halcyon Systems, Inc.</span>, a Delaware corporation (&ldquo;Halcyon&rdquo;).</p>
+          <h3>1&nbsp;&nbsp;DEFINITIONS</h3>
+          <p>1.1 &ldquo;Service&rdquo; means the hosted software Halcyon makes available to Customer under an Order Form, including updates and the documentation that comes with it.</p>
+          <p>1.2 &ldquo;Confidential Information&rdquo; means any information one party gives the other that is marked confidential, or that a reasonable person would treat as confidential.</p>
+          <h3>2&nbsp;&nbsp;TERM AND RENEWAL</h3>
+          <p>2.1 This Agreement starts on the Effective Date and continues for an initial term of <span class="src" data-a="term" data-c="clause 2.1">thirty-six (36) months</span>.</p>
+          <p>2.2 It then renews automatically for further <span class="src" data-a="renew" data-c="clause 2.2">twelve (12) month</span> periods unless either party gives written notice of non-renewal at least <span class="src tgt" data-a="notice-fix" data-c="clause 2.2" id="tgt">sixty (60) days</span> before <span class="src" data-a="notice-wrong" data-c="clause 2.2">the end of the current term</span>.</p>
+          <h3>3&nbsp;&nbsp;FEES AND PAYMENT</h3>
+          <p>3.1 Customer shall pay each invoice <span class="src" data-a="pay" data-c="clause 3.1">within thirty (30) days</span> of the invoice date. Late amounts carry interest at one percent (1%) per month, or the highest rate the law allows if that is lower.</p>
+          <p>3.2 Halcyon may raise the fees once a year, on renewal, by no more than <span class="src" data-a="priceup" data-c="clause 3.2">the change in the Consumer Price Index or five percent (5%), whichever is lower</span>.</p>
+          <h3>4&nbsp;&nbsp;SERVICE LEVELS</h3>
+          <p>4.1 Halcyon will make the Service available <span class="src" data-a="uptime" data-c="clause 4.1">99.9% of the time in each calendar month</span>, not counting maintenance announced at least forty-eight (48) hours ahead.</p>
+          <p>4.2 If availability falls below that level, Customer receives a credit of <span class="src" data-a="credits" data-c="clause 4.2">ten percent (10%) of the monthly fee for each full 0.5% below it</span>, up to half of that month&rsquo;s fee.</p>
+          <h3>5&nbsp;&nbsp;CONFIDENTIALITY</h3>
+          <p class="src cl" data-a="cl-conf" data-c="clause 5.1">5.1 Each party shall keep the other&rsquo;s Confidential Information confidential and use it only to perform this Agreement. It may share it with employees and advisers who need to know it and are bound by the same duty. These obligations continue for three (3) years after this Agreement ends.</p>
+          <h3>6&nbsp;&nbsp;DATA PROTECTION</h3>
+          <p>6.1 Halcyon shall tell Customer about any security incident affecting Customer data <span class="src" data-a="breach" data-c="clause 6.1">within seventy-two (72) hours</span> of becoming aware of it.</p>
+          <p class="src cl" data-a="cl-subp" data-c="clause 6.2">6.2 Halcyon may use a sub-processor to handle Customer data only with Customer&rsquo;s prior written approval, and remains responsible for anything that sub-processor does.</p>
+          <h3>7&nbsp;&nbsp;LIMITATION OF LIABILITY</h3>
+          <p class="src cl" data-a="cl-lol" data-c="clause 7.1">7.1 Each party&rsquo;s total liability under this Agreement shall not exceed <span class="src" data-a="cap" data-c="clause 7.1">the fees paid by Customer in the twelve (12) months</span> before the event that gave rise to the claim. This limit does not apply to a breach of clause 5 or to either party&rsquo;s indemnity obligations.</p>
+          <h3>8&nbsp;&nbsp;TERMINATION</h3>
+          <p class="src cl" data-a="cl-tconv" data-c="clause 8.1">8.1 Customer may end this Agreement for convenience at any time on ninety (90) days&rsquo; written notice to Halcyon.</p>
+          <p>8.2 Either party may end this Agreement if the other materially breaches it and does not put the breach right <span class="src" data-a="cure" data-c="clause 8.2">within thirty (30) days</span> of being told about it.</p>
+          <h3>9&nbsp;&nbsp;FORCE MAJEURE</h3>
+          <p class="src cl" data-a="cl-fm" data-c="clause 9.1">9.1 Neither party is liable for a delay caused by events beyond its reasonable control, including natural disasters, pandemic, war, strikes and power failures. If such an event lasts more than <span class="src" data-a="fmdays" data-c="clause 9.1">ninety (90) days</span>, the other party may terminate this Agreement.</p>
+          <h3>10&nbsp;&nbsp;ASSIGNMENT</h3>
+          <p class="src cl" data-a="cl-assign" data-c="clause 10.1">10.1 Neither party may assign this Agreement without the other&rsquo;s prior written consent, except to a successor of its whole business.</p>
+          <h3>11&nbsp;&nbsp;GOVERNING LAW</h3>
+          <p>11.1 This Agreement is governed by the laws of the <span class="src" data-a="law" data-c="clause 11.1">State of Delaware</span>, without regard to its conflict of laws rules.</p>
+        </article>
+        <aside class="margin" id="margin" aria-label="Values the AI found"></aside>
+      </div>
+    </div>
+  </div>
+  <div class="demobar" id="demobar">
+    <div class="dline"><i id="dfill"></i></div>
+    <div class="drow"><span class="dlab" id="dlab"><b>01</b>Hover to scan the contract</span><button class="dtry" id="dtry" type="button">I want to try this myself</button></div>
+  </div>
+</section>
+
+<script>
+/* ---------- the values the AI proposed. Sample data; the contract and names are made up. ---------- */
+const FIELDS0 = [
+  {id:'type',    kind:'meta',   name:'Agreement type',  value:'Software as a Service Agreement', src:'type',
+   why:'Named in the first sentence. The rest calls itself \u201cthis Agreement\u201d.'},
+  {id:'eff',     kind:'meta',   name:'Effective date',  value:'14 March 2025', src:'eff',
+   why:'The date the agreement is made. Clause 2.1 starts the term from it.'},
+  {id:'parties', kind:'meta',   name:'Parties',         value:'Northbridge Retail Ltd, Halcyon Systems, Inc.', src:'parties',
+   why:'Both are named first, each with the short name used after.'},
+  {id:'term',    kind:'meta',   name:'Initial term',    value:'36 months', src:'term',
+   why:'Counted from the Effective Date. Renewals are kept separate.'},
+  {id:'renew',   kind:'meta',   name:'Renewal term',    value:'12 months, automatic', src:'renew',
+   why:'It renews on its own unless someone gives notice in time.'},
+  {id:'notice',  kind:'meta',   name:'Non-renewal notice', value:'At the end of the term', src:'notice-wrong', wrong:true,
+   why:'Read from \u201cthe end of the current term\u201d. The clause says notice must come sixty days before that.',
+   fix:{value:'60 days', src:'notice-fix', why:'You pointed it at the right words. Kept as a correction the model learns from.'}},
+  {id:'pay',     kind:'oblig',  name:'Payment terms',   value:'30 days from invoice', src:'pay',
+   why:'When each invoice is due. Late interest is separate.'},
+  {id:'priceup', kind:'oblig',  name:'Price increase cap', value:'CPI or 5%, whichever is lower', src:'priceup',
+   why:'Once a year, only on renewal, and never above 5%.'},
+  {id:'uptime',  kind:'sla',    name:'Uptime',          value:'99.9% each month', src:'uptime',
+   why:'Measured each calendar month, announced maintenance left out.'},
+  {id:'credits', kind:'sla',    name:'Service credits', value:'10% per 0.5% missed, up to 50%', src:'credits',
+   why:'What Customer gets back when uptime is missed.'},
+  {id:'conf',    kind:'clause', name:'Confidentiality', value:'Mutual, lasts 3 years after the end', src:'cl-conf',
+   why:'Both parties are bound, and the duty outlives the Agreement.'},
+  {id:'breach',  kind:'oblig',  name:'Incident notice', value:'Within 72 hours', src:'breach',
+   why:'The clock starts when Halcyon becomes aware of it.'},
+  {id:'subp',    kind:'oblig',  name:'Sub-processors',  value:'Customer approval needed', src:'cl-subp',
+   why:'Halcyon also stays responsible for what they do.'},
+  {id:'lol',     kind:'clause', name:'Limitation of liability', value:'Capped, with carve-outs', src:'cl-lol',
+   why:'The cap does not cover confidentiality breaches or indemnities.'},
+  {id:'cap',     kind:'meta',   name:'Liability cap',   value:'Fees paid in the last 12 months', src:'cap',
+   why:'Both parties capped the same way, counted back from the event.'},
+  {id:'tconv',   kind:'clause', name:'Termination for convenience', value:'Customer only, 90 days\u2019 notice', src:'cl-tconv',
+   why:'Only Customer can walk away without a reason.'},
+  {id:'cure',    kind:'meta',   name:'Cure period',     value:'30 days', src:'cure',
+   why:'Time to fix a material breach before the other side can end it.'},
+  {id:'fm',      kind:'clause', name:'Force majeure',   value:'Present, mutual', src:'cl-fm',
+   why:'Covers both parties, with a list of example events.'},
+  {id:'fmdays',  kind:'meta',   name:'Force majeure termination', value:'After 90 days', src:'fmdays',
+   why:'How long an event can last before the other side may end the Agreement.'},
+  {id:'assign',  kind:'clause', name:'Assignment',      value:'Consent needed, except on a sale of the business', src:'cl-assign',
+   why:'A successor to the whole business can take it over without asking.'},
+  {id:'law',     kind:'meta',   name:'Governing law',   value:'Delaware, USA', src:'law',
+   why:'Named in the last clause of the agreement.'}
+];
+let F = [];
+const margin = document.getElementById('margin'), grid = document.getElementById('grid'), sc = document.getElementById('scroll'),
+      countEl = document.getElementById('count'), stageEl = document.getElementById('stage');
+let active = null, picking = null;
+
+const IC = {
+  edit:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.4 3.1a1.4 1.4 0 0 1 2 2L5.6 11.9l-2.8.8.8-2.8Z"/><path d="M9.3 4.2l2.5 2.5"/></svg>',
+  retag:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 5.2V3.5a1 1 0 0 1 1-1h1.7M10.8 2.5h1.7a1 1 0 0 1 1 1v1.7M13.5 10.8v1.7a1 1 0 0 1-1 1h-1.7M5.2 13.5H3.5a1 1 0 0 1-1-1v-1.7"/><path d="M8 5.6v4.8M6.9 5.6h2.2M6.9 10.4h2.2"/></svg>',
+  reject:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 4.4h10.4M6.3 4.4V3.2c0-.4.3-.7.7-.7h2c.4 0 .7.3.7.7v1.2M4.3 4.4l.6 8.4c0 .4.4.7.8.7h4.6c.4 0 .8-.3.8-.7l.6-8.4M6.8 7v4M9.2 7v4"/></svg>',
+  tick:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.2 5.2 4.2 7.1 7.9 3"/></svg>',
+  done:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#0d5e68" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.3 5.8 10 11 4.2"/></svg>'
+};
+const spans = a => [...document.querySelectorAll(`.src[data-a="${a}"]`)];
+const clauseOf = a => (spans(a)[0] || {}).dataset?.c || '';
+
+function tagSpans(){
+  document.querySelectorAll('.src').forEach(sp => { sp.classList.remove('has','first','done'); delete sp.dataset.name; });
+  const by = {};
+  F.forEach(f => (by[f.src] = by[f.src] || []).push(f));
+  Object.entries(by).forEach(([a, fs]) => { const ss = spans(a); ss.forEach((sp, i) => { sp.classList.add('has'); sp.classList.toggle('done', fs.every(f => f.state !== 'todo')); if(i === 0){ sp.classList.add('first'); sp.dataset.name = fs.map(f => f.name).join(' · '); } }); });
+}
+let hotA = null;
+function hot(a){
+  if(a === hotA) return;
+  if(hotA){ spans(hotA).forEach(s => s.classList.remove('hot')); F.forEach(f => { if(f.src === hotA) f.el.classList.remove('fhover'); }); }
+  hotA = a;
+  if(a){ spans(a).forEach(s => s.classList.add('hot')); F.forEach(f => { if(f.src === a) f.el.classList.add('fhover'); }); }
+}
+function build(){
+  F = FIELDS0.map(f => Object.assign({state:'todo'}, f));
+  margin.innerHTML = '';
+  F.forEach(f => {
+    const el = document.createElement('div'); el.className = 'bar'; f.el = el;
+    el.innerHTML = `<div class="row" role="button" tabindex="0"><span class="shape s-${f.kind}"></span><span class="nm">${f.name}</span><span class="st"></span><button type="button" class="ref"></button></div>
+      <div class="body"><div class="val"><span class="v"></span><span class="tick">${IC.tick}</span></div>
+        <p class="why"></p>
+        <div class="acts"><button class="acc" type="button">Accept</button>
+          <span class="tools"><button class="ic ed" type="button" title="Edit the value" aria-label="Edit">${IC.edit}</button><button class="ic rt" type="button" title="Point it at the right words" aria-label="Point it at the right words">${IC.retag}</button><button class="ic rj" type="button" title="Reject" aria-label="Reject">${IC.reject}</button></span></div></div>`;
+    fill(f);
+    el.querySelector('.row').addEventListener('click', () => { if(active !== f) open(f); });
+    el.querySelector('.acc').addEventListener('click', () => accept(f));
+    el.querySelector('.ed').addEventListener('click', () => edit(f));
+    el.querySelector('.rt').addEventListener('click', () => startPick(f));
+    el.querySelector('.rj').addEventListener('click', () => reject(f));
+    el.querySelector('.ref').addEventListener('click', e => { e.stopPropagation(); goTo(f); spans(f.src).forEach(s => { s.classList.remove('pulse'); void s.offsetWidth; s.classList.add('pulse'); }); });
+    margin.appendChild(el);
+  });
+  active = null; picking = null; counts(); tagSpans(); layout();
+}
+function fill(f){
+  const el = f.el;
+  el.querySelector('.v').textContent = f.value;
+  el.querySelector('.why').textContent = f.why;
+  el.querySelector('.ref').textContent = clauseOf(f.src);
+  el.querySelector('.st').innerHTML = f.state === 'ok' ? `<i class="pill ${f.corrected ? 'fix' : 'ok'}">${IC.done}${f.corrected ? 'Corrected' : 'Accepted'}</i>` : f.state === 'no' ? '<i class="pill no">Rejected</i>' : '';
+  el.classList.toggle('done', f.state === 'ok'); el.classList.toggle('no', f.state === 'no');
+}
+function counts(){
+  const n = F.filter(f => f.state !== 'todo').length;
+  countEl.innerHTML = `<span><b>${n}</b> of ${F.length} checked</span><span class="meter"><i style="width:${n/F.length*100}%"></i></span>`;
+  if(document.querySelector('.src.has')) tagSpans();
+}
+
+/* each bar sits level with its words; when two want the same line, the second waits underneath */
+const topOf = a => { const s = spans(a)[0]; return s ? s.getBoundingClientRect().top - grid.getBoundingClientRect().top - 36 : 0; };
+const hOf = f => f._h != null ? f._h : f.el.offsetHeight;   // a card mid-resize counts at the size it is heading to
+function layout(){
+  const order = [...F].sort((a,b) => topOf(a.src) - topOf(b.src) || FIELDS0.findIndex(x=>x.id===a.id) - FIELDS0.findIndex(x=>x.id===b.id));
+  let y = 0;
+  order.forEach(f => { const open = f.el.classList.contains('open') || f.el.classList.contains('closing'); const t = Math.max(topOf(f.src) - 7, y + (open ? 10 : 0)); f.el.style.top = t + 'px'; y = t + hOf(f) + (open ? 22 : 8); });
+  margin.style.minHeight = y + 'px';
+}
+
+function light(f){
+  document.querySelectorAll('.src.lit').forEach(s => s.classList.remove('lit','bad'));
+  document.getElementById('doc').classList.toggle('focus', !!f);
+  if(f) spans(f.src).forEach(s => s.classList.add('lit'));
+}
+/* one scroll, on the same curve as the cards; short distances are not worth moving the page for */
+const easeIO = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+let scrollRaf = 0;
+function glideScroll(to, ms = 560){
+  to = Math.max(0, Math.min(to, sc.scrollHeight - sc.clientHeight));
+  const from = sc.scrollTop, dy = to - from; cancelAnimationFrame(scrollRaf);
+  if(Math.abs(dy) < 24) return;
+  const t0 = performance.now();
+  const tick = now => { const k = Math.min(1, (now - t0) / ms); sc.scrollTop = from + dy * easeIO(k); if(k < 1) scrollRaf = requestAnimationFrame(tick); };
+  scrollRaf = requestAnimationFrame(tick);
+}
+function offScreen(f){ const sp = spans(f.src)[0]; if(!sp) return false; const r = sp.getBoundingClientRect(), v = sc.getBoundingClientRect(); return r.top < v.top + 8 || r.bottom > v.bottom - 8; }
+function goTo(f, smooth = true){
+  let want = topOf(f.src) + 36 - 110;
+  const cardBottom = margin.offsetTop + (parseFloat(f.el.style.top) || 0) + hOf(f);
+  if(cardBottom - want > sc.clientHeight - 24) want = cardBottom - sc.clientHeight + 24;   // the whole card lands in view, never cut by the edge
+  if(smooth) glideScroll(want); else sc.scrollTop = Math.max(0, want);
+}
+/* a card opens and closes by growing and shrinking in place, so the rows around it slide instead of jumping */
+function expand(f){
+  const el = f.el, row = el.querySelector('.row'); row.style.transition = 'none'; el.classList.add('open'); const nat = el.offsetHeight; row.style.transition = '';
+  f._h = nat; el.style.height = '34px'; el.classList.add('sizing', 'grow'); void el.offsetHeight;
+  layout();
+  requestAnimationFrame(() => { el.style.height = nat + 'px'; el.classList.remove('grow'); });
+  clearTimeout(f._t); f._t = setTimeout(() => { el.style.height = ''; el.classList.remove('sizing'); f._h = null; }, 640);
+}
+function collapse(f, done){
+  const el = f.el; el.style.height = el.offsetHeight + 'px';
+  el.classList.add('sizing', 'closing'); el.classList.remove('open'); f._h = 34; void el.offsetHeight;
+  el.style.height = '34px'; layout();
+  clearTimeout(f._t); f._t = setTimeout(() => { el.classList.remove('sizing', 'closing', 'ticked'); el.style.height = ''; f._h = null; if(done) done(); }, 480);
+}
+function open(f){
+  endPick();
+  F.forEach(x => { if(x !== f && x.el.classList.contains('open')) collapse(x); });
+  f.el.classList.remove('quiet'); active = f; light(f); expand(f); if(demo.running || offScreen(f)) goTo(f);
+}
+function openNow(f){ F.forEach(x => { x.el.classList.toggle('open', x === f); x.el.classList.toggle('quiet', x === f); }); active = f; light(f); layout(); sc.scrollTop = 0; }
+function close(){ F.forEach(x => x.el.classList.remove('open','ticked')); active = null; light(null); layout(); }
+function next(after){
+  const order = [...F].sort((a,b) => topOf(a.src) - topOf(b.src));
+  const i = order.indexOf(after);
+  return order.slice(i+1).concat(order.slice(0, i)).find(x => x.state === 'todo');
+}
+/* accept: the tick gets its own moment, then the card closes, then the next value and its words arrive */
+let accepting = false;
+function accept(f){
+  if(accepting) return; accepting = true; endPick(); commitEdit(f);
+  f.el.classList.add('ticked');
+  setTimeout(() => {
+    active = null; light(null);
+    collapse(f, () => { f.state = 'ok'; fill(f); counts(); accepting = false; const n = next(f); if(n) setTimeout(() => open(n), 320); });
+  }, 900);
+}
+function reject(f){ endPick(); active = null; light(null); collapse(f, () => { f.state = 'no'; fill(f); counts(); const n = next(f); if(n) setTimeout(() => open(n), 60); }); }
+function edit(f){
+  const v = f.el.querySelector('.v'); v.contentEditable = 'true'; v.focus();
+  const r = document.createRange(); r.selectNodeContents(v); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  v.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); commitEdit(f); } if(e.key === 'Escape'){ v.textContent = f.value; commitEdit(f); } };
+  v.onblur = () => commitEdit(f);
+}
+function commitEdit(f){
+  const v = f.el.querySelector('.v'); if(v.contentEditable !== 'true') return;
+  v.contentEditable = 'false'; const t = v.textContent.trim(); if(t && t !== f.value){ f.value = t; f.corrected = true; } v.textContent = f.value;
+}
+/* pointing a value at the right words: the correction is made against the source, not typed over it */
+function startPick(f){
+  if(picking === f){ endPick(); return; }
+  picking = f; f.el.classList.add('picking'); f.el.querySelector('.rt').classList.add('on');
+  swapWhy(f, 'Select the words in the contract this value should come from.');
+}
+function endPick(){ if(!picking) return; const f = picking; picking = null; f.el.classList.remove('picking'); f.el.querySelector('.rt').classList.remove('on'); swapWhy(f, f.why); }
+function swapWhy(f, text){ const w = f.el.querySelector('.why'); w.classList.add('swap'); setTimeout(() => { w.textContent = text; w.classList.remove('swap'); layout(); }, 180); }
+function rebind(f, value, src, why){
+  f.value = value; f.src = src; f.why = why; f.corrected = true; f.wrong = false;
+  picking = null; f.el.classList.remove('picking'); f.el.querySelector('.rt').classList.remove('on');
+  fill(f); tagSpans(); light(f); layout(); goTo(f);
+}
+/* a real hand selecting text while the pointer tool is on */
+document.getElementById('doc').addEventListener('mouseup', () => {
+  if(!picking || demo.running) return;
+  const s = getSelection(); const t = s.toString().trim(); if(!t || t.length > 80) return;
+  let id = 'usr-' + Date.now();
+  try { const r = s.getRangeAt(0); const sp = document.createElement('span'); sp.className = 'src'; sp.dataset.a = id;
+        const p = r.startContainer.parentElement.closest('p'); const num = p && (p.textContent.match(/^(\d+\.\d+)/) || [])[1];
+        sp.dataset.c = num ? 'clause ' + num : 'the opening line'; r.surroundContents(sp); } catch(e){ return; }
+  s.removeAllRanges();
+  rebind(picking, t, id, 'You pointed it at these words. Kept as a correction the model learns from.');
+});
+
+/* ---------- the loop: it reviews itself until someone asks to take over ---------- */
+const fcur = document.createElement('div'); fcur.id = 'fcur';
+fcur.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 2l14.5 9.2-6.6 1.3 3.9 7-2.6 1.4-3.9-7.1L3.4 18z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+document.body.appendChild(fcur);
+const demo = {token:0, running:false, driving:false, visible:false};
+let fx = 0, fy = 0, fh = null;
+class Stop extends Error {}
+const PACE = 1.5;
+const wait = (ms, t) => new Promise((res, rej) => setTimeout(() => t === demo.token ? res() : rej(new Stop()), ms * PACE));
+const ease = k => k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3)/2;
+function fakeHover(clear){
+  const el = clear ? null : document.elementFromPoint(fx, fy), h = el && el.closest('.acc, .ic, .ref, .bar:not(.open)');
+  if(h !== fh){ if(fh) fh.classList.remove('fhover'); if(h) h.classList.add('fhover'); fh = h; }
+  const w = el && el.closest('.src.has');
+  hot(w ? w.dataset.a : null);
+}
+function place(x, y){ fx = x; fy = y; fcur.style.transform = `translate(${x-3}px, ${y-2}px)`; fakeHover(); }
+function glide(x, y, ms, t){ ms *= PACE;
+  const x0 = fx, y0 = fy, t0 = performance.now();
+  return new Promise((res, rej) => { const stepf = now => { if(t !== demo.token) return rej(new Stop());
+    const k = Math.min(1, (now - t0)/ms), e = ease(k); place(x0 + (x-x0)*e, y0 + (y-y0)*e); k < 1 ? requestAnimationFrame(stepf) : res(); }; requestAnimationFrame(stepf); });
+}
+const mid = el => { const r = el.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; };
+async function tap(el, t){ fcur.classList.add('down'); await wait(120, t); fcur.classList.remove('down'); el.click(); }
+const byId = id => F.find(f => f.id === id);
+const q = (f, s) => f.el.querySelector(s);
+function reset(){
+  document.getElementById('tgt').classList.remove('drag');
+  document.querySelectorAll('.src').forEach(s => { if(s.dataset.a.startsWith('usr-')) s.replaceWith(...s.childNodes); });
+  accepting = false; build(); openNow(byId('parties')); fakeHover(true);
+}
+
+async function playOnce(t){
+  reset();
+  const sr = stageEl.getBoundingClientRect();
+  place(sr.left + sr.width*0.42, sr.bottom - 40); fcur.classList.add('in');
+
+  /* 1 · the answer is on screen from the first frame. Pass over the contract and each value names itself. */
+  step(1, 8200);
+  const p = byId('parties');
+  await wait(900, t);
+  const over = async (a, ms) => { const sp = spans(a)[0]; if(!sp) return; const r = sp.getClientRects()[0]; await glide(r.left + Math.min(r.width*0.6, 180), r.top + r.height/2, 800, t); await wait(ms, t); };
+  await over('term', 900); await over('pay', 900);
+  sc.scrollTo({top: Math.max(0, topOf('cl-conf') - 40), behavior:'smooth'}); await wait(700, t);
+  await over('cl-conf', 1300);                                                   // a whole clause names itself too
+  sc.scrollTo({top: 0, behavior:'smooth'}); await wait(700, t);
+  await over('parties', 700);
+
+  /* 2 · one value: why the AI thinks so, and where from. No score. */
+  step(2, 5000);
+  await wait(300, t);
+  await glide(...mid(q(p,'.why')), 900, t); await wait(1500, t);
+  goTo(p); spans(p.src).forEach(s => { s.classList.remove('pulse'); void s.offsetWidth; s.classList.add('pulse'); }); await wait(1600, t);
+
+  /* 3 · accept, and the next one comes to you */
+  step(3, 13100);
+  await glide(...mid(q(p,'.acc')), 800, t); await wait(300, t); await tap(q(p,'.acc'), t); await wait(2400, t);   // tick, close, next opens: Initial term
+  const term = byId('term'); await wait(700, t);
+  await glide(...mid(q(term,'.acc')), 900, t); await wait(700, t); await tap(q(term,'.acc'), t); await wait(2400, t);   // next: renewal
+  const rn = byId('renew');
+  await glide(...mid(q(rn,'.acc')), 700, t); await wait(500, t); await tap(q(rn,'.acc'), t); await wait(2600, t);       // next: the wrong one
+  const n = byId('notice'); spans(n.src).forEach(s => s.classList.add('bad'));
+  await wait(1200, t);
+
+  /* 4 · wrong: point it at the right words */
+  step(4, 12100);
+  await glide(...mid(q(n,'.why')), 800, t); await wait(1600, t);
+  await glide(...mid(q(n,'.rt')), 800, t); await wait(300, t); await tap(q(n,'.rt'), t); await wait(1000, t);
+  sc.scrollTo({top: Math.max(0, topOf('notice-fix') - 60), behavior:'smooth'}); await wait(800, t);
+  const g = document.getElementById('tgt'), gr = g.getBoundingClientRect();
+  await glide(gr.left + 2, gr.top + gr.height/2, 900, t); await wait(250, t);
+  fcur.classList.add('down'); g.classList.add('drag'); await glide(gr.right - 2, gr.top + gr.height/2, 800, t); fcur.classList.remove('down'); await wait(300, t);
+  g.classList.remove('drag');
+  rebind(n, n.fix.value, n.fix.src, n.fix.why); await wait(1900, t);
+  await glide(...mid(q(n,'.acc')), 900, t); await wait(300, t); await tap(q(n,'.acc'), t); await wait(2700, t);
+
+  step(5, 0); await wait(1200, t);
+}
+async function loop(){
+  if(demo.running) return; demo.running = true; demo.driving = false; const t = ++demo.token;
+  barPlaying();
+  try { while(true) await playOnce(t); } catch(e){ if(!(e instanceof Stop)) console.error(e); }
+}
+function stopDemo(driving){
+  demo.token++; demo.running = false; fcur.classList.remove('in','down'); fakeHover(true); hot(null);
+  document.getElementById('tgt').classList.remove('drag'); F.forEach(f => f.el.classList.remove('pre'));
+  document.documentElement.classList.remove('demoing');
+  if(driving) demo.driving = true;
+}
+
+/* ---------- one line for the whole run ---------- */
+const STEPL = ['Hover to scan the contract','Why it thinks so','Accept, and the next one comes to you','Wrong? Point it at the right words'],
+      STEPD = [8200, 5000, 13100, 12100], STEPT = STEPD.reduce((a,b)=>a+b,0);
+const demobar = document.getElementById('demobar'), dfill = document.getElementById('dfill'), dlab = document.getElementById('dlab'), dtry = document.getElementById('dtry');
+var UNIT = 'proof'; function tell(m){ try { if(parent !== window) parent.postMessage(Object.assign({unit:UNIT}, m), '*'); } catch(e){} }
+function step(n, dur){
+  if(n > STEPL.length){ dfill.style.transition = 'width .5s ease'; dfill.style.width = '100%'; tell({kind:'step', n, a:1, b:1, dur:500}); return; }
+  const a = STEPD.slice(0, n-1).reduce((x,y)=>x+y,0) / STEPT, b = a + dur / STEPT;
+  dfill.style.transition = 'none'; dfill.style.width = (a*100) + '%'; void dfill.offsetWidth;
+  dfill.style.transition = 'width ' + (dur * PACE) + 'ms linear'; dfill.style.width = (b*100) + '%';
+  dlab.innerHTML = '<b>0' + n + '</b>' + STEPL[n-1];
+  tell({kind:'step', n, of:STEPL.length, label:STEPL[n-1], a, b, dur:dur * PACE});
+}
+function barPlaying(){ demobar.classList.remove('trying'); document.documentElement.classList.add('demoing'); dtry.textContent = 'I want to try this myself'; tell({kind:'state', playing:true}); }
+function barTrying(){ demobar.classList.add('trying'); document.documentElement.classList.remove('demoing'); dtry.textContent = 'Play the demo'; dlab.innerHTML = 'You&rsquo;re trying it. The demo comes back a few seconds after you leave.'; tell({kind:'state', playing:false}); }
+
+/* while the demo plays, a real hand does nothing to the prototype: it has to ask to take over */
+['pointerdown','pointerup','pointermove','pointerover','pointerout','mousedown','mouseup','mousemove','mouseover','mouseout','click','dblclick','contextmenu','wheel'].forEach(type =>
+  document.addEventListener(type, e => {
+    if(!e.isTrusted || !demo.running) return;
+    if(e.target.closest && e.target.closest('#demobar')) return;
+    e.stopImmediatePropagation(); if(type === 'mousedown' || type === 'click' || type === 'contextmenu' || type === 'wheel') e.preventDefault();
+  }, {capture:true, passive:false}));
+
+let idleTimer = null, inside = false;
+const IDLE = 6000;
+function armIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(() => { if(demo.driving && demo.visible && !inside){ demo.driving = false; loop(); } }, IDLE); }
+/* a click on the frame: the demo stops and the reader starts from the beginning, with nothing playing over them */
+function tryNow(){ demo.started = true; if(demo.running) stopDemo(false); clearTimeout(idleTimer); demo.driving = false; reset(); barTrying(); }
+addEventListener('message', e => { if(e.data && e.data.cmd === 'resume'){ if(!demo.running){ clearTimeout(idleTimer); demo.driving = false; loop(); } return; } if(e.data && e.data.cmd === 'try') return tryNow(); if(e.data && e.data.cmd === 'toggle') dtry.click(); });
+dtry.addEventListener('click', e => {
+  e.stopPropagation();
+  if(demo.running){ stopDemo(true); barTrying(); }
+  else { clearTimeout(idleTimer); demo.driving = false; loop(); }
+});
+document.addEventListener('pointermove', e => { if(!e.isTrusted) return; inside = true; if(demo.driving) clearTimeout(idleTimer); }, true);
+document.addEventListener('keydown', () => { if(demo.driving) clearTimeout(idleTimer); }, true);
+document.documentElement.addEventListener('mouseleave', () => { inside = false; if(demo.driving) armIdle(); });
+document.addEventListener('focusout', () => { if(demo.driving && !inside) armIdle(); });
+
+/* quick scan: pass over the contract and each value names itself; pass over a row and its words light */
+const docEl = document.getElementById('doc');
+docEl.addEventListener('pointerover', e => { if(demo.running) return; const w = e.target.closest('.src.has'); hot(w ? w.dataset.a : null); });
+docEl.addEventListener('pointerleave', () => { if(!demo.running) hot(null); });
+docEl.addEventListener('click', e => { if(demo.running || picking) return; const w = e.target.closest('.src.has'); if(!w) return;
+  const fs = F.filter(f => f.src === w.dataset.a); const f = fs.find(x => x.state === 'todo') || fs[0]; if(f && f !== active) open(f); });
+
+build(); openNow(F.find(f => f.id === 'parties'));
+addEventListener('resize', layout);
+addEventListener('keydown', e => { if(e.key === 'Enter' && active && !demo.running && !(document.activeElement && document.activeElement.isContentEditable)){ e.preventDefault(); accept(active); } });
+document.fonts && document.fonts.ready.then(layout);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  new IntersectionObserver(([en]) => {
+    demo.visible = en.intersectionRatio >= .45 || en.intersectionRect.height >= 300;
+    if(demo.visible && !demo.running && !demo.driving && !demo.started){ demo.started = true; loop(); }
+  }, {threshold:[0, .2, .3, .45, .6, .8]}).observe(stageEl);
+} else barTrying();
+
+/* tell the page this is embedded in how tall it is */
+if(document.documentElement.classList.contains('embed')){
+  const post = () => tell({h:document.querySelector('.unit').getBoundingClientRect().height + 2});
+  addEventListener('load', post); new ResizeObserver(post).observe(document.body);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search — ask, confirm, read, list</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<script>(function(q,h){ if(/[?&]embed/.test(q) || location.protocol==='about:') h.classList.add('embed');
+  if(/[?&]bare/.test(q)) h.classList.add('bare'); })('?embed&bare', document.documentElement);</script>
+<style>
+/* Sirion DS 2.0, light. Ask, agree how to judge, read whole contract families, list, and say so when documents disagree.
+   Sample data; every company, contract and clause is made up. */
+:root{
+  --paper:#FFFFFF; --ink:#191A18; --faint:#6F716A; --line:#D7D8D2; --accent:#3D5A45;
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --brand:#0d5e68; --brand-alt:#357981; --border:#D5D4CD; --bg:#fafafa; --t2:#444341; --t3:#5f5e5a; --t4:#888782;
+  --mark:#D1EFDB; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0; padding:0; box-sizing:border-box}
+html, body{background:var(--paper)}
+body{font-family:var(--font); color:var(--ink); -webkit-font-smoothing:antialiased}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer; text-align:left}
+.unit{max-width:1080px; margin:0 auto; padding:40px 24px}
+html.embed .unit{padding:0 0 4px}
+
+.stage{position:relative; background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden}
+.top{height:48px; display:flex; align-items:center; gap:10px; padding:0 24px; border-bottom:1px solid var(--border); font-size:13px; color:var(--t3)}
+.top b{font-weight:500; color:var(--t2)}
+.top .sp{flex:1}
+.top .av{width:26px; height:26px; border-radius:50%; background:#e6eeef; color:var(--brand); font-size:11px; font-weight:500; display:grid; place-items:center}
+.body{position:relative; height:620px; overflow:hidden}
+
+/* the ask box sits in the middle until you ask; then it moves up and the work takes the room */
+.askwrap{position:absolute; left:190px; right:190px; top:148px;   /* centred in the frame, a touch above true middle */ transition:top .7s var(--ease), left .7s var(--ease), right .7s var(--ease)}
+.hello{height:74px; margin:0 0 20px 14px; overflow:hidden; transition:opacity .3s ease, margin .7s var(--ease), height .7s var(--ease)}
+.hello span{display:block; font-size:22px; line-height:28px; font-weight:500; background:linear-gradient(90deg,#8E7CE0,#B293E6); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hello span{display:flex; align-items:center; gap:8px; width:fit-content}
+.hello .hic{flex:none; display:block}
+.hello strong{display:block; font-size:34px; line-height:44px; font-weight:400; letter-spacing:-.02em; color:#2a2a28}
+.stage.asked .hello{opacity:0; height:0; margin:0 0 0 16px}
+.ask{position:relative; display:flex; align-items:center; gap:12px; min-height:44px; padding:0 14px 0 20px; border:1px solid transparent; border-radius:999px; background:#f3f3f2; transition:border-color .2s, box-shadow .2s, background-color .2s, min-height .7s var(--ease)}
+.stage.asked .ask{min-height:46px; background:#fff; border-color:var(--border)}
+.ask.focus{background:#fff; border-color:var(--brand-alt); box-shadow:0 0 0 3px rgba(53,121,129,.12)}
+.ask .q{flex:1; min-width:0; font-size:14px; line-height:20px; color:var(--t2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.ask .q:empty::before{content:"Ask Sirion"; color:var(--t4)}
+.ask .caret{display:inline-block; width:1.5px; height:17px; background:var(--brand); vertical-align:-3px; margin-left:1px; opacity:0}
+.ask.focus .caret{animation:blink 1s steps(1) infinite}
+@keyframes blink{0%,49%{opacity:1} 50%,100%{opacity:0}}
+.ask .send{flex:none; color:#b9b8b2}
+/* the send arrow wakes up once there is something to send: a filled circle, a hover, a press */
+.ask .send{position:relative; z-index:3; box-sizing:content-box; padding:8px; margin-right:-6px; border-radius:50%; cursor:pointer; transition:color .15s ease, background-color .15s ease, transform .12s ease}
+.ask.has .send{color:#fff; background:var(--brand)}
+.stage .ask.typing #qin{padding-right:66px}   /* the text stops short of the filled arrow */
+.ask.has .send:hover{background:var(--brand-alt)}
+.ask .send:active{transform:scale(.9)}
+.stage.asked .ask .send{pointer-events:none}
+.starts{margin:24px 0 0 14px; transition:opacity .3s ease}
+.stage.asked .starts{opacity:0; pointer-events:none; height:0; margin:0; overflow:hidden}
+.starts p{font-size:12px; color:var(--t4); margin:0 0 10px}
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.card{border-radius:12px; background:#f7f7f6; overflow:hidden}
+.card i{display:block; height:60px}
+.card:nth-child(1) i{background:linear-gradient(135deg,#E9DDF2 0%,#F3E6EC 45%,#C9D3F2 100%)}
+.card:nth-child(2) i{background:linear-gradient(160deg,#F6ECEA 0%,#EFB9AE 70%,#E59585 100%)}
+.card:nth-child(3) i{background:linear-gradient(135deg,#EEF0E8 0%,#D4E2B8 60%,#9DC07A 100%)}
+.card b{display:block; font-weight:400; font-size:12.5px; line-height:18px; color:var(--t2); padding:11px 14px 14px}
+
+/* once asked, the screen becomes a thread: the question, how it was read, the reasoning, and one question back */
+.stage.asked .askwrap{opacity:0; pointer-events:none; transform:translateY(-10px)}
+.askwrap{transition:opacity .35s ease, transform .5s var(--ease)}
+.thread{position:absolute; top:0; bottom:0; left:150px; right:150px; opacity:0; pointer-events:none; transition:opacity .35s ease .2s, left .7s var(--ease), right .7s var(--ease)}
+.stage.asked .thread{opacity:1; pointer-events:auto}
+.stage.listing .thread{left:20px; right:640px}
+.msgs{position:absolute; left:0; right:0; top:0; bottom:var(--cb,86px); overflow:hidden; padding:20px 8px 16px; transition:bottom .45s var(--ease)}
+.m{opacity:0; transform:translateY(6px); transition:opacity .35s ease, transform .45s var(--ease); max-height:0; overflow:hidden}
+.m.on{opacity:1; transform:none; max-height:400px; overflow:visible}
+.bub{margin:0 0 18px auto; width:fit-content; max-width:78%; padding:12px 18px; border-radius:20px; border:1px solid #dfe6e8; background:linear-gradient(180deg,#f2f6f7,#e9eff1); font-size:14px; line-height:21px; color:var(--ink)}
+.meta{font-size:13px; line-height:19px; color:var(--t3); margin:0 0 12px}
+.meta svg{vertical-align:-1px; margin-left:4px}
+.agent{font-size:14px; line-height:22px; color:var(--ink); margin:0 0 14px}
+.cot{margin:0 0 10px}
+.cl{display:flex; align-items:center; gap:8px; font-size:13px; line-height:19px; color:var(--t3); padding:3px 0; opacity:0; max-height:0; overflow:hidden; transition:opacity .3s ease, max-height .4s var(--ease)}
+.cl.on{opacity:1; max-height:44px}
+.cl .sp{flex:none; width:12px; height:12px; border-radius:50%; border:1.5px solid var(--brand-alt); border-right-color:transparent; animation:spin .8s linear infinite; display:none}
+.cl.run .sp{display:block}
+.cl.run .tx{color:var(--t2)}
+.cl.warn .tx{color:#8A5A00}
+.cl.done{flex-wrap:nowrap}
+.cl .tx{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.cl .ch{display:none}.cl.done .ch{display:inline}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sum p{font-size:14px; line-height:22px; color:var(--ink); margin:0 0 8px}
+.sum p b{font-weight:500}
+.srow{display:grid; grid-template-columns:120px 22px 1fr; gap:8px; align-items:baseline; font-size:13px; line-height:20px; padding:7px 0; border-top:1px solid #efeeea}
+.srow b{font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums}
+.srow span:first-child{color:var(--t2)} .srow span:last-child{color:var(--t3)}
+.golink{margin-top:12px; font-size:14px; line-height:22px; color:var(--ink)}
+.golink a{color:var(--brand); text-decoration:none; font-weight:500; margin-left:6px; cursor:pointer}
+
+/* the composer: the question card docks above the input, the way a reply would */
+.composer{position:absolute; left:0; right:0; bottom:14px; border:1px solid #e9e9e6; border-radius:18px; background:#f8f8f7; overflow:hidden}
+.qcard{max-height:0; opacity:0; padding:0 16px; transition:max-height .5s var(--ease), opacity .3s ease, padding .5s var(--ease)}
+.qcard.on{max-height:320px; opacity:1; padding:16px 16px 4px}
+.qhead{display:flex; align-items:flex-start; gap:8px}
+.qhead h4{flex:1; font-size:14px; line-height:20px; font-weight:500; color:var(--ink)}
+.qhead svg{color:var(--t3); margin-top:3px}
+.qcard p.sub{font-size:13px; line-height:19px; color:var(--t3); margin:2px 0 8px}
+.opt{display:flex; gap:14px; width:100%; padding:10px 8px; border-bottom:1px solid #ebebe8; border-radius:6px; transition:background-color .15s}
+.opt:hover, .opt.fhover{background:#efefed}
+.opt.picked{background:#e8f0f0}
+.opt .n{flex:none; width:14px; font-size:12px; line-height:20px; color:var(--t4); text-align:right}
+.opt.picked .n{color:var(--brand); font-weight:500}
+.opt b{display:block; font-weight:400; font-size:14px; line-height:20px; color:var(--ink)}
+.opt b em{font-style:normal; color:var(--t3); margin-left:6px}
+.opt span.d{display:block; font-size:13px; line-height:19px; color:var(--t3); margin-top:1px}
+.inrow{display:flex; align-items:center; gap:12px; height:54px; padding:0 10px 0 18px}
+.inrow .ph{flex:1; font-size:14px; color:var(--t4)}
+.inrow .hint{font-size:12px; color:var(--t4)}
+.stage.listing .inrow .hint{display:none}
+.inrow .go{width:34px; height:34px; border-radius:50%; background:#bdbcb7; display:grid; place-items:center; color:#fff}
+
+/* the answer opens beside the thread as the list itself */
+.listp{position:absolute; top:0; right:0; bottom:0; width:640px; background:#fff; border-left:1px solid var(--border); transform:translateX(102%); transition:transform .6s var(--ease); z-index:4; padding:18px 20px 0}
+.stage.listing .listp{transform:none}
+.lh{display:flex; align-items:baseline; justify-content:space-between}
+.lh h3{font-size:15px; line-height:22px; font-weight:500; color:var(--ink)}
+.lh span{font-size:12px; color:var(--t4)}
+.lh h3 .nf{font-size:inherit; color:inherit}
+.lsub{font-size:12px; line-height:18px; color:var(--t4); margin-top:2px}
+.counts{display:flex; gap:8px; margin:12px 0 10px}
+.cnt{display:inline-flex; align-items:center; gap:8px; height:26px; padding:0 10px; border-radius:7px; font-size:12px}
+.cnt b{font-weight:500; font-variant-numeric:tabular-nums}
+.k-c{background:#FBF1DC; color:#7A5200}
+.k-m{background:#FCE9E6; color:#9B2C24}
+.k-o{background:#F4EEE6; color:#7A4E1F}
+.list{position:absolute; left:20px; right:20px; top:118px; bottom:0}
+.list::after{content:""; position:absolute; left:0; right:0; bottom:0; height:56px; background:linear-gradient(rgba(255,255,255,0), #fff 85%); pointer-events:none}
+.th, .tr{display:grid; grid-template-columns:1.3fr 1fr 1.15fr 112px; column-gap:14px; align-items:center; padding:0 10px}
+.th{height:30px; font-size:12px; color:var(--t4); border-bottom:1px solid var(--border)}
+.tr{height:52px; font-size:13px; line-height:18px; color:var(--t2); border-bottom:1px solid #efeeea; cursor:pointer; transition:background-color .15s}
+.tr:hover, .tr.fhover{background:var(--bg)}
+.tr.sel{background:#f3f6f6}
+.tr small{display:block; font-size:12px; line-height:16px; color:var(--t4)}
+.tr .ti, .tr .cp, .tr .bn{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.tr .cp{color:var(--t3)}
+.pill{justify-self:start; height:22px; padding:0 9px; border-radius:6px; font-size:12px; line-height:22px; font-weight:500; white-space:nowrap}
+
+
+/* a step while it runs: the title shimmers, and a quiet line under it counts the documents */
+.cl{flex-wrap:wrap}
+.cl .rt{display:none; font-size:14px; line-height:21px; background:linear-gradient(90deg,var(--t2) 0%,var(--t2) 35%,#4b57c9 50%,var(--t2) 65%,var(--t2) 100%); background-size:240% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shim 1.6s linear infinite}
+@keyframes shim{from{background-position:120% 0} to{background-position:-120% 0}}
+.cl .rs{display:none; width:100%; font-size:13px; line-height:19px; color:var(--t3); padding-left:0}
+.cl.run{max-height:60px}
+.cl.run .rt, .cl.run .rs{display:block}
+.cl.run .tx, .cl.run .ch{display:none}
+.cl .sp{display:none!important}
+.cl .rs b.k{font-weight:400; font-variant-numeric:tabular-nums}
+.cl .rs i{display:inline-block; width:11px; height:11px; border-radius:50%; border:1.5px solid #b9b8b2; border-right-color:transparent; animation:spin .8s linear infinite; vertical-align:-1px; margin-right:8px}
+
+/* the plan rides on the right while the work runs */
+.stage.asked .thread{left:150px; right:150px}
+.stage.asked.planning .thread{left:60px; right:330px}
+.stage.asked.listing .thread, .stage.listing .thread{left:20px; right:656px}
+.plan{position:absolute; right:24px; top:18px; width:280px; opacity:0; transform:translateY(6px); transition:opacity .35s ease, transform .45s var(--ease); pointer-events:none}
+.plan.on{opacity:1; transform:none}
+.stage.listing .plan{opacity:0}
+.ph2{display:flex; justify-content:space-between; font-size:11px; letter-spacing:.08em; color:var(--t3); margin:0 4px 8px}
+.ph2 span:last-child{letter-spacing:0; font-size:12px; color:var(--t4)}
+.pcard{border:1px solid var(--border); border-radius:14px; padding:12px 14px 8px; background:#fff; position:relative}
+.pcard::before{content:""; position:absolute; left:12px; top:-1px; height:2px; width:var(--pp,0%); max-width:calc(100% - 24px); background:#4b57c9; border-radius:2px; transition:width .6s var(--ease)}
+.pcard h5{font-size:13px; line-height:20px; font-weight:500; color:var(--ink); margin:0 0 6px; display:flex; gap:8px; align-items:center}
+.ps{position:relative; display:flex; align-items:center; gap:10px; padding:7px 0; font-size:13px; line-height:18px; color:var(--t3)}
+.ps + .ps::before{content:""; position:absolute; left:9.5px; top:-7px; height:14px; width:1px; background:#e2e1db}
+.ps i{flex:none; width:20px; height:20px; border-radius:50%; background:#f1f1ef; font-style:normal; font-size:11px; display:grid; place-items:center; color:var(--t3)}
+.ps.run{color:var(--ink)} .ps.run i{background:none; border:1.5px dashed #9a9993; animation:spin 2.4s linear infinite; color:transparent}
+.ps.done i{background:#2E7D4E; color:transparent; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5.2 4.1 7.2 8 2.8' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center}
+.ps.done{color:var(--t3)}
+/* 4 · a conflict, opened: the documents side by side, and no guess */
+.det{position:absolute; top:0; right:0; bottom:0; width:640px; background:var(--bg); border-left:1px solid var(--border); z-index:8;
+  transform:translateX(102%); transition:transform .55s var(--ease); display:flex; flex-direction:column}
+.stage.detail .det{transform:none}
+.dh{padding:18px 24px 14px; border-bottom:1px solid var(--border); background:#fff; position:relative}
+.dh h3{font-size:15px; line-height:22px; font-weight:500; color:var(--ink); padding-right:32px}
+.dh p{font-size:12px; line-height:18px; color:var(--t4); margin-top:2px}
+.dx{position:absolute; right:16px; top:16px; width:28px; height:28px; border-radius:8px; display:grid; place-items:center; color:var(--t4)}
+.dx:hover, .dx.fhover{background:var(--bg); color:var(--t2)}
+.dp{flex:1; overflow:hidden; padding:16px 20px}
+.verdict{font-size:13px; line-height:19px; color:var(--t2); margin:0 4px 12px}
+.verdict b{font-weight:500; color:#7A5200}
+.quote{background:#fff; border-radius:8px; box-shadow:0 0 0 1px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.04); padding:12px 14px; margin-bottom:10px; opacity:0; transform:translateY(4px); transition:opacity .35s ease, transform .45s var(--ease)}
+.stage.detail .quote{opacity:1; transform:none}
+.stage.detail .quote:nth-of-type(2){transition-delay:.15s}
+.stage.detail .quote:nth-of-type(3){transition-delay:.3s}
+.quote .ref{display:flex; justify-content:space-between; font-size:12px; line-height:16px; color:var(--t4); margin-bottom:6px}
+.quote .ref b{font-weight:500; color:var(--t3)}
+.quote p{font-size:13px; line-height:20px; color:#252525}
+.quote mark{background:var(--mark); color:var(--ink); border-radius:3px; padding:1px 2px}
+.note{font-size:12px; line-height:18px; color:var(--t3); margin:4px 4px 0}
+
+
+/* by hand: the reading can be changed, the list closed, any row opened */
+.chg{font-size:13px; color:var(--brand); margin-left:6px; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(13,94,104,.3)}
+.chg:hover{text-decoration-color:var(--brand)}
+.lx{width:28px; height:28px; border-radius:8px; display:grid; place-items:center; color:var(--t4)}
+.lx:hover{background:var(--bg); color:var(--t2)}
+.tr.hide{display:none}
+.golink a:hover{text-decoration:underline}
+.chk{background:#fff; border-radius:8px; box-shadow:0 0 0 1px rgba(0,0,0,.05); padding:4px 14px; margin-bottom:10px}
+.chk p{display:flex; justify-content:space-between; font-size:13px; line-height:20px; padding:7px 0; border-bottom:1px solid #f0efeb; color:var(--t2)}
+.chk p:last-child{border-bottom:0}
+.chk p span{color:var(--t4)}
+.verdict b.vm{color:#9B2C24} .verdict b.vo{color:#7A4E1F}
+
+/* between runs the screen fades and comes back on the start screen, with nothing sliding away */
+.body{transition:opacity .35s ease}
+.body.out{opacity:0}
+.stage.snap *, .stage.snap *::before{transition:none !important}
+
+/* the source on hover, in the list itself: which document, which clause, why, and the words */
+.tr .bn b{font-weight:400; text-decoration:underline; text-decoration-color:#c9c8c1; text-underline-offset:3px; cursor:default}
+.tr .bn b.hot{text-decoration-color:var(--t2)}
+.cite{position:absolute; z-index:9; width:340px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px 14px 12px;
+  box-shadow:0 14px 34px -14px rgba(26,26,25,.24), 0 1px 3px rgba(26,26,25,.06); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .18s ease, transform .22s var(--ease)}
+.cite.on{opacity:1; transform:none; pointer-events:auto}
+.cite .cm{font-size:11.5px; line-height:16px; color:var(--t4)}
+.cite h6{font-size:13px; line-height:19px; font-weight:500; color:var(--ink); margin:1px 0 6px}
+.cite .cn{font-size:12.5px; line-height:18px; color:var(--t2); margin-bottom:8px}
+.cite .cq{background:#f4f4f2; border-radius:6px; padding:8px 10px; font-size:12.5px; line-height:18px; color:#252525}
+.cite .cq mark{background:var(--mark); color:var(--ink); border-radius:3px; padding:0 2px}
+.cite .cd p{display:flex; justify-content:space-between; font-size:12.5px; line-height:18px; padding:5px 0; border-top:1px solid #f0efeb; color:var(--t2)}
+.cite .cd p span{color:var(--t4)}
+.cite a{display:inline-block; margin-top:8px; font-size:12.5px; font-weight:500; color:var(--brand); text-decoration:none}
+
+/* the family, opened from a row: why it is on the list, every competing term, the family, and what to do next */
+.det{background:#fff}
+.dh{border-bottom:0; padding:14px 24px 4px}
+.dh .dx{position:static; width:auto; height:auto; display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--t3); margin:0 0 10px; padding:2px 0}
+.dh .dx:hover, .dh .dx.fhover{background:none; color:var(--ink)}
+.dh h3{padding-right:0}
+.dp{overflow:hidden; padding:10px 24px 16px}
+.why2{border:1px solid #F1D3CE; background:#FBF6F5; border-radius:10px; padding:11px 14px; margin-bottom:14px}
+.why2.c{border-color:#EED9A8; background:#FCF8EE}
+.why2 .wl{font-size:10.5px; letter-spacing:.08em; font-weight:500; color:#B23A2E; margin-bottom:3px}
+.why2.c .wl{color:#8A5A00}
+.why2 h5{font-size:13px; line-height:19px; font-weight:500; color:var(--ink)}
+.why2 .ws{font-size:12px; line-height:17px; color:var(--t3); margin:1px 0 7px}
+.why2 blockquote{border-left:2px solid #e2ddd6; padding-left:10px; font-size:12px; line-height:18px; color:var(--t2)}
+.why2 blockquote mark{background:var(--mark); color:var(--ink); border-radius:3px; padding:0 2px}
+.sec2{font-size:10.5px; letter-spacing:.08em; font-weight:500; color:var(--t4); margin:4px 0 4px}
+.kv{display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:12.5px; line-height:18px; padding:6px 0; color:var(--t3)}
+.kv b{font-weight:400; color:var(--ink); display:inline-flex; align-items:center; gap:8px; text-align:right}
+.kv.worst{color:var(--ink)}
+.kv i{font-style:normal; font-size:11px; line-height:18px; padding:0 8px; border-radius:999px; background:#e8f0f0; color:var(--brand)}
+.kv u{text-underline-offset:3px; text-decoration-color:#c9c8c1}
+.sec2.f{margin-top:12px}
+.dbtn{display:block; width:100%; height:34px; border-radius:8px; font-size:13px; font-weight:500; text-align:center; margin-top:8px}
+.dbtn.p{background:var(--brand); color:#fff; margin-top:14px}
+.dbtn.s{border:1px solid var(--border); color:var(--t2)}
+
+/* typing by hand */
+#qin{position:absolute; inset:0; width:100%; opacity:0; cursor:text; border:0; background:none; font:inherit}
+.ask.typing #qin{opacity:1; padding:0 54px 0 20px; font-size:14px; color:var(--t2); outline:none; border-radius:999px}
+.ask.typing .q{visibility:hidden}
+.card{cursor:pointer; transition:box-shadow .2s}
+.card:hover{box-shadow:0 0 0 1px var(--border)}
+.inrow input.ph{border:0; background:none; outline:none; font:inherit; font-size:14px; color:var(--t2); min-width:0}
+.inrow input.ph::placeholder{color:var(--t4)}
+.inrow .go{border:0; cursor:pointer}
+.inrow .go.live{background:var(--brand)}
+#extra .bub{margin-top:6px}
+
+.mailrow{margin:-4px 0 14px}
+.mail{display:inline-flex; align-items:center; height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border); font-size:13px; font-weight:500; color:var(--brand); text-decoration:none; cursor:pointer; background:#fff}
+.mail:hover{border-color:var(--brand-alt); background:#f3f7f7}
+
+/* chain of thought, the DS way: "Thinking…" shimmers while each step lands on a rail (spinner, then a quiet check),
+   then the block folds to one summary line that opens again on click */
+.cot{margin:0 0 12px}
+.cot .chd{display:flex; align-items:center; gap:4px; font-size:13px; line-height:19px; color:var(--t3); user-select:none}
+.cot .chd .ct{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.cot .chd svg{flex:none; display:none; transition:transform .2s ease}
+.cot.closed .chd, .cot.open .chd{cursor:pointer}
+.cot.closed .chd svg, .cot.open .chd svg{display:block}
+.cot.open .chd svg{transform:rotate(90deg)}
+.cot.closed .chd:hover, .cot.open .chd:hover{color:var(--ink)}
+.cot.run .chd .ct{background:linear-gradient(90deg,var(--t3) 0%,var(--t3) 30%,#4b57c9 45%,#4b57c9 55%,var(--t3) 70%,var(--t3) 100%); background-size:250% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shim 2.4s ease-in-out infinite}
+.cot.closed .cel{display:none}
+.cot .cel{padding-top:6px}
+.cl, .cl.on, .cl.run{display:flex; gap:10px; align-items:stretch; padding:0; max-height:none; flex-wrap:nowrap}
+.cl{display:none}
+.cl.on{display:flex; opacity:1; animation:clin .28s var(--ease)}
+@keyframes clin{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+.cl .rl{flex:none; width:12px; display:flex; flex-direction:column; align-items:center; padding-top:4px; gap:2px}
+.cl .rl em{width:11px; height:11px; border-radius:50%; flex:none; box-sizing:border-box; position:relative}
+.cl.run .rl em{border:1.5px solid #c9c8c1; border-top-color:var(--t3); animation:spin 1.1s linear infinite}
+.cl.done .rl em{background:#d6d5cf; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 10 10'%3E%3Cpath d='M2 5.2 4.1 7.2 8 2.8' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center}
+.cl .rl u{flex:1; width:1px; background:#e2e1db; min-height:6px}
+.cl:last-child .rl u, .cl.run .rl u{display:none}
+.cl .bd{flex:1; min-width:0; padding-bottom:9px; font-size:13px; line-height:19px}
+.cl .rt{display:none; font-size:13px; line-height:19px; color:var(--t2); background:none; -webkit-text-fill-color:currentColor; animation:none}
+.cl .rs{display:none; font-size:12.5px; line-height:18px; color:var(--t4)}
+.cl .rs i{display:none}
+.cl.run .rt, .cl.run .rs{display:block}
+.cl .tx{display:block; color:var(--t3); white-space:normal}
+.cl.run .tx{display:none}
+.cl.warn.done .tx{color:#8A5A00}
+.cl .ch{display:none !important}
+.mx{cursor:pointer}
+.mx svg{transition:transform .2s ease}
+.mx.open svg{transform:rotate(90deg)}
+.mxd{display:none; font-size:12.5px; line-height:18px; color:var(--t3); margin:-6px 0 12px; padding-left:10px; border-left:2px solid #e2e1db}
+.mx.open + .mxd{display:block}
+
+.mini{border:1px solid var(--border); border-radius:10px; padding:2px 14px; margin:-4px 0 10px; background:#fff}
+.mini p{display:flex; justify-content:space-between; gap:12px; align-items:center; padding:8px 0; border-top:1px solid #f0efeb; font-size:13px; line-height:18px; color:var(--t2)}
+.mini p:first-child{border-top:0}
+.mini small{display:block; font-size:12px; color:var(--t4)}
+.mini b{font-weight:400; color:var(--ink); text-align:right; white-space:nowrap}
+/* typed questions think too: a shimmering "Thinking…", the steps it takes landing one by one, then the answer */
+.tk{margin:0 0 12px}
+.tkh{font-size:13px; line-height:19px; margin:0 0 6px; width:fit-content; background:linear-gradient(90deg,var(--t3) 0%,var(--t3) 30%,#4b57c9 45%,#4b57c9 55%,var(--t3) 70%,var(--t3) 100%); background-size:250% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shim 2.4s ease-in-out infinite}
+.tks{display:flex; align-items:center; gap:10px; font-size:13px; line-height:20px; color:var(--t3); margin:0 0 4px; animation:clin .28s cubic-bezier(.22,.61,.36,1)}
+.tks em{flex:none; width:11px; height:11px; border-radius:50%; box-sizing:border-box}
+.tks.run em{border:1.5px solid #c9c8c1; border-top-color:var(--t3); animation:spin 1.1s linear infinite}
+.tks.done em{background:#d6d5cf url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 10 10'%3E%3Cpath d='M2 5.2 4.1 7.2 8 2.8' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/8px no-repeat}
+/* "Thinking…" sits on a soft wash that fades out to the right, the same one the editor uses while it thinks */
+.tkh, .cot.run .chd{position:relative; isolation:isolate; padding:7px 12px; margin-left:-12px; margin-top:-7px}
+.tkh::before, .cot.run .chd::before{content:""; position:absolute; z-index:-1; left:0; top:0; bottom:0; width:min(440px, 70vw); border-radius:16px;
+  background:linear-gradient(90deg, rgba(59,130,246,.11), rgba(139,92,246,.07) 30%, rgba(239,68,68,.04) 52%, rgba(239,68,68,0) 92%)}
+.cot.run .chd{margin-bottom:6px}
+.tkh{margin-bottom:10px !important}
+.tkh, .cot.run .chd{margin-top:4px}   /* room above and below the wash, so the steps don't crowd it */
+.tkd{font-size:13px; line-height:19px; color:var(--t3); margin:0 0 10px}
+.think{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--t3); margin:0 0 12px}
+.think i{width:11px; height:11px; border-radius:50%; border:1.5px solid #c9c8c1; border-top-color:var(--t3); animation:spin 1.1s linear infinite}
+.try{font-size:13px; color:var(--brand); font-weight:500; padding:4px 0}
+.try:hover{text-decoration:underline; text-underline-offset:3px}
+#m-note .bub{margin-top:8px}
+
+/* the folded question card no longer sits invisibly over the input */
+.qcard{overflow:hidden; pointer-events:none}
+.qcard.on{pointer-events:auto}
+.inrow{cursor:text}
+
+/* nothing on this screen is dead: what the demo can't do, it says so, briefly, where you clicked */
+.toast{position:absolute; left:50%; bottom:92px; z-index:20; transform:translate(-50%, 8px); max-width:440px; padding:9px 14px; border-radius:10px; background:#1f1f1e; color:#f3f3f1; font-size:12.5px; line-height:18px; text-align:center; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .25s var(--ease); box-shadow:0 10px 30px -10px rgba(0,0,0,.35)}
+.toast.on{opacity:1; transform:translate(-50%, 0)}
+.av{border:0; cursor:pointer}
+.qb{width:22px; height:22px; border-radius:6px; display:grid; place-items:center; color:var(--t3)}
+.qb:hover{background:#efefed; color:var(--ink)}
+.plus{width:22px; height:22px; border-radius:6px; display:grid; place-items:center}
+.plus:hover{background:#efefed}
+.qcard.min .sub, .qcard.min .opt{display:none}
+.qcard.min{padding-bottom:12px}
+.srow{cursor:pointer; border-radius:6px; transition:background-color .15s}
+.srow:hover{background:var(--bg)}
+.cnt{cursor:pointer; transition:box-shadow .15s, opacity .15s}
+.cnt:hover{box-shadow:0 0 0 1px currentColor}
+.counts.filtering .cnt:not(.act){opacity:.4}
+.fline{display:none; font-size:12px; color:var(--t3); margin:-4px 0 6px}
+.fline.on{display:block}
+.fline button{color:var(--brand); font-size:12px; margin-left:6px; text-decoration:underline; text-underline-offset:3px}
+.list{transition:top .2s ease}
+.listp.filtered .list{top:138px}
+.prot{cursor:pointer}
+.ps{cursor:pointer; border-radius:6px}
+.ps:hover{color:var(--ink)}
+.try2{font-size:13px; color:var(--brand); font-weight:500; padding:4px 0}
+.try2:hover{text-decoration:underline; text-underline-offset:3px}
+.bub{overflow-wrap:anywhere}
+
+/* the empty box suggests what to ask, one question at a time */
+.ask .q:empty::before{content:none}
+.rot{position:absolute; left:20px; right:54px; top:0; bottom:0; overflow:hidden; pointer-events:none; display:flex; align-items:center}
+.rot span{display:block; font-size:14px; line-height:20px; color:var(--t4); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:transform .45s var(--ease), opacity .35s ease}
+.rot span.out{transform:translateY(-14px); opacity:0}
+.rot span.in{transform:translateY(14px); opacity:0; transition:none}
+.ask.typing .rot, .ask.focus .rot, .stage.asked .rot{display:none}
+.ask:has(#q:not(:empty)) .rot{display:none}
+
+/* the family opens as a narrow drawer on the right; the list stays in view beside it */
+.det{width:400px !important; box-shadow:-12px 0 32px -18px rgba(26,26,25,.22); border-left:1px solid var(--border)}
+.dh{padding:14px 20px 4px}
+.dp{padding:8px 20px 14px}
+.why2{padding:10px 12px; margin-bottom:12px}
+.why2 h5{font-size:12.5px; line-height:18px}
+.why2 blockquote{font-size:11.5px; line-height:17px}
+.kv{font-size:12px; padding:5px 0}
+.kv span{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.kv b{white-space:nowrap}
+.dbtn{height:32px; font-size:12.5px}
+.stage.detail .tr.sel{box-shadow:inset 3px 0 0 var(--brand)}
+
+/* the conversation scrolls on its own, inside the window, like a real chat */
+.msgs{overflow-y:auto !important; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#d6d5cf transparent}
+.msgs::-webkit-scrollbar{width:6px}
+.msgs::-webkit-scrollbar-thumb{background:#d6d5cf; border-radius:6px}
+.msgs::-webkit-scrollbar-track{background:transparent}
+.listp .list{overflow-y:auto; scrollbar-width:thin; scrollbar-color:#d6d5cf transparent}
+.listp .list::after{position:sticky; display:block; bottom:0}
+.det .dp{overflow-y:auto; scrollbar-width:thin}
+
+/* smoothness: nothing animates width, height or position of text. Messages fade and rise in;
+   when the layout changes the thread settles into its new width in one quiet fade instead of re-wrapping line by line */
+.thread{transition:opacity .35s ease .15s !important}
+.msgs{transition:none !important}
+.m, .m.on{max-height:none !important; overflow:visible !important; transition:none !important; transform:none; opacity:1}
+.m{display:none}
+.m.on{display:block; animation:mIn .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes mIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+.stage.snap .m.on{animation:none}
+.listp{transition:transform .55s cubic-bezier(.22,.61,.36,1) !important; will-change:transform}
+.det{transition:transform .45s cubic-bezier(.22,.61,.36,1) !important; will-change:transform}
+.plan{transition:opacity .4s ease, transform .5s cubic-bezier(.22,.61,.36,1) !important}
+/* the plan arrives on the right and the answer slides left to make room. it keeps the same width before and after, so the text moves as one block and never re-wraps */
+.stage.asked .thread{left:195px; right:195px}
+.stage.asked.planning:not(.listing) .thread{left:195px; right:195px; transform:translateX(-135px)}
+.thread{transition:opacity .35s ease .15s, transform .65s cubic-bezier(.22,.61,.36,1) !important}
+.stage.snap .thread{transition:none !important}
+/* the chat scrolls from the frame's right edge, not from beside the text: the scroll area reaches the edge, the text keeps its column */
+.stage.asked:not(.listing) .msgs{right:-195px; padding-right:203px}
+.stage.asked.planning:not(.listing) .msgs{right:-330px; padding-right:338px}
+.plan{z-index:5}
+.msgs{scrollbar-width:thin; scrollbar-color:rgba(25,26,24,.13) transparent !important}
+.msgs::-webkit-scrollbar{width:6px} .msgs::-webkit-scrollbar-track{background:transparent} .msgs::-webkit-scrollbar-thumb{background:rgba(25,26,24,.13); border-radius:3px}
+.tr{transition:background-color .15s !important}
+.qcard{transition:max-height .45s cubic-bezier(.22,.61,.36,1), opacity .25s ease, padding .45s cubic-bezier(.22,.61,.36,1) !important}
+/* the loop bar, same as the other prototypes */
+.demobar{margin-top:14px}
+html.bare .demobar{display:none}
+.dline{position:relative; height:2px; border-radius:2px; background:var(--line); overflow:hidden}
+.dline i{position:absolute; left:0; top:0; bottom:0; width:0; background:var(--accent)}
+.drow{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:10px; min-height:28px}
+.dlab{font-size:13px; line-height:20px; color:var(--faint)}
+.dlab b{font-weight:400; color:var(--accent); margin-right:8px}
+.dtry{font-size:14px; font-weight:500; white-space:nowrap}
+.dtry:hover{text-decoration:underline; text-underline-offset:3px}
+.demobar.trying .dline i{width:0 !important; transition:none !important}
+#fcur{position:fixed; left:0; top:0; z-index:50; pointer-events:none; width:22px; height:22px; opacity:0; transition:opacity .3s ease}
+#fcur.in{opacity:1}
+#fcur svg{display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.35)); transition:transform .12s ease}
+#fcur.down svg{transform:scale(.86)}
+@media (prefers-reduced-motion:reduce){ .askwrap, .fade, .st, .det, .quote{transition:none} .st.run .ic{animation:none} }
+
+/* two panes, two surfaces: once the list opens, the conversation sits on a soft warm grey and the list stays white paper */
+.body{transition:background-color .6s var(--ease)}
+.stage.listing .body{background:#F5F5F2}
+.listp{box-shadow:-18px 0 36px -28px rgba(25,26,24,.22)}
+.stage.listing .composer{background:#fff; border-color:#E4E3DE; box-shadow:0 1px 2px rgba(25,26,24,.04), 0 8px 20px -14px rgba(25,26,24,.18); transition:background-color .4s ease, box-shadow .4s ease}
+.stage.listing .mini{border-color:#E7E6E1}
+.stage.listing .msgs{-webkit-mask-image:linear-gradient(transparent, #000 24px); mask-image:linear-gradient(transparent, #000 24px)}
+
+/* the follow-up box keeps the shape of the first ask: a pill, one row, same height. It squares off only while a question card is open inside it */
+.composer{border-radius:999px}
+.composer:has(.qcard.on){border-radius:18px}
+.inrow{height:46px; padding:0 8px 0 18px}
+.inrow .go{width:30px; height:30px}
+
+/* the chat a little narrower once the list opens; the 40px goes to the list, where the counterparty names were being cut */
+.listp{width:680px}
+.stage.asked.listing .thread, .stage.listing .thread{right:696px}
+
+/* drawer cards: one white card per group, actions side by side */
+.why2{background:#fff; border:1px solid #E6E5E0; border-radius:12px; padding:12px 14px 13px; box-shadow:0 1px 2px rgba(26,26,25,.04); margin-bottom:6px}
+.why2.c{background:#fff; border-color:#E6E5E0}
+.why2 .wl{display:inline-flex; align-items:center; gap:6px; font-size:10px; letter-spacing:.07em; line-height:18px; padding:0 8px 0 7px; border-radius:999px; background:#FBEDEB; color:#B23A2E; margin-bottom:8px}
+.why2 .wl::before{content:""; width:5px; height:5px; border-radius:50%; background:currentColor}
+.why2.c .wl{background:#FBF1DC; color:#8A5A00}
+.why2 h5{font-size:13px; line-height:19px}
+.why2 .ws{margin:2px 0 10px}
+.why2 blockquote{border-left:0; background:#F5F5F2; border-radius:8px; padding:9px 11px; color:var(--t2)}
+.sec2{font-size:10px; letter-spacing:.08em; margin:16px 2px 6px}
+.sec2.f{margin-top:16px}
+.kvc{background:#fff; border:1px solid #E6E5E0; border-radius:12px; overflow:hidden}
+.kvc .kv{padding:9px 12px; border-top:1px solid #F0EFEB}
+.kvc .kv:first-child{border-top:0}
+.kvc .kv.worst{background:#F4F8F8; box-shadow:inset 2px 0 0 var(--brand-alt)}
+.kvc .kv i{background:#fff; box-shadow:0 0 0 1px #CFE0E1}
+.dact{display:flex; gap:8px; margin-top:16px}
+.dact .dbtn{flex:1 1 0; min-width:0; margin:0; height:36px; border-radius:10px; transition:background-color .18s ease, border-color .18s ease}
+.dact .dbtn.s{background:#fff; border-color:#DAD9D3}
+.dact .dbtn.s:hover{background:#F5F5F2}
+.dact .dbtn.p:hover{background:var(--brand-alt)}
+
+/* the question card folds into the follow-up box without the box turning into a stretched oval:
+   the corner radius stays a real number (24px is already a pill at this height), so it never jumps from 999px */
+.composer, .composer:has(.qcard.on){border-radius:24px}
+.composer:has(.qcard.on){border-radius:20px}
+.composer{transition:border-radius .45s cubic-bezier(.22,.61,.36,1), background-color .4s ease, box-shadow .4s ease}
+.qcard{transition:max-height .45s cubic-bezier(.22,.61,.36,1), opacity .18s ease, padding .45s cubic-bezier(.22,.61,.36,1) !important}
+.qcard.on{transition:max-height .45s cubic-bezier(.22,.61,.36,1), opacity .3s ease .12s, padding .45s cubic-bezier(.22,.61,.36,1) !important}
+
+/* chat pane a little narrower again once the list opens */
+.listp{width:720px}
+.stage.asked.listing .thread, .stage.listing .thread{right:736px}
+
+/* the list and the drawer wait just off the right edge; their shadows only show once they slide in, so nothing smudges the frame's edge at rest */
+.listp, .det{box-shadow:none !important; transition-property:transform, box-shadow !important}
+.stage.listing .listp{box-shadow:-18px 0 36px -28px rgba(25,26,24,.22) !important}
+.stage.detail .det{box-shadow:-12px 0 32px -18px rgba(26,26,25,.22) !important}
+
+/* start screen, matched to the mockup: pill input with a + and a dark send button, soft landscape pictures on the starter cards */
+.askwrap{left:200px; right:200px; top:132px}
+.hello{height:auto; margin:0 0 18px 2px}
+.hello span{font-size:18px; line-height:24px; font-weight:500}
+.hello strong{font-size:31px; line-height:38px; margin-top:2px; letter-spacing:-.022em; color:#1f1f1d}
+.ask{min-height:52px; padding:0 8px 0 46px; border-radius:999px; background:#fff; border:1px solid #D5D4CD; box-shadow:none}
+.ask::before{content:""; position:absolute; left:18px; top:50%; width:12px; height:12px; margin-top:-6px; background:linear-gradient(#55544f,#55544f) center/12px 1.25px no-repeat, linear-gradient(#55544f,#55544f) center/1.25px 12px no-repeat; opacity:.75; pointer-events:none}
+.ask .q, .rot span{font-size:14.5px; line-height:20px; color:#2a2a28}
+.rot{left:44px}
+.ask .q:empty::before{content:none}
+.ask.focus{border-color:#B9B8B2; box-shadow:0 0 0 3px rgba(25,26,24,.06)}
+.ask .send{width:14px; height:14px; padding:9px; margin-right:0; color:#fff; background:#3a3a37; border-radius:50%}
+.ask .send:hover, .ask.has .send, .ask.focus .send{background:#1f1f1d}
+.stage.asked .ask{min-height:46px; padding-left:20px; box-shadow:none}
+.stage.asked .ask::before{display:none}
+.ask{border-radius:24px}
+.ask .q{white-space:normal; overflow:visible; text-overflow:clip; padding:12px 0; overflow-wrap:anywhere}
+.starts{margin:22px 0 0 2px}
+.starts p{font-size:12px; color:var(--t4); margin:0 0 10px}
+.cards{gap:12px}
+.card{display:block; padding:0; border-radius:12px; background:#f7f7f6; border:0; transition:box-shadow .2s ease, transform .2s ease}
+.card:hover{box-shadow:0 0 0 1px var(--border), 0 10px 24px -18px rgba(25,26,24,.35); transform:translateY(-1px)}
+.card i{display:block; width:auto; height:60px; border-radius:0; background-size:cover; background-position:center}
+.card:nth-child(3n+1) i{background-image:url("data:image/webp;base64,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")}
+.card:nth-child(3n+2) i{background-image:url("data:image/webp;base64,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")}
+.card:nth-child(3n) i{background-image:url("data:image/webp;base64,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")}
+.card b{display:block; padding:11px 14px 15px; font-size:13px; line-height:19px; color:var(--t2)}
+.card::after{content:none}
+
+/* posting a question: the start screen goes at once, the question lands as a bubble straight away and the thinking line follows within a beat, the way a chat tool does it */
+.stage.asked .askwrap{opacity:0; transform:none; transition:opacity .1s ease !important}
+.stage.asked .hello, .stage.asked .starts, .stage.asked .ask{transition:none !important}
+.stage.asked .thread{transition:opacity .16s ease 0s, transform .65s cubic-bezier(.22,.61,.36,1) !important}
+.stage.snap .thread{transition:none !important}
+.m.on{animation-duration:.3s}
+
+/* the chat a step smaller, in line with the start screen */
+.bub{font-size:13.5px; line-height:20px; padding:11px 16px; border-radius:16px; margin-bottom:14px}
+.agent{font-size:13.5px; line-height:21px; margin-bottom:12px}
+.meta{font-size:12.5px; line-height:18px; margin-bottom:10px}
+.mxd{font-size:12px; line-height:17px}
+.qhead h4{font-size:14px; line-height:20px}
+.qcard p.sub{font-size:12.5px; line-height:18px}
+.qcard.on{padding:13px 14px 2px}
+.opt b{font-size:14px; line-height:20px}
+.opt span.d{font-size:12.5px; line-height:17px}
+.opt .n{font-size:11.5px}
+.inrow{height:48px; padding-left:18px}
+.inrow input.ph, .inrow .ph{font-size:13.5px}
+.inrow .hint{font-size:11.5px}
+.inrow .go{width:32px; height:32px}
+.tkh, .tks, .tkd, .cot .chd{font-size:13px; line-height:19px}
+.try, .try2{font-size:12.5px}
+
+/* the question card opens at a calmer pace: the box grows, then the heading and the three choices settle in one after another */
+.qcard{transition:max-height .7s cubic-bezier(.22,.61,.36,1), opacity .25s ease, padding .7s cubic-bezier(.22,.61,.36,1) !important}
+.qcard.on{transition:max-height .7s cubic-bezier(.22,.61,.36,1), opacity .4s ease .1s, padding .7s cubic-bezier(.22,.61,.36,1) !important}
+.qcard .qhead, .qcard .sub, .qcard .opt{opacity:0; transform:translateY(6px)}
+.qcard.on .qhead, .qcard.on .sub, .qcard.on .opt{opacity:1; transform:none; transition:opacity .45s ease, transform .55s cubic-bezier(.22,.61,.36,1)}
+.qcard.on .qhead{transition-delay:.15s} .qcard.on .sub{transition-delay:.25s}
+.qcard.on .opt:nth-of-type(1){transition-delay:.4s} .qcard.on .opt:nth-of-type(2){transition-delay:.55s} .qcard.on .opt:nth-of-type(3){transition-delay:.7s}
+.qcard.min .qhead{opacity:1; transform:none}
+
+/* chat history on the right of the start screen; it folds away from the top bar, and steps aside once a question is asked */
+.hbtn{width:30px; height:30px; border-radius:8px; display:grid; place-items:center; color:var(--t3); transition:background-color .15s ease, color .15s ease, opacity .2s ease}
+.hbtn:hover{background:#f3f3f2; color:var(--ink)}
+.stage:not(.hclosed) .hbtn{background:#f3f3f2; color:var(--ink)}
+.stage.asked .hbtn{opacity:0; pointer-events:none}
+.hist{position:absolute; top:0; right:0; bottom:0; width:232px; padding:20px 14px; border-left:1px solid var(--border); background:#fbfbfa; overflow-y:auto; scrollbar-width:none;
+  transition:transform .55s var(--ease), opacity .35s ease}
+.hist::-webkit-scrollbar{display:none}
+.stage.hclosed .hist, .stage.asked .hist{transform:translateX(100%); opacity:0; pointer-events:none}
+.stage.asked .hist{transition:none}
+.newt{display:flex; align-items:center; gap:8px; height:34px; padding:0 14px 0 12px; margin:0 0 6px 4px; border:1px solid var(--border); border-radius:999px; background:#fff; font-size:12.5px; color:var(--t2); transition:border-color .15s ease}
+.newt:hover{border-color:#B9B8B2}
+.hg{font-size:11.5px; line-height:16px; color:var(--t4); margin:18px 0 4px 8px}
+.hi{display:block; width:100%; padding:7px 8px; border-radius:8px; font-size:12.5px; line-height:18px; color:var(--t2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:background-color .15s ease}
+.hi:hover{background:#efefed}
+.askwrap{transition:opacity .35s ease, transform .5s var(--ease), left .55s var(--ease), right .55s var(--ease)}
+.stage:not(.hclosed):not(.asked) .askwrap{left:96px; right:328px}
+
+/* starter prompts: a row that scrolls sideways, a part of the next card showing, and a quiet arrow */
+.crow{position:relative}
+.cards{display:flex !important; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; margin:-4px; padding:4px}
+.cards::-webkit-scrollbar{display:none}
+.card{flex:0 0 calc((100% - 30px) / 3.2); scroll-snap-align:start; cursor:pointer}
+.crow::after{content:""; position:absolute; top:0; bottom:0; right:-4px; width:56px; background:linear-gradient(to right, rgba(255,255,255,0), #fff 85%); pointer-events:none; opacity:0; transition:opacity .2s ease}
+.crow.more::after{opacity:1}
+.crow::before{content:""; position:absolute; top:0; bottom:0; left:-4px; width:56px; z-index:1; background:linear-gradient(to left, rgba(255,255,255,0), #fff 85%); pointer-events:none; opacity:0; transition:opacity .2s ease}
+.crow.less::before{opacity:1}
+.carr{position:absolute; top:50%; z-index:2; width:30px; height:30px; margin-top:-15px; border-radius:50%; background:#fff; color:var(--t2); display:grid; place-items:center;
+  box-shadow:0 0 0 1px var(--border), 0 6px 14px -8px rgba(25,26,24,.35); opacity:0; pointer-events:none; transition:opacity .2s ease, box-shadow .15s ease}
+.carr:hover{box-shadow:0 0 0 1px #B9B8B2, 0 6px 14px -8px rgba(25,26,24,.45)}
+.carr.on{opacity:1; pointer-events:auto}
+.carr.nx{right:-15px} .carr.pv{left:-15px}
+.card:nth-child(n+4) i{filter:hue-rotate(28deg) saturate(.9)}
+
+/* flat, as in the design: no rule beside the history, no fades, the arrow a plain chevron outside the row */
+.hist{border-left:0; background:#fff}
+.crow::before, .crow::after{display:none !important}
+.carr{background:none; box-shadow:none; width:24px; height:24px; margin-top:-12px; color:#55544f}
+.carr:hover{box-shadow:none; color:var(--ink)}
+.carr.nx{right:-34px} .carr.pv{left:-34px}
+.carr svg{width:14px; height:14px}
+</style>
+</head>
+<body>
+<section class="unit">
+  <div class="stage" id="stage">
+    <div class="top"><b>Contracts</b><span class="sp"></span><button class="hbtn" id="hbtn" type="button" aria-label="Show or hide chat history" aria-expanded="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.75" y="2.25" width="12.5" height="11.5" rx="2.5"/><path d="M10 2.5v11"/></svg></button><button class="av" id="av" type="button" aria-label="Account">AK</button></div>
+    <div class="body">
+      <div class="askwrap">
+        <p class="hello"><span>Hello</span><strong>How can I help you?</strong></p>
+        <div class="ask" id="ask">
+          <span class="q"><span id="q"></span><span class="caret"></span></span>
+          <span class="rot" id="rot" aria-hidden="true"><span></span></span>
+          <input id="qin" type="text" aria-label="Ask Sirion" autocomplete="off">
+          <svg class="send" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15.5v-11M5.5 9 10 4.5 14.5 9"/></svg>
+        </div>
+        <div class="starts"><p>Pick a place to start</p><div class="crow" id="crow"><div class="cards" id="cards">
+          <div class="card"><i></i><b>Help me draft a non-disclosure agreement</b></div>
+          <div class="card"><i></i><b>Which contracts expire this year?</b></div>
+          <div class="card"><i></i><b>What is the termination notice in my contracts?</b></div>
+          <div class="card"><i></i><b>Which supplier contracts renew on their own in the next 90 days?</b></div>
+          <div class="card"><i></i><b>Show contracts missing a data-processing addendum</b></div>
+          <div class="card"><i></i><b>Compare liability caps across my vendor agreements</b></div>
+        </div><button class="carr pv" id="cpv" type="button" aria-label="Previous prompts"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg></button><button class="carr nx" id="cnx" type="button" aria-label="More prompts"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5 8 6l-3.5 3.5"/></svg></button></div></div>
+      </div>
+
+      <aside class="hist" id="hist" aria-label="Chat history">
+        <button class="newt" type="button"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 1.5v9M1.5 6h9"/></svg>New thread</button>
+        <p class="hg">Today</p>
+        <button class="hi" type="button">Breach notice over 24 hours</button>
+        <button class="hi" type="button">Supplier contracts renewing in Q1</button>
+        <p class="hg">Yesterday</p>
+        <button class="hi" type="button">Governing law in EU supplier deals</button>
+        <button class="hi" type="button">Draft an NDA for Northwind</button>
+        <p class="hg">Previous 30 days</p>
+        <button class="hi" type="button">Liability caps across vendors</button>
+        <button class="hi" type="button">Contracts missing a data-processing addendum</button>
+        <button class="hi" type="button">Termination notice in my contracts</button>
+      </aside>
+
+      <div class="thread" id="thread">
+        <div class="msgs" id="msgs">
+          <div class="m" id="m-bub"><p class="bub" id="bubq"></p></div>
+          <div class="m" id="m-note"></div>
+          <div class="m" id="m-read"><p class="meta mx" id="mx">Read the request &middot; matched your breach-notice policy<svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M3 1.5 5.5 4 3 6.5"/></svg></p><p class="mxd">Matched &ldquo;report a data breach within 24 hours&rdquo; to your breach-notice policy, so every contract is judged against that 24-hour window.</p></div>
+          <div class="m" id="m-ask"><p class="agent">Before I read your contracts: a miss here could mean a notice period longer than 24 hours, or no breach-notice clause at all, and the list of contracts to fix changes with it. Confirm how it should be judged.</p></div>
+          <div class="m" id="m-judged"><p class="meta"><span id="judged">Judged as a miss when notice is over 24 hours, or absent.</span> <button class="chg" id="chg" type="button">Change</button></p></div>
+          <div class="m" id="m-go"><p class="agent">Reviewing now. The clause can sit in the master agreement, a SOW or a later amendment, so I read each contract family whole and work out which document governs before flagging anything.</p></div>
+          <div class="m" id="m-cot"><div class="cot run" id="cotb"><div class="chd"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3.5 2 6.5 5 3.5 8"/></svg><span class="ct" id="cott">Thinking&hellip;</span></div><div class="cel">
+            <p class="cl"><span class="rl"><em></em><u></u></span><span class="bd"><span class="rt">Scoping the families in play</span><span class="rs"><i></i>Checking for data-processing terms &mdash; <b class="k">0</b> of 1,240 families</span><span class="tx">Scoped 74 families &middot; 318 documents between them</span></span></p>
+            <p class="cl"><span class="rl"><em></em><u></u></span><span class="bd"><span class="rt">Reading every document in each family</span><span class="rs"><i></i>Reading MSAs, SOWs and amendments &mdash; <b class="k">0</b> of 318 documents</span><span class="tx">Read 318 documents &middot; the clause turns up in 62 families</span></span></p>
+            <p class="cl"><span class="rl"><em></em><u></u></span><span class="bd"><span class="rt">Resolving what governs each agreement</span><span class="rs"><i></i>Applying precedence &mdash; latest amendment wins, specific over general</span><span class="tx">Resolved 62 families &middot; latest amendment wins, specific over general</span></span></p>
+            <p class="cl warn"><span class="rl"><em></em><u></u></span><span class="bd"><span class="rt">Flagging what misses 24 hours</span><span class="rs"><i></i>Comparing each position with your policy</span><span class="tx">Flagged 14 families &middot; 3 can&rsquo;t be settled, their documents disagree</span></span></p>
+          </div></div></div>
+          <div class="m" id="m-sum"><div class="sum">
+            <p id="sumline"><b>14 contract families</b> across 12 counterparties miss the 24-hour policy:</p>
+            <div class="srow" data-f="c"><span>Terms conflict</span><b id="s-c">3</b><span>documents disagree; no single position to report</span></div>
+            <div class="srow" data-f="m"><span>Clause missing</span><b id="s-m">6</b><span>nothing on breaches anywhere in the family</span></div>
+            <div class="srow" data-f="o"><span>Over 24 hours</span><b id="s-o">5</b><span>48 hours to 5 business days</span></div>
+            <p class="golink">Here are all the families that fall short <a id="golink">Breach notice &middot; <span class="nf">14</span> families &#8599;</a></p>
+          </div></div>
+          <div id="extra"></div>
+        </div>
+        <div class="composer" id="composer">
+          <div class="qcard" id="qcard">
+            <div class="qhead"><h4>How should a miss be judged?</h4>
+              <button class="qb" id="qmin" type="button" aria-label="Minimise"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+              <button class="qb" id="qx" type="button" aria-label="Skip the question"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button></div>
+            <p class="sub">The list changes with the answer. Your breach-notice policy is the closest match.</p>
+            <button class="opt" type="button"><span class="n">1</span><span><b>Notice over 24 hours, or no clause<em>(recommended)</em></b><span class="d">Your breach-notice policy &middot; silence counts as a miss &middot; signed and active</span></span></button>
+            <button class="opt" type="button"><span class="n">2</span><span><b>No clause at all</b><span class="d">Only agreements that say nothing about breaches</span></span></button>
+            <button class="opt" type="button"><span class="n">3</span><span><b>Signed before the policy date</b><span class="d">Cut-off at the date the policy took effect</span></span></button>
+          </div>
+          <div class="inrow"><button class="plus" id="plus" type="button" aria-label="Add files"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#5f5e5a" stroke-width="1.4" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg></button><input class="ph" id="fin" type="text" placeholder="Ask a follow-up&hellip;" autocomplete="off"><span class="hint">use / to add contracts or @ to tag people</span><button class="go" id="fgo" type="button" aria-label="Send"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 10V2M2.8 5.2 6 2l3.2 3.2"/></svg></button></div>
+        </div>
+      </div>
+
+      <div class="plan" id="plan"><p class="ph2"><span>ONGOING PLAN</span><span>4 steps &middot; Est. 12s</span></p>
+        <div class="pcard" id="pcard"><h5><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#4b57c9" stroke-width="1.4" stroke-linecap="round"><path d="M5 3.5h7M5 7h7M5 10.5h7M2 3.5h.5M2 7h.5M2 10.5h.5"/></svg>Breach notice &middot; policy review</h5>
+          <p class="ps"><i>1</i>Scope the families in play</p><p class="ps"><i>2</i>Read every document in each</p><p class="ps"><i>3</i>Resolve what governs each agreement</p><p class="ps"><i>4</i>Flag what misses 24 hours</p></div></div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <aside class="listp" id="listp" aria-label="Contract families">
+        <div class="lh"><h3>Breach notice &middot; <span class="nf">14</span> families</h3><button class="lx" id="lx" type="button" aria-label="Back to the conversation"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button></div>
+        <p class="lsub">Judged against your 24-hour breach-notice policy</p>
+        <div class="counts"><span class="cnt k-c" data-f="c"><b id="c-c">3</b>Terms conflict</span><span class="cnt k-m" data-f="m"><b id="c-m">6</b>Clause missing</span><span class="cnt k-o" data-f="o"><b id="c-o">5</b>Over 24 hours</span></div>
+        <p class="fline" id="fline"></p>
+        <div class="list" id="list">
+          <div class="th"><span>Contract family</span><span>Counterparty</span><span>Breach notice</span><span>Finding</span></div>
+          <div id="rows"></div>
+        </div>
+        <div class="cite" id="cite"></div>
+      </aside>
+
+      <aside class="det" id="det" aria-label="Contract family">
+        <div class="dh"><button class="dx" id="dx" type="button"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg>Back to the list</button>
+          <h3 id="dt">IT Services Relationship</h3><p id="ds">Northgate Aerospace &middot; FA9088 &middot; Active</p></div>
+        <div class="dp" id="dp">
+          <p class="verdict"><b>Not settled.</b> Three documents in this family give three different deadlines, and none of them says it takes priority.</p>
+          <div class="quote"><div class="ref"><b>Master Services Agreement</b><span>&sect;9.2 &middot; page 14</span></div>
+            <p>&ldquo;The Supplier shall notify the Customer within <mark>seventy-two (72) hours</mark> of becoming aware of a Security Incident.&rdquo;</p></div>
+          <div class="quote"><div class="ref"><b>Data Processing Addendum</b><span>&sect;6.3 &middot; page 4</span></div>
+            <p>&ldquo;&hellip;without undue delay and in any event within <mark>forty-eight (48) hours</mark>.&rdquo;</p></div>
+          <div class="quote"><div class="ref"><b>Support SOW</b><span>&sect;4.1 &middot; page 3</span></div>
+            <p>&ldquo;&hellip;within <mark>five (5) business days</mark> of confirming a Support Incident.&rdquo;</p></div>
+          <p class="note">All three miss 24 hours, so the family is on the list either way. Which one to fix first is a lawyer&rsquo;s call.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="demobar" id="demobar">
+    <div class="dline"><i id="dfill"></i></div>
+    <div class="drow"><span class="dlab" id="dlab"><b>01</b>Ask in your own words</span><button class="dtry" id="dtry" type="button">I want to try this myself</button></div>
+  </div>
+</section>
+
+<script>
+/* ---------- sample data. The companies, contracts and clauses are made up. ---------- */
+const QUERY = 'Our new policy needs vendors to report a data breach within 24 hours. Which contracts don’t meet it?';
+const F = {c:['Terms conflict','k-c'], m:['Clause missing','k-m'], o:['Over 24 hours','k-o']};
+const ROWS = [
+  {ti:'IT Services Relationship', id:'FA9088', cp:'Northgate Aerospace', bn:'5 business days', bw:'in the Support SOW', f:'c', pre:1, n:7, why:'The weakest of three competing terms in this family; none of them says which one wins.', q:[['Support SOW','\u00a74.1 \u00b7 page 3','\u201cThe Supplier shall notify the Customer within <mark>five (5) business days</mark> of confirming a Support Incident.\u201d']]},
+  {ti:'Platform Services', id:'FA5529', cp:'Lumenfield Data', bn:'5 business days', bw:'MSA \u00a711.4', f:'c', pre:0, n:2,
+   q:[['Master Services Agreement','\u00a711.4 \u00b7 page 9','\u201c\u2026no later than <mark>five (5) business days</mark> after discovery.\u201d'],
+      ['Platform SOW','\u00a73.2 \u00b7 page 2','\u201c\u2026notify the Customer within <mark>forty-eight (48) hours</mark>.\u201d']]},
+  {ti:'Data Analytics', id:'FA8461', cp:'Brightline Data', bn:'72 hours', bw:'in the DPA', f:'c', pre:1, n:3,
+   q:[['Data Processing Addendum','\u00a75.1 \u00b7 page 3','\u201c\u2026within <mark>seventy-two (72) hours</mark> of confirmation of a breach.\u201d'],
+      ['Amendment 2','\u00a72 \u00b7 page 1','\u201c\u2026and in any event within <mark>forty-eight (48) hours</mark>.\u201d']]},
+  {ti:'Consulting Framework', id:'FA5233', cp:'Corvane Consulting', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Strategy SOW','Delivery SOW']},
+  {ti:'Platform Data', id:'FA7713', cp:'Cloudmere Systems', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Data Processing Addendum','Hosting SOW','Support SOW']},
+  {ti:'Care Services', id:'FA4188', cp:'Westbrook Health', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Care Services DPA','Amendment 1']},
+  {ti:'Logistics Relationship', id:'FA9155', cp:'Ardent Logistics', bn:'72 hours', bw:'MSA \u00a78.1', f:'o', pre:1, n:1,
+   q:[['Master Services Agreement','\u00a78.1 \u00b7 page 11','\u201c\u2026notification within <mark>72 hours</mark> of detection.\u201d']]},
+  {ti:'Field Services', id:'FA7806', cp:'Redmere Facilities', bn:'5 business days', bw:'SOW overrides the MSA', f:'o', pre:0, n:2,
+   q:[['Field Services SOW','\u00a76.2 \u00b7 page 4','\u201c\u2026within <mark>five (5) business days</mark> of becoming aware. This clause prevails over the Agreement.\u201d']]},
+  {ti:'Data Services', id:'FA6341', cp:'Halden Ventures', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Analytics SOW','Reporting SOW','Migration SOW','Support SOW']},
+  {ti:'Payroll Relationship', id:'FA2248', cp:'Tallow Payroll', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Amendment 1','Amendment 2']},
+  {ti:'Facilities Support', id:'FA3319', cp:'Brookhaven Services', bn:'None', bw:'nowhere in the family', f:'m', pre:1, docs:['Master Services Agreement','Cleaning SOW']}];
+/* how many families each reading flags: all three kinds, only missing clauses, or only those signed before the policy */
+const RULES = [{c:3, m:6, o:5, keep:r => true}, {c:0, m:6, o:0, keep:r => r.f === 'm'}, {c:2, m:6, o:4, keep:r => r.pre}];
+const FAMS = []; ROWS.forEach((r, i) => { FAMS.push({k: r.cp.toLowerCase().split(' ')[0], i}); FAMS.push({k: r.ti.toLowerCase(), i}); });
+const JUDGED = ['Judged as a miss when notice is over 24 hours, or absent.','Judged as a miss only when there is no clause at all.','Judged as a miss when signed before the policy date.'];
+
+const $ = id => document.getElementById(id);
+const stage = $('stage'), ask = $('ask'), qEl = $('q'), rowsEl = $('rows'), msgs = $('msgs'), composer = $('composer');
+rowsEl.innerHTML = ROWS.map((r, i) => `<div class="tr" data-i="${i}"><span class="ti">${r.ti}<small>${r.id}</small></span><span class="cp">${r.cp}</span>
+  <span class="bn"><b>${r.bn}</b><small>${r.bw}</small></span><span class="pill ${F[r.f][1]}">${F[r.f][0]}</span></div>`).join('');
+const opts = [...document.querySelectorAll('.opt')], cls = [...document.querySelectorAll('.cl')], pss = [...document.querySelectorAll('.ps')];
+const M = id => $('m-' + id);
+const say = (id, on = true) => { M(id).classList.toggle('on', on); fitComposer(); follow(); };
+function fitComposer(){ requestAnimationFrame(() => { msgs.style.setProperty('--cb', (composer.offsetHeight + 24) + 'px'); msgs.style.bottom = (composer.offsetHeight + 24) + 'px'; }); }
+let followT = null;
+/* the chat follows new text with one continuous glide that keeps easing toward the bottom as it grows, instead of a fresh scroll for every line */
+let glideRaf = 0;
+function follow(){
+  if(glideRaf) return;
+  const d0 = msgs.scrollHeight - msgs.clientHeight - msgs.scrollTop; if(d0 > 900) msgs.scrollTop = msgs.scrollHeight - msgs.clientHeight - 300;
+  const stepG = () => { const d = msgs.scrollHeight - msgs.clientHeight - msgs.scrollTop;
+    if(d <= .5){ glideRaf = 0; return; } msgs.scrollTop += Math.max(.6, d * .1); glideRaf = requestAnimationFrame(stepG); };
+  glideRaf = requestAnimationFrame(stepG);
+}
+['wheel','touchstart'].forEach(ev => msgs.addEventListener(ev, () => { if(glideRaf){ cancelAnimationFrame(glideRaf); glideRaf = 0; } }, {passive:true}));
+function card(on){ $('qcard').classList.toggle('on', on); fitComposer(); setTimeout(() => { fitComposer(); follow(); }, 760); }
+function pick(k){ opts.forEach((o, i) => o.classList.toggle('picked', i === k)); $('judged').textContent = JUDGED[k]; }
+function plan(n, running){ $('plan').classList.toggle('on', n > 0); stage.classList.toggle('planning', n > 0); pss.forEach((p, i) => { p.classList.toggle('done', i < n - (running ? 1 : 0)); p.classList.toggle('run', running && i === n - 1); });
+  $('pcard').style.setProperty('--pp', (Math.max(0, n - (running ? .5 : 0)) / 4 * 100) + '%'); }
+function cot(n, running){ cls.forEach((c, i) => { c.classList.toggle('on', i < n); c.classList.toggle('run', running && i === n - 1); c.classList.toggle('done', i < n && !(running && i === n - 1)); }); }
+const FAM = {
+  0:{terms:[['Master Services Agreement §9.2','72 hours'],['Data Processing Addendum §6.3','48 hours'],['Support SOW §4.1','5 business days',1],['Hosting SOW','No clause found'],['Implementation SOW','No clause found']], comp:'MSA · DPA · 5 SOWs', rec:7, key:'Renewal in 87 days'},
+  1:{terms:[['Master Services Agreement §11.4','5 business days',1],['Platform SOW §3.2','48 hours']], comp:'MSA · 1 SOW', rec:2, key:'Renewal in 140 days'},
+  2:{terms:[['Data Processing Addendum §5.1','72 hours',1],['Amendment 2 §2','48 hours']], comp:'MSA · DPA · Amendment 2', rec:3, key:'Expires in 11 months'},
+  6:{terms:[['Master Services Agreement §8.1','72 hours',1]], comp:'MSA only', rec:1, key:'Renewal in 64 days'},
+  7:{terms:[['Field Services SOW §6.2','5 business days',1],['Master Services Agreement §10.3','24 hours']], comp:'MSA · 1 SOW', rec:2, key:'Renewal in 9 months'}};
+function openRow(i){
+  const r = ROWS[i]; rowsEl.querySelectorAll('.tr').forEach(x => x.classList.toggle('sel', +x.dataset.i === i)); hideCite && hideCite();
+  $('dt').textContent = r.ti; $('ds').innerHTML = r.cp + ' &middot; ' + r.id + ' &middot; Active';
+  let h = '';
+  if(r.f === 'm'){
+    h += '<div class="why2"><p class="wl">FROM THIS ANSWER</p><h5>No breach-notice clause, policy is 24 hours</h5><p class="ws">Read across all ' + r.docs.length + ' documents in the family</p><blockquote>Nothing obliges this vendor to tell you about a breach at all. Silence counts as a miss under the rule you picked.</blockquote></div>';
+    h += '<p class="sec2">BREACH-NOTICE TERMS &middot; NONE FOUND</p><div class="kvc">' + r.docs.map(d => '<p class="kv"><span>' + d + '</span><b>No clause found</b></p>').join('') + '</div>';
+    h += '<p class="sec2 f">FAMILY</p><div class="kvc"><p class="kv"><span>Composition</span><b>' + r.docs.length + ' documents</b></p><p class="kv"><span>Records</span><b>' + r.docs.length + ' &middot; <u class="prot" data-p="agreements">view agreements</u></b></p></div>';
+  } else {
+    const F2 = FAM[i] || {terms:[[r.bw, r.bn, 1]], comp:'—', rec:r.n || 1, key:'—'}, q = pickQ(r), conflict = r.f === 'c';
+    const why = r.why || (conflict ? 'One of competing terms in this family; none of them says which one wins.' : r.bw === 'SOW overrides the MSA' ? 'The SOW says it prevails over the master, so its term governs.' : 'The only term in the family, and it runs past 24 hours.');
+    h += '<div class="why2' + (conflict ? ' c' : '') + '"><p class="wl">FROM THIS ANSWER</p><h5>Breach notice: ' + r.bn + ', policy is 24 hours</h5><p class="ws">' + q[0] + ' &middot; ' + q[1] + '</p><blockquote>' + q[2] + ' ' + why + '</blockquote></div>';
+    const n = F2.terms.filter(x => x[1] !== 'No clause found').length;
+    h += '<p class="sec2">BREACH-NOTICE TERMS' + (n > 1 ? ' &middot; ' + n + (conflict ? ' COMPETE' : ' FOUND') : '') + '</p><div class="kvc">' +
+      F2.terms.map(x => '<p class="kv' + (x[2] ? ' worst' : '') + '"><span>' + x[0] + '</span><b>' + x[1] + (x[2] ? '<i>' + (conflict ? 'Worst term' : 'Governs') + '</i>' : '') + '</b></p>').join('') + '</div>';
+    h += '<p class="sec2 f">FAMILY</p><div class="kvc"><p class="kv"><span>Composition</span><b>' + F2.comp + '</b></p><p class="kv"><span>Records</span><b>' + F2.rec + ' &middot; <u class="prot" data-p="agreements">view agreements</u></b></p><p class="kv"><span>Next key date</span><b>' + F2.key + '</b></p></div>';
+  }
+  h += '<div class="dact"><button class="dbtn s" type="button">Ask about this family</button><button class="dbtn p prot" data-p="family" type="button">Open contract family</button></div>';
+  $('dp').innerHTML = h; stage.classList.add('detail');
+}
+function applyRule(k){ sumK = k; filt = null; if(typeof $ === 'function' && $('fline')){ $('fline').classList.remove('on'); $('listp').classList.remove('filtered'); document.querySelectorAll('.counts').forEach(c => c.classList.remove('filtering')); document.querySelectorAll('.cnt').forEach(c => c.classList.remove('act')); }
+  const R = RULES[k], tot = R.c + R.m + R.o;
+  rowsEl.querySelectorAll('.tr').forEach(x => x.classList.toggle('hide', !R.keep(ROWS[+x.dataset.i])));
+  ['c','m','o'].forEach(f => { $('s-' + f).textContent = R[f]; $('c-' + f).textContent = R[f]; $('c-' + f).parentElement.style.display = R[f] ? '' : 'none'; $('s-' + f).parentElement.style.display = R[f] ? '' : 'none'; });
+  document.querySelectorAll('.nf').forEach(n => n.textContent = tot);
+  cls[3].querySelector('.tx').innerHTML = ['Flagged 14 families &middot; 3 can&rsquo;t be settled, their documents disagree','Flagged 6 families &middot; no breach clause anywhere in them','Flagged 12 families &middot; 2 can&rsquo;t be settled, their documents disagree'][k];
+  $('sumline').innerHTML = k === 1 ? '<b>6 contract families</b> have no breach-notice clause at all:' : '<b>' + tot + ' contract families</b> across ' + (k === 2 ? 10 : 12) + ' counterparties miss the 24-hour policy:';
+}
+function closeRow(){ stage.classList.remove('detail'); rowsEl.querySelectorAll('.tr').forEach(x => x.classList.remove('sel')); }
+function counter(c, to, ms, t){ const k = c.querySelector('b.k'); if(!k) return Promise.resolve(); const t0 = performance.now();
+  return new Promise(res => { const f = now => { if(t !== undefined && t !== demo.token) return res(); const e = Math.min(1, (now - t0) / ms); k.textContent = Math.round(to * e).toLocaleString(); e < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); }); }
+
+/* the answer state: what the first frame shows, and where every run ends */
+function showAnswer(){
+  qEl.textContent = QUERY; $('bubq').textContent = QUERY; stage.classList.add('asked', 'listing'); closeRow(); hideCite(); card(false); pick(0); applyRule(0);
+  ['bub','read','ask','judged','go','cot','sum'].forEach(id => M(id).classList.add('on')); M('note').classList.remove('on'); M('note').innerHTML = ''; $('extra').innerHTML = ''; cot(4, false); cotState('closed'); $('mx').classList.remove('open'); plan(4, false); $('plan').classList.remove('on'); stage.classList.remove('planning');
+  cls.forEach(c => { const k = c.querySelector('b.k'); if(k) k.textContent = ''; });
+  fitComposer(); setTimeout(() => msgs.scrollTo({top: msgs.scrollHeight}), 50);
+}
+function clearAll(){ ask.classList.remove('has'); hideCite(); $('extra').innerHTML = ''; M('note').classList.remove('on'); M('note').innerHTML = ''; qin.value = ''; ask.classList.remove('typing'); stage.classList.remove('asked', 'listing', 'detail'); qEl.textContent = ''; card(false); opts.forEach(o => o.classList.remove('picked'));
+  ['bub','read','ask','judged','go','cot','sum'].forEach(id => M(id).classList.remove('on')); cot(0, false); cotState('run'); $('mx').classList.remove('open'); plan(0, false); msgs.scrollTo({top:0}); }
+
+/* ---------- by hand ---------- */
+let busy = false, userQ = false;   /* userQ: the reader has asked something of their own. the demo then waits to be asked back */
+async function runFrom(k){
+  if(busy) return; busy = true; userQ = true;
+  stage.classList.remove('listing', 'detail'); pick(k); await new Promise(r => setTimeout(r, 450)); card(false);
+  M('sum').classList.remove('on'); cot(0, false); cotState('run'); say('judged'); await new Promise(r => setTimeout(r, 500)); say('go'); say('cot');
+  for(let n = 1; n <= 4; n++){ cot(n, true); plan(n, true); follow(); await counter(cls[n-1], [1240, 318, 0, 0][n-1], [1500, 800, 0, 0][n-1]); await pause([600, 350, 950, 700][n-1]); cot(n, false); plan(n, false); }
+  applyRule(k); cotState('closed'); await new Promise(r => setTimeout(r, 400)); say('sum'); await new Promise(r => setTimeout(r, 1000)); stage.classList.add('listing'); setTimeout(follow, 700); busy = false;
+}
+/* by hand: the box offers the one question this demo answers, typed in for you; anything else you type still gets sent, with a note */
+const qin = $('qin'), fin = $('fin'), norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+let offering = false;
+async function offer(){
+  if(qin.value || offering) return; offering = true;
+  const pick0 = rotI > 0 ? ROT[rotI] : QUERY;
+  for(const ch of pick0){ if(!offering) return; qin.value += ch; await new Promise(r => setTimeout(r, 18)); }
+  offering = false; qin.select();
+}
+ask.addEventListener('click', () => { if(demo.running || stage.classList.contains('asked')) return; ask.classList.add('typing', 'focus'); qin.focus(); offer(); });
+qin.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); submitQ(qin.value.trim() || QUERY); } else if(offering){ offering = false; } });
+qin.addEventListener('blur', () => { if(!qin.value) ask.classList.remove('typing', 'focus'); });
+/* the arrow is live whenever there is something in the box, whether typed by the reader or offered by the box itself */
+const syncSend = () => ask.classList.toggle('has', !!qin.value.trim() && !stage.classList.contains('asked'));
+qin.addEventListener('input', syncSend); setInterval(syncSend, 120);
+document.querySelector('.ask .send').addEventListener('click', e => { if(demo.running || stage.classList.contains('asked')) return; e.stopPropagation(); submitQ(qin.value.trim() || QUERY); });
+document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => { if(!demo.running && !stage.classList.contains('asked')) submitQ(c.querySelector('b').textContent); }));
+/* history: fold it away and back; an old thread opens the way a new question does */
+$('hbtn').addEventListener('click', e => { e.stopPropagation(); const c = stage.classList.toggle('hclosed'); $('hbtn').setAttribute('aria-expanded', String(!c)); setTimeout(carr, 600); });
+document.querySelectorAll('.hi').forEach(h => h.addEventListener('click', () => { if(!demo.running && !stage.classList.contains('asked')) submitQ(h.textContent); }));
+/* starter prompts: arrows show only when there is more that way */
+const cards = $('cards');
+function carr(){ const m = cards.scrollWidth - cards.clientWidth, x = cards.scrollLeft;
+  $('cpv').classList.toggle('on', x > 4); $('cnx').classList.toggle('on', x < m - 4); $('crow').classList.toggle('more', x < m - 4); $('crow').classList.toggle('less', x > 4); }
+cards.addEventListener('scroll', carr, {passive:true}); addEventListener('resize', carr); setTimeout(carr, 50);
+$('cnx').addEventListener('click', e => { e.stopPropagation(); cards.scrollBy({left: cards.clientWidth * .66, behavior:'smooth'}); });
+$('cpv').addEventListener('click', e => { e.stopPropagation(); cards.scrollBy({left: -cards.clientWidth * .66, behavior:'smooth'}); });
+const MAILTO = 'amritkmr08@gmail.com';
+const mailHref = q => 'mailto:' + MAILTO + '?subject=' + encodeURIComponent('From your portfolio: ' + (q.length > 70 ? q.slice(0, 67) + '…' : q)) +
+  '&body=' + encodeURIComponent('Hi Amrit,\n\nI tried the search demo on your portfolio and asked:\n\n“' + q + '”\n\nI’d like to talk about how this would work for ');
+/* a small router for questions typed or clicked. It answers the few it can, honestly, with sample data,
+   and points everything else at the question this demo was built for, or at Amrit. */
+function intent(q){
+  const s = q.toLowerCase();
+  if(!s.replace(/[^a-z0-9]/g,'')) return 'empty';
+  if(/breach|24.?hour|notif|incident/.test(s)) return 'breach';
+  if(/^help\b|what can you do|how (does|do) (this|it|you) work|what is this|capabilit/.test(s)) return 'help';
+  if(/thank|great|nice|cool|awesome|love/.test(s)) return 'thanks';
+  if(/price|cost|pricing|licen[cs]e fee|how much/.test(s)) return 'price';
+  if(/secur|privacy|private|my data|confidential|safe|gdpr|soc ?2/.test(s)) return 'data';
+  if(/wrong|mistake|halluc|accura|trust|sure|confiden/.test(s)) return 'trust';
+  if(FAMS.some(f => s.includes(f.k)) && !/liabilit|indemn|governing law|jurisdiction|payment|invoice|uptime|force majeure|assign|insurance|audit|warrant/.test(s)) return 'family';
+  if(/liabilit|indemn|governing law|jurisdiction|payment|invoice|price increase|uptime|sla|service level|force majeure|assign|confidential|auto.?renew|non.?compete|warrant|insurance|audit|data protection|sub.?processor/.test(s)) return 'clause';
+  if(/amrit|who (made|built|designed)|designer|portfolio|hire|resume|résumé|experience/.test(s)) return 'amrit';
+  if(/expir|renew|this year|end date/.test(s)) return 'expire';
+  if(/terminat|notice period|exit/.test(s)) return 'term';
+  if(/draft|nda|non.?disclosure|write|redline|template/.test(s)) return 'draft';
+  if(/your name|who are you|what are you|are you (an? )?(ai|bot|human)/.test(s)) return 'name';
+  if(/^(hi|hello|hey|yo)\b/.test(s)) return 'hello';
+  return 'other';
+}
+const rows = r => '<div class="mini">' + r.map(x => '<p><span>' + x[0] + '<small>' + x[1] + '</small></span><b>' + x[2] + '</b></p>').join('') + '</div>';
+const SAMPLE = '<p class="agent">This is sample data, so every company and contract here is made up. In Sirion, I&rsquo;d read your own contracts and answer from them.</p>';
+const s0 = q => q.toLowerCase();
+function answerFor(q){
+  const mail = '<p class="mailrow"><a class="mail" target="_top" href="' + mailHref(q) + '">Send your question to Amrit &#8599;</a></p>';
+  switch(intent(q)){
+    case 'expire': return '<p class="agent">Six contract families expire before the end of 2026. Two of them renew on their own unless notice goes out first, so those come first:</p>' +
+      rows([['Logistics Relationship','Ardent Logistics &middot; renews automatically','30 Nov &middot; notice by 31 Oct'],['Field Services','Redmere Facilities &middot; renews automatically','15 Dec &middot; notice by 15 Nov'],['Care Services','Westbrook Health','31 Dec']]) + SAMPLE;
+    case 'term': return '<p class="agent">It isn&rsquo;t one number. Across your contract families the termination notice ranges from 30 to 90 days, and in a few the SOW sets a different period from the master agreement:</p>' +
+      rows([['Most families','master agreement','90 days'],['Platform Services','Lumenfield Data &middot; SOW overrides','60 days'],['Consulting Framework','Corvane Consulting','30 days']]) + SAMPLE;
+    case 'draft': return '<p class="agent">Drafting is a different part of the product, so it isn&rsquo;t in this demo. Further down this page, <b>Reach</b> shows how Amrit designed AI edits to a contract, including the clause an edit didn&rsquo;t touch but put out of step.</p>';
+    case 'amrit': return '<p class="agent">Amrit designs contract software at Sirion, helping lawyers work with AI and make informed decisions. 13 years in design, the last 3 focused on AI. Everything on this page is his work, and this search is one of the concepts.</p>' +
+      '<p class="mailrow"><a class="mail" target="_top" href="' + mailHref(q) + '">Write to Amrit &#8599;</a></p>';
+    case 'name': return '<p class="agent">I&rsquo;m a working concept of Sirion&rsquo;s contract search, designed by Amrit. I search a small set of sample contracts and I&rsquo;m built around one question, about a new 24-hour breach-notice policy.</p>';
+    case 'empty': return '<p class="agent">Ask me anything about your contracts. I&rsquo;m best at the breach-notice question below.</p>';
+    case 'family': { const f = FAMS.find(x => s0(q).includes(x.k)), r = ROWS[f.i], fl = {c:'Terms conflict', m:'Clause missing', o:'Over 24 hours'}[r.f];
+      const say1 = r.f === 'm' ? 'there&rsquo;s no breach-notice clause anywhere in the family, so it misses your 24-hour policy.'
+        : r.f === 'c' ? 'its documents disagree on breach notice. The weakest term is <b>' + r.bn + '</b> (' + r.bw + '), which is over your 24-hour policy.'
+        : 'breach notice is <b>' + r.bn + '</b> (' + r.bw + '), which is over your 24-hour policy.';
+      return '<p class="agent"><b>' + r.ti + '</b> with ' + r.cp + ': ' + say1 + '</p><p class="mailrow"><button class="try2" type="button" data-open="' + f.i + '">Open this family &rarr;</button></p>' + SAMPLE; }
+    case 'help': return '<p class="agent">I search your contracts in plain words. Before I read, I check how you want the question judged; I read each contract family whole, master agreement, SOWs and amendments; and every answer opens the list it came from, down to the clause. This demo is loaded with one question about a 24-hour breach-notice policy.</p>';
+    case 'thanks': return '<p class="agent">Glad it helped. If you&rsquo;d like to talk about how this would work for your product, Amrit is easy to reach.</p><p class="mailrow"><a class="mail" target="_top" href="' + mailHref(q) + '">Write to Amrit &#8599;</a></p>';
+    case 'price': return '<p class="agent">This is a design concept on Amrit&rsquo;s portfolio, not a product for sale, so there&rsquo;s no price to give.</p>';
+    case 'data': return '<p class="agent">Nothing here is real. The contracts are made up and nothing you type leaves this page, unless you choose to email it to Amrit.</p>';
+    case 'trust': return '<p class="agent">That&rsquo;s the point of this design. I ask how a miss should be judged before I read, every count opens the list behind it, every row shows the clause it came from, and when documents disagree I say so instead of picking one.</p>';
+    case 'clause': { const m = s0(q).match(/liabilit\w*|indemn\w*|governing law|jurisdiction|payment\w*|invoice\w*|price increase\w*|uptime|sla|service levels?|force majeure|assign\w*|confidential\w*|auto.?renew\w*|non.?compete|warrant\w*|insurance|audit\w*|data protection|sub.?processors?/);
+      return '<p class="agent">I&rsquo;d search every contract family for <b>' + (m ? m[0] : 'that clause') + '</b> the same way: read each family whole, work out which document governs, and show the exact words with the page. In this demo only breach-notice terms are loaded, so I can&rsquo;t show it here.</p>' + '<p class="mailrow"><a class="mail" target="_top" href="' + mailHref(q) + '">Send your question to Amrit &#8599;</a></p>'; }
+    case 'hello': return '<p class="agent">Hello. This demo searches a set of sample contracts. It&rsquo;s built around one question, about a new 24-hour breach-notice policy. Try it below.</p>';
+    default: return '<p class="agent">This demo is built around one question, so I can&rsquo;t answer yours here. The thinking behind it, asking before it reads and showing where every answer comes from, is what Amrit designs.</p>' + mail;
+  }
+}
+const TSTEPS = {
+  expire: ['Reading your question', 'Checking end dates across 74 contract families', 'Putting automatic renewals first'],
+  term: ['Reading your question', 'Finding the termination notice in 74 contract families', 'Checking where an SOW overrides the master agreement'],
+  family: ['Finding that contract family', 'Reading its master agreement, SOWs and amendments', 'Comparing its breach notice with your policy'],
+  clause: ['Reading your question', 'Looking for that clause across 74 contract families'],
+  breach: ['Reading your question', 'Matching it to the answer above']};
+const pause = ms => new Promise(r => setTimeout(r, ms));
+async function thinkRun(el, st, w){
+  el.innerHTML = '<div class="tk"><p class="tkh">Thinking&hellip;</p></div>'; const tk = el.firstChild; fitComposer(); follow();
+  await w(420);
+  const beats = [620, 1250, 880, 1050, 700];               /* each step takes its own time, not the same beat */
+  let i = 0;
+  for(const x of st){ const r = document.createElement('p'); r.className = 'tks run'; r.innerHTML = '<em></em>'; r.appendChild(document.createTextNode(x)); tk.appendChild(r); fitComposer(); follow(); await w(st.length > 1 ? beats[i++ % beats.length] : 800); r.classList.replace('run', 'done'); if(i < st.length) await w(140 + Math.random() * 260); }
+  await w(380);
+}
+/* the breach question thinks before it asks back: the steps run, fold away, and the reading of the request takes their place */
+const BSTEPS = ['Reading your question', 'Matching it to your breach-notice policy', 'Checking what could count as a miss'];
+async function thinkBreach(w){
+  const n = M('note'); n.innerHTML = ''; say('note'); await thinkRun(n, BSTEPS, w);
+  await n.animate([{opacity:1}, {opacity:0}], {duration:220, easing:'ease', fill:'forwards'}).finished;
+  say('note', false); n.innerHTML = ''; n.getAnimations().forEach(a => a.cancel());
+}
+async function thinkInto(el, q){
+  const st = TSTEPS[intent(q)] || ['Reading your question'], t0 = Date.now();
+  await thinkRun(el, st, pause);
+  return st.length > 1 ? '<p class="tkd">Thought for ' + Math.max(1, Math.round((Date.now() - t0) / 1000)) + 's</p>' : '';
+}
+async function swapIn(el, html){
+  const tk = el.querySelector('.tk'); if(tk){ await tk.animate([{opacity:1}, {opacity:0}], {duration:180, easing:'ease', fill:'forwards'}).finished; }
+  const h0 = el.offsetHeight; el.innerHTML = html; const h1 = el.offsetHeight;
+  el.style.overflow = 'hidden';
+  const a = el.animate([{height:h0 + 'px'}, {height:h1 + 'px'}], {duration:Math.min(520, 260 + Math.abs(h1 - h0) * .6), easing:'cubic-bezier(.22,.61,.36,1)'});
+  [...el.children].forEach((c, i) => c.animate([{opacity:0, transform:'translateY(6px)'}, {opacity:1, transform:'none'}], {duration:420, delay:60 + i * 70, easing:'cubic-bezier(.22,.61,.36,1)', fill:'backwards'}));
+  a.onfinish = () => { el.style.overflow = ''; }; fitComposer(); follow();
+}
+async function submitQ(text){
+  if(busy) return; userQ = true; text = text.slice(0, 280);
+  offering = false; qin.blur(); ask.classList.remove('typing', 'focus', 'has'); qin.value = '';
+  qEl.textContent = text; $('bubq').textContent = text; stage.classList.add('asked');
+  say('bub'); await new Promise(r => setTimeout(r, 220));
+  if(intent(text) === 'breach'){ busy = true; await thinkBreach(pause); busy = false; say('read'); await pause(600); say('ask'); await pause(700); card(true); return; }
+  const n = M('note');
+  n.innerHTML = ''; say('note'); busy = true; const pre = await thinkInto(n, text); busy = false;
+  await swapIn(n, pre + answerFor(text) + '<p class="mailrow"><button class="try" type="button">Try the question it was built for &rarr;</button></p>');
+  n.querySelector('.try').addEventListener('click', async e => {
+    e.target.closest('.mailrow').remove();
+    const b = document.createElement('p'); b.className = 'bub'; b.textContent = QUERY; n.appendChild(b); fitComposer(); follow();
+    if(busy) return; busy = true; await pause(400);
+    const tw = document.createElement('div'); n.appendChild(tw); await thinkRun(tw, BSTEPS, pause);
+    await tw.animate([{opacity:1}, {opacity:0}], {duration:220, fill:'forwards'}).finished; tw.remove(); busy = false;
+    say('read'); await pause(600); say('ask'); await pause(700); card(true);
+  });
+}
+/* follow-ups go through the same router */
+async function followUp(){
+  if(demo.running) return; userQ = true; const v = fin.value.trim().slice(0, 280);
+  if(!v){ fin.placeholder = 'Type a question first'; fin.focus(); setTimeout(() => fin.placeholder = 'Ask a follow-up\u2026', 1800); return; }
+  if(busy) return toast('One moment, still reading. Your question will make more sense once this finishes.');
+  fin.value = ''; $('fgo').classList.remove('live');
+  const ex = $('extra'), b = document.createElement('div'); b.className = 'm on';
+  const it = intent(v);
+  b.innerHTML = '<p class="bub"></p><div class="ans"></div>';
+  b.querySelector('.bub').textContent = v; ex.appendChild(b); fitComposer(); follow();
+  const ans = b.querySelector('.ans'); busy = true; const pre = await thinkInto(ans, v); busy = false;
+  await swapIn(ans, pre + (it === 'breach' ? '<p class="agent">That&rsquo;s the question answered above. Use <b>Change</b> to judge it a different way, or open any row in the list to see its terms and sources.</p>' : answerFor(v)));
+}
+fin.addEventListener('input', () => $('fgo').classList.toggle('live', !!fin.value.trim()));
+fin.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); followUp(); } });
+$('fgo').addEventListener('click', followUp);
+document.querySelector('.inrow').addEventListener('click', e => { if(!demo.running && !e.target.closest('#fgo')) fin.focus(); });
+document.addEventListener('click', e => { const b = e.target.closest('.dbtn.s'); if(!b || demo.running) return; fin.value = 'About ' + $('dt').textContent + ': '; fin.focus(); $('fgo').classList.add('live'); });
+opts.forEach((o, k) => o.addEventListener('click', () => { if(!demo.running) runFrom(k); }));
+$('chg').addEventListener('click', () => { if(demo.running) return; if(busy) return toast('One moment, still reading. You can change it as soon as this finishes.'); stage.classList.remove('listing', 'detail'); card(true); setTimeout(follow, 600); });
+$('lx').addEventListener('click', () => { if(demo.running) return; stage.classList.remove('listing', 'detail'); setTimeout(follow, 700); });
+$('golink').addEventListener('click', () => { if(!demo.running) stage.classList.add('listing'); });
+rowsEl.addEventListener('click', e => { if(demo.running) return; const bb = e.target.closest('.bn b'); if(bb){ const i = +bb.closest('.tr').dataset.i; citeRow === i ? hideCite() : showCite(i); return; } const r = e.target.closest('.tr'); if(r) openRow(+r.dataset.i); });
+
+$('dx').addEventListener('click', () => { if(!demo.running) closeRow(); });
+
+
+
+const cotb = $('cotb'), SUMS = ['Read 318 documents in 74 families &middot; 14 flagged, 3 can&rsquo;t be settled','Read 318 documents in 74 families &middot; 6 have no breach clause','Read 318 documents in 74 families &middot; 12 flagged, 2 can&rsquo;t be settled'];
+let sumK = 0;
+function cotState(s){ cotb.classList.remove('run','closed','open'); cotb.classList.add(s); $('cott').innerHTML = s === 'run' ? 'Thinking&hellip;' : SUMS[sumK]; }
+cotb.querySelector('.chd').addEventListener('click', () => { if(demo.running || cotb.classList.contains('run')) return; cotState(cotb.classList.contains('open') ? 'closed' : 'open'); fitComposer(); });
+$('mx').addEventListener('click', () => { if(!demo.running) $('mx').classList.toggle('open'); });
+/* ---------- the citation on hover ---------- */
+const cite = $('cite'); let citeT = null, citeRow = -1;
+const pickQ = r => { const d = (r.bn.match(/\d+/) || [''])[0]; return r.q.find(x => x[2].includes('(' + d + ')') || x[2].includes('>' + d + ' ')) || r.q[0]; };
+function citeHTML(r){
+  if(r.f === 'm') return '<p class="cm">' + r.id + ' &middot; ' + r.docs.length + ' documents read</p><h6>No breach-notice clause</h6><p class="cn">Nothing in this family says when, or whether, a breach must be reported.</p><div class="cd">' + r.docs.map(d => '<p>' + d + '<span>no clause</span></p>').join('') + '</div>';
+  const q = pickQ(r), why = r.why || (r.f === 'c' ? 'One of competing terms in this family; none of them says which one wins.' : r.bw === 'SOW overrides the MSA' ? 'The SOW says it prevails, so its term governs.' : 'The only term in the family, and it runs past 24 hours.');
+  return '<p class="cm">' + q[0] + ' &middot; ' + q[1] + '</p><h6>' + r.bn + (r.f === 'c' ? ', not settled' : '') + '</h6><p class="cn">' + why + '</p><div class="cq">' + q[2] + '</div><a class="prot" data-p="doc">Open document &#8599;</a>';
+}
+function showCite(i){
+  const r = ROWS[i], row = rowsEl.querySelector('.tr[data-i="' + i + '"]'), b = row.querySelector('.bn b'), lp = $('listp').getBoundingClientRect(), br = b.getBoundingClientRect();
+  rowsEl.querySelectorAll('.bn b').forEach(x => x.classList.toggle('hot', x === b));
+  cite.innerHTML = citeHTML(r); citeRow = i;
+  let left = br.left - lp.left - 12; left = Math.max(12, Math.min(left, lp.width - 352));
+  let top = br.bottom - lp.top + 30; const h = cite.offsetHeight || 200;
+  if(top + h > lp.height - 8) top = br.top - lp.top - h - 8;
+  cite.style.left = left + 'px'; cite.style.top = top + 'px'; cite.classList.add('on');
+}
+function hideCite(){ cite.classList.remove('on'); citeRow = -1; rowsEl.querySelectorAll('.bn b').forEach(x => x.classList.remove('hot')); }
+rowsEl.addEventListener('mouseover', e => { if(demo.running) return; const b = e.target.closest('.bn b'); if(!b) return; clearTimeout(citeT); const i = +b.closest('.tr').dataset.i; if(i !== citeRow) citeT = setTimeout(() => showCite(i), 220); });
+rowsEl.addEventListener('mouseout', e => { if(demo.running) return; if(e.target.closest('.bn b')){ clearTimeout(citeT); citeT = setTimeout(hideCite, 260); } });
+cite.addEventListener('mouseenter', () => clearTimeout(citeT));
+cite.addEventListener('mouseleave', () => { if(!demo.running){ clearTimeout(citeT); citeT = setTimeout(hideCite, 200); } });
+
+
+/* rotating suggestions in the empty box; clicking the box takes the one showing */
+const ROT = ['Ask Sirion about your contracts', 'Which contracts don’t meet our 24-hour breach policy?', 'Which contracts expire this year?', 'What is the termination notice in my contracts?', 'What does the Northgate Aerospace contract say about breaches?'];
+let rotI = 0; const rotEl = $('rot').firstElementChild; rotEl.textContent = ROT[0];
+setInterval(() => { if(stage.classList.contains('asked') || ask.classList.contains('typing')) return;
+  rotEl.classList.add('out'); setTimeout(() => { rotI = (rotI + 1) % ROT.length; rotEl.textContent = ROT[rotI]; rotEl.classList.remove('out'); rotEl.classList.add('in'); void rotEl.offsetWidth; rotEl.classList.remove('in'); }, 380); }, 3000);
+
+/* when the thread's width changes (plan card arrives, list opens), fade it into place rather than sliding the text */
+(function(){ const th = $('thread'); let last = '';
+  const key = () => ['asked','planning','listing'].map(c => stage.classList.contains(c) ? 1 : 0).join('');
+  new MutationObserver(() => { const k = key(); if(k === last) return; const was = last; last = k;
+    const slideOnly = was && was[2] === '0' && k[2] === '0';   /* the plan coming or going is a slide, handled in CSS */
+    if(was && was[0] === '1' && k[0] === '1' && !slideOnly) th.animate([{opacity:.55, transform:'translateY(4px)'}, {opacity:1, transform:'none'}], {duration:300, easing:'cubic-bezier(.22,.61,.36,1)'});
+    follow();
+  }).observe(stage, {attributes:true, attributeFilter:['class']}); last = key(); })();
+/* ---------- graceful edges: every click answers ---------- */
+const toastEl = $('toast'); let toastT = null;
+function toast(msg){ toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 2800); }
+const PROT = {family:'This is a prototype, so the contract family page isn’t built. In Sirion it opens every document in the family.',
+  doc:'This is a prototype, so the signed document isn’t here. In Sirion it opens at this exact page and clause.',
+  agreements:'This is a prototype, so the agreements list isn’t built. In Sirion it lists every record in the family.'};
+document.addEventListener('click', e => { if(demo.running) return;
+  const p = e.target.closest('.prot'); if(p){ e.preventDefault(); toast(PROT[p.dataset.p]); return; }
+  const o = e.target.closest('.try2'); if(o){ stage.classList.add('listing'); setTimeout(() => openRow(+o.dataset.open), 450); return; }
+  if(!e.target.closest('.bn b') && !e.target.closest('.cite')) hideCite();
+});
+$('av').addEventListener('click', () => { if(!demo.running) toast('You’re looking at the demo as a sample user. Nothing here is real.'); });
+$('plus').addEventListener('click', e => { e.stopPropagation(); if(!demo.running) toast('Adding files isn’t part of this prototype. In Sirion you can point a question at specific contracts.'); });
+/* the question card: minimise folds it to its title; skip uses the recommended reading and says so */
+$('qmin').addEventListener('click', () => { if(!demo.running){ $('qcard').classList.toggle('min'); fitComposer(); } });
+$('qcard').querySelector('.qhead h4').addEventListener('click', () => { if(!demo.running && $('qcard').classList.contains('min')){ $('qcard').classList.remove('min'); fitComposer(); } });
+$('qx').addEventListener('click', () => { if(demo.running || busy) return; $('qcard').classList.remove('min'); toast('Skipped. Using your breach-notice policy, the recommended reading. You can change it any time.'); runFrom(0); });
+/* the counts are not claims: each one filters the list it came from */
+let filt = null;
+function filterTo(f){
+  filt = filt === f ? null : f;
+  const R = RULES[rule0()]; rowsEl.querySelectorAll('.tr').forEach(x => { const r = ROWS[+x.dataset.i]; x.classList.toggle('hide', !R.keep(r) || (filt && r.f !== filt)); });
+  document.querySelectorAll('.counts').forEach(c => c.classList.toggle('filtering', !!filt));
+  document.querySelectorAll('.cnt').forEach(c => c.classList.toggle('act', c.dataset.f === filt));
+  const n = filt ? R[filt] : R.c + R.m + R.o, nm = {c:'terms conflict', m:'clause missing', o:'over 24 hours'};
+  $('fline').innerHTML = filt ? 'Showing ' + n + ' ' + nm[filt] + ' <button type="button" id="fclr">Show all</button>' : '';
+  $('fline').classList.toggle('on', !!filt); $('listp').classList.toggle('filtered', !!filt);
+  if($('fclr')) $('fclr').onclick = () => filterTo(filt);
+}
+const rule0 = () => Math.max(0, opts.findIndex(o => o.classList.contains('picked')));
+document.querySelectorAll('.cnt').forEach(c => c.addEventListener('click', () => { if(!demo.running) filterTo(c.dataset.f); }));
+document.querySelectorAll('.srow').forEach(s => s.addEventListener('click', () => { if(demo.running) return; stage.classList.remove('detail'); stage.classList.add('listing'); filt = null; setTimeout(() => filterTo(s.dataset.f), 300); }));
+/* the plan's steps open the reasoning that did them */
+pss.forEach(ps => ps.addEventListener('click', () => { if(demo.running || busy) return; if(cotb.classList.contains('closed')) cotState('open'); fitComposer(); M('cot').scrollIntoView({block:'nearest', behavior:'smooth'}); }));
+/* ---------- the loop: it runs by itself until someone asks to take over ---------- */
+const fcur = document.createElement('div'); fcur.id = 'fcur';
+fcur.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 2l14.5 9.2-6.6 1.3 3.9 7-2.6 1.4-3.9-7.1L3.4 18z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+document.body.appendChild(fcur);
+const demo = {token:0, running:false, driving:false, visible:false};
+let fx = 0, fy = 0, fh = null;
+class Stop extends Error {}
+const PACE = 1.15;
+const jit = ms => ms * (0.82 + Math.random() * 0.36);   /* every pause lands a little early or late, the way a person does */
+const wait = (ms, t) => new Promise((res, rej) => setTimeout(() => t === demo.token ? res() : rej(new Stop()), jit(ms) * PACE));
+const ease = k => k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3)/2;
+function fakeHover(clear){
+  const el = clear ? null : document.elementFromPoint(fx, fy), h = el && el.closest('.tr, .opt, .dx');
+  if(h !== fh){ if(fh) fh.classList.remove('fhover'); if(h) h.classList.add('fhover'); fh = h; }
+}
+function place(x, y){ fx = x; fy = y; fcur.style.transform = `translate(${x-3}px, ${y-2}px)`; fakeHover(); }
+function glide(x, y, ms, t){ ms *= PACE; const x0 = fx, y0 = fy, t0 = performance.now();
+  return new Promise((res, rej) => { const f = now => { if(t !== demo.token) return rej(new Stop());
+    const k = Math.min(1, (now - t0)/ms), e = ease(k); place(x0 + (x-x0)*e, y0 + (y-y0)*e); k < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+}
+const mid = el => { const r = el.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; };
+async function press(t){ fcur.classList.add('down'); await wait(120, t); fcur.classList.remove('down'); }
+async function typeIt(s, t){ qEl.textContent = ''; let burst = 0;
+  for(const ch of s){ qEl.textContent += ch; burst++;
+    let d = 22 + Math.random() * 40;                       /* ordinary keys: uneven */
+    if(ch === ' ') d = 60 + Math.random() * 80;              /* a breath between words */
+    if(',.?'.includes(ch)) d = 260 + Math.random() * 220;   /* a real pause after punctuation */
+    if(burst > 7 + Math.random() * 6){ d += 180 + Math.random() * 240; burst = 0; }   /* every few words the hands stop for a moment */
+    await wait(d, t); } }
+const row = i => rowsEl.querySelector(`.tr[data-i="${i}"]`);
+
+async function playOnce(t){
+  fakeHover(true);
+  const sr = stage.getBoundingClientRect(), bodyEl = document.querySelector('.body');
+  if(stage.classList.contains('asked')){ bodyEl.classList.add('out'); await wait(380, t); }
+  stage.classList.add('snap'); clearAll(); void stage.offsetHeight; stage.classList.remove('snap'); bodyEl.classList.remove('out');
+  place(sr.left + sr.width*0.55, sr.top + 420); fcur.classList.add('in');
+
+  /* 1 · ask in plain words */
+  step(1, 8600);
+  await wait(1400, t);
+  await glide(...mid(ask), 900, t); await press(t); ask.classList.add('focus'); await wait(300, t);
+  await typeIt(QUERY, t); await wait(400, t);
+  ask.classList.remove('focus'); $('bubq').textContent = QUERY; stage.classList.add('asked'); say('bub'); await wait(260, t);
+
+  /* 2 · before reading anything, it asks how a miss should be judged */
+  step(2, 11600);
+  await thinkBreach(ms => wait(ms, t));
+  say('read'); await wait(900, t); say('ask'); await wait(1100, t); card(true); await wait(2400, t);
+  await glide(...mid(opts[0]), 1100, t); await wait(1300, t); await press(t); await wait(180, t); pick(0); await wait(1100, t);
+  card(false); say('judged'); await wait(900, t);
+
+  /* 3 · it reads each family whole, works out what governs, and says what it can't settle */
+  step(3, 14200);
+  say('go'); await wait(700, t); say('cot');
+  for(let n = 1; n <= 4; n++){ cot(n, true); plan(n, true); follow(); await counter(cls[n-1], [1240, 318, 0, 0][n-1], [2300, 1300, 0, 0][n-1], t); await wait([900, 500, 1400, 1000][n-1], t); cot(n, false); plan(n, false); await wait([250, 550, 300, 450][n-1], t); }
+  applyRule(0); await wait(500, t); cotState('closed'); fitComposer();
+  if(t !== demo.token) throw new Stop();
+  await wait(400, t); say('sum'); await wait(2200, t);
+  const gl = $('golink'); await glide(...mid(gl), 900, t); await wait(200, t); await press(t); stage.classList.add('listing'); setTimeout(follow, 700); await wait(1400, t);
+
+  /* 4 · point at a value and its source opens in place: a conflict, then a missing clause */
+  step(4, 13400);
+  const b0 = row(0).querySelector('.bn b'), b3 = row(3).querySelector('.bn b');
+  await glide(...mid(row(0).querySelector('.pill')), 800, t); await wait(500, t);
+  await glide(...mid(b0), 800, t); await wait(250, t); showCite(0); await wait(1200, t);
+  const cq = cite.querySelector('mark'); if(cq){ await glide(...mid(cq), 800, t); } await wait(2200, t);
+  hideCite(); const ti0 = row(0).querySelector('.ti'); await glide(...mid(ti0), 900, t); await wait(250, t); await press(t); openRow(0); await wait(2600, t);
+  const wk = document.querySelector('.kv.worst'); if(wk){ await glide(...mid(wk), 900, t); await wait(1800, t); }
+  await glide(...mid($('dx')), 900, t); await wait(250, t); await press(t); closeRow(); await wait(800, t);
+
+  step(5, 0); await wait(600, t);
+}
+async function loop(){
+  if(demo.running) return; demo.running = true; demo.driving = false; const t = ++demo.token;
+  barPlaying();
+  try { while(true) await playOnce(t); } catch(e){ if(!(e instanceof Stop)) console.error(e); }
+}
+function stopDemo(driving){
+  demo.token++; demo.running = false; fcur.classList.remove('in','down'); fakeHover(true); document.querySelector('.body').classList.remove('out');
+  /* hand over where it stands: on the start screen it stays there; mid-run it settles on the finished answer */
+  if(stage.classList.contains('asked')) showAnswer(); else { qEl.textContent = ''; ask.classList.remove('focus'); }
+  if(driving) demo.driving = true;
+}
+
+/* ---------- one line for the whole run ---------- */
+const STEPL = ['Ask in your own words','It asks how to judge before it reads','It reads each contract family whole','When documents disagree, it says so'],
+      STEPD = [8600, 11600, 14200, 13400], STEPT = STEPD.reduce((a,b)=>a+b,0);
+const demobar = $('demobar'), dfill = $('dfill'), dlab = $('dlab'), dtry = $('dtry');
+var UNIT = 'search'; function tell(m){ try { if(parent !== window) parent.postMessage(Object.assign({unit:UNIT}, m), '*'); } catch(e){} }
+function step(n, dur){
+  if(n > STEPL.length){ dfill.style.transition = 'width .5s ease'; dfill.style.width = '100%'; tell({kind:'step', n, a:1, b:1, dur:500}); return; }
+  const a = STEPD.slice(0, n-1).reduce((x,y)=>x+y,0) / STEPT, b = a + dur / STEPT;
+  dfill.style.transition = 'none'; dfill.style.width = (a*100) + '%'; void dfill.offsetWidth;
+  dfill.style.transition = 'width ' + (dur * PACE) + 'ms linear'; dfill.style.width = (b*100) + '%';
+  dlab.innerHTML = '<b>0' + n + '</b>' + STEPL[n-1];
+  tell({kind:'step', n, of:STEPL.length, label:STEPL[n-1], a, b, dur:dur * PACE});
+}
+function barPlaying(){ demobar.classList.remove('trying'); dtry.textContent = 'I want to try this myself'; tell({kind:'state', playing:true}); }
+function barTrying(){ demobar.classList.add('trying'); dtry.textContent = 'Play the demo'; dlab.innerHTML = 'You&rsquo;re trying it. The demo comes back a few seconds after you leave.'; tell({kind:'state', playing:false}); }
+
+['pointerdown','pointerup','pointermove','pointerover','pointerout','mousedown','mouseup','mousemove','mouseover','mouseout','click','dblclick','contextmenu','wheel','keydown'].forEach(type =>
+  document.addEventListener(type, e => {
+    if(!e.isTrusted || !demo.running) return;
+    if(e.target.closest && e.target.closest('#demobar')) return;
+    e.stopImmediatePropagation(); if(type === 'mousedown' || type === 'click' || type === 'contextmenu' || type === 'wheel') e.preventDefault();
+  }, {capture:true, passive:false}));
+
+let idleTimer = null, inside = false;
+const IDLE = 6000;
+function armIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(() => { if(demo.driving && demo.visible && !inside && !userQ && !busy){ demo.driving = false; loop(); } }, IDLE); }
+/* moving the pointer off the frame must not wipe a question the reader is in the middle of. only an explicit play brings the demo back */
+/* a click on the frame: the demo stops and the reader starts from the beginning, with nothing playing over them */
+function tryNow(){ demo.started = true; if(demo.running) stopDemo(false); clearTimeout(idleTimer); demo.driving = false; const bd = document.querySelector('.body'); stage.classList.add('snap'); clearAll(); void stage.offsetHeight; stage.classList.remove('snap'); bd.classList.remove('out'); userQ = true; barTrying(); }
+function resumeDemo(){ if(demo.running) return; if(busy){ setTimeout(resumeDemo, 1500); return; } userQ = false; clearTimeout(idleTimer); demo.driving = false; loop(); }
+addEventListener('message', e => { if(e.data && e.data.cmd === 'resume'){ resumeDemo(); return; } if(e.data && e.data.cmd === 'try'){ tryNow(); return; } if(!(e.data && e.data.cmd === 'toggle')) return; if(!demo.running && (userQ || busy) && !e.data.force) return; dtry.click(); });
+dtry.addEventListener('click', e => {
+  e.stopPropagation();
+  if(demo.running){ stopDemo(true); barTrying(); }
+  else { clearTimeout(idleTimer); demo.driving = false; userQ = false; loop(); }
+});
+document.addEventListener('pointermove', e => { if(!e.isTrusted) return; inside = true; if(demo.driving) clearTimeout(idleTimer); }, true);
+document.documentElement.addEventListener('mouseleave', () => { inside = false; if(demo.driving) armIdle(); });
+document.addEventListener('focusout', () => { if(demo.driving && !inside) armIdle(); });
+
+clearAll();
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  new IntersectionObserver(([en]) => {
+    demo.visible = en.intersectionRatio >= .45 || en.intersectionRect.height >= 300;
+    if(demo.visible && !demo.running && !demo.driving && !demo.started){ demo.started = true; loop(); }
+  }, {threshold:[0, .2, .3, .45, .6, .8]}).observe(stage);
+} else barTrying();
+
+if(document.documentElement.classList.contains('embed')){
+  const post = () => tell({h:document.querySelector('.unit').getBoundingClientRect().height + 2});
+  addEventListener('load', post); new ResizeObserver(post).observe(document.body);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clause Lineage — unit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>(function(q,h){ if(/[?&]embed/.test(q) || location.protocol==='about:') h.classList.add('embed');
+  if(/[?&]paper/.test(q)){ h.classList.add('paper'); var l=document.createElement('link'); l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@400;500&display=swap'; document.head.appendChild(l); }
+  if(/[?&]card/.test(q)) h.classList.add('card'); if(/[?&]bare/.test(q)) h.classList.add('bare'); if(/[?&]stage/.test(q)) h.classList.add('onstage'); })('?embed&paper&bare', document.documentElement);</script>
+<style>
+:root{
+  --page:#12292F;
+  --panel:#0E0E0E;
+  --card:#181818;
+  --card-2:#232323;
+  --line:#383838;
+  --line-2:#4A4A4A;
+  --ink:#F2F2F0;
+  --body:#C9C9C5;
+  --muted:#8E8E89;
+  --faint:#5E5E5C;
+    --add:#7CCB8F;
+  --del:#6E6E6A;
+  --teal:#2C8F95;
+  --link:#86AEB3;
+  --sans:"Geist",-apple-system,sans-serif;
+  --mono:"Geist Mono",ui-monospace,monospace;
+  --t1:23px; --t2:15.5px; --t3:13.5px; --t4:11.5px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; background:#0B0B0B; font-family:var(--sans); -webkit-font-smoothing:antialiased; color:var(--body)}
+
+/* ---------- the unit on the page ---------- */
+.unit{max-width:960px; margin:0 auto; padding:120px 24px 160px}
+.u-title{font-size:26px; line-height:1.2; font-weight:600; color:var(--ink); margin:0 0 8px; letter-spacing:-.01em}
+.u-kicker{font-family:var(--mono); font-size:var(--t4); color:var(--muted); letter-spacing:.02em; margin:0 0 28px}
+.u-kicker b{color:var(--faint); font-weight:400}
+.row{display:grid; grid-template-columns:200px 1fr; gap:28px; align-items:start}
+.lbl{font-family:var(--mono); font-size:var(--t4); letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin:0 0 14px}
+
+/* the before: how it's stored. a still, not a scene */
+.stored{display:flex; flex-direction:column; gap:10px}
+.file{
+  background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px;
+}
+.file svg{width:18px; height:18px; color:var(--faint); display:block; margin-bottom:10px}
+.file .f-name{font-size:var(--t4); color:var(--body); font-weight:500; line-height:1.3; margin:0 0 3px}
+.file .f-date{font-size:11px; color:var(--faint); margin:0}
+
+/* the file whose words are on screen now */
+.file{transition:border-color .25s ease, background .25s ease}
+.file.lit{border-color:rgba(44,143,149,.7); background:#152224}
+.file.lit svg{color:var(--teal)}
+.file.lit .f-name{color:var(--ink)}
+
+/* the after: the live thing */
+.stage{position:relative; border:1px solid #D7D8D2; border-radius:16px; background:var(--panel); transition:border-color .25s ease}
+html:hover .stage{border-color:#191A18}
+@media (max-width:760px){ .row{grid-template-columns:1fr} .stored{flex-direction:row; flex-wrap:wrap} .file{flex:1 1 140px} }
+
+/* ---------- the sheet ---------- */
+.panel{position:relative; display:flex; flex-direction:column}
+.head{display:flex; align-items:flex-start; justify-content:space-between; padding:26px 24px 0}
+h1{font-size:var(--t1); line-height:1.15; font-weight:600; color:var(--ink); margin:0}
+.x{
+  flex:none; width:34px; height:34px; margin:-6px -8px 0 0; border:0; border-radius:8px;
+  background:none; color:var(--muted); cursor:pointer; font-size:22px; line-height:1;
+  transition:background .16s ease,color .16s ease;
+}
+.x:hover{background:var(--card-2); color:var(--ink)}
+.state{margin:0; padding:14px 24px 0; font-size:var(--t3); line-height:1.3}
+.state .now{color:var(--ink); font-weight:500}
+.state .now.amber{color:var(--ink)}
+
+/* body: scrolling text on the left, a thin rail on the right */
+.body{display:grid; grid-template-columns:1fr 70px; padding:12px 0 0 24px}
+.scroll{padding:0 6px 24px 0}
+.textwrap{
+  position:relative; background:var(--card); border:1px solid var(--line);
+  border-radius:12px; padding:22px 22px 22px 48px;
+}
+.textwrap .para{position:relative; font-size:var(--t2); line-height:1.6; color:var(--body); margin:0 0 20px}
+.textwrap .para:last-child{margin-bottom:0}
+ins{text-decoration:none; color:var(--add)}
+del{text-decoration:line-through; color:var(--del)}
+
+/* citation marker: in the gutter, click to cite */
+.mark{
+  position:absolute; left:-32px; top:4px; width:20px; height:20px; border-radius:50%;
+  background:#2A2A29; border:1px solid #5E5E5C; color:#D6D6D2;
+  font-family:var(--mono); font-size:11px; font-weight:500; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:border-color .16s ease,color .16s ease;
+}
+.mark:hover,.mark.open{border-color:var(--add); color:var(--add); background:rgba(124,203,143,.12)}
+.cite{
+  position:absolute; left:-8px; top:30px; z-index:6; width:300px;
+  background:var(--card-2); border:1px solid var(--line-2); border-radius:10px;
+  padding:12px 14px; box-shadow:0 18px 44px rgba(0,0,0,.45);
+  font-size:var(--t4); line-height:1.5; color:var(--body);
+  opacity:0; transform:translateY(-4px); pointer-events:none;
+  transition:opacity .16s ease, transform .16s ease;
+}
+.cite.open{opacity:1; transform:translateY(0); pointer-events:auto}
+.cite .c-when{color:var(--ink); font-weight:500; margin:0 0 2px; font-size:var(--t3)}
+.cite .c-what{margin:0 0 10px}
+.cite .c-file{color:var(--muted); margin:0 0 8px; padding-top:9px; border-top:1px solid var(--line)}
+.cite a{color:var(--link); text-decoration:none}
+.cite a:hover{text-decoration:underline}
+
+/* ---------- the rail ---------- */
+.rail{display:flex; align-items:center; justify-content:center; position:relative}
+.track{position:relative; width:14px}
+.track::before{content:""; position:absolute; left:6px; top:0; bottom:0; width:1px; background:var(--line-2)}
+.tick{position:absolute; left:4px; width:5px; height:1px; background:var(--line-2)}
+.node{position:absolute; left:0; width:14px; height:14px; margin-top:-7px; cursor:pointer; outline:none}
+.dot{
+  position:absolute; inset:0; border-radius:50%; border:1px solid var(--muted); background:var(--panel);
+  transition:border-color .18s ease, background .18s ease;
+}
+.node:hover .dot{border-color:var(--ink)}
+.node.on .dot{border-color:var(--teal); background:var(--teal)}
+.node.on .dot::after{content:""; position:absolute; inset:4px; border-radius:50%; background:#fff}
+.node:focus-visible .dot{box-shadow:0 0 0 3px rgba(44,143,149,.35)}
+.end-l{
+  position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap;
+  font-size:var(--t4); color:var(--muted);
+}
+.end-l.top{bottom:calc(100% + 10px)}
+.end-l.bot{top:calc(100% + 10px)}
+
+/* hover card: the detail the rail has no room for */
+.tip{
+  position:absolute; right:26px; top:-14px; z-index:8; width:300px;
+  background:var(--card-2); border-radius:12px; padding:16px 18px 14px;
+  box-shadow:0 18px 44px rgba(0,0,0,.45);
+  opacity:0; transform:translateX(6px); pointer-events:none;
+  transition:opacity .16s ease, transform .16s ease;
+}
+.node:hover .tip,.node:focus-visible .tip{opacity:1; transform:translateX(0); pointer-events:auto}
+.tip .t-when{color:var(--ink); font-weight:600; font-size:var(--t3); margin:0 0 4px}
+.tip .t-doc{color:var(--muted); font-size:var(--t3); margin:0 0 12px; padding-bottom:12px; border-bottom:1px solid var(--line-2)}
+.tip a{display:block; text-align:right; color:var(--link); text-decoration:none; font-size:var(--t3)}
+.tip a:hover{text-decoration:underline}
+
+/* ---------- embedded on the index: no title of its own, the page gives it one ---------- */
+html.embed, html.embed body{background:#FFFFFF}
+html.embed .scroll{max-height:470px; overflow-y:auto; scrollbar-width:none; padding:0; margin:0 0 24px;
+  border:1px solid var(--line); box-shadow:inset 0 -1px 0 var(--line); border-radius:12px; background:var(--card)}
+html.embed .textwrap{border:0; border-radius:0; background:none; padding-bottom:56px}
+html.embed .scroll::after{content:""; position:sticky; bottom:0; display:block; height:56px; margin-top:-56px;
+  background:linear-gradient(to bottom, rgba(24,24,24,0), var(--card)); pointer-events:none}
+html.embed .scroll::-webkit-scrollbar{display:none}
+html.embed .unit{padding:0 20px 28px 0; max-width:none}
+html.embed .u-title, html.embed .u-kicker{display:none}
+
+
+.demobar{display:grid; grid-template-columns:1fr auto; gap:32px; align-items:end; margin-top:16px; font-family:var(--sans)}
+.demobar .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.demobar .steps span{display:flex; flex-direction:column; gap:4px; min-width:0; font-size:12.5px; line-height:28px; color:#6E6E6A; transition:color .3s ease}
+.demobar .steps em{font-style:normal; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.demobar .steps b{font-family:var(--mono); font-weight:400; font-size:11px; color:#4A4A48; margin-right:8px; transition:color .3s ease}
+.demobar .steps i{display:block; height:2px; background:#262626; border-radius:2px; overflow:hidden; position:relative}
+.demobar .steps i::after{content:''; position:absolute; inset:0; background:#86aeb3; transform:scaleX(0); transform-origin:left}
+.demobar .steps span.on{color:#F2F2F0} .demobar .steps span.on b{color:#86aeb3}
+.demobar .steps span.on i::after{transform:scaleX(1); transition:transform var(--dur,10s) linear}
+.demobar .steps span.done{color:#8E8E89} .demobar .steps span.done i::after{transform:scaleX(1); opacity:.45}
+.demobar.driving .steps span{color:#5E5E5C} .demobar.driving .steps i::after{transform:scaleX(0); transition:none}
+.dstat{display:flex; align-items:center; gap:10px; height:28px; font-size:12.5px; color:#8E8E89; white-space:nowrap}
+.dstat .sdot{flex:0 0 6px; width:6px; height:6px; border-radius:50%; background:#86aeb3; box-shadow:0 0 0 0 rgba(134,174,179,.5); animation:dpulse 2s ease-out infinite}
+@keyframes dpulse{0%{box-shadow:0 0 0 0 rgba(134,174,179,.45)}70%{box-shadow:0 0 0 7px rgba(134,174,179,0)}100%{box-shadow:0 0 0 0 rgba(134,174,179,0)}}
+.demobar.driving .dstat .sdot{background:#F2F2F0; animation:none}
+.dstat .replay{display:none; align-items:center; gap:6px; height:28px; padding:0 11px 0 9px; border-radius:7px; border:1px solid #2E2E2E; background:#161616; color:#F2F2F0; font:inherit; font-size:12px; cursor:pointer; transition:background .15s, border-color .15s}
+.dstat .replay:hover{background:#1f1f1f; border-color:#3a3a3a}
+.dstat .replay svg{width:12px; height:12px}
+.demobar.driving .dstat .replay{display:inline-flex}
+@media (max-width:700px){ .demobar{grid-template-columns:1fr; gap:14px} }
+
+/* ---------- the opening film: three signed files become the rail, then the words come out ---------- */
+.node{transition:opacity .3s ease, transform .5s cubic-bezier(.22,.61,.36,1)}
+.stage.f .node{opacity:0; transform:scale(.4)}
+.stage.f .node.fin{opacity:1; transform:none}
+.stage.f .end-l{opacity:0; transition:opacity .4s ease .2s}
+.stage.f .node.fin .end-l{opacity:1}
+.stage.f .track::before{transform:scaleY(var(--rl,0)); transform-origin:bottom; transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.stage.f .state{opacity:0; transition:opacity .45s ease}
+.stage.f.fw .state{opacity:1}
+/* while the files are still landing on the calendar there are no words yet, so the box that will hold them waits too */
+.stage.f .scroll{opacity:0; transition:opacity .5s ease}
+.stage.f.fw .scroll{opacity:1}
+.stage.f .para{opacity:0; transform:translateX(18px); transition:opacity .55s ease, transform .7s cubic-bezier(.22,.61,.36,1)}
+.stage.f.fw .para{opacity:1; transform:none}
+.stage.f.fw .para:nth-child(2){transition-delay:.12s} .stage.f.fw .para:nth-child(3){transition-delay:.24s} .stage.f.fw .para:nth-child(4){transition-delay:.36s}
+.stage.f ins, .stage.f del{transition:color .5s ease, text-decoration-color .5s ease}
+.stage.f:not(.fm) ins{color:var(--body)}
+.stage.f:not(.fm) del{color:var(--body); text-decoration-color:transparent}
+.stage.f .mark{opacity:0; transform:scale(.6); transition:opacity .3s ease, transform .5s cubic-bezier(.22,.61,.36,1)}
+.stage.f.fm .mark{opacity:1; transform:none}
+.fstamp{position:absolute; right:26px; top:-3px; white-space:nowrap; font-family:var(--mono); font-size:var(--t4); color:var(--muted);
+  opacity:0; transform:translateX(6px); transition:opacity .35s ease, transform .5s cubic-bezier(.22,.61,.36,1); pointer-events:none}
+.node.stamping .fstamp{opacity:1; transform:none}
+.fly{position:fixed; z-index:40; pointer-events:none; margin:0; transform-origin:center;
+  transition:transform .85s cubic-bezier(.22,.61,.36,1), opacity .2s ease .7s}
+.file.sent{opacity:.35; transition:opacity .3s ease}
+
+/* the loop's cursor, and what it lights up */
+#fcur{position:fixed; left:0; top:0; z-index:50; pointer-events:none; width:22px; height:22px; opacity:0; transition:opacity .3s ease}
+#fcur.in{opacity:1}
+#fcur svg{display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.5)); transition:transform .12s ease}
+#fcur.down svg{transform:scale(.86)}
+.node.fhover .dot{border-color:var(--ink)}
+.node.fhover .tip{opacity:1; transform:translateX(0)}
+.mark.fhover{border-color:var(--add); color:var(--add)}
+
+
+html.card .dstat{display:none}
+html.onstage, html.onstage body{background:transparent !important}
+/* paper mode, on the page itself (not inside a card): the embed sits on the site's paper and keeps its status */
+@keyframes dpulseP{0%{box-shadow:0 0 0 0 rgba(61,90,69,.35)}70%{box-shadow:0 0 0 7px rgba(61,90,69,0)}100%{box-shadow:0 0 0 0 rgba(61,90,69,0)}}
+
+html.card .demobar{grid-template-columns:1fr} /* ---------- the loop bar: one line for the whole run, the step it is on, and an explicit way in ---------- */
+.demobar{display:block !important; margin-top:14px; font-family:var(--sans)}
+.dline{position:relative; height:2px; border-radius:2px; background:rgba(255,255,255,.10); overflow:hidden}
+.dline i{position:absolute; left:0; top:0; bottom:0; width:0; background:#86aeb3; border-radius:2px}
+.drow{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:10px; min-height:28px}
+.dlab{font-size:13px; line-height:20px; color:#8E8E89; transition:opacity .25s ease}
+.dlab b{font-family:var(--mono); font-weight:400; font-size:11.5px; color:#86aeb3; margin-right:8px}
+.dtry{border:0; background:none; padding:4px 0; font:inherit; font-size:14px; font-weight:500; color:#F2F2F0; cursor:pointer; white-space:nowrap}
+.dtry:hover{text-decoration:underline; text-underline-offset:3px}
+.demobar.trying .dline i{width:0 !important; transition:none !important}
+html.card .dtry{display:none}
+html.bare .demobar{display:none !important}
+/* while the demo plays the document scrolls only by itself, so a wheel over it scrolls the page instead */
+html.demoing .canvas, html.demoing .scroll{overflow:hidden !important}
+
+/* ---------- on the site: paper around the product, the site's type and colour on the chrome; the dark panel is the product ---------- */
+html.paper .lbl{color:#6F716A; font-family:"Poppins",-apple-system,sans-serif; letter-spacing:.1em}
+html.paper .file{background:#FFFFFF; border-color:#D7D8D2}
+html.paper .file svg{color:#6F716A}
+html.paper .file .f-name{color:#191A18}
+html.paper .file .f-date{color:#6F716A}
+html.paper .file.lit{background:#DCE5D3; border-color:#3D5A45}
+html.paper .file.lit svg{color:#3D5A45}
+/* held: the same lift Reach and Proof get, on the product panel only */
+.stage{transition:border-color .25s ease, box-shadow .3s ease}
+html.paper:hover .stage{box-shadow:0 1px 3px rgba(25,26,24,.06), 0 18px 40px -18px rgba(25,26,24,.22)}
+html.paper .fly{box-shadow:0 18px 40px rgba(25,26,24,.18)}
+html.paper .demobar{font-family:"Inter",-apple-system,sans-serif}
+html.paper .demobar .steps span{color:#6F716A}
+html.paper .demobar .steps b{font-family:"Poppins",-apple-system,sans-serif; font-size:11.5px; color:#6F716A}
+html.paper .demobar .steps i{background:#D7D8D2}
+html.paper .demobar .steps i::after{background:#3D5A45}
+html.paper .demobar .steps span.on{color:#191A18}
+html.paper .demobar .steps span.on b{color:#3D5A45}
+html.paper .demobar .steps span.done{color:#5F625C}
+html.paper .dstat{color:#6F716A; font-family:"Inter",-apple-system,sans-serif}
+html.paper .dstat .sdot{background:#3D5A45; animation-name:dpulseP}
+html.paper .demobar.driving .dstat .sdot{background:#191A18}
+html.paper .dstat .replay{background:#fff; border-color:#D7D8D2; color:#191A18}
+html.paper .dstat .replay:hover{background:#fff; border-color:#C9CAC4}
+html.paper .dline{background:#D7D8D2}
+html.paper .dline i{background:#3D5A45}
+html.paper .dlab{font-family:"Inter",-apple-system,sans-serif; color:#6F716A}
+html.paper .dlab b{font-family:"Poppins",-apple-system,sans-serif; color:#3D5A45}
+html.paper .dtry{font-family:"Poppins",-apple-system,sans-serif; color:#191A18}
+
+html.embed.paper, html.embed.paper body{background:#F8F8F6}
+
+/* the whole lineage sits in one card, drawn the same way as the other two: one hairline, no fill of its own */
+html.embed.paper .row{background:transparent; border:1px solid #D7D8D2; border-radius:16px; padding:28px; transition:border-color .25s ease}
+html.embed.paper:hover .row{border-color:#C2C4BD}
+html.embed.paper .stage, html.embed.paper:hover .stage{border-color:transparent; box-shadow:none}
+html.embed.paper .unit{padding:0 0 3px}
+
+.mk{position:relative; display:inline-block; vertical-align:-3px; margin:0 3px 0 5px; line-height:0; white-space:nowrap}
+.mk .mark{position:static; display:inline-flex; vertical-align:0; width:18px; height:18px; font-size:10px}
+.mk .cite{left:-8px; top:26px}
+.mk .cite.flip{left:auto; right:-8px}
+
+/* the marker shows a ring only for keyboard focus, never for a click */
+.mark:focus{outline:none}
+.mark:focus-visible{outline:2px solid var(--add); outline-offset:2px}
+/* the card opens upward when there is no room under the marker, so it is never cut by the frame */
+.mk .cite.up{top:auto; bottom:26px; transform:translateY(4px)}
+.mk .cite.up.open{transform:none}
+
+.cite .c-what{white-space:normal; overflow-wrap:anywhere}
+.cite .c-was{margin:0 0 10px; color:var(--muted); line-height:1.45; overflow-wrap:anywhere}
+.cite .c-was b{color:var(--body); font-weight:500; margin-right:4px}
+.cite .c-src{color:var(--faint)}
+/* the open marker gets a ring, never a click */
+.mark:focus-visible{outline:none}
+.mark.open{box-shadow:0 0 0 2px rgba(124,203,143,.35)}
+.mk .cite{white-space:normal; line-height:1.5}
+
+/* the card says only what the text cannot: which document, and when it was signed.
+   What changed is already in the paragraph - struck out and green. */
+.cite{width:auto; min-width:220px; max-width:300px; padding:12px 16px 12px}
+.cite .c-doc{color:var(--ink); font-weight:500; font-size:var(--t3); line-height:1.35}
+.cite .c-date{color:var(--muted); font-size:var(--t4); margin:2px 0 10px; padding-bottom:10px; border-bottom:1px solid var(--line)}
+
+.cite{min-width:236px; max-width:320px}
+.cite .c-kind{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin:0 0 6px}
+.cite .c-kind.append{color:var(--add)}
+.cite .c-kind.replace{color:var(--add)}
+.cite .c-kind.remove{color:var(--muted)}
+.cite .c-doc{white-space:nowrap}
+.cite .c-date{white-space:nowrap}
+.cite a{display:block; text-align:right}
+
+/* closed cards take no room, so the pane never scrolls sideways to reach them */
+.mk .cite{visibility:hidden}
+.mk .cite.open{visibility:visible}
+html.embed .scroll{overflow-x:hidden}
+
+.cite .c-verb{color:var(--muted); font-weight:400}
+.cite .c-verb.append, .cite .c-verb.replace{color:var(--add)}
+
+/* the numbers are gone: the words themselves are what you point at */
+.mk .mark{display:none}
+.mk{margin:0; width:0; overflow:visible}
+ins[data-src], del[data-gone]{cursor:default; border-radius:3px; transition:background-color .18s ease, box-shadow .18s ease}
+ins.lit, del.lit{background:rgba(124,203,143,.14); box-shadow:0 0 0 2px rgba(124,203,143,.14)}
+.mk .cite{top:22px}
+.mk .cite.up{bottom:22px}
+</style>
+</head>
+<body>
+
+<section class="unit">
+  <h1 class="u-title">Amended twice. Which words are in force?</h1>
+  <p class="u-kicker">Clause lineage &nbsp;<b>·</b>&nbsp; Sirion</p>
+
+  <div class="row">
+    <div>
+      <p class="lbl">Stored as</p>
+      <div class="stored">
+        <div class="file" data-v="2">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg>
+          <p class="f-name">Master Services Agreement</p><p class="f-date">Executed · 14 March 2019</p>
+        </div>
+        <div class="file" data-v="1">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg>
+          <p class="f-name">Amendment 1</p><p class="f-date">Signed · 18 June 2020</p>
+        </div>
+        <div class="file" data-v="0">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg>
+          <p class="f-name">Amendment 2</p><p class="f-date">Signed · 2 October 2022</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="lbl">Read as</p>
+      <div class="stage">
+<div class="panel">
+  <div class="head">
+    <h1>Force Majeure Clause</h1>
+  </div>
+  <p class="state" id="state"></p>
+
+  <div class="body">
+    <div class="scroll"><div class="textwrap" id="textwrap"></div></div>
+    <div class="rail"><div class="track" id="track"></div></div>
+  </div>
+
+</div>
+      </div>
+      <div class="demobar" id="demobar">
+    <div class="dline"><i id="dfill"></i></div>
+    <div class="drow"><span class="dlab" id="dlab"><b>01</b>Three signed files</span><button class="dtry" id="dtry" type="button">I want to try this myself</button></div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ---------- the clause as executed ---------- */
+const ORIGINAL = [
+  `In the event that either party is unable to meet its contractual obligations due to circumstances beyond its reasonable control, that party shall not be held liable for any resulting failure to perform. Such circumstances include, but are not limited to, natural disasters such as earthquakes, hurricanes, or floods, as well as acts of war, terrorism, or significant governmental action that impedes normal operations.`,
+  `These events may lead to delay or to complete non-performance of contractual duties. In such cases this clause protects both parties from liability arising from situations genuinely beyond their influence, ensuring a fair and equitable approach to unforeseen disruption in the execution of this Agreement.`,
+  `Both parties are encouraged to communicate openly about any potential disruption as soon as they become aware of it, allowing for a collaborative approach to mitigating its impact and to finding alternative solutions or timelines.`,
+  `Both parties shall periodically review and update this provision to reflect any change in their operational environment or in the legal landscape, so that it remains effective in protecting their interests.`
+];
+const EXECUTED = { date:new Date(2019,2,14), dateText:'14 March 2019', doc:'Master Services Agreement', file:'Northstar_MSA_Executed_2019-03-14.pdf' };
+
+/* ---------- each amendment: a signed document and the edits it made ----------
+   op kinds: replace {para, find, to}   append {para, text}   remove {para}
+   add a line here and the rail, the redline and the citations follow.        */
+const AMENDMENTS = [
+  { date:new Date(2020,5,18), dateText:'18 June 2020', doc:'Amendment No. 1 to the MSA', file:'Northstar_MSA_Amendment-1_Signed_2020-06-18.pdf', ops:[
+      {para:0, find:'hurricanes', to:'pandemic, epidemic or other public health emergency', at:'Clause 2.1 · page 2', note:'“Hurricanes” replaced with pandemic, epidemic or other public health emergency.'},
+      {para:2, append:'Written notice of a force majeure event shall be given within ten (10) business days of the affected party becoming aware of it.', at:'Clause 2.2 · page 2', note:'New sentence: written notice within ten business days.'} ]},
+  { date:new Date(2022,9,2), dateText:'2 October 2022', doc:'Amendment No. 2 to the MSA', file:'Northstar_MSA_Amendment-2_Signed_2022-10-02.pdf', ops:[
+      {para:2, find:'ten (10) business days', to:'five (5) business days', at:'Clause 3.1 · page 3', note:'Notice period shortened from ten business days to five.'},
+      {para:3, remove:true, at:'Clause 3.2 · page 3', note:'Paragraph removed: the obligation to periodically review this clause.'} ]}
+];
+
+/* ---------- versions, newest first, computed from the edits ----------
+   Every run of text remembers which document put it there (src) and, once it is gone,
+   which document took it out (gone). A view at amendment k shows the clause as it stood
+   then: everything live at k, each surviving change marked with the number of the
+   amendment it came from, and the words amendment k itself removed shown struck. So
+   two markers in one reading can point at two different documents, years apart. */
+const DOCS = [EXECUTED].concat(AMENDMENTS);           /* 0 = executed, k = amendment k */
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function buildSegs(){
+  const paras = ORIGINAL.map(t => [{text:t, src:0, gone:null}]);
+  const notes = [];                                     /* {k, para, note, was:[segs], kind} */
+  AMENDMENTS.forEach((a, idx)=>{
+    const k = idx+1;
+    a.ops.forEach(o=>{
+      const segs = paras[o.para];
+      if(o.remove){ const was = segs.filter(s=>s.gone===null); was.forEach(s=>s.gone=k);
+        notes.push({k, para:o.para, note:o.note, was, kind:'remove', op:o}); return; }
+      if(o.append){ segs.push({text:' ', src:k, gone:null, glue:true}, {text:o.append, src:k, gone:null});
+        notes.push({k, para:o.para, note:o.note, was:[], kind:'append', op:o}); return; }
+      /* replace: find o.find across the live text, split at both ends, retire, insert */
+      const live = segs.filter(s=>s.gone===null);
+      const full = live.map(s=>s.text).join('');
+      const at = full.indexOf(o.find); if(at<0) throw new Error('edit target not found: '+o.find);
+      let pos=0, started=false, was=[];
+      for(const s of live){
+        const s0=pos, s1=pos+s.text.length; pos=s1;
+        const lo=Math.max(s0,at), hi=Math.min(s1,at+o.find.length);
+        if(lo>=hi) continue;
+        const i=segs.indexOf(s);
+        const parts=[];
+        if(lo>s0) parts.push({text:s.text.slice(0,lo-s0), src:s.src, gone:null});
+        const mid={text:s.text.slice(lo-s0,hi-s0), src:s.src, gone:k}; parts.push(mid); was.push(mid);
+        if(hi<s1) parts.push({text:s.text.slice(hi-s0), src:s.src, gone:null});
+        segs.splice(i,1,...parts);
+        if(hi===at+o.find.length){ segs.splice(segs.indexOf(mid)+1, 0, {text:' ', src:k, gone:null, glue:true}, {text:o.to, src:k, gone:null}); }
+      }
+      notes.push({k, para:o.para, note:o.note, was, kind:'replace', op:o});
+    });
+  });
+  return {paras, notes};
+}
+const MODEL = buildSegs();
+/* the clause as it read at version k, 0 = executed */
+function renderAt(k){
+  return MODEL.paras.map((segs, p)=>{
+    const vis = segs.filter(s => s.src<=k);   /* everything ever written up to k; what was taken out stays, struck */
+    if(!vis.length) return null;
+    const allGoneNow = vis.every(s=>s.gone!==null && s.gone<=k);
+    let html='';
+    vis.forEach(s=>{
+      const txt = esc(s.text);
+      if(s.gone!==null && s.gone<=k) html += `<del data-gone="${s.gone}">${txt}</del>`;
+      else if(s.src>0 && !s.glue) html += `<ins data-src="${s.src}">${txt}</ins>`;
+      else html += txt;
+    });
+    /* one marker per amendment that touched this paragraph and is visible at k */
+    const marks = MODEL.notes.filter(n => n.para===p && n.k<=k && (n.kind!=='replace' || true))
+      /* every change up to this version keeps its marker, removals included */
+      .map(n => ({n, srcDoc: n.was.length ? DOCS[Math.max(...n.was.map(s=>s.src))] : null}));
+    return {html, marks, removed: allGoneNow};
+  });
+}
+const VERSIONS = [];
+{
+  VERSIONS.push({ ...EXECUTED, short:'Original', paras:renderAt(0) });
+  AMENDMENTS.forEach((a,i)=>{
+    VERSIONS.push({ date:a.date, dateText:a.dateText, doc:a.doc, short:'Amendment '+(i+1), paras:renderAt(i+1) });
+  });
+  VERSIONS.reverse();
+}
+
+const wrap  = document.getElementById('textwrap');
+const state = document.getElementById('state');
+const track = document.getElementById('track');
+let active = 0;
+
+/* ---------- clause text ---------- */
+function paint(i){
+  const v = VERSIONS[i];
+  wrap.innerHTML = v.paras.filter(Boolean).map(p=>{
+    const marks = p.marks.map(({n, srcDoc})=>{
+      const d = DOCS[n.k];
+      const wasTxt = n.was.map(s=>s.text).join('').trim();
+      const was = n.kind==='append' ? `<div class="c-was"><b>Was</b> not in the clause</div>`
+                : `<div class="c-was"><b>Was</b> &ldquo;${esc(wasTxt.length>72 ? wasTxt.slice(0,70)+'…' : wasTxt)}&rdquo; <span class="c-src">· ${srcDoc ? (DOCS.indexOf(srcDoc)===0 ? 'as executed' : 'Amendment '+DOCS.indexOf(srcDoc)) + ', ' + srcDoc.dateText : ''}</span></div>`;
+      return `<span class="mk" data-k="${n.k}"><span class="mark" role="button" tabindex="0" aria-label="Citation ${n.k}">${n.k}</span>
+      <div class="cite" role="dialog">
+        <div class="c-doc"><span class="c-verb ${n.kind}">${n.kind==='append'?'Added':n.kind==='remove'?'Removed':'Changed'} by</span> ${d.doc.replace(' to the MSA','')}</div>
+        <div class="c-date">Signed ${d.dateText}${n.op.at ? ' · ' + n.op.at.split(' · ')[1] : ''}</div>
+        <a href="#" onclick="event.preventDefault()" title="${d.file}">Open Document →</a>
+      </div></span>`; }).join('');
+    return `<div class="para">${p.html}${marks}</div>`;
+  }).join('');
+  wrap.querySelectorAll('.para > .mk').forEach(mk=>{ const k=mk.dataset.k; const own=mk.parentNode.querySelectorAll('ins[data-src="'+k+'"]'); const dels=mk.parentNode.querySelectorAll('del'); const a=own[own.length-1] || dels[dels.length-1]; if(a) a.after(mk); });
+  const last = i === VERSIONS.length-1, n = VERSIONS.length-1;
+  state.innerHTML = last
+    ? `<span class="now">Original</span>`
+    : `<span class="now amber">Amended&nbsp; ${n} ${n===1?'Time':'Times'}</span>`;
+  document.querySelectorAll('.file').forEach(f => f.classList.toggle('lit', +f.dataset.v === i));
+}
+
+/* citation: click the marker to open; click anywhere else or Esc to close */
+function closeCites(){
+  wrap.querySelectorAll('.cite.open').forEach(c=>c.classList.remove('open'));
+  wrap.querySelectorAll('.mark.open').forEach(m=>m.classList.remove('open'));
+}
+wrap.addEventListener('click', e=>{
+  const m = e.target.closest('.mark');
+  if(m){
+    const c = m.nextElementSibling, wasOpen = c.classList.contains('open');
+    closeCites();
+    if(!wasOpen){ m.classList.add('open'); c.classList.add('open'); c.classList.remove('flip','up');
+      const sc=wrap.closest('.scroll')||wrap, wr=wrap.getBoundingClientRect(), sr=sc.getBoundingClientRect(), cr=c.getBoundingClientRect();
+      if(cr.right>sr.right-8) c.classList.add('flip');
+      if(cr.bottom>sr.bottom-8 && cr.height+8 < m.parentNode.getBoundingClientRect().top-sr.top) c.classList.add('up'); }
+    e.stopPropagation(); return;
+  }
+  if(!e.target.closest('.cite')) closeCites();
+});
+/* No numbers in the text. Point at any green or struck word and every word that one
+   amendment changed in this paragraph is washed together; hold a moment and its card opens. */
+let hvT=0, hvOut=0, hvK=null, hvP=null;
+function changeOf(el){ const x = el.closest('ins[data-src], del[data-gone]'); if(!x) return null;
+  return {k: x.dataset.src || x.dataset.gone, p: x.closest('.para')}; }
+function wash(p,k,on){ if(!p) return; p.querySelectorAll('ins[data-src="'+k+'"], del[data-gone="'+k+'"]').forEach(s=>s.classList.toggle('lit',on)); }
+function showChange(p,k){ const mk = p.querySelector('.mk[data-k="'+k+'"]'); if(!mk) return;
+  const m = mk.querySelector('.mark'); if(m && !m.classList.contains('open')) m.click(); }
+function hoverChange(el){ const c = changeOf(el); if(!c) return;
+  clearTimeout(hvOut);
+  if(hvP===c.p && hvK===c.k) return;
+  if(hvP) wash(hvP,hvK,false); closeCites();
+  hvP=c.p; hvK=c.k; wash(hvP,hvK,true);
+  clearTimeout(hvT); hvT=setTimeout(()=>showChange(hvP,hvK), 450); }
+function leaveChange(){ clearTimeout(hvT); clearTimeout(hvOut);
+  hvOut=setTimeout(()=>{ if(hvP) wash(hvP,hvK,false); hvP=null; hvK=null; closeCites(); }, 260); }
+wrap.addEventListener('mouseover', e=>{
+  if(e.target.closest('.cite')){ clearTimeout(hvOut); return; }
+  if(e.target.closest('ins[data-src], del[data-gone]')) hoverChange(e.target);
+});
+wrap.addEventListener('mouseout', e=>{
+  const to = e.relatedTarget;
+  if(to && (to.closest && (to.closest('.cite') || (changeOf(to) && changeOf(to).k===hvK && changeOf(to).p===hvP)))) return;
+  if(e.target.closest('ins[data-src], del[data-gone], .cite')) leaveChange();
+});
+wrap.addEventListener('keydown', e=>{
+  const m = e.target.closest('.mark');
+  if(m && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); m.click(); }
+});
+document.addEventListener('click', e=>{ if(!e.target.closest('.textwrap')) closeCites(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeCites(); });
+
+/* ---------- rail: dots on a calendar scale ---------- */
+(function buildRail(){
+  const newest = VERSIONS[0].date, oldest = VERSIONS[VERSIONS.length-1].date;
+  const span = newest - oldest;
+  const spanMonths = (newest.getFullYear()-oldest.getFullYear())*12 + (newest.getMonth()-oldest.getMonth());
+  const H = Math.max(150, Math.min(420, spanMonths * 4));   // the track grows with the span
+  track.style.height = H + 'px';
+  const y = d => ((newest - d) / span) * H;                 // 0 = top = latest
+
+  /* year ticks: the ruler the dots sit on */
+  for(let yr = oldest.getFullYear()+1; yr <= newest.getFullYear(); yr++){
+    const d = new Date(yr,0,1); if(d > newest) break;
+    const t = document.createElement('span'); t.className='tick'; t.style.top = y(d)+'px';
+    track.appendChild(t);
+  }
+
+  /* true position, then nudge any that would overlap so a burst stays clickable */
+  const pos = VERSIONS.map(v => y(v.date));
+  const MIN = 16;
+  for(let i=1;i<pos.length;i++) if(pos[i]-pos[i-1] < MIN) pos[i] = pos[i-1]+MIN;
+  let over = pos[pos.length-1] - H;
+  for(let i=pos.length-1; i>0 && over>0; i--){
+    const room = pos[i] - (pos[i-1]+MIN);
+    const d = Math.min(over, Math.max(0, room)); pos[i] -= d; over -= d;
+  }
+
+  VERSIONS.forEach((v,i)=>{
+    const n = document.createElement('div');
+    n.className = 'node' + (i===0?' on':'');
+    n.setAttribute('role','button'); n.setAttribute('tabindex','0');
+    n.setAttribute('aria-pressed', i===0?'true':'false');
+    n.setAttribute('aria-label', v.dateText + ' — ' + v.doc);
+    n.style.top = pos[i] + 'px';
+    const endLabel = i===0 ? `<span class="end-l top">Latest</span>` : (i===VERSIONS.length-1 ? `<span class="end-l bot">Original</span>` : '');
+    n.innerHTML = `<span class="dot"></span>${endLabel}
+      <div class="tip">
+        <p class="t-when">${v.dateText}</p>
+        <p class="t-doc">${v.doc}</p>
+        <a href="#" onclick="event.preventDefault(); event.stopPropagation()">Open Document →</a>
+      </div>`;
+    const select = ()=>{
+      active = i;
+      track.querySelectorAll('.node').forEach((x,j)=>{
+        x.classList.toggle('on', j===i); x.setAttribute('aria-pressed', j===i?'true':'false');
+      });
+      paint(i);
+    };
+    n.addEventListener('click', select); n._select = select;
+    n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(); } });
+    track.appendChild(n);
+  });
+})();
+
+paint(0);
+
+/* ---------- the loop: the panel reads itself until someone takes the mouse ----------
+   a cursor clicks through the dates; the signed file on the left lights up as the clause shows its words */
+const fcur = document.createElement('div'); fcur.id='fcur';
+fcur.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 2l14.5 9.2-6.6 1.3 3.9 7-2.6 1.4-3.9-7.1L3.4 18z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+document.body.appendChild(fcur);
+const stageEl = document.querySelector('.stage'), hint = {set textContent(v){}};
+const demo = {token:0, running:false, driving:false, visible:false};
+let fx = 0, fy = 0, fh = null;
+class Stop extends Error {}
+const PACE = 1.5;
+const wait = (ms, t) => new Promise((res, rej) => setTimeout(() => t === demo.token ? res() : rej(new Stop()), ms * PACE));
+const ease = k => k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3)/2;
+function fakeHover(clear){
+  const el = clear ? null : document.elementFromPoint(fx, fy), h = el && el.closest('.node, .mark');
+  if(h !== fh){ if(fh) fh.classList.remove('fhover'); if(h) h.classList.add('fhover'); fh = h; }
+}
+function place(x, y){ fx = x; fy = y; fcur.style.transform = `translate(${x-3}px, ${y-2}px)`; fakeHover(); }
+function glide(x, y, ms, t){ ms *= PACE;
+  const x0 = fx, y0 = fy, t0 = performance.now();
+  return new Promise((res, rej) => { const step = now => { if(t !== demo.token) return rej(new Stop());
+    const k = Math.min(1, (now - t0)/ms), e = ease(k); place(x0 + (x-x0)*e, y0 + (y-y0)*e); k < 1 ? requestAnimationFrame(step) : res(); }; requestAnimationFrame(step); });
+}
+const mid = el => { const r = el.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; };
+const sc = document.querySelector('.scroll');
+async function bring(el, t){ const r = el.getBoundingClientRect(), s = sc.getBoundingClientRect(); const d = r.top - s.top - 40; if(Math.abs(d) > 4){ sc.scrollTo({top: sc.scrollTop + d, behavior:'smooth'}); await wait(650, t); } }
+async function tap(el, t){ fcur.classList.add('down'); await wait(120, t); fcur.classList.remove('down'); el.click(); }
+const nodes = () => [...track.querySelectorAll('.node')];
+function resetPanel(){ filmClean(); closeCites(); nodes()[0]._select(); fakeHover(true); sc.scrollTop = 0; }
+
+const demobar = document.getElementById('demobar');
+
+/* ---------- the opening film ---------- */
+const STAMP = ['02 OCT 2022','18 JUN 2020','14 MAR 2019'];
+function filmClean(){
+  document.querySelectorAll('.fly').forEach(x => x.remove());
+  document.querySelectorAll('.file.sent').forEach(x => x.classList.remove('sent'));
+  document.querySelectorAll('.node').forEach(n => n.classList.remove('fin','stamping'));
+  stageEl.classList.remove('f','fw','fm'); track.style.removeProperty('--rl');
+}
+async function film(t){
+  closeCites(); nodes()[0]._select(); sc.scrollTop = 0;
+  document.querySelectorAll('.file').forEach(f => f.classList.remove('lit'));
+  stageEl.classList.add('f'); track.style.setProperty('--rl', 0);
+  nodes().forEach((n,i) => { if(!n.querySelector('.fstamp')){ const s = document.createElement('span'); s.className = 'fstamp'; s.textContent = STAMP[i]; n.appendChild(s); } });
+  step(1, 6200);
+  await wait(900, t);
+  const order = [2, 1, 0];                                               // the executed agreement first, then each amendment
+  for(let k = 0; k < order.length; k++){
+    const vi = order[k], card = document.querySelector(`.file[data-v="${vi}"]`), node = nodes()[vi];
+    const a = card.getBoundingClientRect(), b = node.getBoundingClientRect();
+    const c = card.cloneNode(true); c.classList.add('fly'); c.classList.remove('lit');
+    Object.assign(c.style, {left:a.left+'px', top:a.top+'px', width:a.width+'px', height:a.height+'px'});
+    document.body.appendChild(c); card.classList.add('sent');
+    await wait(40, t);
+    c.style.transform = `translate(${(b.left+b.width/2)-(a.left+a.width/2)}px, ${(b.top+b.height/2)-(a.top+a.height/2)}px) scale(.06)`;
+    c.style.opacity = '0';
+    await wait(760, t);
+    node.classList.add('fin','stamping'); track.style.setProperty('--rl', (k+1)/order.length);   // it lands: a dot on the calendar
+    setTimeout(() => { node.classList.remove('stamping'); c.remove(); }, 1100);
+    await wait(260, t);
+  }
+  await wait(600, t);
+  stageEl.classList.add('fw');                                           // the words come out of the files
+  await wait(1100, t);
+  stageEl.classList.add('fm');                                           // what's gone is struck, what's new is green
+  await wait(900, t);
+  document.querySelectorAll('.file.sent').forEach(x => x.classList.remove('sent'));
+  paint(0);
+  await wait(500, t);
+  filmClean();
+}
+async function playOnce(t){
+  await film(t);
+  const sr = stageEl.getBoundingClientRect();
+  place(sr.left + 60, sr.bottom - 34); fcur.classList.add('in');
+  step(2, 6600);
+  await wait(1600, t);                                                       // latest: amended twice, the last change in red and green
+  let m = wrap.querySelector('ins[data-src]'); await bring(m, t); await glide(...mid(m), 1000, t); hoverChange(m); await wait(3000, t);   // which document, which words
+  leaveChange(); closeCites();
+  step(3, 8600); const n1 = nodes()[1]; await glide(...mid(n1), 900, t); await wait(1300, t); await tap(n1, t); await wait(1400, t);             // the first amendment
+  m = wrap.querySelector('ins[data-src]'); await bring(m, t); await glide(...mid(m), 900, t); hoverChange(m); await wait(3000, t);
+  leaveChange(); closeCites();
+  step(4, 8800); const n2 = nodes()[2]; await glide(...mid(n2), 900, t); await wait(900, t); await tap(n2, t); sc.scrollTo({top:0, behavior:'smooth'}); await wait(2400, t);              // as first signed
+  const n0 = nodes()[0]; await glide(...mid(n0), 1000, t); await wait(600, t); await tap(n0, t); await wait(1200, t);             // back to what's in force
+  await glide(sr.left + 60, sr.bottom - 34, 900, t); step(5, 0); await wait(1200, t);
+}
+async function loop(){
+  if(demo.running) return; demo.running = true; demo.driving = false; const t = ++demo.token;
+  barPlaying(); resetPanel();
+  try { while(true) await playOnce(t); } catch(e){ if(!(e instanceof Stop)) console.error(e); }
+}
+function stopDemo(driving){
+  demo.token++; filmClean(); paint(active || 0); demo.running = false; fcur.classList.remove('in','down'); fakeHover(true);
+  document.documentElement.classList.remove('demoing');
+  if(driving) demo.driving = true;
+}
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  new IntersectionObserver(([en]) => {
+    demo.visible = en.intersectionRatio >= .45 || en.intersectionRect.height >= 300;
+    if(demo.visible && !demo.running && !demo.driving && !demo.started){ demo.started = true; loop(); }
+  }, {threshold:[0, .2, .3, .45, .6, .8]}).observe(stageEl);
+} else barTrying();
+
+/* ---------- one line for the whole run ---------- */
+const STEPL = ['Three signed files','Latest version','The 2020 change','Original version'], STEPD = [6200,6600,8600,8800], STEPT = STEPD.reduce((a,b)=>a+b,0);
+const dfill = document.getElementById('dfill'), dlab = document.getElementById('dlab'), dtry = document.getElementById('dtry');
+var UNIT = 'lineage'; function tell(m){ try { parent.postMessage(Object.assign({unit:UNIT}, m), '*'); } catch(e){} }
+function step(n, dur){
+  if(n > STEPL.length){ dfill.style.transition = 'width .5s ease'; dfill.style.width = '100%'; tell({kind:'step', n, a:1, b:1, dur:500}); return; }
+  const a = STEPD.slice(0, n-1).reduce((x,y)=>x+y,0) / STEPT, b = a + dur / STEPT;
+  dfill.style.transition = 'none'; dfill.style.width = (a*100) + '%'; void dfill.offsetWidth;
+  dfill.style.transition = 'width ' + (dur * PACE) + 'ms linear'; dfill.style.width = (b*100) + '%';
+  dlab.innerHTML = '<b>0' + n + '</b>' + STEPL[n-1];
+  tell({kind:'step', n, of:STEPL.length, label:STEPL[n-1], a, b, dur:dur * PACE});
+}
+function barPlaying(){ demobar.classList.remove('trying'); document.documentElement.classList.add('demoing'); dtry.textContent = 'I want to try this myself'; tell({kind:'state', playing:true}); }
+function barTrying(){ demobar.classList.add('trying'); document.documentElement.classList.remove('demoing'); dtry.textContent = 'Play the demo'; dlab.innerHTML = 'You&rsquo;re trying it. The demo comes back a few seconds after you leave.'; tell({kind:'state', playing:false}); }
+
+/* while the demo plays, a real hand does nothing to the prototype: it has to ask to take over */
+['pointerdown','pointerup','pointermove','pointerover','pointerout','mousedown','mouseup','mousemove','mouseover','mouseout','click','dblclick','contextmenu'].forEach(type =>
+  document.addEventListener(type, e => {
+    if(!e.isTrusted || !demo.running) return;
+    if(e.target.closest && e.target.closest('#demobar')) return;
+    e.stopImmediatePropagation(); if(type === 'mousedown' || type === 'click' || type === 'contextmenu') e.preventDefault();
+  }, true));
+
+/* taking over, and giving it back */
+let idleTimer = null;
+const IDLE = 6000;
+function armIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(() => { if(demo.driving && demo.visible && !inside){ demo.driving = false; loop(); } }, IDLE); }
+let inside = false;
+/* a click on the frame: the demo stops and the reader starts from the beginning, with nothing playing over them */
+function tryNow(){ demo.started = true; if(demo.running) stopDemo(false); clearTimeout(idleTimer); demo.driving = false; resetPanel(); barTrying(); }
+addEventListener('message', e => { if(e.data && e.data.cmd === 'resume'){ if(!demo.running){ clearTimeout(idleTimer); demo.driving = false; loop(); } return; } if(e.data && e.data.cmd === 'try') return tryNow(); if(e.data && e.data.cmd === 'toggle') dtry.click(); });
+dtry.addEventListener('click', e => {
+  e.stopPropagation();
+  if(demo.running){ stopDemo(true); barTrying(); }
+  else { clearTimeout(idleTimer); demo.driving = false; loop(); }
+});
+document.addEventListener('pointermove', e => { if(!e.isTrusted) return; inside = true; if(demo.driving) clearTimeout(idleTimer); }, true);
+document.addEventListener('keydown', () => { if(demo.driving) clearTimeout(idleTimer); }, true);
+document.documentElement.addEventListener('mouseleave', () => { inside = false; if(demo.driving) armIdle(); });
+document.addEventListener('focusout', () => { if(demo.driving && !inside) armIdle(); });
+
+/* tell the page this is embedded in how tall it is */
+if(document.documentElement.classList.contains('embed')){
+  const post = () => parent.postMessage({unit:'lineage', h:document.querySelector('.unit').getBoundingClientRect().height + 2}, '*');
+  addEventListener('load', post); new ResizeObserver(post).observe(document.body);
+}
+</script>
+</body>
+</html>
