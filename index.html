@@ -3363,12 +3363,13 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
   function draw(){ var d=v.duration||0, t=done?d:v.currentTime, f=d?Math.min(1,t/d):0;
     prg.style.strokeDasharray=(f*100).toFixed(2)+' 100';
     var rw=document.getElementById('wv-row'), we=card.querySelector('.wv-end'); if(rw) rw.style.setProperty('--p', f.toFixed(4)); if(we) we.style.setProperty('--p', f.toFixed(4));
-    var st = done ? 'ended' : (v.paused ? 'paused' : 'playing'); ctl.dataset.s=st;
-    lbl.textContent = done ? 'Watch again' : (v.paused ? 'Paused' : 'Playing'); tEl.textContent = d ? mmss(t)+' / '+mmss(d) : '';
+    var wait = !done && !v.paused && v.readyState < 3;   /* asked to play, but the film hasn't arrived yet: say so instead of showing a frozen 'Playing' */
+    var st = done ? 'ended' : (v.paused ? 'paused' : (wait ? 'loading' : 'playing')); ctl.dataset.s=st;
+    lbl.textContent = done ? 'Watch again' : (v.paused ? 'Paused' : (wait ? 'Loading\u2026' : 'Playing')); tEl.textContent = d ? mmss(t)+' / '+mmss(d) : '';
     pp.setAttribute('aria-label', done ? 'Play again' : (v.paused ? 'Play' : 'Pause')); fit(); }
   function toggle(){ if(done || v.ended){ done=false; v.currentTime=0; } if(v.paused){ var q=v.play(); if(q&&q.catch) q.catch(function(){}); } else v.pause(); draw(); }
   pp.addEventListener('click', toggle); v.addEventListener('click', toggle);
-  ['timeupdate','play','pause','loadedmetadata','durationchange','seeked'].forEach(function(e){ v.addEventListener(e, draw); });
+  ['timeupdate','play','pause','loadedmetadata','durationchange','seeked','waiting','stalled','canplay','canplaythrough','loadeddata'].forEach(function(e){ v.addEventListener(e, draw); });
   v.addEventListener('playing', function(){ done=false; draw(); });
   /* the voice wave: random, speech-shaped. Each bar heads for a fresh random height every
      80-200ms; every so often the whole wave drops to a murmur for a beat, like a pause between
