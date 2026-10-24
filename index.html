@@ -538,7 +538,8 @@ html, body{background:#101110}
 .ov #w4 .glance{display:grid; grid-template-columns:1fr 1fr; gap:22px 28px; margin:26px 0 8px; padding:24px 0 0; border-top:1px solid var(--line)}
 .ov #w4 .glance dt{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin:0 0 6px}
 .ov #w4 .glance dd{font-size:13.5px; line-height:21px; color:var(--ink); margin:0}
-.ov #w4 p strong, .ov #w5 p strong{font-weight:600; color:var(--ink)}
+.ov #w4 p strong, .ov #w5 p strong{font-weight:600; color:inherit}   /* emphasis is weight, not a new colour: same grey as the text, like the highlighted lines */
+.ov #w4 p.k, .ov #w5 p.k{color:var(--faint) !important}   /* one quiet grey for meta, numbers and captions */
 .ov #w4 p.pq{border-left:2px solid var(--ink); padding:4px 0 4px 18px; margin:22px 0; font-weight:600; color:var(--muted); max-width:60ch}
 .ov #w4 p.bq{font-weight:600; color:var(--muted)}
 /* the rule panel, written as text so it reads at any size */
@@ -578,11 +579,11 @@ html, body{background:#101110}
   .ov #w4 .rb-card{flex-direction:column; align-items:flex-start; gap:8px; padding:14px 16px}
 }
 /* the SME panel, written as text so it reads at any size */
-.ov #w4 .smebox{margin:28px 0; padding:26px 24px 24px; border-radius:22px; background:#1E474E; color:#fff}
+.ov #w4 .smebox{margin:28px 0; padding:26px 24px 24px; border-radius:22px; background:#F0EFEB; color:#191A18}
 .ov #w4 .smebox :where(p){max-width:none; margin:0}
-.ov #w4 .smebox .smebox-k{font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; color:#A9E4E6}
-.ov #w4 .smebox .smebox-h{margin-top:16px; font-size:19px; line-height:26px; font-weight:600; color:#F09087}
-.ov #w4 .smebox-row{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:16px 18px; border-radius:12px; background:#FAFAFA}
+.ov #w4 .smebox .smebox-k{font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint)}
+.ov #w4 .smebox .smebox-h{margin-top:16px; font-size:19px; line-height:26px; font-weight:600; color:#191A18}
+.ov #w4 .smebox-row{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:14px; padding:16px 18px; border-radius:12px; background:#FFFFFF}
 .ov #w4 .smebox-row:first-of-type{margin-top:20px}
 .ov #w4 .smebox .q{font-size:16px; line-height:23px; color:#191A18}
 .ov #w4 .smebox .w{margin-top:4px; font-size:14px; line-height:20px; color:#5F625C}
@@ -601,6 +602,17 @@ html, body{background:#101110}
 .ov #w4 .ch h3{margin-top:2px}
 .ov #w4 figure.wide img{max-width:100%}
 .ov #w4 figure.strip img{max-width:440px}
+/* deal vs contract document: rebuilt as live text so the words are larger and match the write-up */
+.ov #w4 figure.cmp{display:grid; grid-template-columns:1fr 1fr; margin:44px -32px; padding:36px 0 40px; border-radius:16px; background:radial-gradient(60% 80% at 25% 45%, rgba(250,214,190,.45), transparent 70%), radial-gradient(60% 80% at 78% 45%, rgba(190,212,250,.45), transparent 70%), #FBFAF8}
+.ov #w4 .cmp-col{padding:0 36px; text-align:left}
+.ov #w4 .cmp-b{border-left:1px solid #E4E2DC}
+.ov #w4 .cmp-col img{display:block; width:100%; max-width:360px; height:170px; object-fit:contain; margin:14px auto 22px; border:0; border-radius:0; -webkit-mask-image:radial-gradient(closest-side, #000 62%, transparent 100%); mask-image:radial-gradient(closest-side, #000 62%, transparent 100%)}
+@media (max-width:760px){ .ov #w4 .cmp-col img{height:150px} }
+.ov #w4 .cmp-k{margin:0; font-size:12px; line-height:16px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); text-align:center}
+.ov #w4 p.cmp-t{margin:0; font-family:'Poppins',var(--font); font-size:22px; line-height:30px; font-weight:500; color:var(--ink)}
+.ov #w4 p.cmp-d{margin:8px 0 0; font-size:16px; line-height:25px; color:var(--muted)}
+@media (max-width:760px){ .ov #w4 figure.cmp{grid-template-columns:1fr; margin:32px 0; padding:24px 0} .ov #w4 .cmp-col{padding:0 20px} .ov #w4 .cmp-b{border-left:0; border-top:1px solid #E4E2DC; margin-top:28px; padding-top:28px} .ov #w4 p.cmp-t{font-size:20px; line-height:28px} .ov #w4 p.cmp-d{font-size:15px; line-height:23px} }
+
 /* more air in the case studies: paragraphs, highlights, pictures and sections get more room between them */
 @media (min-width:761px){
   .ov #w4 p:not([class]), .ov #w5 p:not([class]){margin-top:18px}
@@ -684,7 +696,7 @@ html, body{background:#101110}
 .ov #w5 .tl-br{border:1px solid var(--rule); border-radius:8px; padding:10px 12px; background:var(--paper)}
 .ov #w5 .tl-br .sit, .ov #w5 .tl-br .out{display:block; font-size:12px; line-height:18px; color:var(--faint)}
 .ov #w5 .tl-br b{display:block; font-family:var(--display); font-weight:500; font-size:14px; line-height:20px; color:var(--ink); margin:6px 0 2px}
-.ov #w5 .tl-br.hot{border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent)} .ov #w5 .tl-br.hot b{color:var(--accent)}
+/* both outcomes are right for their situation, so neither card is highlighted */
 .ov #w5 .vren{padding:16px 22px 14px; border:1px solid var(--line); border-radius:12px}
 .ov #w5 .rn-row{display:grid; grid-template-columns:86px 1fr; gap:12px; align-items:start; padding:8px 0}
 .ov #w5 .rn-n{font-size:13px; line-height:19px; color:var(--ink)}
@@ -934,7 +946,7 @@ html.intro-done .sheet:not(.lifting){box-shadow:none}
 .sheet > .menu{position:absolute}
 @media (max-width:760px){
   .intro{background-position:left 0 bottom 16%; background-size:auto 58%}
-  .intro-t{left:24px; top:13%; width:min(290px, calc(100vw - 48px)); font-size:26px; line-height:34px}
+  .intro-t{left:24px; top:13%; width:min(290px, calc(100vw - 48px)); font-size:26px; line-height:33px; font-weight:500; letter-spacing:-.015em}
   .intro-cue{left:auto; right:24px; transform:none}
 }
 /* phone paragraphs: one size across the site, 15/24 */
@@ -952,10 +964,10 @@ a.mark{width:48px !important; height:48px !important; font-size:23px !important}
 /* intro: the sentence is just there; a live chip under it; the drawing a little smaller */
 .intro-t{color:#E8E7E3}
 .intro-chip{display:flex; width:max-content; align-items:center; gap:10px; margin-top:28px; padding:7px 16px 7px 12px; border-radius:999px;
-  background:rgba(92,201,126,.09); border:1px solid rgba(92,201,126,.30);
-  font-family:var(--font); font-weight:500; font-size:14px; line-height:20px; letter-spacing:0; color:#7FD39A}
-.intro-chip i{position:relative; display:block; width:9px; height:9px; border-radius:50%; background:#5CC97E; flex:none}
-.intro-chip i::after{content:""; position:absolute; inset:-4px; border-radius:50%; background:rgba(92,201,126,.35); animation:chipLive 2s ease-out infinite}
+  background:rgba(232,150,172,.10); border:1px solid rgba(232,150,172,.32);
+  font-family:var(--font); font-weight:500; font-size:14px; line-height:20px; letter-spacing:0; color:#F2B8C8}
+.intro-chip i{position:relative; display:block; width:9px; height:9px; border-radius:50%; background:#E896AC; flex:none}
+.intro-chip i::after{content:""; position:absolute; inset:-4px; border-radius:50%; background:rgba(232,150,172,.38); animation:chipLive 2s ease-out infinite}
 @keyframes chipLive{0%{transform:scale(.5); opacity:.9} 100%{transform:scale(1.6); opacity:0}}
 @media (prefers-reduced-motion:reduce){ .intro-chip i::after{animation:none; opacity:.5} }
 @media (min-width:761px){
@@ -1078,7 +1090,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 @media (min-width:761px){ #hero-line{max-width:400px !important; text-wrap:pretty !important} }
 
 /* intro sentence: Poppins Regular 36 / 54, as in Figma */
-@media (min-width:761px){ .intro-t{font-family:'Poppins',var(--display),sans-serif !important; font-weight:400 !important; font-size:36px !important; line-height:54px !important; letter-spacing:0 !important} }
+@media (min-width:761px){ .intro-t{font-family:'Poppins',var(--display),sans-serif !important; font-weight:500 !important; font-size:34px !important; line-height:42px !important; letter-spacing:-.02em !important} }
 
 /* more air between the hero picture's caption and the line under the opening */
 @media (min-width:901px){ .hero{padding-bottom:150px !important; padding-top:190px !important} }
@@ -1098,7 +1110,8 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 
 /* the drawing's leaves touch the top edge; the grey light at the top right reaches the screen's right edge again; the scroll cue sits at the right edge */
 @media (min-width:761px){
-  .intro::before{height:auto !important; aspect-ratio:3344/2090 !important; margin-top:-3.8% !important; background-position:left 0 top 0 !important}
+  .intro::before{height:auto !important; aspect-ratio:2092/1716 !important; margin-top:0 !important; width:52% !important; left:-3% !important; background-image:url(intro-drawing-2.webp) !important; background-size:100% auto !important; background-position:left 0 top 0 !important;
+    -webkit-mask-image:linear-gradient(to right,#000 78%,transparent 100%), linear-gradient(to bottom,#000 86%,transparent 100%) !important; mask-image:linear-gradient(to right,#000 78%,transparent 100%), linear-gradient(to bottom,#000 86%,transparent 100%) !important; -webkit-mask-composite:source-in !important; mask-composite:intersect !important}   /* the tighter drawing: monkey and tree, a little smaller, sitting above the sheet */
   .intro::after{content:""; position:absolute; left:0; top:0; width:100%; aspect-ratio:3344/2090; margin-top:-4.1%; pointer-events:none;
     background:url(intro-drawing.webp) left 0 top 0/100% auto no-repeat;
     -webkit-mask-image:linear-gradient(to right,transparent 62%,#000 82%); mask-image:linear-gradient(to right,transparent 62%,#000 82%)}
@@ -1152,7 +1165,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .tb-play[hidden]{display:none}
 .tb-l{font-family:var(--font); font-size:13px; line-height:18px; white-space:nowrap}
 /* read-along: the paragraph being read is tinted, the word being spoken is marked */
-.ov #w4 .rd-on{background:rgba(61,90,69,.07); box-shadow:0 0 0 6px rgba(61,90,69,.07); border-radius:4px; transition:background-color .3s ease, box-shadow .3s ease}
+.ov #w4 .rd-on, .ov #w5 .rd-on{background:rgba(61,90,69,.09); box-shadow:0 0 0 8px rgba(61,90,69,.09); border-radius:4px; transition:background-color .3s ease, box-shadow .3s ease}
 ::highlight(readw){background-color:#CFE3D4; color:#191A18}
 
 /* while it reads, a small player stays at the bottom of the screen so it can be paused or stopped from anywhere */
@@ -1164,6 +1177,8 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .rd-mini button:hover{background:rgba(255,255,255,.12)}
 .rd-mini .i-play{display:none} .rd-mini.paused .i-play{display:block} .rd-mini.paused .i-pause{display:none}
 .rd-mini .rd-lbl{padding:0 6px 0 2px; white-space:nowrap}
+.ov .card .ch{position:relative} .ov .card .ch-n .rd-sec{position:absolute; left:-46px; top:-2px; display:grid; place-items:center; width:26px; height:26px; padding:0; border:1px solid var(--rule); border-radius:50%; background:#fff; color:var(--ink); cursor:pointer; opacity:0; transform:translateX(4px); transition:opacity .18s ease, transform .18s ease, border-color .15s ease} .ov .card .ch:hover > .ch-n .rd-sec, .ov .card .ch-n .rd-sec:focus-visible{opacity:1; transform:none} .ov .card .ch-n .rd-sec:hover{border-color:var(--ink)} @media (hover:none), (max-width:760px){ .ov .card .ch-n .rd-sec{position:static; display:inline-grid; width:22px; height:22px; margin-left:8px; vertical-align:middle; opacity:1; transform:none} }
+.rd-mini .rd-prev, .rd-mini .rd-next{color:rgba(255,255,255,.75)} .rd-mini .rd-prev:hover, .rd-mini .rd-next:hover{color:#fff}
 .rd-mini button.rd-go{display:none; width:auto; height:28px; padding:0 12px; margin-right:2px; border-radius:999px; background:#F1F1EE; color:#191A18; font:inherit; font-size:12.5px; font-weight:500; white-space:nowrap}
 .rd-mini button.rd-go:hover{background:#fff}
 .rd-mini.away button.rd-go{display:block}
@@ -1361,7 +1376,7 @@ section.closing{margin-top:160px !important}
 .ex-btn:focus{outline:none} .ex-btn:focus-visible{outline:2px solid #3D5A45; outline-offset:2px}
 @media (min-width:901px){ #chapters.lay-rows .ex-btn{margin:18px 0 0 0; padding:4px 14px 4px 5px; background:rgba(25,26,24,.045)} #chapters.lay-rows .ex-btn:hover{background:rgba(25,26,24,.08); color:#191A18} }
 .ov #wv .wv-vid{margin:28px -48px 0}
-.ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#EEEEEA; box-shadow:0 0 0 1px rgba(25,26,24,.1)}
+.ov #wv .wv-vid video{display:block; width:100%; height:auto; border-radius:14px; background:#141414; box-shadow:0 0 0 1px rgba(255,255,255,.08)}
 .ov #wv .wv-more{display:flex; justify-content:space-between; align-items:center; margin:40px 0 0; padding:20px 24px; border-radius:12px; background:#EEEEEA; color:#3C4A3F; text-decoration:none; font-family:var(--display); font-size:20px; line-height:28px; transition:background-color .15s ease}
 .ov #wv .wv-more:hover{background:#E6E6E1}
 .ov #wv .w4-tag b{margin-right:8px}
@@ -1437,7 +1452,7 @@ section.closing{margin-top:160px !important}
 /* the card is never taller than the screen: its width follows the height left over for a 16:9 film */
 @media (min-width:901px){ .ov .card#wv:not(.dg){max-width:min(1320px, calc(100vw - 120px), calc((100vh - 330px) * var(--ar, 1.7778) + 96px)) !important} }
 
-.ov #wv.dg .wv-vid{margin:20px auto 0; max-width:min(640px, calc(100vh - 300px))}
+.ov #wv.dg .wv-vid{margin:20px auto 0; max-width:min(1320px, calc((100vh - 260px) * 1.45))}   /* the diagram film is nearly square: as wide as the window height allows */
 .ov #wv.dg .wv-vid video{background:#EEEEEA; box-shadow:none; border-radius:10px}
 .ov #wv .wv-more[hidden], .ov #wv .w4-tag[hidden]{display:none !important}
 /* intro: the credentials line sits to the left */
@@ -1467,6 +1482,9 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 /* the walkthrough card is dark: the film is the only light thing on screen */
 .ov #wv, .ov #wv.dg{background:#1F201D !important; color:#E8E7E1; box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 30px 80px -30px rgba(0,0,0,.8)}
 .ov #wv .wv-vid video{background:#1F201D !important}
+/* the films were recorded with a light page behind the prototype's rounded top; the frame crops that sliver so the corners read dark */
+.ov #wv .wv-vid{border-radius:14px; overflow:hidden; background:#1F201D}
+.ov #wv .wv-vid video{clip-path:inset(1px 1px 0 1px round 14px); border-radius:14px}
 .ov #wv h2, .ov #wv .wv-q, .ov #wv .wv-k, .ov #wv .wv-more{color:#F2F1EC !important}
 .ov #wv .wv-n, .ov #wv .wv-more .wv-r, .ov #wv .wv-end a, .ov #wv .wv-end a.back{color:#A3A49C !important}
 .ov #wv .wv-more{border-color:rgba(255,255,255,.12) !important}
@@ -1564,6 +1582,85 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
 <meta name="twitter:image" content="https://amritkmr08-ux.github.io/designbyamrit/og-image.jpg" />
 <link rel="preload" as="image" href="intro-drawing.webp">
 <script>(function(){ var d=document.documentElement, done=function(){ d.classList.add('art-in'); }, im=new Image(); im.onerror=done; im.src='intro-drawing.webp'; if(im.decode) im.decode().then(done, done); else im.onload=done; setTimeout(done, 3000); })();</script>
+<style>
+/* ===== Search, chapter 02: from a fixed result hierarchy to intent-based search =====
+   one rhythm for all five steps: a numbered heading, one or two short lines, then one picture */
+.ov #w4 .ix p.ix-h{margin:72px 0 0; max-width:none; font-family:var(--display); font-size:16px; line-height:26px; font-weight:500; color:var(--ink)}
+.ov #w4 .ix p.ix-h + p{margin-top:10px}
+.ov #w4 .ix p.ix-foot{margin:14px 0 0; max-width:none; font-size:13px; line-height:19px; color:var(--faint)}
+.ov #w4 .ix figure.cmp{margin-left:0; margin-right:0; border-radius:22px}
+.ov #w4 .ix .smebox{padding-top:8px}
+.ov #w4 .ix .smebox-row:first-of-type{margin-top:14px}
+
+/* the five layers; one is lit */
+.ov #w4 .ix-hier{list-style:none; display:flex; align-items:center; gap:16px; margin:18px 0 0; padding:0}
+.ov #w4 .ix-hier li{position:relative; flex:none; margin:0; padding:8px 16px; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:14px; line-height:20px; color:var(--muted)}
+.ov #w4 .ix-hier li + li::before{content:""; position:absolute; right:100%; top:50%; width:16px; height:1px; background:var(--rule)}
+.ov #w4 .ix-hier li.on{background:#EAF3FC; border-color:#4A6C80; color:#23465A; font-weight:600}
+.ov #w4 .ix-hier + p{margin-top:20px}
+
+/* the decision: two questions, one search */
+@keyframes ixIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+}
+@media (max-width:760px){
+  .ov #w4 .ix p.ix-h{margin-top:56px}
+}
+@media (max-width:620px){
+  /* on a phone the layers stack, each a step in from the one above */
+  .ov #w4 .ix-hier{flex-direction:column; align-items:flex-start; gap:8px}
+  .ov #w4 .ix-hier li + li::before{display:none}
+  .ov #w4 .ix-hier li:nth-child(2){margin-left:14px}
+  .ov #w4 .ix-hier li:nth-child(3){margin-left:28px}
+  .ov #w4 .ix-hier li:nth-child(4){margin-left:42px}
+  .ov #w4 .ix-hier li:nth-child(5){margin-left:56px}
+}
+.ov #w4 .ix-hier li.on{position:relative}
+.ov #w4 .ix-here{position:absolute; left:50%; top:calc(100% + 8px); transform:translateX(-50%); white-space:nowrap; font-size:13px; line-height:19px; font-weight:400; color:#4A6C80}
+.ov #w4 .ix-hier:has(.ix-here){margin-bottom:0}
+.ov #w4 .ix-hier + p.ix-foot{margin-top:34px}
+@media (max-width:620px){
+  .ov #w4 .ix-here{left:calc(100% + 10px); top:50%; transform:translateY(-50%); white-space:normal; width:110px}
+  .ov #w4 .ix-hier + p.ix-foot{margin-top:14px}
+}
+.ov #w4 .ix-mx-wrap{margin:22px 0 0; border:1px solid #E3E3DE; border-radius:16px; overflow:hidden; background:#fff}
+.ov #w4 .ix-mx{width:100%; border-collapse:collapse; font-size:14px; line-height:20px}
+.ov #w4 .ix-mx th{padding:12px 16px; text-align:left; font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; font-weight:500; color:var(--faint); background:#F7F7F4; border-bottom:1px solid #E3E3DE}
+.ov #w4 .ix-mx td{padding:14px 16px; vertical-align:top; color:var(--muted); border-top:1px solid #EDEDEA}
+.ov #w4 .ix-mx tbody tr:first-child td{border-top:0}
+.ov #w4 .ix-mx td:first-child{width:28%; color:var(--ink)}
+.ov #w4 .ix-mx .lv{display:inline-block; padding:1px 10px; border-radius:999px; background:#EAF3FC; color:#23465A; font-size:14px; line-height:20px; font-weight:600; white-space:nowrap}
+.ov #w4 .ix-sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.ov #w4 .ix-own{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px}
+.ov #w4 .ix-own p{max-width:none; margin:0; padding:18px 20px; border-radius:14px; background:#F0EFEB; font-size:14px; line-height:20px; color:var(--muted)}
+.ov #w4 .ix-own b{display:block; margin-bottom:6px; font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--ink)}
+.ov #w4 .ix-own + p{margin-top:28px}
+@media (max-width:760px){
+  .ov #w4 .ix-mx-wrap{margin:20px -12px 0}
+  .ov #w4 .ix-mx, .ov #w4 .ix-mx tbody, .ov #w4 .ix-mx tr, .ov #w4 .ix-mx td{display:block; width:auto}
+  .ov #w4 .ix-mx thead{position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+  .ov #w4 .ix-mx thead th{display:block; width:1px; padding:0}
+  .ov #w4 .ix-mx tr{padding:14px 16px; border-top:1px solid #EDEDEA}
+  .ov #w4 .ix-mx tbody tr:first-child{border-top:0}
+  .ov #w4 .ix-mx td{padding:0; border:0}
+  .ov #w4 .ix-mx td:first-child{width:auto; font-size:14px; line-height:20px}
+  .ov #w4 .ix-mx td + td::before{content:attr(data-h); display:block; margin-top:10px; font-size:13px; line-height:18px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint)}
+  .ov #w4 .ix-own{grid-template-columns:1fr}
+}
+</style>
+
+<style>
+/* closing line: the tree on the right, bushes along the bottom, desktop only */
+section.closing{position:relative}
+.closing-art, .closing-bush{display:none}
+@media (min-width:901px){
+  section.closing{min-height:440px; display:flex; align-items:center; padding-bottom:50px !important; margin-top:80px !important}
+  section.closing p{position:relative; z-index:2}
+  .closing-bush{display:block; position:absolute; right:-90px; bottom:0; height:140px; width:auto; transform:scaleX(-1); z-index:1; pointer-events:none; -webkit-user-select:none; user-select:none}
+  .closing-art{display:block; position:absolute; right:40px; bottom:-20px; height:470px; width:auto; z-index:0; pointer-events:none; clip-path:inset(0 0 20px 0); -webkit-user-select:none; user-select:none}
+}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
@@ -1588,7 +1685,7 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
           <div class="cine-line on" data-i="0"><p class="cine-n">One company, 40,000 contracts.</p></div>
           <div class="cine-line" data-i="s"><p class="cine-n">Spread across many documents.</p></div>
           <div class="cine-line" data-i="2"><p class="cine-n">Now AI can connect meaning within the scattered pieces.</p></div>
-          <div class="cine-line" data-i="3"><p class="cine-n">And that brings powerful insights to the business.</p></div>
+          <div class="cine-line" data-i="3"><p class="cine-n">And that can tell the business things no one person could find.</p></div>
           <div class="cine-line" data-i="4"><p class="cine-n">But is that enough to earn the user&rsquo;s trust?</p></div>
           <div class="cine-line" data-i="5">
             <h2 id="cine-h">Not yet.</h2>
@@ -1633,13 +1730,14 @@ p.fmeta .ex-btn.ex-fm{margin:0 0 0 4px !important; padding:3px 12px 3px 5px; gap
   <a href="#q5"><b>05</b><span>Does it need me now, or can it wait?</span></a>
 </nav>
 <main id="work">
+  <div class="workhead"><span class="workhead-l">CLM Stories</span></div>
   <div class="chapters" id="chapters">
   <article class="piece" data-unit="search" id="q1">
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Did it find every piece of data that matters?</h2>
-    <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p>
+    <p class="dek r">A policy changes, and someone has to find every contract that no longer meets&nbsp;it.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="search" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
-    <figure class="r"><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><span class="still"><img src="list-still-q1.webp" alt="Search results: contract families that miss a 24-hour breach-notice policy, with conflicting terms flagged" loading="lazy"><i class="still-tag">Partly shipped</i></span><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -2158,6 +2256,8 @@ html.bare .demobar{display:none}
 .ask .send:hover, .ask.has .send, .ask.focus .send{background:#1f1f1d}
 .stage.asked .ask{min-height:46px; padding-left:20px; box-shadow:none}
 .stage.asked .ask::before{display:none}
+.ask{border-radius:24px}
+.ask .q{white-space:normal; overflow:visible; text-overflow:clip; padding:12px 0; overflow-wrap:anywhere}
 .starts{margin:22px 0 0 2px}
 .starts p{font-size:12px; color:var(--t4); margin:0 0 10px}
 .cards{gap:12px}
@@ -2849,14 +2949,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Shipped partly</span><span class="fm-b" aria-hidden="true">My role: end-to-end design of AskSirion&rsquo;s search and its results&nbsp;listing.</span></span><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
-    <div class="prose r"><p class="role">My role: end-to-end design of AskSirion&rsquo;s search and its results&nbsp;listing.</p><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads every contract in the deal, and flags disagreement instead of guessing. Success would mean a policy check finding every affected contract on the first ask, not after a&nbsp;follow-up.</p><p class="end"><a href="#" data-open="w4">Key decisions</a></p></div>
+    <div class="prose r"><p class="role">Product design &middot; AI search and result&nbsp;behavior</p><p>In most AI search, a wrong answer costs a retry. In legal work, it can cost a breach nobody was told about in time, so this search asks before it assumes, reads every contract in the deal, and flags disagreement instead of guessing. Success would mean a policy check finding every affected contract on the first ask, not after a&nbsp;follow-up.</p><p class="end"><a href="#" data-open="w4">Key decisions</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Can I see the exact words a person wrote?</h2>
-    <p class="dek r">Even when AI gives the answer, people in CLM still want the original. So every value opens on the exact words in the contract, and they can check it before they trust&nbsp;it.</p>
+    <p class="dek r">Even when AI provides an answer, contract reviewers still need to see the source. Every extracted value links to the exact words in the contract, so they can verify it before trusting&nbsp;it.</p><p class="rowmeta">End-to-end design &middot; <b>Month-four retention 5% &rarr; 23%</b></p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="proof" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
-    <figure class="r"><div class="fit" data-h="693" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><span class="still"><img src="list-still-q2.webp" alt="A contract with each extracted value on the right; the Parties value is open with its source sentence highlighted" loading="lazy"><i class="still-tag">Shipped</i></span><div class="fit" data-h="693" data-cut="6"><iframe class="specimen" id="s3" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -3581,14 +3681,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Iterate &middot; Shipped</span><span class="fm-b" aria-hidden="true">My role: end-to-end design of AI contract review (Auto Extraction).</span></span></p></figure>
-    <div class="prose r"><p class="role">My role: end-to-end design of AI contract review (Auto&nbsp;Extraction).</p><p>Reviewers trust what both sides signed, not what the AI says. So every value on the right opens on the exact sentence it came from, and the reviewer can accept, correct or delete it. No confidence score: the sentence is the proof. Month-four retention rose from 5% to 23% as measured users grew from 860 to&nbsp;2,380.</p><p class="end"><a href="auto-extraction.html">Key decisions</a></p></div>
+    <div class="prose r"><p class="role">Product design &middot; AI-assisted contract&nbsp;review</p><p>Reviewers trust what both sides signed, not what the AI says. So every value on the right opens on the exact sentence it came from, and the reviewer can accept, correct or delete it. No confidence score: the sentence is the proof. Month-four retention rose from 5% to 23% as measured users grew from 860 to&nbsp;2,380.</p><p class="end"><a href="auto-extraction.html">Key decisions</a></p></div>
   </article>
   <article class="piece" data-unit="lineage" id="q3">
     <div class="chap-head r"><span class="chap-n">03</span><div class="chap-meta"><p class="chap-name">Lineage</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">Is this information still true today?</h2>
-    <p class="dek r">AI can trace a clause&rsquo;s history. Showing it to the user was the tricky part, because the clause they read today is pieced together from several documents and every change made&nbsp;since.</p>
+    <p class="dek r">AI can trace a clause&rsquo;s history. Showing it to the user was the tricky part, because the clause they read today is pieced together from several documents and every change made&nbsp;since.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="lineage" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
-    <figure class="r"><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><span class="still"><img src="list-still-q3.webp" alt="A force majeure clause read as one paragraph, with the change from Amendment 1 marked and its source shown" loading="lazy"><i class="still-tag">In development</i></span><div class="fit" data-h="688"><iframe class="specimen" id="s1" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -4348,14 +4448,14 @@ if(document.documentElement.classList.contains(&#x27;embed&#x27;)){
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; In development</span><span class="fm-b" aria-hidden="true">My role: end-to-end design. Being built now, to ship as a feature of the contract page.</span></span></p></figure>
-    <div class="prose r"><p class="role">My role: end-to-end design. Being built now, to ship as a feature of the contract&nbsp;page.</p><p>A reviewer reading a clause today is reading the original plus every amendment since, and they can&rsquo;t trust a version they can&rsquo;t trace. So the clause shows as one paragraph with each change marked by its date and source, and one click opens the signed document at the paragraph that made it. Success would mean reviewers opening the signed document less often to double-check a&nbsp;clause.</p><p class="end"></p></div>
+    <div class="prose r"><p class="role">Product design &middot; Contract relationships and information&nbsp;architecture</p><p>A reviewer reading a clause today is reading the original plus every amendment since, and they can&rsquo;t trust a version they can&rsquo;t trace. So the clause shows as one paragraph with each change marked by its date and source, and one click opens the signed document at the paragraph that made it. Success would mean reviewers opening the signed document less often to double-check a&nbsp;clause.</p><p class="end"></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
     <h2 class="r chap-q">If I accept it, what else changes?</h2>
-    <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p>
+    <p class="dek r">Reviewers check every AI edit. The one they worry about is the clause the edit didn&rsquo;t&nbsp;touch.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="reach" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
-    <figure class="r"><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><span class="still"><img src="list-still-q4.webp" alt="Ask AI to draft a change to a confidentiality clause, with suggested wordings from earlier contracts" loading="lazy"><i class="still-tag">Partially built</i></span><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -5614,14 +5714,14 @@ document.addEventListener(&#x27;focusout&#x27;, () =&gt; { if(demo.driving &amp;
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Partially built</span><span class="fm-b" aria-hidden="true">My role: end-to-end design.</span></span></p></figure>
-    <div class="prose r"><p class="role">My role: end-to-end design.</p><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already written. Success would mean knock-on clauses caught before signing, not&nbsp;after.</p><p class="end"></p></div>
+    <div class="prose r"><p class="role">Product design &middot; AI-assisted editing&nbsp;interactions</p><p>Change one clause and something three pages away can stop matching it, so the redline lands in the text, says where its wording came from, and marks the clause it put out of step, with the fix already written. Success would mean knock-on clauses caught before signing, not&nbsp;after.</p><p class="end"></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
     <h2 class="r chap-q">Does it need me now, or can it wait?</h2>
-    <p class="dek r q5dek">Not everything an AI agent finds needs a person. Some things can wait, some need you now.</p>
+    <p class="dek r q5dek">Not everything an AI agent finds needs a person. Some things can wait, some need you now.</p><p class="rowmeta">Own exploration</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="sensitivity" aria-label="Watch a 1-minute narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Watch 1-min video</span></button>
-    <figure class="r"><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
+    <figure class="r"><span class="still"><img src="list-still-q5.webp" alt="A quiet card saying the notice period is 45 days, over a calm landscape" loading="lazy"><i class="still-tag">Concept</i></span><div class="fit" data-h="640" data-sm="470"><iframe class="specimen" id="s4" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot; /&gt;
@@ -8195,12 +8295,14 @@ window.nudgeMark = function (host, go) {
 &lt;/body&gt;
 &lt;/html&gt;
 " title="Working prototype" scrolling="no" style="height:640px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. The same card, asked to say more.</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Own work</span><span class="fm-b" aria-hidden="true">AI agents · When to interrupt, ask, or stay quiet</span></span></p></figure>
-    <div class="prose r"><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">See the idea</a></p></div>
+    <div class="prose r"><p class="role">Independent design&nbsp;exploration</p><p>As AI agents become capable of finding and connecting information on their own, a new question interests me: how do they know what deserves our attention, and&nbsp;when?</p><p class="end"><a href="#" data-open="w5">See the idea</a></p></div>
     <div class="out-idx r"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a></div>
   </article>
   </div>
     <section class="closing r" aria-label="Closing">
     <p>That&#8217;s what it takes to act on an answer.</p>
+    <img class="closing-bush" src="closing-bush.webp" alt="" aria-hidden="true" loading="lazy">
+    <img class="closing-art" src="closing-tree.webp" alt="" aria-hidden="true" loading="lazy">
   </section>
   </main>
 
@@ -8223,6 +8325,13 @@ window.nudgeMark = function (host, go) {
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="How it was designed">
   <div class="ov-in" id="ovin">
+    <a href="#" data-open="wp" id="wp-open" hidden aria-hidden="true" tabindex="-1"></a>
+    <article class="card pcard" id="wp" hidden aria-label="Prototype">
+      <button type="button" class="wp-x" aria-label="Close" data-close><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
+      <div class="wp-head"><p class="wp-tag"><b id="wp-n">01</b><span id="wp-name">Search</span></p><p class="wp-stat" id="wp-stat"></p><div id="wp-ico" hidden></div></div>
+      <div class="wp-stage" id="wp-stage"></div>
+      <div class="wp-row" id="wp-row"><a class="wp-why" id="wp-why" href="#" data-open="w4">Why it&rsquo;s built this way</a><a class="wp-more" id="wp-more" href="#" data-open="w4">Key decisions</a><span class="wp-note" id="wp-note" hidden>Case study isn&rsquo;t public yet</span></div>
+    </article>
     <article class="card conf" id="wc" hidden aria-label="Confidential case study">
       <div class="conf-art" aria-hidden="true"></div>
       <div class="conf-body">
@@ -8353,11 +8462,12 @@ window.nudgeMark = function (host, go) {
       <figure class="fv"><img src="search-v-hero.webp" alt="A note explaining that people in Sirion search across large numbers of contracts, surrounded by the things they look for: suppliers, obligations, deadlines, risks, with a short summary underneath." loading="lazy"><figcaption>The search CLM queries explained</figcaption></figure>
 
       <p class="tension">Where should a search result actually&nbsp;land?</p>
-      <p>In Sirion, people search across large numbers of contracts to find information about suppliers, obligations, deadlines and&nbsp;risks.</p>
-        <p>The push for AI search came from the wider market. Once people got used to asking AI tools questions in plain language, <strong>they expected to do the same with their contracts</strong>. So search had to work from a question written the way people speak, not only from exact&nbsp;words.</p>
-      <p>The challenge is that <strong>contracts don&rsquo;t always work independently</strong>. One supplier might have a master agreement, several smaller agreements, and amendments that change the original&nbsp;terms.</p>
-      <p class="pq">So finding the right text is one thing. Understanding which contract it belongs to, and how it relates to others, is&nbsp;another.</p>
-      <p>I worked on this search experience alongside a co-designer, PMs, engineers, legal engineers and legal experts. We also got <strong>feedback from IBM&rsquo;s legal team</strong>, which helped us understand the problem at a much larger&nbsp;scale.</p>
+      <p>In Sirion, people search across thousands of contracts for suppliers, obligations, deadlines and&nbsp;risks.</p>
+      <p>The push for AI search came from the market. Once people got used to asking AI tools questions in plain language, <strong>they expected the same from their contracts</strong>. So search had to work from a question written the way people speak, not only from exact&nbsp;words.</p>
+      <p>We looked at the moments when people actually come to ask. The clearest was a policy change: a company decides suppliers must report a data breach within 24 hours, and someone needs to know which contracts don&rsquo;t meet it. Others were a renewal date coming up, a new regulation, and a supplier the business was starting to worry&nbsp;about.</p>
+      <p>The hard part is that contracts don&rsquo;t stand alone. One supplier might have a master agreement, several smaller ones, and amendments that change the original&nbsp;terms.</p>
+      <p class="pq">Finding the right text is one thing. Knowing which contract it belongs to, and how it relates to the others, is&nbsp;another.</p>
+      <p>I worked on this alongside a co-designer, PMs, engineers, legal engineers and legal experts, with feedback from IBM&rsquo;s legal team, which showed us the problem at a much larger&nbsp;scale.</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
@@ -8365,33 +8475,68 @@ window.nudgeMark = function (host, go) {
         <p>One thing I understood from working with IBM&rsquo;s legal team was the scale of information people were dealing&nbsp;with.</p>
         <p>Search could find the right text in a document. But when a supplier has multiple related contracts, <strong>a list of matching documents doesn&rsquo;t necessarily help</strong> someone understand the overall&nbsp;situation.</p>
         <figure class="fv"><img src="search-v-scale.webp" alt="A question, which suppliers don't meet the 24-hour breach policy, connected to a master service agreement, an amendment, a SOW, a data processing agreement and a work order among many other documents." loading="lazy"></figure>
-        <p>For example, a company introduces a policy that suppliers must report a data breach within 24 hours. Someone asks which contracts don&rsquo;t meet that&nbsp;policy.</p>
-        <p>The search might find different reporting periods across different documents. The person still needs to understand <strong>which terms actually&nbsp;apply</strong>.</p>
+        <p>Take the breach-notice policy again. Someone asks which contracts don&rsquo;t meet&nbsp;it.</p>
+        <p>The search might find different reporting periods across different documents. The person still needs to understand which terms actually&nbsp;apply.</p>
         <p class="pq">That made us look beyond just finding the matching&nbsp;documents.</p>
       </section>
 
-      <section class="ch">
+      <section class="ch ix" id="w4-intent">
         <p class="ch-n">02</p>
-        <h3>Deal first or contract documents first?</h3>
-        <p>There was a big debate around what should be <strong>the landing view of a search&nbsp;result</strong>.</p>
-        <p>Engineering preferred listing contract documents. Their argument was that it&rsquo;s <strong>easier for the system to find</strong>, because the matching text is found inside a specific&nbsp;contract.</p>
-        <figure class="fv"><img src="search-v-compare.webp" alt="Engineering's view, contract first: the matching text is found inside a specific contract, easier to retrieve. My view, family first: the answer may depend on several related agreements, easier to understand together." loading="lazy"></figure>
-        <p>I was arguing for a deal-first listing. My reasoning was that information follows a&nbsp;hierarchy:</p>
-        <p class="hier">Supplier &rarr; Deal &rarr; Contract document &rarr; Clause &rarr; Details</p>
-        <p>A deal simply means <strong>a group of related contracts under the same business relationship</strong>. In the product, it shows up as a contract&nbsp;family.</p>
-        <p>Take a breach-related question. The answer might depend on terms spread across several contracts in that deal. So from a user&rsquo;s point of view, I felt it made more sense to <strong>consume the result at the deal level</strong> rather than start with individual&nbsp;documents.</p>
-        <p class="pq">We took this into a discussion and testing session with a legal expert. And that discussion changed the&nbsp;direction.</p>
-        <p>We realised that some questions naturally demand a deal-level result, while others&nbsp;don&rsquo;t.</p>
-        <div class="smebox" role="group" aria-label="What changed after testing with a legal expert">
-          <p class="smebox-k">What changed after testing with a legal expert</p>
-          <p class="smebox-h">We realised neither approach worked for every question.</p>
-          <div class="smebox-row"><div><p class="q">&ldquo;Which suppliers have breach-notification issues?&rdquo;</p><p class="w">Needs context across related contracts</p></div><span class="tag">Deal</span></div>
-          <div class="smebox-row"><div><p class="q">&ldquo;Which contracts expire next month?&rdquo;</p><p class="w">Each agreement has its own expiry date</p></div><span class="tag">Contract</span></div>
+        <h3>From a fixed hierarchy to intent-based&nbsp;results</h3>
+
+        <p class="ix-h">The initial hypothesis</p>
+        <p>Contract information sits in five layers, from the widest to the smallest. A search result has to land on one of&nbsp;them.</p>
+        <ol class="ix-hier" aria-label="The five layers of contract information, from widest to narrowest">
+          <li>Counterparty</li><li class="on">Deal / family<span class="ix-here">Where I wanted results to land</span></li><li>Contract</li><li>Document</li><li>Clause</li>
+        </ol>
+        <p class="ix-foot">Counterparty is the supplier. A deal is all their contracts together. A clause is one paragraph inside a&nbsp;document.</p>
+        <p>I proposed a deal-first search, because contractual meaning often comes from the relationships between agreements, amendments and supporting documents, not from one matching document on its&nbsp;own.</p>
+        <p>Engineering favoured document first, which matched how information was&nbsp;retrieved.</p>
+        <figure class="cmp" aria-label="Two ways to land a search result"><div class="cmp-col cmp-a"><p class="cmp-k">Engineering&rsquo;s view</p><img src="search-v-compare-l.webp" alt="" loading="lazy"><p class="cmp-t">Document first</p><p class="cmp-d">Follows how retrieval finds text. Good when the question is about one document. Weak when an amendment elsewhere changed the&nbsp;term.</p></div><div class="cmp-col cmp-b"><p class="cmp-k">My view</p><img src="search-v-compare-r.webp" alt="" loading="lazy"><p class="cmp-t">Deal first</p><p class="cmp-d">Shows terms across related agreements. Good when the answer spans the deal. Slow when someone just needs one&nbsp;document.</p></div></figure>
+        <p class="pq">The question was whether every search should follow the same result&nbsp;hierarchy.</p>
+
+        <p class="ix-h">What changed our thinking</p>
+        <p>Discussions with subject-matter experts challenged the assumption. Even when people search for the same contractual concept, <strong>they may be trying to do different&nbsp;things</strong>.</p>
+        <div class="smebox" role="group" aria-label="Two ways to ask about the same clause">
+          <div class="smebox-row"><div><p class="q">&ldquo;What is the effective notice period for this deal?&rdquo;</p><p class="w">Needs a deal-level answer that accounts for the related agreements</p></div><span class="tag">Deal</span></div>
+          <div class="smebox-row"><div><p class="q">&ldquo;Which document contains the notice period?&rdquo;</p><p class="w">Needs document-level results with supporting evidence</p></div><span class="tag">Document</span></div>
+          <p class="ix-foot">Example questions, not quotes from the sessions.</p>
         </div>
-        <p>So rather than deciding that everything should be deal-first, we moved towards the idea that <strong>the nature of the question should determine where the result&nbsp;lands</strong>.</p>
-        <p class="pq">We moved away from choosing one default result level for every&nbsp;question.</p>
-        <p>For data questions, the answer can take another form altogether. <strong>AskSirion already generates charts</strong> for questions such as total contract value by&nbsp;region.</p>
+        <p>Neither hierarchy was right every time. The right result depended on what the person was trying to&nbsp;do.</p>
+
+        <p class="ix-h">Translating intent into product behaviour</p>
+        <p>With engineering, we defined representative intent categories and the result behaviour for each, using questions from an existing question bank to shape the&nbsp;patterns.</p>
+        <div class="ix-mx-wrap">
+          <table class="ix-mx">
+            <caption class="ix-sr">Representative queries, the interpreted intent, the result level and the expected presentation</caption>
+            <thead><tr><th scope="col">Representative query</th><th scope="col">Interpreted intent</th><th scope="col">Result level</th><th scope="col">Expected presentation</th></tr></thead>
+            <tbody>
+              <tr><td data-h="Query">What is the effective notice period for this deal?</td><td data-h="Interpreted intent">Understand the applicable contractual position</td><td data-h="Result level"><span class="lv">Deal / family</span></td><td data-h="Expected presentation">Computed answer, relevant contracts, supporting evidence</td></tr>
+              <tr><td data-h="Query">Which document contains the notice period?</td><td data-h="Interpreted intent">Locate the source of a specific term</td><td data-h="Result level"><span class="lv">Document</span></td><td data-h="Expected presentation">Matching documents, clause references, source location</td></tr>
+              <tr><td data-h="Query">Which deals have conflicting payment terms?</td><td data-h="Interpreted intent">Identify contractual inconsistencies</td><td data-h="Result level"><span class="lv">Deal / family</span></td><td data-h="Expected presentation">Deals with conflict indicators, relevant terms, supporting documents</td></tr>
+              <tr><td data-h="Query">Show contracts expiring in the next 90 days.</td><td data-h="Interpreted intent">Find contracts matching a date condition</td><td data-h="Result level"><span class="lv">Contract</span></td><td data-h="Expected presentation">Contract listing with expiry date, counterparty and status</td></tr>
+              <tr><td data-h="Query">Which documents contain a governing law clause?</td><td data-h="Interpreted intent">Locate clause evidence</td><td data-h="Result level"><span class="lv">Document</span></td><td data-h="Expected presentation">Matching documents with clause excerpts and citations</td></tr>
+              <tr><td data-h="Query">Show agreements where a required clause is missing.</td><td data-h="Interpreted intent">Identify missing contractual provisions</td><td data-h="Result level"><span class="lv">Contract / Document</span></td><td data-h="Expected presentation">Relevant agreements, computed found / not-found status, evidence where available</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ix-foot">Representative intent-to-result patterns, not an exhaustive mapping of every question. Examples illustrate expected behaviour rather than verified agent&nbsp;outputs.</p>
+
+        <p class="ix-h">The design decision</p>
+        <p>We moved from a fixed result hierarchy to an <strong>intent-dependent presentation&nbsp;model</strong>.</p>
+        <p>Instead of forcing every query into a deal-first or document-first structure, we defined how search should adapt its result level, default columns, computed information and evidence presentation to the question being&nbsp;asked.</p>
+        <p>Part of this is already live. For data questions, AskSirion answers with charts and a table of the matching&nbsp;contracts.</p>
         <figure class="fv"><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click&nbsp;away.</figcaption><img src="search-v-table.webp" alt="Breach notice, 14 families, judged against your 24-hour breach-notice policy: a table of contract families with counterparty, breach-notification position, scope checked and a finding such as terms conflict, clause missing or exceeds 24-hour policy." loading="lazy"></figure>
+        <p>This took the design work beyond the layout of search results into reusable interaction and behaviour patterns for the AI&nbsp;experience.</p>
+        <div class="ix-own">
+          <p><b>My contribution</b>Shaping the expected user-facing behaviour, in collaboration with the&nbsp;team.</p>
+          <p><b>Engineering</b>Implementing the agent and evaluating its performance against the question bank and golden&nbsp;dataset.</p>
+        </div>
+        <p class="pq">The structure of the answer should follow the user&rsquo;s task, not simply the structure of the underlying&nbsp;data.</p>
+
+        <p class="ix-h">What remained to validate</p>
+        <p>The matrix set the expected behaviour, but it did not by itself prove that people could consistently find and correctly interpret their&nbsp;answers.</p>
+        <p>The next validation would check whether people could complete representative search tasks accurately, recognise an incorrect interpretation, and trace an answer back to the supporting contractual&nbsp;evidence.</p>
       </section>
 
       <section class="ch">
@@ -8419,7 +8564,7 @@ window.nudgeMark = function (host, go) {
         <p>We explored a clarifying card where users could choose what they meant or write their own&nbsp;interpretation.</p>
         <p>The idea wasn&rsquo;t to ask users to clarify every search. When the question was clear, search could simply proceed. <strong>When different interpretations could change the result significantly, it made sense to ask&nbsp;first.</strong></p>
         <figure class="fv"><img src="search-v-clarify.webp" alt="How should a deviation be judged? Options: notice period over 24 hours, or absent (recommended); clause absent only; executed before the policy date; or something else." loading="lazy"></figure>
-        <p>For more complicated searches, we also explored <strong>showing a plan before the system runs</strong>, so people could see what information it intended to&nbsp;check.</p>
+        <p>For more complicated searches, we also explored showing a plan before the system runs, so people could see what information it intended to&nbsp;check.</p>
         <p class="pq">This connects to the next phase we&rsquo;re building: clause history, checks against company policy and AI-generated columns. For example, a column could be generated in real time to show where contracts have conflicting terms, instead of relying only on data already stored in the&nbsp;table.</p>
         <p>The important part is that <strong>a conflict should be visible, along with the supporting documents</strong>. The system shouldn&rsquo;t simply make the legal decision for the&nbsp;person.</p>
       </section>
@@ -8441,13 +8586,13 @@ window.nudgeMark = function (host, go) {
         <h3>Where the work stands</h3>
         <p><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion</a> search, deal-level listings and charts for data questions are&nbsp;live.</p>
         <p>We&rsquo;re still building generated columns, clause history and policy checks. Some of the clarification and question-led interactions shown here are explorations, and the screens are from my&nbsp;prototype.</p>
-        <p>One thing I still want to validate is <strong>how we represent a finding at the deal level</strong> without making every contract in that deal appear to have the same&nbsp;issue.</p>
+        <p>One thing I still want to validate is how we represent a finding at the deal level without making every contract in that deal appear to have the same&nbsp;issue.</p>
         <p class="pq">That distinction matters because the result should help someone understand the situation, not create another&nbsp;misunderstanding.</p>
       </section>
 
       <section class="ch">
         <h3>What next</h3>
-        <p>From a search result, people could go further and ask the AI to act on it. For example, &ldquo;Draft a counter-negotiation document for these contracts&rdquo; or &ldquo;Show me a fix plan for these breach contracts.&rdquo; <strong>Search is just the beginning.</strong> Many more AI actions on contracts are still being&nbsp;explored.</p>
+        <p>From a search result, people could go further and ask the AI to act on it. For example, &ldquo;Draft a counter-negotiation document for these contracts&rdquo; or &ldquo;Show me a fix plan for these breach contracts.&rdquo; Search is just the beginning. Many more AI actions on contracts are still being&nbsp;explored.</p>
         <figure class="sel"><img src="search-v-select.webp" alt="Two contract families selected in the breach results, with a bar showing 2 of 14 selected, Route to Legal and Ask about this selection" loading="lazy"></figure>
       </section>
 
@@ -8475,30 +8620,33 @@ window.nudgeMark = function (host, go) {
     <article class="card" id="w5" hidden>
       <h2>Sensitivity</h2>
       <p class="k">How I think &middot; Own work &middot; 2023&ndash;26</p>
-      <hr>
+      <div class="tbar" id="tbar5" role="toolbar" aria-label="Respond to this write-up">
+        <a class="tb tb-com" href="mailto:amritkmr08@gmail.com?subject=On%20Sensitivity" aria-label="Email me about this write-up" title="Email me about this"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"><rect x="3.5" y="5.75" width="17" height="12.5" rx="2"/><path d="M4.2 7.2 12 12.8l7.8-5.6" stroke-linecap="round"/></svg></a>
+        <span class="tb-sp"></span>
+        <button class="tb tb-play" type="button" aria-label="Listen to this write-up"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Listen</span></button>
+      </div>
       <p class="tension">The same information can mean something very different depending on when it reaches&nbsp;you.</p>
-      <figure><img src="sens-3am-call.webp" style="max-width:100%" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
-      <p>Imagine your wife calling at 2 in the afternoon. You might answer or call back&nbsp;later.</p>
-      <p>Now imagine the same call at 3 in the morning. You would probably pick up immediately, expecting something&nbsp;serious.</p>
-      <p>Same person. Same phone call. <strong>The situation changes what it means.</strong> Not because the phone knows something different. Because you&nbsp;do.</p>
-      <p>You know who is calling, her routine, the hour, what has been happening in her life. You don&rsquo;t weigh these one by one. <strong>You read them together.</strong> And you might still be wrong: it could be an accidental&nbsp;call.</p>
-      <p>I started wondering whether AI agents need a similar sense of <strong>when to speak and when to stay&nbsp;quiet</strong>.</p>
+      <figure><img src="sens-3am-call.webp" style="max-width:100%;border-radius:14px;border:0" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
+      <p>Your wife calls at 2 in the afternoon. You might answer, or call back&nbsp;later.</p>
+      <p>The same call at 3 in the morning, and you pick up at&nbsp;once.</p>
+      <p>Same person. Same call. What changed is how much attention it deserves, and you knew that without&nbsp;thinking.</p>
+      <p>Could an AI agent make that judgment? When does a finding need you now, and when can it&nbsp;wait?</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
-        <h3>Where this question came from</h3>
-        <figure><img src="sens-contract-page.webp" style="max-width:100%" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
-        <p>While exploring an AI-first contract experience, I moved away from presenting contracts as pages, fields and documents. The agent does the reading, connects agreements and amendments, and brings forward what someone needs to know or act&nbsp;on.</p>
-        <p>Agents can now do what used to take a team: link a clause in one agreement to an amendment in another, to an invoice, to an email. Every link is a possible finding. What the system can tell us keeps growing. <strong>What a person can take in&nbsp;doesn&rsquo;t.</strong></p>
-        <p>By morning, an agent might have reached 200 conclusions. Show all of them, and <strong>the work has only moved from reading contracts to reading&nbsp;AI</strong>.</p>
+        <h3>Where it started</h3>
+        <figure><img src="sens-contract-page-g.webp" style="max-width:100%;border-radius:14px;border:0" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
+        <p>I was designing an AI-first contract tool. The agent reads the agreements, links clauses to amendments to invoices, and brings forward what someone should act&nbsp;on.</p>
+        <p>By morning it might have 200 findings. Show them all, and reading contracts has become reading&nbsp;AI.</p>
         <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 conclusions by morning. A person can act on a&nbsp;handful.</figcaption></figure>
-        <p>Showing the five most important seems like the obvious answer. But <strong>importance alone doesn&rsquo;t say whether someone needs to see something&nbsp;now</strong>.</p>
+        <p>Show the top five, then? But important isn&rsquo;t the same as urgent. One change can wait three months. Another matters in fifteen&nbsp;minutes.</p>
+        <p class="dd"><b>The real question</b> wasn&rsquo;t what to show. It was when, to whom, and how&nbsp;loudly.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">02</p>
         <h3>One finding, different situations</h3>
-        <p>A contract&rsquo;s payment terms have changed through amendments. At 9 AM, the agent reads the governing term as Net&nbsp;60. At 11 AM, a newly uploaded amendment shows it is actually Net&nbsp;45.</p>
+        <p>At 9 AM the agent reads Acme&rsquo;s payment term as Net&nbsp;60. At 11 AM an amendment arrives: it&rsquo;s Net&nbsp;45.</p>
         <div class="vtl" role="img" aria-label="Timeline: at 9:00 the agent reads Net 60; at 11:00 Amendment 3 shows Net 45. If the next payment is months away, it stays quiet. If Finance pays at noon, it interrupts.">
           <div class="tl-ev"><span class="tm">9:00</span><span class="tx">The agent reads the payment term as Net&nbsp;60</span></div>
           <div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. The term is Net&nbsp;45</span></div>
@@ -8507,12 +8655,14 @@ window.nudgeMark = function (host, go) {
             <div class="tl-br hot"><span class="sit">If Finance pays at 12:00 on the old term</span><b>Interrupt</b><span class="out">Show it before the payment goes&nbsp;out</span></div>
           </div>
         </div>
-        <p>The finding hasn&rsquo;t changed. What changed is what someone was about to do with&nbsp;it.</p>
+        <p>The payment term changed in both cases. Only one needs immediate&nbsp;attention.</p>
+        <p class="dd"><b>Decision 1.</b> How urgently we interrupt depends on the situation, not just the&nbsp;finding.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">03</p>
         <h3>Same finding, four responses</h3>
+        <p>I explored how the agent should respond to the same change in different&nbsp;situations.</p>
         <div class="st4" role="group" aria-label="One finding shown four ways: quiet, interrupt, ask, and adapt after a person responds">
           <div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes the payment term for Acme from Net&nbsp;60 to Net&nbsp;45.</div>
           <div class="st4-row">
@@ -8533,34 +8683,33 @@ window.nudgeMark = function (host, go) {
             <div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won&rsquo;t raise this again unless the payment details&nbsp;change.</span></div>
           </div>
         </div>
-        <p>The first three are the agent&rsquo;s own judgment. The fourth is what it does after a person adds something it couldn&rsquo;t know. Sensitivity doesn&rsquo;t end when information reaches someone. <strong>It also covers how the system changes after they&nbsp;answer.</strong></p>
-        <p>Not knowing enough doesn&rsquo;t always mean asking. If a payment might go out wrong in fifteen minutes, waiting for an answer is itself a risk, and an interruption is cheaper than the mistake. If a minor field changed, the agent can wait. What decides it is the cost of waiting, whether the decision can be undone, and the cost of breaking someone&rsquo;s&nbsp;focus.</p>
+        <p class="dd"><b>The design decision:</b> Don&rsquo;t just change how an alert looks. Change what the agent does: update quietly, interrupt, ask, or stop warning once someone has handled&nbsp;it.</p>
+        <p>But asking can also waste valuable time. If a payment is going out in fifteen minutes, the agent may need to warn someone rather than wait for an&nbsp;answer.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">04</p>
         <h3>Where judgment fails</h3>
-        <p>Two contracts approach renewal. One expires in two days, another in ten. By date, the first looks more urgent. But the first vendor is already being offboarded, and the second is in a negotiation that needs a decision much&nbsp;earlier.</p>
+        <p>Contract A expires in two days, but the vendor is already being offboarded. Contract B expires in ten, but its renewal needs a decision this&nbsp;week.</p>
         <div class="vren" role="img" aria-label="Contract A expires in 2 days but its vendor is being offboarded. Contract B expires in 10 days but a negotiation needs a decision this week. By date A comes first; by situation B does.">
           <div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">2 days left &middot; vendor already being&nbsp;offboarded</span></div></div>
           <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">10 days left &middot; negotiation needs a decision this&nbsp;week</span></div></div>
           <div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
         </div>
-        <p>An agent could read every document correctly and still bring the wrong one to the top. Not because its calculations were wrong. <strong>Because its picture of the situation was&nbsp;incomplete.</strong></p>
-        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance is paying at noon. Another that knows only three, the payment, the amended term and who owns it, makes the right call. What counts is <strong>whether the agent has the fact that changes the&nbsp;decision</strong>.</p>
+        <p>Sort by date and A comes first. Anyone who knows the situation would pick B. The agent read every document correctly and still got the priority&nbsp;wrong.</p>
+        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance pays at&nbsp;noon.</p>
         <div class="vk" role="img" aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call.">
           <div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at&nbsp;noon</p><p class="k-out">Stays quiet. Wrong&nbsp;call.</p></div>
-          <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Right&nbsp;call.</p></div>
+          <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Better-informed&nbsp;call.</p></div>
         </div>
-        <p>Some of those facts never reach the system. A renewal decided on a phone call. A supplier being replaced after an offline conversation. The agent can&rsquo;t judge with information it doesn&rsquo;t have, so its reading can be reasonable and still wrong for the person receiving&nbsp;it.</p>
-        <p>So it should show its reasoning, separate what it knows from what it has inferred, and let people correct it. &ldquo;We&rsquo;re already handling this&rdquo; isn&rsquo;t a dismissal. It&rsquo;s context the agent was missing. But ignoring, acknowledging, handing to someone else and correcting the agent are different intentions, and each should be easy to&nbsp;say.</p>
-        <p>Sometimes what the agent doesn&rsquo;t know is exactly why a person needs to be&nbsp;involved.</p>
+        <p>Some facts never reach the system at all. A renewal agreed on a phone call. A supplier replaced after a hallway conversation. So the agent should show what it knows, mark what it has guessed, and make it easy to correct. &ldquo;We&rsquo;re already on it&rdquo; isn&rsquo;t a dismissal. It&rsquo;s the context the agent was&nbsp;missing.</p>
+        <p class="dd"><b>Decision 2.</b> Don&rsquo;t mistake more information for better judgment. Look for the one fact that would change the call, and show when it&rsquo;s&nbsp;missing.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">05</p>
         <h3>What the agent weighs</h3>
-        <p>Not a scoring formula. Four questions, asked before deciding how to&nbsp;speak:</p>
+        <p>Before it speaks, the agent weighs four things: what it costs to miss this, when it starts to matter, whether it knows enough to judge, and who owns the&nbsp;decision.</p>
         <div class="vfl" role="img" aria-label="A finding passes through four questions: consequence, time, enough to judge, and people. The answer picks a response: quiet, surface, ask or interrupt. A person's reply goes back in as context.">
           <div class="fl-c"><span class="fl-t">Finding</span><span class="fl-f">An amendment changes the payment&nbsp;term</span></div>
           <span class="fl-ar" aria-hidden="true">&rarr;</span>
@@ -8569,25 +8718,37 @@ window.nudgeMark = function (host, go) {
           <div class="fl-c"><span class="fl-t">Response</span><span class="fl-r">Quiet</span><span class="fl-r">Surface</span><span class="fl-r">Ask</span><span class="fl-r hot">Interrupt</span></div>
           <p class="fl-loop">&#8634;&ensp;A person&rsquo;s reply goes back in as context, and the next decision&nbsp;changes</p>
         </div>
-        <p>My earlier exploration proposed five levels of attention: Nothing, Hint, Reveal, Emphasize, Interrupt. They still hold, but they are the visible end of the judgment, not the judgment itself. The agent may need to ask before it can safely pick a&nbsp;level.</p>
+        <p>My earlier work proposed five levels of attention, from Nothing to Interrupt. They still hold. But they&rsquo;re the visible end of the judgment, not the judgment&nbsp;itself.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">06</p>
-        <h3>What I want to test</h3>
-        <p>I haven&rsquo;t run this yet. The plan is small: three to five experienced contract reviewers, the same payment finding, and a different piece of context each time. For each, they decide whether to surface it now, defer it, ask, or treat it as&nbsp;handled.</p>
-        <figure class="vmx"><table><thead><tr><th></th><th>Now</th><th>Later</th><th>Ask</th><th>Handled</th></tr></thead><tbody><tr><td>The finding alone</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ payment at noon</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ vendor being offboarded</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr><tr><td>+ Finance says it&rsquo;s done</td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td><td><span class="c"></span></td></tr></tbody></table><figcaption>The study grid. Each reviewer marks one column per row. Empty until it&nbsp;runs.</figcaption></figure>
-        <p>The useful part won&rsquo;t be which answer wins. It&rsquo;s <strong>which piece of information changes someone&rsquo;s mind</strong>. If their decisions contradict the four questions above, that&rsquo;s evidence&nbsp;too.</p>
+        <h3>What I tested</h3>
+        <p>I built a small clickable prototype around the Net&nbsp;60 to Net&nbsp;45 change. Three situations: a payment at noon today, one in three weeks, and one where the reviewer doesn&rsquo;t know the date. For each, three ways the AI could tell you: stop me, a small sign, or ask&nbsp;me.</p>
+        <p>Seven people tried it, in two rounds, about two minutes&nbsp;each.</p>
+        <figure><img src="sens-test-screen-g.webp" style="max-width:100%;border-radius:14px;border:0" alt="The test screen: the AI found Acme must now be paid within 45 days instead of 60. Situation: Finance is paying Acme at 12:00 today. Three choices: Stop me, Small sign, Ask Finance for me" loading="lazy"><figcaption>What people saw in round two, for the noon-today&nbsp;moment.</figcaption></figure>
+        <p>I expected urgent to interrupt, distant to stay quiet, and unknown to trigger a question. The first two held. The third&nbsp;didn&rsquo;t.</p>
+        <p>Nobody wanted the AI asking them when Finance would pay. They didn&rsquo;t know. Finance&nbsp;did.</p>
+        <p class="tst-turn">I had designed for missing information without asking who could supply&nbsp;it.</p>
+        <div class="tst-path" role="group" aria-label="How the Ask response changed: it first asked the user, testing showed that was the wrong person, so it now asks Finance"><div><b>Initial design</b><span>Ask the user</span></div><i aria-hidden="true">&rarr;</i><div><b>Testing insight</b><span>Wrong person</span></div><i aria-hidden="true">&rarr;</i><div><b>Revised design</b><span>Ask Finance</span></div></div>
+        <p class="tst-k">What changed after round one</p>
+        <ol class="tst-rules">
+          <li><b>Interrupt with proof.</b> People wanted the contract text before trusting an urgent&nbsp;warning.</li>
+          <li><b>Let people come back.</b> The quiet sign needed a &ldquo;Remind me later&rdquo;.</li>
+          <li><b>Ask the right person.</b> &ldquo;Ask me&rdquo; became &ldquo;Ask Finance for&nbsp;me&rdquo;.</li>
+        </ol>
+        <p class="dd"><b>Decision 3.</b> Weigh ownership, not just&nbsp;urgency.</p>
+        <p class="tst-note">Small test, roles not recorded. Early direction, not a validated&nbsp;rule.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">07</p>
         <h3>Where this stands</h3>
-        <p>This isn&rsquo;t a new idea in general. Horvitz and colleagues weighed the cost of interrupting against the cost of delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999). Dey defined context for computing in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001). Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Guidelines for Human-AI Interaction</a> (2019) cover timing, correction and&nbsp;explanation.</p>
-        <p>What changes with agents is that the system now creates its own findings, across many connected documents, <strong>without knowing what people decided offline</strong>. That&rsquo;s the part I&rsquo;m&nbsp;exploring.</p>
+        <p>None of this is new. Horvitz weighed interruption against delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999); Dey defined context in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001); Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Human-AI Guidelines</a> (2019) cover timing and&nbsp;correction.</p>
+        <p>What&rsquo;s new is that agents now find things on their own, across hundreds of documents, while still missing what people decided outside the system. The agent knows the term changed. It may not know Finance already&nbsp;handled&nbsp;it.</p>
       </section>
 
-      <p class="take">How does an agent know whether it understands enough of a situation to deserve someone&rsquo;s&nbsp;attention?</p>
+      <p class="take">How can an agent judge whether a finding deserves someone&rsquo;s attention, when the most important part of the situation may be something it doesn&rsquo;t&nbsp;know?</p>
       <div class="end idx"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a></div>
     </article>
       </div>
@@ -8641,7 +8802,9 @@ function fit(){ document.querySelectorAll('.fit').forEach(w => { const f = w.fir
   const narrow = w.dataset.sm && cw < 600 && w.closest('.lay-rows') && innerWidth > 900, NW = 740, NH = 452; if(!f.dataset.h0) f.dataset.h0 = f.style.height || (h + 'px'); f.style.width = narrow ? NW + 'px' : ''; f.style.height = narrow ? NH + 'px' : f.dataset.h0;
   const sm = w.dataset.sm && cw < 600 && !narrow, k = Math.min(1, cw / (narrow ? NW : +(sm ? w.dataset.sm : (w.dataset.w || 1080)))), dx = sm ? (cw - 1080 * k) / 2 : 0;
   f.style.transform = k < 1 ? (dx ? 'translateX(' + dx + 'px) ' : '') + 'scale(' + k + ')' : ''; /* card view: every prototype frame the same shape, so every card is the same height */
-  const same = w.closest('.lay-rows') && innerWidth > 900; w.style.height = (same ? cw * .61 : (narrow ? NH : h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
+  const same = w.closest('.lay-rows') && innerWidth > 900, pop = w.closest('.pcard');
+  if(pop){ const kk = cw / 1080; f.style.transform = 'scale(' + kk + ')'; w.style.height = ((h - cut) * kk) + 'px'; w.style.setProperty('--k', kk); return; }   /* in the pop-up the prototype fills the card's width, so it grows and shrinks with the window */
+  w.style.height = (same ? cw * .61 : (narrow ? NH : h - cut) * k) + 'px'; w.style.setProperty('--k', k); }); }
 fit(); addEventListener('resize', fit);
 
 /* the retention chart: a crosshair and one tooltip, both lines at that month */
@@ -9148,8 +9311,8 @@ document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(functio
     /* the company, over everything that reaches it */
     if(lay>0){
       var c0=pos(nodes[0]), ca=ease(lay*1.6);
-      glow(c0, nodes[0].r*1.9, '25,26,24', .07*ca);
-      ctx.beginPath(); ctx.arc(c0[0],c0[1],nodes[0].r*(.4+.6*ca),0,Math.PI*2); ctx.fillStyle=INK; ctx.fill();
+      glow(c0, nodes[0].r*1.9, '111,151,140', .14*ca);
+      ctx.beginPath(); ctx.arc(c0[0],c0[1],nodes[0].r*(.4+.6*ca),0,Math.PI*2); ctx.fillStyle='#6F978C';   /* the company dot takes the first colour of the network gradient, so the colour starts here */ ctx.fill();
       if(ringA>0){ ctx.beginPath(); ctx.arc(c0[0],c0[1],nodes[0].r+4,0,Math.PI*2); ctx.lineWidth=1.5; ctx.strokeStyle='rgba(61,90,69,'+Math.min(1,ringA).toFixed(2)+')'; ctx.stroke(); }
     }
 
@@ -9496,9 +9659,9 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
 <script>
 /* Search card bar: email, and listen. Listen reads the card aloud with the best voice this browser has,
    tints the paragraph being read and, where the browser reports word timing, marks each word as it is spoken */
-(function(){
-  var bar=document.getElementById('tbar4'); if(!bar) return;
-  var card=document.getElementById('w4'), play=bar.querySelector('.tb-play'), ss=window.speechSynthesis;
+function readAloud(barId, cardId){
+  var bar=document.getElementById(barId); if(!bar) return;
+  var card=document.getElementById(cardId), play=bar.querySelector('.tb-play'), ss=window.speechSynthesis;
   if(!ss || !window.SpeechSynthesisUtterance){ play.hidden=true; return; }
   var HL=!!(window.Highlight && window.CSS && CSS.highlights), follow=true, state='idle', cur=null, voice=null, run=0;
   var BAD=/compact|eloquence|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|whisper|zarvox|trinoids|jester|organ|superstar|wobble|grandma|grandpa|rocko|shelley|junior|ralph|fred|kathy|good news/i;
@@ -9506,14 +9669,15 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
   var FEMALE=/female|samantha|karen|moira|tessa|serena|\bava\b|allison|zoe|libby|sonia|aria|jenny|victoria|susan|veena|fiona|\bkate\b|neerja|hazel|zira|heera|catherine|emma|olivia|natasha|clara|michelle|ana\b|sara|joanna|amy|nicky|kendra|kimberly|salli|ivy|martha|maisie|isla|aurora|ava\b|jane|nancy|sonia|ashley|cora|elizabeth|monica|siri female/i;
   function score(v){ var n=v.name, s=0;
     if(MALE.test(n) && !/female/i.test(n)) s-=10;   /* same order as the first version, with male voices just behind */
+    if(/^Google US English$/i.test(n)) s+=500;   /* the same voice as the walkthrough videos, whenever the browser has it (Chrome) */
     if(/natural|neural/i.test(n)) s+=60; if(/premium|enhanced/i.test(n)) s+=50; if(/^google/i.test(n)) s+=30;
     if(/en[-_](GB|US|IN|AU|IE)/i.test(v.lang)) s+=5; if(v.default) s+=2; if(BAD.test(n)) s-=200; return s; }
   function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
     vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
   pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
-  function blocks(){ var out=[], els=card.querySelectorAll('h2, p, h3, li');
+  function blocks(){ var out=[], els=card.querySelectorAll('h2, p, h3, li'), SKIP='.ch-n, .cs-head .k, .st4, .vk, .vfl, .tst-note';
     for(var i=0;i<els.length;i++){ var el=els[i];
-      if(el.closest('figure, .smebox, .rulebox, dl, .tbar, .end') || el.classList.contains('k') || el.classList.contains('ch-n')) continue;
+      if(el.closest(SKIP)) continue;   /* section numbers, meta lines and diagram labels are for the eye, not the ear */
       if((el.textContent||'').trim()) out.push(el); }
     return out; }
   function rangeAt(el, start, len){ var tw=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), pos=0, n, r=document.createRange(), on=false;
@@ -9529,7 +9693,7 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
     play.setAttribute('aria-label', l);
     play.querySelector('.tb-l').textContent = state==='playing' ? 'Playing' : state==='paused' ? 'Paused' : 'Listen'; }
   var mini=document.createElement('div'); mini.className='rd-mini'; mini.setAttribute('role','group'); mini.setAttribute('aria-label','Narration');
-  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><span class="rd-lbl">Playing</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><button type="button" class="rd-prev" aria-label="Previous paragraph" title="Previous paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button><button type="button" class="rd-next" aria-label="Next paragraph" title="Next paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3.5 4.5 4.5L6 12.5"/></svg></button><span class="rd-lbl">Playing</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
   document.body.appendChild(mini);
   mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
   mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
@@ -9549,16 +9713,20 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
     while((m=re.exec(text)) && m[0]){ var t=m[0], s=m.index;
       while(t.length>220){ var cut=t.lastIndexOf(', ',200); if(cut<60) cut=t.lastIndexOf(' ',200); if(cut<1) break; out.push({t:t.slice(0,cut+1), o:s}); s+=cut+1; t=t.slice(cut+1); }
       if(t.trim()) out.push({t:t, o:s}); }
-    return out.length?out:[{t:text,o:0}]; }
+    /* join short sentences into one breath (up to ~200 characters): a stop after every sentence is what makes it sound like a machine */
+    var j=[]; out.forEach(function(p){ var last=j[j.length-1]; if(last && last.t.length+p.t.length<=200) last.t+=p.t; else j.push({t:p.t, o:p.o}); });
+    return j.length?j:[{t:text,o:0}]; }
   var dog=0, alive=0;
-  function start(){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; mini.classList.remove('away');
+  function start(fromEl){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; mini.classList.remove('away');
     var q=[]; list.forEach(function(el){ pieces(el.textContent).forEach(function(p){ q.push({el:el, t:p.t, o:p.o}); }); });
+    var k0=0; if(fromEl){ for(var i=0;i<q.length;i++){ if(q[i].el===fromEl || (fromEl.compareDocumentPosition(q[i].el) & Node.DOCUMENT_POSITION_FOLLOWING)){ k0=i; break; } } }
     state='playing'; setUI();
     clearInterval(alive); if(voice && voice.localService===false) alive=setInterval(function(){ if(id!==run){ clearInterval(alive); return; } if(state==='playing' && ss.speaking){ ss.pause(); ss.resume(); } }, 9000);
     function say(k){ if(id!==run) return; if(k>=q.length){ clearInterval(alive); state='idle'; clearMarks(); setUI(); return; }
+      jump.k=k; jump.q=q; jump.say=say; jump.id=id;
       var it=q[k], el=it.el, u=new SpeechSynthesisUtterance(it.t), done=false;
       if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang='en-GB'; u.rate=1; u.pitch=1;
-      function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); say(k+1); }
+      function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); if(jump.skip) return; say(k+1); }
       function arm(){ clearTimeout(dog); dog=setTimeout(function(){ if(id!==run || done) return; if(state==='paused'){ arm(); return; } ss.cancel(); next(); }, 3000 + it.t.length*80); }
       u.onstart=function(){ if(id!==run) return; arm(); if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
         if(follow && !inView(el)) el.scrollIntoView({block:'center', behavior:'smooth'}); } };
@@ -9568,7 +9736,23 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
       u.onend=function(){ if(id===run) next(); };
       u.onerror=function(e){ if(id===run && e.error!=='interrupted' && e.error!=='canceled') next(); };
       ss.speak(u); arm(); }
-    say(0); }
+    say(k0); }
+  /* the arrows: back to the start of the previous paragraph, or on to the next one. a jump restarts the voice at that paragraph's first sentence */
+  var jump={k:0, q:null, say:null, id:0};
+  function jumpBy(dir){ if(state==='idle' || !jump.q || jump.id!==run) return; var q=jump.q, k=jump.k, el=q[k].el, t=k;
+    if(dir<0){ var atStart = q[k].o===0 || (k>0 && q[k-1].el!==el) || k===0; if(!atStart){ while(t>0 && q[t-1].el===el) t--; } else { if(k===0) t=0; else { t=k-1; while(t>0 && q[t-1].el===q[k-1].el) t--; } } }
+    else { t=k+1; while(t<q.length && q[t].el===el) t++; if(t>=q.length) return; }
+    jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); state='playing'; setUI();
+    var sayFn=jump.say; setTimeout(function(){ jump.skip=false; if(jump.id===run) sayFn(t); }, 60); }
+  /* a small play beside each section number: reading starts at that section's heading */
+  card.querySelectorAll('.ch > .ch-n').forEach(function(n){
+    var sec=n.parentElement, h=sec.querySelector('h3'); if(!h) return;
+    var b=document.createElement('button'); b.type='button'; b.className='rd-sec'; b.setAttribute('aria-label','Listen from this section'); b.title='Listen from here';
+    b.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.6 2.3v7.4L9.4 6z" fill="currentColor"/></svg>';
+    b.addEventListener('click', function(e){ e.stopPropagation(); start(h); });
+    n.appendChild(b); });
+  mini.querySelector('.rd-prev').addEventListener('click', function(){ jumpBy(-1); });
+  mini.querySelector('.rd-next').addEventListener('click', function(){ jumpBy(1); });
   play.addEventListener('click', function(){
     if(state==='playing'){ ss.pause(); state='paused'; setUI(); return; }
     if(state==='paused'){ ss.resume(); state='playing'; setUI(); return; }
@@ -9577,7 +9761,8 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
   new MutationObserver(function(){ if(gone() && state!=='idle') stop(); }).observe(card, {attributes:true, attributeFilter:['hidden']});
   if(ovl) new MutationObserver(function(){ if(gone() && state!=='idle') stop(); }).observe(ovl, {attributes:true, attributeFilter:['class']});
   addEventListener('pagehide', function(){ ss.cancel(); });
-})();
+}
+readAloud('tbar4','w4'); readAloud('tbar5','w5');
 </script>
 <script>
 /* Reach card: Play walkthrough plays the narrated film; it stops when the card closes */
@@ -9595,6 +9780,12 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
   if(ovl) new MutationObserver(function(){ if(gone() && !v.paused) v.pause(); }).observe(ovl,{attributes:true, attributeFilter:['class']});
 })();
 </script>
+<style>
+/* list view: one quiet line under each project with my role, where it stands and, for Proof, the result */
+.rowmeta{display:none}
+#chapters.lay-rows .piece .rowmeta{display:block; margin:10px 0 0; font-size:13.5px; line-height:20px; color:var(--faint)}
+#chapters.lay-rows .piece .rowmeta b{font-weight:600; color:var(--muted)}
+</style>
 <script>
 /* the layout toggle: remembers the choice in this browser, and refits the prototypes to their new width */
 (function(){
@@ -9622,8 +9813,8 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
         ch.style.transition='opacity .45s cubic-bezier(.22,.61,.36,1), transform .45s cubic-bezier(.22,.61,.36,1)'; ch.style.opacity='1'; ch.style.transform='none';
         setTimeout(function(){ ch.style.transition=''; ch.style.opacity=''; ch.style.transform=''; busy=false; }, 480); });
     }, 210); });
-  /* every load starts on the cards; the choice only lasts for the visit */
-  try{ localStorage.removeItem('work-layout'); }catch(e){} set('stack', false);
+  /* every load starts on the side-by-side cards; the visitor can switch to full width, and the choice only lasts for the visit */
+  try{ localStorage.removeItem('work-layout'); }catch(e){} set('rows', false);
 })();
 </script>
 <script>
@@ -9661,7 +9852,7 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
   /* the card's width follows the film's own shape, so a taller film gets a narrower card and the footer stays on screen */
   v.addEventListener('loadedmetadata', function(){ if(v.videoWidth && v.videoHeight) card.style.setProperty('--ar', (v.videoWidth/v.videoHeight).toFixed(4)); });
   /* fit the whole card inside the window and centre it: the film takes whatever height is left once the title and footer are placed */
-  var AR={search:1.6466, proof:1.5661, lineage:1.5789, reach:1.7778, sensitivity:1.4056, diagram:1.0714}, ar=1.7778, vid=card.querySelector('.wv-vid');
+  var AR={search:1.6466, proof:1.5661, lineage:1.5789, reach:1.7778, sensitivity:1.4056, diagram:1.45}, ar=1.7778, vid=card.querySelector('.wv-vid');
   function fitCard(){
     if(card.hidden || !ovl || !ovl.classList.contains('on') || innerWidth<601){ card.style.removeProperty('max-width'); card.style.removeProperty('margin-top'); if(vid) vid.style.removeProperty('max-width'); return; }
     if(innerWidth<901){   /* tablet: the card keeps its width, it is only centred on the screen */
@@ -9794,6 +9985,19 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
 @media (min-width:761px) and (max-width:1366px){ .rf-art{right:0} .rf-art img{right:0 !important; transform:translateX(6%) !important} }
 @media (min-width:761px) and (max-width:1000px){ .rf-row{flex-wrap:wrap; row-gap:8px} .rf-b{display:none} .rf-links{flex-wrap:wrap}
   .rf-art img{height:72% !important; top:auto !important; bottom:0 !important; transform:translateX(10%) !important; opacity:.8} }
+/* card view: the role line in medium weight, like the list view */
+#chapters .piece .prose p.role{font-weight:500 !important}
+/* footer: a step up in size and contrast so the small print can be read on black */
+.rf-row{font-size:14px; line-height:20px} .rf-mail{font-size:14px}
+.rf-cap{font-size:12px; line-height:16px; color:#9C9E97}
+.rf-b{color:#BDBFBA}
+/* top menu: same size as the work header beside the layout tabs */
+body .menu{font-size:15.5px; line-height:22px}
+/* diagram film: the light panel is wider than the film, which sits in its middle on the same paper colour */
+.ov #wv.dg .wv-vid{background:#ECEEE6 !important}
+.ov #wv.dg .wv-vid video{width:100% !important; height:auto !important; aspect-ratio:1.45 !important; object-fit:contain !important; background:#ECEEE6 !important}
+/* cards: a soft shadow under the card on hover, so it reads as clickable */
+@media (hover:hover){ html body #chapters.lay-rows .piece{transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important} }
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
@@ -9824,6 +10028,275 @@ p.fmeta .fm-t > span.fm-b{display:none !important} /* the right side keeps only 
     var all=[].slice.call(pc.querySelectorAll('.ex-btn[data-ex]')), vis=all.filter(function(b){return b.offsetParent;})[0]||ex;
     vis.click();
   });
+})();
+</script>
+<style>
+/* full view (desktop): each chapter opens on its prototype, then the number, question and write-up below it */
+@media (min-width:901px){
+ #chapters:not(.lay-rows) .piece{display:flex !important; flex-direction:column}
+ #chapters:not(.lay-rows) .piece > figure{order:-1; margin-top:0 !important}
+ #chapters:not(.lay-rows) .piece > .ptxt{margin-top:40px !important}
+ #chapters:not(.lay-rows) .piece > .ptxt + figure{margin-top:0 !important}
+}
+</style>
+<style>.piece .still{display:none}</style>
+<style>
+/* full view (desktop): the number and the question sit above the prototype; the intro and write-up stay below it */
+@media (min-width:901px){
+ html body #chapters:not(.lay-rows) .piece .ptxt .chap-head{order:-3}
+ html body #chapters:not(.lay-rows) .piece .ptxt > h2.chap-q{order:-2; font-size:26.7px !important; line-height:35.5px !important; margin-bottom:0 !important}
+ html body #chapters:not(.lay-rows) .piece .ptxt > .dek{order:-2; margin-top:12px !important; margin-bottom:28px !important}
+ html body #chapters:not(.lay-rows) .piece > figure{order:-1}
+}
+</style>
+<style>
+figure.tested{margin:24px 0;overflow-x:auto}
+figure.tested table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;line-height:1.45}
+figure.tested th,figure.tested td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(25,26,24,.1);vertical-align:top}
+figure.tested th{font-weight:500;color:#767972}
+figure.tested figcaption{margin-top:10px;font-size:13px;color:#767972}
+</style>
+<style>
+.tst{margin:24px 0;display:grid;gap:8px}
+.tst-h,.tst-r{display:grid;grid-template-columns:1fr 0.8fr 1.5fr;gap:16px;align-items:start}
+.tst-h{font-size:12.5px;color:#8A8B85;padding:0 16px}
+.tst-r{background:#fff;border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.45;color:#5F625C}
+.tst-m{color:#191A18}
+.tst-r b{display:block;font-weight:500;color:#191A18}
+.tst-r q{display:block;margin-top:4px;font-size:13.5px;color:#767972;font-style:italic}
+.tst-r q::before{content:"\201C"}.tst-r q::after{content:"\201D"}
+.tst-r s{text-decoration-thickness:1px}
+.tst-x{box-shadow:inset 0 0 0 1.5px #191A18}
+.tst-rule{margin:24px 0 !important;padding:16px 18px;border-left:2px solid #191A18;font-size:17px !important;line-height:1.5 !important;color:#191A18 !important}
+.tst-rule b{font-weight:600}
+.tst-note{font-size:13.5px !important;color:#8A8B85 !important}
+.ov #w5 .tst-turn{border-left:2px solid var(--ink); padding:4px 0 4px 18px; margin:22px 0 !important; font-weight:600; color:var(--muted); max-width:60ch}
+.ov #w5 p.dd{margin:26px 0 0 !important; padding:14px 18px; border-radius:12px; background:#F0EFEB; color:var(--ink); max-width:60ch} .ov #w5 p.dd b{font-weight:600; margin-right:4px}
+.ov #w5 .ch-lead{margin:2px 0 14px !important; font-size:13px !important; line-height:18px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint) !important}
+.ov #w5 .tst-k{font-family:var(--display); font-size:19px !important; line-height:26px}
+@media (max-width:640px){.tst-h{display:none}.tst-r{grid-template-columns:1fr;gap:4px}.tst-r span:nth-child(2)::before{content:"I guessed: ";color:#8A8B85}}
+</style>
+<style>
+.tst-r span:last-child{font-size:14px;color:#767972}
+.tst-rules{margin:12px 0 24px;padding-left:22px;display:grid;gap:10px;color:#5F625C;font-size:15.5px;line-height:1.55}
+.tst-rules b{font-weight:500;color:#191A18}
+</style>
+<style>
+.tst-k{margin-top:28px !important;font-weight:500;color:#191A18 !important}
+.tst-rules{margin:8px 0 0}
+</style>
+<style>
+/* list view as text cards (from the Figma): five outlined cards, three to a row.
+   Each card: number and name, an icon, status, the question, intro, my role, the write-up, then the two ways to go deeper */
+.lv-ico,.lv-stat{display:none}
+@media (min-width:901px){
+ html body #chapters.lay-rows{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) !important; gap:24px !important; width:auto !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important}
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{display:flex !important; flex-direction:column !important; grid-column:auto !important; order:0 !important; padding:24px 24px 26px !important; margin:0 !important; background:transparent !important; border:1px solid rgba(25,26,24,.2) !important; border-radius:20px !important; box-shadow:none !important; transform:none !important; cursor:pointer}
+ html body #chapters.lay-rows .piece:hover{border-color:rgba(25,26,24,.42) !important; box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important}   /* a soft shadow under the card on hover */
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{align-items:stretch !important; justify-content:flex-start !important}
+ html body #chapters.lay-rows .piece > .ptxt, html body #chapters.lay-rows .piece > .prose{width:auto !important; align-self:stretch !important}
+ html body #chapters.lay-rows .piece > figure, html body #chapters.lay-rows .piece .rowmeta, html body #chapters.lay-rows .piece .ex-top, html body #chapters.lay-rows .piece > .ex-mob{display:none !important}
+ html body #chapters.lay-rows .piece > .ptxt{display:block !important; order:0 !important; padding:0 !important; max-width:none !important; grid-column:auto !important; grid-row:auto !important}
+ html body #chapters.lay-rows .piece > .prose{display:block !important; order:1 !important; margin:16px 0 0 !important; max-width:none !important; grid-column:auto !important; grid-row:auto !important; flex:1; display:flex !important; flex-direction:column}
+ html body #chapters.lay-rows .piece .chap-head{display:block !important; padding:0 !important; background:none !important; box-shadow:none !important}
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{display:inline !important; background:none !important; padding:0 !important; min-width:0 !important; height:auto !important; font-family:var(--display) !important; font-size:14px !important; font-weight:400 !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .lv-ico{display:block; width:40px; height:40px; margin:20px 0 12px}
+ html body #chapters.lay-rows .piece .lv-ico svg{width:40px; height:40px; display:block}
+ html body #chapters.lay-rows .piece .lv-stat{display:block; margin:0 0 22px; font-size:11.5px; line-height:16px; color:#767972}
+ html body #chapters.lay-rows .piece .lv-stat a{color:inherit; text-decoration:underline; text-underline-offset:3px; margin-left:6px}
+ html body #chapters.lay-rows .piece h2.chap-q{font-size:21px !important; line-height:28px !important; margin:0 !important; max-width:none !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-size:13.5px !important; line-height:21px !important; margin-top:12px !important; max-width:none !important; color:#7A7B75 !important}
+ html body #chapters.lay-rows .piece .prose p{font-size:13.5px !important; line-height:21px !important}
+ html body #chapters.lay-rows .piece .prose p.role{display:block !important; position:static !important; width:auto !important; height:auto !important; clip:auto !important; white-space:normal !important; margin:6px 0 10px !important; font-weight:600 !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece .prose p.end{margin-top:auto !important; padding-top:24px}
+ html body #chapters.lay-rows .piece .prose p.end:has(.ex-end){flex-wrap:nowrap !important; gap:18px !important; align-items:center !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{margin:0 !important; white-space:nowrap; padding:4px 12px 4px 5px !important; font-size:13px !important; gap:6px !important}
+ html body #chapters.lay-rows .piece .prose p.role + p{margin-top:0 !important}
+}
+</style>
+<script>
+(function(){
+ var ICON={q1:`<svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.5834 43.0207V46.7082H16.7859V43.0207H24.5834ZM24.5834 43.0207C25.4989 43.0207 26.3346 43.3567 26.9793 43.909L24.5834 46.7082V43.0207ZM50.3959 13.5208C50.3959 13.1948 50.4713 11.858 50.0358 11.4225C49.8053 11.192 49.4927 11.0624 49.1667 11.0624H9.83341C9.50742 11.0624 9.19487 11.192 8.96436 11.4225C8.73384 11.653 8.60425 11.9656 8.60425 12.2916V47.6397L10.7025 45.5415L11.0098 45.2486C12.5879 43.8187 14.6462 43.0212 16.7859 43.0207V46.7082L16.2985 46.7322C15.1736 46.8444 14.116 47.3422 13.3097 48.1487L7.89604 53.5623L7.70158 53.7303C7.49531 53.8832 7.25684 53.9895 7.00297 54.04L6.74609 54.0712C6.57569 54.0794 6.40507 54.0621 6.23954 54.0208L5.99467 53.9392C5.75558 53.8401 5.54297 53.6899 5.37048 53.4999L5.21204 53.2982C5.06828 53.0831 4.9738 52.839 4.93595 52.5852L4.91675 52.3283V12.2916C4.91675 11.1505 5.31366 10.0504 6.03068 9.17547L6.35718 8.81536C7.27923 7.89331 8.52943 7.37493 9.83341 7.37493H49.1667C50.4707 7.37493 52.1488 7.16114 53.5917 8.60494C54.8701 10.0487 54.3292 11.0624 54.3292 22.1258L50.3959 25.8124V18.4374V13.5208Z" fill="currentColor"/><path d="M44.016 39.099C44.7073 38.4077 45.8277 38.4077 46.519 39.099L53.5647 46.1451C54.2559 46.8364 54.2559 47.9569 53.5647 48.6482C52.8734 49.3395 51.753 49.3395 51.0617 48.6482L44.016 41.6021C43.3247 40.9109 43.3247 39.7903 44.016 39.099Z" fill="currentColor"/><path d="M46.8359 32.5626C46.8353 27.3956 42.6454 23.2071 37.4785 23.2071C32.312 23.2076 28.1239 27.3959 28.1234 32.5626C28.1234 37.7297 32.3117 41.9199 37.4785 41.9204C42.6457 41.9204 46.8359 37.7301 46.8359 32.5626ZM50.376 32.5626C50.376 39.6853 44.6009 45.4608 37.4785 45.4608C30.3565 45.4602 24.5833 39.685 24.5833 32.5626C24.5838 25.4407 30.3569 19.6673 37.4785 19.6667C44.6005 19.6667 50.3755 25.4403 50.376 32.5626Z" fill="currentColor"/><path d="M46.0937 18.4375C47.1119 18.4375 47.9374 17.612 47.9374 16.5938C47.9374 15.5755 47.1119 14.75 46.0937 14.75L11.677 14.75C10.6587 14.75 9.83325 15.5755 9.83325 16.5938C9.83325 17.612 10.6587 18.4375 11.677 18.4375H46.0937Z" fill="currentColor"/><path d="M28.8853 25.8125C29.9036 25.8125 30.7291 24.987 30.7291 23.9688C30.7291 22.9505 29.9036 22.125 28.8853 22.125L11.677 22.125C10.6587 22.125 9.83325 22.9505 9.83325 23.9688C9.83325 24.987 10.6587 25.8125 11.677 25.8125H28.8853Z" fill="currentColor"/></svg>`,q2:`<svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.2271 29.4998C52.227 28.1587 51.8893 26.8397 51.2452 25.6635C50.6011 24.4871 49.6719 23.4907 48.542 22.7682C47.8886 22.3501 47.5677 21.5685 47.7378 20.8116C48.0333 19.497 47.9904 18.1278 47.6153 16.8336C47.2402 15.5397 46.5442 14.3604 45.5915 13.4078C44.6388 12.4552 43.4597 11.7591 42.1657 11.384C40.8719 11.009 39.5043 10.9686 38.1901 11.264C37.433 11.4342 36.6492 11.1111 36.2311 10.4573C35.5089 9.32789 34.514 8.39812 33.3383 7.75411C32.1619 7.11 30.8407 6.77222 29.4995 6.77222C28.1586 6.7723 26.8394 7.11013 25.6632 7.75411C24.4868 8.39822 23.4904 9.32739 22.7679 10.4573C22.3501 11.1107 21.5681 11.4336 20.8113 11.264C19.4989 10.9698 18.1324 11.0122 16.8405 11.3864C15.5489 11.7607 14.3714 12.4555 13.4195 13.4054C12.4679 14.3554 11.7725 15.5308 11.3957 16.8216C11.0188 18.1129 10.9721 19.4792 11.2637 20.7924C11.4317 21.551 11.1064 22.3335 10.4498 22.749C9.3116 23.4695 8.37478 24.4666 7.72502 25.6466C7.07517 26.827 6.73356 28.1524 6.73352 29.4998C6.73352 30.8472 7.07514 32.1726 7.72502 33.3529C8.37475 34.533 9.31158 35.5301 10.4498 36.2506C11.1067 36.6663 11.4321 37.4507 11.2637 38.2096C10.9724 39.5223 11.019 40.8871 11.3957 42.178C11.7726 43.4692 12.4674 44.6464 13.4195 45.5966C14.3715 46.5466 15.5487 47.2413 16.8405 47.6156C18.1325 47.9898 19.4989 48.0298 20.8113 47.7356C21.5692 47.5657 22.353 47.8897 22.7703 48.5447C23.4918 49.6789 24.4896 50.6129 25.668 51.2599C26.846 51.9067 28.1676 52.2465 29.5115 52.2466C30.8558 52.2466 32.1791 51.9069 33.3575 51.2599C34.5357 50.6129 35.5313 49.6788 36.2527 48.5447C36.6692 47.8905 37.4522 47.5676 38.2093 47.7356C39.5219 48.0269 40.8869 47.9825 42.1777 47.606C43.469 47.2291 44.6461 46.532 45.5963 45.5798C46.5464 44.6277 47.2411 43.4508 47.6153 42.1588C47.9895 40.8667 48.0296 39.5006 47.7354 38.188C47.5658 37.4313 47.8887 36.6492 48.542 36.2314C49.6719 35.5089 50.6011 34.5125 51.2452 33.3361C51.8892 32.1599 52.2271 30.8408 52.2271 29.4998ZM55.9146 29.4998C55.9146 31.4597 55.4226 33.3887 54.4814 35.1079C53.7398 36.4622 52.7343 37.6477 51.5357 38.6081C51.7111 40.14 51.5875 41.695 51.1564 43.1839C50.6094 45.0723 49.5947 46.7929 48.2059 48.1846C46.8173 49.576 45.0995 50.5938 43.2124 51.1447C41.7243 51.579 40.169 51.7058 38.6366 51.5336C37.6762 52.7379 36.489 53.7483 35.1316 54.4937C33.4095 55.439 31.476 55.9341 29.5115 55.9341C27.547 55.934 25.6134 55.4391 23.8914 54.4937C22.5345 53.7485 21.3466 52.7399 20.3864 51.536C18.8562 51.7104 17.3026 51.5874 15.8154 51.1567C13.9271 50.6097 12.2063 49.5949 10.8147 48.2062C9.4234 46.8176 8.4055 45.0996 7.85465 43.2127C7.42057 41.7255 7.29159 40.1708 7.46334 38.6393C6.25498 37.6795 5.24192 36.491 4.49365 35.1319C3.54388 33.4067 3.04602 31.4691 3.04602 29.4998C3.04606 27.5305 3.54386 25.5928 4.49365 23.8677C5.2422 22.5082 6.25442 21.3179 7.46334 20.3579C7.29208 18.8274 7.42084 17.2732 7.85465 15.7869C8.40557 13.9 9.42338 12.1819 10.8147 10.7934C12.2064 9.4047 13.927 8.38987 15.8154 7.84294C17.3033 7.41203 18.858 7.28639 20.3888 7.46122C21.3489 6.26295 22.5375 5.26179 23.8914 4.52034C25.6106 3.57903 27.5395 3.0848 29.4995 3.08472C31.4597 3.08472 33.3883 3.57896 35.1076 4.52034C36.4612 5.26149 37.6477 6.26346 38.6078 7.46122C40.1425 7.28473 41.7016 7.41059 43.1932 7.84294C45.0842 8.39119 46.8064 9.40845 48.1987 10.8006C49.5912 12.1931 50.6081 13.917 51.1564 15.8085C51.5883 17.2989 51.714 18.8556 51.5381 20.3891C52.7367 21.3494 53.7398 22.5374 54.4814 23.8917C55.4226 25.6109 55.9145 27.5398 55.9146 29.4998Z" fill="currentColor"/><path d="M35.5714 23.2798C36.2914 22.5597 37.4585 22.5597 38.1786 23.2798C38.8986 23.9998 38.8986 25.1669 38.1786 25.8869L28.3452 35.7203C27.6252 36.4403 26.4581 36.4403 25.7381 35.7203L20.8214 30.8036C20.1014 30.0836 20.1014 28.9165 20.8214 28.1964C21.5414 27.4764 22.7085 27.4764 23.4286 28.1964L27.0416 31.8095L35.5714 23.2798Z" fill="currentColor"/></svg>`,q3:`<svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M36.8751 49.7812C37.8934 49.7812 38.7188 50.6067 38.7188 51.625C38.7188 52.6433 37.8934 53.4688 36.8751 53.4688H34.4167C33.3985 53.4688 32.573 52.6433 32.573 51.625C32.573 50.6067 33.3985 49.7812 34.4167 49.7812H36.8751Z" fill="currentColor"/><path d="M36.8751 5.53125C37.8934 5.53125 38.7188 6.35672 38.7188 7.375C38.7188 8.39327 37.8934 9.21875 36.8751 9.21875H34.4167C33.3985 9.21875 32.573 8.39327 32.573 7.375C32.573 6.35672 33.3985 5.53125 34.4167 5.53125H36.8751Z" fill="currentColor"/><path d="M49.7812 12.2917C49.7812 11.4767 49.4572 10.6953 48.8809 10.119C48.3046 9.54273 47.5232 9.21875 46.7083 9.21875C45.69 9.21875 44.8645 8.39327 44.8645 7.375C44.8645 6.35672 45.69 5.53125 46.7083 5.53125C48.5012 5.53125 50.2203 6.24402 51.4881 7.51184C52.7559 8.77966 53.4687 10.4987 53.4687 12.2917C53.4687 13.3099 52.6432 14.1354 51.6249 14.1354C50.6066 14.1354 49.7812 13.3099 49.7812 12.2917Z" fill="currentColor"/><path d="M49.7812 36.8751V34.4167C49.7812 33.3985 50.6067 32.573 51.625 32.573C52.6433 32.573 53.4688 33.3985 53.4688 34.4167V36.8751C53.4688 37.8934 52.6433 38.7188 51.625 38.7188C50.6067 38.7188 49.7812 37.8934 49.7812 36.8751Z" fill="currentColor"/><path d="M49.7812 46.7083C49.7812 45.69 50.6066 44.8645 51.6249 44.8645C52.6432 44.8645 53.4687 45.69 53.4687 46.7083C53.4687 48.5012 52.7559 50.2203 51.4881 51.4881C50.2203 52.7559 48.5012 53.4687 46.7083 53.4687C45.69 53.4687 44.8645 52.6432 44.8645 51.6249C44.8645 50.6066 45.69 49.7812 46.7083 49.7812C47.5232 49.7812 48.3046 49.4572 48.8809 48.8809C49.4572 48.3046 49.7812 47.5232 49.7812 46.7083Z" fill="currentColor"/><path d="M49.7812 24.5833V22.125C49.7812 21.1067 50.6067 20.2812 51.625 20.2812C52.6433 20.2812 53.4688 21.1067 53.4688 22.125V24.5833C53.4688 25.6016 52.6433 26.4271 51.625 26.4271C50.6067 26.4271 49.7812 25.6016 49.7812 24.5833Z" fill="currentColor"/><path d="M5.53125 36.8751V34.4167C5.53125 33.3985 6.35672 32.573 7.375 32.573C8.39327 32.573 9.21875 33.3985 9.21875 34.4167V36.8751C9.21875 37.8934 8.39327 38.7188 7.375 38.7188C6.35672 38.7188 5.53125 37.8934 5.53125 36.8751Z" fill="currentColor"/><path d="M5.53125 24.5833V22.125C5.53125 21.1067 6.35672 20.2812 7.375 20.2812C8.39327 20.2812 9.21875 21.1067 9.21875 22.125V24.5833C9.21875 25.6016 8.39327 26.4271 7.375 26.4271C6.35672 26.4271 5.53125 25.6016 5.53125 24.5833Z" fill="currentColor"/><path d="M5.53125 46.7083C5.53125 45.69 6.35672 44.8645 7.375 44.8645C8.39327 44.8645 9.21875 45.69 9.21875 46.7083C9.21875 47.5232 9.54273 48.3046 10.119 48.8809C10.6953 49.4572 11.4767 49.7812 12.2917 49.7812C13.3099 49.7812 14.1354 50.6066 14.1354 51.6249C14.1354 52.6432 13.3099 53.4687 12.2917 53.4687C10.4987 53.4687 8.77966 52.7559 7.51184 51.4881C6.24402 50.2203 5.53125 48.5012 5.53125 46.7083Z" fill="currentColor"/><path d="M5.53125 12.2917C5.53125 10.4987 6.24402 8.77966 7.51184 7.51184C8.77966 6.24402 10.4987 5.53125 12.2917 5.53125C13.3099 5.53125 14.1354 6.35672 14.1354 7.375C14.1354 8.39327 13.3099 9.21875 12.2917 9.21875C11.4767 9.21875 10.6953 9.54274 10.119 10.119C9.54274 10.6953 9.21875 11.4767 9.21875 12.2917C9.21875 13.3099 8.39327 14.1354 7.375 14.1354C6.35672 14.1354 5.53125 13.3099 5.53125 12.2917Z" fill="currentColor"/><path d="M24.5833 49.7812C25.6016 49.7812 26.4271 50.6067 26.4271 51.625C26.4271 52.6433 25.6016 53.4688 24.5833 53.4688H22.125C21.1067 53.4688 20.2812 52.6433 20.2812 51.625C20.2812 50.6067 21.1067 49.7812 22.125 49.7812H24.5833Z" fill="currentColor"/><path d="M24.5833 5.53125C25.6016 5.53125 26.4271 6.35672 26.4271 7.375C26.4271 8.39327 25.6016 9.21875 24.5833 9.21875H22.125C21.1067 9.21875 20.2812 8.39327 20.2812 7.375C20.2812 6.35672 21.1067 5.53125 22.125 5.53125H24.5833Z" fill="currentColor"/><path d="M34.4168 37.4895C35.4351 37.4895 36.2606 38.315 36.2606 39.3333C36.2606 40.3515 35.4351 41.177 34.4168 41.177H24.5835C23.5652 41.177 22.7397 40.3515 22.7397 39.3333C22.7397 38.315 23.5652 37.4895 24.5835 37.4895H34.4168Z" fill="currentColor"/><path d="M27.6562 39.3333V22.125C27.6562 21.1067 28.4817 20.2812 29.5 20.2812C30.5183 20.2812 31.3438 21.1067 31.3438 22.125V39.3333C31.3438 40.3516 30.5183 41.1771 29.5 41.1771C28.4817 41.1771 27.6562 40.3516 27.6562 39.3333Z" fill="currentColor"/><path d="M37.4897 27.0417V23.9688H21.5105V27.0417C21.5105 28.0599 20.685 28.8854 19.6667 28.8854C18.6485 28.8854 17.823 28.0599 17.823 27.0417V22.125C17.823 21.1067 18.6485 20.2812 19.6667 20.2812H39.3334C40.3517 20.2812 41.1772 21.1067 41.1772 22.125V27.0417C41.1772 28.0599 40.3517 28.8854 39.3334 28.8854C38.3151 28.8854 37.4897 28.0599 37.4897 27.0417Z" fill="currentColor"/></svg>`,q4:`<svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M47.5822 12.9062C48.4568 12.9062 49.1666 13.6161 49.1666 14.4907V27.1593C49.1666 27.1915 49.1589 27.2236 49.157 27.2553C49.1535 27.3134 49.1477 27.3707 49.1378 27.4282C49.1293 27.4781 49.1173 27.5264 49.1042 27.5746C49.0904 27.6255 49.0776 27.6763 49.0586 27.7259C49.0419 27.7693 49.0189 27.8092 48.9986 27.8507C48.9719 27.9053 48.9455 27.9596 48.9121 28.0116C48.8882 28.0488 48.8598 28.0822 48.8329 28.1172C48.8077 28.15 48.789 28.1892 48.7609 28.2204C48.751 28.2314 48.7374 28.2386 48.7273 28.2492C48.6888 28.2896 48.645 28.3235 48.6025 28.3597C48.5651 28.3914 48.5291 28.4231 48.4896 28.4509C48.4548 28.4754 48.4184 28.4964 48.3816 28.5181C48.3276 28.5498 48.2751 28.5821 48.2183 28.6069C48.1718 28.6274 48.1231 28.6414 48.0743 28.6573C48.0303 28.6717 47.9872 28.6877 47.9423 28.6982C47.8865 28.7111 47.8297 28.7177 47.7718 28.7246C47.7229 28.7304 47.6746 28.7377 47.6254 28.739C47.6112 28.7393 47.5964 28.7438 47.5822 28.7438H34.9136C34.0389 28.7438 33.3291 28.034 33.3291 27.1593C33.3294 26.2849 34.0391 25.5772 34.9136 25.5772H43.4577L40.1903 22.6364L39.5806 22.1154C36.4808 19.5828 32.5948 18.1895 28.5757 18.1854C23.9562 18.1861 19.5241 20.0204 16.2576 23.2869C13.0177 26.5273 11.1881 30.9154 11.1585 35.4946C12.5595 36.2039 13.5208 37.6556 13.5208 39.3333C13.5208 41.7093 11.5947 43.6354 9.21871 43.6354C6.84273 43.6354 4.91663 41.7093 4.91663 39.3333C4.91663 37.3812 6.21748 35.7349 7.99915 35.2089C8.10201 29.8929 10.2534 24.8141 14.0201 21.0471C17.8812 17.1864 23.1204 15.0189 28.5805 15.0189L29.5264 15.0405C33.9369 15.248 38.1659 16.8682 41.5852 19.6619L42.3054 20.2788L42.3078 20.2812L46.0001 23.6038V14.4907C46.0001 13.6163 46.7078 12.9066 47.5822 12.9062ZM29.5 35.0312C31.8759 35.0312 33.802 36.9574 33.802 39.3333C33.802 41.7093 31.8759 43.6354 29.5 43.6354C27.124 43.6354 25.1979 41.7093 25.1979 39.3333C25.1979 36.9574 27.124 35.0312 29.5 35.0312ZM49.1666 35.0312C51.5426 35.0312 53.4687 36.9574 53.4687 39.3333C53.4687 41.7093 51.5426 43.6354 49.1666 43.6354C46.7906 43.6354 44.8645 41.7093 44.8645 39.3333C44.8645 36.9574 46.7907 35.0312 49.1666 35.0312ZM9.21871 38.7188C8.87928 38.7188 8.60413 38.9939 8.60413 39.3333C8.60413 39.6728 8.87928 39.9479 9.21871 39.9479C9.55813 39.9479 9.83329 39.6728 9.83329 39.3333C9.83329 38.9939 9.55813 38.7188 9.21871 38.7188Z" fill="currentColor"/><path d="M8.60417 36.875C9.28302 36.875 9.83333 37.9756 9.83333 39.3333C9.83333 40.691 9.28302 41.7917 8.60417 41.7917C7.92532 41.7917 7.375 40.691 7.375 39.3333C7.375 37.9756 7.92532 36.875 8.60417 36.875Z" fill="currentColor"/></svg>`,q5:`<svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M43.53 5.7241C44.6065 4.64796 46.352 4.64796 47.4285 5.7241L53.2771 11.5718C54.3532 12.6482 54.3532 14.3947 53.2771 15.4712L47.4285 21.3188C46.352 22.3949 44.6065 22.3949 43.53 21.3188L38.1902 15.98H20.8474C20.9775 16.0875 21.104 16.2014 21.2244 16.3218C22.23 17.3276 22.7957 18.6914 22.7957 20.1137V24.5688C23.3693 24.3815 23.974 24.2856 24.5828 24.2856L25.0906 24.3091C26.2713 24.4128 27.4081 24.877 28.2986 25.6684C28.7728 26.09 29.1598 26.5921 29.4402 27.1469C30.1587 26.8326 30.9435 26.6694 31.7351 26.6694L32.2419 26.6928C33.4003 26.7946 34.5155 27.2441 35.3982 28.0083C36.3624 27.1529 37.605 26.6694 38.905 26.6694C40.3405 26.6694 41.706 27.2588 42.7039 28.2876C43.6993 29.3142 44.2495 30.6947 44.2498 32.1235V37.6245C44.2498 41.972 42.5752 46.1533 39.5779 49.2436C36.5788 52.3357 32.4987 54.0835 28.2332 54.0835H24.6765C21.9933 54.0834 19.7442 53.6565 17.7712 52.81C15.7968 51.9628 14.1908 50.7333 12.7449 49.2524L12.741 49.2485L6.33862 42.6479C6.31759 42.6262 6.29602 42.6033 6.27612 42.5805C5.36406 41.5389 4.88332 40.1854 4.9187 38.8022C4.95427 37.4193 5.50399 36.0932 6.46948 35.101C7.43697 34.1072 8.74976 33.5253 10.1384 33.4927C10.8032 33.4771 11.4566 33.5874 12.0681 33.811V22.1196C8.09858 22.0013 4.91686 18.7486 4.91675 14.7505C4.91677 10.6774 8.21866 7.37546 12.2917 7.37546C15.502 7.37546 18.226 9.42919 19.239 12.2925H37.1658C37.2951 12.0331 37.4652 11.788 37.6814 11.5718L43.53 5.7241ZM18.5212 18.6977C17.816 19.8089 16.8208 20.7166 15.6433 21.3188V36.7446L17.0681 38.2134C17.7554 38.922 17.7374 40.0542 17.0291 40.7417C16.3203 41.4291 15.1882 41.4133 14.5007 40.7046L13.5818 39.7563C12.7948 39.6351 12.1776 39.0036 12.0818 38.2085L11.4158 37.5219C11.0792 37.2137 10.6516 37.0558 10.2214 37.0659C9.78488 37.0763 9.35787 37.2596 9.03198 37.5942C8.70461 37.9306 8.50503 38.3947 8.49194 38.893C8.47931 39.3868 8.65214 39.8587 8.95776 40.2134L15.3015 46.7553C16.5053 47.9881 17.738 48.9052 19.1824 49.5249C20.6281 50.145 22.3809 50.5072 24.6765 50.5073H28.2332C31.5145 50.5073 34.675 49.1653 37.0125 46.7553C39.3518 44.3434 40.6746 41.0583 40.6746 37.6245V32.1235C40.6743 31.6081 40.4743 31.1242 40.1365 30.7759C39.8002 30.4294 39.3561 30.2446 38.905 30.2446C38.4539 30.2446 38.0098 30.4293 37.6736 30.7759C37.3357 31.1242 37.1358 31.6081 37.1355 32.1235C37.1355 32.248 37.1226 32.3695 37.0984 32.4868V33.2251C37.0982 34.2124 36.2976 35.0122 35.3103 35.0122C34.3231 35.012 33.5224 34.2123 33.5222 33.2251V31.6352C33.522 31.3392 33.3921 31.0053 33.0759 30.7241C32.8334 30.5085 32.5024 30.3472 32.1257 30.2798L31.7351 30.2446C31.1977 30.2446 30.7178 30.4368 30.3943 30.7241C30.0781 31.0053 29.9472 31.3392 29.947 31.6352C29.9468 32.6224 29.1462 33.4223 28.1589 33.4223C27.1717 33.4223 26.3711 32.6224 26.3708 31.6352C26.3709 31.4693 26.3808 31.3045 26.3982 31.1421C26.3816 31.0442 26.3709 30.9439 26.3708 30.8413V29.2505C26.3705 28.9546 26.2396 28.6213 25.9236 28.3403C25.6811 28.1249 25.3508 27.9634 24.9744 27.896L24.5828 27.8608C24.0452 27.8609 23.5654 28.0528 23.2419 28.3403C22.9318 28.6161 22.8008 28.9422 22.7957 29.2339V29.9468C22.7957 29.9525 22.7947 29.9586 22.7947 29.9643V30.8413L22.7859 31.0249C22.6938 31.9258 21.9327 32.6282 21.0076 32.6284C20.0822 32.6284 19.3203 31.9259 19.2283 31.0249L19.2195 30.8413V20.1137C19.2195 19.6398 19.0311 19.1853 18.696 18.8501C18.6412 18.7952 18.5821 18.7446 18.5212 18.6977Z" fill="currentColor"/></svg>`};
+ document.querySelectorAll('#chapters .piece').forEach(function(p){
+  var head=p.querySelector('.chap-head'); if(!head) return;
+  var ic=document.createElement('div'); ic.className='lv-ico'; ic.setAttribute('aria-hidden','true'); ic.innerHTML=ICON[p.id]||''; head.insertAdjacentElement('afterend',ic);
+  var st=document.createElement('p'); st.className='lv-stat';
+  var a=p.querySelector('p.fmeta .fm-a'), l=p.querySelector('p.fmeta a');
+  st.textContent=a?a.textContent:''; if(l){ var c=l.cloneNode(true); st.appendChild(c); }
+  ic.insertAdjacentElement('afterend',st);
+  var band=document.createElement('div'); band.className='lv-band'; head.parentNode.insertBefore(band,head); band.appendChild(head); band.appendChild(ic); band.appendChild(st);
+ });
+})();
+</script>
+
+<style>
+/* list view: each card opens on a soft pastel band holding its number, icon and status */
+.lv-band{display:contents}
+@media (min-width:901px){
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2, html body #chapters.lay-rows #q4{overflow:hidden; padding-top:0 !important}
+ html body #chapters.lay-rows .piece .lv-band{display:block; margin:0 -24px 22px; padding:22px 24px 16px; background:var(--band,#EEEEEA)}
+ html body #chapters.lay-rows .piece .lv-band .lv-stat{margin-bottom:0}
+ html body #chapters.lay-rows .piece .lv-band .lv-ico{margin-top:16px}
+ html body #chapters.lay-rows #q1{--band:#E8F2D9} html body #chapters.lay-rows #q2{--band:#F6E8EF}
+ html body #chapters.lay-rows #q3{--band:#DCE5EB} html body #chapters.lay-rows #q4{--band:#E4E2F0}
+ html body #chapters.lay-rows #q5{--band:#F5E9DA}
+}
+</style>
+<style>
+/* list-view cards: type, colours and weights taken from the Figma card (Figma sizes are the page's 0.9 zoom, so CSS = Figma / 0.9) */
+@media (min-width:901px){
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2, html body #chapters.lay-rows #q4{border:1px solid rgba(0,0,0,.38) !important; border-radius:22px !important; padding:0 27px 27px !important}
+ html body #chapters.lay-rows .piece .lv-band{margin:0 -27px 26px !important; padding:27px 27px 22px !important}
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:17px !important; line-height:24px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .lv-ico{width:60px !important; height:60px !important; margin:18px 0 14px -4px !important; color:#1B2124}
+ html body #chapters.lay-rows .piece .lv-ico svg{width:60px !important; height:60px !important}
+ html body #chapters.lay-rows .piece .lv-stat{font-family:'Inter',var(--font) !important; font-weight:400 !important; font-size:13px !important; line-height:20px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece h2.chap-q{font-family:'Poppins',var(--display) !important; font-weight:500 !important; font-size:26.7px !important; line-height:1.4 !important; letter-spacing:0 !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:25px !important; color:#767972 !important; margin-top:18px !important}
+ html body #chapters.lay-rows .piece .prose{margin-top:28px !important}
+ html body #chapters.lay-rows .piece .prose p.role{font-family:'Inter',var(--font) !important; font-weight:600 !important; font-size:15.5px !important; line-height:25.5px !important; color:#3F403D !important; margin:0 0 14px !important}
+ html body #chapters.lay-rows .piece .prose p:not(.role):not(.end){font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:25px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .prose p.end a{font-family:'Poppins',var(--display) !important; font-weight:500 !important; font-size:16px !important; line-height:22px !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn{font-family:'Inter',var(--font) !important; font-size:14px !important; color:#767972 !important}
+ html body #chapters.lay-rows #q1{--band:#E8F3D8} html body #chapters.lay-rows #q2{--band:#F7EAF0}
+ html body #chapters.lay-rows{grid-template-columns:repeat(auto-fill,minmax(330px,1fr)) !important}
+}
+</style>
+<style>
+/* "My Work" heading with the layout toggle on its right, above the work */
+.workhead{display:flex; align-items:center; justify-content:space-between; margin:0 0 32px; padding-top:24px; border-top:0}
+.workhead-l{font-family:'Inter',var(--font); font-size:15.5px; line-height:22px; color:#5F625C}
+.workhead .layt{margin:0 !important}
+@media (min-width:901px){ #work .workhead{position:relative; z-index:2; margin-top:-35px; margin-bottom:84px; padding-top:0} #work .workhead .workhead-l{background:#F1F1EE; padding-right:14px} #work .workhead .layt{box-shadow:0 0 0 10px #F1F1EE} }   /* the toggle and label sit on the divider line */
+/* CLM Stories shows in both layouts */ #work:has(#chapters:not(.lay-rows)) .workhead-l{padding-left:7px}   /* the label shows only in the list view */
+@media (max-width:900px){ .workhead{display:none} }
+</style>
+<script>(function(){ var h=document.querySelector('.workhead'), t=document.querySelector('#chbar .layt'); if(h && t) h.appendChild(t); })();</script>
+<style>
+/* smaller list-view type, and no extra lines above the work */
+html body #work .workhead .layt button:focus, html body #work .workhead .layt button:focus-visible{outline:none !important}
+@media (min-width:901px){
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{font-size:14px !important; line-height:20px !important; font-weight:500 !important}
+ html body #chapters.lay-rows .piece .lv-ico, html body #chapters.lay-rows .piece .lv-ico svg{width:40px !important; height:40px !important}
+ html body #chapters.lay-rows .piece .lv-stat{font-size:11.5px !important; line-height:17px !important}
+ html body #chapters.lay-rows .piece h2.chap-q{font-size:19px !important; line-height:26px !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-size:13.5px !important; line-height:21px !important; margin-top:10px !important}
+ html body #chapters.lay-rows .piece .prose{margin-top:18px !important}
+ html body #chapters.lay-rows .piece .prose p.role{font-size:13px !important; line-height:20px !important; margin-bottom:8px !important}
+ html body #chapters.lay-rows .piece .prose p:not(.role):not(.end){font-size:13.5px !important; line-height:21px !important}
+ html body #chapters.lay-rows .piece .prose p.end a{font-size:14px !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn{font-size:12px !important}
+}
+</style>
+<style>
+/* chapter bar: the selected tab takes its chapter's pastel from the list view */
+html body .chbar a.cur[href="#q1"]{background:#E8F3D8 !important}
+html body .chbar a.cur[href="#q2"]{background:#F7EAF0 !important}
+html body .chbar a.cur[href="#q3"]{background:#DCE5EB !important}
+html body .chbar a.cur[href="#q4"]{background:#E4E2F0 !important}
+html body .chbar a.cur[href="#q5"]{background:#F5E9DA !important}
+html body .chbar a.cur{color:#191A18 !important}
+</style>
+
+
+<style>
+/* case-study panels: the header sits on the chapter's pastel band, the same colour as its home card */
+.ov .card .cs-head{margin:-64px -76px 36px; padding:64px 76px 18px; border-radius:16px 16px 0 0; background:var(--band,#F1F1EE)}
+.ov .card .cs-head .tbar{margin-bottom:0 !important; border-bottom:0; border-top-color:rgba(25,26,24,.12)}
+.ov .card .cs-head > :first-child{margin-top:0}
+.ov .card .cs-head hr{display:none}
+.ov .card .cs-head:not(:has(.tbar)){padding-bottom:28px}
+.ov #w6 .cs-head{margin-bottom:0}
+.ov #w6 .cs-head + .w6-vid{margin-top:0 !important}
+.ov #w4{--band:#E8F3D8} .ov #w3{--band:#F7EAF0} .ov #w1{--band:#DCE5EB} .ov #w6{--band:#E4E2F0} .ov #w5{--band:#F5E9DA}
+.ov #w4 .cs-head + dl.glance, .ov #w6 .cs-head + dl.glance{margin-top:0 !important; padding-top:0 !important; border-top:0 !important}
+@media (max-width:760px){ .ov .card .cs-head{margin:-40px -24px 28px; padding:40px 24px 14px} }
+</style>
+<script>
+/* wrap each panel's header (tag, title, meta line, toolbar) so it can carry the band */
+(function(){
+  document.querySelectorAll('.ov .card').forEach(function(c){
+    if(c.querySelector(':scope > .cs-head')) return;
+    var kids=[].slice.call(c.children), head=[], stop=false;
+    kids.forEach(function(el){ if(stop) return;
+      var ok=el.matches('.w6-tag, h2, p.k, .tbar, hr');
+      if(!ok){ stop=true; return; }
+      head.push(el); if(el.matches('.tbar')) stop=true; });
+    if(!head.length || !head.some(function(e){return e.matches('h2');})) return;
+    var w=document.createElement('div'); w.className='cs-head';
+    c.insertBefore(w, head[0]); head.forEach(function(e){ w.appendChild(e); });
+  });
+})();
+</script>
+<style>
+/* the prototype pop-up (from the Figma frame): the chapter's prototype at its card-view size, a small header above, one thin row below */
+.ov .card.pcard{position:relative; padding:34px 51px 40px; background:#F1F1EE; border-radius:30px; box-sizing:border-box}
+@media (min-width:901px){ .ov .card.pcard{max-width:none !important; --pm:max(40px, 6vh); width:min(calc(100vw - 2 * var(--pm)), calc((100vh - 2 * var(--pm) - 232px) * 1.6133 + 102px)) !important} }   /* the dark margin is the same on all four sides; the prototype (1080×669) scales to fit both width and height */
+.wp-x{display:none}
+.pcard.trying .tryov{display:none}
+.wp-head{margin:0 0 24px}
+.ov .card .wp-head p{max-width:none}
+html body .ov .card .wp-tag{font-family:var(--display) !important; font-size:17px !important; line-height:24px !important; color:var(--ink) !important; margin:0 !important; display:flex; gap:8px} html body .ov .card .wp-tag b{font-weight:400 !important; color:#767972 !important; margin:0}
+html body .ov .card .wp-stat{font-family:var(--font) !important; font-size:13px !important; line-height:18px !important; color:#767972 !important; margin:4px 0 0 0 !important; display:flex; gap:8px}
+html body .ov .card .wp-stat a{color:inherit !important; font-size:inherit !important; text-decoration:underline; text-underline-offset:2px; margin:0} .wp-stat a::before{content:"\00b7\00a0\00a0"; text-decoration:none; display:inline}
+.wp-stage figure{margin:0 !important; width:auto !important; max-width:none !important}
+.wp-stage .still, .wp-stage p.fmeta, .wp-stage figcaption{display:none !important}
+.wp-stage .fit{border-radius:10px; overflow:hidden; box-shadow:0 0 0 1px rgba(25,26,24,.08); background:#fff}
+.wp-row{display:flex; align-items:center; justify-content:flex-start; gap:16px; margin:28px 0 0; padding:0} .wp-why{display:none !important}
+.wp-why{font-family:var(--display); font-size:17px; line-height:24px; font-weight:500; color:var(--ink); text-decoration:none} .wp-why:hover{text-decoration:underline; text-underline-offset:4px; text-decoration-color:var(--rule)}
+.wp-more{display:inline-flex; align-items:center; font-family:var(--font); font-size:14px; line-height:20px; font-weight:500; color:var(--ink); text-decoration:none; white-space:nowrap; padding:10px 18px; border:1px solid var(--ink); border-radius:999px; background:transparent; transition:background .15s ease, color .15s ease} .wp-more::after{content:"\00a0\2192"} .wp-more:hover{background:var(--ink); color:#fff}
+.wp-more.vid{gap:8px} .wp-more.vid::after{content:none}
+.wp-note{font-size:12px; color:#6F716A}
+@media (max-width:760px){ .ov .card.pcard{padding:24px 16px 20px; border-radius:18px} .wp-row{margin:24px 0 0; padding:0} }
+
+/* the Ask journey: first design, what testing showed, what changed */
+.ov #w5 .tst-path{display:flex; align-items:center; gap:12px; border:1px solid #E3E2DC; border-radius:12px; padding:16px 20px; margin:22px 0; max-width:640px; background:#fff}
+.ov #w5 .tst-path > div{flex:1; text-align:center} .ov #w5 .tst-path b{display:block; font-family:Poppins, sans-serif; font-weight:500; font-size:14px; line-height:20px; color:#191A18}
+.ov #w5 .tst-path span{display:block; margin-top:4px; font-size:12px; line-height:18px; color:#6F716A} .ov #w5 .tst-path i{font-style:normal; color:#6F716A}
+@media (max-width:760px){ .ov #w5 .tst-path{gap:6px; padding:14px 10px} }
+</style>
+<script>
+/* click a card in the side-by-side view: its live prototype opens in a pop-up, where the reader can watch it loop or try it */
+(function(){
+  var wp=document.getElementById('wp'), ch=document.getElementById('chapters'); if(!wp || !ch) return;
+  var stage=document.getElementById('wp-stage'), nEl=document.getElementById('wp-n'), nameEl=document.getElementById('wp-name'), ico=document.getElementById('wp-ico'), stat=document.getElementById('wp-stat'), more=document.getElementById('wp-more'), note=document.getElementById('wp-note'), opener=document.getElementById('wp-open');
+  var home=null;
+  function refit(){ dispatchEvent(new Event('resize')); }
+  function giveBack(){ if(!home) return; var h=home; home=null; if(h.obs) h.obs.disconnect(); wp.classList.remove('trying'); if(h.next && h.next.parentNode===h.parent) h.parent.insertBefore(h.fig, h.next); else h.parent.appendChild(h.fig); refit(); }
+  function openProto(p){
+    var fig=p.querySelector(':scope > figure'); if(!fig) return;
+    giveBack();
+    var n=p.querySelector('.chap-n'), nm=p.querySelector('.chap-name'), ic=p.querySelector('.lv-ico'), st=p.querySelector('.lv-stat');
+    nEl.textContent=n?n.textContent:''; nameEl.textContent=nm?nm.textContent:''; ico.innerHTML=ic?ic.innerHTML:''; stat.innerHTML=st?st.innerHTML:'';
+    var why=document.getElementById('wp-why');
+    var l=p.querySelector('.prose p.end a:not(.ex-btn)');
+    delete more.dataset.vid; more.classList.remove('vid');
+    if(l){ more.hidden=false; why.hidden=false; note.hidden=true; more.textContent=l.textContent;
+      if(l.dataset.open){ more.dataset.open=l.dataset.open; more.setAttribute('href','#'); more.removeAttribute('target'); }
+      else { delete more.dataset.open; more.setAttribute('href', l.getAttribute('href')); if(l.target) more.target=l.target; else more.removeAttribute('target'); }
+      if(more.dataset.open){ why.dataset.open=more.dataset.open; why.setAttribute('href','#'); why.removeAttribute('target'); } else { delete why.dataset.open; why.setAttribute('href', more.getAttribute('href')); if(more.target) why.target=more.target; else why.removeAttribute('target'); } }
+    else { var ex=p.querySelector('.ex-btn[data-ex][data-open]'), vn=ex && ex.dataset.ex;
+      if(vn){ more.hidden=false; why.hidden=true; note.hidden=true; delete more.dataset.open; more.removeAttribute('target'); more.setAttribute('href','#'); more.dataset.vid=vn;
+        more.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg>Watch 1-min video'; more.classList.add('vid'); }
+      else { more.hidden=true; why.hidden=true; note.hidden=false; } }
+    home={fig:fig, parent:fig.parentNode, next:fig.nextSibling, piece:p}; stage.appendChild(fig);
+    wp.classList.toggle('trying', p.classList.contains('trying'));
+    if(home.obs) home.obs.disconnect(); home.obs=new MutationObserver(function(){ wp.classList.toggle('trying', p.classList.contains('trying')); }); home.obs.observe(p,{attributes:true, attributeFilter:['class']});
+    opener.click();
+    requestAnimationFrame(refit); setTimeout(refit, 120); setTimeout(refit, 500);
+  }
+  var LIVE={q1:true, q2:true, q3:true, q4:true, q5:true};   /* every chapter card opens its prototype in the pop-up */
+  /* no write-up to link to: the button plays that chapter's 1-minute film instead */
+  more.addEventListener('click', function(e){ var vn=more.dataset.vid; if(!vn) return; e.preventDefault(); e.stopImmediatePropagation();
+    var b=document.querySelector('.ex-btn[data-open][data-ex="'+vn+'"]'); if(b) b.click(); }, true);
+  ch.addEventListener('click', function(e){
+    if(!ch.classList.contains('lay-rows') || innerWidth<901) return;
+    var p=e.target.closest('.piece'); if(!p || !LIVE[p.id] || e.target.closest('figure, a, button')) return;
+    e.stopImmediatePropagation(); e.preventDefault(); openProto(p);
+  }, true);
+  var ovl=document.getElementById('ov'); function gone(){ return wp.hidden || !ovl || !ovl.classList.contains('on'); }
+  new MutationObserver(function(){ if(gone()) giveBack(); }).observe(wp, {attributes:true, attributeFilter:['hidden']});
+  if(ovl) new MutationObserver(function(){ if(gone()) giveBack(); }).observe(ovl, {attributes:true, attributeFilter:['class']});
 })();
 </script>
 </body>
