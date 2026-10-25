@@ -1728,6 +1728,10 @@ html body .ov #w5 .fl-r{background:#fff}
 /* footer: the chapter bar stays away, even when the pointer comes near the bottom of the screen */
 html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.on:hover{opacity:0 !important; visibility:hidden !important; pointer-events:none !important; transform:translate(-50%,16px) !important; transition:opacity .25s ease, transform .25s ease, visibility 0s .25s !important}
 </style>
+<style>
+/* safety: never a narrow pop-up on a phone-width screen */
+@media (max-width:900px){ #pg .pg-card{left:0 !important; transform:none !important; width:100vw !important; top:0 !important; border-radius:0 !important} }
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
@@ -2586,7 +2590,8 @@ function onWidth(fn){
 </script>
 <script>
 /* say where you are going, then go: the new tab opens a beat after the words change */
-document.querySelectorAll('.end a[href="auto-extraction.html"]').forEach(function(a){
+/* switched off: Auto Extraction now opens like Search (pop-up on desktop, same tab on a phone) */
+[].forEach.call([],function(a){
   var label=a.textContent;
   a.addEventListener('click',function(e){
     if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button) return;
@@ -3962,7 +3967,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
             lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
             sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Read the idea'},
             reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
-            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4?v=4', poster:'diagram-walkthrough-poster.webp'} };
+            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4?v=5', poster:'diagram-walkthrough-poster.webp'} };
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return; card.dataset.film=b.dataset.ex;
     tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Read key decisions'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
@@ -4986,6 +4991,8 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
   x.addEventListener('click', close);
   pg.addEventListener('click', function(e){ if(e.target===pg) close(); });
   addEventListener('keydown', function(e){ if(e.key==='Escape' && pg.classList.contains('on')) close(); });
+  /* the pop-up is for wide screens: if the window becomes phone-width while it is open, open that page on its own instead */
+  addEventListener('resize', function(){ if(!pg.classList.contains('on') || innerWidth>=901) return; var u=''; try{ u=fr.contentWindow.location.href; }catch(e){} if(!u || u==='about:blank') u=fr.getAttribute('src'); location.href=u; });
   addEventListener('message', function(e){ var d=e.data||{}; if(d.pg==='close') close(); else if(d.pg==='open' && d.href) fr.src=d.href; else if(d.pg==='scroll') pg.classList.toggle('scrolled', d.y>24); else if(d.pg==='proto' && d.id){ close(); setTimeout(function(){ if(window.openProto) window.openProto(d.id); }, 120); } });
 })();
 </script>

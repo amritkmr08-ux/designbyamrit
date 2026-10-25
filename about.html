@@ -1728,6 +1728,8 @@ window.nudgeMark = function (host, go) {
   var target=document.querySelector(el.getAttribute('data-over'));
   if(!t||!target){ lift(); if(el.parentNode) el.parentNode.removeChild(el); return; }
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){ lift(); el.parentNode.removeChild(el); return; }
+  /* phone: the sentence would land below the screen and leave it blank for seconds, so the page opens directly */
+  if(innerWidth<=760){ lift(); el.parentNode.removeChild(el); document.documentElement.classList.remove('ldr-on'); return; }
 
   function place(){
     var r=target.getBoundingClientRect(), cs=getComputedStyle(target);

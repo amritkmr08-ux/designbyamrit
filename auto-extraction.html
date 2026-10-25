@@ -710,6 +710,27 @@ html.in-pop body{background:#F7F7F5}
 /* left panel: no foot; the mark and the end of the page already lead back */
 .rail .foot{display:none!important}
 </style>
+<style>
+/* the summary: one review told start to finish, set apart as a card so it reads as "the short version", before the case study goes deeper */
+.shell header .scn{max-width:900px;margin:44px 0 8px;background:#fff;border:1px solid #E3E3DF;border-radius:20px;overflow:hidden}
+.shell header section.scn{padding:0 !important;min-height:0 !important}
+.shell header .scn-fig{margin:0 !important;padding:0 !important;line-height:0}
+.shell header .scn-fig img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
+.shell header .scn-txt{padding:32px 40px 34px;max-width:780px}
+.shell header .scn p{font-family:"Inter",sans-serif;font-size:16px;line-height:1.7;color:#5F625C;margin:0 0 16px}
+.shell header .scn p.scn-k{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;font-family:"Poppins",sans-serif;font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:#6F716A}
+.shell header .scn p.scn-k b{font-weight:500;color:#3D5A45;background:#E8EFE9;border-radius:999px;padding:4px 10px;letter-spacing:.09em}
+.shell header .scn p.scn-end{font-family:"Poppins",sans-serif;font-size:19px;line-height:1.5;font-weight:500;letter-spacing:-.01em;color:#191A18;margin:24px 0 0}
+.shell header .scn-more{display:inline-flex;align-items:center;gap:8px;margin-top:26px;padding-top:18px;border-top:1px solid #E3E3DF;width:100%;font-family:"Inter",sans-serif;font-size:14px;line-height:20px;font-weight:500;color:#191A18;text-decoration:none}
+.shell header .scn-more i{font-style:normal;color:#9A9C96;transition:transform .2s ease}
+.shell header .scn-more:hover i{transform:translateY(2px);color:#191A18}
+@media (max-width:760px){ .shell header .scn{margin-top:32px;border-radius:14px} .shell header .scn-txt{padding:22px 20px 24px} .shell header .scn p{font-size:15px} .shell header .scn p.scn-end{font-size:17px} }
+.shell header .scn-pts{margin:26px 0 0;padding:0;border-top:1px solid #E3E3DF}
+.shell header .scn-pts div{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid #E3E3DF}
+.shell header .scn-pts dt{font-family:"Inter",sans-serif;font-size:14px;line-height:24px;font-weight:600;color:#191A18}
+.shell header .scn-pts dd{margin:0;font-family:"Inter",sans-serif;font-size:15px;line-height:1.65;color:#5F625C}
+@media (max-width:760px){ .shell header .scn-pts div{grid-template-columns:1fr;gap:4px} }
+</style>
 </head>
 <body>
 
@@ -758,6 +779,24 @@ html.in-pop body{background:#F7F7F5}
 <div class="tbar ae-listen hero-listen" id="tbar-ae" role="toolbar" aria-label="Listen to this case study">
       <button class="tb tb-play" type="button" aria-label="Listen to this case study"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Listen</span></button>
     </div>
+
+    <section class="scn reveal" aria-label="In short: what this case study is about">
+      <figure class="scn-fig"><img src="ae-scenario.webp" width="1672" height="941" alt="A reviewer at her desk at night, reading a long contract. Highlighted lines in the text glow and connect to small cards floating above it, each holding a value taken from the contract." loading="lazy"></figure>
+      <div class="scn-txt">
+        <p class="scn-k"><b>In short</b><span>What this case study is about</span></p>
+        <p>A legal team reviews contracts every day, some of them hundreds of pages long. The details that matter, like parties, dates and notice periods, sit deep inside the&nbsp;paragraphs.</p>
+        <p>AI changed the first half of that job. It reads the contract and brings those values up front in&nbsp;seconds.</p>
+        <p>But a reviewer can&rsquo;t sign off on a value just because the AI found it. She has to see the exact words. The old screen showed the answer and left her to hunt for the&nbsp;source.</p>
+        <p>So the design work was to bring the document back into the review. One click on a value scrolls the contract to the sentence it came from. She reads it, accepts or corrects it, and the next value comes to&nbsp;her.</p>
+        <dl class="scn-pts">
+          <div><dt>Before and after</dt><dd>Before, for every value she searched the contract herself, read around it, and came back to accept or fix it. Now one click takes her to the sentence, she decides, and the next value opens on its&nbsp;own.</dd></div>
+          <div><dt>When the AI is wrong</dt><dd>The model sometimes picks the wrong words or points to the wrong place. She can re-tag the right text in one step, and if the link to the passage fails, a fallback still shows the extracted text, so she is never&nbsp;stuck.</dd></div>
+          <div><dt>How I worked with AI</dt><dd>In 2024 I tested this with a Figma prototype. Today I build working prototypes in HTML with AI tools, so people react to the real thing. The review loop further down this page is one of&nbsp;them.</dd></div>
+        </dl>
+        <p class="scn-end">AI made the review faster. The design made it something a reviewer could&nbsp;trust.</p>
+        <a class="scn-more" href="#problem">The full story: how each step was designed <i aria-hidden="true">&darr;</i></a>
+      </div>
+    </section>
 
     <p class="hero-sub reveal">AI can read a contract and extract names, dates, clauses, and obligations
     in seconds. But someone still has to check whether those answers are right. At Sirion, I
@@ -1454,7 +1493,7 @@ function readAloud(barId, cardId){
   function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
     vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
   pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
-  function blocks(){ var out=[], els=card.querySelectorAll('h1, h2, p, h3, li'), SKIP='.rail, .kicker, .snapshot, figcaption, .ae-listen, .opt-lbl, .headline-nums, .ret, .end-cta, footer, .learned .n, .verdict .tag';
+  function blocks(){ var out=[], els=card.querySelectorAll('h1, h2, p, h3, li'), SKIP='.rail, .kicker, .snapshot, .scn-k, figcaption, .ae-listen, .opt-lbl, .headline-nums, .ret, .end-cta, footer, .learned .n, .verdict .tag';
     for(var i=0;i<els.length;i++){ var el=els[i];
       if(el.closest(SKIP)) continue;   /* section numbers, meta lines and diagram labels are for the eye, not the ear */
       if((el.textContent||'').trim()) out.push(el); }
