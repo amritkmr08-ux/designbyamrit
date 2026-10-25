@@ -2179,6 +2179,45 @@ a.site-mark{width:48px !important; height:48px !important; font-size:23px !impor
   background:rgba(255,255,255,.45) !important;
   -webkit-backdrop-filter:blur(11px) saturate(1.9); backdrop-filter:blur(11px) saturate(1.9)}
 .stage.sp .menu button:hover, .ov-x:hover{background:rgba(255,255,255,.7) !important}
+
+/* section number on the same line as its title: "03  What should the agent do?" (the number moves into the heading; its old line keeps only its spacing) */
+.ch > p.ch-n{font-size:0 !important; line-height:0 !important; height:0; letter-spacing:0 !important; overflow:visible}
+.ch > p.ch-n + h3[data-n]::before{content:attr(data-n); color:#8A8B85; font-weight:400; margin-right:.45em}
+
+/* ===== Sensitivity figures, one calm system: a soft tinted panel (no outline), white cards that read as product UI, small uppercase labels, no rules between rows ===== */
+html body .ov .w5c .vtl, html body .ov .w5c .st4, html body .ov .w5c .vren, html body .ov .w5c .vk, html body .ov .w5c .vfl{border:0 !important; background:#F4F3EF !important; border-radius:16px !important; padding:28px !important; box-shadow:none !important; margin:24px 0 32px !important}
+html body .ov .w5c .vk{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+/* small labels */
+html body .ov .w5c .st4-find .lab, html body .ov .w5c .st4-after, html body .ov .w5c .tl-br .sit, html body .ov .w5c .k-h, html body .ov .w5c .fl-t, html body .ov .w5c .vfl .fl-c > .fl-t{font-size:12px !important; line-height:18px !important; letter-spacing:.06em !important; text-transform:uppercase; color:#8A8B85 !important}
+/* white cards */
+html body .ov .w5c .tl-br, html body .ov .w5c .st4-ui, html body .ov .w5c .k-p, html body .ov .w5c .fl-q > div, html body .ov .w5c .fl-f{background:#fff !important; border:0 !important; border-radius:12px !important; box-shadow:0 1px 2px rgba(25,26,24,.05), 0 6px 18px -10px rgba(25,26,24,.18) !important}
+html body .ov .w5c .tl-br{padding:16px 18px !important}
+/* timeline */
+html body .ov .w5c .tl-fork{gap:12px !important; margin-top:6px}
+html body .ov .w5c .tl-br b{font-size:15px !important; margin:8px 0 4px !important}
+/* four responses: the finding as a headline, rows without rules */
+html body .ov .w5c .st4{padding:28px 28px 20px !important}
+html body .ov .w5c .st4-find{font-size:15px !important; line-height:23px !important; padding-bottom:20px !important; color:#191A18}
+html body .ov .w5c .st4-row{border-top:0 !important; padding:8px 0 !important; grid-template-columns:170px 1fr !important; gap:20px !important; align-items:center !important}
+html body .ov .w5c .st4-l b{font-size:15px !important}
+html body .ov .w5c .st4-ui{padding:14px 16px !important}
+html body .ov .w5c .st4-ui.q{border-style:solid !important}
+html body .ov .w5c .st4-ui.i{box-shadow:inset 3px 0 0 #3D5A45, 0 1px 2px rgba(25,26,24,.05), 0 6px 18px -10px rgba(25,26,24,.18) !important}
+html body .ov .w5c .st4-after{border-top:0 !important; margin:16px 0 4px !important; padding-top:0 !important}
+html body .ov .w5c .st4-ui .btn{background:#fff}
+/* knows 99 vs 3 */
+html body .ov .w5c .k-p{padding:20px !important}
+/* contracts */
+html body .ov .w5c .vren .rn-f{border-top:0 !important; margin-top:8px}
+/* what the agent weighs */
+html body .ov .w5c .fl-q > div{padding:14px 16px !important}
+html body .ov .w5c .fl-f{padding:14px 16px !important; display:block}
+html body .ov .w5c .fl-loop{border-top:0 !important}
+@media (max-width:600px){ html body .ov .w5c .vtl, html body .ov .w5c .st4, html body .ov .w5c .vren, html body .ov .w5c .vk, html body .ov .w5c .vfl{padding:18px !important} html body .ov .w5c .vk{grid-template-columns:1fr} html body .ov .w5c .st4-row{grid-template-columns:1fr !important; gap:8px !important} }
+
+/* situations read as sentences */
+html body .ov .w5c .tl-br .sit{text-transform:none !important; letter-spacing:0 !important; font-size:13px !important}
+html body .ov .w5c .fl-r{background:#fff}
 </style>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://amritkmr08-ux.github.io/designbyamrit/sensitivity.html" />
@@ -2521,133 +2560,140 @@ function onWidth(fn){
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Sensitivity">
   <button class="ov-x" id="ovX" type="button" aria-label="Close">&times;</button>
   <div class="ov-in"><div class="md w5c">
-      <h2>Sensitivity</h2>
+      <h2>When AI knows the answer, how does it know when to&nbsp;speak?</h2>
       <p class="k">How I think &middot; Own work &middot; 2023&ndash;26</p>
       <hr>
-      <p class="tension">The same information can mean something very different depending on when it reaches&nbsp;you.</p>
+      <p>The same information can mean something very different depending on when it reaches&nbsp;you.</p>
       <figure><img src="sens-3am-call.webp" style="max-width:100%;border-radius:14px;border:0" alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" loading="lazy"></figure>
-      <p>Your wife calls at 2 in the afternoon. You might answer, or call back&nbsp;later.</p>
-      <p>The same call at 3 in the morning, and you pick up at&nbsp;once.</p>
-      <p>Same person. Same call. What changed is how much attention it deserves, and you knew that without&nbsp;thinking.</p>
-      <p>Could an AI agent make that judgment? When does a finding need you now, and when can it&nbsp;wait?</p>
+      <p>Your wife calls at 2 in the afternoon. You might answer or call back&nbsp;later.</p>
+      <p>But if she calls at 3 in the morning, you&rsquo;d probably pick up immediately. Something might be&nbsp;wrong.</p>
+      <p>Same person. Same call. Yet you react differently because you understand the&nbsp;situation.</p>
+      <p>We make these judgments all the time. But can an AI agent do the same? When should it interrupt us, and when should it stay&nbsp;quiet?</p>
 
       <section class="ch">
         <p class="ch-n">01</p>
         <h3>Where it started</h3>
         <figure><img src="sens-contract-page-g.webp" style="max-width:100%;border-radius:14px;border:0" alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy"></figure>
-        <p>I was designing an AI-first contract tool. The agent reads the agreements, links clauses to amendments to invoices, and brings forward what someone should act&nbsp;on.</p>
-        <p>By morning it might have 200 findings. Show them all, and reading contracts has become reading&nbsp;AI.</p>
-        <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 conclusions by morning. A person can act on a&nbsp;handful.</figcaption></figure>
-        <p>Show the top five, then? But important isn&rsquo;t the same as urgent. One change can wait three months. Another matters in fifteen&nbsp;minutes.</p>
-        <p class="dd"><b>The real question</b> wasn&rsquo;t what to show. It was when, to whom, and how&nbsp;loudly.</p>
+        <p>I was designing an AI-first contract tool. The agent reads agreements, connects clauses to amendments and invoices, and identifies things people might need to act&nbsp;on.</p>
+        <p>Imagine opening the tool in the morning to find 200 AI-generated&nbsp;insights.</p>
+        <figure class="v200" role="img" aria-label="200 small dots for the agent's conclusions, five of them highlighted"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 insights by morning. A person can act on a&nbsp;handful.</figcaption></figure>
+        <p>You&rsquo;d still have to read through everything to work out what matters. We&rsquo;d simply replaced reading contracts with reading&nbsp;AI.</p>
+        <p>Showing only the top five seemed reasonable. But important isn&rsquo;t always urgent. One finding can wait three months. Another might affect a payment going out in fifteen&nbsp;minutes.</p>
+        <p class="dd">The question wasn&rsquo;t just what to show. It was when, to whom, and how&nbsp;loudly.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">02</p>
-        <h3>One finding, different situations</h3>
-        <p>At 9 AM the agent reads Acme&rsquo;s payment term as Net&nbsp;60. At 11 AM an amendment arrives: it&rsquo;s Net&nbsp;45.</p>
+        <h3>Same finding, different urgency</h3>
+        <p>At 9 AM, the agent reads Acme&rsquo;s payment term as Net&nbsp;60. At 11 AM, an amendment arrives changing it to Net&nbsp;45. Now consider two&nbsp;situations.</p>
         <div class="vtl" role="img" aria-label="Timeline: at 9:00 the agent reads Net 60; at 11:00 Amendment 3 shows Net 45. If the next payment is months away, it stays quiet. If Finance pays at noon, it interrupts.">
-          <div class="tl-ev"><span class="tm">9:00</span><span class="tx">The agent reads the payment term as Net&nbsp;60</span></div>
-          <div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. The term is Net&nbsp;45</span></div>
+          <div class="tl-ev"><span class="tm">9:00</span><span class="tx">Payment term: Net&nbsp;60</span></div>
+          <div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. Payment term: Net&nbsp;45</span></div>
           <div class="tl-fork">
-            <div class="tl-br"><span class="sit">If the next payment is three months away</span><b>Quiet</b><span class="out">Update, keep the evidence, tell no&nbsp;one</span></div>
-            <div class="tl-br hot"><span class="sit">If Finance pays at 12:00 on the old term</span><b>Interrupt</b><span class="out">Show it before the payment goes&nbsp;out</span></div>
+            <div class="tl-br"><span class="sit">Payment is three months away</span><b>Quiet</b><span class="out">Update the term quietly. Keep the evidence. No need to interrupt&nbsp;anyone.</span></div>
+            <div class="tl-br hot"><span class="sit">Finance is paying at noon using the old term</span><b>Interrupt</b><span class="out">Show the change before the payment goes&nbsp;out.</span></div>
           </div>
         </div>
-        <p>The payment term changed in both cases. Only one needs immediate&nbsp;attention.</p>
-        <p class="dd"><b>Decision 1.</b> How urgently we interrupt depends on the situation, not just the&nbsp;finding.</p>
+        <p>The finding hasn&rsquo;t changed. What changed is how much attention it&nbsp;deserves.</p>
+        <p class="dd"><b>Decision 1.</b> Urgency depends on the situation, not just the&nbsp;finding.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">03</p>
-        <h3>Same finding, four responses</h3>
-        <p>I explored how the agent should respond to the same change in different&nbsp;situations.</p>
+        <h3>What should the agent do?</h3>
+        <p>This made me question whether changing the appearance of an alert was enough. Sometimes the agent should simply update information. Sometimes it needs to interrupt. And sometimes it should ask, or stop warning once the issue is&nbsp;handled.</p>
+        <p>I explored four responses to the same&nbsp;finding.</p>
         <div class="st4" role="group" aria-label="One finding shown four ways: quiet, interrupt, ask, and adapt after a person responds">
-          <div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes the payment term for Acme from Net&nbsp;60 to Net&nbsp;45.</div>
+          <div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes Acme&rsquo;s payment term from Net&nbsp;60 to Net&nbsp;45.</div>
           <div class="st4-row">
-            <div class="st4-l"><b>Quiet</b><span>Next payment is three months away</span></div>
-            <div class="st4-ui q"><span class="fld">Payment term</span><span class="val">Net 45</span><span class="src">Updated 11:02 from Amendment&nbsp;3</span></div>
+            <div class="st4-l"><b>Quiet</b><span>Nothing needs attention yet. Next payment is three months&nbsp;away.</span></div>
+            <div class="st4-ui q"><span class="fld">Payment term</span><span class="val">Net 45</span><span class="src">Updated at 11:02 from Amendment&nbsp;3.</span></div>
           </div>
           <div class="st4-row">
-            <div class="st4-l"><b>Interrupt</b><span>A payment is being processed at noon</span></div>
+            <div class="st4-l"><b>Interrupt</b><span>Someone is about to act. A payment is being processed at&nbsp;noon.</span></div>
             <div class="st4-ui i"><p>Today&rsquo;s payment to Acme uses Net&nbsp;60. Amendment&nbsp;3 changed it to Net&nbsp;45.</p><span class="btn pri">Review before paying</span><span class="btn">Already handled</span></div>
           </div>
           <div class="st4-row">
-            <div class="st4-l"><b>Ask</b><span>The agent can&rsquo;t see payment activity</span></div>
-            <div class="st4-ui a"><p>Is a payment to Acme planned this week? The term changed to Net&nbsp;45, and I can&rsquo;t see your payment&nbsp;schedule.</p><span class="btn">Yes, this week</span><span class="btn">No</span><span class="btn">Not mine</span></div>
+            <div class="st4-l"><b>Ask</b><span>Something important is missing. The agent can&rsquo;t see when the next payment is&nbsp;due.</span></div>
+            <div class="st4-ui a"><p>Is a payment to Acme planned this week? The term changed to Net&nbsp;45, but I can&rsquo;t see your payment&nbsp;schedule.</p><span class="btn">Yes, this week</span><span class="btn">No</span><span class="btn">Not mine</span></div>
           </div>
           <p class="st4-after">After a person responds</p>
           <div class="st4-row">
-            <div class="st4-l"><b>Adapt</b><span>Finance confirms it&rsquo;s already handled</span></div>
+            <div class="st4-l"><b>Adapt</b><span>Someone has already handled it. Finance confirms the change is taken care&nbsp;of.</span></div>
             <div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won&rsquo;t raise this again unless the payment details&nbsp;change.</span></div>
           </div>
         </div>
-        <p class="dd"><b>The design decision:</b> Don&rsquo;t just change how an alert looks. Change what the agent does: update quietly, interrupt, ask, or stop warning once someone has handled&nbsp;it.</p>
-        <p>But asking can also waste valuable time. If a payment is going out in fifteen minutes, the agent may need to warn someone rather than wait for an&nbsp;answer.</p>
+        <p>These aren&rsquo;t just four ways of displaying an alert. They&rsquo;re four different things the agent can&nbsp;do.</p>
+        <p>But there&rsquo;s a catch. Asking also takes time. If a payment is going out in fifteen minutes, waiting for an answer may be worse than&nbsp;interrupting.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">04</p>
-        <h3>Where judgment fails</h3>
-        <p>Contract A expires in two days, but the vendor is already being offboarded. Contract B expires in ten, but its renewal needs a decision this&nbsp;week.</p>
+        <h3>When the agent gets it wrong</h3>
+        <p>Consider two&nbsp;contracts.</p>
         <div class="vren" role="img" aria-label="Contract A expires in 2 days but its vendor is being offboarded. Contract B expires in 10 days but a negotiation needs a decision this week. By date A comes first; by situation B does.">
-          <div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">2 days left &middot; vendor already being&nbsp;offboarded</span></div></div>
-          <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">10 days left &middot; negotiation needs a decision this&nbsp;week</span></div></div>
+          <div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">Expires in two days. The vendor is already being&nbsp;offboarded.</span></div></div>
+          <div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">Expires in ten days. The renewal needs a decision this&nbsp;week.</span></div></div>
           <div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
         </div>
-        <p>Sort by date and A comes first. Anyone who knows the situation would pick B. The agent read every document correctly and still got the priority&nbsp;wrong.</p>
-        <p>More context doesn&rsquo;t fix this on its own. An agent can know 99 things about a contract and miss the one that matters: Finance pays at&nbsp;noon.</p>
+        <p>Sort by date and Contract A comes first. But anyone who knows the situation would prioritise B. The agent could read every document correctly and still get the priority&nbsp;wrong.</p>
+        <p>I initially thought more context might solve this. But an agent can know 99 things about a contract and still miss the one fact that matters: Finance is paying at&nbsp;noon.</p>
         <div class="vk" role="img" aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call.">
           <div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at&nbsp;noon</p><p class="k-out">Stays quiet. Wrong&nbsp;call.</p></div>
           <div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Better-informed&nbsp;call.</p></div>
         </div>
-        <p>Some facts never reach the system at all. A renewal agreed on a phone call. A supplier replaced after a hallway conversation. So the agent should show what it knows, mark what it has guessed, and make it easy to correct. &ldquo;We&rsquo;re already on it&rdquo; isn&rsquo;t a dismissal. It&rsquo;s the context the agent was&nbsp;missing.</p>
-        <p class="dd"><b>Decision 2.</b> Don&rsquo;t mistake more information for better judgment. Look for the one fact that would change the call, and show when it&rsquo;s&nbsp;missing.</p>
+        <p>Some facts may never reach the system. A renewal agreed over the phone. A supplier replaced after a meeting. An issue someone has already&nbsp;resolved.</p>
+        <p>The agent needs to be clear about what it knows and make it easy for people to correct it. &ldquo;We&rsquo;re already on it&rdquo; isn&rsquo;t just dismissing an alert. It&rsquo;s giving the agent information it didn&rsquo;t&nbsp;have.</p>
+        <p class="dd"><b>Decision 2.</b> More context doesn&rsquo;t always mean better judgment. What matters is the fact that could change the&nbsp;decision.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">05</p>
-        <h3>What the agent weighs</h3>
-        <p>Before it speaks, the agent weighs four things: what it costs to miss this, when it starts to matter, whether it knows enough to judge, and who owns the&nbsp;decision.</p>
+        <h3>What the agent needs to consider</h3>
+        <p>These examples helped me narrow the problem to four&nbsp;questions.</p>
         <div class="vfl" role="img" aria-label="A finding passes through four questions: consequence, time, enough to judge, and people. The answer picks a response: quiet, surface, ask or interrupt. A person's reply goes back in as context.">
           <div class="fl-c"><span class="fl-t">Finding</span><span class="fl-f">An amendment changes the payment&nbsp;term</span></div>
           <span class="fl-ar" aria-hidden="true">&rarr;</span>
-          <div class="fl-q"><div><b>Consequence</b><span>What if it&rsquo;s missed? Can it be&nbsp;undone?</span></div><div><b>Time</b><span>When does it start to&nbsp;matter?</span></div><div><b>Enough to judge</b><span>Is the deciding fact&nbsp;missing?</span></div><div><b>People</b><span>Who decides? Has someone taken&nbsp;it?</span></div></div>
+          <div class="fl-q"><div><b>Consequence</b><span>What happens if this is missed? Can it be&nbsp;undone?</span></div><div><b>Time</b><span>When does it start to&nbsp;matter?</span></div><div><b>Enough to judge</b><span>Is the information needed to make the decision&nbsp;missing?</span></div><div><b>People</b><span>Who owns the decision? Has someone already&nbsp;acted?</span></div></div>
           <span class="fl-ar" aria-hidden="true">&rarr;</span>
           <div class="fl-c"><span class="fl-t">Response</span><span class="fl-r">Quiet</span><span class="fl-r">Surface</span><span class="fl-r">Ask</span><span class="fl-r hot">Interrupt</span></div>
-          <p class="fl-loop">&#8634;&ensp;A person&rsquo;s reply goes back in as context, and the next decision&nbsp;changes</p>
+          <p class="fl-loop">&#8634;&ensp;When a person responds, that answer becomes part of the context for the next&nbsp;decision.</p>
         </div>
-        <p>My earlier work proposed five levels of attention, from Nothing to Interrupt. They still hold. But they&rsquo;re the visible end of the judgment, not the judgment&nbsp;itself.</p>
+        <p>Together, these shape whether the agent stays quiet, shows something, asks, or&nbsp;interrupts.</p>
+        <p>Earlier, I&rsquo;d explored five levels of attention, from Nothing to Interrupt. I still find them useful, but my thinking has shifted. The level of attention is the outcome. The harder problem is deciding which response the situation&nbsp;deserves.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">06</p>
-        <h3>What I tested</h3>
-        <p>I built a small clickable prototype around the Net&nbsp;60 to Net&nbsp;45 change. Three situations: a payment at noon today, one in three weeks, and one where the reviewer doesn&rsquo;t know the date. For each, three ways the AI could tell you: stop me, a small sign, or ask&nbsp;me.</p>
-        <p>Seven people tried it, in two rounds, about two minutes&nbsp;each.</p>
+        <h3>What testing changed</h3>
+        <p>I built a small clickable prototype around the Net&nbsp;60 to Net&nbsp;45 change. People saw three situations: a payment going out at noon, one in three weeks, and one where the payment date was unknown. For each, they chose whether the AI should interrupt, show a small sign, or ask a&nbsp;question.</p>
+        <p>Seven people tried it across two rounds, about two minutes&nbsp;each.</p>
         <figure><img src="sens-test-screen-g.webp" style="max-width:100%;border-radius:14px;border:0" alt="The test screen: the AI found Acme must now be paid within 45 days instead of 60. Situation: Finance is paying Acme at 12:00 today. Three choices: Stop me, Small sign, Ask Finance for me" loading="lazy"><figcaption>What people saw in round two, for the noon-today&nbsp;moment.</figcaption></figure>
-        <p>I expected urgent to interrupt, distant to stay quiet, and unknown to trigger a question. The first two held. The third&nbsp;didn&rsquo;t.</p>
+        <p>I expected the urgent payment to trigger an interruption, the distant one to stay quiet, and the unknown date to trigger a question. The first two went as expected. The third surprised&nbsp;me.</p>
         <p>Nobody wanted the AI asking them when Finance would pay. They didn&rsquo;t know. Finance&nbsp;did.</p>
-        <p class="tst-turn">I had designed for missing information without asking who could supply&nbsp;it.</p>
-        <div class="tst-path" role="group" aria-label="How the Ask response changed: it first asked the user, testing showed that was the wrong person, so it now asks Finance"><div><b>Initial design</b><span>Ask the user</span></div><i aria-hidden="true">&rarr;</i><div><b>Testing insight</b><span>Wrong person</span></div><i aria-hidden="true">&rarr;</i><div><b>Revised design</b><span>Ask Finance</span></div></div>
-        <p class="tst-k">What changed after round one</p>
+        <p>I&rsquo;d been thinking about missing information without considering who could actually provide it. That changed the&nbsp;design.</p>
+        <div class="tst-path" role="group" aria-label="How the Ask response changed: it first asked the user, testing showed that was the wrong person, so it now asks Finance"><div><b>Before</b><span>Ask the user</span></div><i aria-hidden="true">&rarr;</i><div><b>What I learned</b><span>The user may not&nbsp;know</span></div><i aria-hidden="true">&rarr;</i><div><b>After</b><span>Ask Finance for me</span></div></div>
+        <p class="tst-k">Testing also revealed two other things</p>
         <ol class="tst-rules">
-          <li><b>Interrupt with proof.</b> People wanted the contract text before trusting an urgent&nbsp;warning.</li>
-          <li><b>Let people come back.</b> The quiet sign needed a &ldquo;Remind me later&rdquo;.</li>
-          <li><b>Ask the right person.</b> &ldquo;Ask me&rdquo; became &ldquo;Ask Finance for&nbsp;me&rdquo;.</li>
+          <li><b>Show the proof.</b> People wanted to see the contract text before trusting an urgent&nbsp;warning.</li>
+          <li><b>Let people return later.</b> A quiet notification needed a &ldquo;Remind me later&rdquo;&nbsp;option.</li>
         </ol>
-        <p class="dd"><b>Decision 3.</b> Weigh ownership, not just&nbsp;urgency.</p>
-        <p class="tst-note">Small test, roles not recorded. Early direction, not a validated&nbsp;rule.</p>
+        <p class="dd"><b>Decision 3.</b> Knowing who owns the decision matters as much as knowing how urgent it&nbsp;is.</p>
+        <p class="tst-note">This was a small test, and I didn&rsquo;t record participants&rsquo; roles. These are early design directions, not validated&nbsp;rules.</p>
+        <p>But one thing stayed with&nbsp;me.</p>
+        <p class="tst-turn">I had designed for missing information without asking who could supply&nbsp;it.</p>
       </section>
 
       <section class="ch">
         <p class="ch-n">07</p>
         <h3>Where this stands</h3>
-        <p>None of this is new. Horvitz weighed interruption against delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999); Dey defined context in <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">Understanding and Using Context</a> (2001); Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Human-AI Guidelines</a> (2019) cover timing and&nbsp;correction.</p>
-        <p>What&rsquo;s new is that agents now find things on their own, across hundreds of documents, while still missing what people decided outside the system. The agent knows the term changed. It may not know Finance already&nbsp;handled&nbsp;it.</p>
+        <p>The idea that timing and context affect attention isn&rsquo;t new. Horvitz explored interruption versus delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" target="_blank" rel="noopener">Attention-Sensitive Alerting</a> (1999). Dey examined <a href="https://www.cs.cmu.edu/~anind/context.html" target="_blank" rel="noopener">context</a> in 2001, and Microsoft&rsquo;s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" target="_blank" rel="noopener">Human-AI Interaction Guidelines</a> (2019) address timing and&nbsp;correction.</p>
+        <p>What&rsquo;s different now is that AI agents can find hundreds of things on their own, across documents and systems. But finding something doesn&rsquo;t mean knowing what someone should do about&nbsp;it.</p>
+        <p>The agent may know a payment term changed. It may not know Finance already handled it. It may know a contract is expiring. It may not know the supplier is being&nbsp;replaced.</p>
+        <p>The agent can be right about what it found and still be wrong about what matters. That&rsquo;s the part I&rsquo;m interested in designing&nbsp;for.</p>
       </section>
 
-      <p class="take">How can an agent judge whether a finding deserves someone&rsquo;s attention, when the most important part of the situation may be something it doesn&rsquo;t&nbsp;know?</p>
+      <p class="take">How can an agent decide when something deserves our attention, especially when the most important part of the situation might be something it doesn&rsquo;t&nbsp;know?</p>
       <div class="end idx"><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a><a class="back" href="#" id="w5back"><i>&larr;</i>&nbsp;Back to the samples</a></div>
 </div><div class="md old"><picture class="md-banner">
 <img src="sens-banner-plain.webp" width="1360" height="754" loading="lazy" decoding="async"
@@ -4564,6 +4610,43 @@ p.dd{margin:26px 0 0 !important; padding:14px 18px; border-radius:12px; backgrou
 .tst-path > div{flex:1; text-align:center} .tst-path b{display:block; font-family:Poppins, sans-serif; font-weight:500; font-size:14px; line-height:20px; color:#191A18}
 .tst-path span{display:block; margin-top:4px; font-size:12px; line-height:18px; color:#6F716A} .tst-path i{font-style:normal; color:#6F716A}
 @media (max-width:760px){ .tst-path{gap:6px; padding:14px 10px} }
+
+/* Sensitivity: the three test situations as a short plain list */
+.tst-sits{margin:12px 0 0; padding-left:22px; display:grid; gap:6px; color:var(--muted)} .tst-sits li{margin:0}
+
+.take-after{margin:16px 0 0; max-width:60ch; color:var(--muted)}
+
+/* Sensitivity highlights use the same pull-quote style as Search: a dark bar on the left, bold grey text, no box */
+html body p.dd{background:none !important; border-radius:0 !important; border-left:2px solid #191A18 !important; padding:4px 0 4px 18px !important; margin:28px 0 !important; font-weight:600 !important; color:#5F625C !important; max-width:60ch}
+html body p.dd b{font-weight:600 !important; color:inherit !important; margin-right:0 !important}
+
+/* ===== Sensitivity write-up, visual polish: one clear type scale, three kinds of emphasis that look different, figures in one system, a closing that echoes the opening ===== */
+/* section titles: a real step above body text */
+html body .ov .w5c section.ch > h3{font-size:24px !important; line-height:32px !important; font-weight:500 !important; letter-spacing:-.015em !important}
+html body .ov .w5c section.ch{margin-top:88px !important}
+/* Decisions: a small green label, then the decision as a statement in the display face */
+html body .ov .w5c p.dd{border-left:0 !important; padding:0 !important; margin:36px 0 !important; font-family:var(--display) !important; font-size:19px !important; line-height:28px !important; font-weight:500 !important; color:#191A18 !important; max-width:34em}
+html body .ov .w5c p.dd b{display:block; font-family:var(--font) !important; font-size:12px !important; line-height:18px !important; font-weight:600 !important; letter-spacing:.08em; text-transform:uppercase; color:#3D5A45 !important; margin:0 0 6px !important}
+/* the one insight the whole piece turns on: the largest line inside the story */
+html body .ov .w5c p.tst-turn{border:0 !important; padding:0 !important; margin:40px 0 !important; max-width:none !important; font-family:var(--display) !important; font-size:26px !important; line-height:34px !important; font-weight:500 !important; letter-spacing:-.015em; color:#191A18 !important}
+html body .ov .w5c p.tst-turn::before{content:"\201C"; display:block; font-size:56px; line-height:40px; color:#E2C9A6; margin-bottom:4px}
+/* before / learned / after: the same tinted panel and white cards as the other figures */
+html body .ov .w5c .tst-path{border:0 !important; background:#F4F3EF !important; border-radius:16px !important; padding:20px !important; gap:10px !important; max-width:none !important; margin:28px 0 !important}
+html body .ov .w5c .tst-path > div{background:#fff; border-radius:12px; padding:14px 12px; box-shadow:0 1px 2px rgba(25,26,24,.05), 0 6px 18px -10px rgba(25,26,24,.18)}
+html body .ov .w5c .tst-path > div:last-child{box-shadow:inset 0 0 0 1px #3D5A45, 0 6px 18px -10px rgba(25,26,24,.18)}
+html body .ov .w5c .tst-path b{font-size:12px !important; line-height:18px !important; letter-spacing:.06em; text-transform:uppercase; color:#8A8B85 !important; font-family:var(--font) !important; font-weight:500 !important}
+html body .ov .w5c .tst-path span{font-family:var(--display) !important; font-size:15px !important; line-height:22px !important; color:#191A18 !important; margin-top:6px !important}
+html body .ov .w5c .tst-k{font-size:12px !important; line-height:18px !important; letter-spacing:.08em; text-transform:uppercase; font-family:var(--font) !important; font-weight:600 !important; color:#8A8B85 !important; margin-top:36px !important}
+/* captions and the small-test note: one quiet style */
+html body .ov .w5c figcaption, html body .ov .w5c p.tst-note{font-size:13px !important; line-height:20px !important; color:#8A8B85 !important}
+/* closing question: sits on a peach block on the right, echoing the opening */
+@media (min-width:901px){
+  html body .ov .w5c p.take{position:relative; margin:104px 0 56px !important; padding:56px 0 56px 56px !important; font-size:28px !important; line-height:38px !important; max-width:none !important; z-index:0}
+  html body .ov .w5c p.take::before{content:""; position:absolute; z-index:-1; left:0; top:0; bottom:0; right:-76px; background:var(--band,#F5E9DA); border-radius:16px 0 0 16px}
+}
 </style>
+<script>/* copy each section number into its heading so they share one line */
+document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextElementSibling; if(!h || h.tagName!=='H3') return;
+  var t=''; n.childNodes.forEach(function(c){ if(c.nodeType===3) t+=c.textContent; }); t=t.trim(); if(t) h.setAttribute('data-n', t); });</script>
 </body>
 </html>
