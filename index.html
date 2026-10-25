@@ -1719,6 +1719,15 @@ html body .ov #w5 .fl-r{background:#fff}
 ::highlight(reads){background-color:rgba(61,90,69,.16);color:#191A18}
 ::highlight(readw){background-color:#A9C9B0;color:#191A18}
 </style>
+<style>
+/* hero: a way to the About page, right after the line on years in design */
+.hero .hero-about{margin:24px 0 0}
+@media (max-width:760px){ .hero .hero-about{margin-top:18px} }
+</style>
+<style>
+/* footer: the chapter bar stays away, even when the pointer comes near the bottom of the screen */
+html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.on:hover{opacity:0 !important; visibility:hidden !important; pointer-events:none !important; transform:translate(-50%,16px) !important; transition:opacity .25s ease, transform .25s ease, visibility 0s .25s !important}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
@@ -1734,6 +1743,7 @@ html body .ov #w5 .fl-r{background:#fff}
     <h1 class="r" id="hero-line">I&#8217;ve learnt enterprise users won&#8217;t act on AI answers they can&#8217;t verify.</h1>
     <p class="r" id="hero-sub">So my work focuses on building that trust: showing what has changed, what else it affects, and what needs their attention first.</p>
     <p class="r hero-meta">Senior product designer at Sirion. Ex&nbsp;Airtel.<br><span class="meta-yrs">13 years in design, <span class="meta-ai">the last 3 on AI</span></span></p>
+    <p class="r hero-about"><a class="wp-more" href="about.html">About me</a></p>
     </div>
   <!-- the movie: one company to the five questions, scrubbed by scroll: the hero ends on a question; scrolling answers it, one picture per question -->
     <section class="cine" id="cine" aria-labelledby="cine-h">
@@ -1863,7 +1873,7 @@ html body .ov #w5 .fl-r{background:#fff}
       <button type="button" class="wp-x" aria-label="Close" data-close><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
       <div class="wp-head"><p class="wp-tag"><b id="wp-n">01</b><span id="wp-name">Search</span><span class="wp-ai">AI-built prototype</span></p><p class="wp-stat" id="wp-stat"></p><div id="wp-ico" hidden></div></div>
       <div class="wp-stage" id="wp-stage"></div>
-      <div class="wp-row" id="wp-row"><a class="wp-why" id="wp-why" href="#" data-open="w4">Why it&rsquo;s built this way</a><a class="wp-more" id="wp-more" href="#" data-open="w4">Key decisions</a><span class="wp-note" id="wp-note" hidden>Case study isn&rsquo;t public yet</span></div>
+      <div class="wp-row" id="wp-row"><a class="wp-why" id="wp-why" href="#" data-open="w4">Why it&rsquo;s built this way</a><a class="wp-more" id="wp-more" href="#" data-open="w4">Read key decisions</a><span class="wp-note" id="wp-note" hidden>Case study isn&rsquo;t public yet</span></div>
     </article>
     <article class="card conf" id="wc" hidden aria-label="Confidential case study">
       <div class="conf-art" aria-hidden="true"></div>
@@ -1966,7 +1976,7 @@ html body .ov #w5 .fl-r{background:#fff}
       <p class="k" id="wv-k" hidden></p>
       <figure class="wv-vid"><video id="wvv" playsinline preload="none"></video>
 </figure>
-      <div class="wv-row" id="wv-row"><a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Key decisions</span><span class="wv-r">&rarr;</span></a></div>
+      <div class="wv-row" id="wv-row"><a class="wv-more" href="#" data-open="w4" id="wv-more"><span>Read key decisions</span><span class="wv-r">&rarr;</span></a></div>
       <div class="end idx wv-end"><a class="back" href="#" data-close><i>&larr;</i>&nbsp;Back to the work</a>
         <div class="wv-ctl" id="wv-ctl" data-s="paused">
           <svg class="wc-ring" aria-hidden="true"><path class="wc-track"/><path class="wc-prog" pathLength="100"/></svg>
@@ -3947,15 +3957,15 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
 (function(){
   var card=document.getElementById('wv'); if(!card) return;
   var v=document.getElementById('wvv'), tag=document.getElementById('wv-tag'), h=document.getElementById('wv-h'), more=document.getElementById('wv-more');
-  var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', href:'search.html', moreT:'Key decisions'},
+  var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', href:'search.html', moreT:'Read key decisions'},
             proof:{n:'02', name:'Proof', q:'Can I see the exact words a person wrote?', src:'proof-walkthrough.mp4', poster:'proof-walkthrough-poster.webp', href:'auto-extraction.html'},
             lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
             sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Read the idea'},
             reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
-            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4', poster:'diagram-walkthrough-poster.webp', rest:12} };
+            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4?v=4', poster:'diagram-walkthrough-poster.webp'} };
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return; card.dataset.film=b.dataset.ex;
-    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Key decisions'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
+    tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Read key decisions'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
     if(v.getAttribute('src')!==c.src){ v.setAttribute('poster', c.poster); v.setAttribute('src', c.src); v.load(); }   /* load() so the cover shows at once, not a dark frame */
     try{ speechSynthesis.cancel(); }catch(e){} v.currentTime=0; var p=v.play(); if(p && p.catch) p.catch(function(){}); }); });
   more.addEventListener('click', function(){ v.pause(); });
@@ -4800,7 +4810,7 @@ html body a.mark{width:52px !important; height:52px !important; font-size:25px !
     var why=document.getElementById('wp-why');
     var l=p.querySelector('.prose p.end a:not(.ex-btn)');
     delete more.dataset.vid; more.classList.remove('vid');
-    if(l){ more.hidden=false; why.hidden=false; note.hidden=true; more.textContent=l.textContent;
+    if(l){ more.hidden=false; why.hidden=false; note.hidden=true; more.textContent=/^\s*Key decisions\s*$/i.test(l.textContent) ? 'Read key decisions' : l.textContent;
       if(l.dataset.open){ more.dataset.open=l.dataset.open; more.setAttribute('href','#'); more.removeAttribute('target'); }
       else { delete more.dataset.open; more.setAttribute('href', l.getAttribute('href')); if(l.target) more.target=l.target; else more.removeAttribute('target'); }
       if(more.dataset.open){ why.dataset.open=more.dataset.open; why.setAttribute('href','#'); why.removeAttribute('target'); } else { delete why.dataset.open; why.setAttribute('href', more.getAttribute('href')); if(more.target) why.target=more.target; else why.removeAttribute('target'); } }
