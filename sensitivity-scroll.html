@@ -345,6 +345,46 @@ p.end-ai a.ai-proto{color:#191A18!important;font-weight:500}
 }
 
 </style>
+<style>
+/* phone: the chapters live in a pill in the top bar; tap it for the full list */
+@media (max-width:1080px){
+  .mc-btn{display:flex;align-items:center;gap:8px;min-width:0;flex:1;margin:0 0 0 14px;padding:8px 12px 8px 14px;border:1px solid #E3E3DF;border-radius:999px;background:#fff;font:500 13px/18px Inter,sans-serif;color:#191A18;cursor:pointer;text-align:left}
+  .mc-btn .mc-n{color:#9A9C96;font-variant-numeric:tabular-nums;flex:none}
+  .mc-btn .mc-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mc-btn .mc-c{flex:none;color:#6F716A;transition:transform .25s}
+  .mc-btn .mc-bar{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#191A18;transform-origin:0 50%;transform:scaleX(var(--mcp,0))}
+  .mc-scrim{position:fixed;inset:0;z-index:80;background:rgba(25,26,24,.32);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+  .mc-sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;background:#F7F7F5;border-radius:20px 20px 0 0;padding:10px 24px 28px;box-shadow:0 -12px 40px -16px rgba(25,26,24,.35);transform:translateY(105%);transition:transform .32s cubic-bezier(.22,.61,.36,1)}
+  html.mc-open .mc-scrim{opacity:1;visibility:visible} html.mc-open .mc-sheet{transform:none}
+  .mc-grab{width:36px;height:4px;border-radius:2px;background:#D2D2CD;margin:0 auto 16px}
+  .mc-k{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px;font:500 11px/16px Poppins,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#6F716A}
+  .mc-k span{letter-spacing:0;text-transform:none;font:400 12px/16px Inter,sans-serif;color:#9A9C96}
+  .mc-list{list-style:none;margin:0;padding:0}
+  .mc-list li{position:relative;padding-left:30px}
+  .mc-list li+li{margin-top:4px}
+  .mc-list li::before{content:"";position:absolute;left:6px;top:27px;bottom:-15px;border-left:1px dashed #DADBD6}
+  .mc-list li:last-child::before{display:none}
+  .mc-list .d{position:absolute;left:0;top:14px;width:13px;height:13px;border-radius:50%;border:1px solid #C9CAC4;background:#F7F7F5}
+  .mc-list li.done .d{background:#C9CAC4}
+  .mc-list li.now .d{background:#191A18;border-color:#191A18}
+  .mc-list a{display:block;padding:10px 0;font:500 15px/21px Inter,sans-serif;color:#6F716A;text-decoration:none}
+  .mc-list li.now a{color:#191A18}
+  .mc-list li.done a{color:#9A9C96}
+  .mc-back{display:block;margin-top:18px;padding-top:16px;border-top:1px solid #E3E3DF;font:500 14px/20px Inter,sans-serif;color:#191A18;text-decoration:none}
+}
+@media (min-width:1081px){ .mc-btn,.mc-scrim,.mc-sheet{display:none} }
+@media (max-width:1080px){ section[id], .ch[id]{scroll-margin-top:84px !important} .rail-in{background:rgba(247,247,245,.97) !important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)} }
+</style>
+<style>
+/* phone: the chapter pill floats at the bottom of the screen, dark like the home page's bar; it steps up when the reading player is showing */
+@media (max-width:1080px){
+  .mc-btn{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:70;margin:0;flex:none;width:auto;max-width:calc(100% - 32px);padding:11px 16px 11px 18px;border:0;background:rgba(25,26,24,.94);color:#F1F1EE;box-shadow:0 12px 32px -12px rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:bottom .25s ease,opacity .2s ease}
+  .mc-btn .mc-n{color:#9A9C96} .mc-btn .mc-c{color:#BDBFBA;transform:rotate(180deg)}
+  html.mc-open .mc-btn{opacity:0;pointer-events:none}
+  body:has(.rd-mini.on) .mc-btn{bottom:72px}
+  .mc-sheet{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+}
+</style>
 </head>
 <body><aside class="rail"><div class="rail-in">
 <a class="mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
@@ -681,5 +721,30 @@ readAloud('tbar-ae','.case');
     var tail=last.splitText(last.data.length-m[0].length), s=document.createElement('span'); s.className='rd-tail'; s.style.whiteSpace='nowrap';
     tail.parentNode.insertBefore(s, tail); s.appendChild(tail); s.appendChild(document.createTextNode(' ')); s.appendChild(b); }); }
   if(document.readyState==='loading') addEventListener('DOMContentLoaded', glue); else glue(); setTimeout(glue, 400); })();
+</script>
+<script>
+/* phone chapter bar: shows the chapter you are in, and opens the full list from the bottom */
+(function(){
+  var rail=document.querySelector('.rail-in'), toc=document.querySelector('.rail .toc'); if(!rail||!toc) return;
+  var items=[].slice.call(toc.querySelectorAll('li')), links=items.map(function(li){return li.querySelector('a');});
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  var btn=document.createElement('button'); btn.type='button'; btn.className='mc-btn'; btn.setAttribute('aria-haspopup','dialog'); btn.setAttribute('aria-label','Chapters');
+  btn.innerHTML='<span class="mc-n"></span><span class="mc-t"></span><svg class="mc-c" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5 6 7.5l3-3"/></svg>';
+  document.body.appendChild(btn);   /* a floating pill at the bottom, like the home page's bar */
+  var scrim=document.createElement('div'); scrim.className='mc-scrim';
+  var sheet=document.createElement('div'); sheet.className='mc-sheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','Chapters');
+  sheet.innerHTML='<div class="mc-grab"></div><p class="mc-k">Chapters<span>'+items.length+' in this case study</span></p><ol class="mc-list">'+links.map(function(a,i){return '<li><i class="d"></i><a href="'+a.getAttribute('href')+'">'+a.textContent.trim()+'</a></li>';}).join('')+'</ol><a class="mc-back" href="index.html#work">&larr;&nbsp; All work</a>';
+  document.body.appendChild(scrim); document.body.appendChild(sheet);
+  var lis=[].slice.call(sheet.querySelectorAll('.mc-list li'));
+  function open(){ document.documentElement.classList.add('mc-open'); } function close(){ document.documentElement.classList.remove('mc-open'); }
+  btn.addEventListener('click',open); scrim.addEventListener('click',close);
+  sheet.querySelectorAll('.mc-list a').forEach(function(a){ a.addEventListener('click',function(){ close(); }); });
+  addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  function upd(){ var y=innerHeight*.3, cur=-1; secs.forEach(function(s,i){ if(s && s.getBoundingClientRect().top<y) cur=i; });
+    var i=Math.max(cur,0); btn.querySelector('.mc-n').textContent=cur<0?'':String(i+1).padStart(2,'0');
+    btn.querySelector('.mc-t').textContent=cur<0?'Chapters':links[i].textContent.trim();
+    lis.forEach(function(li,k){ li.classList.toggle('now',k===cur); li.classList.toggle('done',k<cur); }); }
+  addEventListener('scroll',upd,{passive:true}); upd();
+})();
 </script>
 </body></html>
