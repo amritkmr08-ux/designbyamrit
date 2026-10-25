@@ -1929,7 +1929,10 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
 <style>
 /* phone: more room for the drawing. The sheet starts lower, the monkey sits lower and a little larger, and the sky (with its stars) reaches down to it */
 @media (max-width:760px){
-  .intro{background-position:left 0 top 45vh !important; background-size:auto 58% !important}
+  .intro{background-position:left 0 top 34vh !important; background-size:auto 57% !important}
+  #intro-creds{left:16px !important; right:16px !important; justify-content:center !important; text-align:center; gap:6px 22px !important; padding:10px 0 2px; text-shadow:none !important}
+  #intro-creds span{color:#B9B8B3 !important}
+  #intro-creds::before{content:""; position:absolute; z-index:-1; left:-16px; right:-16px; top:-28px; bottom:-14px; background:linear-gradient(to bottom, rgba(10,9,7,0), rgba(10,9,7,.92) 45%); pointer-events:none}
   .intro-sky{height:85% !important}
 }
 </style>
@@ -1944,6 +1947,8 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
 <style>
 /* desktop: only the brightest strokes of the drawing are pulled down to a soft grey; the darker shades stay as they are */
 @media (min-width:761px){ .intro::before, .intro::after{filter:url(#tone-hi)} }
+/* the footer drawing: the same treatment, brightest strokes pulled down to a soft grey, on every screen size */
+.rf-art img{filter:url(#tone-hi)}
 </style>
 </head>
 <body>
@@ -2684,7 +2689,7 @@ function onWidth(fn){
   var z=1, H=0, raf=0, held=true;
   function z0(){ return parseFloat(getComputedStyle(d).zoom)||1; }
   function size(){ z=z0(); var vh=innerHeight/z, phone=innerWidth/z<761;
-    H=Math.round(vh*(phone?.88:.74))-(phone?0:40);   /* phone: the page starts a little lower, so the credits have air under them */ sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; var cr=document.getElementById('intro-creds'); if(cr){ cr.style.top=(H-(phone?cr.offsetHeight+22:48))+'px'; var it=document.getElementById('intro-t'); cr.style.left = (!phone && it) ? it.offsetLeft+'px' : ''; } tick(); }
+    H=Math.round(vh*(phone?.92:.74))-(phone?0:40);   /* phone: the page starts a little lower, so the credits have air under them */ sheet.style.marginTop=H+'px'; var cu=document.getElementById('intro-cue'); if(cu) cu.style.top=(H-(phone?64:76))+'px'; var cr=document.getElementById('intro-creds'); if(cr){ cr.style.top=(H-(phone?cr.offsetHeight+22:48))+'px'; var it=document.getElementById('intro-t'); cr.style.left = (!phone && it) ? it.offsetLeft+'px' : ''; } tick(); }
   function tick(){ raf=0;
     var p=Math.max(0,Math.min(1,(scrollY/z)/H)), e=1-Math.pow(1-p,3);
     if(p>=1){ sheet.style.scale=''; sheet.style.transformOrigin=''; sheet.style.removeProperty('--tr'); d.classList.add('intro-done'); }
@@ -4398,7 +4403,7 @@ html body .ov #w4 .ix h3 + p.ix-h{margin-top:18px !important}
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
   var mq=matchMedia('(max-width:760px)');
-  function place(){ var phone=mq.matches; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
+  function place(){ if(cr.parentNode!==home) home.appendChild(cr); }   /* phone and desktop alike: the credits sit at the foot of the opening, just above the page */
   /* the width can be wrong while the page is still loading on a phone, so check again once it has loaded and whenever the width class changes */
   place(); addEventListener('resize', place); addEventListener('DOMContentLoaded', place); addEventListener('load', place); addEventListener('pageshow', place);
   if(mq.addEventListener) mq.addEventListener('change', place); else if(mq.addListener) mq.addListener(place); })();</script>
