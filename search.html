@@ -1,0 +1,571 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Did it find every piece of data that matters? · Amrit Kumar</title><meta name="description" content="Search case study: how AI search in Sirion decides where a result should land, when to ask, and how to show its criteria."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"><style>
+:root{--ink:#252724;--muted:#62655e;--sub:#95988f;--rule:#dfdfda;--green:#a8ba91;--paper:#fff;--read:720px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;overflow-y:auto!important}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:17px;line-height:1.8;overflow:auto!important;position:static!important;height:auto!important}a{color:inherit} .sitebar{max-width:1450px;margin:auto;padding:31px 52px;display:flex;justify-content:space-between;border-bottom:1px solid #ededeb;font-size:12px;letter-spacing:.04em}.brand{font-weight:600}.sitebar a{text-decoration:none;color:#666}
+.case{max-width:1250px;margin:auto;padding:100px 52px 170px} .eyebrow{font-size:12px;letter-spacing:.16em;font-weight:600;color:#777d72;margin-bottom:28px}.eyebrow span{color:#aab8a1;padding:0 8px}
+.case>h2{font-family:Poppins,Inter,sans-serif;font-size:clamp(40px,5.2vw,75px);line-height:1.15;letter-spacing:-.048em;font-weight:500;max-width:920px;margin:0 0 55px;color:#222}.case>p.k{display:none}
+.case>p:not(.tension):not(.pq),.case>p.pq,.case>p.tension{max-width:var(--read);margin:24px auto;color:var(--muted)}.case>p.tension{margin-top:90px;color:var(--ink);font:500 clamp(25px,3vw,42px)/1.35 Poppins,Arial;letter-spacing:-.03em}.case strong{color:#343732;font-weight:600}
+.case>figure:first-of-type{margin:0 0 60px}.case figure{margin:45px 0 60px}.case figure img{width:100%;height:auto;display:block;border-radius:16px}.case figcaption{font-size:13px;color:#82867e;line-height:1.65;margin:13px 0 0}.case>figure:first-of-type img{border-radius:22px}
+.glance{max-width:var(--read);margin:90px auto 130px;padding:27px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:grid;grid-template-columns:repeat(2,1fr);gap:24px 38px}.glance dt{font-size:11px;letter-spacing:.12em;color:#848981;text-transform:uppercase}.glance dd{font-size:14px;line-height:1.55;margin:6px 0 0}
+.ch{border-top:1px solid #e8e8e3;padding:105px 0 115px;scroll-margin-top:40px}.ch-n{font-size:18px!important;color:var(--green)!important;font-family:Poppins,Arial;letter-spacing:.02em;max-width:var(--read);margin:0 auto 9px!important}.ch h3{font-family:Poppins,Arial;font-size:clamp(32px,3.7vw,49px);line-height:1.27;font-weight:500;letter-spacing:-.038em;max-width:var(--read);margin:0 auto 48px}.ch>p,.ch>ol,.ch>div:not(.cmp):not(.rulebox){max-width:var(--read);margin:20px auto;color:var(--muted)}.ch p.pq{font-size:22px;line-height:1.5;color:#30332f;font-weight:500;border-left:2px solid #a6ba99;padding-left:23px;margin:55px auto}.ch p.bq{font-weight:600;color:var(--ink)}.ch p.ix-h{font-weight:600;font-size:21px;color:var(--ink);margin-top:56px}.ch p.ix-foot{font-size:14px;color:#858982}.ch figure.evidence{max-width:1100px;margin:65px auto 78px}.ch figure.evidence img{box-shadow:0 0 0 1px rgba(30,30,30,.025)}.ch figure.evidence figcaption{max-width:var(--read);margin:15px auto 0}
+.ix-chain{list-style:none;display:flex;gap:8px;flex-wrap:wrap;padding:0!important;margin:32px auto!important}.ix-chain li{display:inline-flex;align-items:center;font-size:14px;white-space:nowrap}.ix-chain li:not(:last-child):after{content:'→';margin:0 11px;color:#b4b8af}.ix-chain .on{font-weight:600;color:#222;text-decoration:underline;text-decoration-color:#aec9d5;text-underline-offset:7px;text-decoration-thickness:3px}
+.cmp{max-width:1000px;margin:68px auto 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.cmp-col{border:1px solid #e4e4de;border-radius:18px;padding:30px;background:#fcfcfa}.cmp-col img{width:100%;height:160px;object-fit:contain;mix-blend-mode:multiply}.cmp-k{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#8b9187}.cmp-t{font:500 22px/1.4 Poppins;margin-top:15px}.cmp-d{color:var(--muted);font-size:15px}.cmp p{margin:12px 0}.cmp-col:last-child{background:#f5f7f2;border-color:#dce5d5}
+.ix-own{max-width:var(--read);display:grid;grid-template-columns:1fr 1fr;gap:26px;border-top:1px solid var(--rule);padding-top:22px}.ix-own p{font-size:14px}.ix-own b{display:block;color:var(--ink)}
+.ix-matrix, .matrix, .ix-table{width:100%;overflow-x:auto}.ch table{border-collapse:collapse;width:100%;min-width:680px;margin:45px auto;font-size:13px;line-height:1.5}.ch th{text-align:left;font-size:11px;color:#767b73;letter-spacing:.09em;text-transform:uppercase;border-bottom:1px solid #ccc;padding:16px 12px}.ch td{border-bottom:1px solid #eee;padding:16px 12px;vertical-align:top}.ch table .lv{font-weight:600;color:#485b46}
+.rulebox{max-width:var(--read);margin:60px auto;padding:25px 28px;border:1px solid #e3e6df;border-radius:16px;background:#fbfbf9}.rb-k,.rb-n,.rb-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#7a8177}.rb-h{font-weight:600}.rb-ask,.rb-opt{border-top:1px solid #deded8;margin-top:20px;padding-top:20px}.rb-said{display:block;font-weight:600}.rb-chips{display:flex;flex-wrap:wrap;gap:8px}.rb-chips span{font-size:13px;border-radius:30px;border:1px solid #d7dbd2;padding:3px 10px}.rb-opts{display:grid;grid-template-columns:1fr 1fr;gap:22px}.rb-t{font-weight:600}.rb-t svg{vertical-align:middle}.rb-t i{display:none}.rb-card{margin-top:15px;border:1px solid #ddd;border-radius:10px;padding:12px}.rb-d,.rb-could,.rb-s,.rb-ck,.rb-chg{font-size:13px;color:#6e736b}.rb-cv{font-size:14px;font-weight:600}
+.chapter-nav{max-width:1250px;margin:30px auto 0;padding:0 52px;display:flex;gap:18px;flex-wrap:wrap}.chapter-nav a{font-size:12px;text-decoration:none;color:#656960;border-bottom:1px solid #dadbd6;padding-bottom:7px}.chapter-nav span{color:#a0b48f;margin-right:8px}.chapter-nav a:hover{color:#111}.endnote{border-top:1px solid #ddd;max-width:1146px;padding:34px 0;margin:0 auto 80px;color:#888;font-size:13px}
+@media(max-width:760px){.sitebar{padding:22px}.case{padding:65px 23px 100px}.case>h2{margin-bottom:34px}.ch{padding:66px 0 80px}.ch h3{margin-bottom:32px}.case figure{margin:34px 0 46px}.case figure img{border-radius:12px}.glance{grid-template-columns:1fr;margin:60px auto 90px}.cmp,.rb-opts,.ix-own{grid-template-columns:1fr}.ch p.pq{font-size:19px}.chapter-nav{padding:0 23px}.case>p.tension{margin-top:60px}.ix-chain{gap:4px}.ix-chain li{font-size:12px}}
+
+/* Portfolio typography and an editorial, uncluttered opening */
+:root{--ink:#191A18;--muted:#5F625C;--read:620px}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;line-height:1.7}
+.sitebar{font-family:"Inter",sans-serif;font-size:13px;letter-spacing:0;padding-top:30px;padding-bottom:30px}
+.brand{font-family:"Poppins",sans-serif;font-size:14px;font-weight:500}
+.case{padding-top:118px}
+.eyebrow{font-family:"Poppins",sans-serif;font-size:12px;font-weight:500;letter-spacing:.11em}
+.case>h2{font-family:"Poppins",sans-serif;font-size:clamp(34px,3.1vw,48px);line-height:1.24;letter-spacing:-.025em;font-weight:500;max-width:760px;margin-bottom:52px}
+.ch h3{font-family:"Poppins",sans-serif;font-size:clamp(29px,2.8vw,38px);line-height:1.3;letter-spacing:-.02em;font-weight:500}
+.case>p.tension{font-size:clamp(24px,2.7vw,34px);letter-spacing:-.02em}
+.cmp-t{font-family:"Poppins",sans-serif;font-weight:500}
+@media(max-width:760px){.case{padding-top:72px}.case>h2{font-size:34px;line-height:1.25;margin-bottom:36px}.sitebar{padding:22px}}
+</style><style>
+/* ===== fixes on the editorial draft: the site's rail, listen, calmer type, no boxes ===== */
+:root{--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--accent:#3D5A45;--bg:#F7F7F5;--font-body:Inter,Arial,sans-serif;--font-display:Poppins,Inter,sans-serif;--rail-bg:#22241F;--rail-2:#2C2F28;--on:#fff;--on-dim:#9DA097;--on-faint:#6A6D64}
+body{background:var(--bg);font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;line-height:1.7}
+:root{--read:620px}
+.case{padding-top:118px}
+.eyebrow{font-family:"Poppins",sans-serif;font-size:12px;font-weight:500;letter-spacing:.11em}
+.case>p.tension{font-size:clamp(24px,2.7vw,34px);letter-spacing:-.02em}
+.cmp-t{font-family:"Poppins",sans-serif;font-weight:500}
+.ch figure.evidence{max-width:1000px}
+@media(max-width:760px){.case{padding-top:72px}.case>h2{font-size:34px;line-height:1.25;margin-bottom:36px}}
+.case>h2{font-family:"Poppins",sans-serif;font-size:clamp(34px,3.1vw,48px);line-height:1.24;letter-spacing:-.025em;font-weight:500;max-width:760px;margin-bottom:52px}
+.ch h3{font-family:"Poppins",sans-serif;font-size:clamp(29px,2.8vw,38px);line-height:1.3;letter-spacing:-.02em;font-weight:500;position:relative}
+.eyebrow{margin-bottom:22px}
+.rail{position:fixed;top:0;left:0;width:320px;height:100vh;padding:20px 0 20px 20px;z-index:30}
+.rail-in{height:100%;background:var(--rail-bg);border-radius:22px;padding:30px 26px 26px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 60px -36px rgba(25,26,24,.5)}
+.rail .mark{width:44px;height:44px;border-radius:50%;background:#F7F7F5;color:#191A18;display:grid;place-items:center;font-family:var(--font-display);font-weight:500;font-size:16px;line-height:1;text-decoration:none;margin-bottom:36px;transition:transform .25s ease}
+.rail .mark:hover{transform:scale(1.06)}
+.rail .toc{list-style:none;margin:0;padding:0;flex:1;min-height:0;overflow:auto;scrollbar-width:none}
+.rail .st{position:relative;padding-left:30px}.rail .st+.st{margin-top:18px}
+.rail .st::before{content:"";position:absolute;left:6px;top:19px;bottom:-19px;border-left:1px dashed rgba(255,255,255,.16)}.rail .st:last-child::before{display:none}
+.rail .dot{position:absolute;left:0;top:6px;width:13px;height:13px;border-radius:50%;border:1px solid var(--on-faint);background:var(--rail-bg);transition:background .24s,border-color .24s}
+.rail .st.done .dot{background:var(--on-faint)}.rail .st.done .dot::after{content:"";position:absolute;left:3px;top:4px;width:6px;height:3px;border-left:1.3px solid var(--rail-bg);border-bottom:1.3px solid var(--rail-bg);transform:rotate(-45deg)}
+.rail .st.now .dot{border-color:var(--on);background:var(--on)}.rail .st.now .dot::after{content:"";position:absolute;left:4px;top:4px;width:5px;height:5px;border-radius:50%;background:var(--rail-bg)}
+.rail .toc a{display:block;color:var(--on-dim);font-size:13px;line-height:18px;font-weight:500;text-decoration:none;transition:color .22s}.rail .st.done a{color:var(--on-faint)}.rail .st.now a,.rail .toc a:hover{color:var(--on)}
+.rail .foot{display:flex;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px}.rail .foot a{color:var(--on-dim);text-decoration:none}.rail .foot a:hover{color:var(--on)}
+.shell{margin-left:320px}
+@media (max-width:1080px){.rail{position:sticky;width:auto;height:auto;padding:0}.rail-in{flex-direction:row;align-items:center;justify-content:space-between;height:auto;border-radius:0;padding:14px 24px;background:rgba(247,247,245,.94);backdrop-filter:blur(10px);box-shadow:none;border-bottom:1px solid var(--line)}.rail .mark{width:32px;height:32px;font-size:13px;margin:0;background:rgba(25,26,24,.06);color:var(--ink)}.rail .toc{display:none}.rail .foot{margin:0;padding:0;border:0}.rail .foot a{color:var(--muted)}.rail .foot a+a{margin-left:18px}.shell{margin-left:0}}
+.smebox{max-width:var(--read);margin:40px auto}.smebox-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-top:1px solid var(--line)}.smebox-row:last-of-type{border-bottom:1px solid var(--line)}
+.smebox .q{margin:0;color:var(--ink);font-weight:500}.smebox .w{margin:4px 0 0;font-size:14px;color:var(--muted)}.smebox .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.cmp{gap:0}.cmp-col{border:0;border-radius:0;background:none!important;padding:0 40px 0 0}.cmp-col+.cmp-col{padding:0 0 0 40px;border-left:1px solid var(--line)}
+.cmp-col img{height:200px}
+.rulebox{background:none;border:0;border-left:2px solid var(--ink);border-radius:0;padding:4px 0 4px 24px}
+.ae-listen{max-width:var(--read);margin:-90px auto 110px}
+.ae-listen .tb-play{display:inline-flex;align-items:stretch;gap:0;padding:0;border:0;border-radius:0;background:#2A2A27;color:#F2F1EC;height:48px;cursor:pointer;font:inherit}
+.ae-listen .tb-play .tb-l{display:flex;align-items:center;padding:0 26px 0 22px;font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#F2F1EC;white-space:nowrap}
+.ae-listen .tb-play svg{order:2;display:block;width:48px;height:48px;padding:13px;background:#4A4B47;color:#F2F1EC;box-sizing:border-box}
+.ae-listen .tb-play .i-pause{display:none}.ae-listen .tb-play.on .i-play{display:none}.ae-listen .tb-play.on .i-pause{display:block}.ae-listen .tb-play[hidden]{display:none}
+.rd-sec{position:absolute;left:-40px;top:.55em;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:50%;background:var(--ink);color:var(--bg);cursor:pointer;opacity:.85;transition:opacity .18s,transform .18s}.rd-sec:hover{opacity:1;transform:scale(1.08)}.rd-sec svg{display:block}
+@media (max-width:1080px){.rd-sec{position:static;display:inline-grid;margin-left:10px;vertical-align:middle;opacity:1}}
+.rd-on{background:rgba(25,26,24,.055) !important; box-shadow:0 0 0 10px rgba(25,26,24,.055) !important; border-radius:4px !important; color:#191A18 !important; transition:background-color .25s ease, box-shadow .25s ease, color .25s ease}
+.ix-chain .on{text-decoration:none}.ix-chain .on::before{content:none}.ix-chain .on span, .ix-chain .on{box-shadow:none}.ix-chain li.on{border-bottom:0}.ix-chain li.on > *{text-decoration:underline;text-decoration-color:#aec9d5;text-underline-offset:7px;text-decoration-thickness:3px}
+::highlight(readw){background-color:#CFE3D4;color:#191A18}
+.rd-mini{position:fixed;left:50%;bottom:24px;z-index:200;display:flex;align-items:center;gap:4px;padding:5px 6px;border-radius:999px;background:#191A18;color:#F1F1EE;box-shadow:0 12px 32px -12px rgba(0,0,0,.55);font-family:var(--font-body);font-size:13px;line-height:18px;opacity:0;visibility:hidden;transform:translate(-50%,12px);transition:opacity .25s,transform .3s cubic-bezier(.22,.61,.36,1),visibility .25s}
+.rd-mini.on{opacity:1;visibility:visible;transform:translate(-50%,0)}.rd-mini button{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:none;border:0;color:inherit;cursor:pointer}.rd-mini button:hover{background:rgba(255,255,255,.12)}
+.rd-mini .i-play{display:none}.rd-mini.paused .i-play{display:block}.rd-mini.paused .i-pause{display:none}.rd-mini .rd-lbl{padding:0 6px 0 2px;white-space:nowrap}.rd-mini .rd-prev,.rd-mini .rd-next{color:rgba(255,255,255,.75)}
+.rd-mini button.rd-go{display:none;width:auto;height:28px;padding:0 12px;margin-right:2px;border-radius:999px;background:#F1F1EE;color:#191A18;font:inherit;font-size:12.5px;font-weight:500;white-space:nowrap}.rd-mini.away button.rd-go{display:block}.rd-mini svg{display:block}
+@media (min-width:1081px){.rd-mini{left:calc(50% + 160px)}}
+.endnote{display:none}
+</style>
+<style>
+/* the rail, light: no dark panel, no shadow. A list set on the paper, with a hairline to its right; the mark stays dark */
+:root{--rail-bg:#F7F7F5;--rail-2:#ECECE8;--on:#191A18;--on-dim:#6F716A;--on-faint:#B7B8B2}
+.rail-in{background:none;box-shadow:none;border-radius:0;border-right:1px solid #E6E6E2;padding:30px 28px 26px 26px}
+.rail .mark{background:#191A18;color:#F7F7F5}
+.rail .mark:focus-visible{outline:1px solid #191A18}
+.rail .st::before{border-left-color:#DADBD6}
+.rail .dot{border-color:#C9CAC4;background:var(--rail-bg)}
+.rail .st.done .dot{background:#C9CAC4;border-color:#C9CAC4}
+.rail .st.done .dot::after{border-color:#F7F7F5}
+.rail .st.now .dot{border-color:#191A18;background:#191A18}
+.rail .st.now .dot::after{background:#F7F7F5}
+.rail .toc a{color:#6F716A}
+.rail .st.done a{color:#B7B8B2}
+.rail .st.now a,.rail .toc a:hover{color:#191A18}
+.rail .pips i{background:rgba(25,26,24,.18)}
+.rail .pips i.on{background:#191A18}
+.rail .foot{border-top-color:#E6E6E2}
+.rail .foot a{color:#6F716A}
+.rail .foot a:hover{color:#191A18}
+.hint{background:#ECECE8;box-shadow:none}
+.hint span{color:#6F716A}
+@media (prefers-reduced-motion:no-preference){ .rail-in{animation:none} }
+</style>
+<style>
+/* the current chapter's dot: solid, no white centre */
+.rail .st.now .dot::after{display:none!important}
+/* Listen lives in the rail, under the mark: always in view, and part of the navigation */
+.rail .ae-listen{position:fixed!important;top:28px;right:36px;margin:0!important;max-width:none;z-index:60}
+.ae-listen .tb-play:focus:not(:focus-visible){outline:none}
+.ae-listen .tb-play{box-shadow:0 10px 24px -14px rgba(25,26,24,.45)}
+.rail .ae-listen .tb-play{height:40px}
+.rail .ae-listen .tb-play .tb-l{padding:0 18px 0 16px;font-size:11px}
+.rail .ae-listen .tb-play svg{width:40px;height:40px;padding:11px}
+.rail .mark{margin-bottom:36px!important}
+@media (max-width:1080px){
+  .rail .ae-listen{position:static!important;margin:0 0 0 auto!important;order:2}
+  .ae-listen .tb-play{box-shadow:none}
+  .rail .ae-listen .tb-play{height:34px}.rail .ae-listen .tb-play .tb-l{padding:0 12px;font-size:10.5px}.rail .ae-listen .tb-play svg{width:34px;height:34px;padding:9px}
+  .rail .foot{order:3;margin-left:18px!important}
+  .rail .mark{margin:0!important}
+}
+</style>
+
+<style>
+/* reading: the paragraph is the grey block, the sentence being spoken is darker inside it, and the word (where the browser reports it) is on top */
+::highlight(reads){background-color:rgba(61,90,69,.16);color:#191A18}
+::highlight(readw){background-color:#A9C9B0;color:#191A18}
+</style>
+
+<style>
+/* phone: the top bar stays pinned (the page's body overflow rule stops sticky from holding) */
+@media (max-width:1080px){ .rail{position:fixed!important;top:0;left:0;right:0;z-index:50} .shell{padding-top:var(--railh,62px)} }
+</style>
+
+<style>
+/* phone top bar: its own paper background and compact padding (the light-rail rules had cleared them) */
+@media (max-width:1080px){ .rail-in{background:rgba(247,247,245,.96)!important;backdrop-filter:blur(10px);padding:12px 20px!important;border-right:0!important;border-bottom:1px solid #E6E6E2!important} }
+</style>
+
+<style>
+/* Listen: at the right edge of the content, level with the title's last line; it scrolls with the page */
+.rail .ae-listen{display:none}
+.hero-listen{display:flex;justify-content:flex-end;margin:-52px 0 0!important;max-width:none;position:static!important}
+.hero-listen .tb-play{height:44px;box-shadow:none!important}
+.hero-listen .tb-play .tb-l{padding:0 20px 0 18px;font-size:11.5px}
+.hero-listen .tb-play svg{width:44px;height:44px;padding:12px}
+.hero-listen .tb-play:focus:not(:focus-visible){outline:none}
+@media (max-width:900px){ .hero-listen{justify-content:flex-start;margin:24px 0 0!important} }
+</style>
+
+<style>
+.hero-listen{background:none!important;border:0!important;padding:0!important;box-shadow:none!important;width:auto!important}
+/* desktop: Listen is taken out of the flow and its bottom set to the title's last line, so nothing else moves */
+@media (min-width:901px){ .hero-listen{position:absolute!important;right:var(--lr,0);top:var(--lt,0);margin:0!important} }
+</style>
+
+<style>
+/* inside the home page\'s pop-up: the page exactly as it is */
+html.in-pop body{background:#F7F7F5}
+</style>
+<script>if(window.top!==window.self){document.documentElement.classList.add('in-pop');}</script>
+
+<style>
+/* chapter play button centred on the title's first line (line 49.4px, button 24px, +2px for the optical middle of the letters) */
+@media (min-width:1081px){ .rd-sec{top:15px!important} }
+/* left panel foot: only the way back */
+.rail .foot a[href^="mailto:"]{display:none!important}
+.rail .foot{justify-content:flex-start!important}
+</style>
+
+<style>
+/* a small line icon above the label, one per case study */
+.cs-icon{margin:0 0 30px;line-height:0}
+.cs-icon svg{display:block;width:60px;height:60px;margin-left:-4px;color:#1B2124}
+@media (max-width:760px){ .cs-icon{margin-bottom:22px} .cs-icon svg{width:48px;height:48px} }
+</style>
+
+<style>
+/* the closing line: two separate links, back on the left and the prototype on the right */
+p.end-ai{display:flex!important;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;max-width:1000px!important;margin:56px auto 0!important;padding-top:22px!important;border-top:1px solid #E3E3DF;font-size:14px!important;line-height:20px!important}
+p.end-ai a{text-decoration:none;color:#5F625C!important;font-size:14px!important;white-space:nowrap}
+p.end-ai a:hover{color:#191A18!important}
+p.end-ai a.ai-proto{color:#191A18!important;font-weight:500}
+</style>
+<style>
+/* left panel: no foot; the mark and the end of the page already lead back */
+.rail .foot{display:none!important}
+</style>
+<style>
+/* table caption: for screen readers only */
+.ix-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* phone: a type scale in proportion to the home page, and layouts that fit a narrow screen */
+@media (max-width:760px){
+  .case>h2{font-size:28px!important;line-height:1.25!important;letter-spacing:-.02em!important}
+  .eyebrow{font-size:11px!important}
+  .ch-n{font-size:15px!important}
+  .ch h3{font-size:24px!important;line-height:1.3!important;margin-bottom:28px!important}
+  .case>p.tension{font-size:21px!important;line-height:1.4!important;margin-top:48px!important}
+  .case>p,.ch>p,.ch>ol>li{font-size:15px;line-height:1.7}
+  .ch p.pq{font-size:17px!important;line-height:1.55!important;padding-left:16px!important;margin:36px auto!important}
+  .ch p.ix-h{font-size:17px!important;margin-top:40px!important}
+  .sens .ch p.take{font-size:20px!important;margin-top:48px!important}
+  .hero-listen{margin:20px 0 18px!important}
+  .cmp-col,.cmp-col+.cmp-col{padding:0!important;border-left:0!important}
+  .cmp-col+.cmp-col{border-top:1px solid var(--line)!important;padding-top:28px!important;margin-top:28px}
+  .ix-mx-wrap{overflow:visible!important}
+  .ch table.ix-mx{min-width:0!important;margin:24px 0!important}
+  .ix-mx thead{display:none}
+  .ix-mx,.ix-mx tbody,.ix-mx tr,.ix-mx td{display:block;width:100%}
+  .ix-mx tr{padding:14px 0 16px;border-top:1px solid var(--line)}
+  .ix-mx tr:last-child{border-bottom:1px solid var(--line)}
+  .ix-mx td{border:0!important;padding:2px 0!important;font-size:14px;line-height:1.55}
+  .ix-mx td::before{content:attr(data-h);display:block;margin-top:10px;font-size:10.5px;line-height:16px;letter-spacing:.12em;text-transform:uppercase;color:#7A7E76}
+  .ix-mx td:first-child{font-weight:500;color:var(--ink)}
+  .ix-mx td:first-child::before{content:none}
+}
+</style>
+</head><body><aside class="rail"><div class="rail-in">
+<a class="mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
+<ol class="toc">
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-1">The scale problem</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-2">From a fixed hierarchy to intent-based results</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-3">When a question can mean more than one thing</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-4">Making search results easier to understand and correct</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-5">Where the work stands</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-6">What next</a></li>
+</ol>
+<div class="foot"><a href="index.html#work">&larr;&nbsp; All work</a><a href="mailto:amritkmr08@gmail.com">Email me</a></div>
+</div></aside>
+<div class="shell">
+<article class="case" id="w4">
+
+<div class="cs-icon" aria-hidden="true"><svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.5834 43.0207V46.7082H16.7859V43.0207H24.5834ZM24.5834 43.0207C25.4989 43.0207 26.3346 43.3567 26.9793 43.909L24.5834 46.7082V43.0207ZM50.3959 13.5208C50.3959 13.1948 50.4713 11.858 50.0358 11.4225C49.8053 11.192 49.4927 11.0624 49.1667 11.0624H9.83341C9.50742 11.0624 9.19487 11.192 8.96436 11.4225C8.73384 11.653 8.60425 11.9656 8.60425 12.2916V47.6397L10.7025 45.5415L11.0098 45.2486C12.5879 43.8187 14.6462 43.0212 16.7859 43.0207V46.7082L16.2985 46.7322C15.1736 46.8444 14.116 47.3422 13.3097 48.1487L7.89604 53.5623L7.70158 53.7303C7.49531 53.8832 7.25684 53.9895 7.00297 54.04L6.74609 54.0712C6.57569 54.0794 6.40507 54.0621 6.23954 54.0208L5.99467 53.9392C5.75558 53.8401 5.54297 53.6899 5.37048 53.4999L5.21204 53.2982C5.06828 53.0831 4.9738 52.839 4.93595 52.5852L4.91675 52.3283V12.2916C4.91675 11.1505 5.31366 10.0504 6.03068 9.17547L6.35718 8.81536C7.27923 7.89331 8.52943 7.37493 9.83341 7.37493H49.1667C50.4707 7.37493 52.1488 7.16114 53.5917 8.60494C54.8701 10.0487 54.3292 11.0624 54.3292 22.1258L50.3959 25.8124V18.4374V13.5208Z" fill="currentColor"/><path d="M44.016 39.099C44.7073 38.4077 45.8277 38.4077 46.519 39.099L53.5647 46.1451C54.2559 46.8364 54.2559 47.9569 53.5647 48.6482C52.8734 49.3395 51.753 49.3395 51.0617 48.6482L44.016 41.6021C43.3247 40.9109 43.3247 39.7903 44.016 39.099Z" fill="currentColor"/><path d="M46.8359 32.5626C46.8353 27.3956 42.6454 23.2071 37.4785 23.2071C32.312 23.2076 28.1239 27.3959 28.1234 32.5626C28.1234 37.7297 32.3117 41.9199 37.4785 41.9204C42.6457 41.9204 46.8359 37.7301 46.8359 32.5626ZM50.376 32.5626C50.376 39.6853 44.6009 45.4608 37.4785 45.4608C30.3565 45.4602 24.5833 39.685 24.5833 32.5626C24.5838 25.4407 30.3569 19.6673 37.4785 19.6667C44.6005 19.6667 50.3755 25.4403 50.376 32.5626Z" fill="currentColor"/><path d="M46.0937 18.4375C47.1119 18.4375 47.9374 17.612 47.9374 16.5938C47.9374 15.5755 47.1119 14.75 46.0937 14.75L11.677 14.75C10.6587 14.75 9.83325 15.5755 9.83325 16.5938C9.83325 17.612 10.6587 18.4375 11.677 18.4375H46.0937Z" fill="currentColor"/><path d="M28.8853 25.8125C29.9036 25.8125 30.7291 24.987 30.7291 23.9688C30.7291 22.9505 29.9036 22.125 28.8853 22.125L11.677 22.125C10.6587 22.125 9.83325 22.9505 9.83325 23.9688C9.83325 24.987 10.6587 25.8125 11.677 25.8125H28.8853Z" fill="currentColor"/></svg></div>
+<div class="eyebrow">CASE STUDY <span> / </span> ENTERPRISE SEARCH · SIRION</div><h2>Did it find every piece of data that matters?</h2>
+<div class="tbar ae-listen hero-listen" id="tbar-ae" role="toolbar" aria-label="Listen to this case study"><button class="tb tb-play" type="button" aria-label="Listen to this case study"><svg class="i-play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><svg class="i-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6" stroke-width="1.8" stroke-linecap="round"/></svg><span class="tb-l">Listen</span></button></div>
+<figure class="evidence fv"><img alt="A note explaining that people in Sirion search across large numbers of contracts, surrounded by the things they look for: suppliers, obligations, deadlines, risks, with a short summary underneath." src="search-v-hero.webp" loading="lazy"/><figcaption>The search CLM queries explained</figcaption></figure>
+<p class="k">Sirion · Enterprise search · Partly shipped</p>
+
+
+
+<p class="tension">Where should a search result actually land?</p>
+<p>In Sirion, people search across thousands of contracts for suppliers, obligations, deadlines and risks.</p>
+<p>The push for AI search came from the market. Once people got used to asking AI tools questions in plain language, <strong>they expected the same from their contracts</strong>. So search had to work from a question written the way people speak, not only from exact words.</p>
+<p>We looked at the moments when people actually come to ask. The clearest was a policy change: a company decides suppliers must report a data breach within 24 hours, and someone needs to know which contracts don’t meet it. Others were a renewal date coming up, a new regulation, and a supplier the business was starting to worry about.</p>
+<p>The hard part is that contracts don’t stand alone. One supplier might have a master agreement, several smaller ones, and amendments that change the original terms.</p>
+<p class="pq">Finding the right text is one thing. Knowing which contract it belongs to, and how it relates to the others, is another.</p>
+<p>I worked on this alongside a co-designer, PMs, engineers, legal engineers and legal experts, with feedback from IBM’s legal team, which showed us the problem at a much larger scale.</p>
+<dl class="glance">
+<div><dt>My role</dt><dd>Designer, alongside a co-designer</dd></div>
+<div><dt>Worked with</dt><dd>PMs, engineers, legal engineers, legal experts, and feedback from IBM’s legal team</dd></div>
+<div><dt>Live today</dt><dd>AskSirion search, charts and deal-level listing</dd></div>
+<div><dt>What’s next</dt><dd>Generated columns, clause history and policy checks in development</dd></div>
+</dl>
+<section class="ch" id="chapter-1">
+<p class="ch-n">01</p>
+<h3>The scale problem</h3>
+<p>One thing I understood from working with IBM’s legal team was the scale of information people were dealing with.</p>
+<p>Search could find the right text in a document. But when a supplier has multiple related contracts, <strong>a list of matching documents doesn’t necessarily help</strong> someone understand the overall situation.</p>
+
+<figure class="evidence fv"><img alt="A question, which suppliers don't meet the 24-hour breach policy, connected to a master service agreement, an amendment, a SOW, a data processing agreement and a work order among many other documents." src="search-v-scale.webp" loading="lazy"/><figcaption>The question doesn’t belong to one document. The answer may depend on a whole family of agreements.</figcaption></figure>
+<p>Take the breach-notice policy again. Someone asks which contracts don’t meet it.</p>
+<p>The search might find different reporting periods across different documents. The person still needs to understand which terms actually apply.</p>
+<p class="pq">That made us look beyond just finding the matching documents.</p>
+</section>
+<section class="ch ix" id="chapter-2">
+<p class="ch-n">02</p>
+<h3>From a fixed hierarchy to <span style="white-space:nowrap">intent-based</span> results</h3>
+<p class="ix-h">The initial hypothesis</p>
+<p>Contract information sits in five layers, from the widest to the smallest. A search result has to land on one of them.</p>
+<ol aria-label="The five layers of contract information, from widest to narrowest" class="ix-hier ix-chain">
+<li>Counterparty</li><li class="on"><span>Deal / family</span></li><li>Contract</li><li>Document</li><li>Clause</li>
+</ol>
+<p class="ix-foot">Counterparty is the supplier. A deal is all their contracts together. A clause is one paragraph inside a document.</p>
+
+<p>I wanted results to land on the deal, because contractual meaning often comes from the relationships between agreements, amendments and supporting documents, not from one matching document on its own. Engineering favoured document first, which matched how information was retrieved.</p>
+<figure aria-label="Two ways to land a search result" class="cmp"><div class="cmp-col cmp-a"><p class="cmp-k">Engineering’s view</p><img alt="" src="search-v-compare-r.webp" loading="lazy"/><p class="cmp-t">Document first</p><p class="cmp-d">Follows how retrieval finds text. Good when the question is about one document. Weak when an amendment elsewhere changed the term.</p></div><div class="cmp-col cmp-b"><p class="cmp-k">My view</p><img alt="" src="search-v-compare-r.webp" loading="lazy"/><p class="cmp-t">Deal first</p><p class="cmp-d">Shows terms across related agreements. Good when the answer spans the deal. Slow when someone just needs one document.</p></div></figure>
+<p class="pq">The question was whether every search should follow the same result hierarchy.</p>
+<p class="ix-h">What changed our thinking</p>
+<p>Discussions with subject-matter experts challenged the assumption. Even when people search for the same contractual concept, <strong>they may be trying to do different things</strong>.</p>
+<div aria-label="Two ways to ask about the same clause" class="smebox" role="group">
+<div class="smebox-row"><div><p class="q">“What is the effective notice period for this deal?”</p><p class="w">Needs a deal-level answer that accounts for the related agreements</p></div><span class="tag">Deal</span></div>
+<div class="smebox-row"><div><p class="q">“Which document contains the notice period?”</p><p class="w">Needs document-level results with supporting evidence</p></div><span class="tag">Document</span></div>
+<p class="ix-foot">Example questions, not quotes from the sessions.</p>
+</div>
+<p>Neither hierarchy was right every time. The right result depended on what the person was trying to do.</p>
+<p class="ix-h">Translating intent into product behaviour</p>
+<p>With engineering, we defined representative intent categories and the result behaviour for each, using questions from an existing question bank to shape the patterns.</p>
+<div class="ix-mx-wrap">
+<table class="ix-mx">
+<caption class="ix-sr">Representative queries, the interpreted intent, the result level and the expected presentation</caption>
+<thead><tr><th scope="col">Representative query</th><th scope="col">Interpreted intent</th><th scope="col">Result level</th><th scope="col">Expected presentation</th></tr></thead>
+<tbody>
+<tr><td data-h="Query">What is the effective notice period for this deal?</td><td data-h="Interpreted intent">Understand the applicable contractual position</td><td data-h="Result level"><span class="lv">Deal / family</span></td><td data-h="Expected presentation">Computed answer, relevant contracts, supporting evidence</td></tr>
+<tr><td data-h="Query">Which document contains the notice period?</td><td data-h="Interpreted intent">Locate the source of a specific term</td><td data-h="Result level"><span class="lv">Document</span></td><td data-h="Expected presentation">Matching documents, clause references, source location</td></tr>
+<tr><td data-h="Query">Which deals have conflicting payment terms?</td><td data-h="Interpreted intent">Identify contractual inconsistencies</td><td data-h="Result level"><span class="lv">Deal / family</span></td><td data-h="Expected presentation">Deals with conflict indicators, relevant terms, supporting documents</td></tr>
+<tr><td data-h="Query">Show contracts expiring in the next 90 days.</td><td data-h="Interpreted intent">Find contracts matching a date condition</td><td data-h="Result level"><span class="lv">Contract</span></td><td data-h="Expected presentation">Contract listing with expiry date, counterparty and status</td></tr>
+<tr><td data-h="Query">Which documents contain a governing law clause?</td><td data-h="Interpreted intent">Locate clause evidence</td><td data-h="Result level"><span class="lv">Document</span></td><td data-h="Expected presentation">Matching documents with clause excerpts and citations</td></tr>
+<tr><td data-h="Query">Show agreements where a required clause is missing.</td><td data-h="Interpreted intent">Identify missing contractual provisions</td><td data-h="Result level"><span class="lv">Contract / Document</span></td><td data-h="Expected presentation">Relevant agreements, computed found / not-found status, evidence where available</td></tr>
+</tbody>
+</table>
+</div>
+<p class="ix-foot">Representative intent-to-result patterns, not an exhaustive mapping of every question. Examples illustrate expected behaviour rather than verified agent outputs.</p>
+<p class="ix-h">The design decision</p>
+<p>We moved from a fixed result hierarchy to an <strong>intent-dependent presentation model</strong>.</p>
+<p>Instead of forcing every query into a deal-first or document-first structure, we defined how search should adapt its result level, default columns, computed information and evidence presentation to the question being asked.</p>
+<p>Part of this is already live. For data questions, AskSirion answers with charts and a table of the matching contracts.</p>
+<figure class="evidence fv"><img alt="Breach notice, 14 families, judged against your 24-hour breach-notice policy: a table of contract families with counterparty, breach-notification position, scope checked and a finding such as terms conflict, clause missing or exceeds 24-hour policy." src="search-v-table.webp" loading="lazy"/><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click away.</figcaption></figure>
+<p>This took the design work beyond the layout of search results into reusable interaction and behaviour patterns for the AI experience.</p>
+<div class="ix-own">
+<p><b>My contribution</b>Shaping the expected user-facing behaviour, in collaboration with the team.</p>
+<p><b>Engineering</b>Implementing the agent and evaluating its performance against the question bank and golden dataset.</p>
+</div>
+<p class="pq">The structure of the answer should follow the user’s task, not simply the structure of the underlying data.</p>
+<p class="ix-h">What remained to validate</p>
+<p>The matrix set the expected behaviour, but it did not by itself prove that people could consistently find and correctly interpret their answers.</p>
+<p>The next validation would check whether people could complete representative search tasks accurately, recognise an incorrect interpretation, and trace an answer back to the supporting contractual evidence.</p>
+</section>
+<section class="ch" id="chapter-3">
+<p class="ch-n">03</p>
+<h3>When a question can mean more than one thing</h3>
+<p>Another problem was how the system understood what people were asking.</p>
+<p>We initially had suggested follow-up questions, similar to early AI search tools. There was also a thumbs-up and thumbs-down option for feedback. <strong>Almost nobody used the thumbs.</strong></p>
+<p class="pq">But more importantly, suggesting the next question wasn’t solving the problem when the current question could mean different things.</p>
+<p>For example, “Which contracts don’t meet the new 24-hour policy?” Does that mean contracts with a longer reporting period? Contracts where the clause is missing? Or older contracts signed before the new policy?</p>
+<p class="bq">But how does the system know when a question is clear enough or not? That needed a rule, not a guess.</p>
+<div aria-label="The rule: a simple confidence check" class="rulebox" role="group">
+<div class="rb-rule"><p class="rb-k">The rule:</p><p class="rb-h">I proposed a simple confidence check. Take a question about “contract value”.</p><p class="rb-s">For agent, that could mean total contract value and more</p></div>
+<div class="rb-ask"><p class="rb-q"><span class="rb-lbl">Someone asks</span><svg aria-hidden="true" fill="none" height="18" stroke="#4A6C80" stroke-linecap="round" stroke-width="1.7" viewbox="0 0 20 20" width="18"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="m13 13 4 4"></path></svg><span class="rb-said">“Show contract value by supplier”</span></p>
+<p class="rb-could">“Contract value” could mean</p>
+<p class="rb-chips"><span>Total contract value</span><span>Committed value</span><span>Maximum value</span><span>Estimated annual spend</span></p></div>
+<div class="rb-opts">
+<div class="rb-opt rb-yes"><p class="rb-n">Option 1</p><p class="rb-t"><i aria-hidden="true"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 16 16" width="16"><path d="m3.5 8.5 3 3 6-7"></path></svg></i><span><b>Proceed</b> – safe enough to assume</span></p>
+<p class="rb-d">If meaning is much more likely, and getting it wrong would make little difference to the result.</p>
+<div class="rb-card"><div><p class="rb-ck">Search agent makes its assumption visible</p><p class="rb-cv">Using: Total contract value</p></div><span class="rb-chg">Or Change ↗</span></div></div>
+<div class="rb-opt rb-no"><p class="rb-n">Option 2</p><p class="rb-t"><i aria-hidden="true">?</i><span><b>Ask</b> – too important to guess</span></p>
+<p class="rb-d">Several meanings remain plausible, and choosing the wrong one could change the answer a lot.</p>
+<div class="rb-card"><p class="rb-cv">Show a clarifying card</p></div></div>
+</div>
+</div>
+<p>We explored a clarifying card where users could choose what they meant or write their own interpretation.</p>
+<p>The idea wasn’t to ask users to clarify every search. When the question was clear, search could simply proceed. <strong>When different interpretations could change the result significantly, it made sense to ask first.</strong></p>
+<figure class="evidence fv"><img alt="How should a deviation be judged? Options: notice period over 24 hours, or absent (recommended); clause absent only; executed before the policy date; or something else." src="search-v-clarify.webp" loading="lazy"/><figcaption>When different interpretations could materially change the answer, ask before proceeding.</figcaption></figure>
+<p>For more complicated searches, we also explored showing a plan before the system runs, so people could see what information it intended to check.</p>
+<p class="pq">This connects to the next phase we’re building: clause history, checks against company policy and AI-generated columns. For example, a column could be generated in real time to show where contracts have conflicting terms, instead of relying only on data already stored in the table.</p>
+<p>The important part is that <strong>a conflict should be visible, along with the supporting documents</strong>. The system shouldn’t simply make the legal decision for the person.</p>
+</section>
+<section class="ch" id="chapter-4">
+<p class="ch-n">04</p>
+<h3>Making search results easier to understand and correct</h3>
+<p>Another part of the work was bringing search and filters together. Earlier, people often used advanced filters to narrow down the list.</p>
+<p>We explored how someone could simply type what they wanted, and the system could <strong>turn that question into filter criteria</strong>. Those criteria appear as editable chips, so people can see how search understood their question.</p>
+<p>We explored different versions of this, including a more natural sentence-like format. At rest, it reads like text. When someone interacts with a condition, it becomes editable.</p>
+<figure class="evidence fv"><img alt="Search result, showing 34 of 8,940 contracts. The criteria read as a sentence: status is active and region is any of Asia, EMEA, LATAM and value over 1 million pounds. Clear all, save view." src="search-v-chips.webp" loading="lazy"/><figcaption>Natural-language criteria become readable, editable search conditions.</figcaption></figure>
+<p>We also spent time on empty results. Sometimes a search returns nothing because <strong>a filter is hiding the relevant contracts</strong>. Sometimes the correct answer really is that nothing matched.</p>
+<p>We wanted the interface to explain that difference and help people make corrections without starting over.</p>
+<figure class="evidence fv"><img src="search-v-empty.webp" alt="A family row for CloudScale Technologies showing None, nowhere in the family, and Clause missing. Hovering it explains: all repository scanned, no breach-notification term anywhere, read the master, its data addendum and two SOWs." loading="lazy"></figure>
+
+<p class="pq">After shipping, one observation was that fewer people seemed to go directly to advanced filters, and more started by typing what they wanted. We don’t have an exact measurement for that yet.</p>
+</section>
+<section class="ch" id="chapter-5">
+<p class="ch-n">05</p>
+<h3>Where the work stands</h3>
+<p><a href="https://www.sirion.ai/platform/store/contract-insights-search/" rel="noopener" target="_blank">AskSirion</a> search, deal-level listings and charts for data questions are live.</p>
+<p>We’re still building generated columns, clause history and policy checks. Some of the clarification and question-led interactions shown here are explorations, and the screens are from my prototype.</p>
+<p>One thing I still want to validate is how we represent a finding at the deal level without making every contract in that deal appear to have the same issue.</p>
+<p class="pq">That distinction matters because the result should help someone understand the situation, not create another misunderstanding.</p>
+</section>
+<section class="ch" id="chapter-6">
+<p class="ch-n">06</p>
+<h3>What next</h3>
+<p>From a search result, people could go further and ask the AI to act on it. For example, “Draft a counter-negotiation document for these contracts” or “Show me a fix plan for these breach contracts.” Search is just the beginning. Many more AI actions on contracts are still being explored.</p>
+<figure class="evidence sel"><img alt="Two contract families selected in the breach results, with a bar showing 2 of 14 selected, Route to Legal and Ask about this selection" src="search-v-select.webp" loading="lazy"/><figcaption>Selected families lead directly to follow-up actions.</figcaption></figure>
+</section>
+<div class="end idx"><p class="end-ai"><a class="back" data-close="" href="#"><i>←</i> Back to the work</a><a class="ai-proto" data-proto="q1" href="#">Prototype built with AI <i aria-hidden="true">→</i></a></p></div>
+</article><footer class="endnote">Search · Enterprise product design · Case study</footer></div>
+<script>
+  /* Three states on the rail, and the pip that says how far through a section you
+     are. The observer names the section you are in; everything before it is behind
+     you and everything after is ahead, which is the whole state of the walk. */
+  var steps = [].slice.call(document.querySelectorAll('.rail .toc .st'));
+  var links = steps.map(function (li) { return li.querySelector('a'); });
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var here = -1;
+
+  function mark(i) {
+    if (i === here) return; here = i;
+    steps.forEach(function (li, j) {
+      li.classList.toggle('now', j === i);
+      li.classList.toggle('done', j < i);
+    });
+    pip();
+  }
+  /* which figure in this section you have reached */
+  function pip() {
+    var li = steps[here]; if (!li) return;
+    var pips = [].slice.call(li.querySelectorAll('.pips i')); if (!pips.length) return;
+    var sec = secs[here]; if (!sec) return;
+    var figs = [].slice.call(sec.querySelectorAll('figure'));
+    var mid = innerHeight * 0.45, best = 0;
+    figs.slice(0, pips.length).forEach(function (f, k) {
+      if (f.getBoundingClientRect().top < mid) best = k;
+    });
+    pips.forEach(function (p, k) { p.classList.toggle('on', k === best); });
+  }
+
+  var spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      mark(secs.indexOf(e.target));
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(function (s) { if (s) spy.observe(s); });
+
+  var tick = false;
+  addEventListener('scroll', function () {
+    if (tick) return; tick = true;
+    requestAnimationFrame(function () { tick = false; pip(); });
+  }, { passive: true });
+  mark(0);
+</script>
+<script>
+/* Listen: reads the case study aloud. The same reader as the write-ups on the home page */
+function readAloud(barId, cardId){
+  var bar=document.getElementById(barId); if(!bar) return;
+  var card=document.querySelector(cardId), play=bar.querySelector('.tb-play'), ss=window.speechSynthesis;
+  if(!ss || !window.SpeechSynthesisUtterance){ play.hidden=true; return; }
+  var HL=!!(window.Highlight && window.CSS && CSS.highlights), follow=true, state='idle', cur=null, voice=null, run=0;
+  var BAD=/compact|eloquence|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|whisper|zarvox|trinoids|jester|organ|superstar|wobble|grandma|grandpa|rocko|shelley|junior|ralph|fred|kathy|good news/i;
+  var MALE=/\bmale\b|daniel|\balex\b|\btom\b|aaron|arthur|oliver|rishi|evan|nathan|\bguy\b|ryan|christopher|\beric\b|andrew|brian|davis|roger|steffan|thomas|liam|william|prabhat|george|james|david|mark|jacob|tony|\bsam\b|gordon|lee\b/i;
+  var FEMALE=/female|samantha|karen|moira|tessa|serena|\bava\b|allison|zoe|libby|sonia|aria|jenny|victoria|susan|veena|fiona|\bkate\b|neerja|hazel|zira|heera|catherine|emma|olivia|natasha|clara|michelle|ana\b|sara|joanna|amy|nicky|kendra|kimberly|salli|ivy|martha|maisie|isla|aurora|ava\b|jane|nancy|sonia|ashley|cora|elizabeth|monica|siri female/i;
+  function score(v){ var n=v.name, s=0;
+    if(MALE.test(n) && !/female/i.test(n)) s-=10;   /* same order as the first version, with male voices just behind */
+    if(/^Google US English$/i.test(n)) s+=500;   /* the same voice as the walkthrough videos, whenever the browser has it (Chrome) */
+    if(/natural|neural/i.test(n)) s+=60; if(/premium|enhanced/i.test(n)) s+=50; if(/^google/i.test(n)) s+=30;
+    if(/en[-_](GB|US|IN|AU|IE)/i.test(v.lang)) s+=5; if(v.default) s+=2; if(BAD.test(n)) s-=200; return s; }
+  function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
+    vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
+  pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
+  function blocks(){ var out=[], els=card.querySelectorAll('h1, h2, p, h3, li'), SKIP='.rail, .eyebrow, .glance, figcaption, .ae-listen, .ch-n, .ix-foot, .cmp-k, .rb-k, .rb-n, .rb-lbl, .endnote, .ix-chain, .smebox .tag, .ix-sr';
+    for(var i=0;i<els.length;i++){ var el=els[i];
+      if(el.closest(SKIP)) continue;   /* section numbers, meta lines and diagram labels are for the eye, not the ear */
+      if((el.textContent||'').trim()) out.push(el); }
+    return out; }
+  function rangeAt(el, start, len){ var tw=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), pos=0, n, r=document.createRange(), on=false;
+    while((n=tw.nextNode())){ var L=n.data.length;
+      if(!on && start<pos+L){ r.setStart(n, start-pos); on=true; }
+      if(on && start+len<=pos+L){ r.setEnd(n, start+len-pos); return r; }
+      pos+=L; }
+    return null; }
+  function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL){ CSS.highlights.delete('readw'); CSS.highlights.delete('reads'); } }
+  function inView(el){ var b=el.getBoundingClientRect(); return b.top>80 && b.bottom<innerHeight-80; }
+  function setUI(){ play.classList.toggle('on', state==='playing'); play.classList.toggle('paused', state==='paused');
+    var l = state==='playing' ? 'Pause' : state==='paused' ? 'Carry on listening' : 'Listen to this case study';
+    play.setAttribute('aria-label', l);
+    play.querySelector('.tb-l').textContent = state==='playing' ? 'Playing' : state==='paused' ? 'Paused' : 'Listen'; }
+  var mini=document.createElement('div'); mini.className='rd-mini'; mini.setAttribute('role','group'); mini.setAttribute('aria-label','Narration');
+  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><button type="button" class="rd-prev" aria-label="Previous paragraph" title="Previous paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button><button type="button" class="rd-next" aria-label="Next paragraph" title="Next paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3.5 4.5 4.5L6 12.5"/></svg></button><span class="rd-lbl">Playing</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+  document.body.appendChild(mini);
+  mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
+  mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
+  /* the page follows the reading until you scroll yourself; then a button takes you back to it */
+  var t0=0, awayT=0;
+  function away(){ if(state==='idle' || !follow) return; if(Date.now()-t0<1200) return;
+    clearTimeout(awayT); awayT=setTimeout(function(){ if(state==='idle' || !follow) return; if(cur && inView(cur)) return; follow=false; mini.classList.add('away'); }, 250); }
+  ['wheel','touchmove'].forEach(function(ev){ addEventListener(ev, function(e){ if(!mini.contains(e.target)) away(); }, {passive:true}); });
+  addEventListener('keydown', function(e){ if(/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(e.key)) away(); });
+  mini.querySelector('.rd-go').addEventListener('click', function(){ follow=true; mini.classList.remove('away'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'}); });
+  var setUI0=setUI; setUI=function(){ setUI0(); mini.classList.toggle('on', state!=='idle'); mini.classList.toggle('paused', state==='paused');
+    mini.querySelector('.rd-pp').setAttribute('aria-label', state==='paused'?'Resume':'Pause');
+    mini.querySelector('.rd-lbl').textContent = state==='paused' ? 'Paused' : 'Playing'; };
+  /* a hard stop: Chrome can ignore cancel() on a paused or online voice, so resume first and cancel again a beat later */
+  function stop(){ run++; clearTimeout(dog); clearInterval(alive); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ ss.cancel(); }, 60); setTimeout(function(){ if(state==='idle') ss.cancel(); }, 300); state='idle'; clearMarks(); setUI(); }
+  document.addEventListener('visibilitychange', function(){ if(document.hidden && state!=='idle') stop(); });
+  /* long paragraphs go out as sentence-sized pieces: Chrome's online voices stall on long text, and a stall should never stop the reading */
+  function pieces(text){ var out=[], re=/[^.!?]+(?:[.!?]+["'’”)]*\s*|$)/g, m;
+    while((m=re.exec(text)) && m[0]){ var t=m[0], s=m.index;
+      while(t.length>220){ var cut=t.lastIndexOf(', ',200); if(cut<60) cut=t.lastIndexOf(' ',200); if(cut<1) break; out.push({t:t.slice(0,cut+1), o:s}); s+=cut+1; t=t.slice(cut+1); }
+      if(t.trim()) out.push({t:t, o:s}); }
+    /* join short sentences into one breath (up to ~200 characters): a stop after every sentence is what makes it sound like a machine */
+    var j=[]; out.forEach(function(p){ var last=j[j.length-1]; if(last && last.t.length+p.t.length<=200) last.t+=p.t; else j.push({t:p.t, o:p.o}); });
+    return j.length?j:[{t:text,o:0}]; }
+  var dog=0, alive=0;
+  function start(fromEl){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; t0=Date.now(); clearTimeout(awayT); mini.classList.remove('away');
+    var q=[]; list.forEach(function(el){ pieces(el.textContent).forEach(function(p){ q.push({el:el, t:p.t, o:p.o}); }); });
+    var k0=0; if(fromEl){ for(var i=0;i<q.length;i++){ if(q[i].el===fromEl || (fromEl.compareDocumentPosition(q[i].el) & Node.DOCUMENT_POSITION_FOLLOWING)){ k0=i; break; } } }
+    state='playing'; setUI();
+    clearInterval(alive); if(voice && voice.localService===false) alive=setInterval(function(){ if(id!==run){ clearInterval(alive); return; } if(state==='playing' && ss.speaking){ ss.pause(); ss.resume(); } }, 9000);
+    function say(k){ if(id!==run) return; if(k>=q.length){ clearInterval(alive); state='idle'; clearMarks(); setUI(); return; }
+      jump.k=k; jump.q=q; jump.say=say; jump.id=id;
+      var it=q[k], el=it.el, u=new SpeechSynthesisUtterance(it.t), done=false;
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang='en-GB'; u.rate=1; u.pitch=1;
+      function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); if(jump.skip) return; say(k+1); }
+      function arm(){ clearTimeout(dog); dog=setTimeout(function(){ if(id!==run || done) return; if(state==='paused'){ arm(); return; } ss.cancel(); next(); }, 3000 + it.t.length*80); }
+      u.onstart=function(){ if(id!==run) return; arm(); if(HL){ var lead=(it.t.match(/^\s*/)||[''])[0].length, body=it.t.replace(/\s+$/,'').length-lead; var sr=body>0 && rangeAt(el, it.o+lead, body); if(sr) CSS.highlights.set('reads', new Highlight(sr)); } if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
+        if(follow){ var b=el.getBoundingClientRect(); if(b.top<120 || b.bottom>innerHeight*.72) el.scrollIntoView({block:'center', behavior:'smooth'}); } } };
+      u.onboundary=function(e){ if(id!==run) return; arm(); if(!HL || (e.name && e.name!=='word')) return;
+        var len=e.charLength || ((it.t.slice(e.charIndex).match(/^\S+/)||[''])[0].replace(/[.,;:!?)’”]+$/,'').length);
+        if(!len) return; var r=rangeAt(el, it.o+e.charIndex, len); if(r) CSS.highlights.set('readw', new Highlight(r)); };
+      u.onend=function(){ if(id===run) next(); };
+      u.onerror=function(e){ if(id===run && e.error!=='interrupted' && e.error!=='canceled') next(); };
+      ss.speak(u); arm(); }
+    say(k0); }
+  /* the arrows: back to the start of the previous paragraph, or on to the next one. a jump restarts the voice at that paragraph's first sentence */
+  var jump={k:0, q:null, say:null, id:0};
+  function jumpBy(dir){ if(state==='idle' || !jump.q || jump.id!==run) return; var q=jump.q, k=jump.k, el=q[k].el, t=k;
+    if(dir<0){ var atStart = q[k].o===0 || (k>0 && q[k-1].el!==el) || k===0; if(!atStart){ while(t>0 && q[t-1].el===el) t--; } else { if(k===0) t=0; else { t=k-1; while(t>0 && q[t-1].el===q[k-1].el) t--; } } }
+    else { t=k+1; while(t<q.length && q[t].el===el) t++; if(t>=q.length) return; }
+    jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); state='playing'; setUI();
+    var sayFn=jump.say; setTimeout(function(){ jump.skip=false; if(jump.id===run) sayFn(t); }, 60); }
+  card.querySelectorAll('section.ch > h3').forEach(function(h){
+    var b=document.createElement('button'); b.type='button'; b.className='rd-sec'; b.setAttribute('aria-label','Listen from this section'); b.title='Listen from here';
+    b.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.6 2.3v7.4L9.4 6z" fill="currentColor"/></svg>';
+    b.addEventListener('click', function(e){ e.stopPropagation(); start(h); });
+    h.appendChild(b); });
+  mini.querySelector('.rd-prev').addEventListener('click', function(){ jumpBy(-1); });
+  mini.querySelector('.rd-next').addEventListener('click', function(){ jumpBy(1); });
+  play.addEventListener('click', function(){
+    if(state==='playing'){ state='paused'; jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ if(state==='paused') ss.cancel(); },80); setUI(); return; }
+    if(state==='paused'){ state='playing'; setUI(); if(jump.say && jump.id===run){ var k=jump.k, sf=jump.say; setTimeout(function(){ jump.skip=false; if(state==='playing' && jump.id===run) sf(k); },60); } else { start(cur); } return; }
+    start(); });
+  addEventListener('pagehide', function(){ ss.cancel(); });
+}
+readAloud('tbar-ae','.case');
+</script>
+<script>(function(){var r=document.querySelector('.rail');function f(){if(innerWidth<=1080)document.documentElement.style.setProperty('--railh',r.offsetHeight+'px');}addEventListener('resize',f);f();})();</script>
+<script>
+/* place Listen: right edge of the content, bottom on the title's last line */
+(function(){ var b=document.querySelector('.hero-listen'); if(!b) return; var t=b.previousElementSibling; var box=b.parentElement;
+  function put(){ if(innerWidth<901){ b.style.removeProperty('--lt'); return; }
+    if(getComputedStyle(box).position==='static') box.style.position='relative';
+    var br=box.getBoundingClientRect(), tr=t.getBoundingClientRect(), cs=getComputedStyle(box), h=b.offsetHeight;
+    b.style.setProperty('--lt', Math.round(tr.bottom-br.top-h-4)+'px'); b.style.setProperty('--lr', parseFloat(cs.paddingRight)+'px'); }
+  addEventListener('resize', put); addEventListener('load', put); if(document.fonts) document.fonts.ready.then(put); t.addEventListener('transitionend', put); setTimeout(put,900); setTimeout(put,1600); put(); })();
+</script>
+<script>
+/* inside the pop-up: Escape closes it, and links back to the home page close it instead of loading the home page inside the card */
+(function(){ if(window.top===window.self) return;
+  function close(){ try{ window.parent.postMessage({pg:'close'},'*'); }catch(e){} }
+  addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  document.addEventListener('click', function(e){ var a=e.target.closest('a[href]'); if(!a) return; var h=a.getAttribute('href');
+    if(/^index\.html/.test(h)){ e.preventDefault(); close(); }
+    else if(/^(search|auto-extraction)\.html/.test(h)){ e.preventDefault(); window.parent.postMessage({pg:'open', href:h},'*'); }
+    else if(/^mailto:/.test(h)){ /* fine in place */ }
+    else if(!/^#/.test(h) && !a.target){ a.target='_top'; } }, true);
+})();
+</script>
+<script>
+/* end links: "Back to the work" returns to the home page's work list; "Prototype built with AI" opens that chapter's prototype on the home page.
+   Inside the home page's pop-up they talk to the home page instead of loading it in the card. */
+(function(){ var inPop=window.top!==window.self;
+  document.addEventListener('click', function(e){
+    var back=e.target.closest('a.back, a.conf-back, a[data-close]'), pr=e.target.closest('a.ai-proto');
+    if(!back && !pr) return; e.preventDefault(); e.stopImmediatePropagation();
+    if(pr){ var id=pr.getAttribute('data-proto')||'';
+      if(inPop) window.parent.postMessage({pg:'proto', id:id},'*'); else location.href='index.html#proto-'+id; return; }
+    if(inPop) window.parent.postMessage({pg:'close'},'*'); else location.href='index.html#work';
+  }, true);
+})();
+</script>
+<script>/* inside the home page's pop-up: tell the home page how far this page has scrolled */
+(function(){ if(window.top===window.self) return; var last=-1; function tell(){ var y=scrollY>24?1:0; if(y!==last){ last=y; window.parent.postMessage({pg:'scroll', y:scrollY},'*'); } } addEventListener('scroll', tell, {passive:true}); tell(); })();</script>
+<script>
+/* the chapter play button stays on the same line as the last word of the title, so it never sits alone on a line */
+(function(){ function glue(){ document.querySelectorAll('.rd-sec').forEach(function(b){ if(b.parentNode && b.parentNode.classList && b.parentNode.classList.contains('rd-tail')) return; var h=b.parentNode; if(!h) return;
+    var w=document.createTreeWalker(h, NodeFilter.SHOW_TEXT), n, last=null; while((n=w.nextNode())){ if(!b.contains(n) && n.data.trim()) last=n; }
+    if(!last) return; var m=last.data.match(/(\S+)\s*$/); if(!m) return;
+    var tail=last.splitText(last.data.length-m[0].length), s=document.createElement('span'); s.className='rd-tail'; s.style.whiteSpace='nowrap';
+    tail.parentNode.insertBefore(s, tail); s.appendChild(tail); s.appendChild(document.createTextNode(' ')); s.appendChild(b); }); }
+  if(document.readyState==='loading') addEventListener('DOMContentLoaded', glue); else glue(); setTimeout(glue, 400); })();
+</script>
+</body></html>

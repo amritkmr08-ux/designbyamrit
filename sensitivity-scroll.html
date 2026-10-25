@@ -1,0 +1,685 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>When AI knows the answer, how does it know when to speak? · Amrit Kumar</title><meta name="description" content="Sensitivity: how an AI agent could decide when a finding deserves a person's attention, and when it should stay quiet."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"><style>
+:root{--ink:#252724;--muted:#62655e;--sub:#95988f;--rule:#dfdfda;--green:#a8ba91;--paper:#fff;--read:720px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;overflow-y:auto!important}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:17px;line-height:1.8;overflow:auto!important;position:static!important;height:auto!important}a{color:inherit} .sitebar{max-width:1450px;margin:auto;padding:31px 52px;display:flex;justify-content:space-between;border-bottom:1px solid #ededeb;font-size:12px;letter-spacing:.04em}.brand{font-weight:600}.sitebar a{text-decoration:none;color:#666}
+.case{max-width:1250px;margin:auto;padding:100px 52px 170px} .eyebrow{font-size:12px;letter-spacing:.16em;font-weight:600;color:#777d72;margin-bottom:28px}.eyebrow span{color:#aab8a1;padding:0 8px}
+.case>h2{font-family:Poppins,Inter,sans-serif;font-size:clamp(40px,5.2vw,75px);line-height:1.15;letter-spacing:-.048em;font-weight:500;max-width:920px;margin:0 0 55px;color:#222}.case>p.k{display:none}
+.case>p:not(.tension):not(.pq),.case>p.pq,.case>p.tension{max-width:var(--read);margin:24px auto;color:var(--muted)}.case>p.tension{margin-top:90px;color:var(--ink);font:500 clamp(25px,3vw,42px)/1.35 Poppins,Arial;letter-spacing:-.03em}.case strong{color:#343732;font-weight:600}
+.case>figure:first-of-type{margin:0 0 60px}.case figure{margin:45px 0 60px}.case figure img{width:100%;height:auto;display:block;border-radius:16px}.case figcaption{font-size:13px;color:#82867e;line-height:1.65;margin:13px 0 0}.case>figure:first-of-type img{border-radius:22px}
+.glance{max-width:var(--read);margin:90px auto 130px;padding:27px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:grid;grid-template-columns:repeat(2,1fr);gap:24px 38px}.glance dt{font-size:11px;letter-spacing:.12em;color:#848981;text-transform:uppercase}.glance dd{font-size:14px;line-height:1.55;margin:6px 0 0}
+.ch{border-top:1px solid #e8e8e3;padding:105px 0 115px;scroll-margin-top:40px}.ch-n{font-size:18px!important;color:var(--green)!important;font-family:Poppins,Arial;letter-spacing:.02em;max-width:var(--read);margin:0 auto 9px!important}.ch h3{font-family:Poppins,Arial;font-size:clamp(32px,3.7vw,49px);line-height:1.27;font-weight:500;letter-spacing:-.038em;max-width:var(--read);margin:0 auto 48px}.ch>p,.ch>ol,.ch>div:not(.cmp):not(.rulebox){max-width:var(--read);margin:20px auto;color:var(--muted)}.ch p.pq{font-size:22px;line-height:1.5;color:#30332f;font-weight:500;border-left:2px solid #a6ba99;padding-left:23px;margin:55px auto}.ch p.bq{font-weight:600;color:var(--ink)}.ch p.ix-h{font-weight:600;font-size:21px;color:var(--ink);margin-top:56px}.ch p.ix-foot{font-size:14px;color:#858982}.ch figure.evidence{max-width:1100px;margin:65px auto 78px}.ch figure.evidence img{box-shadow:0 0 0 1px rgba(30,30,30,.025)}.ch figure.evidence figcaption{max-width:var(--read);margin:15px auto 0}
+.ix-chain{list-style:none;display:flex;gap:8px;flex-wrap:wrap;padding:0!important;margin:32px auto!important}.ix-chain li{display:inline-flex;align-items:center;font-size:14px;white-space:nowrap}.ix-chain li:not(:last-child):after{content:'→';margin:0 11px;color:#b4b8af}.ix-chain .on{font-weight:600;color:#222;text-decoration:underline;text-decoration-color:#aec9d5;text-underline-offset:7px;text-decoration-thickness:3px}
+.cmp{max-width:1000px;margin:68px auto 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.cmp-col{border:1px solid #e4e4de;border-radius:18px;padding:30px;background:#fcfcfa}.cmp-col img{width:100%;height:160px;object-fit:contain;mix-blend-mode:multiply}.cmp-k{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#8b9187}.cmp-t{font:500 22px/1.4 Poppins;margin-top:15px}.cmp-d{color:var(--muted);font-size:15px}.cmp p{margin:12px 0}.cmp-col:last-child{background:#f5f7f2;border-color:#dce5d5}
+.ix-own{max-width:var(--read);display:grid;grid-template-columns:1fr 1fr;gap:26px;border-top:1px solid var(--rule);padding-top:22px}.ix-own p{font-size:14px}.ix-own b{display:block;color:var(--ink)}
+.ix-matrix, .matrix, .ix-table{width:100%;overflow-x:auto}.ch table{border-collapse:collapse;width:100%;min-width:680px;margin:45px auto;font-size:13px;line-height:1.5}.ch th{text-align:left;font-size:11px;color:#767b73;letter-spacing:.09em;text-transform:uppercase;border-bottom:1px solid #ccc;padding:16px 12px}.ch td{border-bottom:1px solid #eee;padding:16px 12px;vertical-align:top}.ch table .lv{font-weight:600;color:#485b46}
+.rulebox{max-width:var(--read);margin:60px auto;padding:25px 28px;border:1px solid #e3e6df;border-radius:16px;background:#fbfbf9}.rb-k,.rb-n,.rb-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#7a8177}.rb-h{font-weight:600}.rb-ask,.rb-opt{border-top:1px solid #deded8;margin-top:20px;padding-top:20px}.rb-said{display:block;font-weight:600}.rb-chips{display:flex;flex-wrap:wrap;gap:8px}.rb-chips span{font-size:13px;border-radius:30px;border:1px solid #d7dbd2;padding:3px 10px}.rb-opts{display:grid;grid-template-columns:1fr 1fr;gap:22px}.rb-t{font-weight:600}.rb-t svg{vertical-align:middle}.rb-t i{display:none}.rb-card{margin-top:15px;border:1px solid #ddd;border-radius:10px;padding:12px}.rb-d,.rb-could,.rb-s,.rb-ck,.rb-chg{font-size:13px;color:#6e736b}.rb-cv{font-size:14px;font-weight:600}
+.chapter-nav{max-width:1250px;margin:30px auto 0;padding:0 52px;display:flex;gap:18px;flex-wrap:wrap}.chapter-nav a{font-size:12px;text-decoration:none;color:#656960;border-bottom:1px solid #dadbd6;padding-bottom:7px}.chapter-nav span{color:#a0b48f;margin-right:8px}.chapter-nav a:hover{color:#111}.endnote{border-top:1px solid #ddd;max-width:1146px;padding:34px 0;margin:0 auto 80px;color:#888;font-size:13px}
+@media(max-width:760px){.sitebar{padding:22px}.case{padding:65px 23px 100px}.case>h2{margin-bottom:34px}.ch{padding:66px 0 80px}.ch h3{margin-bottom:32px}.case figure{margin:34px 0 46px}.case figure img{border-radius:12px}.glance{grid-template-columns:1fr;margin:60px auto 90px}.cmp,.rb-opts,.ix-own{grid-template-columns:1fr}.ch p.pq{font-size:19px}.chapter-nav{padding:0 23px}.case>p.tension{margin-top:60px}.ix-chain{gap:4px}.ix-chain li{font-size:12px}}
+
+/* Portfolio typography and an editorial, uncluttered opening */
+:root{--ink:#191A18;--muted:#5F625C;--read:620px}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;line-height:1.7}
+.sitebar{font-family:"Inter",sans-serif;font-size:13px;letter-spacing:0;padding-top:30px;padding-bottom:30px}
+.brand{font-family:"Poppins",sans-serif;font-size:14px;font-weight:500}
+.case{padding-top:118px}
+.eyebrow{font-family:"Poppins",sans-serif;font-size:12px;font-weight:500;letter-spacing:.11em}
+.case>h2{font-family:"Poppins",sans-serif;font-size:clamp(34px,3.1vw,48px);line-height:1.24;letter-spacing:-.025em;font-weight:500;max-width:760px;margin-bottom:52px}
+.ch h3{font-family:"Poppins",sans-serif;font-size:clamp(29px,2.8vw,38px);line-height:1.3;letter-spacing:-.02em;font-weight:500}
+.case>p.tension{font-size:clamp(24px,2.7vw,34px);letter-spacing:-.02em}
+.cmp-t{font-family:"Poppins",sans-serif;font-weight:500}
+@media(max-width:760px){.case{padding-top:72px}.case>h2{font-size:34px;line-height:1.25;margin-bottom:36px}.sitebar{padding:22px}}
+</style><style>
+/* ===== fixes on the editorial draft: the site's rail, listen, calmer type, no boxes ===== */
+:root{--ink:#191A18;--muted:#5F625C;--faint:#6F716A;--line:#E3E3DF;--accent:#3D5A45;--bg:#F7F7F5;--font-body:Inter,Arial,sans-serif;--font-display:Poppins,Inter,sans-serif;--rail-bg:#22241F;--rail-2:#2C2F28;--on:#fff;--on-dim:#9DA097;--on-faint:#6A6D64}
+body{background:var(--bg);font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;line-height:1.7}
+:root{--read:620px}
+.case{padding-top:118px}
+.eyebrow{font-family:"Poppins",sans-serif;font-size:12px;font-weight:500;letter-spacing:.11em}
+.case>p.tension{font-size:clamp(24px,2.7vw,34px);letter-spacing:-.02em}
+.cmp-t{font-family:"Poppins",sans-serif;font-weight:500}
+.ch figure.evidence{max-width:1000px}
+@media(max-width:760px){.case{padding-top:72px}.case>h2{font-size:34px;line-height:1.25;margin-bottom:36px}}
+.case>h2{font-family:"Poppins",sans-serif;font-size:clamp(34px,3.1vw,48px);line-height:1.24;letter-spacing:-.025em;font-weight:500;max-width:760px;margin-bottom:52px}
+.ch h3{font-family:"Poppins",sans-serif;font-size:clamp(29px,2.8vw,38px);line-height:1.3;letter-spacing:-.02em;font-weight:500;position:relative}
+.eyebrow{margin-bottom:22px}
+.rail{position:fixed;top:0;left:0;width:320px;height:100vh;padding:20px 0 20px 20px;z-index:30}
+.rail-in{height:100%;background:var(--rail-bg);border-radius:22px;padding:30px 26px 26px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 60px -36px rgba(25,26,24,.5)}
+.rail .mark{width:44px;height:44px;border-radius:50%;background:#F7F7F5;color:#191A18;display:grid;place-items:center;font-family:var(--font-display);font-weight:500;font-size:16px;line-height:1;text-decoration:none;margin-bottom:36px;transition:transform .25s ease}
+.rail .mark:hover{transform:scale(1.06)}
+.rail .toc{list-style:none;margin:0;padding:0;flex:1;min-height:0;overflow:auto;scrollbar-width:none}
+.rail .st{position:relative;padding-left:30px}.rail .st+.st{margin-top:18px}
+.rail .st::before{content:"";position:absolute;left:6px;top:19px;bottom:-19px;border-left:1px dashed rgba(255,255,255,.16)}.rail .st:last-child::before{display:none}
+.rail .dot{position:absolute;left:0;top:6px;width:13px;height:13px;border-radius:50%;border:1px solid var(--on-faint);background:var(--rail-bg);transition:background .24s,border-color .24s}
+.rail .st.done .dot{background:var(--on-faint)}.rail .st.done .dot::after{content:"";position:absolute;left:3px;top:4px;width:6px;height:3px;border-left:1.3px solid var(--rail-bg);border-bottom:1.3px solid var(--rail-bg);transform:rotate(-45deg)}
+.rail .st.now .dot{border-color:var(--on);background:var(--on)}.rail .st.now .dot::after{content:"";position:absolute;left:4px;top:4px;width:5px;height:5px;border-radius:50%;background:var(--rail-bg)}
+.rail .toc a{display:block;color:var(--on-dim);font-size:13px;line-height:18px;font-weight:500;text-decoration:none;transition:color .22s}.rail .st.done a{color:var(--on-faint)}.rail .st.now a,.rail .toc a:hover{color:var(--on)}
+.rail .foot{display:flex;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px}.rail .foot a{color:var(--on-dim);text-decoration:none}.rail .foot a:hover{color:var(--on)}
+.shell{margin-left:320px}
+@media (max-width:1080px){.rail{position:sticky;width:auto;height:auto;padding:0}.rail-in{flex-direction:row;align-items:center;justify-content:space-between;height:auto;border-radius:0;padding:14px 24px;background:rgba(247,247,245,.94);backdrop-filter:blur(10px);box-shadow:none;border-bottom:1px solid var(--line)}.rail .mark{width:32px;height:32px;font-size:13px;margin:0;background:rgba(25,26,24,.06);color:var(--ink)}.rail .toc{display:none}.rail .foot{margin:0;padding:0;border:0}.rail .foot a{color:var(--muted)}.rail .foot a+a{margin-left:18px}.shell{margin-left:0}}
+.smebox{max-width:var(--read);margin:40px auto}.smebox-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-top:1px solid var(--line)}.smebox-row:last-of-type{border-bottom:1px solid var(--line)}
+.smebox .q{margin:0;color:var(--ink);font-weight:500}.smebox .w{margin:4px 0 0;font-size:14px;color:var(--muted)}.smebox .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.cmp{gap:0}.cmp-col{border:0;border-radius:0;background:none!important;padding:0 40px 0 0}.cmp-col+.cmp-col{padding:0 0 0 40px;border-left:1px solid var(--line)}
+.cmp-col img{height:200px}
+.rulebox{background:none;border:0;border-left:2px solid var(--ink);border-radius:0;padding:4px 0 4px 24px}
+.ae-listen{max-width:var(--read);margin:-90px auto 110px}
+.ae-listen .tb-play{display:inline-flex;align-items:stretch;gap:0;padding:0;border:0;border-radius:0;background:#2A2A27;color:#F2F1EC;height:48px;cursor:pointer;font:inherit}
+.ae-listen .tb-play .tb-l{display:flex;align-items:center;padding:0 26px 0 22px;font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#F2F1EC;white-space:nowrap}
+.ae-listen .tb-play svg{order:2;display:block;width:48px;height:48px;padding:13px;background:#4A4B47;color:#F2F1EC;box-sizing:border-box}
+.ae-listen .tb-play .i-pause{display:none}.ae-listen .tb-play.on .i-play{display:none}.ae-listen .tb-play.on .i-pause{display:block}.ae-listen .tb-play[hidden]{display:none}
+.rd-sec{position:absolute;left:-40px;top:.55em;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:50%;background:var(--ink);color:var(--bg);cursor:pointer;opacity:.85;transition:opacity .18s,transform .18s}.rd-sec:hover{opacity:1;transform:scale(1.08)}.rd-sec svg{display:block}
+@media (max-width:1080px){.rd-sec{position:static;display:inline-grid;margin-left:10px;vertical-align:middle;opacity:1}}
+.rd-on{background:rgba(25,26,24,.055) !important; box-shadow:0 0 0 10px rgba(25,26,24,.055) !important; border-radius:4px !important; color:#191A18 !important; transition:background-color .25s ease, box-shadow .25s ease, color .25s ease}
+.ix-chain .on{text-decoration:none}.ix-chain .on::before{content:none}.ix-chain .on span, .ix-chain .on{box-shadow:none}.ix-chain li.on{border-bottom:0}.ix-chain li.on > *{text-decoration:underline;text-decoration-color:#aec9d5;text-underline-offset:7px;text-decoration-thickness:3px}
+::highlight(readw){background-color:#CFE3D4;color:#191A18}
+.rd-mini{position:fixed;left:50%;bottom:24px;z-index:200;display:flex;align-items:center;gap:4px;padding:5px 6px;border-radius:999px;background:#191A18;color:#F1F1EE;box-shadow:0 12px 32px -12px rgba(0,0,0,.55);font-family:var(--font-body);font-size:13px;line-height:18px;opacity:0;visibility:hidden;transform:translate(-50%,12px);transition:opacity .25s,transform .3s cubic-bezier(.22,.61,.36,1),visibility .25s}
+.rd-mini.on{opacity:1;visibility:visible;transform:translate(-50%,0)}.rd-mini button{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:none;border:0;color:inherit;cursor:pointer}.rd-mini button:hover{background:rgba(255,255,255,.12)}
+.rd-mini .i-play{display:none}.rd-mini.paused .i-play{display:block}.rd-mini.paused .i-pause{display:none}.rd-mini .rd-lbl{padding:0 6px 0 2px;white-space:nowrap}.rd-mini .rd-prev,.rd-mini .rd-next{color:rgba(255,255,255,.75)}
+.rd-mini button.rd-go{display:none;width:auto;height:28px;padding:0 12px;margin-right:2px;border-radius:999px;background:#F1F1EE;color:#191A18;font:inherit;font-size:12.5px;font-weight:500;white-space:nowrap}.rd-mini.away button.rd-go{display:block}.rd-mini svg{display:block}
+@media (min-width:1081px){.rd-mini{left:calc(50% + 160px)}}
+.endnote{display:none}
+</style>
+<style>
+/* the rail, light: no dark panel, no shadow. A list set on the paper, with a hairline to its right; the mark stays dark */
+:root{--rail-bg:#F7F7F5;--rail-2:#ECECE8;--on:#191A18;--on-dim:#6F716A;--on-faint:#B7B8B2}
+.rail-in{background:none;box-shadow:none;border-radius:0;border-right:1px solid #E6E6E2;padding:30px 28px 26px 26px}
+.rail .mark{background:#191A18;color:#F7F7F5}
+.rail .mark:focus-visible{outline:1px solid #191A18}
+.rail .st::before{border-left-color:#DADBD6}
+.rail .dot{border-color:#C9CAC4;background:var(--rail-bg)}
+.rail .st.done .dot{background:#C9CAC4;border-color:#C9CAC4}
+.rail .st.done .dot::after{border-color:#F7F7F5}
+.rail .st.now .dot{border-color:#191A18;background:#191A18}
+.rail .st.now .dot::after{background:#F7F7F5}
+.rail .toc a{color:#6F716A}
+.rail .st.done a{color:#B7B8B2}
+.rail .st.now a,.rail .toc a:hover{color:#191A18}
+.rail .pips i{background:rgba(25,26,24,.18)}
+.rail .pips i.on{background:#191A18}
+.rail .foot{border-top-color:#E6E6E2}
+.rail .foot a{color:#6F716A}
+.rail .foot a:hover{color:#191A18}
+.hint{background:#ECECE8;box-shadow:none}
+.hint span{color:#6F716A}
+@media (prefers-reduced-motion:no-preference){ .rail-in{animation:none} }
+</style>
+<style>
+/* the current chapter's dot: solid, no white centre */
+.rail .st.now .dot::after{display:none!important}
+/* Listen lives in the rail, under the mark: always in view, and part of the navigation */
+.rail .ae-listen{position:fixed!important;top:28px;right:36px;margin:0!important;max-width:none;z-index:60}
+.ae-listen .tb-play:focus:not(:focus-visible){outline:none}
+.ae-listen .tb-play{box-shadow:0 10px 24px -14px rgba(25,26,24,.45)}
+.rail .ae-listen .tb-play{height:40px}
+.rail .ae-listen .tb-play .tb-l{padding:0 18px 0 16px;font-size:11px}
+.rail .ae-listen .tb-play svg{width:40px;height:40px;padding:11px}
+.rail .mark{margin-bottom:36px!important}
+@media (max-width:1080px){
+  .rail .ae-listen{position:static!important;margin:0 0 0 auto!important;order:2}
+  .ae-listen .tb-play{box-shadow:none}
+  .rail .ae-listen .tb-play{height:34px}.rail .ae-listen .tb-play .tb-l{padding:0 12px;font-size:10.5px}.rail .ae-listen .tb-play svg{width:34px;height:34px;padding:9px}
+  .rail .foot{order:3;margin-left:18px!important}
+  .rail .mark{margin:0!important}
+}
+</style>
+
+<style>
+/* reading: the paragraph is the grey block, the sentence being spoken is darker inside it, and the word (where the browser reports it) is on top */
+::highlight(reads){background-color:rgba(61,90,69,.16);color:#191A18}
+::highlight(readw){background-color:#A9C9B0;color:#191A18}
+</style>
+
+<style>
+/* phone: the top bar stays pinned (the page's body overflow rule stops sticky from holding) */
+@media (max-width:1080px){ .rail{position:fixed!important;top:0;left:0;right:0;z-index:50} .shell{padding-top:var(--railh,62px)} }
+</style>
+
+<style>
+/* phone top bar: its own paper background and compact padding (the light-rail rules had cleared them) */
+@media (max-width:1080px){ .rail-in{background:rgba(247,247,245,.96)!important;backdrop-filter:blur(10px);padding:12px 20px!important;border-right:0!important;border-bottom:1px solid #E6E6E2!important} }
+</style>
+
+<style>
+/* Listen: at the right edge of the content, level with the title's last line; it scrolls with the page */
+.rail .ae-listen{display:none}
+.hero-listen{display:flex;justify-content:flex-end;margin:-52px 0 0!important;max-width:none;position:static!important}
+.hero-listen .tb-play{height:44px;box-shadow:none!important}
+.hero-listen .tb-play .tb-l{padding:0 20px 0 18px;font-size:11.5px}
+.hero-listen .tb-play svg{width:44px;height:44px;padding:12px}
+.hero-listen .tb-play:focus:not(:focus-visible){outline:none}
+@media (max-width:900px){ .hero-listen{justify-content:flex-start;margin:24px 0 0!important} }
+</style>
+
+<style>
+.hero-listen{background:none!important;border:0!important;padding:0!important;box-shadow:none!important;width:auto!important}
+/* desktop: Listen is taken out of the flow and its bottom set to the title's last line, so nothing else moves */
+@media (min-width:901px){ .hero-listen{position:absolute!important;right:var(--lr,0);top:var(--lt,0);margin:0!important} }
+</style>
+
+<style>
+/* inside the home page\'s pop-up: the page exactly as it is */
+html.in-pop body{background:#F7F7F5}
+</style>
+<script>if(window.top!==window.self){document.documentElement.classList.add('in-pop');}</script>
+
+<style>
+/* chapter play button centred on the title's first line (line 49.4px, button 24px, +2px for the optical middle of the letters) */
+@media (min-width:1081px){ .rd-sec{top:15px!important} }
+/* left panel foot: only the way back */
+.rail .foot a[href^="mailto:"]{display:none!important}
+.rail .foot{justify-content:flex-start!important}
+</style>
+
+<style>
+/* a small line icon above the label, one per case study */
+.cs-icon{margin:0 0 30px;line-height:0}
+.cs-icon svg{display:block;width:60px;height:60px;margin-left:-4px;color:#1B2124}
+@media (max-width:760px){ .cs-icon{margin-bottom:22px} .cs-icon svg{width:48px;height:48px} }
+</style>
+
+<style>
+/* the closing line: two separate links, back on the left and the prototype on the right */
+p.end-ai{display:flex!important;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;max-width:1000px!important;margin:56px auto 0!important;padding-top:22px!important;border-top:1px solid #E3E3DF;font-size:14px!important;line-height:20px!important}
+p.end-ai a{text-decoration:none;color:#5F625C!important;font-size:14px!important;white-space:nowrap}
+p.end-ai a:hover{color:#191A18!important}
+p.end-ai a.ai-proto{color:#191A18!important;font-weight:500}
+</style>
+<style>
+/* left panel: no foot; the mark and the end of the page already lead back */
+.rail .foot{display:none!important}
+</style>
+<style>
+/* table caption: for screen readers only */
+.ix-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* phone: a type scale in proportion to the home page, and layouts that fit a narrow screen */
+@media (max-width:760px){
+  .case>h2{font-size:28px!important;line-height:1.25!important;letter-spacing:-.02em!important}
+  .eyebrow{font-size:11px!important}
+  .ch-n{font-size:15px!important}
+  .ch h3{font-size:24px!important;line-height:1.3!important;margin-bottom:28px!important}
+  .case>p.tension{font-size:21px!important;line-height:1.4!important;margin-top:48px!important}
+  .case>p,.ch>p,.ch>ol>li{font-size:15px;line-height:1.7}
+  .ch p.pq{font-size:17px!important;line-height:1.55!important;padding-left:16px!important;margin:36px auto!important}
+  .ch p.ix-h{font-size:17px!important;margin-top:40px!important}
+  .sens .ch p.take{font-size:20px!important;margin-top:48px!important}
+  .hero-listen{margin:20px 0 18px!important}
+  .cmp-col,.cmp-col+.cmp-col{padding:0!important;border-left:0!important}
+  .cmp-col+.cmp-col{border-top:1px solid var(--line)!important;padding-top:28px!important;margin-top:28px}
+  .ix-mx-wrap{overflow:visible!important}
+  .ch table.ix-mx{min-width:0!important;margin:24px 0!important}
+  .ix-mx thead{display:none}
+  .ix-mx,.ix-mx tbody,.ix-mx tr,.ix-mx td{display:block;width:100%}
+  .ix-mx tr{padding:14px 0 16px;border-top:1px solid var(--line)}
+  .ix-mx tr:last-child{border-bottom:1px solid var(--line)}
+  .ix-mx td{border:0!important;padding:2px 0!important;font-size:14px;line-height:1.55}
+  .ix-mx td::before{content:attr(data-h);display:block;margin-top:10px;font-size:10.5px;line-height:16px;letter-spacing:.12em;text-transform:uppercase;color:#7A7E76}
+  .ix-mx td:first-child{font-weight:500;color:var(--ink)}
+  .ix-mx td:first-child::before{content:none}
+}
+</style>
+<style>
+/* Sensitivity on the Search page's tokens: paper background, hairlines, no tinted plates.
+   Labels 11px caps (like the glance and option labels), titles in Poppins, body 16/1.7, accent #3D5A45 */
+.sens{--wide:1000px;--lab:#7A7E76}
+.sens .hero-fig{margin:0 0 60px}
+.sens .hero-fig img{border-radius:22px}
+.sens .ch figure.evidence.tall{max-width:var(--read)}
+.sens .ch>div.vtl,.sens .ch>div.vren,.sens .ch>div.tst-path{max-width:var(--read);margin:48px auto 56px}
+.sens .ch>div.st4,.sens .ch>div.vk,.sens .ch>div.vfl{max-width:var(--wide);margin:64px auto 72px}
+.sens .lab,.sens .tl-br .sit,.sens .st4-after,.sens .k-h,.sens .fl-t,.sens .tst-path b,.sens .nx-k{font-size:11px;line-height:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--lab);font-weight:500}
+
+/* 200 insights: the dots */
+.sens .ch figure.v200{max-width:var(--read);margin:48px auto 56px}
+.v200 .dots{display:grid;grid-template-columns:repeat(20,1fr);gap:9px}
+.v200 .dt{display:block;aspect-ratio:1;border-radius:50%;background:#DCDCD7}
+.v200 .dt.on{background:var(--accent)}
+.sens .v200 figcaption{margin-top:18px}
+
+/* same finding, two situations: a timeline, then a fork set like the comparison in Search */
+.vtl .tl-ev{display:grid;grid-template-columns:56px 1fr;gap:0 18px;position:relative;padding:0 0 18px;font-size:15px;line-height:22px}
+.vtl .tm{color:var(--lab);font-variant-numeric:tabular-nums}
+.vtl .tx{color:var(--muted);position:relative;padding-left:22px}
+.vtl .tx::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:#C9CAC4}
+.vtl .tl-ev:first-child .tx::after{content:"";position:absolute;left:3px;top:19px;height:22px;border-left:1px solid #DADBD6}
+.vtl .tl-ev.hot .tx{color:var(--ink);font-weight:500}
+.vtl .tl-ev.hot .tx::before{background:var(--accent)}
+.vtl .tl-fork{display:grid;grid-template-columns:1fr 1fr;margin-top:14px;border-top:1px solid var(--line);padding-top:24px}
+.vtl .tl-fork{grid-template-rows:auto auto auto}
+.vtl .tl-br{display:grid;grid-row:span 3;grid-template-rows:subgrid;align-content:start;padding-right:28px}
+.vtl .tl-br .sit{align-self:end}
+.vtl .tl-br+.tl-br{padding:0 0 0 28px;border-left:1px solid var(--line)}
+.vtl .tl-br b{font:500 20px/28px var(--font-display);color:var(--ink);margin:10px 0 6px;letter-spacing:-.01em}
+.vtl .tl-br.hot b{color:var(--accent)}
+.vtl .tl-br .out{font-size:14px;line-height:22px;color:var(--muted)}
+
+/* four responses: the label on the left, the UI it would show on the right */
+.st4-find{font-size:16px;line-height:26px;color:var(--ink);font-weight:500;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.st4-find .lab{display:block;margin-bottom:8px}
+.st4-row{display:grid;grid-template-columns:240px 1fr;gap:40px;align-items:start;padding:24px 0;border-bottom:1px solid var(--line)}
+.st4-l b{display:block;font:500 20px/28px var(--font-display);color:var(--ink);letter-spacing:-.01em}
+.st4-l span{display:block;margin-top:6px;font-size:14px;line-height:22px;color:var(--muted)}
+.st4-after{margin:36px 0 0!important;padding-bottom:12px}
+.st4-ui{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;font-size:14px;line-height:22px;color:var(--ink)}
+.st4-ui p{margin:0 0 14px}
+.st4-ui .fld{color:var(--muted);margin-right:12px}
+.st4-ui .val{font-weight:600}
+.st4-ui .src{display:block;margin-top:10px;font-size:13px;line-height:20px;color:var(--lab)}
+.st4-ui.i{border-left:2px solid var(--accent)}
+.st4-ui .btn{display:inline-block;margin:0 8px 0 0;padding:5px 12px;border:1px solid #D7DBD2;border-radius:30px;font-size:13px;line-height:18px;color:var(--ink)}
+.st4-ui .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.st4-ui .chk{font-weight:500;color:var(--accent)}
+
+/* when the agent gets it wrong: two contracts by date */
+.vren .rn-row{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;padding:16px 0;border-top:1px solid var(--line)}
+.vren .rn-row:first-child{border-top:0;padding-top:0}
+.vren .rn-n{font-size:14px;line-height:20px;font-weight:500;color:var(--ink)}
+.vren .rn-bar{height:4px;margin-top:8px;border-radius:2px;background:#E6E6E2;overflow:hidden}
+.vren .rn-bar i{display:block;height:100%;background:#B7B8B2}
+.vren .rn-bar i.b{background:var(--accent)}
+.vren .rn-t{display:block;margin-top:10px;font-size:14px;line-height:22px;color:var(--muted)}
+.vren .rn-f{display:flex;gap:40px;margin-top:6px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;line-height:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--lab)}
+.vren .rn-f b{margin-left:8px;font-weight:600;color:var(--ink)}
+.vren .rn-f .hot b{color:var(--accent)}
+
+/* 99 things against 3: two columns, the same divider as the comparison in Search */
+.vk{display:grid;grid-template-columns:1fr 1fr}
+.vk .k-p{padding-right:40px}
+.vk .k-p+.k-p{padding:0 0 0 40px;border-left:1px solid var(--line)}
+.vk p{margin:0}
+.vk .k-dots{display:grid;grid-template-columns:repeat(10,10px);gap:7px;margin:18px 0 0}
+.vk .k-dots .dt{width:10px;height:10px;border-radius:50%;background:#DCDCD7}
+.vk .k-dots .dt.miss{background:none;border:1px dashed #8F928A}
+.vk .k-miss{margin-top:14px!important;font-size:13px;line-height:20px;color:var(--lab)}
+.vk .k-out{margin-top:18px!important;font:500 20px/28px var(--font-display);color:var(--ink);letter-spacing:-.01em}
+.vk .ok .k-out{color:var(--accent)}
+.vk .k-chips{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.vk .k-chips li{font-size:13px;line-height:18px;padding:5px 12px;border:1px solid #D7DBD2;border-radius:30px;color:var(--ink)}
+.vk .k-chips li.key{border-color:var(--accent);color:var(--accent);font-weight:500}
+
+/* four questions: finding, the questions, the response */
+.vfl{display:grid;grid-template-columns:180px 24px 1fr 24px 150px;gap:0 16px;align-items:center}
+.vfl .fl-c{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.vfl .fl-f{font:500 17px/26px var(--font-display);color:var(--ink);letter-spacing:-.01em}
+.vfl .fl-ar{color:#B4B8AF;font-size:16px;text-align:center}
+.vfl .fl-q{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.vfl .fl-q>div{padding:16px 18px 18px 0;border-bottom:1px solid var(--line)}
+.vfl .fl-q>div:nth-child(even){padding-left:18px;border-left:1px solid var(--line)}
+.vfl .fl-q b{display:block;font-size:14px;line-height:20px;font-weight:600;color:var(--ink)}
+.vfl .fl-q span{display:block;margin-top:4px;font-size:13px;line-height:20px;color:var(--muted)}
+.vfl .fl-r{font-size:13px;line-height:18px;padding:5px 12px;border:1px solid #D7DBD2;border-radius:30px;color:var(--ink)}
+.vfl .fl-r.hot{border-color:var(--accent);color:var(--accent);font-weight:500}
+.vfl .fl-loop{grid-column:1/-1;margin:28px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:14px;line-height:22px;color:var(--muted)}
+
+/* what testing changed: before, learned, after */
+.tst-path{display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr;gap:0 12px;align-items:start;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tst-path>div{display:flex;flex-direction:column;gap:6px}
+.tst-path span{font-size:15px;line-height:22px;color:var(--ink)}
+.tst-path>div:last-child span{color:var(--accent);font-weight:500}
+.tst-path i{font-style:normal;color:#B4B8AF;padding-top:22px;text-align:center}
+.sens .ch>ol.tst-rules{padding-left:20px}
+.tst-rules li{margin:8px 0;padding-left:4px}
+.tst-rules li b{color:var(--ink);font-weight:600}
+.sens .ch p.ix-h{font-size:18px}
+
+/* the closing question: set like the opening line */
+.sens .ch p.take{margin:72px auto 0;color:var(--ink);font:500 clamp(22px,2.3vw,28px)/1.4 var(--font-display);letter-spacing:-.02em}
+
+/* more on the idea: two links, the width of the closing line under them */
+.nx-row{max-width:var(--wide);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.nx{display:flex;flex-direction:column;gap:6px;padding:24px 40px 26px 0;text-decoration:none}
+.nx+.nx{padding:24px 0 26px 40px;border-left:1px solid var(--line)}
+.nx-t{font:500 22px/30px var(--font-display);color:var(--ink);letter-spacing:-.01em}
+.nx-t::after{content:" →";color:#B4B8AF;transition:color .2s}
+.nx:hover .nx-t::after{color:var(--ink)}
+.sens .end p.end-ai{margin-top:0!important}
+
+@media (max-width:760px){
+  .vtl .tl-fork,.vk,.nx-row{grid-template-columns:1fr}
+  .vtl .tl-br,.vk .k-p,.nx{padding:0 0 22px!important}
+  .vtl .tl-br+.tl-br,.vk .k-p+.k-p,.nx+.nx{border-left:0;border-top:1px solid var(--line);padding:22px 0 22px!important}
+  .st4-row{grid-template-columns:1fr;gap:14px}
+  .vfl{grid-template-columns:1fr;gap:14px}
+  .vfl .fl-ar{transform:rotate(90deg);text-align:left;width:16px}
+  .vfl .fl-c:last-of-type{flex-direction:row;flex-wrap:wrap;align-items:center}
+  .tst-path{grid-template-columns:1fr;gap:12px}
+  .tst-path i{padding:0;text-align:left;transform:rotate(90deg);width:16px}
+  .v200 .dots{gap:6px}
+}
+
+</style>
+</head>
+<body><aside class="rail"><div class="rail-in">
+<a class="mark" href="index.html" aria-label="Amrit Kumar, home">a</a>
+<ol class="toc">
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-1">Where it started</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-2">Same finding, different urgency</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-3">What should the agent do?</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-4">When the agent gets it wrong</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-5">What the agent needs to consider</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-6">What testing changed</a></li>
+<li class="st"><span class="dot" aria-hidden="true"></span><a href="#chapter-7">Where this stands</a></li>
+</ol>
+</div></aside>
+<div class="shell">
+<article class="case sens" id="w5">
+<div class="cs-icon" aria-hidden="true"><svg viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M43.53 5.7241C44.6065 4.64796 46.352 4.64796 47.4285 5.7241L53.2771 11.5718C54.3532 12.6482 54.3532 14.3947 53.2771 15.4712L47.4285 21.3188C46.352 22.3949 44.6065 22.3949 43.53 21.3188L38.1902 15.98H20.8474C20.9775 16.0875 21.104 16.2014 21.2244 16.3218C22.23 17.3276 22.7957 18.6914 22.7957 20.1137V24.5688C23.3693 24.3815 23.974 24.2856 24.5828 24.2856L25.0906 24.3091C26.2713 24.4128 27.4081 24.877 28.2986 25.6684C28.7728 26.09 29.1598 26.5921 29.4402 27.1469C30.1587 26.8326 30.9435 26.6694 31.7351 26.6694L32.2419 26.6928C33.4003 26.7946 34.5155 27.2441 35.3982 28.0083C36.3624 27.1529 37.605 26.6694 38.905 26.6694C40.3405 26.6694 41.706 27.2588 42.7039 28.2876C43.6993 29.3142 44.2495 30.6947 44.2498 32.1235V37.6245C44.2498 41.972 42.5752 46.1533 39.5779 49.2436C36.5788 52.3357 32.4987 54.0835 28.2332 54.0835H24.6765C21.9933 54.0834 19.7442 53.6565 17.7712 52.81C15.7968 51.9628 14.1908 50.7333 12.7449 49.2524L12.741 49.2485L6.33862 42.6479C6.31759 42.6262 6.29602 42.6033 6.27612 42.5805C5.36406 41.5389 4.88332 40.1854 4.9187 38.8022C4.95427 37.4193 5.50399 36.0932 6.46948 35.101C7.43697 34.1072 8.74976 33.5253 10.1384 33.4927C10.8032 33.4771 11.4566 33.5874 12.0681 33.811V22.1196C8.09858 22.0013 4.91686 18.7486 4.91675 14.7505C4.91677 10.6774 8.21866 7.37546 12.2917 7.37546C15.502 7.37546 18.226 9.42919 19.239 12.2925H37.1658C37.2951 12.0331 37.4652 11.788 37.6814 11.5718L43.53 5.7241ZM18.5212 18.6977C17.816 19.8089 16.8208 20.7166 15.6433 21.3188V36.7446L17.0681 38.2134C17.7554 38.922 17.7374 40.0542 17.0291 40.7417C16.3203 41.4291 15.1882 41.4133 14.5007 40.7046L13.5818 39.7563C12.7948 39.6351 12.1776 39.0036 12.0818 38.2085L11.4158 37.5219C11.0792 37.2137 10.6516 37.0558 10.2214 37.0659C9.78488 37.0763 9.35787 37.2596 9.03198 37.5942C8.70461 37.9306 8.50503 38.3947 8.49194 38.893C8.47931 39.3868 8.65214 39.8587 8.95776 40.2134L15.3015 46.7553C16.5053 47.9881 17.738 48.9052 19.1824 49.5249C20.6281 50.145 22.3809 50.5072 24.6765 50.5073H28.2332C31.5145 50.5073 34.675 49.1653 37.0125 46.7553C39.3518 44.3434 40.6746 41.0583 40.6746 37.6245V32.1235C40.6743 31.6081 40.4743 31.1242 40.1365 30.7759C39.8002 30.4294 39.3561 30.2446 38.905 30.2446C38.4539 30.2446 38.0098 30.4293 37.6736 30.7759C37.3357 31.1242 37.1358 31.6081 37.1355 32.1235C37.1355 32.248 37.1226 32.3695 37.0984 32.4868V33.2251C37.0982 34.2124 36.2976 35.0122 35.3103 35.0122C34.3231 35.012 33.5224 34.2123 33.5222 33.2251V31.6352C33.522 31.3392 33.3921 31.0053 33.0759 30.7241C32.8334 30.5085 32.5024 30.3472 32.1257 30.2798L31.7351 30.2446C31.1977 30.2446 30.7178 30.4368 30.3943 30.7241C30.0781 31.0053 29.9472 31.3392 29.947 31.6352C29.9468 32.6224 29.1462 33.4223 28.1589 33.4223C27.1717 33.4223 26.3711 32.6224 26.3708 31.6352C26.3709 31.4693 26.3808 31.3045 26.3982 31.1421C26.3816 31.0442 26.3709 30.9439 26.3708 30.8413V29.2505C26.3705 28.9546 26.2396 28.6213 25.9236 28.3403C25.6811 28.1249 25.3508 27.9634 24.9744 27.896L24.5828 27.8608C24.0452 27.8609 23.5654 28.0528 23.2419 28.3403C22.9318 28.6161 22.8008 28.9422 22.7957 29.2339V29.9468C22.7957 29.9525 22.7947 29.9586 22.7947 29.9643V30.8413L22.7859 31.0249C22.6938 31.9258 21.9327 32.6282 21.0076 32.6284C20.0822 32.6284 19.3203 31.9259 19.2283 31.0249L19.2195 30.8413V20.1137C19.2195 19.6398 19.0311 19.1853 18.696 18.8501C18.6412 18.7952 18.5821 18.7446 18.5212 18.6977Z" fill="currentColor"/></svg></div>
+<div class="eyebrow">HOW I THINK <span> / </span> OWN WORK · 2023–26</div><h2>When AI knows the answer, how does it know when to speak?</h2>
+<div class="tbar ae-listen hero-listen" id="tbar-ae" role="toolbar" aria-label="Listen to this write-up"><button class="tb tb-play" type="button" aria-label="Listen to this write-up"><svg class="i-play" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8.3 6.6v6.8L13.6 10z" fill="currentColor"/></svg><svg class="i-pause" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 6.8v6.4M12 6.8v6.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="tb-l">Listen</span></button></div>
+<figure class="evidence fv hero-fig"><img alt="A phone on a bedside table at night, lit up with an incoming call from Wife at 3:00 AM" src="sens-3am-call.webp" loading="lazy"/></figure>
+<p class="tension">The same information can mean something very different depending on when it reaches you.</p>
+<p>Your wife calls at 2 in the afternoon. You might answer or call back later.</p>
+<p>But if she calls at 3 in the morning, you’d probably pick up immediately. Something might be wrong.</p>
+<p>Same person. Same call. Yet you react differently because you understand the situation.</p>
+<p>We make these judgments all the time. But can an AI agent do the same? When should it interrupt us, and when should it stay quiet?</p>
+<section class="ch" id="chapter-1">
+<p class="ch-n">01</p>
+<h3>Where it started</h3>
+<figure class="evidence fv"><img alt="A contract page redesigned around AI-generated insights and actions: a short summary of the agreement, then the items that need attention today" loading="lazy" src="sens-contract-page-g.webp"/></figure>
+<p>I was designing an AI-first contract tool. The agent reads agreements, connects clauses to amendments and invoices, and identifies things people might need to act on.</p>
+<p>Imagine opening the tool in the morning to find 200 AI-generated insights.</p>
+<figure aria-label="200 small dots for the agent's conclusions, five of them highlighted" class="v200" role="img"><div class="dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt on"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span></div><figcaption>200 insights by morning. A person can act on a handful.</figcaption></figure>
+<p>You’d still have to read through everything to work out what matters. We’d simply replaced reading contracts with reading AI.</p>
+<p>Showing only the top five seemed reasonable. But important isn’t always urgent. One finding can wait three months. Another might affect a payment going out in fifteen minutes.</p>
+<p class="pq">The question wasn’t just what to show. It was when, to whom, and how loudly.</p>
+</section>
+<section class="ch" id="chapter-2">
+<p class="ch-n">02</p>
+<h3>Same finding, different urgency</h3>
+<p>At 9 AM, the agent reads Acme’s payment term as Net 60. At 11 AM, an amendment arrives changing it to Net 45. Now consider two situations.</p>
+<div aria-label="Timeline: at 9:00 the agent reads Net 60; at 11:00 Amendment 3 shows Net 45. If the next payment is months away, it stays quiet. If Finance pays at noon, it interrupts." class="vtl" role="img">
+<div class="tl-ev"><span class="tm">9:00</span><span class="tx">Payment term: Net 60</span></div>
+<div class="tl-ev hot"><span class="tm">11:00</span><span class="tx">Amendment 3 arrives. Payment term: Net 45</span></div>
+<div class="tl-fork">
+<div class="tl-br"><span class="sit">Payment is three months away</span><b>Quiet</b><span class="out">Update the term quietly. Keep the evidence. No need to interrupt anyone.</span></div>
+<div class="tl-br hot"><span class="sit">Finance is paying at noon using the old term</span><b>Interrupt</b><span class="out">Show the change before the payment goes out.</span></div>
+</div>
+</div>
+<p>The finding hasn’t changed. What changed is how much attention it deserves.</p>
+<p class="pq"><b>Decision 1.</b> Urgency depends on the situation, not just the finding.</p>
+</section>
+<section class="ch" id="chapter-3">
+<p class="ch-n">03</p>
+<h3>What should the agent do?</h3>
+<p>This made me question whether changing the appearance of an alert was enough. Sometimes the agent should simply update information. Sometimes it needs to interrupt. And sometimes it should ask, or stop warning once the issue is handled.</p>
+<p>I explored four responses to the same finding.</p>
+<div aria-label="One finding shown four ways: quiet, interrupt, ask, and adapt after a person responds" class="st4" role="group">
+<div class="st4-find"><span class="lab">The finding</span>Amendment 3 changes Acme’s payment term from Net 60 to Net 45.</div>
+<div class="st4-row">
+<div class="st4-l"><b>Quiet</b><span>Nothing needs attention yet. Next payment is three months away.</span></div>
+<div class="st4-ui q"><span class="fld">Payment term</span><span class="val">Net 45</span><span class="src">Updated at 11:02 from Amendment 3.</span></div>
+</div>
+<div class="st4-row">
+<div class="st4-l"><b>Interrupt</b><span>Someone is about to act. A payment is being processed at noon.</span></div>
+<div class="st4-ui i"><p>Today’s payment to Acme uses Net 60. Amendment 3 changed it to Net 45.</p><span class="btn pri">Review before paying</span><span class="btn">Already handled</span></div>
+</div>
+<div class="st4-row">
+<div class="st4-l"><b>Ask</b><span>Something important is missing. The agent can’t see when the next payment is due.</span></div>
+<div class="st4-ui a"><p>Is a payment to Acme planned this week? The term changed to Net 45, but I can’t see your payment schedule.</p><span class="btn">Yes, this week</span><span class="btn">No</span><span class="btn">Not mine</span></div>
+</div>
+<p class="st4-after">After a person responds</p>
+<div class="st4-row">
+<div class="st4-l"><b>Adapt</b><span>Someone has already handled it. Finance confirms the change is taken care of.</span></div>
+<div class="st4-ui d"><span class="chk">Handled by Finance</span><span class="src">Won’t raise this again unless the payment details change.</span></div>
+</div>
+</div>
+<p>These aren’t just four ways of displaying an alert. They’re four different things the agent can do.</p>
+<p>But there’s a catch. Asking also takes time. If a payment is going out in fifteen minutes, waiting for an answer may be worse than interrupting.</p>
+</section>
+<section class="ch" id="chapter-4">
+<p class="ch-n">04</p>
+<h3>When the agent gets it wrong</h3>
+<p>Consider two contracts.</p>
+<div aria-label="Contract A expires in 2 days but its vendor is being offboarded. Contract B expires in 10 days but a negotiation needs a decision this week. By date A comes first; by situation B does." class="vren" role="img">
+<div class="rn-row"><span class="rn-n">Contract A</span><div><div class="rn-bar"><i style="width:14%"></i></div><span class="rn-t">Expires in two days. The vendor is already being offboarded.</span></div></div>
+<div class="rn-row"><span class="rn-n">Contract B</span><div><div class="rn-bar"><i class="b" style="width:71%"></i></div><span class="rn-t">Expires in ten days. The renewal needs a decision this week.</span></div></div>
+<div class="rn-f"><span>By date <b>A first</b></span><span class="hot">By situation <b>B first</b></span></div>
+</div>
+<p>Sort by date and Contract A comes first. But anyone who knows the situation would prioritise B. The agent could read every document correctly and still get the priority wrong.</p>
+<p>I initially thought more context might solve this. But an agent can know 99 things about a contract and still miss the one fact that matters: Finance is paying at noon.</p>
+<div aria-label="An agent that knows 99 things but not the payment at noon stays quiet, the wrong call. An agent that knows three things, including the payment, interrupts, the right call." class="vk" role="img">
+<div class="k-p"><p class="k-h">Knows 99 things</p><div class="k-dots"><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt"></span><span class="dt miss"></span></div><p class="k-miss">Missing: payment at noon</p><p class="k-out">Stays quiet. Wrong call.</p></div>
+<div class="k-p ok"><p class="k-h">Knows 3 things</p><ul class="k-chips"><li class="key">Payment at noon</li><li>Net 45 amendment</li><li>Finance owns it</li></ul><p class="k-out">Interrupts. Better-informed call.</p></div>
+</div>
+<p>Some facts may never reach the system. A renewal agreed over the phone. A supplier replaced after a meeting. An issue someone has already resolved.</p>
+<p>The agent needs to be clear about what it knows and make it easy for people to correct it. “We’re already on it” isn’t just dismissing an alert. It’s giving the agent information it didn’t have.</p>
+<p class="pq"><b>Decision 2.</b> More context doesn’t always mean better judgment. What matters is the fact that could change the decision.</p>
+</section>
+<section class="ch" id="chapter-5">
+<p class="ch-n">05</p>
+<h3>What the agent needs to consider</h3>
+<p>These examples helped me narrow the problem to four questions.</p>
+<div aria-label="A finding passes through four questions: consequence, time, enough to judge, and people. The answer picks a response: quiet, surface, ask or interrupt. A person's reply goes back in as context." class="vfl" role="img">
+<div class="fl-c"><span class="fl-t">Finding</span><span class="fl-f">An amendment changes the payment term</span></div>
+<span aria-hidden="true" class="fl-ar">→</span>
+<div class="fl-q"><div><b>Consequence</b><span>What happens if this is missed? Can it be undone?</span></div><div><b>Time</b><span>When does it start to matter?</span></div><div><b>Enough to judge</b><span>Is the information needed to make the decision missing?</span></div><div><b>People</b><span>Who owns the decision? Has someone already acted?</span></div></div>
+<span aria-hidden="true" class="fl-ar">→</span>
+<div class="fl-c"><span class="fl-t">Response</span><span class="fl-r">Quiet</span><span class="fl-r">Surface</span><span class="fl-r">Ask</span><span class="fl-r hot">Interrupt</span></div>
+<p class="fl-loop">↺ When a person responds, that answer becomes part of the context for the next decision.</p>
+</div>
+<p>Together, these shape whether the agent stays quiet, shows something, asks, or interrupts.</p>
+<p>Earlier, I’d explored five levels of attention, from Nothing to Interrupt. I still find them useful, but my thinking has shifted. The level of attention is the outcome. The harder problem is deciding which response the situation deserves.</p>
+</section>
+<section class="ch" id="chapter-6">
+<p class="ch-n">06</p>
+<h3>What testing changed</h3>
+<p>I built a small clickable prototype around the Net 60 to Net 45 change. People saw three situations: a payment going out at noon, one in three weeks, and one where the payment date was unknown. For each, they chose whether the AI should interrupt, show a small sign, or ask a question.</p>
+<p>Seven people tried it across two rounds, about two minutes each.</p>
+<figure class="evidence fv tall"><img alt="The test screen: the AI found Acme must now be paid within 45 days instead of 60. Situation: Finance is paying Acme at 12:00 today. Three choices: Stop me, Small sign, Ask Finance for me" loading="lazy" src="sens-test-screen-g.webp"/><figcaption>What people saw in round two, for the noon-today moment.</figcaption></figure>
+<p>I expected the urgent payment to trigger an interruption, the distant one to stay quiet, and the unknown date to trigger a question. The first two went as expected. The third surprised me.</p>
+<p>Nobody wanted the AI asking them when Finance would pay. They didn’t know. Finance did.</p>
+<p>I’d been thinking about missing information without considering who could actually provide it. That changed the design.</p>
+<div aria-label="How the Ask response changed: it first asked the user, testing showed that was the wrong person, so it now asks Finance" class="tst-path" role="group"><div><b>Before</b><span>Ask the user</span></div><i aria-hidden="true">→</i><div><b>What I learned</b><span>The user may not know</span></div><i aria-hidden="true">→</i><div><b>After</b><span>Ask Finance for me</span></div></div>
+<p class="ix-h">Testing also revealed two other things</p>
+<ol class="tst-rules">
+<li><b>Show the proof.</b> People wanted to see the contract text before trusting an urgent warning.</li>
+<li><b>Let people return later.</b> A quiet notification needed a “Remind me later” option.</li>
+</ol>
+<p class="pq"><b>Decision 3.</b> Knowing who owns the decision matters as much as knowing how urgent it is.</p>
+<p class="ix-foot">This was a small test, and I didn’t record participants’ roles. These are early design directions, not validated rules.</p>
+<p>But one thing stayed with me.</p>
+<p class="pq">I had designed for missing information without asking who could supply it.</p>
+</section>
+<section class="ch" id="chapter-7">
+<p class="ch-n">07</p>
+<h3>Where this stands</h3>
+<p>The idea that timing and context affect attention isn’t new. Horvitz explored interruption versus delay in <a href="https://www.microsoft.com/en-us/research/publication/attention-sensitive-alerting/" rel="noopener" target="_blank">Attention-Sensitive Alerting</a> (1999). Dey examined <a href="https://www.cs.cmu.edu/~anind/context.html" rel="noopener" target="_blank">context</a> in 2001, and Microsoft’s <a href="https://www.microsoft.com/en-us/research/blog/guidelines-for-human-ai-interaction-design/" rel="noopener" target="_blank">Human-AI Interaction Guidelines</a> (2019) address timing and correction.</p>
+<p>What’s different now is that AI agents can find hundreds of things on their own, across documents and systems. But finding something doesn’t mean knowing what someone should do about it.</p>
+<p>The agent may know a payment term changed. It may not know Finance already handled it. It may know a contract is expiring. It may not know the supplier is being replaced.</p>
+<p>The agent can be right about what it found and still be wrong about what matters. That’s the part I’m interested in designing for.</p>
+<p class="take">How can an agent decide when something deserves our attention, especially when the most important part of the situation might be something it doesn’t know?</p></section>
+<div class="end idx"><nav class="nx-row" aria-label="More on this idea"><a class="nx" href="sensitivity.html"><span class="nx-k">Live interactions</span><span class="nx-t">See the UI samples</span></a><a class="nx" href="sensitivity-paper.html"><span class="nx-k">The full paper</span><span class="nx-t">Read the idea</span></a></nav><p class="end-ai"><a class="back" data-close="" href="#"><i>←</i> Back to the work</a><a class="ai-proto" data-proto="q5" href="#">Prototype built with AI <i aria-hidden="true">→</i></a></p></div>
+</article></div>
+<script>
+  /* Three states on the rail, and the pip that says how far through a section you
+     are. The observer names the section you are in; everything before it is behind
+     you and everything after is ahead, which is the whole state of the walk. */
+  var steps = [].slice.call(document.querySelectorAll('.rail .toc .st'));
+  var links = steps.map(function (li) { return li.querySelector('a'); });
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var here = -1;
+
+  function mark(i) {
+    if (i === here) return; here = i;
+    steps.forEach(function (li, j) {
+      li.classList.toggle('now', j === i);
+      li.classList.toggle('done', j < i);
+    });
+    pip();
+  }
+  /* which figure in this section you have reached */
+  function pip() {
+    var li = steps[here]; if (!li) return;
+    var pips = [].slice.call(li.querySelectorAll('.pips i')); if (!pips.length) return;
+    var sec = secs[here]; if (!sec) return;
+    var figs = [].slice.call(sec.querySelectorAll('figure'));
+    var mid = innerHeight * 0.45, best = 0;
+    figs.slice(0, pips.length).forEach(function (f, k) {
+      if (f.getBoundingClientRect().top < mid) best = k;
+    });
+    pips.forEach(function (p, k) { p.classList.toggle('on', k === best); });
+  }
+
+  var spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      mark(secs.indexOf(e.target));
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(function (s) { if (s) spy.observe(s); });
+
+  var tick = false;
+  addEventListener('scroll', function () {
+    if (tick) return; tick = true;
+    requestAnimationFrame(function () { tick = false; pip(); });
+  }, { passive: true });
+  mark(0);
+</script>
+<script>
+/* Listen: reads the case study aloud. The same reader as the write-ups on the home page */
+function readAloud(barId, cardId){
+  var bar=document.getElementById(barId); if(!bar) return;
+  var card=document.querySelector(cardId), play=bar.querySelector('.tb-play'), ss=window.speechSynthesis;
+  if(!ss || !window.SpeechSynthesisUtterance){ play.hidden=true; return; }
+  var HL=!!(window.Highlight && window.CSS && CSS.highlights), follow=true, state='idle', cur=null, voice=null, run=0;
+  var BAD=/compact|eloquence|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|whisper|zarvox|trinoids|jester|organ|superstar|wobble|grandma|grandpa|rocko|shelley|junior|ralph|fred|kathy|good news/i;
+  var MALE=/\bmale\b|daniel|\balex\b|\btom\b|aaron|arthur|oliver|rishi|evan|nathan|\bguy\b|ryan|christopher|\beric\b|andrew|brian|davis|roger|steffan|thomas|liam|william|prabhat|george|james|david|mark|jacob|tony|\bsam\b|gordon|lee\b/i;
+  var FEMALE=/female|samantha|karen|moira|tessa|serena|\bava\b|allison|zoe|libby|sonia|aria|jenny|victoria|susan|veena|fiona|\bkate\b|neerja|hazel|zira|heera|catherine|emma|olivia|natasha|clara|michelle|ana\b|sara|joanna|amy|nicky|kendra|kimberly|salli|ivy|martha|maisie|isla|aurora|ava\b|jane|nancy|sonia|ashley|cora|elizabeth|monica|siri female/i;
+  function score(v){ var n=v.name, s=0;
+    if(MALE.test(n) && !/female/i.test(n)) s-=10;   /* same order as the first version, with male voices just behind */
+    if(/^Google US English$/i.test(n)) s+=500;   /* the same voice as the walkthrough videos, whenever the browser has it (Chrome) */
+    if(/natural|neural/i.test(n)) s+=60; if(/premium|enhanced/i.test(n)) s+=50; if(/^google/i.test(n)) s+=30;
+    if(/en[-_](GB|US|IN|AU|IE)/i.test(v.lang)) s+=5; if(v.default) s+=2; if(BAD.test(n)) s-=200; return s; }
+  function pick(){ var vs=ss.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
+    vs.sort(function(a,b){ return score(b)-score(a); }); voice=vs[0]||null; }
+  pick(); if(ss.addEventListener) ss.addEventListener('voiceschanged', pick);
+  function blocks(){ var out=[], els=card.querySelectorAll('h1, h2, p, h3, li'), SKIP='.vtl, .st4, .vren, .vk, .vfl, .tst-path, .v200, .end, .rail, .eyebrow, .glance, figcaption, .ae-listen, .ch-n, .ix-foot, .cmp-k, .rb-k, .rb-n, .rb-lbl, .endnote, .ix-chain, .smebox .tag, .ix-sr';
+    for(var i=0;i<els.length;i++){ var el=els[i];
+      if(el.closest(SKIP)) continue;   /* section numbers, meta lines and diagram labels are for the eye, not the ear */
+      if((el.textContent||'').trim()) out.push(el); }
+    return out; }
+  function rangeAt(el, start, len){ var tw=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), pos=0, n, r=document.createRange(), on=false;
+    while((n=tw.nextNode())){ var L=n.data.length;
+      if(!on && start<pos+L){ r.setStart(n, start-pos); on=true; }
+      if(on && start+len<=pos+L){ r.setEnd(n, start+len-pos); return r; }
+      pos+=L; }
+    return null; }
+  function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL){ CSS.highlights.delete('readw'); CSS.highlights.delete('reads'); } }
+  function inView(el){ var b=el.getBoundingClientRect(); return b.top>80 && b.bottom<innerHeight-80; }
+  function setUI(){ play.classList.toggle('on', state==='playing'); play.classList.toggle('paused', state==='paused');
+    var l = state==='playing' ? 'Pause' : state==='paused' ? 'Carry on listening' : 'Listen to this case study';
+    play.setAttribute('aria-label', l);
+    play.querySelector('.tb-l').textContent = state==='playing' ? 'Playing' : state==='paused' ? 'Paused' : 'Listen'; }
+  var mini=document.createElement('div'); mini.className='rd-mini'; mini.setAttribute('role','group'); mini.setAttribute('aria-label','Narration');
+  mini.innerHTML='<button type="button" class="rd-pp" aria-label="Pause"><svg class="i-pause" width="16" height="16" viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.2v9.6l7.5-4.8z" fill="currentColor"/></svg></button><button type="button" class="rd-prev" aria-label="Previous paragraph" title="Previous paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></button><button type="button" class="rd-next" aria-label="Next paragraph" title="Next paragraph"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3.5 4.5 4.5L6 12.5"/></svg></button><span class="rd-lbl">Playing</span><button type="button" class="rd-go">Go to reading</button><button type="button" class="rd-x" aria-label="Stop reading"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>';
+  document.body.appendChild(mini);
+  mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
+  mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
+  /* the page follows the reading until you scroll yourself; then a button takes you back to it */
+  var t0=0, awayT=0;
+  function away(){ if(state==='idle' || !follow) return; if(Date.now()-t0<1200) return;
+    clearTimeout(awayT); awayT=setTimeout(function(){ if(state==='idle' || !follow) return; if(cur && inView(cur)) return; follow=false; mini.classList.add('away'); }, 250); }
+  ['wheel','touchmove'].forEach(function(ev){ addEventListener(ev, function(e){ if(!mini.contains(e.target)) away(); }, {passive:true}); });
+  addEventListener('keydown', function(e){ if(/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(e.key)) away(); });
+  mini.querySelector('.rd-go').addEventListener('click', function(){ follow=true; mini.classList.remove('away'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'}); });
+  var setUI0=setUI; setUI=function(){ setUI0(); mini.classList.toggle('on', state!=='idle'); mini.classList.toggle('paused', state==='paused');
+    mini.querySelector('.rd-pp').setAttribute('aria-label', state==='paused'?'Resume':'Pause');
+    mini.querySelector('.rd-lbl').textContent = state==='paused' ? 'Paused' : 'Playing'; };
+  /* a hard stop: Chrome can ignore cancel() on a paused or online voice, so resume first and cancel again a beat later */
+  function stop(){ run++; clearTimeout(dog); clearInterval(alive); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ ss.cancel(); }, 60); setTimeout(function(){ if(state==='idle') ss.cancel(); }, 300); state='idle'; clearMarks(); setUI(); }
+  document.addEventListener('visibilitychange', function(){ if(document.hidden && state!=='idle') stop(); });
+  /* long paragraphs go out as sentence-sized pieces: Chrome's online voices stall on long text, and a stall should never stop the reading */
+  function pieces(text){ var out=[], re=/[^.!?]+(?:[.!?]+["'’”)]*\s*|$)/g, m;
+    while((m=re.exec(text)) && m[0]){ var t=m[0], s=m.index;
+      while(t.length>220){ var cut=t.lastIndexOf(', ',200); if(cut<60) cut=t.lastIndexOf(' ',200); if(cut<1) break; out.push({t:t.slice(0,cut+1), o:s}); s+=cut+1; t=t.slice(cut+1); }
+      if(t.trim()) out.push({t:t, o:s}); }
+    /* join short sentences into one breath (up to ~200 characters): a stop after every sentence is what makes it sound like a machine */
+    var j=[]; out.forEach(function(p){ var last=j[j.length-1]; if(last && last.t.length+p.t.length<=200) last.t+=p.t; else j.push({t:p.t, o:p.o}); });
+    return j.length?j:[{t:text,o:0}]; }
+  var dog=0, alive=0;
+  function start(fromEl){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; t0=Date.now(); clearTimeout(awayT); mini.classList.remove('away');
+    var q=[]; list.forEach(function(el){ pieces(el.textContent).forEach(function(p){ q.push({el:el, t:p.t, o:p.o}); }); });
+    var k0=0; if(fromEl){ for(var i=0;i<q.length;i++){ if(q[i].el===fromEl || (fromEl.compareDocumentPosition(q[i].el) & Node.DOCUMENT_POSITION_FOLLOWING)){ k0=i; break; } } }
+    state='playing'; setUI();
+    clearInterval(alive); if(voice && voice.localService===false) alive=setInterval(function(){ if(id!==run){ clearInterval(alive); return; } if(state==='playing' && ss.speaking){ ss.pause(); ss.resume(); } }, 9000);
+    function say(k){ if(id!==run) return; if(k>=q.length){ clearInterval(alive); state='idle'; clearMarks(); setUI(); return; }
+      jump.k=k; jump.q=q; jump.say=say; jump.id=id;
+      var it=q[k], el=it.el, u=new SpeechSynthesisUtterance(it.t), done=false;
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang='en-GB'; u.rate=1; u.pitch=1;
+      function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); if(jump.skip) return; say(k+1); }
+      function arm(){ clearTimeout(dog); dog=setTimeout(function(){ if(id!==run || done) return; if(state==='paused'){ arm(); return; } ss.cancel(); next(); }, 3000 + it.t.length*80); }
+      u.onstart=function(){ if(id!==run) return; arm(); if(HL){ var lead=(it.t.match(/^\s*/)||[''])[0].length, body=it.t.replace(/\s+$/,'').length-lead; var sr=body>0 && rangeAt(el, it.o+lead, body); if(sr) CSS.highlights.set('reads', new Highlight(sr)); } if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
+        if(follow){ var b=el.getBoundingClientRect(); if(b.top<120 || b.bottom>innerHeight*.72) el.scrollIntoView({block:'center', behavior:'smooth'}); } } };
+      u.onboundary=function(e){ if(id!==run) return; arm(); if(!HL || (e.name && e.name!=='word')) return;
+        var len=e.charLength || ((it.t.slice(e.charIndex).match(/^\S+/)||[''])[0].replace(/[.,;:!?)’”]+$/,'').length);
+        if(!len) return; var r=rangeAt(el, it.o+e.charIndex, len); if(r) CSS.highlights.set('readw', new Highlight(r)); };
+      u.onend=function(){ if(id===run) next(); };
+      u.onerror=function(e){ if(id===run && e.error!=='interrupted' && e.error!=='canceled') next(); };
+      ss.speak(u); arm(); }
+    say(k0); }
+  /* the arrows: back to the start of the previous paragraph, or on to the next one. a jump restarts the voice at that paragraph's first sentence */
+  var jump={k:0, q:null, say:null, id:0};
+  function jumpBy(dir){ if(state==='idle' || !jump.q || jump.id!==run) return; var q=jump.q, k=jump.k, el=q[k].el, t=k;
+    if(dir<0){ var atStart = q[k].o===0 || (k>0 && q[k-1].el!==el) || k===0; if(!atStart){ while(t>0 && q[t-1].el===el) t--; } else { if(k===0) t=0; else { t=k-1; while(t>0 && q[t-1].el===q[k-1].el) t--; } } }
+    else { t=k+1; while(t<q.length && q[t].el===el) t++; if(t>=q.length) return; }
+    jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); state='playing'; setUI();
+    var sayFn=jump.say; setTimeout(function(){ jump.skip=false; if(jump.id===run) sayFn(t); }, 60); }
+  card.querySelectorAll('section.ch > h3').forEach(function(h){
+    var b=document.createElement('button'); b.type='button'; b.className='rd-sec'; b.setAttribute('aria-label','Listen from this section'); b.title='Listen from here';
+    b.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.6 2.3v7.4L9.4 6z" fill="currentColor"/></svg>';
+    b.addEventListener('click', function(e){ e.stopPropagation(); start(h); });
+    h.appendChild(b); });
+  mini.querySelector('.rd-prev').addEventListener('click', function(){ jumpBy(-1); });
+  mini.querySelector('.rd-next').addEventListener('click', function(){ jumpBy(1); });
+  play.addEventListener('click', function(){
+    if(state==='playing'){ state='paused'; jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ if(state==='paused') ss.cancel(); },80); setUI(); return; }
+    if(state==='paused'){ state='playing'; setUI(); if(jump.say && jump.id===run){ var k=jump.k, sf=jump.say; setTimeout(function(){ jump.skip=false; if(state==='playing' && jump.id===run) sf(k); },60); } else { start(cur); } return; }
+    start(); });
+  addEventListener('pagehide', function(){ ss.cancel(); });
+}
+readAloud('tbar-ae','.case');
+</script>
+<script>(function(){var r=document.querySelector('.rail');function f(){if(innerWidth<=1080)document.documentElement.style.setProperty('--railh',r.offsetHeight+'px');}addEventListener('resize',f);f();})();</script>
+<script>
+/* place Listen: right edge of the content, bottom on the title's last line */
+(function(){ var b=document.querySelector('.hero-listen'); if(!b) return; var t=b.previousElementSibling; var box=b.parentElement;
+  function put(){ if(innerWidth<901){ b.style.removeProperty('--lt'); return; }
+    if(getComputedStyle(box).position==='static') box.style.position='relative';
+    var br=box.getBoundingClientRect(), tr=t.getBoundingClientRect(), cs=getComputedStyle(box), h=b.offsetHeight;
+    b.style.setProperty('--lt', Math.round(tr.bottom-br.top-h-4)+'px'); b.style.setProperty('--lr', parseFloat(cs.paddingRight)+'px'); }
+  addEventListener('resize', put); addEventListener('load', put); if(document.fonts) document.fonts.ready.then(put); t.addEventListener('transitionend', put); setTimeout(put,900); setTimeout(put,1600); put(); })();
+</script>
+<script>
+/* inside the pop-up: Escape closes it, and links back to the home page close it instead of loading the home page inside the card */
+(function(){ if(window.top===window.self) return;
+  function close(){ try{ window.parent.postMessage({pg:'close'},'*'); }catch(e){} }
+  addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  document.addEventListener('click', function(e){ var a=e.target.closest('a[href]'); if(!a) return; var h=a.getAttribute('href');
+    if(/^index\.html/.test(h)){ e.preventDefault(); close(); }
+    else if(/^(search|auto-extraction|sensitivity-scroll)\.html/.test(h)){ e.preventDefault(); window.parent.postMessage({pg:'open', href:h},'*'); }
+    else if(/^mailto:/.test(h)){ /* fine in place */ }
+    else if(!/^#/.test(h) && !a.target){ a.target='_top'; } }, true);
+})();
+</script>
+<script>
+/* end links: "Back to the work" returns to the home page's work list; "Prototype built with AI" opens that chapter's prototype on the home page.
+   Inside the home page's pop-up they talk to the home page instead of loading it in the card. */
+(function(){ var inPop=window.top!==window.self;
+  document.addEventListener('click', function(e){
+    var back=e.target.closest('a.back, a.conf-back, a[data-close]'), pr=e.target.closest('a.ai-proto');
+    if(!back && !pr) return; e.preventDefault(); e.stopImmediatePropagation();
+    if(pr){ var id=pr.getAttribute('data-proto')||'';
+      if(inPop) window.parent.postMessage({pg:'proto', id:id},'*'); else location.href='index.html#proto-'+id; return; }
+    if(inPop) window.parent.postMessage({pg:'close'},'*'); else location.href='index.html#work';
+  }, true);
+})();
+</script>
+<script>/* inside the home page's pop-up: tell the home page how far this page has scrolled */
+(function(){ if(window.top===window.self) return; var last=-1; function tell(){ var y=scrollY>24?1:0; if(y!==last){ last=y; window.parent.postMessage({pg:'scroll', y:scrollY},'*'); } } addEventListener('scroll', tell, {passive:true}); tell(); })();</script>
+<script>
+/* the chapter play button stays on the same line as the last word of the title, so it never sits alone on a line */
+(function(){ function glue(){ document.querySelectorAll('.rd-sec').forEach(function(b){ if(b.parentNode && b.parentNode.classList && b.parentNode.classList.contains('rd-tail')) return; var h=b.parentNode; if(!h) return;
+    var w=document.createTreeWalker(h, NodeFilter.SHOW_TEXT), n, last=null; while((n=w.nextNode())){ if(!b.contains(n) && n.data.trim()) last=n; }
+    if(!last) return; var m=last.data.match(/(\S+)\s*$/); if(!m) return;
+    var tail=last.splitText(last.data.length-m[0].length), s=document.createElement('span'); s.className='rd-tail'; s.style.whiteSpace='nowrap';
+    tail.parentNode.insertBefore(s, tail); s.appendChild(tail); s.appendChild(document.createTextNode(' ')); s.appendChild(b); }); }
+  if(document.readyState==='loading') addEventListener('DOMContentLoaded', glue); else glue(); setTimeout(glue, 400); })();
+</script>
+</body></html>

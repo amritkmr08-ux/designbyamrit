@@ -673,12 +673,13 @@ function step(n, dur){
 function barPlaying(){ demobar.classList.remove('trying'); document.documentElement.classList.add('demoing'); dtry.textContent = 'I want to try this myself'; tell({kind:'state', playing:true}); }
 function barTrying(){ demobar.classList.add('trying'); document.documentElement.classList.remove('demoing'); dtry.textContent = 'Play the demo'; dlab.innerHTML = 'You&rsquo;re trying it. The demo comes back a few seconds after you leave.'; tell({kind:'state', playing:false}); }
 
-/* while the demo plays, a real hand does nothing to the prototype: it has to ask to take over */
-['pointerdown','pointerup','pointermove','pointerover','pointerout','mousedown','mouseup','mousemove','mouseover','mouseout','click','dblclick','contextmenu','wheel'].forEach(type =>
+/* while the demo plays, a real hand does nothing to the prototype: it has to ask to take over
+   (the wheel is left alone, so scrolling over the demo still scrolls the page around it) */
+['pointerdown','pointerup','pointermove','pointerover','pointerout','mousedown','mouseup','mousemove','mouseover','mouseout','click','dblclick','contextmenu'].forEach(type =>
   document.addEventListener(type, e => {
     if(!e.isTrusted || !demo.running) return;
     if(e.target.closest && e.target.closest('#demobar')) return;
-    e.stopImmediatePropagation(); if(type === 'mousedown' || type === 'click' || type === 'contextmenu' || type === 'wheel') e.preventDefault();
+    e.stopImmediatePropagation(); if(type === 'mousedown' || type === 'click' || type === 'contextmenu') e.preventDefault();
   }, {capture:true, passive:false}));
 
 let idleTimer = null, inside = false;

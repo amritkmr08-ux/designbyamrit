@@ -1110,7 +1110,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 
 /* the drawing's leaves touch the top edge; the grey light at the top right reaches the screen's right edge again; the scroll cue sits at the right edge */
 @media (min-width:761px){
-  .intro::before{height:auto !important; aspect-ratio:2092/1716 !important; margin-top:0 !important; width:52% !important; left:-3% !important; background-image:url(intro-drawing-2.webp) !important; background-size:100% auto !important; background-position:left 0 top 0 !important;
+  .intro::before{height:auto !important; aspect-ratio:2092/1716 !important; margin-top:0 !important; width:52% !important; left:-3% !important; background-image:url(intro-drawing-3.webp) !important; background-size:100% auto !important; background-position:left 0 top 0 !important;
     -webkit-mask-image:linear-gradient(to right,#000 78%,transparent 100%), linear-gradient(to bottom,#000 86%,transparent 100%) !important; mask-image:linear-gradient(to right,#000 78%,transparent 100%), linear-gradient(to bottom,#000 86%,transparent 100%) !important; -webkit-mask-composite:source-in !important; mask-composite:intersect !important}   /* the tighter drawing: monkey and tree, a little smaller, sitting above the sheet */
   .intro::after{content:""; position:absolute; left:0; top:0; width:100%; aspect-ratio:3344/2090; margin-top:-4.1%; pointer-events:none;
     background:url(intro-drawing.webp) left 0 top 0/100% auto no-repeat;
@@ -1165,7 +1165,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .tb-play[hidden]{display:none}
 .tb-l{font-family:var(--font); font-size:13px; line-height:18px; white-space:nowrap}
 /* read-along: the paragraph being read is tinted, the word being spoken is marked */
-.ov #w4 .rd-on, .ov #w5 .rd-on{background:rgba(61,90,69,.09); box-shadow:0 0 0 8px rgba(61,90,69,.09); border-radius:4px; transition:background-color .3s ease, box-shadow .3s ease}
+.ov #w4 .rd-on, .ov #w5 .rd-on{background:rgba(25,26,24,.055) !important; box-shadow:0 0 0 10px rgba(25,26,24,.055) !important; border-radius:4px !important; color:#191A18 !important; transition:background-color .25s ease, box-shadow .25s ease, color .25s ease}
 ::highlight(readw){background-color:#CFE3D4; color:#191A18}
 
 /* while it reads, a small player stays at the bottom of the screen so it can be paused or stopped from anywhere */
@@ -1713,6 +1713,12 @@ html body .ov #w5 .fl-r{background:#fff}
 }
 
 </style>
+
+<style>
+/* reading: the paragraph is the grey block, the sentence being spoken is darker inside it, and the word (where the browser reports it) is on top */
+::highlight(reads){background-color:rgba(61,90,69,.16);color:#191A18}
+::highlight(readw){background-color:#A9C9B0;color:#191A18}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
@@ -1790,7 +1796,7 @@ html body .ov #w5 .fl-r{background:#fff}
     <p class="dek r">A policy changes. Now someone needs to find every contract affected by&nbsp;it.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="search" aria-label="Explain me: play a short narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Explain me</span></button>
     <figure class="r"><span class="still"><img src="list-still-q1.webp" alt="Search results: contract families that miss a 24-hour breach-notice policy, with conflicting terms flagged" loading="lazy"><i class="still-tag">Partly shipped</i></span><div class="fit" data-h="677" data-cut="7"><iframe class="specimen" id="s6" src="proto-search.html" loading="lazy" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; Shipped partly</span><span class="fm-b" aria-hidden="true">My role: end-to-end design of AskSirion&rsquo;s search and its results&nbsp;listing.</span></span><a href="https://www.sirion.ai/platform/store/contract-insights-search/" target="_blank" rel="noopener">AskSirion on sirion.ai&nbsp;&#8599;</a></p></figure>
-    <div class="prose r"><p class="role">Product design &middot; AI search and result&nbsp;behavior</p><p>In most searches, a wrong answer means trying again. In legal work, a missed contract could mean an unnoticed breach. So we designed search to ask when something is unclear, look across every contract in a deal, and flag conflicting information instead of guessing. <span class="goal">The goal: find the contracts you need, quickly and&nbsp;accurately.</span></p><p class="end"><a href="#" data-open="w4">Key decisions</a></p></div>
+    <div class="prose r"><p class="role">Product design &middot; AI search and result&nbsp;behavior</p><p>In most searches, a wrong answer means trying again. In legal work, a missed contract could mean an unnoticed breach. So we designed search to ask when something is unclear, look across every contract in a deal, and flag conflicting information instead of guessing. <span class="goal">The goal: find the contracts you need, quickly and&nbsp;accurately.</span></p><p class="end"><a href="search.html">Key decisions</a></p></div>
   </article>
   <article class="piece" data-unit="proof" id="q2">
     <div class="chap-head r"><span class="chap-n">02</span><div class="chap-meta"><p class="chap-name">Proof</p><span class="chap-pips" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i><i></i></span></div></div>
@@ -1838,7 +1844,7 @@ html body .ov #w5 .fl-r{background:#fff}
 </div>
 
 <footer class="rf" id="rf">
-  <div class="rf-art" aria-hidden="true"><img src="footer-drawing.webp" alt=""></div>
+  <div class="rf-art" aria-hidden="true"><img src="footer-drawing-2.webp" alt=""></div>
   <div class="rf-in">
     <div class="rf-top">
       <h2 class="rf-h">Tell me about your<br>next project</h2>
@@ -2052,7 +2058,7 @@ html body .ov #w5 .fl-r{background:#fff}
         <p>We moved from a fixed result hierarchy to an <strong>intent-dependent presentation&nbsp;model</strong>.</p>
         <p>Instead of forcing every query into a deal-first or document-first structure, we defined how search should adapt its result level, default columns, computed information and evidence presentation to the question being&nbsp;asked.</p>
         <p>Part of this is already live. For data questions, AskSirion answers with charts and a table of the matching&nbsp;contracts.</p>
-        <figure class="fv"><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click&nbsp;away.</figcaption><img src="search-v-table.webp" alt="Breach notice, 14 families, judged against your 24-hour breach-notice policy: a table of contract families with counterparty, breach-notification position, scope checked and a finding such as terms conflict, clause missing or exceeds 24-hour policy." loading="lazy"></figure>
+        <figure class="fv"><img src="search-v-table.webp" alt="Breach notice, 14 families, judged against your 24-hour breach-notice policy: a table of contract families with counterparty, breach-notification position, scope checked and a finding such as terms conflict, clause missing or exceeds 24-hour policy." loading="lazy"><figcaption>Shipped in Sirion. A data question gets its answer as charts, by customer and by region, with the matching contracts one click&nbsp;away.</figcaption></figure>
         <p>This took the design work beyond the layout of search results into reusable interaction and behaviour patterns for the AI&nbsp;experience.</p>
         <div class="ix-own">
           <p><b>My contribution</b>Shaping the expected user-facing behaviour, in collaboration with the&nbsp;team.</p>
@@ -2464,7 +2470,7 @@ function onWidth(fn){
   var w=innerWidth; addEventListener('resize',function(){ if(innerWidth!==w){ w=innerWidth; size(); } });
   /* a link that ends in #top (the mark, shared or bookmarked) made the browser jump past the intro on arrival.
      Arriving always starts at the intro; the mark takes you to the top of the page content, without a hash. */
-  var stripped=false;
+  var stripped=false; window.__arrive=location.hash;   /* kept for #work and #proto-qN, which come back from a case study */
   if(location.hash){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} stripped=true; }
   scrollTo(0,0); size();
   if(stripped){ addEventListener('load',function(){ scrollTo(0,0); }); requestAnimationFrame(function(){ scrollTo(0,0); }); }
@@ -2526,11 +2532,11 @@ function onWidth(fn){
   var cur='', want='', tmr=0, hov=null, welcomed=false, shownAt=0, lastMove=Date.now(), raw='', since=Date.now();
   function put(w){ if(w===cur) return; cur=w;
     var old=el.querySelector('span:not(.out):not(.m)'), s=document.createElement('span'); s.className='pre'; s.textContent=w; el.appendChild(s);
-    el.style.setProperty('--hw',(15+s.offsetWidth+8+42)+'px');
+    el.style.setProperty('--hw',(18+s.offsetWidth+10+56)+'px');
     if(old){ old.classList.add('out'); setTimeout(function(){ old.remove(); },500); }
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ s.classList.remove('pre'); }); });
   }
-  function rest(){ clearTimeout(tmr); want=''; cur=''; el.classList.remove('on'); el.style.setProperty('--hw','42px');
+  function rest(){ clearTimeout(tmr); want=''; cur=''; el.classList.remove('on'); el.style.setProperty('--hw','56px');
     [].forEach.call(el.querySelectorAll('span:not(.m)'),function(x){ x.classList.add('out'); setTimeout(function(){ x.remove(); },500); }); }
   function ask(w){ if(w===want) return; want=w; clearTimeout(tmr); tmr=setTimeout(function(){ put(want); }, cur?280:0); }
   function seen(r){ return r.bottom>0 && r.top<innerHeight; }
@@ -3794,7 +3800,7 @@ function readAloud(barId, cardId){
       if(on && start+len<=pos+L){ r.setEnd(n, start+len-pos); return r; }
       pos+=L; }
     return null; }
-  function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL) CSS.highlights.delete('readw'); }
+  function clearMarks(){ if(cur) cur.classList.remove('rd-on'); cur=null; if(HL){ CSS.highlights.delete('readw'); CSS.highlights.delete('reads'); } }
   function inView(el){ var b=el.getBoundingClientRect(); return b.top>80 && b.bottom<innerHeight-80; }
   function setUI(){ play.classList.toggle('on', state==='playing'); play.classList.toggle('paused', state==='paused');
     var l = state==='playing' ? 'Pause' : state==='paused' ? 'Carry on listening' : 'Listen to this case study';
@@ -3806,7 +3812,10 @@ function readAloud(barId, cardId){
   mini.querySelector('.rd-pp').addEventListener('click', function(){ play.click(); });
   mini.querySelector('.rd-x').addEventListener('click', function(){ stop(); });
   /* the page follows the reading until you scroll yourself; then a button takes you back to it */
-  function away(){ if(state==='idle' || !follow) return; follow=false; mini.classList.add('away'); }
+  var t0=0, awayT=0;
+  function away(){ if(state==='idle' || !follow) return; if(Date.now()-t0<1200) return;   /* momentum from the scroll that brought you here */
+    clearTimeout(awayT); awayT=setTimeout(function(){ if(state==='idle' || !follow) return; if(cur && inView(cur)) return;   /* a nudge that kept the paragraph on screen is not leaving */
+      follow=false; mini.classList.add('away'); }, 250); }
   ['wheel','touchmove'].forEach(function(ev){ addEventListener(ev, function(e){ if(!mini.contains(e.target)) away(); }, {passive:true}); });
   addEventListener('keydown', function(e){ if(/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(e.key)) away(); });
   mini.querySelector('.rd-go').addEventListener('click', function(){ follow=true; mini.classList.remove('away'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'}); });
@@ -3825,7 +3834,7 @@ function readAloud(barId, cardId){
     var j=[]; out.forEach(function(p){ var last=j[j.length-1]; if(last && last.t.length+p.t.length<=200) last.t+=p.t; else j.push({t:p.t, o:p.o}); });
     return j.length?j:[{t:text,o:0}]; }
   var dog=0, alive=0;
-  function start(fromEl){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; mini.classList.remove('away');
+  function start(fromEl){ ss.cancel(); var id=++run, list=blocks(); if(!list.length) return; if(!voice) pick(); follow=true; t0=Date.now(); clearTimeout(awayT); mini.classList.remove('away');
     var q=[]; list.forEach(function(el){ pieces(el.textContent).forEach(function(p){ q.push({el:el, t:p.t, o:p.o}); }); });
     var k0=0; if(fromEl){ for(var i=0;i<q.length;i++){ if(q[i].el===fromEl || (fromEl.compareDocumentPosition(q[i].el) & Node.DOCUMENT_POSITION_FOLLOWING)){ k0=i; break; } } }
     state='playing'; setUI();
@@ -3836,8 +3845,8 @@ function readAloud(barId, cardId){
       if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang='en-GB'; u.rate=1; u.pitch=1;
       function next(){ if(done) return; done=true; clearTimeout(dog); if(HL) CSS.highlights.delete('readw'); if(jump.skip) return; say(k+1); }
       function arm(){ clearTimeout(dog); dog=setTimeout(function(){ if(id!==run || done) return; if(state==='paused'){ arm(); return; } ss.cancel(); next(); }, 3000 + it.t.length*80); }
-      u.onstart=function(){ if(id!==run) return; arm(); if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
-        if(follow && !inView(el)) el.scrollIntoView({block:'center', behavior:'smooth'}); } };
+      u.onstart=function(){ if(id!==run) return; arm(); if(HL){ var lead=(it.t.match(/^\s*/)||[''])[0].length, body=it.t.replace(/\s+$/,'').length-lead; var sr=body>0 && rangeAt(el, it.o+lead, body); if(sr) CSS.highlights.set('reads', new Highlight(sr)); } if(cur!==el){ clearMarks(); cur=el; el.classList.add('rd-on');
+        if(follow){ var b=el.getBoundingClientRect(); if(b.top<120 || b.bottom>innerHeight*.72) el.scrollIntoView({block:'center', behavior:'smooth'}); } } };
       u.onboundary=function(e){ if(id!==run) return; arm(); if(!HL || (e.name && e.name!=='word')) return;
         var len=e.charLength || ((it.t.slice(e.charIndex).match(/^\S+/)||[''])[0].replace(/[.,;:!?)’”]+$/,'').length);
         if(!len) return; var r=rangeAt(el, it.o+e.charIndex, len); if(r) CSS.highlights.set('readw', new Highlight(r)); };
@@ -3853,8 +3862,8 @@ function readAloud(barId, cardId){
     jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); state='playing'; setUI();
     var sayFn=jump.say; setTimeout(function(){ jump.skip=false; if(jump.id===run) sayFn(t); }, 60); }
   /* a small play beside each section number: reading starts at that section's heading */
-  card.querySelectorAll('.ch > .ch-n').forEach(function(n){
-    var sec=n.parentElement, h=sec.querySelector('h3'); if(!h) return;
+  card.querySelectorAll('section.ch').forEach(function(sec){
+    var h=sec.querySelector('h3'); if(!h) return; var n=sec.querySelector(':scope > .ch-n'); if(!n){ n=document.createElement('p'); n.className='ch-n'; n.setAttribute('aria-hidden','true'); sec.insertBefore(n, sec.firstChild); }
     var b=document.createElement('button'); b.type='button'; b.className='rd-sec'; b.setAttribute('aria-label','Listen from this section'); b.title='Listen from here';
     b.innerHTML='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.6 2.3v7.4L9.4 6z" fill="currentColor"/></svg>';
     b.addEventListener('click', function(e){ e.stopPropagation(); start(h); });
@@ -3862,8 +3871,8 @@ function readAloud(barId, cardId){
   mini.querySelector('.rd-prev').addEventListener('click', function(){ jumpBy(-1); });
   mini.querySelector('.rd-next').addEventListener('click', function(){ jumpBy(1); });
   play.addEventListener('click', function(){
-    if(state==='playing'){ ss.pause(); state='paused'; setUI(); return; }
-    if(state==='paused'){ ss.resume(); state='playing'; setUI(); return; }
+    if(state==='playing'){ state='paused'; jump.skip=true; clearTimeout(dog); try{ ss.resume(); }catch(e){} ss.cancel(); setTimeout(function(){ if(state==='paused') ss.cancel(); },80); setUI(); return; }
+    if(state==='paused'){ state='playing'; setUI(); if(jump.say && jump.id===run){ var k=jump.k, sf=jump.say; setTimeout(function(){ jump.skip=false; if(state==='playing' && jump.id===run) sf(k); },60); } else { start(cur); } return; }
     start(); });
   var ovl=card.closest('.ov'); function gone(){ return card.hidden || (ovl && !ovl.classList.contains('on')); }
   new MutationObserver(function(){ if(gone() && state!=='idle') stop(); }).observe(card, {attributes:true, attributeFilter:['hidden']});
@@ -3938,7 +3947,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
 (function(){
   var card=document.getElementById('wv'); if(!card) return;
   var v=document.getElementById('wvv'), tag=document.getElementById('wv-tag'), h=document.getElementById('wv-h'), more=document.getElementById('wv-more');
-  var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', read:'w4'},
+  var SET={ search:{n:'01', name:'Search', q:'Did it find every piece of data that matters?', src:'search-walkthrough.mp4', poster:'search-walkthrough-poster.webp', href:'search.html', moreT:'Key decisions'},
             proof:{n:'02', name:'Proof', q:'Can I see the exact words a person wrote?', src:'proof-walkthrough.mp4', poster:'proof-walkthrough-poster.webp', href:'auto-extraction.html'},
             lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
             sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Read the idea'},
@@ -4158,8 +4167,11 @@ html body .ov .card.pcard.dark .wp-stat, html body .ov .card.pcard.dark .wp-tag 
 html body .ov #w4 .ix h3 + p.ix-h{margin-top:18px !important}
 </style>
 <script>(function(){ var cr=document.getElementById('intro-creds'), t=document.getElementById('intro-t'), home=document.getElementById('intro'); if(!cr||!t||!home) return;
-  function place(){ var phone=innerWidth<=760; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
-  place(); addEventListener('resize', place); })();</script>
+  var mq=matchMedia('(max-width:760px)');
+  function place(){ var phone=mq.matches; if(phone && cr.parentNode!==t) t.appendChild(cr); else if(!phone && cr.parentNode!==home) home.appendChild(cr); }
+  /* the width can be wrong while the page is still loading on a phone, so check again once it has loaded and whenever the width class changes */
+  place(); addEventListener('resize', place); addEventListener('DOMContentLoaded', place); addEventListener('load', place); addEventListener('pageshow', place);
+  if(mq.addEventListener) mq.addEventListener('change', place); else if(mq.addListener) mq.addListener(place); })();</script>
 <script>(function(){ var t=document.querySelector('.rf-say .rf-tel'), m=document.querySelector('.rf-say .rf-mail'); if(!t||!m) return; var T=t.textContent, M=m.textContent;
   m.setAttribute('aria-label','Email '+M); function place(){ var ph=innerWidth<=760; t.textContent= ph ? 'Call '+T : T; m.textContent= ph ? 'Email me' : M; } place(); addEventListener('resize', place); })();</script>
 <style>
@@ -4614,6 +4626,163 @@ html body .ov #w4 section.ch > p.ix-h{font-family:var(--display) !important; fon
   html body .ov #w4 section.ch > h3[data-n]::before{color:#A9BC8C !important}
 }
 @media (max-width:900px){ html body .ov #w4 .ed2-head .w4-tag{text-align:left} html body .ov #w4 section.ch > p.pq{font-size:19px !important; line-height:28px !important; margin:28px 0 !important} }
+
+/* ===== long section titles: a title that needs three lines or more in the narrow left column spans the full width above the text instead of fighting for space ===== */
+@media (min-width:901px){
+  html body .ov #w4 section.ch > h3.wide, html body .ov #w5 section.ch > h3.wide{float:none !important; width:auto !important; max-width:none !important; margin:0 0 24px !important}
+}
+
+/* ===== room to breathe: generous space around every panel, figure, pull-quote and sub-heading in the Search and Sensitivity write-ups (desktop) ===== */
+@media (min-width:901px){
+  /* panels and pictures: well clear of the text on both sides */
+  html body .ov #w4 section.ch > figure, html body .ov #w4 section.ch > .vtl, html body .ov #w4 section.ch > .st4, html body .ov #w4 section.ch > .vren, html body .ov #w4 section.ch > .vk, html body .ov #w4 section.ch > .vfl, html body .ov #w4 section.ch > .tst-path,
+  html body .ov #w4 section.ch > figure.cmp, html body .ov #w4 section.ch > .smebox, html body .ov #w4 section.ch > .ix-mx-wrap, html body .ov #w4 section.ch > .rulebox, html body .ov #w4 section.ch > .ix-own{margin-top:56px !important; margin-bottom:72px !important}
+  html body .ov #w4 section.ch > figure.v200{margin-top:56px !important; margin-bottom:80px !important}
+  html body .ov #w4 section.ch figure.fv, html body .ov #w4 figure.fv{margin-top:56px !important; margin-bottom:72px !important}
+  html body .ov #w4 section.ch > figure figcaption{margin-top:-48px !important; margin-bottom:72px !important}
+  html body .ov #w4 section.ch > .ix-mx-wrap + p.ix-foot{margin-top:-64px !important; margin-bottom:96px !important}
+  html body .ov #w4 section.ch > ol + p.ix-foot{margin-top:14px !important; margin-bottom:64px !important}
+  /* a caption that sits above its picture keeps its place */
+  html body .ov #w4 section.ch > figure figcaption:first-child{margin-top:0 !important; margin-bottom:16px !important}
+  /* pull-quotes and decisions: a pause before and after */
+  html body .ov #w4 section.ch > p.pq, html body .ov #w4 section.ch > p.dd, html body .ov #w4 section.ch > p.bq{margin-top:64px !important; margin-bottom:64px !important}
+  html body .ov #w4 p.tst-turn{margin-top:72px !important; margin-bottom:72px !important}
+  /* sub-headings start a new thought */
+  html body .ov #w4 section.ch > p.ix-h{margin-top:48px !important; margin-bottom:12px !important}
+  html body .ov #w4 section.ch > p.ix-h + p{margin-top:0 !important}
+  /* body paragraphs: a little more air between them */
+  html body .ov #w4 section.ch > p:not([class]) + p:not([class]){margin-top:22px !important}
+  /* sections */
+  html body .ov #w4 section.ch{margin-top:128px !important; padding-top:56px !important}
+  html body .ov #w4 p.take{margin-top:128px !important}
+}
+@media (max-width:900px){
+  html body .ov #w4 section.ch > figure, html body .ov #w4 section.ch > figure.cmp, html body .ov #w4 section.ch > .smebox, html body .ov #w4 section.ch > .rulebox, html body .ov #w4 section.ch > .vtl, html body .ov #w4 section.ch > .st4, html body .ov #w4 section.ch > .vren, html body .ov #w4 section.ch > .vk, html body .ov #w4 section.ch > .vfl, html body .ov #w4 section.ch > .tst-path{margin-top:44px !important; margin-bottom:56px !important}
+  html body .ov #w4 section.ch > p.pq, html body .ov #w4 section.ch > p.dd, html body .ov #w4 section.ch > p.bq{margin-top:40px !important; margin-bottom:40px !important}
+  html body .ov #w4 section.ch > p.ix-h{margin-top:40px !important}
+}
+
+/* ===== room to breathe: generous space around every panel, figure, pull-quote and sub-heading in the Search and Sensitivity write-ups (desktop) ===== */
+@media (min-width:901px){
+  /* panels and pictures: well clear of the text on both sides */
+  html body .ov #w5 section.ch > figure, html body .ov #w5 section.ch > .vtl, html body .ov #w5 section.ch > .st4, html body .ov #w5 section.ch > .vren, html body .ov #w5 section.ch > .vk, html body .ov #w5 section.ch > .vfl, html body .ov #w5 section.ch > .tst-path,
+  html body .ov #w5 section.ch > figure.cmp, html body .ov #w5 section.ch > .smebox, html body .ov #w5 section.ch > .ix-mx-wrap, html body .ov #w5 section.ch > .rulebox, html body .ov #w5 section.ch > .ix-own{margin-top:72px !important; margin-bottom:96px !important}
+  html body .ov #w5 section.ch > figure.v200{margin-top:56px !important; margin-bottom:80px !important}
+  html body .ov #w5 section.ch figure.fv, html body .ov #w5 figure.fv{margin-top:72px !important; margin-bottom:96px !important}
+  html body .ov #w5 section.ch > figure figcaption{margin-top:-64px !important; margin-bottom:96px !important}
+  /* a caption that sits above its picture keeps its place */
+  html body .ov #w5 section.ch > figure figcaption:first-child{margin-top:0 !important; margin-bottom:16px !important}
+  /* pull-quotes and decisions: a pause before and after */
+  html body .ov #w5 section.ch > p.pq, html body .ov #w5 section.ch > p.dd, html body .ov #w5 section.ch > p.bq{margin-top:64px !important; margin-bottom:64px !important}
+  html body .ov #w5 p.tst-turn{margin-top:72px !important; margin-bottom:72px !important}
+  /* sub-headings start a new thought */
+  html body .ov #w5 section.ch > p.ix-h{margin-top:64px !important; margin-bottom:12px !important}
+  html body .ov #w5 section.ch > p.ix-h + p{margin-top:0 !important}
+  /* body paragraphs: a little more air between them */
+  html body .ov #w5 section.ch > p:not([class]) + p:not([class]){margin-top:22px !important}
+  /* sections */
+  html body .ov #w5 section.ch{margin-top:128px !important; padding-top:56px !important}
+  html body .ov #w5 p.take{margin-top:128px !important}
+}
+@media (max-width:900px){
+  html body .ov #w5 section.ch > figure, html body .ov #w5 section.ch > figure.cmp, html body .ov #w5 section.ch > .smebox, html body .ov #w5 section.ch > .rulebox, html body .ov #w5 section.ch > .vtl, html body .ov #w5 section.ch > .st4, html body .ov #w5 section.ch > .vren, html body .ov #w5 section.ch > .vk, html body .ov #w5 section.ch > .vfl, html body .ov #w5 section.ch > .tst-path{margin-top:44px !important; margin-bottom:56px !important}
+  html body .ov #w5 section.ch > p.pq, html body .ov #w5 section.ch > p.dd, html body .ov #w5 section.ch > p.bq{margin-top:40px !important; margin-bottom:40px !important}
+  html body .ov #w5 section.ch > p.ix-h{margin-top:40px !important}
+}
+
+/* ===== section play: beside the title, always visible; and a tighter rhythm where things belong together ===== */
+@media (min-width:901px){
+  html body .ov #w4 section.ch > .ch-n .rd-sec, html body .ov #w5 section.ch > .ch-n .rd-sec{top:92px; left:-40px; width:24px; height:24px; opacity:.85; transform:none; border:0; color:#F7F7F5; background:#191A18}
+  html body .ov #w4 section.ch > .ch-n .rd-sec:hover, html body .ov #w5 section.ch > .ch-n .rd-sec:hover{opacity:1; transform:scale(1.08)}
+  html body .ov #w5 section.ch > .ch-n .rd-sec{top:60px}
+  /* a pull-quote belongs to the paragraph before it: close above, a pause after */
+  html body .ov #w4 section.ch > p.pq, html body .ov #w4 section.ch > p.bq, html body .ov #w5 section.ch > p.dd{margin-top:36px !important; margin-bottom:56px !important}
+  html body .ov #w4 section.ch > p.pq + p.ix-h, html body .ov #w4 section.ch > p.bq + p.ix-h{margin-top:56px !important}
+  /* a caption-style footnote stays with its figure */
+  /* a sub-heading right after a panel does not need the panel's gap plus its own */
+  html body .ov #w4 section.ch > figure + p.ix-h, html body .ov #w4 section.ch > .smebox + p.ix-h, html body .ov #w4 section.ch > .rulebox + p.ix-h, html body .ov #w4 section.ch > p.ix-foot + p.ix-h{margin-top:0 !important}
+}
+
+/* ===== Search write-up, editorial minimalism: one dominant thing per section, no containers, no badges; space and type carry the hierarchy (desktop) ===== */
+@media (min-width:901px){
+  /* no coloured blocks behind anything */
+  html body .ov #w4 section.ch > figure.cmp::after, html body .ov #w4 section.ch > .smebox::after, html body .ov #w4 section.ch > .vtl::after, html body .ov #w4 section.ch > .st4::after, html body .ov #w4 section.ch > .vren::after, html body .ov #w4 section.ch > .vk::after, html body .ov #w4 section.ch > .vfl::after{display:none !important}
+  /* pictures are the hero: full width, on the page, a single hairline */
+  html body .ov #w4 figure.fv img{border-radius:6px !important; box-shadow:none !important; outline:1px solid rgba(25,26,24,.08); outline-offset:-1px}
+  html body .ov #w4 figure.fv figcaption{margin-left:240px !important; max-width:52ch}
+  /* the pull-quote is the one idea of its section: large, and it starts at the title column, breaking the text column */
+  html body .ov #w4 section.ch > p.pq{margin:40px 0 44px 240px !important; max-width:32ch !important; font-size:20px !important; line-height:28px !important; letter-spacing:-.005em}
+  html body .ov #w4 section.ch > p.bq{font-size:19px !important; line-height:28px !important; max-width:34ch}
+  /* a long pull-quote is a paragraph, not a headline: one step down, a little wider */
+  html body .ov #w4 section.ch > p.pq.pq-long{font-size:18px !important; line-height:27px !important; max-width:36ch !important}
+  /* two views: no panel, a hairline between the columns, small quiet labels */
+  html body .ov #w4 figure.cmp{background:none !important; padding:0 !important; margin:48px 0 56px !important; border-radius:0 !important; gap:0 !important}
+  html body .ov #w4 .cmp-col{padding:0 48px 0 0 !important}
+  html body .ov #w4 .cmp-col + .cmp-col{padding:0 0 0 48px !important; border-left:1px solid rgba(25,26,24,.1)}
+  html body .ov #w4 .cmp-col img{margin:16px 0 24px !important; max-width:300px !important}
+  html body .ov #w4 .cmp-k{text-align:left !important}
+  html body .ov #w4 .cmp-t{font-size:19px !important}
+  /* two example questions: no box, no pill; a hairline list with a quiet right-hand label */
+  html body .ov #w4 .smebox{background:none !important; padding:0 !important; margin:40px 0 56px 240px !important; border-radius:0 !important}
+  html body .ov #w4 .smebox-row{background:none !important; box-shadow:none !important; border:0 !important; border-top:1px solid rgba(25,26,24,.12) !important; border-radius:0 !important; padding:20px 0 !important; margin:0 !important}
+  html body .ov #w4 .smebox-row:last-of-type{border-bottom:1px solid rgba(25,26,24,.12) !important}
+  html body .ov #w4 .smebox .tag{background:none !important; padding:0 !important; font-size:12px !important; letter-spacing:.1em; text-transform:uppercase; color:var(--faint) !important}
+  html body .ov #w4 .smebox .ix-foot{margin:12px 0 0 !important}
+  /* the matrix: plain words, no pills, hairlines only */
+  html body .ov #w4 .ix-mx-wrap{border:0 !important; border-radius:0 !important; background:none !important; padding:0 !important}
+  html body .ov #w4 .ix-mx .lv{background:none !important; padding:0 !important; color:#191A18 !important; font-weight:500 !important}
+  html body .ov #w4 .ix-mx th{background:none !important}
+  /* who did what: two quiet columns, no grey boxes */
+  html body .ov #w4 .ix-own{margin:40px 0 0 240px !important; gap:40px !important}
+  html body .ov #w4 .ix-own p{background:none !important; padding:16px 0 0 !important; border-top:1px solid rgba(25,26,24,.12); border-radius:0 !important}
+  /* the rule keeps its own design: it is a small UI story (ask, two outcomes, the mock) and needs its two panels to read as two outcomes */
+  html body .ov #w4 .rulebox{margin:48px 0 64px 0 !important; clear:both}
+  /* section titles get a little more room from the rule above */
+  html body .ov #w4 section.ch{padding-top:48px !important; margin-top:96px !important}
+  /* text-like things stay in the text column; wide things (the table, the two-view comparison) use the full width like the pictures */
+  html body .ov #w4 section.ch > .smebox, html body .ov #w4 section.ch > .ix-own{margin-left:240px !important}
+  html body .ov #w4 section.ch > .ix-mx-wrap, html body .ov #w4 section.ch > figure.cmp{margin-left:0 !important; clear:both}
+  html body .ov #w4 section.ch > .ix-mx-wrap + p.ix-foot{margin:-56px 0 96px 0 !important; max-width:60ch}
+  html body .ov #w4 figure.cmp img{max-width:none !important; width:100% !important; height:240px !important; margin:16px 0 24px !important}
+  html body .ov #w4 .ix-mx td, html body .ov #w4 .ix-mx th{padding-left:0 !important}
+  html body .ov #w4 .ix-mx td + td, html body .ov #w4 .ix-mx th + th{padding-left:20px !important}
+}
+
+/* the mark, a proper size: 56 on a laptop (50 on the zoomed desktop), 52 on a phone */
+html body a.mark{width:52px !important; height:52px !important; font-size:25px !important}
+@media (min-width:761px){ html body a.mark{width:56px !important; height:56px !important; font-size:27px !important; top:34px}
+  html body .hint{height:56px; border-radius:28px; width:var(--hw,56px); left:calc(max(24px, calc(50% - 660px)) + 56px); top:34px} html body .hint span{line-height:54px; left:18px} }
+
+/* captions in the Search write-up: one style, under the picture, quiet */
+@media (min-width:901px){
+  html body .ov #w4 section.ch > figure figcaption, html body .ov #w4 section.ch > figure.fv figcaption{margin:14px 0 0 240px !important; max-width:52ch; font-size:13px !important; line-height:19px !important; color:var(--faint) !important}
+}
+
+/* card layout: the bottom row is its own zone. Both controls get a tall hit area so they don't need a precise click, and the row never opens the prototype */
+@media (min-width:901px){
+  html body #chapters.lay-rows .piece .prose p.end{padding-top:28px !important; padding-bottom:4px; min-height:64px; gap:22px !important}
+  html body #chapters.lay-rows .piece .prose p.end a{display:inline-flex; align-items:center; min-height:44px}
+  html body #chapters.lay-rows .piece .prose p.end{justify-content:space-between !important}
+  html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{margin-left:auto !important}
+  html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{min-height:44px; padding:0 18px 0 10px !important; font-size:14px !important; gap:8px !important}
+}
+
+
+
+/* case-study pop-up: the full case study in a card over the home page */
+#pg{position:fixed;inset:0;z-index:300;display:none;background:rgba(17,18,16,.62);backdrop-filter:blur(3px)}
+#pg.on{display:block}
+#pg .pg-card{position:absolute;top:48px;bottom:0;left:50%;transform:translateX(-50%);width:calc(100vw - 216px);transition:top .35s cubic-bezier(.22,.61,.36,1), border-radius .35s ease;background:#F7F7F5;border-radius:18px 18px 0 0;overflow:hidden;box-shadow:0 40px 100px -40px rgba(0,0,0,.7);animation:pg-in .32s cubic-bezier(.22,.61,.36,1)}
+#pg iframe{display:block;width:100%;height:100%;border:0;background:#F7F7F5}
+#pg .pg-x{display:none!important;position:absolute;top:10px;right:24px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:#F7F7F5;color:#191A18;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+#pg .pg-x:hover{background:#fff}
+@keyframes pg-in{from{opacity:0;transform:translate(-50%,24px)}}
+/* a gap above the card when it opens; once you scroll the case study, the card rises to the top */
+#pg.scrolled .pg-card{top:0;border-radius:0}
+/* the home page is drawn at 90% from 1200px up; the case study inside the card is shown at its own size */
+@media (min-width:1200px){ #pg{zoom:1.1112} }
+@media (prefers-reduced-motion:reduce){ #pg .pg-card{animation:none} }
+
 </style>
 <script>
 /* click a card in the side-by-side view: its live prototype opens in a pop-up, where the reader can watch it loop or try it */
@@ -4674,7 +4843,7 @@ html body .ov #w4 section.ch > p.ix-h{font-family:var(--display) !important; fon
     var b=document.querySelector('.ex-btn[data-open][data-ex="'+vn+'"]'); if(b) b.click(); }, true);
   ch.addEventListener('click', function(e){
     if(!ch.classList.contains('lay-rows') || innerWidth<901) return;
-    var p=e.target.closest('.piece'); if(!p || !LIVE[p.id] || e.target.closest('figure, a, button')) return;
+    var p=e.target.closest('.piece'); if(!p || !LIVE[p.id] || e.target.closest('figure, a, button, p.end')) return;
     e.stopImmediatePropagation(); e.preventDefault(); openProto(p);
   }, true);
   var ovl=document.getElementById('ov'); function gone(){ return wp.hidden || !ovl || !ovl.classList.contains('on'); }
@@ -4779,5 +4948,44 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
   addEventListener('resize', size); c.addEventListener('load', size, true);
   new MutationObserver(function(){ if(!c.hidden) setTimeout(size,60); }).observe(c,{attributes:true, attributeFilter:['hidden']});
   if(!build()){ var tries=0, iv=setInterval(function(){ if(build() || ++tries>50) clearInterval(iv); }, 100); } })();</script>
+<script>/* long section titles in the Search and Sensitivity write-ups: measure after layout, and let any title that would take three lines or more in the left column span the full width */
+(function(){ var cards=['w4','w5'].map(function(id){ return document.getElementById(id); }).filter(Boolean); if(!cards.length) return;
+  function fit(c){ if(innerWidth<901 || c.hidden) return; c.querySelectorAll('section.ch > h3').forEach(function(h){ h.classList.remove('wide'); if(h.offsetHeight>70) h.classList.add('wide'); }); }
+  function all(){ cards.forEach(fit); }
+  cards.forEach(function(c){ new MutationObserver(function(){ if(!c.hidden) setTimeout(function(){ fit(c); },80); }).observe(c,{attributes:true, attributeFilter:['hidden']}); });
+  addEventListener('resize', all); if(document.fonts && document.fonts.ready) document.fonts.ready.then(all); all(); })();</script>
+<script>/* long pull-quotes in the Search write-up step down a size */
+(function(){ document.querySelectorAll('#w4 section.ch > p.pq').forEach(function(p){ if(p.textContent.trim().length>150) p.classList.add('pq-long'); }); })();</script>
+<div id="pg" role="dialog" aria-modal="true" aria-label="Case study"><div class="pg-card"><iframe title="Case study" src="about:blank"></iframe></div><button type="button" class="pg-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button></div>
+<script>
+/* Search and Auto Extraction open in the pop-up on desktop; on a phone the link opens the page */
+(function(){ var pg=document.getElementById('pg'), fr=pg.querySelector('iframe'), x=pg.querySelector('.pg-x'), y=0, last=null;
+  function open(href, from){ last=from||document.activeElement; y=scrollY; pg.classList.remove('scrolled'); fr.src=href; pg.classList.add('on');
+    var z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;
+    document.body.style.position='fixed'; document.body.style.top=(-y/z)+'px'; document.body.style.width='100%';
+    var ov=document.getElementById('ov'); if(ov && ov.classList.contains('on')){ var c=ov.querySelector('[data-close]'); if(c) c.click(); }
+    setTimeout(function(){ try{ fr.focus(); }catch(e){} }, 300); }
+  function close(){ if(!pg.classList.contains('on')) return; pg.classList.remove('on'); pg.classList.remove('scrolled'); fr.src='about:blank';
+    document.body.style.position=''; document.body.style.top=''; document.body.style.width='';
+    var r=document.documentElement, pb=r.style.scrollBehavior; r.style.scrollBehavior='auto'; scrollTo(0,y); requestAnimationFrame(function(){ r.style.scrollBehavior=pb; });
+    if(last && last.focus) last.focus({preventScroll:true}); }
+  document.addEventListener('click', function(e){ var a=e.target.closest('a[href="search.html"], a[href="auto-extraction.html"], a[href="sensitivity-scroll.html"], [data-open="w5"]'); if(!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var h=a.getAttribute('data-open')==='w5' ? 'sensitivity-scroll.html' : a.getAttribute('href');
+    if(innerWidth<901){ if(h!==a.getAttribute('href')){ e.preventDefault(); e.stopImmediatePropagation(); location.href=h; } return; }
+    e.preventDefault(); e.stopImmediatePropagation(); open(h, a); }, true);
+  x.addEventListener('click', close);
+  pg.addEventListener('click', function(e){ if(e.target===pg) close(); });
+  addEventListener('keydown', function(e){ if(e.key==='Escape' && pg.classList.contains('on')) close(); });
+  addEventListener('message', function(e){ var d=e.data||{}; if(d.pg==='close') close(); else if(d.pg==='open' && d.href) fr.src=d.href; else if(d.pg==='scroll') pg.classList.toggle('scrolled', d.y>24); else if(d.pg==='proto' && d.id){ close(); setTimeout(function(){ if(window.openProto) window.openProto(d.id); }, 120); } });
+})();
+</script>
+<script>
+/* coming back from a case study: index.html#work lands on the work list, index.html#proto-q1 also opens that prototype */
+(function(){ var h=window.__arrive||''; var m=/^#proto-(q\d)$/.exec(h); if(h!=='#work' && !m) return;
+  function toWork(){ var w=document.getElementById('work'); if(!w) return; var r=document.documentElement, pb=r.style.scrollBehavior; r.style.scrollBehavior='auto';
+    w.scrollIntoView({block:'start'}); requestAnimationFrame(function(){ r.style.scrollBehavior=pb; }); }
+  addEventListener('load', function(){ setTimeout(function(){ toWork();
+    if(m){ var t=0, iv=setInterval(function(){ if(window.openProto){ clearInterval(iv); var p=document.getElementById(m[1]); if(p) p.scrollIntoView({block:'center'}); window.openProto(m[1]); } else if(++t>40) clearInterval(iv); },100); } }, 350); }); })();
+</script>
 </body>
 </html>
