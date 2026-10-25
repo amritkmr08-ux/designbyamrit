@@ -2514,7 +2514,7 @@ function onWidth(fn){
   var sheet=document.getElementById('sheet'), rf=document.getElementById('rf'); if(!sheet||!rf) return;
   var calm=matchMedia('(prefers-reduced-motion: reduce)').matches, fh=0, raf=0, PEEK=144;   /* the sheet stops with its rounded edge still showing at the top */
   function vh(){ return innerHeight/(parseFloat(getComputedStyle(document.documentElement).zoom)||1); }
-  function size(){ PEEK=Math.round(Math.max(96,Math.min(200,vh()*.158))); rf.style.setProperty('--peek',PEEK+'px'); fh=rf.offsetHeight; sheet.style.marginBottom=(fh-PEEK)+'px'; document.body.style.paddingBottom='1px'; tick(); }
+  function size(){ PEEK=Math.round(Math.max(72,Math.min(140,vh()*.11)));   /* a little less of the sheet stays on top, so the footer and its drawing get more height */ rf.style.setProperty('--peek',PEEK+'px'); fh=rf.offsetHeight; sheet.style.marginBottom=(fh-PEEK)+'px'; document.body.style.paddingBottom='1px'; tick(); }
   function tick(){ raf=0;
     var z=(parseFloat(getComputedStyle(document.documentElement).zoom)||1), r=sheet.getBoundingClientRect(), p=Math.max(0,Math.min(1,(innerHeight-r.bottom)/z/(fh-PEEK)));
     if(p<=0){ rf.style.setProperty('--fp','0'); sheet.style.transform=''; sheet.style.removeProperty('--sr'); sheet.classList.remove('lifting'); document.body.classList.remove('foot-on'); return; }
