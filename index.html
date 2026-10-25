@@ -1941,8 +1941,14 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
   section.closing .closing-bush{display:block !important; position:absolute; left:0; bottom:0; width:100%; max-width:620px; height:auto; z-index:1; pointer-events:none; user-select:none}
 }
 </style>
+<style>
+/* desktop: only the brightest strokes of the drawing are pulled down to a soft grey; the darker shades stay as they are */
+@media (min-width:761px){ .intro::before, .intro::after{filter:url(#tone-hi)} }
+</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.24 0.38 0.47 0.54"/><feFuncG type="table" tableValues="0 0.24 0.38 0.47 0.54"/><feFuncB type="table" tableValues="0 0.24 0.38 0.47 0.54"/></feComponentTransfer></filter></svg>
+
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
