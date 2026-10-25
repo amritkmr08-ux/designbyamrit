@@ -1732,6 +1732,200 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
 /* safety: never a narrow pop-up on a phone-width screen */
 @media (max-width:900px){ #pg .pg-card{left:0 !important; transform:none !important; width:100vw !important; top:0 !important; border-radius:0 !important} }
 </style>
+<style>
+/* phone and tablet: the work opens as the list view (the same cards as the desktop list), so the five projects are quick to skim */
+@media (max-width:900px){
+ #chapters.lay-rows .piece .fit{background:#fff} 
+
+  .chapters.lay-rows .piece{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); grid-template-rows:1fr auto auto auto auto 1fr; column-gap:56px;
+    border:1px solid var(--line); border-radius:36px; padding:30px 48px 30px 30px; margin:0 0 32px; padding-bottom:30px !important; box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+  .chapters.lay-rows .piece > *{grid-column:2; min-width:0}
+  .chapters.lay-rows .piece > .chap-head{grid-row:2} .chapters.lay-rows .piece > h2{grid-row:3} .chapters.lay-rows .piece > .dek{grid-row:4} .chapters.lay-rows .piece > .prose{grid-row:5}
+  .chapters.lay-rows .piece > figure{grid-column:1; grid-row:1 / 7; margin:0 !important; align-self:center}
+  .chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); padding:30px 30px 30px 48px}
+  .chapters.lay-rows .piece:nth-child(even) > *{grid-column:1}
+  .chapters.lay-rows .piece:nth-child(even) > figure{grid-column:2}
+  .chapters.lay-rows .piece > .prose{max-width:none; margin-top:20px}
+  .chapters.lay-rows .piece h2.chap-q{max-width:none}
+  .chapters.lay-rows .piece::after{display:none !important}
+  .chapters.lay-rows .piece{position:relative}
+  .chapters.lay-rows .piece p.fmeta{max-width:100%; margin-right:0; flex-wrap:wrap; white-space:normal; justify-content:flex-end; text-align:right}
+
+
+  .chapters.lay-rows .piece{grid-template-columns:minmax(0,1fr) minmax(0,.94fr) !important; column-gap:68px !important; padding:36px 56px 36px 36px !important;
+    border:1.5px solid #CFCFCA !important; border-radius:40px !important; box-shadow:0 2px 6px -2px rgba(25,26,24,.12) !important; margin-bottom:36px !important; cursor:pointer}
+  .chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,.94fr) minmax(0,1fr) !important; padding:36px 36px 36px 56px !important}
+  .chapters.lay-rows .piece > .prose, .chapters.lay-rows .piece p.fmeta, .chapters.lay-rows .piece figcaption{display:none !important}
+  .chapters.lay-rows .piece > figure{cursor:default}
+  .chapters.lay-rows .piece .fit{border-radius:10px; overflow:hidden}
+  .chapters.lay-rows .piece:hover{border-color:#B9B9B3 !important}
+
+
+  .chapters.lay-rows .piece{grid-template-rows:auto !important; align-items:center; padding:36px 56px 36px 36px !important}
+  .chapters.lay-rows .piece:nth-child(even){padding:36px 36px 36px 56px !important}
+  .chapters.lay-rows .piece > figure{grid-row:1 !important; grid-column:1 !important}
+  .chapters.lay-rows .piece > .ptxt{display:block; grid-row:1; grid-column:2}
+  .chapters.lay-rows .piece:nth-child(even) > figure{grid-column:2 !important}
+  .chapters.lay-rows .piece:nth-child(even) > .ptxt{grid-column:1}
+  .chapters.lay-rows .piece > .out-idx{display:none !important}
+  .chapters.lay-rows .piece .fit{border-radius:14px !important}
+  .chapters.lay-rows #q5 > figure{width:100%; justify-self:stretch}
+  .chapters.lay-rows #q5 .fit{border-radius:14px !important}
+
+
+  .chapters.lay-rows .piece{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.28)) !important; border:1px solid rgba(25,26,24,.09) !important; border-radius:32px !important;
+    box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 1px 2px rgba(25,26,24,.04), 0 18px 40px -28px rgba(25,26,24,.22) !important;
+    padding:24px 64px 24px 24px !important; column-gap:64px !important; margin-bottom:28px !important;
+    transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease, border-color .35s ease}
+  .chapters.lay-rows .piece:nth-child(even){padding:24px 24px 24px 64px !important}
+  .chapters.lay-rows .piece:hover{transform:translateY(-2px); border-color:rgba(25,26,24,.14) !important; box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 2px 4px rgba(25,26,24,.04), 0 28px 56px -30px rgba(25,26,24,.3) !important}
+  .chapters.lay-rows .piece .fit{border-radius:12px !important; box-shadow:0 0 0 1px rgba(25,26,24,.06), 0 10px 30px -18px rgba(25,26,24,.35)}
+  .chapters.lay-rows .piece > .ptxt{max-width:380px}
+  .chapters.lay-rows .piece .chap-head{display:inline-flex !important; align-items:center; gap:8px; padding:5px 12px 5px 6px; border-radius:999px; background:rgba(255,255,255,.7); box-shadow:0 0 0 1px rgba(25,26,24,.07)}
+  .chapters.lay-rows .piece .chap-head .chap-n{display:inline-grid !important; place-items:center; min-width:24px; height:24px; padding:0 6px; border-radius:999px; background:#1E1F1D; color:#F3F3EF !important; font-size:11.5px !important; line-height:24px !important; margin:0 !important; letter-spacing:.02em !important}
+  .chapters.lay-rows .piece .chap-head .chap-name{font-size:13.5px !important; line-height:20px !important; color:#3C3D3A !important}
+  #chapters.lay-rows .piece .chap-head .chap-n{color:#F3F3EF !important; font-family:var(--font) !important; font-weight:500 !important; font-size:11px !important}
+  .chapters.lay-rows .piece h2.chap-q{font-size:26px !important; line-height:34px !important; letter-spacing:-.015em !important; margin-top:20px !important; max-width:15em !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{color:#85867F !important}
+  .chapters.lay-rows .piece h2.chap-q + .dek{font-size:15px !important; line-height:24px !important; margin-top:12px !important; max-width:30em !important}
+
+
+  #chapters.lay-rows .piece{background:transparent !important; border:1.5px solid #D2D2CD !important; border-radius:22px !important;
+    box-shadow:0 2px 3px -1px rgba(25,26,24,.10), 0 10px 22px -16px rgba(25,26,24,.22) !important;
+    grid-template-columns:minmax(0,36fr) minmax(0,64fr) !important; column-gap:48px !important; padding:18px 44px 18px 18px !important; margin-bottom:20px !important}
+  #chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,64fr) minmax(0,36fr) !important; padding:18px 18px 18px 44px !important}
+  #chapters.lay-rows .piece:hover{transform:none; border-color:#C2C2BC !important}
+  #chapters.lay-rows .piece .fit{border-radius:6px !important; box-shadow:0 0 0 1px rgba(25,26,24,.05) !important}
+  #chapters.lay-rows .piece > .ptxt{max-width:none}
+  #chapters.lay-rows .piece .chap-head{display:block !important; padding:0 !important; background:none !important; box-shadow:none !important}
+  #chapters.lay-rows .piece .chap-head .chap-n{display:inline !important; min-width:0; height:auto; padding:0 !important; background:none !important; color:var(--muted) !important; font-family:var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:24px !important; margin:0 5px 0 0 !important}
+  #chapters.lay-rows .piece .chap-head .chap-name{font-size:16px !important; line-height:24px !important; color:var(--muted) !important}
+  #chapters.lay-rows .piece h2.chap-q{font-size:28px !important; line-height:34px !important; font-weight:500 !important; letter-spacing:-.01em !important; margin-top:12px !important; max-width:none !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{font-size:16px !important; line-height:24px !important; margin-top:8px !important; max-width:none !important; color:#7A7B75 !important}
+  /* even air: the same 18px round the prototype on every card, text centred against it, and one 12px step between label, question, line and button */
+  #chapters.lay-rows .piece{align-items:center !important}
+  #chapters.lay-rows .piece > figure{align-self:center !important; margin:0 !important}
+  #chapters.lay-rows .piece > figure figcaption, #chapters.lay-rows .piece > figure p.fmeta{display:none !important}
+  #chapters.lay-rows .piece .chap-head{margin:0 !important}
+  #chapters.lay-rows .piece h2.chap-q{margin-top:10px !important}
+  #chapters.lay-rows .piece h2.chap-q + .dek{margin-top:10px !important}
+  #chapters.lay-rows .piece .ex-btn.ex-top{margin-top:14px !important}
+
+
+  #chapters.lay-rows .piece{background:#F6F6F3 !important; box-shadow:none !important; transform:none !important; border-color:#D2D2CD !important;
+    transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease !important}
+  #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{border-color:#C6C6C0 !important; transform:translateY(-2px) !important;
+    box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important}
+  @media (prefers-reduced-motion:reduce){ #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{transform:none !important} }
+
+
+  #chapters.lay-rows .piece{border-width:1px !important; border-color:#DEDED9 !important}
+  #chapters.lay-rows .piece:hover, #chapters.lay-rows .piece:focus-within{border-color:#D2D2CD !important}
+
+
+  #chapters.lay-rows .piece:nth-child(even){grid-template-columns:minmax(0,36fr) minmax(0,64fr) !important; padding:18px 44px 18px 18px !important}
+  #chapters.lay-rows .piece:nth-child(even) > figure{grid-column:1 !important}
+  #chapters.lay-rows .piece:nth-child(even) > .ptxt{grid-column:2 !important}
+
+ #chapters.lay-rows .ex-btn{margin:18px 0 0 0; padding:4px 14px 4px 5px; background:rgba(25,26,24,.045)} #chapters.lay-rows .ex-btn:hover{background:rgba(25,26,24,.08); color:#191A18} 
+ #chapters:not(.lay-rows) .piece > .ptxt + figure{margin-top:32px !important} 
+ #chapters:not(.lay-rows) .piece > figure + .prose{margin-top:18px !important} 
+ #chapters:not(.lay-rows) .piece .ex-btn.ex-top{display:none !important} 
+
+  #chapters:not(.lay-rows) .piece .chap-head, #chapters:not(.lay-rows) .piece h2.chap-q, #chapters:not(.lay-rows) .piece h2.chap-q + .dek,
+  #chapters:not(.lay-rows) .piece .prose, #chapters:not(.lay-rows) .piece .ptxt{margin-left:7px !important}
+
+
+ #chapters:not(.lay-rows) .piece{display:flex !important; flex-direction:column}
+ #chapters:not(.lay-rows) .piece > figure{order:-1; margin-top:0 !important}
+ #chapters:not(.lay-rows) .piece > .ptxt{margin-top:40px !important}
+ #chapters:not(.lay-rows) .piece > .ptxt + figure{margin-top:0 !important}
+
+
+ html body #chapters:not(.lay-rows) .piece .ptxt .chap-head{order:-3}
+ html body #chapters:not(.lay-rows) .piece .ptxt > h2.chap-q{order:-2; font-size:26.7px !important; line-height:35.5px !important; margin-bottom:0 !important}
+ html body #chapters:not(.lay-rows) .piece .ptxt > .dek{order:-2; margin-top:12px !important; margin-bottom:28px !important}
+ html body #chapters:not(.lay-rows) .piece > figure{order:-1}
+
+
+ html body #chapters.lay-rows{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) !important; gap:24px !important; width:auto !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important}
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{display:flex !important; flex-direction:column !important; grid-column:auto !important; order:0 !important; padding:24px 24px 26px !important; margin:0 !important; background:transparent !important; border:1px solid rgba(25,26,24,.2) !important; border-radius:20px !important; box-shadow:none !important; transform:none !important; cursor:pointer}
+ html body #chapters.lay-rows .piece:hover{border-color:rgba(25,26,24,.42) !important; box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important}   /* a soft shadow under the card on hover */
+ /* the same lift for every card: Proof and Reach had stronger rules that held them flat */
+ @media (hover:hover){ html body #chapters.lay-rows .piece:hover, html body #chapters.lay-rows .piece:nth-child(even):hover, html body #chapters.lay-rows #q2:hover, html body #chapters.lay-rows .piece:focus-within, html body #chapters.lay-rows .piece:nth-child(even):focus-within, html body #chapters.lay-rows #q2:focus-within{border-color:rgba(25,26,24,.42) !important; transform:translateY(-2px) !important; box-shadow:0 2px 4px -2px rgba(25,26,24,.08), 0 18px 36px -20px rgba(25,26,24,.28) !important} }
+ @media (prefers-reduced-motion:reduce){ html body #chapters.lay-rows .piece:hover, html body #chapters.lay-rows .piece:nth-child(even):hover, html body #chapters.lay-rows #q2:hover{transform:none !important} }
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2{align-items:stretch !important; justify-content:flex-start !important}
+ html body #chapters.lay-rows .piece > .ptxt, html body #chapters.lay-rows .piece > .prose{width:auto !important; align-self:stretch !important}
+ html body #chapters.lay-rows .piece > figure, html body #chapters.lay-rows .piece .rowmeta, html body #chapters.lay-rows .piece .ex-top, html body #chapters.lay-rows .piece > .ex-mob{display:none !important}
+ html body #chapters.lay-rows .piece > .ptxt{display:block !important; order:0 !important; padding:0 !important; max-width:none !important; grid-column:auto !important; grid-row:auto !important}
+ html body #chapters.lay-rows .piece > .prose{display:block !important; order:1 !important; margin:16px 0 0 !important; max-width:none !important; grid-column:auto !important; grid-row:auto !important; flex:1; display:flex !important; flex-direction:column}
+ html body #chapters.lay-rows .piece .chap-head{display:block !important; padding:0 !important; background:none !important; box-shadow:none !important}
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{display:inline !important; background:none !important; padding:0 !important; min-width:0 !important; height:auto !important; font-family:var(--display) !important; font-size:14px !important; font-weight:400 !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .lv-ico{display:block; width:40px; height:40px; margin:20px 0 12px}
+ html body #chapters.lay-rows .piece .lv-ico svg{width:40px; height:40px; display:block}
+ html body #chapters.lay-rows .piece .lv-stat{display:block; margin:0 0 22px; font-size:11.5px; line-height:16px; color:#767972}
+ html body #chapters.lay-rows .piece .lv-stat a{color:inherit; text-decoration:underline; text-underline-offset:3px; margin-left:6px}
+ html body #chapters.lay-rows .piece h2.chap-q{font-size:21px !important; line-height:28px !important; margin:0 !important; max-width:none !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-size:14px !important; line-height:22px !important; margin-top:12px !important; max-width:none !important; color:#7A7B75 !important}
+ html body #chapters.lay-rows .piece .prose p{font-size:14px !important; line-height:22px !important}
+ html body #chapters.lay-rows .piece .prose p.role{display:block !important; position:static !important; width:auto !important; height:auto !important; clip:auto !important; white-space:normal !important; margin:6px 0 10px !important; font-weight:600 !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece .prose p.end{margin-top:auto !important; padding-top:24px}
+ html body #chapters.lay-rows .piece .prose p.end:has(.ex-end){flex-wrap:nowrap !important; gap:18px !important; align-items:center !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{margin:0 !important; white-space:nowrap; padding:4px 12px 4px 5px !important; font-size:13px !important; gap:6px !important}
+ html body #chapters.lay-rows .piece .prose p.role + p{margin-top:0 !important}
+
+
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2, html body #chapters.lay-rows #q4{overflow:hidden; padding-top:0 !important}
+ html body #chapters.lay-rows .piece .lv-band{display:block; margin:0 -24px 22px; padding:22px 24px 16px; background:var(--band,#EEEEEA)}
+ html body #chapters.lay-rows .piece .lv-band .lv-stat{margin-bottom:0}
+ html body #chapters.lay-rows .piece .lv-band .lv-ico{margin-top:16px}
+ html body #chapters.lay-rows #q1{--band:#E8F2D9} html body #chapters.lay-rows #q2{--band:#F6E8EF}
+ html body #chapters.lay-rows #q3{--band:#DCE5EB} html body #chapters.lay-rows #q4{--band:#E4E2F0}
+ html body #chapters.lay-rows #q5{--band:#F5E9DA}
+
+
+ html body #chapters.lay-rows .piece, html body #chapters.lay-rows .piece:nth-child(even), html body #chapters.lay-rows #q2, html body #chapters.lay-rows #q4{border:1px solid rgba(0,0,0,.38) !important; border-radius:22px !important; padding:0 27px 27px !important}
+ html body #chapters.lay-rows .piece .lv-band{margin:0 -27px 26px !important; padding:27px 27px 22px !important}
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:17px !important; line-height:24px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .lv-ico{width:60px !important; height:60px !important; margin:18px 0 14px -4px !important; color:#1B2124}
+ html body #chapters.lay-rows .piece .lv-ico svg{width:60px !important; height:60px !important}
+ html body #chapters.lay-rows .piece .lv-stat{font-family:'Inter',var(--font) !important; font-weight:400 !important; font-size:13px !important; line-height:20px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece h2.chap-q{font-family:'Poppins',var(--display) !important; font-weight:500 !important; font-size:26.7px !important; line-height:1.4 !important; letter-spacing:0 !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:25px !important; color:#767972 !important; margin-top:18px !important}
+ html body #chapters.lay-rows .piece .prose{margin-top:28px !important}
+ html body #chapters.lay-rows .piece .prose p.role{font-family:'Inter',var(--font) !important; font-weight:600 !important; font-size:15.5px !important; line-height:25.5px !important; color:#3F403D !important; margin:0 0 14px !important}
+ html body #chapters.lay-rows .piece .prose p:not(.role):not(.end){font-family:'Poppins',var(--display) !important; font-weight:400 !important; font-size:16px !important; line-height:25px !important; color:#767972 !important}
+ html body #chapters.lay-rows .piece .prose p.end a{font-family:'Poppins',var(--display) !important; font-weight:500 !important; font-size:16px !important; line-height:22px !important; color:#191A18 !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn{font-family:'Inter',var(--font) !important; font-size:14px !important; color:#767972 !important}
+ html body #chapters.lay-rows #q1{--band:#E8F3D8} html body #chapters.lay-rows #q2{--band:#F7EAF0}
+ html body #chapters.lay-rows{grid-template-columns:repeat(auto-fill,minmax(330px,1fr)) !important}
+
+
+ html body #chapters.lay-rows .piece .chap-head .chap-n, html body #chapters.lay-rows .piece .chap-head .chap-name{font-size:14px !important; line-height:20px !important; font-weight:500 !important}
+ html body #chapters.lay-rows .piece .lv-ico, html body #chapters.lay-rows .piece .lv-ico svg{width:40px !important; height:40px !important}
+ html body #chapters.lay-rows .piece .lv-stat{font-size:11.5px !important; line-height:17px !important}
+ html body #chapters.lay-rows .piece h2.chap-q{font-size:19px !important; line-height:26px !important}
+ html body #chapters.lay-rows .piece h2.chap-q + .dek{font-size:14px !important; line-height:22px !important; margin-top:10px !important}
+ html body #chapters.lay-rows .piece .prose{margin-top:18px !important}
+ html body #chapters.lay-rows .piece .prose p.role{font-size:13px !important; line-height:20px !important; margin-bottom:8px !important}
+ html body #chapters.lay-rows .piece .prose p:not(.role):not(.end){font-size:14px !important; line-height:22px !important}
+ html body #chapters.lay-rows .piece .prose p.end a{font-size:14px !important}
+ html body #chapters.lay-rows .piece .prose p.end .ex-btn{font-size:12px !important}
+
+
+  html body #chapters.lay-rows .piece .prose p.end{padding-top:28px !important; padding-bottom:4px; min-height:64px; gap:22px !important}
+  html body #chapters.lay-rows .piece .prose p.end a{display:inline-flex; align-items:center; min-height:44px}
+  html body #chapters.lay-rows .piece .prose p.end{justify-content:space-between !important}
+  html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{margin-left:auto !important}
+  html body #chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{min-height:44px; padding:0 18px 0 10px !important; font-size:14px !important; gap:8px !important}
+
+#chapters.lay-rows .piece .prose p.end{display:flex !important;align-items:center;justify-content:space-between;margin-top:22px !important}
+#chapters.lay-rows .piece .prose p.end .ex-btn.ex-end{display:inline-flex !important;margin:0 !important;padding:4px 14px 4px 5px !important;gap:8px;font-size:14px !important;border-radius:999px;background:rgba(25,26,24,.045)}
+#chapters.lay-rows .piece{padding-bottom:24px !important;min-height:0 !important}
+#chapters.lay-rows .piece > .ex-mob{display:none !important}
+
+}
+</style>
 </head>
 <body>
 <div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
@@ -1762,7 +1956,7 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
           <div class="cine-line" data-i="5">
             <h2 id="cine-h">Not yet.</h2>
           </div>
-          <div class="cine-line" data-i="u"><p class="cine-n">Users ask&hellip;</p></div>
+          <div class="cine-line" data-i="u"><p class="cine-n">Users ask new kinds of questions&hellip;</p></div>
           <div class="cine-line" data-i="6"><p class="lbl"><a class="cine-tag" href="#q1"><b>01</b>Search</a></p><p class="cine-q">Did it find every piece of data that matters?</p></div>
           <div class="cine-line" data-i="7"><p class="lbl"><a class="cine-tag" href="#q2"><b>02</b>Proof</a></p><p class="cine-q">Can I see the exact words a person wrote?</p></div>
           <div class="cine-line" data-i="8"><p class="lbl"><a class="cine-tag" href="#q3"><b>03</b>Lineage</a></p><p class="cine-q">Is this information still true today?</p></div>
