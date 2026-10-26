@@ -2001,6 +2001,11 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
   #work .workhead .workhead-l{font-family:'Inter',var(--font); font-size:14px; line-height:20px; color:#5F625C; background:none; padding:0}
 }
 </style>
+<style>
+/* cards without a public case study: a quiet note in the same slot as "Key decisions", plain text, not a link */
+#chapters .piece .prose p.end .cs-note{font-family:'Inter',var(--font); font-size:14px; line-height:20px; color:#9A9C96; white-space:nowrap}
+#chapters.lay-rows .piece{cursor:pointer}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.24 0.38 0.47 0.54"/><feFuncG type="table" tableValues="0 0.24 0.38 0.47 0.54"/><feFuncB type="table" tableValues="0 0.24 0.38 0.47 0.54"/></feComponentTransfer></filter></svg>
@@ -2097,7 +2102,7 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
     <p class="dek r">A clause may look simple today. But its meaning could have changed several times across different&nbsp;documents.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="lineage" aria-label="Explain me: play a short narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Explain me</span></button>
     <figure class="r"><span class="still"><img src="list-still-q3.webp" alt="A force majeure clause read as one paragraph, with the change from Amendment 1 marked and its source shown" loading="lazy"><i class="still-tag">In development</i></span><div class="fit" data-h="688"><iframe class="specimen" id="s1" src="proto-lineage.html" loading="lazy" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Build &middot; In development</span><span class="fm-b" aria-hidden="true">My role: end-to-end design. Being built now, to ship as a feature of the contract page.</span></span></p></figure>
-    <div class="prose r"><p class="role">Product design &middot; Contract relationships and information&nbsp;architecture</p><p>We designed a way to read the clause as it stands today, without piecing together every amendment by hand. Each change is marked with its date and source, and one click opens the signed document at the exact paragraph behind it. <span class="goal">Success would mean reviewers reopening documents less often just to check they&rsquo;re reading the right&nbsp;version.</span></p><p class="end"></p></div>
+    <div class="prose r"><p class="role">Product design &middot; Contract relationships and information&nbsp;architecture</p><p>We designed a way to read the clause as it stands today, without piecing together every amendment by hand. Each change is marked with its date and source, and one click opens the signed document at the exact paragraph behind it. <span class="goal">Success would mean reviewers reopening documents less often just to check they&rsquo;re reading the right&nbsp;version.</span></p><p class="end"><span class="cs-note" title="The case study isn&rsquo;t public yet">Not public yet</span></p></div>
   </article>
   <article class="piece" data-unit="editor" id="q4">
     <div class="chap-head r"><span class="chap-n">04</span><div class="chap-meta"><p class="chap-name">Reach</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i><i></i></span></div></div>
@@ -2105,7 +2110,7 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
     <p class="dek r">A change to one clause can create a problem somewhere else in the contract. Reviewers often have to find these knock-on effects&nbsp;themselves.</p><p class="rowmeta">End-to-end design</p>
     <button type="button" class="ex-btn r" data-open="wv" data-ex="reach" aria-label="Explain me: play a short narrated video"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke-linejoin="round"/></svg><span>Explain me</span></button>
     <figure class="r"><span class="still"><img src="list-still-q4.webp" alt="Ask AI to draft a change to a confidentiality clause, with suggested wordings from earlier contracts" loading="lazy"><i class="still-tag">Partially built</i></span><div class="fit" data-h="657" data-cut="10"><iframe class="specimen" id="s2" src="proto-reach.html" loading="lazy" title="Working prototype" scrolling="no"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Hypothesis &middot; Partially built</span><span class="fm-b" aria-hidden="true">My role: end-to-end design.</span></span></p></figure>
-    <div class="prose r"><p class="role">Product design &middot; AI-assisted editing&nbsp;interactions</p><p>We explored a redlining experience that shows the suggested edit in the text, explains where its wording came from, and points out other clauses that may no longer match, with a proposed fix ready to review. <span class="goal">The goal is to catch these conflicts before signing, not&nbsp;after.</span></p><p class="end"></p></div>
+    <div class="prose r"><p class="role">Product design &middot; AI-assisted editing&nbsp;interactions</p><p>We explored a redlining experience that shows the suggested edit in the text, explains where its wording came from, and points out other clauses that may no longer match, with a proposed fix ready to review. <span class="goal">The goal is to catch these conflicts before signing, not&nbsp;after.</span></p><p class="end"><span class="cs-note" title="The case study isn&rsquo;t public yet">Not public yet</span></p></div>
   </article>
   <article class="piece static note" id="q5">
     <div class="chap-head r"><span class="chap-n">05</span><div class="chap-meta"><p class="chap-name">Sensitivity</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i></span></div></div>
@@ -5129,7 +5134,7 @@ html body a.mark{width:52px !important; height:52px !important; font-size:25px !
     var b=document.querySelector('.ex-btn[data-open][data-ex="'+vn+'"]'); if(b) b.click(); }, true);
   ch.addEventListener('click', function(e){
     if(!ch.classList.contains('lay-rows') || innerWidth<901) return;
-    var p=e.target.closest('.piece'); if(!p || !LIVE[p.id] || e.target.closest('figure, a, button, p.end')) return;
+    var p=e.target.closest('.piece'); if(!p || !LIVE[p.id] || e.target.closest('figure, a, button')) return;   /* the empty part of the bottom row opens the prototype too */
     e.stopImmediatePropagation(); e.preventDefault(); openProto(p);
   }, true);
   var ovl=document.getElementById('ov'); function gone(){ return wp.hidden || !ovl || !ovl.classList.contains('on'); }
