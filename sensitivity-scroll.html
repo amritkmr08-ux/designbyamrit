@@ -1,7 +1,36 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFWF1XK9GB"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CFWF1XK9GB');</script>
+<!-- Google Analytics (GA4), only after the visitor says yes. Nothing loads and no cookie is set until then -->
+<script>
+(function(){
+  var ID='G-CFWF1XK9GB', KEY='ga-consent', v=null;
+  try{ v=localStorage.getItem(KEY); }catch(e){}
+  function load(){ if(window.__ga) return; window.__ga=1;
+    var s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id='+ID; document.head.appendChild(s);
+    window.dataLayer=window.dataLayer||[]; window.gtag=function(){ dataLayer.push(arguments); };
+    gtag('js',new Date()); gtag('config',ID,{anonymize_ip:true}); }
+  function save(x){ try{ localStorage.setItem(KEY,x); }catch(e){} }
+  if(v==='yes'){ load(); return; }
+  if(v==='no') return;
+  function ask(){
+    var st=document.createElement('style');
+    st.textContent='.ck{position:fixed;left:16px;bottom:16px;z-index:9999;max-width:360px;padding:16px 18px;border-radius:16px;background:#191A18;color:#E9E8E3;box-shadow:0 16px 40px -16px rgba(0,0,0,.6);font:400 13px/1.55 Inter,-apple-system,sans-serif;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}'
+      +'.ck.on{opacity:1;transform:none}.ck p{margin:0 0 12px}.ck div{display:flex;gap:8px}'
+      +'.ck button{flex:1;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:none;color:#E9E8E3;font:500 13px/18px Inter,sans-serif;cursor:pointer}'
+      +'.ck button.y{background:#F1F1EE;border-color:#F1F1EE;color:#191A18}'
+      +'@media (max-width:760px){.ck{left:12px;right:12px;bottom:12px;max-width:none}}';
+    document.head.appendChild(st);
+    var b=document.createElement('div'); b.className='ck'; b.setAttribute('role','dialog'); b.setAttribute('aria-label','Analytics cookies');
+    b.innerHTML='<p>Can I use Google Analytics to see which pages people read? No ads, and nothing is shared for tracking across sites.</p><div><button type="button" class="n">No thanks</button><button type="button" class="y">Allow</button></div>';
+    document.body.appendChild(b); requestAnimationFrame(function(){ requestAnimationFrame(function(){ b.classList.add('on'); }); });
+    function done(x){ save(x); if(x==='yes') load(); b.classList.remove('on'); setTimeout(function(){ b.remove(); },350); }
+    b.querySelector('.y').addEventListener('click',function(){ done('yes'); });
+    b.querySelector('.n').addEventListener('click',function(){ done('no'); });
+  }
+  /* inside the home page's pop-up the parent page asks; the framed page never shows its own banner */
+  if(window.top!==window.self){ try{ if(window.top.localStorage.getItem(KEY)==='yes') load(); }catch(e){} return; }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setTimeout(ask,1500); }); else setTimeout(ask,1500);
+})();
+</script>
 <title>When AI knows the answer, how does it know when to speak? · Amrit Kumar</title><meta name="description" content="Sensitivity: how an AI agent could decide when a finding deserves a person's attention, and when it should stay quiet."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191A18'/%3E%3Ctext x='32' y='43' font-family='Poppins,sans-serif' font-weight='500' font-size='36' fill='%23F7F7F5' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"><style>
 :root{--ink:#252724;--muted:#62655e;--sub:#95988f;--rule:#dfdfda;--green:#a8ba91;--paper:#fff;--read:720px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;overflow-y:auto!important}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:17px;line-height:1.8;overflow:auto!important;position:static!important;height:auto!important}a{color:inherit} .sitebar{max-width:1450px;margin:auto;padding:31px 52px;display:flex;justify-content:space-between;border-bottom:1px solid #ededeb;font-size:12px;letter-spacing:.04em}.brand{font-weight:600}.sitebar a{text-decoration:none;color:#666}
