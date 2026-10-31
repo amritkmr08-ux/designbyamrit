@@ -4275,7 +4275,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
             lineage:{n:'03', name:'Lineage', q:'Is this information still true today?', src:'lineage-walkthrough.mp4', poster:'lineage-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
             sensitivity:{n:'05', name:'Sensitivity', q:'Does it need me now, or can it wait?', src:'sensitivity-walkthrough.mp4', poster:'sensitivity-walkthrough-poster.webp', read:'w5', moreT:'Read the idea'},
             reach:{n:'04', name:'Reach', q:'If I accept it, what else changes?', src:'reach-walkthrough.mp4', poster:'reach-walkthrough-poster.webp', read:'wc', moreT:'Case study isn&rsquo;t public yet'},
-            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4?v=5', poster:'diagram-walkthrough-poster.webp'} };
+            diagram:{q:'', k:'Enterprise data explained', src:'diagram-walkthrough.mp4?v=9', poster:'diagram-walkthrough-poster.webp'} };
   var kEl=document.getElementById('wv-k');
   document.querySelectorAll('.ex-btn[data-ex]').forEach(function(b){ b.addEventListener('click', function(){ var c=SET[b.dataset.ex]; if(!c) return; card.dataset.film=b.dataset.ex;
     tag.hidden=!c.n; if(c.n) tag.innerHTML='<b>'+c.n+'</b> '+c.name; h.textContent=c.q; if(c.n) h.dataset.n=c.n; else delete h.dataset.n; h.hidden=!c.q; kEl.hidden=!c.k; kEl.textContent=c.k||''; more.hidden=!(c.read||c.href); var mt=more.querySelector('span'); if(mt) mt.innerHTML=c.moreT||'Read key decisions'; if(c.read){ more.setAttribute('data-open', c.read); more.setAttribute('href','#'); } else if(c.href){ more.removeAttribute('data-open'); more.setAttribute('href', c.href); } card.classList.toggle('dg', !(c.read||c.href));
