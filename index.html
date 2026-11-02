@@ -2061,6 +2061,14 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
   #work .blog-t{font-size:16.5px; line-height:24px}
 }
 </style>
+<style>
+/* desktop: the Scroll cue sits higher, so its line ends above the credits row instead of running beside it */
+@media (min-width:761px){ #intro-cue{margin-top:-68px !important} }
+</style>
+<style>
+/* "My work" reads like the Writing label; the five-questions line follows it, a step lighter */
+#work .workhead-s{color:#8A8D86}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
@@ -2133,7 +2141,7 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
   <a href="#q5"><b>05</b><span>Does it need me now, or can it wait?</span></a>
 </nav>
 <main id="work">
-  <div class="workhead"><span class="workhead-l">Five questions about contract AI</span></div>
+  <div class="workhead"><span class="workhead-l">My work<span class="workhead-s"> · Five questions about contract AI</span></span></div>
   <div class="chapters lay-rows" id="chapters">
   <article class="piece" data-unit="search" id="q1">
     <div class="chap-head r"><span class="chap-n">01</span><div class="chap-meta"><p class="chap-name">Search</p><span class="chap-pips" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></div></div>
