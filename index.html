@@ -2038,6 +2038,29 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
   html body #chapters:not(.lay-rows) .piece > .out-idx .row:last-child{border-bottom:0 !important}
 }
 </style>
+<style>
+/* Writing: three recent stories from Medium, as cards in the same family as the work cards; a link out to the rest */
+#work .blog{max-width:1080px; margin:120px auto 0; padding:0}
+#work .blog-head{display:flex; align-items:baseline; justify-content:space-between; margin:0 0 22px}
+#work .blog-l{font-family:'Inter',var(--font); font-size:15.5px; line-height:22px; color:#5F625C}
+#work .blog-more{font-family:'Inter',var(--font); font-size:14px; line-height:20px; font-weight:500; color:#191A18; text-decoration:underline; text-decoration-color:#C9CAC4; text-underline-offset:5px}
+#work .blog-more:hover{text-decoration-color:#191A18}
+#work .blog-more i{font-style:normal; margin-left:2px}
+#work .blog-row{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+#work .blog-card{display:flex; flex-direction:column; background:#F6F6F3; border:1px solid #D2D2CD; border-radius:20px; overflow:hidden; text-decoration:none; color:inherit; transition:box-shadow .3s cubic-bezier(.22,.61,.36,1), transform .3s cubic-bezier(.22,.61,.36,1)}
+#work .blog-card:hover{box-shadow:0 18px 40px -22px rgba(25,26,24,.35); transform:translateY(-2px)}
+#work .blog-img{display:block; aspect-ratio:16/10; background:#E6E6E2; overflow:hidden; border-bottom:1px solid #E3E3DF}
+#work .blog-img img{display:block; width:100%; height:100%; object-fit:cover}
+#work .blog-meta{display:block; margin:18px 22px 0; font-family:'Inter',var(--font); font-size:12.5px; line-height:18px; color:#767972}
+#work .blog-t{display:block; margin:8px 22px 24px; font-family:var(--font-display,'Poppins'),sans-serif; font-weight:500; font-size:18px; line-height:26px; letter-spacing:-.01em; color:#191A18}
+@media (max-width:900px){
+  #work .blog{margin-top:72px}
+  #work .blog-row{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; margin:0; padding:0 0 6px; scrollbar-width:none}
+  #work .blog-row::-webkit-scrollbar{display:none}
+  #work .blog-card{flex:0 0 78%; scroll-snap-align:start}
+  #work .blog-t{font-size:16.5px; line-height:24px}
+}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
@@ -2154,6 +2177,10 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
     <div class="out-idx r"><a class="row" href="sensitivity.html">See the UI samples<span>Live interactions</span></a><a class="row" href="sensitivity-paper.html">Read the idea<span>The full paper</span></a></div>
   </article>
   </div>
+    <section class="blog r" id="writing" aria-label="Writing">
+    <div class="blog-head"><span class="blog-l">Writing</span><a class="blog-more" href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">More on Medium <i aria-hidden="true">&#8599;</i></a></div>
+    <div class="blog-row" id="blog-row"><a class="blog-card" href="https://medium.com/@amritkmr08/when-ai-knows-the-answer-how-does-it-know-when-to-speak-222d795cff4f" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*-NNXgNdqAAGSMo5K4JAcQw.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Oct 2026 · 13 min read</span><span class="blog-t">When AI Knows the Answer, How Does It Know When to Speak?</span></a><a class="blog-card" href="https://uxplanet.org/when-ai-does-the-work-what-should-the-interface-show-cef03be7797b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*Z2hVoq7GUCAI3Hzbvm7w-Q.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">UX Planet · Oct 2026 · 10 min read</span><span class="blog-t">When AI Does the Work, What Should the Interface Show?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/how-to-navigate-design-explorations-6e94b2a1068c" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*QYTEOucESE8ChOhybK_iEA.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 6 min read</span><span class="blog-t">How to Navigate Design Explorations</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-distance-between-boardroom-and-sketchbook-8bc8fe5453bc" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*iUqXlUtJbKIxVr-J" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Distance Between Boardroom and Sketchbook</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-law-of-pr%C3%A4gnanz-for-design-why-your-brain-craves-simplicity-in-design-13699b2c20b5" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*bIvFrXW80u9oHLIY" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Law of Prägnanz for Design. Why Your Brain Craves Simplicity in Design?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-curve-and-the-quiet-crafting-emotion-in-design-5eac5f6d457b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*JwcJ8XIJJCTNlQnC.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 7 min read</span><span class="blog-t">The Curve and the Quiet: Crafting Emotion in Design</span></a></div>
+  </section>
     <section class="closing r" aria-label="Closing">
     <p>That&#8217;s what it takes to act on an answer.</p>
     <img class="closing-bush" src="closing-bush.webp" alt="" aria-hidden="true" loading="lazy">
@@ -5312,6 +5339,24 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
     w.scrollIntoView({block:'start'}); requestAnimationFrame(function(){ r.style.scrollBehavior=pb; }); }
   addEventListener('load', function(){ setTimeout(function(){ toWork();
     if(m){ var t=0, iv=setInterval(function(){ if(window.openProto){ clearInterval(iv); var p=document.getElementById(m[1]); if(p) p.scrollIntoView({block:'center'}); window.openProto(m[1]); } else if(++t>40) clearInterval(iv); },100); } }, 350); }); })();
+</script>
+<script>
+/* Writing: the six newest stories from Medium, fetched when the page loads (through rss2json, since Medium's feed can't be read directly from a browser).
+   If the fetch fails or is slow, the six stories already in the page stay. */
+(function(){ var row=document.getElementById('blog-row'); if(!row || !window.fetch) return;
+  var FEED='https://medium.com/feed/@amritkmr08', API='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(FEED);
+  var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function esc(x){ return String(x).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function card(it){ var c=it.content||it.description||'', m=c.match(/<img[^>]+src="([^"]+)"/), img=(it.thumbnail||(m&&m[1])||'').replace('/max/1024/','/max/800/');
+    var words=c.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length, mins=Math.max(1,Math.round(words/230));
+    var link=(it.link||'').split('?')[0], host='Medium'; try{ var h=new URL(link).hostname.replace(/^www\./,''); if(h!=='medium.com') host=({'uxplanet.org':'UX Planet','uxdesign.cc':'UX Collective','bootcamp.uxdesign.cc':'Bootcamp'})[h]||h; }catch(e){}
+    var d=new Date((it.pubDate||'').replace(' ','T')+'Z'), when=isNaN(d)?'':M[d.getUTCMonth()]+' '+d.getUTCFullYear();
+    return '<a class="blog-card" href="'+esc(link)+'" target="_blank" rel="noopener"><span class="blog-img">'+(img?'<img src="'+esc(img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'')+'</span><span class="blog-meta">'+esc([host,when,mins+' min read'].filter(Boolean).join(' · '))+'</span><span class="blog-t">'+esc(it.title||'')+'</span></a>'; }
+  var ctl=window.AbortController?new AbortController():null, t=setTimeout(function(){ if(ctl) ctl.abort(); },6000);
+  fetch(API, ctl?{signal:ctl.signal}:{}).then(function(r){ return r.json(); }).then(function(j){ clearTimeout(t);
+    var items=(j && j.status==='ok' && j.items)||[]; items=items.filter(function(i){ return i.link && i.title; }).slice(0,6);
+    if(items.length>=3) row.innerHTML=items.map(card).join(''); }).catch(function(){ clearTimeout(t); });
+})();
 </script>
 </body>
 </html>
