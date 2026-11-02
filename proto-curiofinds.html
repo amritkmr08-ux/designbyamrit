@@ -1,0 +1,1468 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Curiofinds · prototype</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=JetBrains+Mono:wght@500;700&family=Anton&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: 1200px shell, three browse modes over one idea set. An opened idea expands in place inside the grid (full row, neighbours reflow); nothing navigates away. Tokens = Curiofinds Design Freeze v1.0. */
+:root{
+  --bg:#fafaf7; --fg:#222924; --muted:#5e655d; --line:#e7e9e1; --accent:#435c48;
+  --lilac:#e5deff; --mint:#d8eee4; --peach:#f3dfd0; --butter:#f7edc4; --sky:#dce8fb; --rose:#f1dfe5;
+  --surface:#ffffff; --chip:#ffffff; --thought:#f5f7f2; --shade:rgba(32,44,32,.14);
+  --card-line:rgba(36,42,36,.06); --heart-bg:rgba(255,255,255,.72); --heart-line:rgba(34,48,37,.13); --body:#435046; --follow:#f1f2ec; --skel:#efefea;
+  --sans:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --r:14px; --gap:15px; --shell:1200px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151918; --fg:#e7ebe7; --muted:#a2aaa5; --line:#2d3431; --accent:#7cc8a3;
+  --lilac:#2c2843; --mint:#1d3a2f; --peach:#40301f; --butter:#3a371c; --sky:#1d2d42; --rose:#3e252c;
+  --surface:#1d2220; --chip:#1d2220; --thought:#1f2a24; --shade:rgba(0,0,0,.55);
+  --card-line:rgba(255,255,255,.05); --heart-bg:rgba(0,0,0,.25); --heart-line:rgba(255,255,255,.14); --body:#c9d0ca; --follow:#111514; --skel:#232a27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151918; --fg:#e7ebe7; --muted:#a2aaa5; --line:#2d3431; --accent:#7cc8a3;
+  --lilac:#2c2843; --mint:#1d3a2f; --peach:#40301f; --butter:#3a371c; --sky:#1d2d42; --rose:#3e252c;
+  --surface:#1d2220; --chip:#1d2220; --thought:#1f2a24; --shade:rgba(0,0,0,.55);
+  --card-line:rgba(255,255,255,.05); --heart-bg:rgba(0,0,0,.25); --heart-line:rgba(255,255,255,.14); --body:#c9d0ca; --follow:#111514; --skel:#232a27; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.shell{max-width:var(--shell);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .shell{display:flex;align-items:center;justify-content:space-between;height:58px;gap:16px}
+.logo{font-weight:800;letter-spacing:-.03em;font-size:19px}
+.logo i{font-family:var(--serif);font-weight:400;font-size:21px;letter-spacing:0}
+.nav{display:flex;gap:20px;font-size:14px;color:var(--muted)}
+.nav b{color:var(--fg);font-weight:500}
+.lab-badge{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:3px 9px}
+
+/* hero */
+.hero{padding-block:40px 18px}
+.hero h1{margin:0;font-size:clamp(34px,5vw,56px);line-height:1;letter-spacing:-.045em;font-weight:800;text-wrap:balance}
+.hero h1 em{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
+.hero p{margin:12px 0 0;color:var(--muted);max-width:58ch}
+
+/* controls */
+.controls{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:15;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line)}
+.row1{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{flex:1 1 320px;position:relative;min-width:0}
+.search input{width:100%;height:44px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:0 40px;font:inherit;color:var(--fg)}
+.search svg{position:absolute;left:13px;top:13px;width:18px;height:18px;stroke:var(--muted)}
+.search .clear{position:absolute;right:6px;top:6px;width:32px;height:32px;border:0;background:transparent;border-radius:8px;cursor:pointer;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;padding:3px;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.seg button:focus:not(:focus-visible),.chip:focus:not(:focus-visible){outline:none}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.btn{height:44px;padding:0 14px;border:1px solid var(--line);background:var(--surface);border-radius:12px;cursor:pointer;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--muted)}
+#surprise.busy{border-color:var(--accent);color:var(--accent)}
+#surprise.busy svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.chip .dot{display:none}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip.ctx{background:var(--card);border-color:var(--card-line)}
+.chips-wrap{position:relative;margin-top:10px}
+.chips-wrap .chips{margin-top:0}
+.skel-line{border-radius:8px;background:var(--skel);animation:skelPulse 1.6s ease-in-out infinite}
+#main.fadein{animation:openIn .4s ease-out both}
+.chip-skel{flex:none;height:33px;border-radius:999px;background:var(--skel);animation:skelPulse 1.6s ease-in-out infinite}
+.chip[data-back]{position:sticky;left:0;z-index:2;background:var(--surface);box-shadow:10px 0 10px -2px var(--bg)}
+/* the arrow's hit area covers the whole faded end of the row, so a near-miss never lands on a chip */
+.chip-arrow{position:absolute;top:-4px;bottom:-2px;width:84px;border:0;padding:0;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:flex-end;background:linear-gradient(to left,var(--bg) 60%,transparent)}
+.chip-arrow.right{right:0}
+.chip-arrow.left{justify-content:flex-start;background:linear-gradient(to right,var(--bg) 60%,transparent)}
+.ca-dot{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;transition:transform .15s}
+.chip-arrow:hover .ca-dot{transform:scale(1.08)}
+.chips::after{content:"";flex:0 0 70px}
+.chip-arrow[hidden]{display:none}
+.chip-arrow.left{left:0}
+.chip-arrow svg{width:16px;height:16px;fill:none;stroke:var(--fg);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.chip.ctx .sw{display:none}
+.chip.ctx[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip-label{flex:none;align-self:center;font-size:12px;color:var(--muted);padding:0 2px;white-space:nowrap}
+.chip .cnt{margin-left:6px;font-size:12px;opacity:.6}
+.status:has(#statusText:empty){display:none}
+.status{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:12.5px;color:var(--muted);min-height:19px;flex-wrap:wrap}
+.scale{display:inline-flex;gap:6px;align-items:center}
+.scale button{border:0;background:none;padding:0 2px;cursor:pointer;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:12.5px}
+.scale button[aria-pressed="true"]{color:var(--fg);font-weight:600;text-decoration:none}
+
+/* category colours */
+.c-dt{--card:var(--lilac)} .c-me{--card:var(--mint)} .c-ux{--card:var(--butter)} .c-ix{--card:var(--peach)}
+.c-ac{--card:var(--sky)} .c-ds{--card:var(--rose)} .c-ps{--card:var(--lilac)} .c-rs{--card:var(--mint)} .c-pt{--card:var(--mint)} .c-dn{--card:var(--sky)}
+/* card colour cycles in a fixed order, as in the reference wall */
+.k0{--card:var(--lilac)} .k1{--card:var(--peach)} .k2{--card:var(--butter)} .k3{--card:var(--mint)} .k4{--card:var(--sky)} .k5{--card:var(--rose)}
+
+/* cards: one type size and weight for every card; height = content; 1px row masonry keeps a fixed 16px gap */
+main{padding-block:22px 80px;min-height:100vh}
+.grid{--vgap:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px;row-gap:0;grid-auto-rows:1px;grid-auto-flow:row dense;align-items:start}
+.grid.plain{grid-auto-rows:auto;row-gap:16px}
+.card{position:relative;align-self:start;background:var(--card);border:1px solid var(--card-line);border-radius:16px;padding:24px 25px 22px;display:flex;flex-direction:column;transition:transform .18s ease, box-shadow .18s ease;scroll-margin-top:150px}
+.card:not(.expanded):hover{transform:translateY(-2px);box-shadow:0 8px 18px var(--shade)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;min-height:34px}
+.tag{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);padding-top:4px}
+.card-core{padding-top:24px}
+.card h3{margin:0 0 13px;font-size:28px;line-height:1.15;letter-spacing:-.04em;font-weight:750;overflow-wrap:break-word}
+.card h3 .open{all:unset;cursor:pointer}
+.card h3 .open::after{content:"";position:absolute;inset:0;border-radius:16px}
+.card h3 .open:focus-visible::after{outline:3px solid var(--accent);outline-offset:3px}
+.card p{margin:0;color:var(--body);font-size:14px;line-height:1.55}
+/* some cards carry a longer description, up to six lines, so the wall shows real height variety */
+.card p.long{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;line-clamp:6;overflow:hidden}
+.card .src{margin:12px 0 0;font-size:11px;line-height:1.45;color:var(--muted)}
+.card-foot{padding-top:18px;display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;font-weight:600;min-height:35px}
+.read{display:none;align-items:center;gap:5px;font-weight:500;color:var(--muted)}
+.card.is-read .read{display:inline-flex}
+.card.is-open{outline:2px solid var(--fg);outline-offset:2px}
+.repeat{font-size:11px;font-weight:500;border:1px dashed color-mix(in srgb,var(--fg) 30%,transparent);border-radius:999px;padding:0 7px;color:var(--muted)}
+.save{position:relative;z-index:2;width:34px;height:34px;margin:-5px -4px 0 0;border-radius:50%;border:1px solid var(--heart-line);background:var(--heart-bg);display:grid;place-items:center;cursor:pointer;flex:none;transition:transform .15s}
+.save:hover{transform:scale(1.08)}
+.save svg{width:17px;height:17px;fill:none;stroke:var(--fg);stroke-width:1.8}
+.save[aria-pressed="true"] svg{fill:var(--fg);stroke:var(--fg)}
+.loadline{display:flex;justify-content:center;margin-top:26px;color:var(--muted);font-size:13px;min-height:20px}
+.card-foot .go{opacity:0;transform:translateX(-6px);transition:opacity .18s ease,transform .18s ease}
+.card:hover .go,.card:focus-within .go{opacity:1;transform:none}
+@media (hover:none){.card-foot .go{opacity:1;transform:none}}
+.card.enter{animation:cardIn .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.skel{align-self:start;height:231px;border-radius:16px;background:var(--skel);animation:skelPulse 1.6s ease-in-out infinite}
+@keyframes skelPulse{50%{opacity:.6}}
+.skel.out{opacity:0!important;transition:opacity .28s ease;animation:none}
+.lead-skel{grid-column:1/-1;height:520px;border-radius:22px}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:0 0}}
+/* bottom glow while new ideas are being curated */
+.curate{position:fixed;left:0;right:0;bottom:0;height:240px;z-index:25;pointer-events:none;opacity:0;transition:opacity .35s ease;display:flex;align-items:flex-end;justify-content:center;padding-bottom:calc(34px + env(safe-area-inset-bottom,0px))}
+.curate.on{opacity:1}
+.curate::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 8%,color-mix(in srgb,var(--bg) 70%,transparent) 45%,transparent)}
+.curate::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-70px;height:200px;background:linear-gradient(90deg,var(--lilac),var(--peach),var(--butter),var(--mint),var(--sky),var(--rose),var(--lilac));background-size:200% 100%;filter:blur(46px);opacity:.9;animation:glow 3.2s linear infinite}
+@keyframes glow{from{background-position:0 0}to{background-position:200% 0}}
+.curate span{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;box-shadow:0 8px 24px -12px var(--shade)}
+.curate svg{width:15px;height:15px;fill:var(--accent);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(.75) rotate(45deg);opacity:.6}}
+#sentinel{height:1px}
+
+/* expanded idea (in place) */
+.card.expanded{animation:openIn .32s ease-out both}
+@keyframes openIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card.expanded{grid-column:1/-1;padding:0;background:var(--surface);border:1px solid var(--line);overflow:hidden;cursor:default;border-radius:22px}
+.x-hero{position:relative;background:var(--card);padding:46px 52px 45px;display:grid;gap:16px}
+.x-hero h2{margin:0;font-size:clamp(33px,4.2vw,50px);line-height:1.13;letter-spacing:-.04em;font-weight:750;max-width:730px;text-wrap:balance}
+.x-hero .sum{margin:0;font-size:16px;line-height:1.65;color:var(--body);max-width:630px}
+.x-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{height:36px;padding:0 15px;border:0;border-radius:999px;background:var(--surface);cursor:pointer;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.pill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+.pill[aria-pressed="true"] svg{fill:currentColor}
+.x-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;border:0;background:color-mix(in srgb,var(--surface) 80%,transparent);cursor:pointer;display:grid;place-items:center}
+.x-close svg{width:18px;height:18px;stroke:var(--fg);stroke-width:2;fill:none}
+.more-head{grid-column:1/-1;align-self:start;padding:22px 2px 0}
+.more-head.beyond{padding:34px 2px 4px;border-top:1px solid var(--line);margin-top:8px}
+.more-head.beyond .why{margin:6px 0 0;color:var(--muted);font-size:14px}
+.more-head .kicker{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.more-head h2{margin:0;font-size:26px;line-height:1.2;letter-spacing:-.035em;font-weight:750}
+.x-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.visit{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:14px;background:transparent;color:var(--fg);text-decoration:none;font-size:16px;font-weight:600;flex:none;transition:background .15s}
+.visit:hover,.visit:focus-visible{background:color-mix(in srgb,var(--fg) 10%,transparent)}
+/* the source stays quiet: it appears only while the reader hovers the idea; the full link lives in 06 / Further reading */
+.visit{opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .2s ease,transform .2s ease,background .15s}
+.x-hero:hover .visit,.visit:focus-visible{opacity:1;transform:none;pointer-events:auto}
+@media (hover:none){.visit{display:none}}
+.visit svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2}
+.visit{flex-direction:column;align-items:flex-end;gap:3px}
+.v-main{display:inline-flex;align-items:center;gap:7px}
+.visit{padding:8px 12px;border-radius:10px;font-size:14px;font-weight:500}
+.v-from{font-size:12px;font-weight:500;color:var(--muted)}
+.x-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.pill.back svg{fill:none;stroke:currentColor;stroke-width:2.2}
+.pill.back[aria-pressed] svg{fill:none}
+.thought-save{background:var(--surface);border:1px solid var(--line)}
+.x-title:focus{outline:none}
+.navbtn{border:0;background:none;padding:0;cursor:pointer;color:var(--muted);font-size:14px}
+.navbtn[aria-current="page"]{color:var(--fg);font-weight:500}
+.navbtn:hover{color:var(--fg)}
+.x-came{font-size:12.5px;color:color-mix(in srgb,var(--fg) 70%,transparent)}
+.x-body{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(205px,.8fr);gap:35px;padding:32px 52px 30px}
+.x-sec{padding:19px 0 25px;border-bottom:1px solid var(--line)}
+.x-sec:last-child{border-bottom:0}
+.kicker{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+.x-sec h3{margin:0 0 10px;font-size:23px;letter-spacing:-.035em;font-weight:700;line-height:1.2}
+.x-sec p{margin:0;color:var(--muted);font-size:14px;line-height:1.85;max-width:64ch}
+.x-sec .kicker,.thought .kicker{font-family:var(--sans);font-size:10px;font-weight:800;letter-spacing:.1em;line-height:1.4;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+.x-sec a{color:var(--accent);text-underline-offset:3px}
+.x-sec .src-note{display:block;margin-top:6px;font-size:14px;color:var(--muted)}
+.x-aside{padding-top:20px}
+.thought{position:sticky;top:160px;background:var(--thought);border-radius:14px;padding:24px}
+.thought p{margin:6px 0 12px;font-family:var(--serif);font-size:20px;line-height:1.35}
+.x-follow{padding:28px 52px 42px;background:var(--follow);border-top:1px solid var(--line)}
+.x-follow h3{margin:0 0 15px;font-size:20px;letter-spacing:-.03em;font-weight:700}
+.f-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+.f-card{text-align:left;border:0;background:var(--card);border-radius:var(--r);padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-height:150px;transition:transform .18s}
+.f-card:hover{transform:translateY(-2px)}
+.f-card .t{font-size:20px;font-weight:750;letter-spacing:-.025em;line-height:1.15;margin-top:6px}
+.f-card .s{font-size:13.5px;color:color-mix(in srgb,var(--fg) 78%,transparent)}
+.f-card .why{margin-top:auto;padding-top:8px;font-size:12.5px;color:color-mix(in srgb,var(--fg) 66%,transparent);font-style:italic}
+.f-card.random{background:var(--surface);border:1px dashed var(--line)}
+
+/* view transitions */
+::view-transition-group(*){animation-duration:.38s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+::view-transition-old(*),::view-transition-new(*){height:100%;object-fit:cover;object-position:top}
+
+/* zero results */
+.zero{border:1px solid var(--line);border-radius:var(--r);padding:26px;background:var(--surface);display:grid;gap:16px}
+.zero h2{margin:0;font-size:22px;letter-spacing:-.02em}
+.zero .sub{margin:0;color:var(--muted)}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.block-label{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--fg) 70%,transparent)}
+
+/* shelves */
+.shelf{margin-bottom:34px}
+.shelf-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.shelf-head h2{margin:0;font-size:22px;letter-spacing:-.025em;display:flex;align-items:center;gap:10px}
+.shelf-head h2 .dot{width:12px;height:12px;border-radius:50%;background:var(--card)}
+.shelf-head .why{color:var(--muted);font-size:13.5px;margin:2px 0 0}
+.shelf-nav{display:flex;gap:6px;align-items:center;flex:none}
+.round{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 2*var(--gap))/3.25);gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding:4px 4px 8px}
+.track .card{scroll-snap-align:start;min-height:180px}
+.track .card h3{font-size:21px}
+.shelf-open{margin-top:var(--gap)}
+.shelf-open .card.expanded{display:block}
+.seeall{all:unset;cursor:pointer;color:var(--accent);font-weight:600;font-size:14px}
+
+/* trail */
+.trail-crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:14px}
+.trail-crumbs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;cursor:pointer;font-size:12.5px}
+.trail-crumbs button[aria-current="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* test log */
+.logbtn{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:35;border-radius:999px;height:40px;box-shadow:0 6px 18px -10px var(--shade)}
+.log{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:36;width:min(380px,calc(100% - 32px));background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:0 18px 40px -20px var(--shade)}
+.log h3{margin:0 0 4px;font-size:15px}
+.log .sub{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.log table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.log th,.log td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
+.log th:first-child,.log td:first-child{text-align:left;color:var(--muted);font-weight:500}
+.log .acts{display:flex;gap:8px;margin-top:12px}
+.log .acts .btn{height:36px;font-size:13px}
+.log pre{white-space:pre-wrap;font-size:11.5px;background:var(--bg);border-radius:8px;padding:8px;max-height:140px;overflow:auto}
+
+.notes{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--muted);font-size:13.5px}
+.notes summary{cursor:pointer;color:var(--fg);font-weight:600}
+.notes ul{margin:10px 0 0;padding-left:18px;display:grid;gap:4px;max-width:80ch}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .track{grid-auto-columns:calc((100% - var(--gap))/2.2)}
+  .x-hero{padding:40px 28px 36px}.x-body{padding:20px 28px}.x-follow{padding:24px 28px 32px}
+  .x-body{grid-template-columns:1fr;gap:0}
+  .x-aside{padding-top:8px;padding-bottom:24px}
+  .thought{position:static}
+  .f-grid{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .hero{padding-block:26px 10px}
+  .nav{display:none}
+  .grid{grid-template-columns:1fr}
+  .track{grid-auto-columns:82%}
+  .controls{padding-block:10px}
+  .row1{gap:8px}
+  .row1 .btn,.seg button{height:38px}
+  .search input{height:40px}
+  .search svg{top:11px}
+  .search .clear{top:4px}
+  .status{display:none}
+  .x-hero{padding:56px 22px 28px}
+  .x-body{padding:4px 22px}
+  .x-follow{padding:20px 22px 32px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.card.enter,.skel,.curate::after,.curate svg,.card.expanded{animation:none!important}::view-transition-group(*){animation:none!important}}
+
+/* ===== Card look experiment (prototype only) ===== */
+.k0{--deep:#5b4bc4;--hl:#cdbfff} .k1{--deep:#c2643a;--hl:#f6c3a3} .k2{--deep:#9a7a08;--hl:#f3dc78} .k3{--deep:#2f7d5b;--hl:#a9dfc6} .k4{--deep:#2f62b8;--hl:#b8cff5} .k5{--deep:#b54a6e;--hl:#efbccd}
+.card{overflow:hidden}
+.card:has(.open:focus-visible){outline:3px solid var(--accent);outline-offset:3px}
+.card .art{margin:0 0 18px}
+/* quote */
+.v-quote .card-core{display:flex;flex-direction:column;padding-top:14px}
+.v-quote .card-core>p:not(.src){order:-1;font-family:var(--serif);font-style:italic;font-size:29px;line-height:1.1;letter-spacing:-.01em;color:var(--fg)}
+.v-quote .card-core>p:not(.src)::before{content:"“";display:block;font-size:64px;line-height:.6;margin:10px 0 4px;color:var(--deep);font-style:normal}
+.v-quote h3{font-size:15px;letter-spacing:-.01em;margin:16px 0 0}
+/* big word / stat */
+.v-stat .art{font-family:"Fraunces",var(--serif);font-weight:600;font-size:clamp(54px,7vw,84px);line-height:.9;letter-spacing:-.04em;color:var(--deep);margin:2px 0 14px;overflow-wrap:anywhere}
+.v-stat .art.word{font-style:italic;font-weight:500;font-size:clamp(44px,5.6vw,66px)}
+.v-stat h3{font-size:20px}
+/* poster */
+.v-poster{background:#1e231f;border-color:#1e231f;color:#f4f2ea}
+.v-poster .tag{color:var(--card)} .v-poster h3{color:#fbfaf5;font-size:36px;line-height:1.02;letter-spacing:-.045em}
+.v-poster p,.v-poster .src{color:rgba(244,242,234,.72)!important} .v-poster .card-foot{color:#f4f2ea}
+.v-poster .save{background:#fff;border-color:#fff}
+.v-poster::before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:var(--card);right:-44px;top:-48px;opacity:.95}
+.v-poster .save{z-index:3}
+.v-poster .card-core,.v-poster .card-foot{position:relative}
+/* highlight */
+.v-highlight{background:#fdfcf8;border-color:var(--line)}
+.v-highlight h3 .open span{background:linear-gradient(transparent 52%,var(--hl) 52%,var(--hl) 92%,transparent 92%);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .08em}
+.v-highlight .tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--deep);margin-right:8px;vertical-align:1px}
+/* index */
+.v-index .art{font-family:"Fraunces",var(--serif);font-size:88px;font-weight:600;line-height:.8;color:transparent;-webkit-text-stroke:1.4px var(--deep);margin:0 0 16px;letter-spacing:-.04em}
+.v-index .art small{font-size:14px;-webkit-text-stroke:0;color:var(--deep);font-weight:600;letter-spacing:.02em;vertical-align:top;margin-right:6px;font-family:var(--sans);text-transform:uppercase}
+.v-index h3{font-family:"Fraunces",var(--serif);font-weight:600;letter-spacing:-.02em;font-size:30px}
+/* diagram & widget panels */
+.v-diagram .art,.v-widget .art{border-radius:12px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.05);height:132px;display:grid;place-items:center;overflow:hidden}
+.v-diagram .art svg,.v-widget .art svg{width:100%;height:100%}
+.v-diagram h3,.v-widget h3{font-size:24px}
+.v-widget .art{background:#fff;box-shadow:0 6px 18px rgba(30,35,31,.08)}
+/* note */
+.v-note{background:#fffdf6;border-color:#ece6d3;background-image:repeating-linear-gradient(transparent 0 27px,rgba(60,90,160,.11) 27px 28px);background-position:0 70px}
+.v-note::after{content:"";position:absolute;top:0;bottom:0;left:16px;width:1.5px;background:rgba(214,92,92,.35);pointer-events:none}
+.v-note .tag{font-family:"JetBrains Mono",monospace;font-weight:700;letter-spacing:.04em;color:var(--deep)}
+.v-note h3{font-family:"Fraunces",var(--serif);font-weight:500;font-style:italic;letter-spacing:-.015em;font-size:29px}
+.v-note p{line-height:28px!important}
+/* split */
+.v-split{padding-top:0;background:#fff;border-color:var(--line)}
+.v-split .art.top{margin:0 -25px 18px;height:118px;background:var(--deep);position:relative;overflow:hidden}
+.v-split .art.top b{position:absolute;right:16px;bottom:-26px;font-family:"Fraunces",var(--serif);font-size:150px;line-height:1;color:var(--card);font-weight:600;letter-spacing:-.06em}
+.v-split .art.top i{position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.08) 0 2px,transparent 2px 12px)}
+/* outline */
+.v-outline{background:transparent;border:1.5px solid var(--fg)}
+.v-outline h3{font-family:var(--serif);font-weight:400;font-size:40px;line-height:1;letter-spacing:-.01em}
+.v-outline .tag::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--card);border:1px solid var(--deep);margin-right:8px;vertical-align:-1px}
+/* gradient */
+.v-gradient{border-color:transparent;background:radial-gradient(120% 80% at 10% 0%,var(--card) 0 40%,transparent 70%),radial-gradient(90% 70% at 100% 100%,color-mix(in srgb,var(--deep) 55%,#fff) 0 30%,transparent 72%),#f7f5ff}
+.v-gradient::before{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 8px,transparent 8px 20px);-webkit-mask:linear-gradient(transparent,#000);mask:linear-gradient(transparent,#000);pointer-events:none}
+.v-gradient h3{font-size:32px;letter-spacing:-.05em}
+/* ticket */
+.v-ticket{background:color-mix(in srgb,var(--card) 38%,#fff);border-color:color-mix(in srgb,var(--card) 70%,var(--line))}
+.v-ticket .tag{color:var(--deep)}
+.v-ticket .stub{margin:18px -25px -6px;padding:14px 25px 2px;border-top:2px dashed var(--line);position:relative;display:flex;justify-content:space-between;gap:10px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.v-ticket .stub::before,.v-ticket .stub::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.v-ticket .stub::before{left:-11px}.v-ticket .stub::after{right:-11px}
+.v-ticket .stub b{color:var(--fg);font-weight:700}
+/* condensed */
+.v-condensed h3{font-family:"Anton",Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:44px;line-height:.98;letter-spacing:.005em}
+.v-condensed .tag{background:var(--fg);color:var(--card);padding:5px 8px 4px;border-radius:4px}
+/* sticker */
+.v-sticker .sticker{position:absolute;top:20px;right:64px;transform:rotate(-6deg);background:#fff;border:1.5px solid var(--fg);border-radius:999px;padding:6px 12px 4px;font-family:"Caveat",cursive;font-size:19px;font-weight:700;line-height:1;box-shadow:2px 3px 0 var(--fg);z-index:1}
+.v-sticker .squig{display:block;width:150px;height:12px;margin:-6px 0 12px;color:var(--deep)}
+/* the switcher (prototype only) */
+.looks-wrap{position:fixed;left:16px;bottom:70px;z-index:60}
+.gear{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;box-shadow:0 6px 18px rgba(30,35,31,.14);display:grid;place-items:center;cursor:pointer;color:var(--fg)}
+.gear[aria-expanded="true"]{background:var(--fg);color:#fff}
+.looks{position:absolute;left:0;bottom:50px;flex-direction:column;align-items:stretch!important;min-width:250px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(30,35,31,.14);padding:10px 12px;font-size:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 32px)}
+.looks b{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.looks[hidden]{display:none!important}
+.looks .look-panel{left:calc(100% + 8px);bottom:0}
+.looks select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.looks label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.look-btn{font:inherit;font-weight:500;min-width:170px;text-align:left;padding:6px 30px 6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23222924' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer}
+.look-panel{position:absolute;left:0;bottom:calc(100% + 6px);width:230px;max-height:min(420px,70vh);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 28px rgba(30,35,31,.16);padding:6px}
+.lp-head{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);padding:6px 8px 8px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.lp-head .lp-acts{display:flex;gap:6px}
+.lp-head button{all:unset;cursor:pointer;color:var(--accent);font-weight:600;padding:3px 9px;border:1px solid var(--line);border-radius:999px;background:var(--bg,#fff)}
+.lp-head button:hover{border-color:var(--accent)}
+.lp-head button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lp-grid{display:flex;flex-direction:column}
+.lp-mode{display:flex;flex-direction:column;padding:4px 2px 8px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.lp-mode label{padding:6px 8px;border-radius:6px;font-weight:600}
+.lp-mode input{accent-color:var(--fg);margin:0}
+.lp-legend{padding:2px 8px 6px;font-size:12px;line-height:1.9}
+.lp-legend div{display:flex;justify-content:space-between;gap:10px}.lp-legend span{color:var(--muted)}
+.lp-grid label{display:flex;gap:10px;align-items:center;padding:7px 8px;border-radius:6px;font-weight:500;cursor:pointer}
+.lp-grid label:hover{background:var(--bg)}
+.lp-grid input{width:15px;height:15px;accent-color:var(--fg);margin:0}
+/* peek on hover-delay */
+.peek{position:fixed;z-index:55;width:340px;max-width:calc(100vw - 32px);background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.7);border-radius:18px;box-shadow:0 18px 40px rgba(30,35,31,.18);padding:20px 22px;font-size:14.5px;line-height:1.6;color:var(--fg);opacity:0;transform:translateY(6px) scale(.98);transition:opacity .2s ease,transform .2s ease;pointer-events:none}
+.peek.on{opacity:1;transform:none}
+.peek h4{margin:14px 0 2px;font-size:14.5px}
+.peek p{margin:0}
+.peek .pk{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+@media (hover:none){.peek{display:none}}
+@media (prefers-reduced-motion:reduce){.peek{transition:none}}
+
+/* ===== Best version: hook-first cards ===== */
+.k6{--card:#e2ecd3;--deep:#5d7a2c;--hl:#c6dca4} .k7{--card:#d6eef0;--deep:#22777f;--hl:#a8dce1} .k8{--card:#ece3d3;--deep:#7a6342;--hl:#dcc9a6} .k9{--card:#dfe0f7;--deep:#4a50a8;--hl:#bfc2f0}
+.card h3 .open span{display:inline}
+.card .name{margin:-4px 0 10px!important;font-size:12px!important;font-weight:700;letter-spacing:.02em;color:var(--deep)!important;text-transform:none}
+.card h3{font-size:24px;line-height:1.18;letter-spacing:-.03em}
+.v-quote h3{font-family:var(--serif);font-weight:400;font-style:italic;font-size:30px;line-height:1.1;letter-spacing:-.01em;margin:6px 0 12px}
+.v-quote h3::before{content:"“";display:block;font-size:60px;line-height:.55;margin:8px 0 2px;color:var(--deep);font-style:normal}
+.v-quote .card-core{display:block;padding-top:14px}
+.v-quote .card-core>p:not(.src){order:0;font-family:var(--sans);font-style:normal;font-size:14px;line-height:1.55;color:var(--body)}
+.v-quote .card-core>p:not(.src)::before{content:none}
+.v-diagram .art,.v-widget .art{height:104px}
+.newb{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:#fff;border-radius:999px;padding:4px 8px 3px;margin-left:8px;vertical-align:1px}
+.card.is-read .newb{display:none}
+.resurface{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 16px;padding:14px 18px;border:1px dashed var(--line);border-radius:14px;background:var(--surface,#fff);font-size:14px}
+.resurface .rk{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.resurface button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.resurface button:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.loadline .loadmore{font:inherit;font-weight:700;margin-left:12px;padding:10px 18px;border-radius:999px;border:1px solid var(--fg);background:var(--fg);color:#fff;cursor:pointer}
+.loadline .done{font-weight:700;color:var(--fg)}
+.x-art{margin:18px 0 4px;max-width:460px}
+.x-art .art{margin:0;height:120px;border-radius:12px;background:rgba(255,255,255,.55);display:grid;place-items:center;overflow:hidden}
+.x-art .art svg{width:100%;height:100%}
+.x-art .art:not(:has(svg)){background:none;height:auto;display:block;font-family:"Fraunces",var(--serif);font-weight:600;font-size:64px;line-height:.9;color:var(--deep)}
+.x-hero .x-hook,.x-hook{font-family:var(--serif)!important;font-style:italic;font-size:26px!important;line-height:1.2;margin:6px 0 10px;color:var(--fg);max-width:720px}
+
+/* search suggestions + fresh research */
+.search{position:relative}
+#q::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.qsug{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px rgba(30,35,31,.14);padding:6px;max-height:60vh;overflow:auto}
+.qsug [data-sug]{all:unset;display:block;width:calc(100% - 24px);padding:9px 12px;border-radius:8px;cursor:pointer}
+.qsug [data-sug] b{display:block;font-size:14px;font-weight:650}
+.qsug [data-sug] span{font-size:12px;color:var(--muted)}
+.qsug [data-sug]:hover,.qsug [data-sug].on{background:var(--bg)}
+.sug-enter{font-size:12px;color:var(--muted);padding:8px 12px 6px;border-top:1px solid var(--line);margin-top:4px}
+.sug-enter kbd{font:inherit;font-weight:700;border:1px solid var(--line);border-radius:4px;padding:0 5px;background:var(--bg)}
+.fresh-sec{margin-top:16px}
+.fresh-head h2{margin:0;font-size:26px;letter-spacing:-.035em;font-weight:750}
+.fresh-head p{margin:6px 0 18px;color:var(--muted);font-size:14px}
+.card.fresh{background:#fff;border:1.5px dashed #c9cdc4}
+.card.fresh .fresh-chip{background:#f1f2ee;border:1px solid var(--line);border-radius:999px;padding:4px 9px 3px;letter-spacing:.08em}
+.card.fresh h3{font-size:22px}
+.card.fresh blockquote{margin:0 0 12px;padding-left:12px;border-left:3px solid #c9cdc4;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.35;color:var(--fg)}
+.card.fresh .read-paper{font-weight:700;color:var(--fg);text-underline-offset:3px;position:relative;z-index:2}
+.card.fresh .card-foot .go,.card.fresh .read{display:none}
+.zero-beta{padding:8px 2px 22px}
+.zero-beta h2{margin:0 0 8px;font-size:26px;letter-spacing:-.035em;font-weight:750}
+.zero-beta p{margin:0;color:var(--muted);font-size:15px}
+.fresh-note{margin:18px 2px 0;color:var(--muted);font-size:14px}
+</style>
+
+<header class="top">
+  <div class="shell">
+    <div class="logo">curio<i>finds</i>.</div>
+    <nav class="nav" aria-label="Main"><button class="navbtn" id="navExplore" aria-current="page">Explore</button><button class="navbtn" id="navBoard">Your Board</button><span>About</span></nav>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="hero">
+    <h1>Better thinking. <em>One idea at a time.</em></h1>
+    <p>Small, sourced finds on design, research and product. Each one leads with the surprise, and links to its proof.</p>
+  </section>
+</div>
+
+<div class="controls">
+  <div class="shell">
+    <div class="row1">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label for="q" class="sr">Search ideas</label>
+        <input id="q" type="search" placeholder="Search ideas, methods, metrics…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="qsug" aria-autocomplete="list"><div class="qsug" id="qsug" role="listbox" hidden></div>
+        <button class="clear" id="qclear" aria-label="Clear search" hidden>✕</button>
+      </div>
+      <div class="seg" role="group" aria-label="Layout">
+        <button id="m-wall" aria-pressed="true">Wall</button>
+        <button id="m-trail" aria-pressed="false">Trail</button>
+      </div>
+      <button class="btn" id="surprise">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+        Surprise me
+      </button>
+    </div>
+    <div class="chips-wrap">
+      <div class="chips" id="chips" role="group" aria-label="Categories"></div>
+      <button class="chip-arrow left" id="chipL" aria-label="Scroll chips left" hidden><span class="ca-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button>
+      <button class="chip-arrow right" id="chipR" aria-label="Scroll chips right" hidden><span class="ca-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button>
+    </div>
+    <div class="status">
+      <span id="statusText" role="status"></span>
+    </div>
+  </div>
+</div>
+
+<main class="shell" id="main"></main>
+
+<div class="shell">
+  <details class="notes">
+    <summary>What this prototype changes from the live site</summary>
+    <ul>
+      <li>Opening an idea expands the card in place to the full row. Cards after it move up to fill the gap. The live site goes to a separate page.</li>
+      <li>The expanded card keeps the live detail format: the idea, in practice, a common mistake, when to use it, why it matters, the source, and Follow the thought.</li>
+      <li>Wall cards follow the top-aligned grid file: one title size and weight for every card, and each card is exactly as tall as its own text. Gaps stay 16px in both directions.</li>
+      <li>Card colour cycles in a fixed order, as in that file. It doesn’t follow category.</li>
+      <li>The ↗ arrow is removed; “Explore idea →” and the save heart stay.</li>
+      <li>The wall loads 24 cards at a time as you scroll. Search and chips look through all ideas, loaded or not.</li>
+      <li>New: Surprise me, a “Read” marker, Shelves and Trail layouts, a zero-result block, and search that ignores apostrophes and plural s.</li>
+      <li>Follow the thought carries a reason line. About 25 links have hand-written reasons; the rest say “Also in [category]”.</li>
+      <li>The 400 view repeats the real ideas to simulate scale. Repeats are marked.</li>
+      <li>Concept text is written for this prototype and hasn’t been editor-checked. Sources are shown only where a real page is known; the rest say a source is still to be added. The synthetic users finding uses the live page’s text.</li>
+    </ul>
+  </details>
+</div>
+
+<button class="btn logbtn" id="logBtn" aria-expanded="false">Test log</button>
+<section class="log" id="log" hidden aria-label="Test log">
+  <h3>Test log</h3>
+  <p class="sub">Counts for this browser session only. Nothing is sent anywhere.</p>
+  <p class="sub scale">Library size: <button id="s-real" aria-pressed="false"></button>·<button id="s-400" aria-pressed="true">400 (simulated)</button></p>
+  <div id="logTable"></div>
+  <div class="acts">
+    <button class="btn" id="logCopy">Copy summary</button>
+    <button class="btn" id="logReset">Reset</button>
+  </div>
+  <pre id="logOut" hidden></pre>
+</section>
+<div class="looks-wrap" id="looksWrap">
+<button type="button" class="gear" id="gearBtn" aria-label="Design settings: card look and test states" title="Design settings" aria-expanded="false" aria-controls="looks"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10" cy="7" r="1.2" fill="currentColor"/><circle cx="14.5" cy="7" r="1.2" fill="currentColor"/><circle cx="17" cy="11" r="1.2" fill="currentColor"/></svg></button>
+<div class="looks" id="looks" aria-label="Prototype settings" hidden>
+  <b>Card look</b>
+  <button type="button" class="look-btn" id="lookBtn" aria-expanded="false" aria-controls="lookPanel">Styles</button>
+  <div class="look-panel" id="lookPanel" hidden>
+    <div class="lp-mode"><label><input type="radio" name="lookMode" value="topic"> Match by topic</label><label><input type="radio" name="lookMode" value="custom"> Custom mix</label></div>
+    <div class="lp-legend" id="lookLegend"></div>
+    <div id="lookCustom"><div class="lp-head"><span>Card styles</span><span class="lp-acts"><button type="button" data-all="1">All</button><button type="button" data-all="0">Only calm</button></span></div>
+    <div class="lp-grid" id="lookGrid"></div></div>
+  </div>
+  <label><input type="checkbox" id="peekChk"> Peek on hover</label>
+</div>
+</div>
+<div class="peek" id="peek" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<div class="curate" id="curate" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg><b id="curateText" style="font-weight:inherit">Curating more ideas for you…</b></span></div>
+
+<script>
+(function(){
+"use strict";
+const CATS=[
+ {k:"dt",n:"Design thinking",why:"How to frame the problem before you design."},
+ {k:"me",n:"Metrics",why:"Numbers that tell you if a design works."},
+ {k:"ux",n:"UX research",why:"Ways to learn what people actually do."},
+ {k:"rs",n:"Research",why:"Findings from studies, with their context and limits."},
+ {k:"ix",n:"Interaction",why:"Patterns for how an interface responds."},
+ {k:"ac",n:"Accessibility",why:"Making it work for everyone who uses it."},
+ {k:"ds",n:"Design systems",why:"Shared parts and rules that keep products consistent."},
+ {k:"ps",n:"Psychology",why:"How people perceive, decide and remember."},
+ {k:"pt",n:"Product thinking",why:"What makes AI products stay useful over time."},
+ {k:"dn",n:"Design",why:"How an interface shows what it can and can’t do."}
+];
+const CAT=Object.fromEntries(CATS.map(c=>[c.k,c]));
+const LUX="https://lawsofux.com/";
+// [title, cat, idea, in practice, common mistake, when, why it matters, aliases, source [label,url?,note?]]
+const RAW=[
+["Double Diamond","dt","Explore the problem widely, then narrow it. Then explore solutions widely, and narrow again.","Interview eight people before choosing which pain point to solve.","Rushing through the first diamond and treating the brief as the problem.","At the start of a project, when nobody agrees yet on what the real problem is.","It makes time for understanding before the team commits to a solution.","discover define develop deliver"],
+["Problem Framing","dt","Define the problem worth solving before choosing the screen to redesign.","“Checkout looks old” becomes “people leave when they first see the shipping cost.”","Framing the problem as a missing feature, which already assumes the answer.","Whenever a request arrives as a solution, like “add a filter”.","A well-framed problem tells you what success looks like before you design.",""],
+["Hypothesis-Driven Design","dt","Turn a design belief into a statement you could prove wrong.","“If we show the delivery date earlier, fewer people will leave checkout.”","Writing a hypothesis so vague that no result could prove it wrong.","Before building anything you’re not sure will work.","It turns opinions into tests, so debates end with evidence.","hypothesis"],
+["Jobs to Be Done","dt","People hire a product to make progress in a particular situation.","A commuter hires a podcast to make the train ride feel shorter.","Describing the job as a product feature instead of the progress people want.","When you need to understand why people switch to, or away from, a product.","Jobs stay stable while products change, so they guide long-term decisions.","jtbd jobs"],
+["Opportunity Solution Tree","dt","Connect one outcome to the opportunities, solutions and tests below it.","Outcome: weekly use. Opportunity: people forget to come back. Solution: a weekly digest.","Jumping from the outcome straight to solutions and skipping opportunities.","When a team has a clear goal but too many possible ideas.","It shows why each idea exists and which goal it serves.","ost"],
+["Design Critique","dt","Feedback judged against the goal of the design, not personal taste.","“Can a new user find export?” instead of “I don’t like the blue.”","Turning critique into a vote on taste, or into a defence of the work.","While work is mid-way and can still change.","Good critique finds problems while they’re still cheap to fix.","crit feedback"],
+["How Might We","dt","Rephrase a problem as an open question that invites many ideas.","“How might we make waiting for a refund feel shorter?”","Wording it so narrow it names the solution, or so broad it means nothing.","Right after research, to turn findings into a brainstorm.","The wording of the question shapes the range of answers.","hmw"],
+["Assumption Mapping","dt","List what must be true for an idea to work, then test the riskiest, least-known one first.","Before building boards, check that people want to save ideas at all.","Testing the easiest assumption first because it feels like progress.","Before investing in a new feature or product.","Many failures trace back to one belief nobody tested.","assumptions"],
+["Crazy Eights","dt","Sketch eight ideas in eight minutes to get past the first obvious one.","Eight versions of an empty state before picking one.","Polishing the sketches. Speed is the point.","When a team keeps returning to the same first idea.","The first idea is rarely the best one; volume gets you past it.","sketching"],
+["Design Principles","dt","A few written rules that settle arguments the team keeps having.","“Show the source before the claim.”","Principles so generic, like “simple”, that nobody could disagree.","When the same design argument keeps coming back.","They let a team decide quickly and consistently, even without the lead in the room.",""],
+["Service Blueprint","dt","Map what the user sees next to the people and systems working behind it.","A refund flow that also shows the support agent’s steps.","Mapping only the screens and leaving out the people and systems behind them.","When a problem spans channels, teams or back-office steps.","Many user problems start behind the screen, not on it.","blueprint"],
+["Personas","dt","A sketch of a type of user, built from research rather than guesses.","Built from twelve interviews, not from a marketing segment.","Inventing details like hobbies that never affect a design decision.","When a team needs a shared picture of who it’s designing for.","A grounded persona keeps decisions tied to real people.","persona"],
+["Task Success Rate","me","The share of attempts where people complete the task they came to do. Define success before you watch anyone.","20 people try to book a train ticket. 11 succeed, so the rate is 55%.","Counting clicks or page views as success instead of a finished task.","When checking whether a workflow helps people reach a well-defined goal.","It’s the simplest usability number and the easiest to explain to anyone.","success rate completion",["Nielsen Norman Group — Success Rate: The Simplest Usability Metric","https://www.nngroup.com/articles/success-rate-the-simplest-usability-metric/"]],
+["Time on Task","me","How long a task takes from start to finish.","The median time it takes to change a password.","Treating faster as always better, even for tasks people want to take time over.","For repeated tasks where speed matters, like data entry.","Small delays on frequent tasks add up to a lot of lost time.","task time"],
+["Error Rate","me","How often people make meaningful mistakes on a task.","The wrong date is picked in 3 of 10 test bookings.","Counting every slip the same, whether it’s fixed in a second or loses work.","When mistakes are costly, like payments or bookings.","Errors show exactly where the design misleads people.","errors"],
+["A/B Testing","me","Show two versions to similar groups and compare one measure.","Two button labels, compared by sign-up rate.","Stopping the test as soon as one version looks ahead.","When you have enough traffic and one clear measure to compare.","It shows what people do, not what they say they’d do.","ab test split test experiment"],
+["System Usability Scale","me","A ten-question survey that gives a usability score from 0 to 100.","Run it after each round of testing to compare rounds.","Reading the score as a percentage. Around 68 is roughly average, not a failing grade.","After usability tests, to compare rounds or versions.","A standard score lets you compare over time without inventing your own survey.","sus"],
+["Net Promoter Score","me","Asks how likely people are to recommend you, from 0 to 10. Promoters minus detractors.","Watch the trend over months, not one week’s number.","Using it to judge a single screen or feature.","To track overall feeling about a product over time.","It’s widely used, so it’s easy to compare against your own past.","nps"],
+["Conversion Funnel","me","The drop-off at each step between first visit and the goal.","Visit → product page → cart → paid.","Fixing the biggest drop without checking whether those people were ever likely to convert.","When a goal has clear, ordered steps, like sign-up or checkout.","It shows where to look first.","funnel conversion"],
+["Retention Rate","me","The share of people who come back after a set period.","Of 100 people who joined in week one, how many return in week two.","Looking only at the average and missing which groups stay and which leave.","When judging whether a product gives lasting value.","Getting people to come back is usually harder than getting them in.","retention churn"],
+["North Star Metric","me","One measure that best reflects the value people get from the product.","Nights booked, not app opens.","Picking a number that’s easy to grow but doesn’t mean value.","When teams pull in different directions and need one shared goal.","One shared measure helps teams make trade-offs.","north star nsm"],
+["Customer Effort Score","me","How easy people say it was to get something done.","Asked right after a support chat ends.","Asking long after the task, when people no longer remember the effort.","Right after a support contact or a key task.","High effort is a common reason people give up on a product.","ces"],
+["Activation Rate","me","The share of new users who reach the first moment of real value.","Created a first project on day one.","Defining activation as sign-up instead of a moment of real value.","When many people sign up but few stick around.","It points to the first moment the product has to win.","activation"],
+["HEART Framework","me","Happiness, Engagement, Adoption, Retention, Task success: a way to choose UX metrics.","For each letter, pick a goal, a signal and one metric.","Measuring all five letters at once instead of the ones that match your goal.","When a team needs to pick UX metrics for a feature.","It links each metric to a goal, so the numbers have a reason.","heart"],
+["Counter Metric","me","A number you watch so that a win on one metric doesn’t hide harm elsewhere.","Sign-ups go up, so you also watch the refund rate.","Adding it after launch, once the damage is already done.","Whenever you set a goal metric.","It catches the hidden cost of a win.","guardrail"],
+["User Interviews","ux","Learn what people do, need and struggle with, in their own words.","Ask about the last time it happened, not what they would do.","Asking people to predict what they would do instead of what they did.","Early, when you need to understand needs and context.","People’s own words reveal problems you didn’t think to ask about.","interview"],
+["Usability Testing","ux","Watch people attempt realistic tasks with your design.","Five people, three tasks, thinking aloud.","Helping the participant as soon as they get stuck.","Whenever you have something people can try, even a sketch.","Watching one person struggle is more convincing than any opinion.","usability test user testing"],
+["Journey Mapping","ux","Map the steps, feelings and pain points of an experience over time.","From first hearing about a product to the first renewal.","Mapping the journey the team imagines rather than the one research shows.","When a problem spans several steps or channels.","It shows where pain sits over time, not just on one screen.","journey map customer journey"],
+["Card Sorting","ux","Ask people to group topics, to learn how they expect things to be organised.","Thirty settings sorted into groups by ten users.","Copying the sort results straight into the menu without testing it.","When designing or reorganising navigation.","It shows how people expect things to be grouped.","card sort"],
+["Tree Testing","ux","Test whether people can find things in a menu structure, without any visual design.","“Where would you change your delivery address?”","Writing tasks that use the exact menu labels, which gives the answer away.","Before building a new navigation.","It tests the structure on its own, with no visual design helping.","tree test navigation"],
+["Diary Studies","ux","People record their experiences over days or weeks.","Log every time you look for a recipe, for two weeks.","Asking for too much in each entry, so people stop logging.","When behaviour happens over time, at home or on the move.","It captures moments an interview can’t recall.","diary study"],
+["Contextual Inquiry","ux","Watch and ask questions while people work in their real setting.","Sit with a lawyer while they review a contract.","Turning it into an interview at a desk, away from the real work.","When the work depends on tools, people or places around the user.","You see the workarounds people never mention.","field study"],
+["First-Click Testing","ux","Check where people click first when given a task.","If the first click is wrong, the task often fails.","Testing only the happy path.","When checking whether labels and layout point people the right way.","It’s fast and catches navigation problems early.","first click"],
+["Think-Aloud Protocol","ux","People say what they’re thinking while they use a design.","“I expected this to be under Account.”","Reading silence as success. People often go quiet when they’re stuck.","During usability tests.","It shows why people act, not just what they do.","think aloud"],
+["Affinity Mapping","ux","Group research notes to find the patterns in them.","Two hundred sticky notes become eight themes.","Grouping by feature area instead of by what people need.","After research, when you have lots of raw notes.","Patterns across people matter more than one loud quote.","affinity diagram synthesis"],
+["Surveys","ux","Questions to many people, for breadth rather than depth.","Run one after interviews to see how common a problem is.","Leading questions, or questions people can’t answer accurately.","When you need numbers on how common something is.","It tells you how many people a problem affects.","survey questionnaire"],
+["Five Whys","ux","Keep asking why to get from a symptom to its cause.","Reports are late. Why? The export is manual. Why? …","Stopping at a person to blame instead of the process behind them.","After an incident or a repeated problem.","It moves fixes from symptoms to causes.","5 whys root cause"],
+["Research Repository","ux","One searchable home for findings, so research gets reused.","Tag each insight with product area and date.","Storing raw files that nobody can search.","When research happens often and by several people.","Findings get reused instead of rediscovered.","repository"],
+["Synthetic Users Show Less Variation","rs","The study compares responses from AI-generated users to those from 604 human respondents, revealing that while both groups reached the same conclusions, the AI responses exhibited significantly less variation. This raises questions about the reliability and richness of insights derived from synthetic users compared to human feedback.","Imagine a team asking simulated users which onboarding step feels confusing. Both simulated and human respondents point to the same step, but real participants explain their difficulties in different ways. Keeping only the synthetic responses could hide those unexpected explanations.","Treating agreement on one headline result as proof that synthetic respondents can replace human research. Reaching the same conclusion does not establish that the diversity of human responses was captured.","When evaluating synthetic respondents for early exploration, especially before treating their answers as enough evidence to make a consequential product decision.","Understanding the differences in response variability can inform how we utilize AI in user research.","synthetic users ai respondents",["Nielsen Norman Group — Synthetic Users vs. Human Respondents: Same Conclusion, Less Variation","","Link as on the live page. An editorial interpretation of the linked source, not a direct quotation or endorsement."],"AI responses reached a similar conclusion, but showed less variety than human answers."],
+["Progressive Disclosure","ix","Show what matters now and reveal the rest when it’s needed.","Advanced settings stay collapsed until someone opens them.","Hiding something people need often behind an extra click.","When a screen has a few common options and many rare ones.","People see less at once, so they decide faster.",""],
+["Error Prevention","ix","Design so that mistakes are hard to make in the first place.","A booking date picker that won’t let you choose a past date.","Relying on error messages after the fact.","Wherever a mistake is costly or hard to undo.","A prevented error costs nothing to fix.","prevent errors"],
+["Affordances","ix","What an object lets you do with it.","A handle affords pulling; a flat plate affords pushing.","Flat styling that removes every cue, so people can’t tell what’s interactive.","When designing any control people must find and use.","People act on what they think an object allows.","affordance"],
+["Signifiers","ix","Cues that show where and how to act.","Underlined blue text signals a link.","Using a cue as decoration, so it signals an action that isn’t there.","When something is interactive but doesn’t look it.","Without a signifier, a good feature goes unused.","signifier"],
+["Progressive Onboarding","ix","Teach a feature when someone needs it, not all at the start.","A tip appears the first time you open filters.","A ten-step tour before people have done anything.","For products with features people only need later.","People remember help they get at the moment they need it.","onboarding"],
+["Information Scent","ix","Labels and cues that tell people they’re on the right path.","A “Pricing” link beats a vague “Learn more”.","Clever labels that sound nice but don’t say where they lead.","When designing navigation, links and search results.","People leave when the scent goes cold.","scent"],
+["Feedback and System Status","ix","Always show people what the system is doing.","“Uploading 3 of 10 files”.","A spinner with no idea of how long it will take.","Any time the system is working, saving or waiting.","Without feedback, people repeat actions or give up.","feedback status loading"],
+["Undo and Recovery","ix","Let people reverse an action instead of asking “Are you sure?” every time.","“Email deleted · Undo”.","A confirm dialog everywhere, which people learn to click through.","For actions people take often and sometimes regret.","People explore more when they know they can go back.","undo"],
+["Empty States","ix","What a screen shows before there is any content.","“No projects yet” with a button to create the first one.","Leaving the screen blank, or only saying “No data”.","First use, cleared filters, or deleted content.","It’s often the first screen a new user sees.","empty state"],
+["Microcopy","ix","The small words on buttons, labels and error messages.","“Save draft” instead of “Submit”.","Vague labels like “OK” that don’t say what will happen.","On every button, label and error.","Small words decide whether people trust the next click.","ux writing copy"],
+["Visual Hierarchy","ix","Size, weight and position tell people what to look at first.","One primary button per screen.","Making everything bold, so nothing stands out.","On any screen with more than one thing to do.","It decides what people see first, and often all they see.","hierarchy"],
+["Skeleton Screens","ix","Grey shapes in the layout of the content, shown while it loads.","Card outlines appear before the feed arrives.","Showing a skeleton for content that loads instantly anyway.","When content takes a moment to load.","Waiting feels shorter when people can see the shape of what’s coming.","skeleton loading"],
+["Defaults","ix","The preselected option that most people keep.","Email set to weekly rather than daily by default.","Choosing the default that helps the business but surprises the user.","Any setting most people will never change.","Most people keep the default, so the default is the decision.","default"],
+["Accessible Interaction","ac","Everyone can perceive, operate and understand the interface.","Every task can be done by keyboard, by touch and with a screen reader.","Leaving accessibility to a final audit.","From the first sketch.","It helps everyone, including people with short-term limits like a broken arm.","accessibility a11y"],
+["WCAG Principles","ac","Perceivable, Operable, Understandable, Robust: the four ideas behind the guidelines.","Use the four as a checklist before each release.","Treating it as a test to pass rather than a way to think.","When planning and reviewing any release.","It’s the shared standard that many laws and contracts point to.","wcag pour"],
+["Keyboard Navigation","ac","Every action works without a mouse.","Tab reaches the save button on every card.","Custom controls that can’t be reached with Tab.","For every interactive element.","Many people can’t or don’t use a mouse.","keyboard tab"],
+["Focus Indicators","ac","A visible outline that shows where keyboard focus is.","Never remove the outline without putting a clear one back.","Removing the outline and adding nothing in its place.","Wherever keyboard focus can land.","Without it, keyboard users are lost.","focus outline"],
+["Color Contrast","ac","Text has to stand out enough from its background.","WCAG AA asks for 4.5:1 for normal body text.","Pale grey text on white because it looks elegant.","For all text and important icons.","Low contrast also fails people reading in bright sunlight.","contrast colour"],
+["Alt Text","ac","A short description of an image for people who can’t see it.","Say what the chart shows, not just “chart”.","Writing “image of”, or leaving the file name.","For every image that carries meaning.","It’s the only way some people get the image’s point.","alt alternative text"],
+["Target Size","ac","Make tap and click targets big enough to hit easily.","WCAG 2.2 AA sets a minimum of 24 × 24 CSS pixels.","Tiny icon buttons placed close together.","On touch screens and for small controls.","Missed taps are slow and frustrating for everyone.","touch target tap target"],
+["Screen Readers","ac","Software that reads the interface aloud.","Icon buttons need a name, not just a picture.","Icon-only buttons with no label.","When testing any finished screen.","Testing with one shows problems no checklist will.","screen reader voiceover"],
+["Reduced Motion","ac","Respect people who ask their device for less animation.","Parallax switches off when the system asks for reduced motion.","Ignoring the setting, or removing all motion including useful feedback.","Whenever you add animation.","Some motion can make people feel unwell.","motion animation"],
+["Plain Language","ac","Short words and sentences, so more people understand.","“Pay” instead of “Remit payment”.","Thinking plain means childish.","In all interface text and help content.","Clear text helps experts too, especially when they’re busy.","plain english"],
+["Heading Structure","ac","Headings in order, so people can skim and screen readers can jump.","One H1, then H2s, never skipping levels.","Picking heading levels for their size instead of their place in the page.","On every page with sections.","Many screen reader users move through a page by headings.","headings"],
+["Captions and Transcripts","ac","Text versions of audio and video.","A transcript under every recorded talk.","Auto-captions that nobody reviews.","For any audio or video.","Many people watch with the sound off.","captions subtitles"],
+["Design Tokens","ds","Named values for colour, type and spacing, shared by design and code.","--accent: #276e53 in both Figma and CSS.","Naming tokens after their value, like blue-500, so they break when the brand changes.","When design and code need to stay in sync.","One change updates every place it’s used.","tokens"],
+["Component States","ds","Every state a component can be in.","Default, hover, focus, disabled, loading, error.","Designing only the default state.","For every component before handoff.","Missing states are where many UI bugs hide.","states"],
+["Design System Governance","ds","Who decides what goes into the system, and how it changes.","A fortnightly review for new component requests.","No owner, so the system slowly drifts.","Once more than one team uses the system.","Without it, a system becomes a pile of exceptions.","governance"],
+["Atomic Design","ds","Build interfaces from small parts up: atoms, molecules, organisms.","A button and a label make a search field; fields make a form.","Arguing about whether something is a molecule or an organism.","When structuring a component library.","It gives a shared way to talk about parts.","atomic"],
+["Spacing Scale","ds","A fixed set of spacing values instead of any number.","4, 8, 12, 16, 24, 32.","Allowing any value “just this once”.","From the start of a system.","Consistent spacing makes layouts feel calm.","spacing"],
+["Type Scale","ds","A fixed set of font sizes with a clear step between them.","12, 14, 16, 20, 24, 32.","Too many sizes that are almost the same.","When setting up a product’s typography.","Fewer sizes make the hierarchy clearer.","typography scale"],
+["Variants","ds","One component with options, instead of many near-copies.","One button with primary, secondary and quiet variants.","Adding a variant for every one-off request.","When copies of a component start to differ slightly.","One component is easier to fix than ten copies.","variant"],
+["Component Documentation","ds","Guidance on when to use a component, and when not to.","“Use a toast for confirmations, never for errors that need action.”","Documenting only what a component is, not when to use it.","For every component in the system.","Teams use what they understand.","docs documentation"],
+["Contribution Model","ds","How teams propose and add new parts to the system.","A request template and a review before anything is added.","Making contribution so hard that teams build their own instead.","When several teams need things the system lacks.","It keeps the system growing with real needs.","contribution"],
+["Semantic Colour","ds","Colours named by what they mean, not by their hue.","--danger instead of --red-500.","Using a colour for meaning in one place and for decoration in another.","When colours carry status, like error or success.","Themes and dark mode become much easier.","semantic color"],
+["Grid System","ds","Columns and gutters that line content up.","Three columns with a 15px gap.","Breaking the grid for every special case.","On any layout with repeated content.","Alignment makes a page easier to scan.","grid layout"],
+["System Versioning","ds","Release changes with version numbers so teams can upgrade safely.","Version 2.0 renames tokens; 1.x keeps working until teams switch.","Releasing breaking changes without a version bump.","When other teams depend on the system.","Teams can upgrade when they’re ready.","versioning semver"],
+["Mental Models","ps","What people believe about how a system works.","People expect a trash folder to let them restore things.","Assuming users think about the system the way its builders do.","When designing anything new or unfamiliar.","Matching what people expect makes things feel easy.","mental model"],
+["Recognition Over Recall","ps","Show the options instead of making people remember them.","A list of recent searches.","Making people type commands or remember codes.","Wherever people choose from known options.","Recognising something is much easier than remembering it.","recognition recall"],
+["Hick’s Law","ps","Decision time grows as the number of choices grows, but slowly, roughly logarithmically. Meaningful grouping makes the choice easier.","A settings screen groups related preferences instead of showing 40 unrelated toggles.","Removing useful choices just to make a screen look minimal.","When a menu or decision point overwhelms new users.","Fewer, clearer choices help people decide faster.","hicks hick hyman choices",["Laws of UX — Hick’s Law",LUX+"hicks-law/"]],
+["Fitts’s Law","ps","The time to hit a target depends on how far away it is and how big it is.","Put the main button where the cursor or thumb already is.","Small targets placed far from where the user is already working.","When placing primary actions and touch targets.","It explains why corners and big buttons are easy to hit.","fitts",["Laws of UX — Fitts’s Law",LUX+"fittss-law/"]],
+["Cognitive Load","ps","The mental effort a task demands.","Ask for one thing per step instead of ten fields at once.","Cutting content people actually need, in the name of simplicity.","On complex forms and dense screens.","Effort spent on the interface is effort not spent on the task.","mental effort",["Laws of UX — Cognitive Load",LUX+"cognitive-load/"]],
+["Jakob’s Law","ps","People expect your site to work like the sites they already use.","The cart lives at the top right.","Reinventing a common pattern just to be original.","For standard parts like carts, search and navigation.","People spend most of their time on other sites.","jakobs",["Laws of UX — Jakob’s Law",LUX+"jakobs-law/"]],
+["Peak-End Rule","ps","People judge an experience mostly by its most intense moment and its end.","A smooth final step can soften a slow middle.","Polishing the middle and ignoring the final step.","When designing flows with a clear end, like checkout or onboarding.","The memory of an experience decides whether people return.","peak end",["Laws of UX — Peak-End Rule",LUX+"peak-end-rule/"]],
+["Gestalt Proximity","ps","Things placed close together are seen as a group.","A label sits closer to its own field than to the next one.","Equal spacing everywhere, so nothing looks grouped.","On forms, cards and any grouped content.","Spacing alone can show structure without extra lines.","gestalt proximity grouping",["Laws of UX — Law of Proximity",LUX+"law-of-proximity/"]],
+["Serial Position Effect","ps","The first and last items in a list tend to be remembered best.","Put the most important nav items first and last.","Burying the key item in the middle of a long list.","For navigation and long lists.","Where something sits changes what people remember.","primacy recency",["Laws of UX — Serial Position Effect",LUX+"serial-position-effect/"]],
+["Anchoring","ps","The first number people see shapes how they judge the next ones.","A struck-through original price next to the sale price.","Using anchors to mislead, which costs trust.","When showing prices, estimates or defaults.","The first number frames every number after it.","anchor"],
+["Loss Aversion","ps","A loss tends to feel bigger than a gain of the same size.","“Don’t lose your progress” can motivate more than “Save your progress”.","Using fear of loss as a dark pattern.","When explaining what people keep by acting.","Framing changes decisions even when the facts are the same.","loss"],
+["Von Restorff Effect","ps","The item that stands out from the rest is the one people remember.","One highlighted plan on a pricing page.","Highlighting several things, so nothing stands out.","For the one action or option that matters most.","Distinct things get noticed and remembered.","isolation effect",["Laws of UX — Von Restorff Effect",LUX+"von-restorff-effect/"]],
+["Zeigarnik Effect","ps","People tend to remember unfinished tasks. The research evidence for this is mixed.","“3 of 5 steps done” on a profile.","Using fake progress to pressure people.","For multi-step tasks people may leave and come back to.","Visible progress can bring people back to finish.","zeigarnik unfinished",["Laws of UX — Zeigarnik Effect",LUX+"zeigarnik-effect/"]],
+["Miller’s Law","ps","Working memory holds only a few items at once, often fewer than the famous seven.","Break a 10-digit number into chunks.","Using “7 ± 2” as a strict rule for menu length.","When people must hold information in mind.","Chunking helps people remember more.","millers chunking 7",["Laws of UX — Miller’s Law",LUX+"millers-law/"]]
+];
+// Findings added from the live wall (titles and summaries from the live cards; detail text adapted from the earlier prototype file, not yet editor-checked)
+const NNG_NOTE="Link carried over from your earlier prototype. An editorial interpretation, not a direct quotation; check the article before publishing.";
+const NEW_FINDINGS=[
+["Findable Context Makes AI Agents More Useful","pt","An assistant may keep using outdated project information when its stored context files are hard to find or update. The problem isn’t always the prompt in front of it; it can be the reference material behind it.","Imagine a team that keeps a context file about its product. When the roadmap changes, nobody can find the file to update it, so the assistant keeps planning around last quarter’s priorities.","Assuming a better prompt will fix answers that actually come from stale stored context.","When an assistant relies on saved instructions, files or memory that people need to keep current.","Context needs an owner, a clear home and an easy way to correct it if an assistant is to stay useful over time.","context library ai agent findable",["Nielsen Norman Group — Context Libraries: How AI Power Users Manage Context Engineering","https://www.nngroup.com/articles/context-libraries/",NNG_NOTE],"Stored instructions help less when users cannot locate or correct them."],
+["AI Context Libraries Need Maintenance","pt","Stored context ages. Files that were right when written can quietly become wrong, and an assistant using them repeats the old version with full confidence.","Imagine a support assistant that still quotes a plan the company retired months ago, because the plan lives in a context file nobody reviews.","Treating a context library as a one-time setup instead of something to review on a schedule.","Once an assistant’s stored context covers things that change: prices, policies, priorities.","Outdated context gives confident wrong answers, which can be harder to spot than an honest “I don’t know.”","stale context maintenance",["Nielsen Norman Group — Context Libraries: How AI Power Users Manage Context Engineering","https://www.nngroup.com/articles/context-libraries/",NNG_NOTE],"An assistant can keep giving outdated answers when its stored context goes stale."],
+["AI Assistants Must Make Limits Clear","dn","A model may understand a request but still be unable to carry it out without the right information or permissions. A fluent reply can hide that gap.","Imagine asking an assistant to move a meeting. It answers confidently, but it has no access to your calendar, so nothing changes.","Designing only the happy path, so the assistant sounds equally sure whether or not it can act.","Whenever an answer depends on data or actions the assistant may not have access to.","People can only judge an answer if they can see what the assistant knows and what is still uncertain.","limits uncertainty transparency",["Nielsen Norman Group — The New Siri’s Biggest Strength Is Not Intelligence","https://www.nngroup.com/articles/ai-assistant-context/",NNG_NOTE],"Fluent answers should not hide what an assistant cannot know or do."],
+["Personal Context Makes AI Assistants Useful","pt","Useful help depends partly on access to the right context, not only on how capable the model is.","“When is my flight?” is easy for an assistant that can see your bookings, and impossible for one that can’t, however capable it is.","Assuming more personal data is always better. Permission and transparency matter as much as access.","When deciding what an assistant should be able to see, and how it should ask.","The right context often separates a helpful answer from a generic one.","personal context permissions",["Nielsen Norman Group — The New Siri’s Biggest Strength Is Not Intelligence","https://www.nngroup.com/articles/ai-assistant-context/",NNG_NOTE],"A capable model is more useful when it can use the right context for a task."],
+["Know When to Simplify an AI Workflow","pt","When agents, prompts and integrations pile up without clear structure, a change in one place can break something elsewhere. The source compares this to the software idea of a “big ball of mud”.","Imagine a support workflow where every fix added another prompt. A small wording change now breaks the refund step, and nobody can say why.","Concluding that every agent system turns fragile, or that quick prototyping is always bad.","When quick fixes start causing surprises, or when a one-off AI workflow becomes something people use daily.","Making dependencies visible matters more as a workflow grows and more people rely on it.","agent workflow fragile big ball of mud",["Nielsen Norman Group — The New Big Ball of Mud: Why Agentic AI Systems Turn Fragile","https://www.nngroup.com/articles/big-ball-of-mud-ai/",NNG_NOTE],"Repeated fixes may signal that a growing agent needs a clearer structure."]
+];
+// Sources as published on the live concept pages (read from curiofinds.netlify.app on 28 Oct 2026)
+const LIVE_NOTE="A reference for further learning, not an endorsement or verbatim quotation.";
+const N="Nielsen Norman Group — ",NG="https://www.nngroup.com/articles/",W3="https://www.w3.org/WAI/";
+const LIVE_SRC={
+"A/B Testing":["Optimizely — A/B Testing","https://www.optimizely.com/optimization-glossary/ab-testing/"],
+"AI Assistants Must Make Limits Clear":[N+"The New Siri’s Biggest Strength Is Not Intelligence",NG+"ai-assistant-context/"],
+"AI Context Libraries Need Maintenance":[N+"Context Libraries: How AI Power Users Manage Context Engineering",NG+"context-libraries/"],
+"Accessible Interaction":["W3C — WCAG Overview",W3+"standards-guidelines/wcag/"],
+"Affordances":[N+"Affordances and Signifiers",NG+"affordances-and-signifiers/"],
+"Card Sorting":[N+"Card Sorting",NG+"card-sorting-definition/"],
+"Cognitive Load":[N+"Cognitive Load",NG+"minimize-cognitive-load/"],
+"Color Contrast":["W3C — Contrast Minimum",W3+"WCAG22/Understanding/contrast-minimum.html"],
+"Component States":[N+"Visibility of System Status",NG+"ten-usability-heuristics/"],
+"Contextual Inquiry":[N+"Contextual Inquiry",NG+"contextual-inquiry/"],
+"Conversion Funnel":[N+"Conversion Rates",NG+"conversion-rates/"],
+"Design Critique":[N+"Design Critiques",NG+"design-critiques/"],
+"Design System Governance":["Design Systems — Further Reading","https://www.designsystems.com/"],
+"Design Tokens":["Design Tokens Community Group","https://www.designtokens.org/"],
+"Diary Studies":[N+"Diary Studies",NG+"diary-studies/"],
+"Double Diamond":["Design Council — Framework for Innovation","https://www.designcouncil.org.uk/our-resources/the-double-diamond/"],
+"Empty States":[N+"Empty States",NG+"empty-state-interface-design/"],
+"Error Prevention":[N+"Error Prevention",NG+"slips/"],
+"Error Rate":[N+"Usability Metrics",NG+"usability-metrics/"],
+"Feedback and System Status":[N+"Usability Heuristics",NG+"ten-usability-heuristics/"],
+"Findable Context Makes AI Agents More Useful":[N+"Context Libraries: How AI Power Users Manage Context Engineering",NG+"context-libraries/"],
+"First-Click Testing":[N+"First-Click Usability",NG+"first-click-usability/"],
+"Fitts’s Law":["Laws of UX — Fitts’s Law","https://lawsofux.com/fittss-law/"],
+"Focus Indicators":["W3C — Focus Visible",W3+"WCAG22/Understanding/focus-visible.html"],
+"Gestalt Proximity":[N+"Proximity Principle",NG+"gestalt-proximity/"],
+"Hick’s Law":["Laws of UX — Hick’s Law","https://lawsofux.com/hicks-law/"],
+"Hypothesis-Driven Design":[N+"Design Thinking",NG+"design-thinking/"],
+"Information Scent":[N+"Information Scent",NG+"information-scent/"],
+"Jakob’s Law":["Laws of UX — Jakob’s Law","https://lawsofux.com/jakobs-law/"],
+"Jobs to Be Done":["Intercom — Job Stories","https://www.intercom.com/blog/using-job-stories-design-features-ui-ux/"],
+"Journey Mapping":[N+"Journey Mapping 101",NG+"journey-mapping-101/"],
+"Keyboard Navigation":["W3C — Keyboard Accessibility",W3+"WCAG22/Understanding/keyboard.html"],
+"Know When to Simplify an AI Workflow":[N+"The New Big Ball of Mud: Why Agentic AI Systems Turn Fragile",NG+"big-ball-of-mud-ai/"],
+"Mental Models":[N+"Mental Models",NG+"mental-models/"],
+"Microcopy":[N+"Writing for the Web",NG+"concise-scannable-and-objective-how-to-write-for-the-web/"],
+"Net Promoter Score":["Qualtrics — Net Promoter Score","https://www.qualtrics.com/experience-management/customer/net-promoter-score/"],
+"North Star Metric":["Amplitude — North Star Metrics","https://amplitude.com/blog/north-star-metric"],
+"Opportunity Solution Tree":["Product Talk — Opportunity Solution Trees","https://www.producttalk.org/opportunity-solution-tree/"],
+"Peak-End Rule":["Laws of UX — Peak-End Rule","https://lawsofux.com/peak-end-rule/"],
+"Personal Context Makes AI Assistants Useful":[N+"The New Siri’s Biggest Strength Is Not Intelligence",NG+"ai-assistant-context/"],
+"Problem Framing":[N+"Problem Statements",NG+"problem-statements/"],
+"Progressive Disclosure":[N+"Progressive Disclosure",NG+"progressive-disclosure/"],
+"Progressive Onboarding":[N+"Onboarding Tutorials",NG+"onboarding-tutorials/"],
+"Recognition Over Recall":[N+"Usability Heuristics",NG+"ten-usability-heuristics/"],
+"Retention Rate":["Amplitude — Retention Analysis","https://amplitude.com/blog/retention-analysis"],
+"Signifiers":[N+"Affordances and Signifiers",NG+"affordances-and-signifiers/"],
+"Synthetic Users Show Less Variation":[N+"Synthetic Users vs. Human Respondents: Same Conclusion, Less Variation",NG+"synthetic-users-vs-human-respondents/"],
+"System Usability Scale":["Usability.gov — System Usability Scale","https://www.usability.gov/how-to-and-tools/methods/system-usability-scale.html"],
+"Task Success Rate":[N+"Success Rate",NG+"success-rate-the-simplest-usability-metric/"],
+"Time on Task":[N+"Usability Metrics",NG+"usability-metrics/"],
+"Tree Testing":[N+"Tree Testing",NG+"tree-testing/"],
+"Undo and Recovery":[N+"Usability Heuristics",NG+"ten-usability-heuristics/"],
+"Usability Testing":[N+"Usability Testing 101",NG+"usability-testing-101/"],
+"User Interviews":[N+"User Interviews",NG+"user-interviews/"],
+"Visual Hierarchy":[N+"Visual Hierarchy",NG+"visual-hierarchy-ux-definition/"],
+"WCAG Principles":["W3C WAI — WCAG Overview",W3+"standards-guidelines/wcag/"]
+};
+[...RAW,...NEW_FINDINGS].forEach(r=>{const s=LIVE_SRC[r[0]];if(s)r[8]=[s[0],s[1],LIVE_NOTE]});
+// lead the wall with the six findings, as on the live wall
+{const syn=RAW.findIndex(r=>r[0]==="Synthetic Users Show Less Variation");RAW.unshift(...RAW.splice(syn,1),...NEW_FINDINGS)}
+const REL={
+"Findable Context Makes AI Agents More Useful":[["AI Context Libraries Need Maintenance","Same source: what happens when that context goes stale."],["Personal Context Makes AI Assistants Useful","Why the right context matters at all."],["Information Scent","The same problem for people: can they find it?"]],
+"AI Context Libraries Need Maintenance":[["Findable Context Makes AI Agents More Useful","You can only maintain what people can find."],["Design System Governance","Ownership keeps a shared library from drifting."]],
+"AI Assistants Must Make Limits Clear":[["Feedback and System Status","The older rule behind it: show what the system is doing."],["Personal Context Makes AI Assistants Useful","Often the limit is missing context."],["Mental Models","What people assume the assistant can do."]],
+"Personal Context Makes AI Assistants Useful":[["AI Assistants Must Make Limits Clear","The other side: say when context is missing."],["Findable Context Makes AI Agents More Useful","Context only helps if it can be found and fixed."]],
+"Know When to Simplify an AI Workflow":[["Findable Context Makes AI Agents More Useful","Clear structure starts with findable context."],["Five Whys","A way to trace a repeated failure to its cause."]],
+"Hick’s Law":[["Fitts’s Law","Same family: Hick is about choosing, Fitts is about pointing."],["Progressive Disclosure","One way to cut the number of choices on screen."],["Cognitive Load","Why too many options feel tiring."]],
+"Fitts’s Law":[["Hick’s Law","Its partner: how long choosing takes, not reaching."],["Target Size","The accessibility rule that puts a number on it."]],
+"Task Success Rate":[["Time on Task","Measured in the same test session."],["Error Rate","The other half: what went wrong along the way."],["Usability Testing","Where this number usually comes from."]],
+"Synthetic Users Show Less Variation":[["User Interviews","The human method this finding is compared against."],["Usability Testing","Where varied human explanations show up most."],["Surveys","Another way to hear many voices, with real people."]],
+"Card Sorting":[["Tree Testing","Sort first to build the menu, then tree-test it."],["Mental Models","What a card sort is trying to reveal."]],
+"Tree Testing":[["Card Sorting","Usually run before it, to shape the menu."],["Information Scent","What makes people pick the right branch."]],
+"Affordances":[["Signifiers","Affordance is what you can do; a signifier is how you know."],["Mental Models","Why people expect what they expect."]],
+"Signifiers":[["Affordances","What the signifier is pointing to."],["Information Scent","Signifiers for navigation."]],
+"Undo and Recovery":[["Error Prevention","The other side of handling mistakes."],["Feedback and System Status","Undo only works if people see what happened."]],
+"Error Prevention":[["Undo and Recovery","When prevention fails, recovery takes over."],["Defaults","A good default prevents a whole class of errors."]],
+"Double Diamond":[["Problem Framing","The first diamond ends with a framed problem."],["How Might We","A common bridge between the two diamonds."]],
+"Jobs to Be Done":[["User Interviews","How you uncover the job."],["Problem Framing","A job is one way to frame the problem."]],
+"North Star Metric":[["Counter Metric","What to watch so the north star doesn’t mislead you."],["Retention Rate","Often the real test of a north star."]],
+"A/B Testing":[["Hypothesis-Driven Design","An A/B test needs a hypothesis to test."],["Counter Metric","Check the test didn’t break something else."]],
+"Design Tokens":[["Semantic Colour","Tokens named by meaning."],["Spacing Scale","Spacing is often the first token set teams agree on."]],
+"Keyboard Navigation":[["Focus Indicators","Keyboard users need to see where they are."],["Accessible Interaction","The wider goal it serves."]],
+"Focus Indicators":[["Keyboard Navigation","Who needs the outline most."],["Color Contrast","The outline has to be visible against the background."]],
+"Peak-End Rule":[["Journey Mapping","Find the peak and the end on the map."],["Empty States","An ending people often forget to design."]],
+"Recognition Over Recall":[["Cognitive Load","Showing options takes memory work off people."],["Miller’s Law","Why recall breaks down so quickly."]],
+"Gestalt Proximity":[["Visual Hierarchy","Grouping is half of hierarchy."],["Grid System","A grid makes proximity consistent."]],
+"Zeigarnik Effect":[["Progressive Onboarding","Unfinished checklists can pull people back."],["Feedback and System Status","Progress has to be visible to work."]],
+"Miller’s Law":[["Cognitive Load","The bigger idea it belongs to."],["Recognition Over Recall","The design answer to limited memory."]],
+"Activation Rate":[["Retention Rate","Activation usually comes before people stick around."],["Progressive Onboarding","A common way to raise it."]],
+"Retention Rate":[["Activation Rate","Look here first when retention is low."],["North Star Metric","Retention often checks whether the north star is right."]],
+"Progressive Disclosure":[["Hick’s Law","Fewer visible choices, faster decisions."],["Cognitive Load","What it’s trying to reduce."]],
+"Usability Testing":[["Think-Aloud Protocol","The usual way to hear what people think during a test."],["Task Success Rate","The simplest number to take from it."]],
+"User Interviews":[["Synthetic Users Show Less Variation","What you might lose if AI answers replace interviews."],["Jobs to Be Done","A lens for what to listen for."]]
+};
+const START=["Hick’s Law","Task Success Rate","Synthetic Users Show Less Variation","Progressive Disclosure","Jobs to Be Done","Peak-End Rule","Undo and Recovery","Color Contrast","Card Sorting","Design Tokens"];
+const THOUGHT="One useful idea can change what you notice next.";
+
+const norm=s=>s.toLowerCase().replace(/[’‘`']/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const toks=s=>norm(s).split(" ").filter(Boolean).map(w=>w.length>3&&w.endsWith("s")?w.slice(0,-1):w);
+const HOOK={"Double Diamond": "Why good teams go wide twice before they narrow", "Problem Framing": "Are you redesigning the screen, or solving the problem?", "Hypothesis-Driven Design": "Could your design belief be proven wrong? It should be.", "Jobs to Be Done": "People don’t just buy a product. They hire it to make progress.", "Opportunity Solution Tree": "Tie every idea back to the one outcome that matters", "Design Critique": "Good feedback starts with the goal, not “I like it”", "How Might We": "Turn a complaint into a question that invites ideas", "Assumption Mapping": "Test the assumption that could sink you, first", "Crazy Eights": "Your first idea is rarely your best. Sketch eight.", "Design Principles": "A few written rules that end the same old argument", "Service Blueprint": "What users see is only the front of the service", "Personas": "A persona built on guesses is just a character", "Task Success Rate": "Did they actually finish what they came to do?", "Time on Task": "How long does the task really take?", "Error Rate": "Where do people slip, and how often?", "A/B Testing": "Two versions, one measure: let behaviour decide", "System Usability Scale": "Ten questions that score “is this usable?”", "Net Promoter Score": "Would they recommend you? What that number does and doesn’t say", "Conversion Funnel": "Where exactly do people drop off?", "Retention Rate": "Do people come back?", "North Star Metric": "If you could track only one number, which one?", "Customer Effort Score": "How hard did that feel to the customer?", "Activation Rate": "How many new users reach the moment it clicks?", "HEART Framework": "Five lenses for choosing UX metrics that matter", "Counter Metric": "The number that stops one win hiding a loss", "User Interviews": "Hear what people need, in their own words", "Usability Testing": "Watch someone use it. You’ll see what your desk can’t show you.", "Journey Mapping": "See the experience across days, not screens", "Card Sorting": "Let people show you how they’d organise it", "Tree Testing": "Can people find it before anything is designed?", "Diary Studies": "What happens over weeks that one session misses", "Contextual Inquiry": "Watch the work where it actually happens", "First-Click Testing": "Where do people click first, and is it right?", "Think-Aloud Protocol": "Hear what people think while they use it", "Affinity Mapping": "Turn a wall of notes into patterns", "Surveys": "Many voices, little depth: when that’s enough", "Five Whys": "Get from the symptom to the cause", "Research Repository": "Stop re-running research you already did", "Progressive Disclosure": "Show what matters now. Reveal the rest when it’s needed.", "Error Prevention": "The best error message is the one never shown", "Affordances": "What does this thing let you do?", "Signifiers": "How do people know where to click?", "Progressive Onboarding": "Teach a feature at the moment someone needs it", "Information Scent": "Why people click the wrong menu item", "Feedback and System Status": "Never leave people guessing what the system is doing", "Undo and Recovery": "Why “Undo” beats “Are you sure?”", "Empty States": "The empty screen is a first impression", "Microcopy": "Small words that decide whether people act", "Visual Hierarchy": "What should people look at first?", "Skeleton Screens": "What to show while content loads", "Defaults": "Most people keep the preselected option", "Accessible Interaction": "Can everyone perceive, operate and understand it?", "WCAG Principles": "Four words behind every accessibility guideline", "Keyboard Navigation": "Can every action be done without a mouse?", "Focus Indicators": "Where am I on this page, without a mouse?", "Color Contrast": "Can the text be read against its background?", "Alt Text": "What would someone who can’t see this image need to know?", "Target Size": "Is the button big enough to hit?", "Screen Readers": "How does your interface sound, read aloud?", "Reduced Motion": "Some people ask their device for less animation", "Plain Language": "Short words reach more people", "Heading Structure": "Headings are how people skim and jump", "Captions and Transcripts": "Video with the sound off still has to make sense", "Design Tokens": "One name for a colour, shared by design and code", "Component States": "Every state a component can be in, designed up front", "Design System Governance": "Who decides what goes into the system?", "Atomic Design": "Build interfaces from small parts up", "Spacing Scale": "Why a few spacing values beat any number", "Type Scale": "A few font sizes, with clear steps between them", "Variants": "One component with options, not ten near-copies", "Component Documentation": "When not to use a component matters too", "Contribution Model": "How a team gets a new part into the system", "Semantic Colour": "Name colours by what they mean, not their hue", "Grid System": "Columns that make layouts line up", "System Versioning": "Ship system changes without breaking other teams", "Mental Models": "People act on what they believe the system does", "Recognition Over Recall": "Don’t make people remember. Show them.", "Hick’s Law": "More choices, slower decisions, but only slightly", "Fitts’s Law": "Small, far-away buttons are slow to hit", "Cognitive Load": "Every extra thing to think about has a cost", "Jakob’s Law": "People expect your site to work like the others they use", "Peak-End Rule": "People remember the peak and the ending", "Gestalt Proximity": "Close together reads as belonging together", "Serial Position Effect": "People remember the first and last items best", "Anchoring": "The first number shapes every judgement after it", "Loss Aversion": "Losing feels bigger than winning the same amount", "Von Restorff Effect": "The one that stands out is the one remembered", "Zeigarnik Effect": "Do unfinished tasks stick in memory? The evidence is mixed.", "Miller’s Law": "Working memory holds only a few things at once"};
+const CATCOL={dt:0,ux:1,ix:2,me:3,rs:4,ac:5,pt:6,ps:7,ds:8,dn:9};
+const NEWSET=new Set(NEW_FINDINGS.map(r=>r[0]));
+const REAL=RAW.map((r,i)=>({id:"i"+i,t:r[0],c:r[1],s:r[9]||r[2],idea:r[2],x:r[3],m:r[4],w:r[5],y:r[6],a:r[7],src:r[8]||null,rep:0,ci:CATCOL[r[1]]??i%6,long:i%3===1,hook:HOOK[r[0]]||r[0],isNew:NEWSET.has(r[0])}));
+REAL.forEach(it=>{it.title=toks(it.t);it.hay=toks(it.t+" "+it.hook+" "+it.s+" "+CAT[it.c].n+" "+it.a)});
+const BY=Object.fromEntries(REAL.map(i=>[i.t,i]));
+const BYID=Object.fromEntries(REAL.map(i=>[i.id,i]));
+function build400(){const out=[...REAL];let n=1;while(out.length<400){for(const it of REAL){if(out.length>=400)break;out.push({...it,id:it.id+"r"+n,rep:n,ci:out.length%6})}n++}return out}
+const BIG=build400();BIG.forEach(i=>BYID[i.id]=i);
+
+// state
+const st={mode:"wall",cat:"all",q:"",scale:"400",shown:24,trail:[],trailIdx:-1,exp:null,swap:null,expShelf:null,path:[]};
+let saved=new Set(),readSet=new Set();
+try{saved=new Set(JSON.parse(localStorage.getItem("cf-lab:saved")||"[]"))}catch(e){}
+const persist=()=>{try{localStorage.setItem("cf-lab:saved",JSON.stringify([...saved]))}catch(e){}};
+const lib=()=>st.scale==="real"?REAL:BIG;
+const day=Math.floor(Date.now()/864e5);
+const today=REAL[(day*7)%REAL.length];
+
+// log
+const MODES=["wall","trail"];
+const blank=()=>({time:0,seen:new Set(),opened:0,hops:0,saves:0,searches:0,zero:0,more:0,surprise:0,deepest:0});
+let L=Object.fromEntries(MODES.map(m=>[m,blank()]));
+let modeStart=performance.now(),zeroQueries=[],suggested=[];
+const tick=()=>{if(document.visibilityState==="visible"){const n=performance.now();L[st.mode].time+=n-modeStart;modeStart=n}};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")modeStart=performance.now();else L[st.mode].time+=performance.now()-modeStart});
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const heartPath='<path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/>';
+const heart='<svg viewBox="0 0 24 24" aria-hidden="true">'+heartPath+'</svg>';
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),1800)}
+const reduce=()=>window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+// calm switch: no card morphing; the opened card simply fades in at the top
+function animate(fn){fn();return Promise.resolve()}
+
+function match(it,q){const qt=toks(q);if(!qt.length)return 2;let score=0;for(const w of qt){if(it.title.some(h=>h.startsWith(w)))score+=3;else if(it.hay.some(h=>h.startsWith(w)))score+=1;else return 0}return score}
+const mix=i=>{let h=7;for(const ch of i.id+st.shuffle)h=(h*31+ch.charCodeAt(0))|0;return h};
+function filtered(){const q=st.q.trim();let items=lib().filter(i=>st.cat==="all"||i.c===st.cat);if(st.shuffle&&!q)items=items.map(i=>[i,readSet.has(i.t)?1:0,mix(i)]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(p=>p[0]);if(st.board)items=items.filter(i=>saved.has(i.t)&&!i.rep);if(!q)return items;return items.map(i=>[i,match(i,q)]).filter(p=>p[1]>0).sort((a,b)=>b[1]-a[1]).map(p=>p[0])}
+
+function related(it){
+  const out=[];(REL[it.t]||[]).forEach(([t,why])=>{if(BY[t])out.push({it:BY[t],why})});
+  const same=REAL.filter(i=>i.c===it.c&&i.t!==it.t&&!out.some(o=>o.it.t===i.t));
+  for(let k=0;out.length<3&&k<same.length;k++)out.push({it:same[(it.t.length+k*5)%same.length],why:"Also in "+CAT[it.c].n+"."});
+  return out.slice(0,3);
+}
+
+
+// ===== Card look experiment (prototype only) =====
+st.picked=(()=>{try{const v=JSON.parse(localStorage.getItem("cf-lab:picked")||"null");if(Array.isArray(v))return new Set(v)}catch(e){}return null})();
+st.peek=(()=>{try{return localStorage.getItem("cf-lab:peek")!=="off"}catch(e){return true}})();
+const LOOKS=["calm","quote","stat","poster","highlight","index","diagram","widget","note","split","outline","gradient","ticket","condensed","sticker"];
+if(!st.picked)st.picked=new Set(LOOKS);
+st.lookMode=(()=>{try{return localStorage.getItem("cf-lab:lookMode")||"topic"}catch(e){return "topic"}})();
+// what kind of idea is this? decides its visual treatment in "Match by topic" mode
+const KIND_LOOK={thought:"quote",concept:"diagram",finding:"ticket",method:"note",metric:"widget"};
+const KIND_NAME={thought:"Thought",concept:"Concept",finding:"Finding",method:"Method",metric:"Metric"};
+const DT_METHOD=new Set(["Crazy Eights","Assumption Mapping","How Might We","Personas","Five Whys"]);
+const DT_CONCEPT=new Set(["Double Diamond","Opportunity Solution Tree","Service Blueprint","Jobs to Be Done"]);
+function kindOf(it){
+  if(["rs","pt","dn"].includes(it.c))return "finding";
+  if(it.c==="me")return "metric";
+  if(it.c==="ux"||DT_METHOD.has(it.t))return "method";
+  if(["ps","ix","ac","ds"].includes(it.c)||DT_CONCEPT.has(it.t))return "concept";
+  return "thought";
+}
+const hashOf=s=>{let h=5381;for(const ch of s)h=((h<<5)+h+ch.charCodeAt(0))|0;return Math.abs(h)};
+const numIn=it=>{const m=[it.s,it.idea,it.x].join(" ").match(/\b\d{1,3}(?:\.\d+)?%|\b\d+(?:\.\d+)?×/);return m?m[0]:null};
+function lookFor(it){
+  if(st.lookMode==="topic"){const k=kindOf(it);return k==="finding"&&numIn(it)?"stat":KIND_LOOK[k]}
+  const P=[...st.picked];if(!P.length)return "calm";if(P.length===1)return P[0];
+  const fin=["rs","pt","dn"].includes(it.c)&&it.src;
+  const pools={me:["widget","calm","gradient","stat","outline"],pt:["gradient","widget","calm","poster","ticket"],ux:["note","calm","sticker","widget","highlight"],
+    rs:["ticket","quote","calm","note","highlight"],dn:["diagram","calm","split","ticket","outline"],ix:["diagram","calm","outline","split","highlight"],
+    ac:["outline","calm","diagram","highlight","split"],ds:["split","calm","diagram","outline","index"],ps:["index","calm","poster","quote","condensed","diagram"],
+    dt:["condensed","calm","quote","poster","index"]};
+  let pool=pools[it.c]||["calm","quote","poster"];
+  if(fin)pool=pool.concat(["ticket"]);
+  pool=pool.filter(v=>st.picked.has(v));if(pool.length<2)pool=pool.concat(P);
+  const h=hashOf(it.id+it.t);let v=pool[h%pool.length];
+  // avoid two identical styles in a row (keeps the wall varied); calm may repeat
+  const uniq=[...new Set(pool)];if(v!=="calm"&&v===lookFor.prev&&uniq.length>1)v=uniq[(uniq.indexOf(v)+1)%uniq.length];
+  lookFor.prev=v;
+  return v;
+}
+function glyph(it){
+  const t=it.t.toLowerCase(),d="var(--deep)",c="var(--card)",f="#1e231f";
+  const W=(inner)=>`<svg viewBox="0 0 300 132" aria-hidden="true" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
+  const L=(x1,y1,x2,y2,col=f,w=1.5,dash="")=>`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${col}" stroke-width="${w}" ${dash?`stroke-dasharray="${dash}"`:""} fill="none"/>`;
+  const R=(x,y,w,h,fill,rx=6,op=1)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${fill}" opacity="${op}"/>`;
+  if(/mental model/.test(t))return W(`<circle cx="105" cy="66" r="40" fill="${c}" stroke="${f}" stroke-width="1.5"/><circle cx="185" cy="66" r="40" fill="${d}" opacity=".55"/><text x="80" y="71" font-family="Inter" font-size="12" fill="${f}">belief</text><text x="196" y="71" font-family="Inter" font-size="12" fill="#fff">system</text>`);
+  if(/recognition|recall|miller|cognitive load|chunk/.test(t))return W([0,1,2].map(g=>[0,1,2].map(k=>R(40+g*80+k*20,50,14,30,g==1?d:c,4)).join("")).join("")+L(40,96,260,96,f,1,"3 5"));
+  if(/serial position/.test(t))return W([...Array(8)].map((_,i)=>R(34+i*30,50,22,34,i<2||i>5?d:c,5)).join(""));
+  if(/restorff/.test(t))return W([...Array(7)].map((_,i)=>i==4?`<circle cx="${50+i*33}" cy="66" r="15" fill="${d}"/>`:R(38+i*33,54,24,24,c,4)).join(""));
+  if(/zeigarnik/.test(t))return W(`<circle cx="150" cy="66" r="40" fill="none" stroke="${c}" stroke-width="12"/><path d="M150 26 A40 40 0 1 1 112 78" fill="none" stroke="${d}" stroke-width="12" stroke-linecap="round"/>`);
+  if(/peak/.test(t))return W(`<polyline points="30,90 70,84 100,40 130,80 170,86 210,82 262,52" fill="none" stroke="${d}" stroke-width="3" stroke-linejoin="round"/><circle cx="100" cy="40" r="7" fill="${d}"/><circle cx="262" cy="52" r="7" fill="${d}"/>`+L(30,108,270,108,f,1));
+  if(/anchor/.test(t))return W(`<text x="70" y="86" font-family="Fraunces,serif" font-size="52" fill="${d}">₹999</text><text x="200" y="84" font-family="Fraunces,serif" font-size="30" fill="${f}" opacity=".6">₹499</text>`+L(68,70,170,70,f,2));
+  if(/loss/.test(t))return W(`${L(150,30,150,104,f,2)}${L(70,62,230,46,f,2.5)}<circle cx="70" cy="80" r="16" fill="${d}"/><circle cx="230" cy="64" r="16" fill="${c}" stroke="${f}"/>`);
+  if(/jakob/.test(t))return W([0,1,2].map(i=>R(36+i*84,30,70,72,i==1?"#fff":c,8)+R(44+i*84,40,54,8,f,4,.25)+R(44+i*84,56,30,30,i==1?d:"#fff",6)).join(""));
+  if(/disclosure|accordion/.test(t))return W([0,1,2].map(i=>R(50,22+i*32,200,24,i==0?d:c,6)+`<path d="M232 ${30+i*32} l6 6 6-6" stroke="${i==0?"#fff":f}" stroke-width="2" fill="none"/>`).join(""));
+  if(/onboarding/.test(t))return W([0,1,2,3].map(i=>`<circle cx="${70+i*54}" cy="66" r="${i==1?14:9}" fill="${i<=1?d:c}"/>`).join("")+L(79,66,107,66,d,2)+L(133,66,161,66,f,1.5,"3 4")+L(187,66,215,66,f,1.5,"3 4"));
+  if(/undo|recovery/.test(t))return W(`<path d="M190 92 A40 40 0 1 0 110 60" fill="none" stroke="${d}" stroke-width="5" stroke-linecap="round"/><path d="M98 44 L110 64 L128 50" fill="none" stroke="${d}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`);
+  if(/feedback|status/.test(t))return W(`${R(60,46,180,40,c,20)}<circle cx="86" cy="66" r="10" fill="${d}"/><path d="M81 66 l4 4 7-8" stroke="#fff" stroke-width="2.4" fill="none"/>${R(108,60,100,10,f,5,.3)}`);
+  if(/empty state/.test(t))return W(`<rect x="100" y="24" width="100" height="72" rx="10" fill="none" stroke="${f}" stroke-width="1.5" stroke-dasharray="5 5"/>${R(118,104,64,16,d,8)}`);
+  if(/skeleton/.test(t))return W(`<circle cx="70" cy="48" r="18" fill="${c}"/>${R(100,36,150,10,c,5)}${R(100,54,100,10,c,5)}${R(52,82,200,10,c,5)}${R(52,100,160,10,d,5,.35)}`);
+  if(/default/.test(t))return W(`${R(110,46,80,40,d,20)}<circle cx="170" cy="66" r="15" fill="#fff"/>`);
+  if(/microcopy|plain language/.test(t))return W(`${R(50,40,200,12,f,6,.15)}${R(50,60,90,12,d,6)}${R(146,60,104,12,f,6,.15)}${R(50,80,160,12,f,6,.15)}`);
+  if(/error prevention/.test(t))return W(`${R(50,44,200,36,"#fff",8)}<rect x="50" y="44" width="200" height="36" rx="8" fill="none" stroke="${d}" stroke-width="2"/>${R(62,58,90,8,f,4,.3)}<text x="52" y="100" font-family="Inter" font-size="11" fill="${d}">Check before it breaks</text>`);
+  if(/alt text|screen reader|caption/.test(t))return W(`${R(56,30,110,72,c,8)}<path d="M66 92 l26-30 20 20 14-14 30 24z" fill="${d}" opacity=".6"/>${R(180,44,70,10,f,5,.3)}${R(180,62,54,10,f,5,.3)}${R(180,80,62,10,f,5,.3)}`);
+  if(/target size/.test(t))return W(`<circle cx="110" cy="66" r="8" fill="${f}" opacity=".3"/><circle cx="190" cy="66" r="30" fill="${d}"/>`);
+  if(/reduced motion/.test(t))return W(`<path d="M30 66 q20 -40 40 0 t40 0 t40 0" fill="none" stroke="${c}" stroke-width="4"/><path d="M150 66 q20 -10 40 0 t40 0 t40 0" fill="none" stroke="${d}" stroke-width="4"/>`);
+  if(/heading|type scale/.test(t))return W(`${R(50,26,180,20,f,4)}${R(50,54,140,14,d,4)}${R(50,76,100,10,d,4,.6)}${R(50,94,70,8,d,4,.35)}`);
+  if(/spacing|grid/.test(t))return W([...Array(6)].map((_,i)=>R(40+i*38,30,26,72,i%2?c:d,4,i%2?1:.35)).join(""));
+  if(/variant|states|component/.test(t))return W(["default","hover","pressed"].map((n,i)=>R(40+i*76,48,66,34,i==1?d:i==2?f:c,17)).join(""));
+  if(/atomic/.test(t))return W(`<circle cx="70" cy="66" r="10" fill="${d}"/>${R(110,52,40,28,c,6)}${R(176,38,84,56,c,8)}${R(186,48,30,16,d,4)}`);
+  if(/semantic colou?r/.test(t))return W(["#2f7d5b","#c2643a","#b54a6e","#2f62b8"].map((col,i)=>`<circle cx="${70+i*54}" cy="66" r="18" fill="${col}"/>`).join(""));
+  if(/document|contribution|version|governance/.test(t))return W(`${R(70,24,90,84,"#fff",8)}<rect x="70" y="24" width="90" height="84" rx="8" fill="none" stroke="${f}"/>${R(82,40,60,7,f,3,.3)}${R(82,54,48,7,f,3,.3)}${R(82,68,56,7,f,3,.3)}<circle cx="210" cy="66" r="22" fill="${d}"/><text x="210" y="71" text-anchor="middle" font-family="Inter" font-weight="700" font-size="13" fill="#fff">v2</text>`);
+  if(/jobs to be done/.test(t))return W(`<circle cx="60" cy="66" r="12" fill="${c}" stroke="${f}"/>${L(74,66,226,66,d,3)}<path d="M222 56 l14 10 -14 10" fill="${d}"/><circle cx="246" cy="66" r="12" fill="${d}"/>`);
+  if(/opportunity solution tree/.test(t))return W(`<circle cx="150" cy="24" r="10" fill="${d}"/>${L(150,34,90,60)}${L(150,34,210,60)}<circle cx="90" cy="66" r="8" fill="${c}" stroke="${f}"/><circle cx="210" cy="66" r="8" fill="${c}" stroke="${f}"/>${L(90,74,66,102)}${L(90,74,114,102)}${L(210,74,210,102)}`+[66,114,210].map(x=>R(x-10,102,20,14,d,3,.5)).join(""));
+  if(/blueprint/.test(t))return W([0,1,2].map(i=>R(30,22+i*32,240,24,i==1?"#fff":c,4)).join("")+L(30,66,270,66,d,2,"6 4")+[60,130,200].map(x=>`<circle cx="${x}" cy="34" r="6" fill="${d}"/><circle cx="${x}" cy="98" r="6" fill="${f}" opacity=".5"/>`).join(""));
+
+  if(/proximity|gestalt/.test(t))return W([0,1,2].map(r=>[0,1,2].map(k=>`<circle cx="${60+k*22}" cy="${40+r*22}" r="7" fill="${d}"/>`).join("")).join("")+[0,1,2].map(r=>[0,1].map(k=>`<circle cx="${190+k*22}" cy="${40+r*22}" r="7" fill="${f}" opacity=".25"/>`).join("")).join(""));
+  if(/fitts|target|tap/.test(t))return W(`<circle cx="190" cy="66" r="44" fill="${c}"/><circle cx="190" cy="66" r="26" fill="${d}" opacity=".35"/><circle cx="190" cy="66" r="10" fill="${d}"/><path d="M50 104 C90 100 130 80 168 72" stroke="${f}" stroke-width="2" fill="none" stroke-dasharray="4 5"/><path d="M44 98 l14 12 4-16z" fill="${f}"/>`);
+  if(/hick|choice|decision/.test(t))return W(`<circle cx="50" cy="66" r="8" fill="${f}"/>`+[20,43,66,89,112].map((y,i)=>`<path d="M58 66 C110 66 120 ${y} 180 ${y}" stroke="${i==2?d:f}" stroke-width="${i==2?3:1.5}" fill="none" opacity="${i==2?1:.35}"/><rect x="186" y="${y-7}" width="${50+i*9}" height="14" rx="7" fill="${i==2?d:c}"/>`).join(""));
+  if(/diamond/.test(t))return W(`<path d="M30 66 L90 20 L150 66 L90 112Z" fill="${c}" stroke="${f}" stroke-width="1.5"/><path d="M150 66 L210 20 L270 66 L210 112Z" fill="${d}" opacity=".85"/>`);
+  if(/hierarchy|contrast|visual/.test(t))return W(`<rect x="40" y="26" width="160" height="22" rx="6" fill="${f}"/><rect x="40" y="58" width="220" height="10" rx="5" fill="${d}" opacity=".5"/><rect x="40" y="76" width="190" height="10" rx="5" fill="${d}" opacity=".35"/><rect x="40" y="94" width="120" height="10" rx="5" fill="${d}" opacity=".25"/>`);
+  if(/token|system|component|governance/.test(t))return W([0,1,2,3].map(i=>`<rect x="${42+i*56}" y="34" width="44" height="44" rx="${[4,10,18,22][i]}" fill="${i%2?d:c}" stroke="${f}" stroke-width="1"/><rect x="${42+i*56}" y="90" width="44" height="8" rx="4" fill="${f}" opacity=".2"/>`).join(""));
+  if(/contrast|color|accessib|keyboard|focus|wcag/.test(t))return W(`<rect x="50" y="24" width="84" height="84" rx="14" fill="${f}"/><text x="92" y="78" text-anchor="middle" font-family="Fraunces,serif" font-size="40" fill="#fff">Aa</text><rect x="166" y="24" width="84" height="84" rx="14" fill="${c}"/><text x="208" y="78" text-anchor="middle" font-family="Fraunces,serif" font-size="40" fill="${d}">Aa</text>`);
+  if(/flow|journey|map|blueprint|service/.test(t))return W([0,1,2,3].map(i=>`<circle cx="${50+i*66}" cy="58" r="14" fill="${i==3?d:c}" stroke="${f}" stroke-width="1.5"/>`).join("")+`<path d="M64 58 H102 M130 58 H168 M196 58 H234" stroke="${f}" stroke-width="1.5"/><path d="M50 96 H248" stroke="${d}" stroke-width="2" stroke-dasharray="3 6"/>`);
+  if(/afford/.test(t))return W(`${R(60,60,180,10,c,5)}${R(60,60,110,10,d,5)}<circle cx="170" cy="65" r="16" fill="#fff" stroke="${f}" stroke-width="1.5"/>${L(164,58,164,72,f,1.5)}${L(170,58,170,72,f,1.5)}${L(176,58,176,72,f,1.5)}`);
+  if(/scent/.test(t))return W(`${L(40,96,260,96,f,1.5,"4 5")}`+[70,150,230].map((x,i)=>`${L(x,96,x,46,f,1.5)}<path d="M${x} 40 h${44-i*6} l10 9 -10 9 h-${44-i*6}z" fill="${i==2?d:c}" stroke="${f}"/>`).join(""));
+  if(/scent|signif|afford|link|navigation/.test(t))return W(`<rect x="44" y="40" width="96" height="52" rx="26" fill="${d}"/><text x="92" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="15" fill="#fff">Next →</text><rect x="168" y="48" width="88" height="36" rx="8" fill="none" stroke="${f}" stroke-width="1.5" stroke-dasharray="4 4"/>`);
+  const seed=hashOf(it.t);const shapes=[0,1,2,3,4].map(i=>{const x=40+i*52,r=10+((seed>>i)&7)*3;return i%2?`<rect x="${x-r}" y="${66-r}" width="${2*r}" height="${2*r}" rx="6" fill="${i==2?d:c}" stroke="${f}" stroke-width="1"/>`:`<circle cx="${x}" cy="66" r="${r}" fill="${i==2?d:c}" stroke="${f}" stroke-width="1"/>`}).join("");
+  return W(shapes);
+}
+function widget(it){
+  const d="var(--deep)",c="var(--card)",f="#1e231f";const seed=hashOf(it.t);
+  const W=(inner)=>`<svg viewBox="0 0 300 132" aria-hidden="true">${inner}</svg>`;
+  if(it.c==="me"){const pts=[...Array(9)].map((_,i)=>[24+i*31,96-((seed>>(i%16))&31)*1.6-i*3]);const line=pts.map(p=>p.join(",")).join(" ");
+    return W(`<rect x="18" y="16" width="70" height="8" rx="4" fill="${f}" opacity=".18"/><polygon points="24,116 ${line} 272,116" fill="${c}"/><polyline points="${line}" fill="none" stroke="${d}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="${pts[8][0]}" cy="${pts[8][1]}" r="5" fill="${d}"/>`)}
+  if(it.c==="pt")return W(`<rect x="22" y="20" width="170" height="30" rx="15" fill="${c}"/><rect x="34" y="31" width="110" height="8" rx="4" fill="${f}" opacity=".35"/><rect x="108" y="60" width="170" height="30" rx="15" fill="${d}"/><rect x="122" y="71" width="120" height="8" rx="4" fill="#fff" opacity=".7"/><rect x="22" y="100" width="44" height="22" rx="11" fill="${f}" opacity=".12"/><circle cx="33" cy="111" r="8" fill="${d}"/>`);
+  if(it.c==="ux")return W(`<circle cx="34" cy="28" r="6" fill="#e04b4b"/><rect x="48" y="23" width="40" height="10" rx="5" fill="${f}" opacity=".2"/>`+[...Array(28)].map((_,i)=>{const h=8+((seed>>(i%18))&15)*3.4;return `<rect x="${26+i*9}" y="${82-h/2}" width="4" height="${h}" rx="2" fill="${i<17?d:f}" opacity="${i<17?1:.2}"/>`}).join(""));
+  return W([0,1,2].map(i=>`<rect x="24" y="${26+i*30}" width="252" height="18" rx="9" fill="${f}" opacity=".08"/><rect x="24" y="${26+i*30}" width="${80+((seed>>i*3)&15)*10}" height="18" rx="9" fill="${i==0?d:c}"/>`).join(""));
+}
+function lookParts(it,srcName){
+  const v0=lookFor(it);let v=v0==="stat"&&!numIn(it)?"stat":v0;const o={v,pre:"",art:"",after:"",stub:"",sticker:""};
+  if(v==="stat"){const n=numIn(it);if(n)o.art=`<div class="art">${esc(n)}</div>`;else{const w=it.t.replace(/[’']s\b/g,"").split(/\s+/).sort((a,b)=>b.length-a.length)[0];o.art=`<div class="art word">${esc(w)}</div>`}}
+  if(v==="index")o.art=`<div class="art"><small>No.</small>${String((parseInt(it.id.slice(1))||0)+1).padStart(2,"0")}</div>`;
+  if(v==="diagram")o.art=`<div class="art">${glyph(it)}</div>`;
+  if(v==="widget")o.art=`<div class="art">${widget(it)}</div>`;
+  if(v==="split")o.pre=`<div class="art top"><i></i><b>${esc(it.t.trim()[0])}</b></div>`;
+  if(v==="ticket")o.stub=`<div class="stub"><span>${srcName?"Evidence":"Idea"}</span><b>${esc(srcName||CAT[it.c].n)}</b></div>`;
+  if(v==="sticker"){o.sticker=`<span class="sticker" aria-hidden="true">${srcName?"new find!":"huh!"}</span>`;o.after=`<svg class="squig" viewBox="0 0 150 12" aria-hidden="true"><path d="M2 8 Q12 1 22 7 T42 7 T62 7 T82 7 T102 7 T122 7 T148 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>`}
+  return o;
+}
+
+function resurfaceHTML(){
+  if(st.mode!=="wall"||st.exp||st.board||st.q.trim()||st.cat!=="all"||!saved.size)return "";
+  const list=REAL.filter(i=>saved.has(i.t));if(!list.length)return "";
+  const it=list[day%list.length];
+  return `<div class="resurface"><span class="rk">From your collection</span><button type="button" data-open="${it.id}">${esc(it.hook)}</button><span style="color:var(--muted)">${esc(it.t)}</span></div>`;
+}
+document.addEventListener("click",e=>{if(e.target.closest("[data-loadmore]")){e.target.closest("[data-loadmore]").disabled=true;appendBatch()}});
+
+// ===== Fresh research (prototype simulation using REAL, verified 2025–2026 findings with exact quotes) =====
+const FRESH=[{"claim": "AI Twins Rate Software Too Kindly", "quote": "the summary twins were 10.6 points and the full twins 10.4 points higher", "paper": "Digital Twins Systematically Overestimated Business Software SUS Scores", "pub": "MeasuringU", "date": "2026-10-20", "url": "https://measuringu.com/digital-twins-systematically-overestimated-business-software-sus-scores/#:~:text=the%20summary%20twins%20were%2010.6%20points%20and%20the%20full%20twins%2010.4%20points%20higher", "about": "LLM 'digital twins' of 289 real business-software users gave SUS scores about 10.5 points higher than the real users, though products stayed in nearly the same rank order. AI copies of real users scored software about 10 points higher on SUS than the real people did."}, {"claim": "Desktop Tests of Mobile Prototypes Hold Up", "quote": "the results favored the mobile condition 15 times", "paper": "What Happens When You Test a Mobile Prototype on Desktop?", "pub": "MeasuringU", "date": "2025-05-13", "url": "https://measuringu.com/ratings-of-a-mobile-app-prototype-on-desktop-and-mobile-devices/#:~:text=the%20results%20favored%20the%20mobile%20condition%2015%20times", "about": "Testing a mobile banking prototype on desktop instead of on real phones gave only slightly worse results: mobile came out ahead on 15 of 16 measures, but the differences were small. Testing a mobile prototype on desktop gave slightly lower, but not very different, results than on phones."}, {"claim": "Hidden Contract Length Loses Sales", "quote": "20% of participants abandoned suitable plans on sites where the contract length was not obvious", "paper": "New Telco UX Research: 3 High-Level Takeaways from 3,500 Hours of Testing", "pub": "Baymard Institute", "date": "2025-10-22", "url": "https://baymard.com/research-articles/telco-ux-research#:~:text=20%25%20of%20participants%20abandoned%20suitable%20plans%20on%20sites%20where%20the%20contract%20length%20was%20not%20obvious", "about": "In moderated tests on 16 US and UK telco sites, 20% of participants abandoned plans that suited them when the contract length wasn't obvious. One in five telco shoppers dropped a plan that suited them when the contract length wasn't clear."}, {"claim": "Collapsed Details Count as Missing", "quote": "Hiding basic item and order details in collapsed sections performed as poorly in testing", "paper": "Accounts & Self-Service UX Research Update and Expansion: 3 Key Takeaways", "pub": "Baymard Institute", "date": "2026-09-09", "url": "https://baymard.com/research-articles/accounts-and-self-service-ux-research-2026#:~:text=Hiding%20basic%20item%20and%20order%20details%20in%20collapsed%20sections%20performed%20as%20poorly%20in%20testing", "about": "In Baymard's 2026 account and self-service testing, hiding basic item and order details in collapsed sections performed as poorly as not showing them at all. Hiding order details in collapsed sections tested as badly as leaving them out completely."}, {"claim": "Shoppers Distrust AI Product Photos", "quote": "60% of online shoppers say knowing a product image is AI-generated", "paper": "AI Engagement Quantitative UX: 2 High-Level Takeaways from 20+ Charts", "pub": "Baymard Institute", "date": "2026-10-27", "url": "https://baymard.com/research-articles/ai-engagement-quantitative-ux-insights-2026#:~:text=60%25%20of%20online%20shoppers%20say%20knowing%20a%20product%20image%20is%20AI%2Dgenerated", "about": "In a June 2026 survey of 2,273 US online shoppers, 60% said knowing a product image is AI-generated would lower their purchase confidence, and about two-thirds wanted a human for damaged or wrong orders. 60% of US shoppers say knowing a product photo is AI-made would lower their confidence to buy."}, {"claim": "AI Hero Images Matched Stock Photos", "quote": "Instead, we found no evidence that the AI-generated images we tested reduced trust", "paper": "AI-Generated Images Can Perform as Well as Stock Photography", "pub": "Nielsen Norman Group", "date": "2026-08-21", "url": "https://www.nngroup.com/articles/ai-generated-images/#:~:text=Instead%2C%20we%20found%20no%20evidence%20that%20the%20AI%2Dgenerated%20images%20we%20tested%20reduced%20trust", "about": "In a test with 77 US adults, homepages with AI-generated hero images were rated at least as trustworthy, professional and authentic as the same pages with stock photos, when the AI wasn't disclosed. Undisclosed AI hero images were rated as trustworthy as stock photos on a test homepage."}, {"claim": "Site Chatbots Don't Explain Themselves", "quote": "Users see little reason to use site AI chatbots", "paper": "What Is Your Site's AI Chatbot for? Users Can't Tell", "pub": "Nielsen Norman Group", "date": "2026-03-20", "url": "https://www.nngroup.com/articles/site-ai-chatbot/#:~:text=Users%20see%20little%20reason%20to%20use%20site%20AI%20chatbots", "about": "In moderated tests with 9 users across 8 site AI chatbots (e.g. Amazon Rufus, Home Depot Magic Apron), users often missed them, couldn't tell what they offered beyond search, and found them slower than search or filters. Users often skipped site AI chatbots because they couldn't tell what they did better than search."}, {"claim": "In China, Social Apps Check AI Answers", "quote": "all our participants chose to use their phones for their information-seeking tasks", "paper": "Information Seeking in China: A Different Ecosystem, Familiar Behavior", "pub": "Nielsen Norman Group", "date": "2026-05-01", "url": "https://www.nngroup.com/articles/information-seeking-china/#:~:text=all%20our%20participants%20chose%20to%20use%20their%20phones%20for%20their%20information%2Dseeking%20tasks", "about": "In a remote study of 6 participants in China, all searched on phones, few used search engines like Baidu, and they checked AI chatbot answers on social apps such as Rednote. In a small China study, people checked AI answers on social apps like Rednote, not search engines."}, {"claim": "Floppy Disk Still Means Save", "quote": "83% of participants associated the floppy disk icon with saving", "paper": "The Floppy Disk Icon as \"Save:\" Still Appropriate Today?", "pub": "Nielsen Norman Group", "date": "2025-07-04", "url": "https://www.nngroup.com/articles/floppy-disk-icon-understandability/#:~:text=83%25%20of%20participants%20associated%20the%20floppy%20disk%20icon%20with%20saving", "about": "In an NN/g icon study of English-speaking US adults (median age 41), 83% read the floppy disk icon as 'save' — it works because people know the interface, not the object. 83% of people still read the floppy disk icon as save — from interface habit, not the object."}, {"claim": "AI Summaries Halve Search Clicks", "quote": "clicked on a traditional search result link in 8% of all visits", "paper": "Google users are less likely to click on links when an AI summary appears in the results", "pub": "Pew Research Center", "date": "2025-07-22", "url": "https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/#:~:text=clicked%20on%20a%20traditional%20search%20result%20link%20in%208%25%20of%20all%20visits", "about": "In real browsing data from 900 US adults, people clicked a regular search result in 8% of Google visits with an AI summary, versus 15% without one; links inside the summary got about 1%. With an AI summary on Google, people clicked a regular result in 8% of visits, versus 15% without."}, {"claim": "Half of US Adults Now Use Chatbots", "quote": "About half of U.S. adults now report using AI chatbots", "paper": "Americans and AI 2026: Chatbots, Smart Devices and Views on Impact", "pub": "Pew Research Center", "date": "2026-06-17", "url": "https://www.pewresearch.org/internet/2026/06/17/americans-and-ai-2026-chatbots-smart-devices-and-views-on-impact/#:~:text=About%20half%20of%20U.S.%20adults%20now%20report%20using%20AI%20chatbots", "about": "In a February 2026 survey of 5,119 US adults, about half said they use AI chatbots (up from a third in 2024), and six in ten said they read AI summaries in search results. About half of US adults said they use AI chatbots in 2026, up from about a third in 2024."}, {"claim": "10 Seconds Feels Too Slow for AI", "quote": "In a follow-up survey of GOV.UK app users, 73% found GOV.UK Chat useful", "paper": "5 things we learned testing GOV.UK Chat: an AI assistant for government", "pub": "Government Digital Service (GOV.UK)", "date": "2026-03-16", "url": "https://insidegovuk.blog.gov.uk/2026/03/16/5-things-we-learned-testing-gov-uk-chat-an-ai-assistant-for-government/#:~:text=In%20a%20follow%2Dup%20survey%20of%20GOV.UK%20app%20users%2C%2073%25%20found%20GOV.UK%20Chat%20useful", "about": "In GOV.UK's AI assistant pilots (10,000+ users), 73% of surveyed app users found it useful, yet the average 10.7-second answer time was the main complaint. GOV.UK's AI assistant was found useful, but its 10.7-second average answer was the top complaint."}, {"claim": "Multi-Format Lessons Stick Longer", "quote": "a randomized controlled study with 60 students from the Chicago area, ages 15–18", "paper": "Learn Your Way: Reimagining textbooks with generative AI", "pub": "Google Research", "date": "2025-09-16", "url": "https://research.google/blog/learn-your-way-reimagining-textbooks-with-generative-ai/#:~:text=a%20randomized%20controlled%20study%20with%2060%20students%20from%20the%20Chicago%20area%2C%20ages%2015%E2%80%9318", "about": "In a randomised study of 60 students aged 15–18, those who learned from an AI-transformed, multi-format textbook scored 78% on a retention test days later, versus 67% with a standard PDF. Students using an AI multi-format textbook scored 78% on a later recall test, versus 67% with a PDF."}, {"claim": "Interrupted Every Two Minutes", "quote": "employees using Microsoft 365 are interrupted every 2 minutes by a meeting, email, or notification", "paper": "Breaking down the infinite workday", "pub": "Microsoft WorkLab", "date": "2025-06-17", "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday#:~:text=employees%20using%20Microsoft%20365%20are%20interrupted%20every%202%20minutes%20by%20a%20meeting%2C%20email%2C%20or%20notification", "about": "Microsoft 365 data shows heavily-pinged workers are interrupted about every 2 minutes by a meeting, email or chat, and half of all meetings fall in the 9–11 am and 1–3 pm focus slots. The most-pinged Microsoft 365 users get interrupted about every 2 minutes during the workday."}];
+FRESH.forEach((f,i)=>{f.id="f"+i;f.hay=toks(f.claim+" "+f.about+" "+f.paper+" "+f.pub)});
+let freshSaved=new Set();try{freshSaved=new Set(JSON.parse(localStorage.getItem("cf-lab:freshSaved")||"[]"))}catch(e){}
+st.researchDown=false;
+function freshMatches(q){const w=toks(q).filter(x=>x.length>2);if(!w.length)return [];return FRESH.map(f=>[f,w.filter(x=>f.hay.some(h=>h.startsWith(x))).length]).filter(p=>p[1]>=Math.max(1,Math.ceil(w.length*0.6))).sort((a,b)=>b[1]-a[1]).map(p=>p[0])}
+function freshCard(f){const on=freshSaved.has(f.id);const y=(f.date||"").slice(0,4);
+  return `<article class="card fresh" data-fid="${f.id}"><div class="card-top"><span class="tag fresh-chip">Fresh · unreviewed</span><button class="save" data-fsave="${f.id}" aria-pressed="${on}" aria-label="Save ${esc(f.claim)}">${heart}</button></div>
+  <div class="card-core"><h3>${esc(f.claim)}</h3><blockquote>“${esc(f.quote)}”</blockquote><p class="src">${esc(f.paper)} · ${esc(f.pub)}${y?" · "+y:""}</p></div>
+  <div class="card-foot"><a class="read-paper" href="${esc(f.url)}" target="_blank" rel="noopener">Read the source ↗</a></div></article>`}
+function freshSection(libCount){
+  const q=st.q.trim();
+  return `<section class="fresh-sec" id="freshSec" aria-live="polite"><div class="grid fresh-grid" id="freshGrid">${skelHTML(3)}</div></section>`;
+}
+function lazyFresh(libCount){
+  const sec=$("#freshSec");if(!sec)return;const fg=$("#freshGrid");if(fg)arrange(fg);
+  if(!libCount||!("IntersectionObserver" in window))return runFresh(libCount);
+  const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();runFresh(libCount)}},{rootMargin:"300px"});io.observe(sec);
+}
+function runFresh(libCount){
+  const q=st.q.trim(),token=(runFresh.t=(runFresh.t||0)+1);const fg=$("#freshGrid");if(fg)arrange(fg);
+  $("#curate")&&$("#curate").classList.add("on");const ct=$("#curateText");if(ct)ct.textContent="Curating more ideas for you…";
+  setTimeout(()=>{
+    if(token!==runFresh.t||st.q.trim()!==q)return;
+    $("#curate")&&$("#curate").classList.remove("on");setTimeout(()=>{const ct=$("#curateText");if(ct)ct.textContent="Curating more ideas for you…"},400);
+    const sec=$("#freshSec");if(!sec)return;const g=$("#freshGrid");
+    const list=st.researchDown?[]:freshMatches(q);
+    if(!list.length){if(!libCount){sec.outerHTML=zeroBlockHTML(q);arrange($("#zeroGrid"))}else{sec.remove()}return}
+    g.innerHTML=list.map(freshCard).join("");arrange(g);
+  },st.researchDown?2500:1400);
+}
+function zeroBlockHTML(q){
+  // never a dead end: honest beta note + real cards to keep browsing (closest first, then new and unread)
+  const qt=toks(q);const near=REAL.map(i=>[i,qt.reduce((s,w)=>s+(i.hay.some(h=>h.startsWith(w.slice(0,3)))?1:0),0)]).filter(p=>p[1]>0).sort((a,b)=>b[1]-a[1]).map(p=>p[0]);
+  const byCat={};REAL.filter(i=>!readSet.has(i.t)).forEach(i=>(byCat[i.c]=byCat[i.c]||[]).push(i));const mixed=[];for(let k=0;mixed.length<40&&k<20;k++)for(const c in byCat)if(byCat[c][(k*3+day)%byCat[c].length])mixed.push(byCat[c][(k*3+day)%byCat[c].length]);
+  const pool=[...near,...REAL.filter(i=>i.isNew).slice(0,2),...mixed];const pick=[];for(const i of pool){if(!pick.includes(i))pick.push(i);if(pick.length===6)break}
+  return `<div class="zero-beta"><h2>Not sure what you meant by “${esc(q)}”.</h2><p>We’re in beta and still growing the library, but here are a few interesting thoughts. <button class="linkbtn" id="zClear">Clear search</button> · <button class="linkbtn" id="zSuggest">Suggest “${esc(q)}” as a topic</button></p></div><div class="grid" id="zeroGrid">${pick.map(i=>cardHTML(i)).join("")}</div>`}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-fsave]");if(!b)return;const id=b.dataset.fsave;freshSaved.has(id)?freshSaved.delete(id):freshSaved.add(id);try{localStorage.setItem("cf-lab:freshSaved",JSON.stringify([...freshSaved]))}catch(_){};b.setAttribute("aria-pressed",freshSaved.has(id));toast(freshSaved.has(id)?"Saved. This also tells us to review it.":"Removed")});
+function cardHTML(it,opts={}){
+  if(opts.expanded)return expandedHTML(it,opts);
+  const isS=saved.has(it.t),isR=readSet.has(it.t);
+  const vt=st.mode==="wall"?` style="view-transition-name:vt-${it.id}"`:"";
+  // source shows on the card only for findings (new claims); familiar concepts keep it inside the opened idea
+  const isFinding=["rs","pt","dn"].includes(it.c);
+  const srcName=isFinding&&it.src?it.src[0].split(" — ")[0]:"";
+  const L=lookParts(it,srcName);const shortTxt=L.v!=="calm"&&L.v!=="note"&&L.v!=="highlight";
+  return `<article class="card k${it.ci} v-${L.v}${isR?" is-read":""}${opts.open?" is-open":""}" data-t="${esc(it.t)}" data-id="${it.id}"${vt}>${L.pre}
+   <div class="card-top"><span class="tag">${CAT[it.c].n}${it.isNew?'<span class="newb">New</span>':""}</span>
+    <button class="save" aria-pressed="${isS}" aria-label="Save ${esc(it.t)} to Your Board">${heart}</button></div>${L.sticker}
+   <div class="card-core">${L.art}<h3><button class="open" aria-expanded="false" aria-label="${esc(it.hook!==it.t?it.hook+" — "+it.t:it.t)}"><span>${esc(it.hook)}</span></button></h3>${L.after}${it.hook!==it.t?`<p class="name">${esc(it.t)}</p>`:""}
+   <p class="${it.long&&!shortTxt?"long":""}">${esc(it.long&&!shortTxt?it.idea+" "+it.x:it.s)}</p>${srcName&&!L.stub?`<p class="src">${esc(srcName)}</p>`:""}${L.stub}</div>
+   <div class="card-foot"><span class="go">Explore idea →</span><span class="read"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Read</span>${it.rep?'<span class="repeat">repeat '+it.rep+'</span>':''}</div>
+  </article>`;
+}
+function expandedHTML(it,opts){
+  const isS=saved.has(it.t),rel=related(it);
+  const slotId=opts.slotId||it.id;
+  const vt=st.mode==="wall"?` style="view-transition-name:vt-${slotId}"`:"";
+  const src=it.src?`<p>${it.src[1]?`<a href="${esc(it.src[1])}" target="_blank" rel="noopener">${esc(it.src[0])} ↗</a>`:`<span style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">${esc(it.src[0])}</span>`}</p>`
+    :`<p>Source still to be added before this idea is published.</p>`;
+  const secs=[["01 / The idea","What does it mean?",it.idea],["02 / In practice","Make it concrete.",it.x],["03 / What to watch for","A common mistake.",it.m],["04 / When it helps","When should you use it?",it.w],["05 / Why it matters","Why keep this thought?",it.y]];
+  const came=st.path.length>1?`<span class="x-came">You came here through ${st.path.slice(0,-1).map(t=>esc(t)).join(" → ")}</span>`:"";
+  return `<article class="card expanded k${it.ci}" data-t="${esc(it.t)}" data-id="${slotId}"${vt} aria-label="${esc(it.t)}, opened">
+   <div class="x-hero">
+    <div class="x-bar">${opts.trail?`<button class="pill back" data-trailback aria-label="Back one step"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back</button>`:`<button class="pill back" data-close aria-label="Back to where you were"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back</button>`}
+     <button class="pill" data-xsave="${esc(it.t)}" aria-pressed="${isS}"><svg viewBox="0 0 24 24" aria-hidden="true">${heartPath}</svg><span>${isS?"Saved":"Save"}</span></button></div>
+    <span class="tag">${CAT[it.c].n}</span>
+    <h2 tabindex="-1" class="x-title">${esc(it.t)}</h2>${it.hook!==it.t?`<p class="x-hook">${esc(it.hook)}</p>`:""}${(()=>{const P=lookParts(it,"");return P.art&&["diagram","widget","stat"].includes(P.v)?`<div class="x-art">${P.art}</div>`:""})()}
+    <div class="x-foot"><p class="sum">${esc(it.s)}</p>${it.src&&it.src[1]?`<a class="visit" href="${esc(it.src[1])}" target="_blank" rel="noopener" aria-label="Visit source: ${esc(it.src[0])} (opens in a new tab)"><span class="v-main"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>Visit source</span></a>`:""}</div>
+    ${came?`<div class="x-actions">${came}</div>`:""}
+   </div>
+   <div class="x-body">
+    <div>${secs.map(s=>`<section class="x-sec"><p class="kicker">${s[0]}</p><h3>${s[1]}</h3><p>${esc(s[2])}</p></section>`).join("")}
+     <section class="x-sec"><p class="kicker">06 / Further reading</p><h3>Explore the source.</h3>${src}</section></div>
+    <aside class="x-aside"><div class="thought"><p class="kicker">A thought to keep</p><p>${esc(it.y||THOUGHT)}</p></div></aside>
+   </div>
+   ${opts.trail?`<div class="x-follow"><h3>Follow the thought</h3>
+    <div class="f-grid">${rel.map(r=>`<button class="f-card k${r.it.ci}" data-follow="${esc(r.it.t)}"><span class="tag">${CAT[r.it.c].n}</span><span class="t">${esc(r.it.t)}</span><span class="s">${esc(r.it.s)}</span><span class="why">${esc(r.why)}</span></button>`).join("")}</div>
+    ${opts.trail?`<div style="margin-top:12px"><button class="f-card random" data-follow="__random" style="min-height:0;width:100%"><span class="t" style="font-size:17px;margin:0">Jump somewhere new</span><span class="s">Leave this thread and start another.</span></button></div>`:""}
+   </div>`:""}
+  </article>`;
+}
+
+// seen observer
+let io=null;
+function observe(root){if(!("IntersectionObserver" in window))return;if(io)io.disconnect();
+  io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)L[st.mode].seen.add(e.target.dataset.id)})},{threshold:.6});
+  root.querySelectorAll(".card:not(.expanded)").forEach(c=>io.observe(c));}
+
+// chips follow what the reader is doing: an open idea shows its neighbours, a search shows where the matches are
+function renderChips(){
+  const el=$("#chips");$("#s-real").textContent=REAL.length+" (real)";
+  const q=st.q.trim();
+  const openNow=st.mode==="trail"||!!st.exp;
+  $(".chips-wrap").hidden=openNow&&!q;
+  if(openNow&&!q){el.innerHTML="";return}
+  if(q){const counts={};lib().forEach(i=>{if(!i.rep&&(!st.board||saved.has(i.t))&&match(i,q)>0)counts[i.c]=(counts[i.c]||0)+1});
+    el.innerHTML=`<button class="chip" data-cat="all" aria-pressed="${st.cat==="all"}">All results</button>`+CATS.filter(c=>counts[c.k]).map((c,n)=>`<button class="chip ctx k${n%6}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}">${c.n}<span class="cnt">${counts[c.k]}</span></button>`).join("");return}
+  el.innerHTML=`<button class="chip" data-cat="all" aria-pressed="${st.cat==="all"}">All</button>`+
+   CATS.map(c=>`<button class="chip c-${c.k}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}"><span class="dot"></span>${c.n}</button>`).join("");
+  $("#s-real").textContent=REAL.length+" (real)";
+}
+// arrows appear only when the chip row overflows; back chip stays pinned, so the left arrow is only for plain rows
+function chipArrows(){const c=$("#chips");if(!c)return;const max=c.scrollWidth-c.clientWidth-2;const pinned=!!c.querySelector("[data-back]");
+  $("#chipR").hidden=!(max>0&&c.scrollLeft<max);$("#chipL").hidden=pinned||!(c.scrollLeft>2)}
+$("#chips").addEventListener("scroll",chipArrows,{passive:true});window.addEventListener("resize",chipArrows);
+$("#chipR").addEventListener("click",()=>{const c=$("#chips");c.scrollBy({left:c.clientWidth*.7,behavior:reduce()?"auto":"smooth"})});
+$("#chipL").addEventListener("click",()=>{const c=$("#chips");c.scrollBy({left:-c.clientWidth*.7,behavior:reduce()?"auto":"smooth"})});
+function render(){
+  // keep the chip row where the reader left it, unless the set of chips itself changed
+  const ck=(st.mode==="wall"&&st.exp?"x"+st.exp:"")+"|"+(st.q.trim()?"q":"");const keepX=$("#chips").scrollLeft;
+  // the hero is for the home view only: hidden while an idea is open (and in Trail, which is always one idea)
+  $(".hero").hidden=!!st.exp||st.mode==="trail";
+  tick();renderChips();$("#chips").scrollLeft=(ck===render.ck)?keepX:0;render.ck=ck;requestAnimationFrame(chipArrows);
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.id==="m-"+st.mode));
+  $("#s-real").setAttribute("aria-pressed",st.scale==="real");$("#s-400").setAttribute("aria-pressed",st.scale==="400");
+  document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.cat===st.cat));
+  $("#qclear").hidden=!st.q;
+  $("#navBoard").textContent=saved.size?`Your Board · ${saved.size}`:"Your Board";
+  const m=$("#main");
+  if(st.mode==="wall")renderWall(m);else if(st.mode==="shelves")renderShelves(m);else renderTrail(m);
+  observe(m);
+}
+function wallList(){
+  const all=filtered();
+  // the opened idea leads the page; the wall below skips it
+  let items=st.exp?all.filter(i=>i.id!==st.exp):all;
+  // below an opened idea, the wall starts with its closest ideas, then its category, then everything else
+  if(st.exp){const lead=st.swap?BY[st.swap]:BYID[st.exp];if(lead){const rel=related(lead).map(r=>r.it.t);
+    const rank=i=>{const r=rel.indexOf(i.t);return r>=0&&!i.rep?r:(i.c===lead.c?10:20)};
+    items=items.map((i,n)=>[i,rank(i),n]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(p=>p[0])}}
+  // a category tab never dead-ends: when its own ideas run out, continue with the closest ideas from other topics
+  st._divAt=null;
+  if(!st.exp&&st.cat!=="all"&&!st.q.trim()&&!st.board&&st.mode==="wall"){
+    const beyond=beyondList(st.cat,items);
+    if(beyond.length){st._divAt=items.length;items=items.concat([{divider:true,id:"beyond-"+st.cat}],beyond)}
+  }
+  return {all,items,showFeat:false,pool:items,shown:items.slice(0,st.shown)};
+}
+// how close is an idea from another topic to the current one? links between ideas first, then what you've read, then topic affinity, then shared words
+const AFFINITY={dt:{ux:2,ps:1,pt:1,me:1},ux:{dt:2,rs:2,me:1},ix:{ps:2,ac:2,ds:1},ac:{ix:2,ds:1},ds:{ix:2,ac:1},ps:{ix:2,dt:1},me:{pt:2,ux:1,dt:1},pt:{me:2,dt:1,rs:1},rs:{ux:2,pt:1},dn:{pt:2,ix:1}};
+function beyondList(cat,inside){
+  const inT=new Set(inside.map(i=>i.t));
+  const words=new Set();inside.forEach(i=>i.hay.forEach(w=>{if(w.length>4)words.add(w)}));
+  const links=t=>{let n=0;(REL[t]||[]).forEach(([x])=>{if(inT.has(x))n++});inside.forEach(i=>(REL[i.t]||[]).forEach(([x])=>{if(x===t)n++}));return n};
+  const readLinks=t=>{let n=0;readSet.forEach(r=>(REL[r]||[]).forEach(([x])=>{if(x===t)n++}));return n};
+  return lib().filter(i=>i.c!==cat&&!i.rep).map((i,n)=>{
+    const shared=i.hay.filter(w=>w.length>4&&words.has(w)).length;
+    const score=links(i.t)*4+readLinks(i.t)*2+((AFFINITY[cat]||{})[i.c]||0)*1.5+Math.min(shared,4)*.5;
+    return [i,score,n]}).sort((a,b)=>b[1]-a[1]||a[2]-b[2]).map(p=>p[0]);
+}
+const leadHTML=()=>st.exp?cardHTML(st.swap?BY[st.swap]:BYID[st.exp],{expanded:true,slotId:st.exp}):"";
+const wallCard=it=>{
+  if(it.divider)return `<div class="more-head beyond"><h2>Similar thoughts beyond ${esc(CAT[st.cat].n)}</h2><p class="why">That’s every ${esc(CAT[st.cat].n)} idea. These are the closest ones from other topics.</p></div>`;
+  if(st.exp===it.id){const show=st.swap?BY[st.swap]:it;return cardHTML(show,{expanded:true,slotId:it.id})}
+  return cardHTML(it);
+};
+function loadText(shownN,total){
+  if(st._divAt!=null){if(shownN>st._divAt)shownN--;total--;if(shownN>=total)return `You’ve seen every idea near ${CAT[st.cat].n}. Try Surprise me for a new path.`}
+  if(shownN<total)return `${shownN} of ${total} loaded. More load as you scroll.`;
+  return total>12?`That’s all ${total}${st.cat!=="all"?" in "+CAT[st.cat].n:""}.`:"";
+}
+function renderWall(m){
+  const {items,shown}=wallList();
+  const searching=st.q.trim()&&!st.board&&st.mode==="wall"&&!st.exp;
+  if(!items.length&&!st.exp){if(searching){$("#statusText").textContent="";const cw=document.querySelector(".chips-wrap");if(cw)cw.hidden=true;m.innerHTML=freshSection(0);lazyFresh(0);return}return renderZero(m)}
+  $("#statusText").textContent=st.board?`Your Board · ${items.length+(st.exp?1:0)} saved`:(st.q?`${items.length} ideas match “${st.q}”`:(st.cat==="all"?"":CAT[st.cat].why));
+  m.innerHTML=`<div class="grid" id="wallGrid">${st.pending==="lead"?leadSkel():leadHTML()}${st.exp?moreHead():""}${st.pending?skelHTML(12):shown.map(wallCard).join("")}</div><div class="loadline" id="loadline">${st.pending?"":loadText(shown.length,items.length)}</div><div id="sentinel"></div>`;
+  const res=resurfaceHTML();if(res)m.insertAdjacentHTML("afterbegin",res);
+  if(searching){m.insertAdjacentHTML("beforeend",freshSection(items.length));lazyFresh(items.length)}
+  arrange($("#wallGrid"));
+  watchSentinel();
+}
+// masonry: each card spans exactly its own height in 1px rows, plus a fixed 16px gap
+let ro=null;
+function spanFor(card){const gap=16;card.style.gridRowEnd="span "+Math.max(1,Math.ceil(card.getBoundingClientRect().height+gap))}
+function arrange(grid){
+  if(!grid)return;
+  const cards=[...grid.children];
+  cards.forEach(spanFor);
+  if("ResizeObserver" in window){if(ro)ro.disconnect();ro=new ResizeObserver(es=>es.forEach(e=>spanFor(e.target)));cards.forEach(c=>ro.observe(c))}
+}
+// lazy load: next 24 append when the reader nears the end
+let sio=null;
+function watchSentinel(){
+  if(sio)sio.disconnect();
+  const s=$("#sentinel");if(!s||!("IntersectionObserver" in window))return;
+  sio=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))appendBatch()},{rootMargin:"150px 0px"});
+  sio.observe(s);
+}
+let loading=false;
+const start0=()=>Math.round(st.shown/24);
+function appendBatch(){
+  if(st.mode!=="wall"||loading||st.pending)return;
+  const {items}=wallList();if(st.shown>=items.length)return;
+  const grid=$("#wallGrid");if(!grid)return;
+  loading=true;
+  // first two batches arrive at once; after that each batch takes a moment, like a real fetch
+  const batchNo=Math.round((st.shown-24)/24)+1;
+  const wait=reduce()?0:(batchNo<=2?0:2600);
+  // placeholder cards while the next batch arrives
+  const cols=getComputedStyle(grid).gridTemplateColumns.split(" ").length;
+  // two to three rows of plain grey placeholders in mixed heights, like the cards they stand in for
+  const H=[230,300,262,214,286,248,320,236,270];
+  grid.insertAdjacentHTML("beforeend",Array.from({length:cols*3},(_,i)=>`<div class="skel" aria-hidden="true" style="height:${H[(i+start0())%H.length]}px;animation-delay:${(i%cols)*120}ms"></div>`).join(""));
+  grid.querySelectorAll(".skel").forEach(spanFor);
+  $("#loadline").textContent=wait?"":"Loading more ideas…";
+  if(wait)$("#curate").classList.add("on");
+  setTimeout(()=>{
+    if(!surprising)$("#curate").classList.remove("on");
+    if(st.mode!=="wall"||grid!==$("#wallGrid")){loading=false;return}
+    fadeOutSkels(grid).then(()=>{
+    loading=false;
+    const start=st.shown;st.shown=Math.min(items.length,st.shown+24);L.wall.more++;
+    revealCards(grid,items.slice(start,st.shown).map(wallCard).join(""),start+(st.exp?2:0));
+    $("#loadline").innerHTML=loadText(st.shown,items.length);
+    // if the sentinel is still on screen, keep loading
+    const s=$("#sentinel");if(s&&s.getBoundingClientRect().top<innerHeight+150)appendBatch();
+    });
+  },wait);
+}
+function renderZero(m){
+  if(st.board&&!st.q.trim()){$("#statusText").textContent="";m.innerHTML=`<div class="zero"><h2>Nothing saved yet</h2><p class="sub">Tap the heart on any idea, or Save on an open one, to keep it here. <button class="linkbtn" id="zExplore">Explore ideas</button></p></div>`;return}
+  const q=st.q;L[st.mode].zero++;if(!zeroQueries.includes(q))zeroQueries.push(q);
+  const qt=toks(q);const near=REAL.map(i=>[i,qt.reduce((s,w)=>s+(i.hay.some(h=>h.startsWith(w.slice(0,3)))?1:0),0)]).filter(p=>p[1]>0).sort((a,b)=>b[1]-a[1]).map(p=>p[0]).slice(0,3);
+  const sug=near.length?near:START.slice(0,3).map(t=>BY[t]);
+  $("#statusText").textContent="";
+  m.innerHTML=`<div class="zero"><h2>No ideas match “${esc(q)}” yet</h2>
+  <p class="sub">${st.cat!=="all"?`You’re searching inside ${CAT[st.cat].n}. <button class="linkbtn" id="zAll">Search all categories</button> · `:""}<button class="linkbtn" id="zClear">Clear search</button> · <button class="linkbtn" id="zSuggest">Suggest “${esc(q)}” as a topic</button></p>
+  <div class="block-label">${near.length?"Closest ideas":"Good places to start"}</div>
+  <div class="grid plain">${sug.map(i=>cardHTML(i)).join("")}</div></div>`;
+}
+function renderShelves(m){
+  const q=st.q.trim();
+  if(q&&!filtered().length)return renderZero(m);
+  $("#statusText").textContent=q?`Showing shelves with matches for “${q}”`:"";
+  const rows=[];
+  if(!q&&st.cat==="all")rows.push({k:"start",title:"Start here",why:"Ten ideas that are quick to get and useful right away.",items:START.map(t=>BY[t]),cls:"c-me",all:false});
+  CATS.forEach(c=>{if(st.cat!=="all"&&st.cat!==c.k)return;const items=filtered().filter(i=>i.c===c.k);if(!items.length)return;rows.push({k:c.k,title:c.n,why:c.why,items:items.slice(0,10),total:items.length,cls:"c-"+c.k,all:items.length>10})});
+  m.innerHTML=rows.map(r=>{
+    const openHere=st.expShelf===r.k&&st.exp;
+    const expIt=openHere?(st.swap?BY[st.swap]:BYID[st.exp]):null;
+    return `<section class="shelf ${r.cls}" data-shelf="${r.k}"><div class="shelf-head"><div><h2><span class="dot"></span>${r.title}</h2><p class="why">${r.why}</p></div>
+   <div class="shelf-nav">${r.all?`<button class="seeall" data-see="${r.k}">See all ${r.total}</button>`:""}<button class="round" data-scroll="-1" aria-label="Scroll ${r.title} left">‹</button><button class="round" data-scroll="1" aria-label="Scroll ${r.title} right">›</button></div></div>
+   <div class="track">${r.items.map(i=>cardHTML(i,{open:openHere&&i.id===st.exp})).join("")}</div>
+   ${expIt?`<div class="shelf-open">${expandedHTML(expIt,{slotId:st.exp})}</div>`:""}</section>`}).join("");
+}
+function renderTrail(m){
+  if(st.trailIdx<0){st.trail=[today.t];st.trailIdx=0}
+  const it=BY[st.trail[st.trailIdx]];readSet.add(it.t);
+  $("#statusText").textContent=`Step ${st.trailIdx+1} of your trail. Search and chips pick a new starting point.`;
+  st.path=[];
+  m.innerHTML=`<div class="trail-crumbs" aria-label="Your trail">${st.trail.map((t,i)=>`<button data-crumb="${i}" aria-current="${i===st.trailIdx}">${esc(t)}</button>`).join('<span aria-hidden="true">→</span>')}</div>
+  <div class="grid plain">${expandedHTML(it,{trail:true})}</div>`;
+  L.trail.deepest=Math.max(L.trail.deepest,st.trail.length);
+}
+
+// expand / collapse
+let returnFocusId=null;
+// open = jump straight to the top (no long scroll), show the idea, grey placeholders below, then the wall fills in
+function skelHTML(n){const H=[230,300,262,214,286,248,320,236,270];return Array.from({length:n},(_,i)=>`<div class="skel" aria-hidden="true" style="height:${H[i%H.length]}px;animation-delay:${(i%3)*120}ms"></div>`).join("")}
+// staged like a real fetch: 1) grey shapes  2) the idea fades in  3) related cards arrive one by one
+const leadSkel=()=>'<div class="skel lead-skel" aria-hidden="true"></div>';
+const moreHead=()=>{const it=st.swap?BY[st.swap]:BYID[st.exp];if(!it)return "";
+  // name the topic only when it is true: at least 2 of the 3 related ideas share the open idea's category
+  const same=related(it).filter(r=>r.it.c===it.c).length;
+  const n=CAT[it.c].n, topic=/^UX/.test(n)?n:n[0].toLowerCase()+n.slice(1);
+  return `<div class="more-head"><h2>${same>=2?"More thoughts on "+topic:"More thoughts"}</h2></div>`};
+function fadeOutSkels(g){return new Promise(res=>{const s=g.querySelectorAll(".skel");if(!s.length||reduce()){s.forEach(x=>x.remove());return res()}s.forEach(x=>x.classList.add("out"));setTimeout(()=>{s.forEach(x=>x.remove());res()},280)})}
+function revealCards(g,html,from){
+  g.insertAdjacentHTML("beforeend",html);
+  [...g.children].slice(from).forEach((c,i)=>{c.classList.add("enter");c.style.animationDelay=Math.min(i,14)*70+"ms";c.addEventListener("animationend",()=>{c.classList.remove("enter");c.style.animationDelay=""},{once:true});spanFor(c);if(ro)ro.observe(c);if(io)io.observe(c)});
+}
+// every view change loads: grey shapes in the shape of the view, the glow, then the real view fades in
+function viewSkel(mode){
+  if(mode==="shelves")return [0,1].map(()=>`<section class="shelf"><div class="skel-line" style="width:220px;height:22px"></div><div class="skel-line" style="width:320px;height:14px;margin:10px 0 16px"></div><div class="track">${[230,300,262,214].map((h,i)=>`<div class="skel" style="height:${h}px;animation-delay:${i*120}ms"></div>`).join("")}</div></section>`).join("");
+  return `<div class="trail-crumbs"><span class="chip-skel" style="width:150px;height:26px"></span></div><div class="grid plain"><div class="skel lead-skel"></div></div>`;
+}
+function loadView(label){
+  clearTimeout(loadView.t);
+  if(st.mode==="wall")return curateTo(label);
+  clearTimeout(curateTo.t);render();if(reduce())return;
+  const m=$("#main");m.innerHTML=viewSkel(st.mode);
+  const head=$("header.top").offsetHeight+$(".controls").offsetHeight;const top=Math.max(0,m.getBoundingClientRect().top+scrollY-head);if(scrollY>top)window.scrollTo({top,behavior:"auto"});
+  const cap=$("#curate span").lastChild;cap.textContent=`Curating ${label}…`;$("#curate").classList.add("on");
+  loadView.t=setTimeout(()=>{$("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";
+    if(st.mode==="wall")return;render();m.classList.remove("fadein");void m.offsetWidth;m.classList.add("fadein")},1400);
+}
+// picking a chip curates like a real fetch: grey shapes and the glow first, then the cards arrive one by one
+function curateTo(label){
+  clearTimeout(curateTo.t);clearTimeout(loadView.t);clearTimeout(openLead.t);clearTimeout(openLead.t2);
+  const slow=!reduce();st.pending=slow?"below":false;render();
+  const g=$("#wallGrid");if(g){const head=$("header.top").offsetHeight+$(".controls").offsetHeight;const top=Math.max(0,g.getBoundingClientRect().top+scrollY-head-16);if(scrollY>top)window.scrollTo({top,behavior:"auto"})}
+  if(!slow)return;
+  const cap=$("#curate span").lastChild;cap.textContent=`Curating ${label}…`;$("#curate").classList.add("on");
+  curateTo.t=setTimeout(async()=>{
+    $("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";
+    const g2=$("#wallGrid");if(!g2||st.mode!=="wall"||st.exp||st.pending!=="below")return;
+    await fadeOutSkels(g2);st.pending=false;
+    const {items,shown}=wallList();revealCards(g2,shown.map(wallCard).join(""),0);
+    $("#loadline").innerHTML=loadText(shown.length,items.length);
+  },1600);
+}
+function openLead(id,shelfKey){
+  clearTimeout(curateTo.t);
+  st.exp=id;st.swap=null;st.expShelf=shelfKey||null;clearTimeout(openLead.t);clearTimeout(openLead.t2);
+  if(st.mode!=="wall"){st.pending=false;render();focusTitle(true);return}
+  const slow=!reduce();
+  st.shown=24;st.pending=slow?"lead":"below";render();
+  const g0=$("#wallGrid");if(g0){const head=$("header.top").offsetHeight+$(".controls").offsetHeight;window.scrollTo({top:Math.max(0,g0.getBoundingClientRect().top+scrollY-head-16),behavior:"auto"})}
+  openLead.t=setTimeout(()=>{
+    const g=$("#wallGrid");if(!g||st.mode!=="wall")return;
+    st.pending="below";
+    const first=g.firstElementChild;if(first&&first.classList.contains("lead-skel")){first.insertAdjacentHTML("afterend",leadHTML());first.remove();spanFor(g.firstElementChild);if(ro)ro.observe(g.firstElementChild)}
+    const h=g.querySelector(".x-title");h&&h.focus({preventScroll:true});
+    openLead.t2=setTimeout(async()=>{
+      const g2=$("#wallGrid");if(!g2||st.mode!=="wall"||st.pending!=="below")return;
+      await fadeOutSkels(g2);st.pending=false;
+      const {items,shown}=wallList();revealCards(g2,shown.map(wallCard).join(""),2);renderChips();requestAnimationFrame(chipArrows);
+      $("#loadline").innerHTML=loadText(shown.length,items.length);
+    },slow?1500:0);
+  },slow?650:0);
+}
+function focusTitle(instant){requestAnimationFrame(()=>{const x=document.querySelector(".card.expanded");if(!x)return;
+  const head=$("header.top").offsetHeight+$(".controls").offsetHeight;
+  window.scrollTo({top:Math.max(0,x.getBoundingClientRect().top+scrollY-head-16),behavior:(instant===true||reduce())?"auto":"smooth"});
+  const h=x.querySelector(".x-title");h&&h.focus({preventScroll:true})})}
+function expand(id,shelfKey){
+  const it=BYID[id];if(!it)return;
+  const chained=!!st.exp&&st.mode==="wall";
+  if(!chained)returnFocusId=id;readSet.add(it.t);L[st.mode].opened++;if(chained)L[st.mode].hops++;
+  st.path=chained?[...st.path,it.t]:[it.t];L[st.mode].deepest=Math.max(L[st.mode].deepest,st.path.length);
+  openLead(id,shelfKey);
+}
+function collapse(){
+  if(!st.exp)return;const back=returnFocusId;clearTimeout(openLead.t);clearTimeout(openLead.t2);st.pending=false;
+  animate(()=>{const idx=filtered().findIndex(i=>i.id===back);if(idx>=st.shown)st.shown=Math.ceil((idx+1)/24)*24;st.exp=null;st.swap=null;st.expShelf=null;st.path=[];render()}).then(()=>requestAnimationFrame(()=>{const c=document.querySelector(`.card[data-id="${back}"] .open`);if(c){c.closest(".card").scrollIntoView({block:"center",behavior:"auto"});c.focus({preventScroll:true})}}));
+}
+function follow(t){
+  const target=BY[t];if(!target)return;
+  readSet.add(t);L[st.mode].opened++;L[st.mode].hops++;
+  st.path=[...st.path,t];L[st.mode].deepest=Math.max(L[st.mode].deepest,st.path.length);
+  if(st.mode==="wall"){
+    returnFocusId=target.id;openLead(target.id,null);return;
+  }else{st.swap=t;render()}
+  focusTitle();
+}
+function toggleSave(t){if(saved.has(t)){saved.delete(t);toast("Removed from Your Board")}else{saved.add(t);L[st.mode].saves++;toast("Saved to Your Board")}persist()}
+
+// events
+document.addEventListener("click",e=>{
+  const s=e.target.closest(".card .save");
+  if(s){e.stopPropagation();const t=s.closest(".card").dataset.t;toggleSave(t);s.setAttribute("aria-pressed",saved.has(t));$("#navBoard").textContent=saved.size?`Your Board · ${saved.size}`:"Your Board";return}
+  const o=e.target.closest(".card .open");
+  if(o){const card=o.closest(".card");const sh=card.closest("[data-shelf]");
+    if(st.exp===card.dataset.id&&!st.swap){collapse();return}
+    expand(card.dataset.id,sh?sh.dataset.shelf:null);return}
+  if(e.target.closest("[data-trailback]")){trailBack();return}
+  if(e.target.closest("[data-close]")){collapse();return}
+  const xs=e.target.closest("[data-xsave]");if(xs){const t=xs.dataset.xsave;toggleSave(t);const on=saved.has(t);
+    document.querySelectorAll("[data-xsave]").forEach(b=>{if(b.dataset.xsave!==t)return;b.setAttribute("aria-pressed",on);b.lastChild.textContent=on?(b.dataset.on||"Saved"):(b.dataset.off||"Save")});
+    document.querySelectorAll(".card:not(.expanded)").forEach(c=>{if(c.dataset.t===t){const h=c.querySelector(".save");h&&h.setAttribute("aria-pressed",on)}});$("#navBoard").textContent=saved.size?`Your Board · ${saved.size}`:"Your Board";return}
+  const fl=e.target.closest("[data-follow]");
+  if(fl){let t=fl.dataset.follow;
+    if(st.mode==="trail"){if(t==="__random"){t=REAL[Math.floor(Math.random()*REAL.length)].t;L.trail.surprise++}else L.trail.hops++;
+      st.trail=st.trail.slice(0,st.trailIdx+1);st.trail.push(t);st.trailIdx++;L.trail.opened++;render();$("#main").scrollIntoView({block:"start"});return}
+    follow(t);return}
+  if(e.target.closest("[data-back]")){collapse();return}
+  const op=e.target.closest("[data-open]");if(op){expand(op.dataset.open,null);return}
+  const ch=e.target.closest(".chip[data-cat]");if(ch){st.shuffle=0;st.cat=ch.dataset.cat;st.shown=24;st.exp=null;st.swap=null;if(st.mode==="trail"){const f=filtered();if(f.length){st.trail=[f[0].t];st.trailIdx=0}}
+    loadView(st.cat==="all"?"all ideas":CAT[st.cat].n+" ideas");return}
+  const sc=e.target.closest("[data-scroll]");if(sc){const tr=sc.closest(".shelf").querySelector(".track");tr.scrollBy({left:tr.clientWidth*.9*+sc.dataset.scroll,behavior:"smooth"});return}
+  const sa=e.target.closest("[data-see]");if(sa){tick();st.mode="wall";st.cat=sa.dataset.see;st.shown=24;st.exp=null;st.swap=null;modeStart=performance.now();render();window.scrollTo({top:0});return}
+  const cr=e.target.closest("[data-crumb]");if(cr){st.trailIdx=+cr.dataset.crumb;render();return}
+  if(e.target.id==="moreBtn"){st.shown+=24;L.wall.more++;render();return}
+  if(e.target.id==="navBoard"||e.target.id==="navExplore"||e.target.id==="zExplore"){
+    tick();st.board=e.target.id==="navBoard";st.mode="wall";st.exp=null;st.swap=null;st.pending=false;st.cat="all";st.q="";$("#q").value="";st.shown=24;
+    $("#navBoard").setAttribute("aria-current",st.board?"page":"false");$("#navExplore").setAttribute("aria-current",st.board?"false":"page");
+    modeStart=performance.now();window.scrollTo({top:0});loadView(st.board?"Your Board":"all ideas");return}
+  if(e.target.id==="zClear"){st.q="";$("#q").value="";render();return}
+  if(e.target.id==="zAll"){st.cat="all";render();return}
+  if(e.target.id==="zSuggest"){if(!suggested.includes(st.q))suggested.push(st.q);toast("Noted. On the live site this would go to the topic list.");return}
+});
+let qTimer;
+const headH=()=>$("header.top").offsetHeight+$(".controls").offsetHeight;
+const pastHero=()=>$("#main").getBoundingClientRect().top<=headH()+2;
+function stayPastHero(was){if(!was)return;const top=$("#main").getBoundingClientRect().top+scrollY-headH();window.scrollTo({top:Math.max(0,top),behavior:"auto"})}
+// search commits on Enter; typing only shows library suggestions (free, instant)
+function commitSearch(v){st.q=v;st.shown=24;st.exp=null;st.swap=null;hideSug();const was=pastHero();if(st.q.trim())L[st.mode].searches++;if(st.mode==="trail"&&st.q.trim()){const f=filtered();if(f.length){st.trail=[f[0].t];st.trailIdx=0}}render();stayPastHero(was)}
+function hideSug(){const b=$("#qsug");if(b){b.hidden=true;b.innerHTML=""}$("#q").setAttribute("aria-expanded","false")}
+let sugIdx=-1;
+function showSug(v){const b=$("#qsug");const w=toks(v);if(!w.length){hideSug();return}
+  const list=REAL.map(i=>[i,match(i,v)]).filter(p=>p[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,6).map(p=>p[0]);sugIdx=-1;
+  b.innerHTML=(list.length?list.map((i,n)=>`<button type="button" role="option" id="sug${n}" data-sug="${i.id}"><b>${esc(i.hook||i.t)}</b><span>${esc(i.t)} · ${esc(CAT[i.c].n)}</span></button>`).join(""):"")+`<div class="sug-enter">Press <kbd>Enter</kbd> to search the library and fresh research for “${esc(v)}”</div>`;
+  b.hidden=false;$("#q").setAttribute("aria-expanded","true")}
+$("#q").addEventListener("input",e=>{const v=e.target.value;$("#qclear").hidden=!v;if(!v.trim()){commitSearch("");return}showSug(v)});
+$("#q").addEventListener("keydown",e=>{const b=$("#qsug");const opts=b?[...b.querySelectorAll("[data-sug]")]:[];
+  if(e.key==="ArrowDown"&&opts.length){e.preventDefault();sugIdx=(sugIdx+1)%opts.length;opts.forEach((o,i)=>o.classList.toggle("on",i===sugIdx));$("#q").setAttribute("aria-activedescendant",opts[sugIdx].id)}
+  else if(e.key==="ArrowUp"&&opts.length){e.preventDefault();sugIdx=(sugIdx-1+opts.length)%opts.length;opts.forEach((o,i)=>o.classList.toggle("on",i===sugIdx));$("#q").setAttribute("aria-activedescendant",opts[sugIdx].id)}
+  else if(e.key==="Enter"){e.preventDefault();if(sugIdx>=0&&opts[sugIdx]){const id=opts[sugIdx].dataset.sug;hideSug();expand(id,null)}else commitSearch(e.target.value)}
+  else if(e.key==="Escape"){hideSug()}});
+document.addEventListener("click",e=>{const o=e.target.closest("[data-sug]");if(o){hideSug();expand(o.dataset.sug,null);return}if(!e.target.closest(".search"))hideSug()});
+$("#qclear").addEventListener("click",()=>{const was=pastHero();st.q="";$("#q").value="";render();stayPastHero(was);$("#q").focus({preventScroll:true})});
+MODES.forEach(md=>$("#m-"+md).addEventListener("click",e=>{if(e.detail>0)e.currentTarget.blur();if(st.mode===md&&!st.exp)return;tick();st.mode=md;st.shown=24;st.exp=null;st.swap=null;st.expShelf=null;st.pending=false;modeStart=performance.now();
+  loadView(md==="wall"?"the wall":md==="shelves"?"shelves":"your trail")}));
+$("#s-real").addEventListener("click",()=>{st.scale="real";st.shown=24;st.exp=null;renderChips();render()});
+$("#s-400").addEventListener("click",()=>{st.scale="400";st.shown=24;st.exp=null;renderChips();render()});
+// Surprise me takes a moment: the button and bottom glow show it looking, then the idea opens
+let surprising=false;
+$("#surprise").addEventListener("click",()=>{
+  if(surprising)return;surprising=true;
+  const btn=$("#surprise"),label=btn.lastChild,old=label.textContent,cap=$("#curate span").lastChild;
+  btn.classList.add("busy");btn.setAttribute("aria-busy","true");label.textContent=" Finding a surprise…";
+  if(st.mode==="wall"){doSurprise();window.scrollTo({top:0,behavior:"auto"});setTimeout(()=>{surprising=false;btn.classList.remove("busy");btn.removeAttribute("aria-busy");label.textContent=old},1600);return}
+  cap.textContent="Looking for something you haven’t seen yet…";$("#curate").classList.add("on");
+  setTimeout(()=>{surprising=false;btn.classList.remove("busy");btn.removeAttribute("aria-busy");label.textContent=old;
+    $("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";doSurprise()},reduce()?0:1800);
+});
+function doSurprise(){const unread=REAL.filter(i=>!readSet.has(i.t));const pool=unread.length?unread:REAL;const it=pool[Math.floor(Math.random()*pool.length)];L[st.mode].surprise++;
+  if(st.mode==="trail"){st.trail=st.trail.slice(0,st.trailIdx+1);st.trail.push(it.t);st.trailIdx++;L.trail.opened++;render();return}
+  if(st.mode==="wall"){st.cat="all";st.q="";$("#q").value="";st.board=false;st.exp=null;st.swap=null;st.shown=24;st.shuffle=Math.random();curateTo("something new");return}
+  const row=CATS.find(c=>c.k===it.c);expand(it.id,row.k)}
+function trailBack(){if(st.trailIdx>0){st.trailIdx--;render();$("#main").scrollIntoView({block:"start"})}else{tick();st.mode="wall";st.shown=24;modeStart=performance.now();loadView("the wall")}}
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(st.mode==="trail"&&!st.q.trim())trailBack();else if(st.exp)collapse()});
+
+// log
+const fmt=ms=>{const s=Math.round(ms/1000);return s<60?s+"s":Math.floor(s/60)+"m "+(s%60)+"s"};
+function logRows(){tick();return [["Time spent",m=>fmt(L[m].time)],["Cards seen",m=>L[m].seen.size],["Ideas opened",m=>L[m].opened],["Next idea from an open one",m=>L[m].hops],["Longest chain",m=>L[m].deepest],["Saves",m=>L[m].saves],["Searches",m=>L[m].searches],["Zero results",m=>L[m].zero],["Surprise me",m=>L[m].surprise],["Batches lazy-loaded",m=>m==="wall"?L.wall.more:"–"]]}
+function renderLog(){const rows=logRows();$("#logTable").innerHTML=`<table><thead><tr><th></th><th>Wall</th><th>Trail</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r[0]}</td>${MODES.map(m=>`<td>${r[1](m)}</td>`).join("")}</tr>`).join("")}</tbody></table>`}
+$("#logBtn").addEventListener("click",()=>{const p=$("#log");p.hidden=!p.hidden;$("#logBtn").setAttribute("aria-expanded",!p.hidden);if(!p.hidden)renderLog()});
+setInterval(()=>{if(!$("#log").hidden)renderLog()},2000);
+$("#logCopy").addEventListener("click",()=>{const rows=logRows();const txt="Curiofinds browse lab, "+new Date().toLocaleString()+"\nLibrary: "+(st.scale==="real"?REAL.length:400)+" ideas\n\n"+rows.map(r=>r[0]+": "+MODES.map(m=>m+" "+r[1](m)).join(", ")).join("\n")+"\n\nZero-result searches: "+(zeroQueries.join(", ")||"none")+"\nSuggested topics: "+(suggested.join(", ")||"none");
+  const out=$("#logOut");out.textContent=txt;out.hidden=false;
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast("Summary copied"),()=>selectOut(out))}else selectOut(out)});
+function selectOut(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Select and copy the text below")}
+$("#logReset").addEventListener("click",()=>{L=Object.fromEntries(MODES.map(m=>[m,blank()]));zeroQueries=[];suggested=[];modeStart=performance.now();$("#logOut").hidden=true;renderLog();toast("Log reset")});
+
+
+// card look switch + peek
+(function(){
+  $("#gearBtn").addEventListener("click",()=>{const L=$("#looks");L.hidden=!L.hidden;$("#gearBtn").setAttribute("aria-expanded",String(!L.hidden))});
+  document.addEventListener("click",e=>{if(!e.target.closest("#looksWrap")&&!$("#looks").hidden){$("#looks").hidden=true;$("#gearBtn").setAttribute("aria-expanded","false")}});
+
+  const chk=$("#peekChk"),btn=$("#lookBtn"),panel=$("#lookPanel"),grid=$("#lookGrid");chk.checked=st.peek;
+  const NAMES={calm:"Calm",quote:"Quote",stat:"Big word",poster:"Dark poster",highlight:"Highlighter",index:"Index no.",diagram:"Diagram",widget:"Widget",note:"Research note",split:"Split block",outline:"Outline",gradient:"Gradient",ticket:"Ticket",condensed:"Condensed",sticker:"Sticker"};
+  grid.innerHTML=LOOKS.map(v=>`<label><input type="checkbox" value="${v}">${NAMES[v]}</label>`).join("");
+  const sync=()=>{grid.querySelectorAll("input").forEach(i=>i.checked=st.picked.has(i.value));btn.textContent=`Styles · ${st.picked.size===LOOKS.length?"all":st.picked.size}`};
+  const save=()=>{try{localStorage.setItem("cf-lab:picked",JSON.stringify([...st.picked]))}catch(e){};sync();render()};
+  const modeSync=()=>{document.querySelectorAll('input[name="lookMode"]').forEach(r=>r.checked=r.value===st.lookMode);$("#lookCustom").hidden=st.lookMode!=="custom";$("#lookLegend").hidden=st.lookMode!=="topic";
+    if(st.lookMode==="topic")btn.textContent="Styles · by topic"};
+  const STYLE_NAME={quote:"Quote",diagram:"Diagram",ticket:"Evidence ticket",note:"Research note",widget:"Product widget"};
+  $("#lookLegend").innerHTML=Object.keys(KIND_LOOK).map(k=>`<div><b>${KIND_NAME[k]}</b><span>${STYLE_NAME[KIND_LOOK[k]]}${k==="finding"?" (big number if it has one)":""}</span></div>`).join("");
+  document.querySelectorAll('input[name="lookMode"]').forEach(r=>r.addEventListener("change",()=>{st.lookMode=r.value;try{localStorage.setItem("cf-lab:lookMode",st.lookMode)}catch(e){};sync();modeSync();render()}));
+  sync();modeSync();
+  grid.addEventListener("change",e=>{const v=e.target.value;if(e.target.checked)st.picked.add(v);else st.picked.delete(v);save()});
+  panel.querySelector(".lp-head").addEventListener("click",e=>{const a=e.target.dataset.all;if(a==null)return;st.picked=a==="1"?new Set(LOOKS):new Set(["calm"]);save()});
+  btn.addEventListener("click",()=>{const o=panel.hidden;panel.hidden=!o;btn.setAttribute("aria-expanded",o)});
+  document.addEventListener("click",e=>{if(!panel.hidden&&!e.target.closest("#looksWrap")){panel.hidden=true;btn.setAttribute("aria-expanded","false")}});
+  chk.addEventListener("change",()=>{st.peek=chk.checked;try{localStorage.setItem("cf-lab:peek",st.peek?"on":"off")}catch(e){};hidePeek()});
+  const pk=$("#peek");let timer=null,cur=null;
+  function hidePeek(){clearTimeout(timer);timer=null;cur=null;pk.classList.remove("on")}
+  window.hidePeek=hidePeek;
+  function show(card){
+    const it=BYID[card.dataset.id]||BY[card.dataset.t];if(!it)return;
+    pk.innerHTML=`<div class="pk">${esc(CAT[it.c].n)}</div><p>${esc(it.idea)}</p><h4>Make it concrete.</h4><p>${esc(it.x)}</p>`;
+    const r=card.getBoundingClientRect(),w=Math.min(340,innerWidth-32);
+    let x=r.right+12;if(x+w>innerWidth-16)x=r.left-w-12;if(x<16)x=Math.max(16,Math.min(innerWidth-w-16,r.left+24));
+    pk.style.left=x+"px";pk.style.top="0px";pk.classList.add("on");
+    const h=pk.offsetHeight;let y=Math.max(150,Math.min(r.top,innerHeight-h-16));pk.style.top=y+"px";
+  }
+  document.addEventListener("mouseover",e=>{
+    if(!st.peek)return;const card=e.target.closest(".card:not(.expanded)");
+    if(!card||e.target.closest(".save")){if(!card)hidePeek();return}
+    if(card===cur)return;hidePeek();cur=card;timer=setTimeout(()=>show(card),400);
+  });
+  document.addEventListener("focusin",e=>{if(!st.peek)return;const card=e.target.closest&&e.target.closest(".card:not(.expanded)");if(card&&e.target.classList.contains("open")){hidePeek();cur=card;timer=setTimeout(()=>show(card),400)}});
+  document.addEventListener("scroll",hidePeek,{passive:true});document.addEventListener("click",hidePeek,true);document.addEventListener("keydown",e=>{if(e.key!=="Tab")hidePeek()});
+})();
+
+renderChips();render();
+})();
+
+</script>
+
+<style id="embed-demo">
+/* on the portfolio: the lab's own tools stay out of the way */
+#logBtn,#log,#looksWrap{display:none !important}
+#dcur{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;width:22px;height:22px;opacity:0;transition:opacity .3s ease}
+#dcur.in{opacity:1}
+#dcur svg{display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));transition:transform .12s ease}
+#dcur.down svg{transform:scale(.86)}
+</style>
+<script>
+/* the loop: a cursor browses the wall by itself until a real hand takes over.
+   filter by a topic, open an idea, go back, try Trail, ask for a surprise, then start again */
+(function(){
+  document.documentElement.setAttribute('data-theme','light');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cur=document.createElement('div'); cur.id='dcur';
+  cur.innerHTML='<svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 2l14.5 9.2-6.6 1.3 3.9 7-2.6 1.4-3.9-7.1L3.4 18z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+  document.body.appendChild(cur);
+  var token=0, running=false, fx=40, fy=40, idle=null, inside=false;
+  function Stop(){}
+  var wait=function(ms,t){return new Promise(function(res,rej){setTimeout(function(){t===token?res():rej(new Stop())},ms)})};
+  var ease=function(k){return k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2};
+  function place(x,y){fx=x;fy=y;cur.style.transform='translate('+(x-3)+'px,'+(y-2)+'px)'}
+  function glide(x,y,ms,t){var x0=fx,y0=fy,t0=performance.now();return new Promise(function(res,rej){(function step(now){if(t!==token)return rej(new Stop());var k=Math.min(1,(now-t0)/ms),e=ease(k);place(x0+(x-x0)*e,y0+(y-y0)*e);k<1?requestAnimationFrame(step):res()})(performance.now())})}
+  function mid(el){var r=el.getBoundingClientRect();return [r.left+Math.min(r.width/2,60),r.top+r.height/2]}
+  function q(s){return document.querySelector(s)}
+  function scrollTo2(y,t){scrollTo({top:y,behavior:'smooth'});return wait(700,t)}
+  async function show(el,t){var r=el.getBoundingClientRect();if(r.top<70||r.bottom>innerHeight-20){await scrollTo2(scrollY+r.top-120,t)}}
+  async function tap(sel,t,ms){var el=typeof sel==='string'?q(sel):sel;if(!el)return;await show(el,t);var m=mid(el);await glide(m[0],m[1],ms||900,t);await wait(250,t);cur.classList.add('down');await wait(130,t);cur.classList.remove('down');el.click();}
+  function reset(){var w=q('#m-wall');if(w&&!w.classList.contains('on')&&w.getAttribute('aria-pressed')!=='true')w.click();var b=q('.card.expanded .back');if(b)b.click();var a=q('.chip[data-cat=all]');if(a)a.click();scrollTo(0,0)}
+  async function once(t){
+    place(innerWidth*.62,innerHeight*.8); cur.classList.add('in');
+    await wait(1600,t);
+    await tap('.chip[data-cat=ux]',t,1100); await wait(2600,t);             // a topic: UX research
+    await tap('.card .open',t,1000); await wait(1800,t);                    // open one idea in place
+    await scrollTo2(scrollY+340,t); await wait(2200,t);
+    await scrollTo2(0,t);
+    await tap('.card.expanded .back',t,900); await wait(1400,t);           // and back to the wall
+    await tap('#m-trail',t,1000); await wait(3200,t);                       // Trail: one step at a time
+    await tap('#surprise',t,900); await wait(3600,t);                       // Surprise me
+    await scrollTo2(0,t);
+    await tap('#m-wall',t,900); await wait(1500,t);
+    await tap('.chip[data-cat=all]',t,1000); await wait(2400,t);
+    cur.classList.remove('in'); await wait(900,t); reset(); await wait(800,t);
+  }
+  async function loop(){if(running)return;running=true;var t=++token;reset();try{while(true)await once(t)}catch(e){if(!(e instanceof Stop))console.error(e)}}
+  function stop(){token++;running=false;cur.classList.remove('in','down')}
+  /* a real click stops the demo and hands over the page; it comes back a while after the mouse leaves */
+  document.addEventListener('pointerdown',function(e){if(!e.isTrusted)return;if(running){stop();e.preventDefault();e.stopImmediatePropagation();}clearTimeout(idle)},true);
+  document.addEventListener('click',function(e){if(e.isTrusted&&running){e.preventDefault();e.stopImmediatePropagation()}},true);
+  document.addEventListener('wheel',function(e){if(running){e.preventDefault()}},{capture:true,passive:false});
+  document.addEventListener('pointermove',function(e){if(e.isTrusted){inside=true;clearTimeout(idle)}},true);
+  document.documentElement.addEventListener('mouseleave',function(){inside=false;if(!running){clearTimeout(idle);idle=setTimeout(function(){if(!inside)loop()},8000)}});
+  var started=false;
+  function start(){if(started)return;started=true;setTimeout(loop,600)}
+  if('IntersectionObserver' in window && window.parent!==window){
+    try{ new IntersectionObserver(function(en){if(en[0].isIntersecting)start()}).observe(document.body); }catch(e){start()}
+  } else start();
+  addEventListener('load',start);
+})();
+</script>
+</body></html>

@@ -2072,8 +2072,50 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
 <style>
 /* 06 Curiofinds: its own band colour in both layouts and in the chapter bar */
 html body #chapters #q6{--band:#F3EDD3}
-html body .chbar a.cur[href="#q6"]{background:#F3EDD3 !important}
+html body nav.chbar.chbar a.cur.cur[href="#q6"]{background:#FCF3DE !important}
 
+</style>
+<style>
+/* card view, desktop: side by side. Words on the left, the prototype on the right in the card's colour */
+@media (min-width:901px){
+  html body #chapters:not(.lay-rows) > .piece{max-width:1080px !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); grid-template-rows:auto auto 1fr; overflow:hidden; padding:0 !important}
+  html body #chapters:not(.lay-rows) > .piece > .ptxt{grid-column:1; grid-row:1}
+  html body #chapters:not(.lay-rows) > .piece > .prose{grid-column:1; grid-row:2; align-self:start; padding-bottom:36px}
+  html body #chapters:not(.lay-rows) > .piece > figure{grid-column:2; grid-row:1 / 4; margin:0 !important; width:auto !important; max-width:none !important; background:var(--band); padding:48px 40px; display:flex !important; flex-direction:column; justify-content:center; align-self:stretch}
+  html body #chapters:not(.lay-rows) > .piece .lv-band{background:none !important}
+  html body #chapters:not(.lay-rows) > .piece > .out-idx{grid-column:1; grid-row:3; align-self:start; margin:0 40px 36px !important; max-width:none !important; width:auto !important}
+  /* same type as the collapsed six-card view, nothing new */
+  html body #chapters:not(.lay-rows) > .piece .chap-n, html body #chapters:not(.lay-rows) > .piece .chap-name{font-size:14px !important; line-height:20px !important; font-weight:500 !important}
+  html body #chapters:not(.lay-rows) > .piece .lv-stat{font-size:11.5px !important; line-height:17px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece h2.chap-q.r{font-size:19px !important; line-height:26px !important; letter-spacing:normal !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .dek.r{font-size:14px !important; line-height:22px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .prose p.role{font-size:13px !important; line-height:20px !important; font-weight:600 !important; color:#3F403D !important}
+  html body #chapters:not(.lay-rows) > .piece .prose p, html body #chapters:not(.lay-rows) > .piece .prose .end a{font-size:14px !important; line-height:22px !important}
+  /* one rhythm for the words: 8px steps, three groups (what it is, the question, the story), one left edge */
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece > .ptxt{padding:40px 44px 0 !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .lv-band{margin:0 0 32px !important; padding:0 !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .lv-ico{margin:16px 0 12px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece h2.chap-q.r{margin:0 0 8px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .dek.r{margin:0 !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece > .prose{margin:32px 0 0 !important; padding:0 44px 40px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .prose p.role{margin:0 0 8px !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .prose p:not(.role):not(.end){margin:0 !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece .prose p.end{margin:24px 0 0 !important}
+  html body #chapters#chapters:not(.lay-rows) > .piece.piece > .out-idx{margin:24px 44px 40px !important}
+}
+</style>
+<style>
+/* card colours: Amrit's palette (tea green, cherry blossom, ash grey, desert sand, papaya whip) plus a dusty lavender for the sixth */
+html body #chapters#chapters #q1.piece{--band:#E8ECDB !important} html body nav.chbar.chbar a.cur.cur[href="#q1"]{background:#E8ECDB !important}
+html body #chapters#chapters #q2.piece{--band:#F3DADC !important} html body nav.chbar.chbar a.cur.cur[href="#q2"]{background:#F3DADC !important}
+html body #chapters#chapters #q3.piece{--band:#D1E0E0 !important} html body nav.chbar.chbar a.cur.cur[href="#q3"]{background:#D1E0E0 !important}
+html body #chapters#chapters #q4.piece{--band:#E8E3EB !important} html body nav.chbar.chbar a.cur.cur[href="#q4"]{background:#E8E3EB !important}
+html body #chapters#chapters #q5.piece{--band:#DFE5F4 !important} html body nav.chbar.chbar a.cur.cur[href="#q5"]{background:#DFE5F4 !important}
+html body #chapters#chapters #q6.piece{--band:#FCF3DE !important} html body nav.chbar.chbar a.cur.cur[href="#q6"]{background:#FCF3DE !important}
+</style>
+<style>
+/* no tree: the closing strip only needs room for the bushes */
+@media (min-width:761px){ html body section.closing{min-height:240px !important; padding-top:0 !important} }
 </style>
 </head>
 <body>
@@ -2196,7 +2238,7 @@ html body .chbar a.cur[href="#q6"]{background:#F3EDD3 !important}
     <div class="chap-head r"><span class="chap-n">06</span><div class="chap-meta"><p class="chap-name">Curiofinds</p><span class="chap-pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div></div>
     <h2 class="r chap-q">What&rsquo;s worth reading next?</h2>
     <p class="dek r">Good ideas about design and research are spread across many sites. Curiofinds puts them on one wall, so you can understand one quickly and follow what catches your&nbsp;attention.</p><p class="rowmeta">Side project</p>
-    <figure class="r"><span class="still"><img src="list-still-q6.webp" alt="The Curiofinds wall: a search bar, topic filters and pastel cards, one idea per card" loading="lazy"><i class="still-tag">Live</i></span><p class="fmeta"><span class="fm-t"><span class="fm-a on">Side project &middot; Live</span><span class="fm-b" aria-hidden="true">Design and research ideas · One idea per card</span></span></p></figure>
+    <figure class="r"><span class="still"><img src="list-still-q6.webp" alt="The Curiofinds wall: a search bar, topic filters and pastel cards, one idea per card" loading="lazy"><i class="still-tag">Live</i></span><div class="fit" data-h="900" data-w="1200" data-sm="740" data-nh="900"><iframe class="specimen" id="s6" src="proto-curiofinds.html" loading="lazy" title="Curiofinds, working prototype" style="height:900px"></iframe><i class="bar"></i></div><figcaption><span class="fstat"><span class="dot"></span><span class="now">Playing on a loop. Click to try it.</span></span></figcaption><p class="fmeta"><span class="fm-t"><span class="fm-a on">Side project &middot; Live</span><span class="fm-b" aria-hidden="true">Design and research ideas · One idea per card</span></span></p></figure>
     <div class="prose r"><p class="role">Independent side&nbsp;project</p><p>A library of ideas for curious people, starting with design and research. Each idea gets a short card and its own page that points back to the source. You can browse the wall, search, follow a trail, or ask it to surprise you. <span class="goal">Discovery is the main thing it&rsquo;s built&nbsp;for.</span></p><p class="end"><a href="https://curiofinds.netlify.app/" target="_blank" rel="noopener">Visit Curiofinds <i aria-hidden="true">&#8599;</i></a></p></div>
   </article>
   </div>
@@ -2205,9 +2247,8 @@ html body .chbar a.cur[href="#q6"]{background:#F3EDD3 !important}
     <div class="blog-row" id="blog-row"><a class="blog-card" href="https://medium.com/@amritkmr08/when-ai-knows-the-answer-how-does-it-know-when-to-speak-222d795cff4f" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*-NNXgNdqAAGSMo5K4JAcQw.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Oct 2026 · 13 min read</span><span class="blog-t">When AI Knows the Answer, How Does It Know When to Speak?</span></a><a class="blog-card" href="https://uxplanet.org/when-ai-does-the-work-what-should-the-interface-show-cef03be7797b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*Z2hVoq7GUCAI3Hzbvm7w-Q.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">UX Planet · Oct 2026 · 10 min read</span><span class="blog-t">When AI Does the Work, What Should the Interface Show?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/how-to-navigate-design-explorations-6e94b2a1068c" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*QYTEOucESE8ChOhybK_iEA.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 6 min read</span><span class="blog-t">How to Navigate Design Explorations</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-distance-between-boardroom-and-sketchbook-8bc8fe5453bc" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*iUqXlUtJbKIxVr-J" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Distance Between Boardroom and Sketchbook</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-law-of-pr%C3%A4gnanz-for-design-why-your-brain-craves-simplicity-in-design-13699b2c20b5" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*bIvFrXW80u9oHLIY" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Law of Prägnanz for Design. Why Your Brain Craves Simplicity in Design?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-curve-and-the-quiet-crafting-emotion-in-design-5eac5f6d457b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*JwcJ8XIJJCTNlQnC.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 7 min read</span><span class="blog-t">The Curve and the Quiet: Crafting Emotion in Design</span></a></div>
   </section>
     <section class="closing r" aria-label="Closing">
-    <p>That&#8217;s what it takes to act on an answer.</p>
+    
     <img class="closing-bush" src="closing-bush.webp" alt="" aria-hidden="true" loading="lazy">
-    <img class="closing-art" src="closing-tree.webp" alt="" aria-hidden="true" loading="lazy">
   </section>
   </main>
 
@@ -2711,7 +2752,7 @@ addEventListener('message', e => {
 function fit(){ document.querySelectorAll('.fit').forEach(w => { const f = w.firstElementChild, cw = w.clientWidth, h = +w.dataset.h, cut = +(w.dataset.cut || 0);
   /* on a phone, a specimen marked data-sm is shown up close: scaled to that width and centred, so its card stays big instead of shrinking with the whole scene */
   /* in the card view a phone specimen gets a phone-sized frame of its own, so its layout is the real narrow one, not a crop of the wide one */
-  const narrow = w.dataset.sm && cw < 600 && w.closest('.lay-rows') && innerWidth > 900, NW = 740, NH = 452; if(!f.dataset.h0) f.dataset.h0 = f.style.height || (h + 'px'); f.style.width = narrow ? NW + 'px' : ''; f.style.height = narrow ? NH + 'px' : f.dataset.h0;
+  const narrow = w.dataset.sm && cw < 600 && w.closest('#chapters') && innerWidth > 900, NW = 740, NH = +(w.dataset.nh || 452); if(!f.dataset.h0) f.dataset.h0 = f.style.height || (h + 'px'); f.style.width = narrow ? NW + 'px' : ''; f.style.height = narrow ? NH + 'px' : f.dataset.h0;
   const sm = w.dataset.sm && cw < 600 && !narrow, k = Math.min(1, cw / (narrow ? NW : +(sm ? w.dataset.sm : (w.dataset.w || 1080)))), dx = sm ? (cw - 1080 * k) / 2 : 0;
   f.style.transform = k < 1 ? (dx ? 'translateX(' + dx + 'px) ' : '') + 'scale(' + k + ')' : ''; /* card view: every prototype frame the same shape, so every card is the same height */
   const same = w.closest('.lay-rows') && innerWidth > 900, pop = w.closest('.pcard');
@@ -4736,11 +4777,11 @@ html body #work .workhead .layt button:focus, html body #work .workhead .layt bu
 </style>
 <style>
 /* chapter bar: the selected tab takes its chapter's pastel from the list view */
-html body .chbar a.cur[href="#q1"]{background:#E8F3D8 !important}
-html body .chbar a.cur[href="#q2"]{background:#F7EAF0 !important}
-html body .chbar a.cur[href="#q3"]{background:#DCE5EB !important}
-html body .chbar a.cur[href="#q4"]{background:#E4E2F0 !important}
-html body .chbar a.cur[href="#q5"]{background:#F5E9DA !important}
+html body nav.chbar.chbar a.cur.cur[href="#q1"]{background:#E8ECDB !important}
+html body nav.chbar.chbar a.cur.cur[href="#q2"]{background:#F3DADC !important}
+html body nav.chbar.chbar a.cur.cur[href="#q3"]{background:#D1E0E0 !important}
+html body nav.chbar.chbar a.cur.cur[href="#q4"]{background:#E8E3EB !important}
+html body nav.chbar.chbar a.cur.cur[href="#q5"]{background:#DFE5F4 !important}
 html body .chbar a.cur{color:#191A18 !important}
 </style>
 
