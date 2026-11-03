@@ -1207,7 +1207,7 @@ function loadView(label){
   const head=$("header.top").offsetHeight+$(".controls").offsetHeight;const top=Math.max(0,m.getBoundingClientRect().top+scrollY-head);if(scrollY>top)window.scrollTo({top,behavior:"auto"});
   const cap=$("#curate span").lastChild;cap.textContent=`Curating ${label}…`;$("#curate").classList.add("on");
   loadView.t=setTimeout(()=>{$("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";
-    if(st.mode==="wall")return;render();m.classList.remove("fadein");void m.offsetWidth;m.classList.add("fadein")},1400);
+    if(st.mode==="wall")return;render();m.classList.remove("fadein");void m.offsetWidth;m.classList.add("fadein")},700);
 }
 // picking a chip curates like a real fetch: grey shapes and the glow first, then the cards arrive one by one
 function curateTo(label){
@@ -1222,7 +1222,7 @@ function curateTo(label){
     await fadeOutSkels(g2);st.pending=false;
     const {items,shown}=wallList();revealCards(g2,shown.map(wallCard).join(""),0);
     $("#loadline").innerHTML=loadText(shown.length,items.length);
-  },1600);
+  },700);
 }
 function openLead(id,shelfKey){
   clearTimeout(curateTo.t);
@@ -1337,7 +1337,7 @@ $("#surprise").addEventListener("click",()=>{
   if(st.mode==="wall"){doSurprise();window.scrollTo({top:0,behavior:"auto"});setTimeout(()=>{surprising=false;btn.classList.remove("busy");btn.removeAttribute("aria-busy");label.textContent=old},1600);return}
   cap.textContent="Looking for something you haven’t seen yet…";$("#curate").classList.add("on");
   setTimeout(()=>{surprising=false;btn.classList.remove("busy");btn.removeAttribute("aria-busy");label.textContent=old;
-    $("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";doSurprise()},reduce()?0:1800);
+    $("#curate").classList.remove("on");cap.textContent="Curating more ideas for you…";doSurprise()},reduce()?0:900);
 });
 function doSurprise(){const unread=REAL.filter(i=>!readSet.has(i.t));const pool=unread.length?unread:REAL;const it=pool[Math.floor(Math.random()*pool.length)];L[st.mode].surprise++;
   if(st.mode==="trail"){st.trail=st.trail.slice(0,st.trailIdx+1);st.trail.push(it.t);st.trailIdx++;L.trail.opened++;render();return}
@@ -1433,7 +1433,7 @@ renderChips();render();
   function scrollTo2(y,t){scrollTo({top:y,behavior:'smooth'});return wait(700,t)}
   async function show(el,t){var r=el.getBoundingClientRect();if(r.top<70||r.bottom>innerHeight-20){await scrollTo2(scrollY+r.top-120,t)}}
   async function tap(sel,t,ms){var el=typeof sel==='string'?q(sel):sel;if(!el)return;await show(el,t);var m=mid(el);await glide(m[0],m[1],ms||900,t);await wait(250,t);cur.classList.add('down');await wait(130,t);cur.classList.remove('down');el.click();}
-  function reset(){var w=q('#m-wall');if(w&&!w.classList.contains('on')&&w.getAttribute('aria-pressed')!=='true')w.click();var b=q('.card.expanded .back');if(b)b.click();var a=q('.chip[data-cat=all]');if(a)a.click();scrollTo(0,0)}
+  function reset(){var w=q('#m-wall');if(w&&!w.classList.contains('on')&&w.getAttribute('aria-pressed')!=='true')w.click();var b=q('.card.expanded .back');if(b)b.click();var a=q('.chip[data-cat=all]');if(a&&!/\b(on|active|is-on)\b/.test(a.className)&&a.getAttribute('aria-pressed')!=='true')a.click();scrollTo(0,0)}
   async function once(t){
     place(innerWidth*.62,innerHeight*.8); cur.classList.add('in');
     await wait(1600,t);

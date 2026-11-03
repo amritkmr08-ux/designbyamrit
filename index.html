@@ -2117,6 +2117,29 @@ html body #chapters#chapters #q6.piece{--band:#FCF3DE !important} html body nav.
 /* no tree: the closing strip only needs room for the bushes */
 @media (min-width:761px){ html body section.closing{min-height:240px !important; padding-top:0 !important} }
 </style>
+<style>
+/* the round "a": smaller on desktop, and the letter sits in the middle of the circle */
+html body a.mark.mark{display:grid !important; place-items:center !important; line-height:1 !important; padding:0 !important}
+@media (min-width:901px){ html body a.mark.mark{width:40px !important; height:40px !important; font-size:20px !important} }
+</style>
+<style>
+/* Writing on desktop: one row of three, the rest a sideways scroll with arrows */
+@media (min-width:901px){
+  html body #work .blog-row{display:flex !important; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; padding:4px 0 28px; margin:-4px 0 -28px}
+  html body #work .blog-row::-webkit-scrollbar{display:none}
+  html body #work .blog-card{flex:0 0 calc((100% - 48px) / 3); scroll-snap-align:start}
+}
+#work .blog-nav{display:inline-flex; gap:8px; margin-left:20px; vertical-align:middle}
+#work .blog-nav button{width:32px; height:32px; border-radius:50%; border:1px solid #D2D2CD; background:#F6F6F3; color:#191A18; display:grid; place-items:center; cursor:pointer; padding:0; transition:opacity .2s, background-color .2s}
+#work .blog-nav button:hover{background:#ECECE8}
+#work .blog-nav button:disabled{opacity:.35; cursor:default}
+@media (max-width:900px){ #work .blog-nav{display:none} }
+</style>
+<style>
+/* Writing: just the three newest, no sideways scroll */
+html body #work .blog-row .blog-card:nth-child(n+4){display:none !important}
+#work .blog-nav{display:none !important}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
@@ -2243,7 +2266,7 @@ html body #chapters#chapters #q6.piece{--band:#FCF3DE !important} html body nav.
   </article>
   </div>
     <section class="blog r" id="writing" aria-label="Writing">
-    <div class="blog-head"><span class="blog-l">Writing</span><a class="blog-more" href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">More on Medium <i aria-hidden="true">&#8599;</i></a></div>
+    <div class="blog-head"><span class="blog-l">Writing</span><span class="blog-r"><a class="blog-more" href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">More on Medium <i aria-hidden="true">&#8599;</i></a><span class="blog-nav"><button type="button" class="bn-prev" aria-label="Previous posts"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 3L4.5 7l4 4"/></svg></button><button type="button" class="bn-next" aria-label="More posts"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 3l4 4-4 4"/></svg></button></span></span></div>
     <div class="blog-row" id="blog-row"><a class="blog-card" href="https://medium.com/@amritkmr08/when-ai-knows-the-answer-how-does-it-know-when-to-speak-222d795cff4f" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*-NNXgNdqAAGSMo5K4JAcQw.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Oct 2026 · 13 min read</span><span class="blog-t">When AI Knows the Answer, How Does It Know When to Speak?</span></a><a class="blog-card" href="https://uxplanet.org/when-ai-does-the-work-what-should-the-interface-show-cef03be7797b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*Z2hVoq7GUCAI3Hzbvm7w-Q.png" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">UX Planet · Oct 2026 · 10 min read</span><span class="blog-t">When AI Does the Work, What Should the Interface Show?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/how-to-navigate-design-explorations-6e94b2a1068c" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/1*QYTEOucESE8ChOhybK_iEA.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 6 min read</span><span class="blog-t">How to Navigate Design Explorations</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-distance-between-boardroom-and-sketchbook-8bc8fe5453bc" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*iUqXlUtJbKIxVr-J" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Distance Between Boardroom and Sketchbook</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-law-of-pr%C3%A4gnanz-for-design-why-your-brain-craves-simplicity-in-design-13699b2c20b5" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*bIvFrXW80u9oHLIY" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 3 min read</span><span class="blog-t">The Law of Prägnanz for Design. Why Your Brain Craves Simplicity in Design?</span></a><a class="blog-card" href="https://medium.com/@amritkmr08/the-curve-and-the-quiet-crafting-emotion-in-design-5eac5f6d457b" target="_blank" rel="noopener"><span class="blog-img"><img src="https://cdn-images-1.medium.com/max/800/0*JwcJ8XIJJCTNlQnC.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></span><span class="blog-meta">Medium · Sep 2026 · 7 min read</span><span class="blog-t">The Curve and the Quiet: Crafting Emotion in Design</span></a></div>
   </section>
     <section class="closing r" aria-label="Closing">
@@ -4345,7 +4368,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
         setTimeout(function(){ ch.style.transition=''; ch.style.opacity=''; ch.style.transform=''; busy=false; }, 480); });
     }, 210); });
   /* every load starts on the side-by-side cards; the visitor can switch to full width, and the choice only lasts for the visit */
-  try{ localStorage.removeItem('work-layout'); }catch(e){} set('rows', false);
+  try{ localStorage.removeItem('work-layout'); }catch(e){} set(innerWidth>900 ? 'stack' : 'rows', false);   /* web opens on the side-by-side cards; phones keep the list */
 })();
 </script>
 <script>
@@ -5422,5 +5445,21 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
     if(items.length>=3) row.innerHTML=items.map(card).join(''); }).catch(function(){ clearTimeout(t); });
 })();
 </script>
+<script>/* Writing arrows: move one card at a time, grey out at the ends */
+(function(){ var row=document.getElementById('blog-row'), w=document.getElementById('writing'); if(!row||!w) return;
+  var pv=w.querySelector('.bn-prev'), nx=w.querySelector('.bn-next');
+  function step(){ var c=row.querySelector('.blog-card'); return c ? c.getBoundingClientRect().width + 24 : row.clientWidth/3; }
+  function upd(){ pv.disabled = row.scrollLeft < 4; nx.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4; }
+  pv.addEventListener('click', function(){ row.scrollBy({left:-step()}); });
+  nx.addEventListener('click', function(){ row.scrollBy({left:step()}); });
+  row.addEventListener('scroll', upd, {passive:true}); addEventListener('resize', upd);
+  new MutationObserver(upd).observe(row, {childList:true}); upd();
+})();</script>
+<script>/* card view: the "Try the prototype" label that follows the pointer opens the big pop-up, like list view. Curiofinds has no pop-up. */
+(function(){ document.addEventListener('click',function(e){
+  var ch=document.getElementById('chapters'); if(!ch || ch.classList.contains('lay-rows') || innerWidth<901 || !window.openProto) return;
+  var o=e.target.closest && e.target.closest('.tryov'); if(!o) return; var p=o.closest('.piece'); if(!p || !/^q[1-5]$/.test(p.id)) return;
+  e.preventDefault(); e.stopImmediatePropagation(); window.openProto(p.id);
+}, true); })();</script>
 </body>
 </html>
