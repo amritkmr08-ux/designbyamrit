@@ -1414,6 +1414,17 @@ renderChips();render();
 #dcur.down svg{transform:scale(.86)}
 </style>
 <script>
+/* inside the portfolio frame, scrollIntoView would also scroll the portfolio page itself.
+   here it only scrolls inside the prototype: the nearest scrolling box, or the prototype's own page */
+if(window.parent!==window){ Element.prototype.scrollIntoView=function(o){
+  var el=this, b=(o&&typeof o==='object'&&o.block)||(o===false?'end':'start'), beh=(o&&o.behavior)||'auto', box=el.parentElement;
+  while(box && box!==document.body && box!==document.documentElement){ var s=getComputedStyle(box).overflowY; if((s==='auto'||s==='scroll') && box.scrollHeight>box.clientHeight) break; box=box.parentElement; }
+  var win=!box || box===document.body || box===document.documentElement, r=el.getBoundingClientRect(),
+      top=win?0:box.getBoundingClientRect().top, h=win?innerHeight:box.clientHeight, cur=win?scrollY:box.scrollTop, rel=r.top-top, y;
+  if(b==='center') y=cur+rel-(h-r.height)/2; else if(b==='end') y=cur+rel-h+r.height;
+  else if(b==='nearest'){ if(rel<0) y=cur+rel; else if(rel+r.height>h) y=cur+rel+r.height-h; else return; } else y=cur+rel;
+  y=Math.max(0,y); if(win) scrollTo({top:y,behavior:beh}); else box.scrollTo({top:y,behavior:beh}); };
+  var _f=HTMLElement.prototype.focus; HTMLElement.prototype.focus=function(o){ return _f.call(this,Object.assign({},o||{},{preventScroll:true})); }; }
 /* the loop: a cursor browses the wall by itself until a real hand takes over.
    filter by a topic, open an idea, go back, try Trail, ask for a surprise, then start again */
 (function(){
