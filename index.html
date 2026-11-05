@@ -2140,11 +2140,57 @@ html body a.mark.mark{display:grid !important; place-items:center !important; li
 html body #work .blog-row .blog-card:nth-child(n+4){display:none !important}
 #work .blog-nav{display:none !important}
 </style>
+<style>
+/* phone: the dark floater is the compact one, "My work" and the view switch, no chapter tabs */
+@media (max-width:760px){
+  html body nav#chbar.chbar > a{display:none !important}
+  html body nav#chbar.chbar .chbar-lbl{display:flex !important; font-size:14.5px; padding:0 16px 0 16px; margin-right:6px}
+  html body nav#chbar.chbar .layt.layt-nav{display:flex !important}
+}
+/* one "Explain me" button: same height, padding and icon size everywhere */
+html body #chapters.chapters .piece .prose p.end .ex-btn.ex-btn.ex-btn, html body #chapters .ex-btn.ex-btn.ex-btn, html body .ex-btn.ex-btn{align-items:center !important; height:34px !important; min-height:0 !important; padding:0 15px 0 8px !important; gap:8px !important; line-height:20px !important; box-sizing:border-box !important}
+html body .ex-btn.ex-btn svg{width:18px !important; height:18px !important; flex:0 0 auto}
+</style>
+<style>
+/* landing: a little of the same line-drawn vegetation at the bottom right, light on dark like the monkey drawing; it rests on the white sheet's top edge */
+.intro-bush{position:absolute; right:0; bottom:calc(26vh + 40px); width:min(400px,30vw); height:auto; z-index:1; pointer-events:none; user-select:none; opacity:0; transition:opacity 1.2s cubic-bezier(.22,.61,.36,1);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%); mask-image:linear-gradient(90deg,transparent 0,#000 18%)}
+html.art-in .intro-bush{opacity:.85}
+@media (max-width:760px){ .intro-bush{bottom:8vh; width:58vw} }
+@media (prefers-reduced-motion:reduce){ .intro-bush{transition:none} }
+</style>
+<style>
+/* no word next to the round "a" (Reading, Viewing, Try prototype, Scroll): the mark stands alone */
+html body .hint{display:none !important}
+</style>
+<style>
+/* footer: a card that opens the About page */
+.rf-about{grid-row:3; grid-column:1; align-self:end; justify-self:start; display:flex; align-items:center; gap:16px; max-width:440px; margin:32px 0 40px; padding:14px 20px 14px 14px; border:1px solid rgba(255,255,255,.12); border-radius:20px; background:rgba(24,24,23,.72); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:#E9E9E5; text-decoration:none; position:relative; z-index:2; transition:background-color .25s ease, border-color .25s ease, transform .25s ease}
+.rf-about:hover{background:rgba(40,40,38,.8); border-color:rgba(255,255,255,.22); transform:translateY(-2px)}
+.rfa-pic{flex:0 0 56px; width:56px; height:56px; border-radius:50%; overflow:hidden; background:#D9D9D4; display:grid; place-items:end center}
+.rfa-pic img{width:100%; height:auto; display:block; filter:grayscale(1)}
+.rfa-t{display:flex; flex-direction:column; gap:2px; min-width:0}
+.rfa-k{font:500 11px/16px Inter,var(--font); letter-spacing:.12em; text-transform:uppercase; color:#8E908A}
+.rfa-h{font:500 16px/22px var(--display); color:#F2F2EF}
+.rfa-m{font:400 13px/18px Inter,var(--font); color:#9A9C96}
+.rfa-go{margin-left:auto; font-size:18px; color:#8E908A; transition:transform .25s ease, color .25s ease}
+.rf-about:hover .rfa-go{transform:translateX(3px); color:#F2F2EF}
+@media (max-width:760px){ .rf-about{grid-row:2; justify-self:stretch; max-width:none; margin:24px 0 28px} .rfa-m{display:none} }
+</style>
+<style>
+/* footer order: heading, then phone and email, then the About card just above the line */
+html body footer.rf .rf-in .rf-say{grid-row:3 !important; align-self:end; margin-top:32px}
+html body footer.rf .rf-in .rf-about{grid-row:4 !important; align-self:start; margin:28px 0 40px !important}
+@media (max-width:760px){
+  html body footer.rf .rf-in .rf-say{grid-row:2 !important; align-self:end; margin-top:24px}
+  html body footer.rf .rf-in .rf-about{grid-row:3 !important; margin:24px 0 8px !important}
+}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
 
-<div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
+<div class="intro" id="intro" aria-label="Introduction"><img class="intro-bush" src="intro-bush-dark.webp" alt="" aria-hidden="true"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
@@ -2287,6 +2333,7 @@ html body #work .blog-row .blog-card:nth-child(n+4){display:none !important}
       <p class="rf-d">Have a complex problem or an idea taking shape? Let&rsquo;s think it through together.</p>
     </div>
     <div class="rf-say"><a class="rf-tel" href="tel:9560255168">9560255168</a><a class="rf-mail" href="mailto:amritkmr08@gmail.com">amritkmr08@gmail.com</a></div>
+    <a class="rf-about" href="about.html"><span class="rfa-pic"><img src="about-thumb.webp" alt="" width="80" height="82" loading="lazy"></span><span class="rfa-t"><span class="rfa-k">About me</span><span class="rfa-h">I design for difficult decisions.</span><span class="rfa-m">13 years in design &middot; 6 in product &middot; 3 on AI-native products</span></span><span class="rfa-go" aria-hidden="true">&rarr;</span></a>
     <p class="rf-cap">illustration is my hand drawing and AI</p>
   </div>
   <div class="rf-row"><span class="rf-c">&copy; 2026 Amrit Kumar</span><nav class="rf-links" aria-label="Elsewhere"><a href="about.html">About</a><a href="sketchbook.html">Sketchbook</a><a href="sensitivity.html">Sensitivity</a><a href="https://www.linkedin.com/in/amritkumardesigns/" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.behance.net/amritkmr/projects" target="_blank" rel="noopener">Behance</a><a href="https://medium.com/@amritkmr08" target="_blank" rel="noopener">Medium</a><a href="Amrit-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a></nav><span class="rf-b">Page Built with Claude</span></div>
@@ -5461,5 +5508,17 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
   var o=e.target.closest && e.target.closest('.tryov'); if(!o) return; var p=o.closest('.piece'); if(!p || !/^q[1-5]$/.test(p.id)) return;
   e.preventDefault(); e.stopImmediatePropagation(); window.openProto(p.id);
 }, true); })();</script>
+<script>/* the landing vegetation sits exactly on the white sheet's top edge, whatever the screen size */
+(function(){ var b=document.querySelector('.intro-bush'), sh=document.getElementById('sheet'); if(!b||!sh) return;
+  function place(){ if(scrollY>2) return; b.style.bottom='auto'; b.style.top='0px';
+    /* desktop: it starts just after the credits line ends, so it never sits on top of the words */
+    var c=document.getElementById('intro-creds'), ir=document.getElementById('intro').getBoundingClientRect();
+    var k0=b.getBoundingClientRect().width/(b.offsetWidth||1)||1;
+    if(innerWidth>760 && c){ var cr=c.getBoundingClientRect(), x=(cr.right - ir.left)/k0 + 14; b.style.right='auto'; b.style.left=x+'px';
+      b.style.width=Math.max(180, Math.min(420, (ir.right - cr.right)/k0 - 14))+'px'; }
+    else { b.style.left=''; b.style.right='0'; b.style.width=''; }
+    var k=b.getBoundingClientRect().height/(b.offsetHeight||1)||1, d=sh.getBoundingClientRect().top - b.getBoundingClientRect().bottom;
+    b.style.top=(parseFloat(b.style.top)||0)+(d/k)+'px'; }
+  if(b.complete) place(); else b.addEventListener('load',place); addEventListener('load',place); addEventListener('resize',place); setTimeout(place,1200); })();</script>
 </body>
 </html>
