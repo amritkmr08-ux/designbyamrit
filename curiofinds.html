@@ -1,0 +1,364 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Curiofinds</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a playful wall of real finds as the hero, then short bands that each show one part of the product. */
+:root{
+  --bg:#fbfaf6; --ink:#1f2622; --muted:#5b6560; --line:#e4e6dd; --accent:#2f6b4f; --sun:#ffd34d;
+  --lilac:#e6dfff; --mint:#d5efe3; --peach:#ffe0cc; --butter:#fff1b8; --sky:#d9e8ff; --rose:#ffdbe6;
+  --card-ink:#1f2622; --surface:#ffffff; --shadow:rgba(31,38,34,.12);
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121614; --ink:#eef1ed; --muted:#a3ada7; --line:#2a312d; --accent:#7fd3a8; --sun:#ffd34d;
+  --lilac:#cfc4ff; --mint:#b9e6d1; --peach:#ffcfb0; --butter:#ffe891; --sky:#bcd6ff; --rose:#ffc3d6;
+  --card-ink:#1f2622; --surface:#1a201d; --shadow:rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --ink:#eef1ed; --muted:#a3ada7; --line:#2a312d; --accent:#7fd3a8; --sun:#ffd34d;
+  --lilac:#cfc4ff; --mint:#b9e6d1; --peach:#ffcfb0; --butter:#ffe891; --sky:#bcd6ff; --rose:#ffc3d6;
+  --card-ink:#1f2622; --surface:#1a201d; --shadow:rgba(0,0,0,.45); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03em;text-decoration:none}
+.logo i{font-family:var(--serif);font-weight:400;font-size:25px;letter-spacing:0}
+.nav nav{display:flex;gap:26px;font-weight:500;font-size:15px}
+.nav nav a{text-decoration:none;color:var(--muted)}
+.nav nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid var(--ink);transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:4px 4px 0 var(--sun)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--surface)}
+.btn.small{height:40px;padding:0 16px;font-size:14px}
+
+/* hero */
+.hero{padding-block:56px 72px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center}
+.hero h1{font-size:clamp(44px,6.4vw,84px);line-height:.98;font-weight:800}
+.hero h1 em{font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.01em;position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.06em;height:.22em;background:var(--sun);z-index:-1;border-radius:4px;transform:rotate(-1.2deg)}
+.hero .lede{margin-top:22px;font-size:19px;color:var(--muted);max-width:30em}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.hero .note{margin-top:18px;font-size:14px;color:var(--muted)}
+
+/* the wall */
+.wall{position:relative;min-height:540px}
+.find{position:absolute;width:min(270px,62%);background:var(--c);color:var(--card-ink);border-radius:20px;padding:18px 20px 16px;box-shadow:0 14px 30px -12px var(--shadow);transform:rotate(var(--r));animation:drift 7s ease-in-out infinite;animation-delay:var(--d)}
+.find .kind{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.find h3{font-family:var(--display);font-size:19px;line-height:1.2;font-weight:700;margin:8px 0 10px;letter-spacing:-.015em}
+.find .src{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+.find .src::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--card-ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/9px no-repeat;flex:none}
+.find .heart{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.7);display:grid;place-items:center}
+.find .heart svg{width:15px;height:15px}
+@keyframes drift{0%,100%{transform:rotate(var(--r)) translateY(0)}50%{transform:rotate(var(--r)) translateY(-8px)}}
+.sticker{position:absolute;right:4%;bottom:8%;transform:rotate(8deg);background:var(--sun);color:#1f2622;font-family:var(--serif);font-style:italic;font-size:24px;padding:10px 18px;border-radius:999px;border:2px solid #1f2622;box-shadow:3px 3px 0 #1f2622;z-index:3}
+
+/* bands */
+section.band{padding-block:84px}
+.band h2{font-size:clamp(34px,4.4vw,54px);line-height:1.04;font-weight:800;max-width:16em}
+.band h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.band .intro{margin-top:16px;color:var(--muted);font-size:18px;max-width:36em}
+
+/* anatomy */
+.anatomy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;margin-top:48px}
+.big-card{background:var(--mint);color:var(--card-ink);border-radius:26px;padding:30px 30px 26px;position:relative;box-shadow:0 24px 50px -24px var(--shadow)}
+.big-card .top{display:flex;gap:10px;align-items:center;font-size:13px;font-weight:700}
+.big-card .top span:last-child{opacity:.6;font-weight:600}
+.big-card h3{font-size:30px;line-height:1.12;font-weight:800;margin:16px 0 18px}
+.big-card .eg{background:rgba(255,255,255,.6);border-radius:14px;padding:14px 16px;font-size:15.5px;line-height:1.5}
+.big-card .eg b{font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-right:8px;color:var(--accent)}
+.big-card .foot{display:flex;justify-content:space-between;margin-top:18px;font-weight:700;font-size:14px}
+.parts{display:flex;flex-direction:column;gap:22px;margin:0;padding:0;list-style:none}
+.parts li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start}
+.parts .dot{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--c);color:var(--card-ink)}
+.parts .dot svg{width:22px;height:22px}
+.parts h3{font-size:21px;font-weight:700}
+.parts p{color:var(--muted);margin-top:4px}
+
+/* try it */
+.try{background:var(--ink);color:var(--bg);border-radius:32px;padding:56px clamp(20px,5vw,56px);margin-top:0}
+.try .eyebrow{color:var(--sun)}
+.try h2{color:var(--bg)}
+.try .intro{color:color-mix(in srgb,var(--bg) 72%,transparent)}
+.searchbox{margin-top:32px;display:flex;align-items:center;gap:12px;background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 8px 8px 22px;max-width:640px}
+.searchbox svg{width:20px;height:20px;flex:none;color:var(--muted)}
+.searchbox span{flex:1;font-size:18px;font-weight:500;min-width:0;overflow:hidden;white-space:nowrap}
+.searchbox .caret{display:inline-block;width:2px;height:1.1em;background:var(--accent);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{border:1.5px solid color-mix(in srgb,var(--bg) 35%,transparent);background:transparent;color:var(--bg);border-radius:999px;padding:9px 16px;font:600 15px var(--body);cursor:pointer;transition:background .15s,color .15s}
+.chip:hover{border-color:var(--bg)}
+.chip[aria-pressed="true"]{background:var(--sun);color:#1f2622;border-color:var(--sun)}
+.results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+.res{background:var(--c);color:var(--card-ink);border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;animation:pop .35s ease both}
+.res .kind{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.res h3{font-size:19px;line-height:1.22;font-weight:700}
+.res p{font-size:14.5px;opacity:.85}
+.res .src{margin-top:auto;font-size:12.5px;font-weight:700}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.flow{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;font-weight:600;color:color-mix(in srgb,var(--bg) 78%,transparent);font-size:15px}
+.flow span{display:inline-flex;align-items:center;gap:8px}
+.flow b{color:var(--sun)}
+
+/* topics */
+.topics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:36px}
+.topic{background:var(--c);color:var(--card-ink);border-radius:18px;padding:16px 20px;text-decoration:none;transition:transform .15s ease;min-width:0}
+.topic:hover{transform:translateY(-3px) rotate(-.6deg)}
+.topic b{display:block;font-family:var(--display);font-size:20px;letter-spacing:-.01em}
+.topic span{font-size:14.5px;opacity:.8}
+
+/* for whom */
+.who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+.who article{border:1.5px solid var(--line);border-radius:22px;padding:26px;background:var(--surface)}
+.who h3{font-size:22px;font-weight:700;margin:12px 0 8px}
+.who p{color:var(--muted)}
+.who .tag{display:inline-block;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--c);color:var(--card-ink)}
+
+/* proof */
+.proof{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:center}
+.sources{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.sources span{border:1.5px dashed var(--line);border-radius:999px;padding:8px 14px;font-weight:600;font-size:15px}
+.sources span.more{border-style:solid;border-color:transparent;background:var(--butter);color:var(--card-ink)}
+.quote{background:var(--butter);color:var(--card-ink);border-radius:26px;padding:30px;transform:rotate(1.2deg)}
+.quote blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:27px;line-height:1.25}
+.quote p{margin-top:16px;font-size:14px;font-weight:700}
+.quote small{display:block;font-weight:500;opacity:.75;margin-top:4px}
+
+/* closing */
+.closing{text-align:center;padding-block:96px 80px}
+.closing h2{font-size:clamp(40px,6vw,76px);line-height:1;font-weight:800;margin:0 auto;max-width:12em}
+.closing h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.closing p{margin:18px auto 30px;color:var(--muted);max-width:30em;font-size:18px}
+footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero .wrap,.anatomy,.proof{grid-template-columns:1fr}
+  .wall{min-height:500px}
+  .results,.who{grid-template-columns:1fr}
+  .nav nav{display:none}
+}
+@media (max-width:900px){.topics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){
+  .wall{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .find{position:static;width:auto;padding:14px 14px 12px}
+  .find h3{font-size:16px}
+  .find .heart{display:none}
+  .find:nth-of-type(n+5),.sticker{display:none}
+}
+@media (max-width:480px){
+  body{font-size:16px}
+  .hero{padding-block:32px 48px}
+  section.band{padding-block:60px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="https://curiofinds.netlify.app/" aria-label="Curiofinds home">curio<i>finds</i>.</a>
+    <nav aria-label="Sections"><a href="#how">How it works</a><a href="#try">Try it</a><a href="#topics">Topics</a><a href="#sources">Sources</a></nav>
+    <a class="btn primary small" href="https://curiofinds.netlify.app/">Start exploring</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">For curious designers and product people</p>
+        <h1 style="margin-top:14px">Small finds that make you <em>think.</em></h1>
+        <p class="lede">Curiofinds collects short, sourced ideas from design, research and product. Read one in a minute, check where it came from, then follow the thread to the next.</p>
+        <div class="ctas">
+          <a class="btn primary" href="https://curiofinds.netlify.app/">Start exploring <span aria-hidden="true">→</span></a>
+          <a class="btn ghost" href="#how">See how a find works</a>
+        </div>
+        <p class="note">Free to browse. Save the ones you like to your board.</p>
+      </div>
+
+      <div class="wall" aria-label="Examples of finds on Curiofinds">
+        <article class="find" style="--c:var(--lilac);--r:-6deg;--d:0s;left:2%;top:2%">
+          <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1f2622" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <span class="kind">Psychology · Hick's Law</span>
+          <h3>More choices can make it harder for people to decide</h3>
+          <span class="src">Design concept</span>
+        </article>
+        <article class="find" style="--c:var(--mint);--r:4deg;--d:-2s;right:0;top:6%">
+          <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1f2622" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <span class="kind">Research</span>
+          <h3>AI respondents reached the same conclusion as 604 people, with far less variety</h3>
+          <span class="src">Nielsen Norman Group</span>
+        </article>
+        <article class="find" style="--c:var(--peach);--r:3deg;--d:-4s;left:6%;top:38%">
+          <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1f2622" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <span class="kind">Interaction · Progressive disclosure</span>
+          <h3>Show what matters now and reveal the rest when it's needed</h3>
+          <span class="src">Design concept</span>
+        </article>
+        <article class="find" style="--c:var(--sky);--r:-3deg;--d:-1s;right:4%;top:46%">
+          <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1f2622" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <span class="kind">Accessibility · Color contrast</span>
+          <h3>Text has to stand out from its background to be read</h3>
+          <span class="src">Design concept</span>
+        </article>
+        <article class="find" style="--c:var(--rose);--r:-1.5deg;--d:-3s;left:18%;bottom:0">
+          <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1f2622" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+          <span class="kind">Product thinking</span>
+          <h3>Claude power users often couldn't find their own context files</h3>
+          <span class="src">Nielsen Norman Group</span>
+        </article>
+        <span class="sticker" aria-hidden="true">one idea at a time</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="how">
+    <div class="wrap">
+      <p class="eyebrow">How a find works</p>
+      <h2 style="margin-top:12px">Every card says one thing <em>and shows where it came from.</em></h2>
+      <p class="intro">No feeds full of hot takes. Each find is one idea, said plainly, with an example you can picture and a link to the source.</p>
+
+      <div class="anatomy">
+        <article class="big-card" aria-label="Example find">
+          <div class="top"><span>Nielsen Norman Group</span><span>Research</span></div>
+          <h3>AI respondents reached the same conclusion as 604 people, with far less variety</h3>
+          <p class="eg"><b>e.g.</b>A team asks simulated users which onboarding step feels confusing. Both groups point to the same step, but real people explain it in many more ways.</p>
+          <div class="foot"><span>✓ From Nielsen Norman Group</span><span>Open →</span></div>
+        </article>
+        <ul class="parts">
+          <li><span class="dot" style="--c:var(--lilac)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h10M5 17h7"/></svg></span><div><h3>A title that says the idea</h3><p>You learn something from the title alone. Read more only if you want to.</p></div></li>
+          <li><span class="dot" style="--c:var(--peach)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><div><h3>An example you can picture</h3><p>Each idea comes with a real situation, so it's easy to remember and use.</p></div></li>
+          <li><span class="dot" style="--c:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg></span><div><h3>The source, one tap away</h3><p>Findings link to the study or article they came from, so you can check it yourself.</p></div></li>
+          <li><span class="dot" style="--c:var(--sky)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12h12M12 6l6 6-6 6"/></svg></span><div><h3>A thread to follow</h3><p>Open a find and you'll see related ideas, so one question leads to the next.</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="try" style="padding-top:0">
+    <div class="wrap">
+      <div class="try">
+        <p class="eyebrow">Try it</p>
+        <h2 style="margin-top:12px">Search a topic, then keep scrolling.</h2>
+        <p class="intro">Pick a topic below to see the kind of finds you'll get.</p>
+
+        <div class="searchbox" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span><span id="typed">onboarding</span><span class="caret"></span></span>
+        </div>
+        <div class="chips" role="group" aria-label="Pick a topic" id="chips"></div>
+        <div class="results" id="results" aria-live="polite"></div>
+        <div class="flow"><span><b>1</b> Search</span><span><b>2</b> Discover</span><span><b>3</b> Scroll</span><span><b>4</b> Discover more</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="topics" style="padding-top:24px">
+    <div class="wrap">
+      <p class="eyebrow">Topics</p>
+      <h2 style="margin-top:12px">Start where you're <em>curious.</em></h2>
+      <div class="topics">
+        <a class="topic" style="--c:var(--lilac)" href="https://curiofinds.netlify.app/"><b>Design thinking</b><span>Frame the problem first</span></a>
+        <a class="topic" style="--c:var(--butter)" href="https://curiofinds.netlify.app/"><b>UX research</b><span>Learn what people actually do</span></a>
+        <a class="topic" style="--c:var(--peach)" href="https://curiofinds.netlify.app/"><b>Interaction</b><span>How an interface responds</span></a>
+        <a class="topic" style="--c:var(--sky)" href="https://curiofinds.netlify.app/"><b>Accessibility</b><span>Make it work for everyone</span></a>
+        <a class="topic" style="--c:var(--rose)" href="https://curiofinds.netlify.app/"><b>Design systems</b><span>Shared parts, shared rules</span></a>
+        <a class="topic" style="--c:var(--lilac)" href="https://curiofinds.netlify.app/"><b>Psychology</b><span>How people decide and remember</span></a>
+        <a class="topic" style="--c:var(--mint)" href="https://curiofinds.netlify.app/"><b>Metrics</b><span>Know if a design works</span></a>
+        <a class="topic" style="--c:var(--butter)" href="https://curiofinds.netlify.app/"><b>Product thinking</b><span>What keeps AI products useful</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:24px">
+    <div class="wrap">
+      <p class="eyebrow">Who it's for</p>
+      <h2 style="margin-top:12px">Built for people who <em>make things for people.</em></h2>
+      <div class="who">
+        <article><span class="tag" style="--c:var(--peach)">Designer</span><h3>Patterns you can use tomorrow</h3><p>Interaction, accessibility, design systems and research methods, with examples from real products.</p></article>
+        <article><span class="tag" style="--c:var(--mint)">Product manager</span><h3>Evidence for the next decision</h3><p>Metrics, research and product thinking, each tied to a source you can share with your team.</p></article>
+        <article><span class="tag" style="--c:var(--sky)">Just curious</span><h3>One good idea a day</h3><p>Browse the whole wall, or hit Surprise me and see where it takes you.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="sources" style="padding-top:24px">
+    <div class="wrap proof">
+      <div>
+        <p class="eyebrow">Trust</p>
+        <h2 style="margin-top:12px">Every finding <em>links to its proof.</em></h2>
+        <p class="intro">Findings come from published research and respected practitioners. If a card makes a claim, the source is right there. Sources we draw from include:</p>
+        <div class="sources"><span>Nielsen Norman Group</span><span>Laws of UX</span><span>W3C accessibility guidelines</span><span>Don Norman</span><span>Design Council</span><span>Teresa Torres</span><span class="more">+ many more sources to come</span></div>
+      </div>
+      <figure class="quote" style="margin:0">
+        <blockquote>“…the synthetic responses varied much less than the human ones.”</blockquote>
+        <p>From the source behind one of our findings<small>Nielsen Norman Group · Synthetic Users vs. Human Respondents</small></p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Better thinking, <em>one idea at a time.</em></h2>
+      <p>Open the wall, pick a card, and see where your curiosity goes.</p>
+      <a class="btn primary" href="https://curiofinds.netlify.app/">Start exploring <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span class="logo" style="font-size:18px">curio<i style="font-size:20px">finds</i>.</span><span>Short, sourced ideas on design, research and product.</span></div>
+</footer>
+
+<script>
+(function(){
+  var SETS={
+    "onboarding":{c:["var(--lilac)","var(--peach)","var(--mint)"],items:[
+      ["Interaction","Teach a feature at the moment people need it","Showing tips when someone first reaches a feature, instead of a long tour at sign-up.","Design concept"],
+      ["Research","Many mobile game players quit in their first few minutes","Free-to-play mobile games see a substantial share of new players leave during the opening minutes.","Research paper"],
+      ["Psychology","Familiar patterns help people get started faster","A checkout that works like other checkouts needs no explaining.","Design concept"]]},
+    "accessibility":{c:["var(--sky)","var(--butter)","var(--rose)"],items:[
+      ["Accessibility","Every key task should work with a keyboard alone","Tab through your sign-up form. If you get stuck, so will many users.","Design concept"],
+      ["Accessibility","Keyboard users need to see where they are on the page","A clear focus outline shows which control is active.","Design concept"],
+      ["Accessibility","Text has to stand out from its background to be read","Light grey on white looks calm and is hard to read for many people.","Design concept"]]},
+    "ai products":{c:["var(--mint)","var(--rose)","var(--lilac)"],items:[
+      ["Research","AI respondents reached the same conclusion as people, with far less variety","Synthetic answers matched the headline result but missed how differently real people answered.","Nielsen Norman Group"],
+      ["Product thinking","AI assistants must show which sources they searched","\"I couldn't find it\" can sound like \"it doesn't exist\" unless the gaps are shown.","Nielsen Norman Group"],
+      ["Product thinking","Claude power users often couldn't find their own context files","Files written once were used for months after they stopped matching how people worked.","Nielsen Norman Group"]]},
+    "metrics":{c:["var(--butter)","var(--sky)","var(--peach)"],items:[
+      ["Metrics","Task success shows whether people finished what they came for","Of ten people asked to change their address, how many actually did?","Design concept"],
+      ["Metrics","A funnel shows the step where people leave a journey","Visit, product page, cart, paid: the biggest drop tells you where to look.","Design concept"],
+      ["Metrics","NPS measures willingness to recommend, not usability","A high score can sit next to a confusing settings page.","Design concept"]]}
+  };
+  var chips=document.getElementById("chips"),res=document.getElementById("results"),typed=document.getElementById("typed");
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
+  function show(k){
+    typed.textContent=k;
+    chips.querySelectorAll(".chip").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.k===k))});
+    var s=SETS[k];
+    res.innerHTML=s.items.map(function(it,i){return '<article class="res" style="--c:'+s.c[i]+';animation-delay:'+(i*70)+'ms"><span class="kind">'+esc(it[0])+'</span><h3>'+esc(it[1])+'</h3><p>'+esc(it[2])+'</p><span class="src">'+esc(it[3])+'</span></article>'}).join("");
+  }
+  chips.innerHTML=Object.keys(SETS).map(function(k){return '<button type="button" class="chip" data-k="'+k+'" aria-pressed="false">'+(k==='ai products'?'AI products':k.charAt(0).toUpperCase()+k.slice(1))+'</button>'}).join("");
+  chips.addEventListener("click",function(e){var b=e.target.closest(".chip");if(b)show(b.dataset.k)});
+  show("onboarding");
+})();
+</script>
+
+</body></html>
