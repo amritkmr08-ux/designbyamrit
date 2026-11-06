@@ -2188,13 +2188,13 @@ html body footer.rf .rf-in .rf-about{grid-row:4 !important; align-self:start; ma
 </style>
 <style>
 /* under the credits line the drawing fades out to the right instead of the left */
-.intro-bush.under{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 70%,transparent 100%) !important; mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 70%,transparent 100%) !important}
+.intro-bush.under{-webkit-mask-image:none !important; mask-image:none !important}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
 
-<div class="intro" id="intro" aria-label="Introduction"><img class="intro-bush" src="intro-bush-dark.webp" alt="" aria-hidden="true"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
+<div class="intro" id="intro" aria-label="Introduction"><img class="intro-bush" src="intro-bush-full.webp" alt="" aria-hidden="true"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
@@ -5520,11 +5520,11 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
     var k0=b.getBoundingClientRect().width/(b.offsetWidth||1)||1;
     /* desktop: the drawing sits under the credits line, starting where the line starts; the line moves up to make room */
     if(c) c.style.translate='';
-    if(innerWidth>760 && c){ var cr=c.getBoundingClientRect(); b.style.right='auto'; b.style.left=((cr.left - ir.left)/k0 - 6)+'px'; b.style.width='260px'; b.classList.add('under'); }
+    if(innerWidth>760 && c){ var cr=c.getBoundingClientRect(), cw=(cr.right-cr.left)/k0, W=Math.min(460, cw*.72); b.style.right='auto'; b.style.width=W+'px'; b.style.left=((cr.left - ir.left)/k0 + cw*.43 + 10)+'px';   /* under the right part of the credits line, running a little past XLRI */ b.classList.add('under'); }
     else { b.style.left=''; b.style.right='0'; b.style.width=''; b.classList.remove('under'); }
     var k=b.getBoundingClientRect().height/(b.offsetHeight||1)||1, d=sh.getBoundingClientRect().top - b.getBoundingClientRect().bottom;
     b.style.top=(parseFloat(b.style.top)||0)+(d/k)+'px';
-    if(innerWidth>760 && c){ var lift=c.getBoundingClientRect().bottom - (b.getBoundingClientRect().top + 30*k); if(lift>0) c.style.translate='0 -'+(lift/k)+'px'; } }
+    if(innerWidth>760 && c){ var lift=c.getBoundingClientRect().bottom - (b.getBoundingClientRect().top - 6*k); if(lift>0) c.style.translate='0 -'+(lift/k)+'px'; } }
   if(b.complete) place(); else b.addEventListener('load',place); addEventListener('load',place); addEventListener('resize',place); setTimeout(place,1200); })();</script>
 </body>
 </html>
