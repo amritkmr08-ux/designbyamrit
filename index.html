@@ -51,7 +51,7 @@
   --display:"Poppins",-apple-system,sans-serif;
   --font:"Inter",-apple-system,sans-serif;
   --ease:cubic-bezier(.22,.61,.36,1);
-  --col:min(1080px, calc(100% - 48px)); --read:480px;
+  --col:min(1180px, calc(100% - 48px)); --read:480px;
 }
 *{margin:0; padding:0; box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -490,7 +490,7 @@ html, body{background:#101110}
 @media (prefers-reduced-motion:reduce){ .hint, .hint span{transition:none !important} }
 
 .rf{border:0; margin:0; padding:0; position:fixed; z-index:0; left:0; right:0; bottom:0; height:100vh; background:#0B0B0B; color:#F7F7F5; overflow:hidden;
-  --peek:144px; --row:120px; --cw:min(calc(100vw - 48px), max(1080px, 68vw))}
+  --peek:144px; --row:120px; --cw:min(calc(100vw - 48px), max(1180px, 74vw))}
 /* the drawing's own wall, from the sheet's edge down to the footer line; its edges sink into the dark */
 .rf-art{position:absolute; top:var(--peek); bottom:var(--row); left:8%; right:8%; overflow:hidden; pointer-events:none; background:#0B0B0B}
 .rf-art img{position:absolute; top:-1%; height:102%; width:auto; max-width:none; display:block; right:calc(50% - var(--cw) / 2 - 13px); transform:translateX(14.4%);
@@ -779,7 +779,7 @@ html, body{background:#101110}
 }
 
 /* viewport units are not scaled by zoom, so the footer measures the window in page units */
-.rf{height:calc(100vh / var(--z,1)); --cw:min(calc(100vw / var(--z,1) - 48px), max(1080px, calc(68vw / var(--z,1))))}
+.rf{height:calc(100vh / var(--z,1)); --cw:min(calc(100vw / var(--z,1) - 48px), max(1180px, calc(74vw / var(--z,1))))}
 .piece.note h2{font-size:48px}
 .piece.note figure{max-width:none}   /* same width as the other four prototypes */
 /* Sensitivity specimen: same 1080 canvas as the others, so it fills the frame */
@@ -2040,7 +2040,7 @@ html body.foot-on #chbar, html body.foot-on #chbar.on, html body.foot-on #chbar.
 </style>
 <style>
 /* Writing: three recent stories from Medium, as cards in the same family as the work cards; a link out to the rest */
-#work .blog{max-width:1080px; margin:120px auto 0; padding:0}
+#work .blog{max-width:1180px; margin:120px auto 0; padding:0}
 #work .blog-head{display:flex; align-items:baseline; justify-content:space-between; margin:0 0 22px}
 #work .blog-l{font-family:'Inter',var(--font); font-size:15.5px; line-height:22px; color:#5F625C}
 #work .blog-more{font-family:'Inter',var(--font); font-size:14px; line-height:20px; font-weight:500; color:#191A18; text-decoration:underline; text-decoration-color:#C9CAC4; text-underline-offset:5px}
@@ -2078,7 +2078,7 @@ html body nav.chbar.chbar a.cur.cur[href="#q6"]{background:#FCF3DE !important}
 <style>
 /* card view, desktop: side by side. Words on the left, the prototype on the right in the card's colour */
 @media (min-width:901px){
-  html body #chapters:not(.lay-rows) > .piece{max-width:1080px !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); grid-template-rows:auto auto 1fr; overflow:hidden; padding:0 !important}
+  html body #chapters:not(.lay-rows) > .piece{max-width:1180px !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); grid-template-rows:auto auto 1fr; overflow:hidden; padding:0 !important}
   html body #chapters:not(.lay-rows) > .piece > .ptxt{grid-column:1; grid-row:1}
   html body #chapters:not(.lay-rows) > .piece > .prose{grid-column:1; grid-row:2; align-self:start; padding-bottom:36px}
   html body #chapters:not(.lay-rows) > .piece > figure{grid-column:2; grid-row:1 / 4; margin:0 !important; width:auto !important; max-width:none !important; background:var(--band); padding:48px 40px; display:flex !important; flex-direction:column; justify-content:center; align-self:stretch}
