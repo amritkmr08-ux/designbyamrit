@@ -4419,7 +4419,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
         setTimeout(function(){ ch.style.transition=''; ch.style.opacity=''; ch.style.transform=''; busy=false; }, 480); });
     }, 210); });
   /* every load starts on the side-by-side cards; the visitor can switch to full width, and the choice only lasts for the visit */
-  try{ localStorage.removeItem('work-layout'); }catch(e){} set(innerWidth>900 ? 'stack' : 'rows', false);   /* web opens on the side-by-side cards; phones keep the list */
+  try{ localStorage.removeItem('work-layout'); }catch(e){} set('rows', false);   /* every screen opens on the grid of cards */
 })();
 </script>
 <script>
