@@ -1169,7 +1169,7 @@ p.fmeta a::before{content:'\00b7'; display:inline-block; margin-right:8px; color
 .intro-creds{position:absolute; left:50%; transform:translateX(-50%); z-index:2; margin:0; display:flex; align-items:center; gap:28px; white-space:nowrap;
   font-family:var(--font); font-weight:400; font-size:14px; line-height:20px; letter-spacing:0; color:#8B8985;
   opacity:calc(1 - var(--ip,0) * 3)}
-.intro-creds b{display:block; width:1px; height:16px; background:rgba(139,137,133,.35)}
+.intro-creds b{display:block; width:1px; height:16px; background:rgba(201,200,195,.55)}
 /* the scroll cue moves to the right edge so it doesn't sit on the line */
 @media (min-width:761px){ .intro-cue{left:auto !important; right:48px !important; transform:none !important} }
 @media (max-width:760px){
@@ -2190,11 +2190,23 @@ html body footer.rf .rf-in .rf-about{grid-row:4 !important; align-self:start; ma
 /* under the credits line the drawing fades out to the right instead of the left */
 .intro-bush.under{-webkit-mask-image:none !important; mask-image:none !important}
 </style>
+<style>
+/* a step darker on the lighter page: the grey text on the cards, and the Explain me buttons */
+html body #chapters#chapters .piece .chap-n, html body #chapters#chapters .piece .chap-name, html body #chapters#chapters .piece .lv-stat,
+html body #chapters#chapters .piece .dek.dek, html body #chapters#chapters .piece .prose p:not(.role):not(.end){color:#5C5F58 !important}
+html body #chapters#chapters .piece .prose p.role{color:#2E302C !important}
+html body #chapters#chapters .piece .cs-note{color:#7E817A !important}
+html body .ex-btn.ex-btn.ex-btn, html body #chapters#chapters.chapters .piece .prose p.end .ex-btn.ex-btn, html body .ex-btn.ex-btn.ex-btn span, html body #chapters#chapters.chapters .piece .ex-btn.ex-btn span{color:#474A44 !important}
+html body .ex-btn.ex-btn.ex-btn{background:rgba(25,26,24,.075) !important}
+/* grid cards: the body under the coloured band is a little whiter than the page */
+html body #chapters#chapters.lay-rows > .piece{background:#FDFDFB !important}
+html body .ex-btn.ex-btn.ex-btn:hover{background:rgba(25,26,24,.12) !important; color:#191A18 !important}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
 
-<div class="intro" id="intro" aria-label="Introduction"><img class="intro-bush" src="intro-bush-full.webp" alt="" aria-hidden="true"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
+<div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
@@ -5512,28 +5524,16 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
   var o=e.target.closest && e.target.closest('.tryov'); if(!o) return; var p=o.closest('.piece'); if(!p || !/^q[1-5]$/.test(p.id)) return;
   e.preventDefault(); e.stopImmediatePropagation(); window.openProto(p.id);
 }, true); })();</script>
-<script>/* the landing vegetation sits exactly on the white sheet's top edge, whatever the screen size */
-(function(){ var b=document.querySelector('.intro-bush'), sh=document.getElementById('sheet'); if(!b||!sh) return;
-  function place(){ if(scrollY>2) return; b.style.bottom='auto'; b.style.top='0px';
-    /* desktop: it starts just after the credits line ends, so it never sits on top of the words */
-    var c=document.getElementById('intro-creds'), ir=document.getElementById('intro').getBoundingClientRect();
-    var k0=b.getBoundingClientRect().width/(b.offsetWidth||1)||1;
-    /* desktop: the drawing sits under the credits line, starting where the line starts; the line moves up to make room */
-    if(c){ c.style.translate=''; c.style.maxWidth=''; c.style.flexWrap=''; c.style.whiteSpace=''; c.style.rowGap=''; }
-    /* narrower laptops: the credits line wraps before it reaches the Scroll cue or the screen edge */
-    var cue=document.getElementById('intro-cue');
-    if(innerWidth>760 && c){ var cr0=c.getBoundingClientRect(), lim=Math.min(cue?cue.getBoundingClientRect().left-20:innerWidth, ir.right-24);
+<script>/* landing credits line: on narrower laptops it wraps before the Scroll cue, and only ever breaks at a divider */
+(function(){ var c=document.getElementById('intro-creds'), it=document.getElementById('intro'); if(!c||!it) return;
+  function place(){ if(scrollY>2) return;
+    var ir=it.getBoundingClientRect(), k0=ir.width/(it.offsetWidth||1)||1, cue=document.getElementById('intro-cue');
+    c.style.maxWidth=''; c.style.flexWrap=''; c.style.whiteSpace=''; c.style.rowGap='';
+    if(innerWidth>760){ var cr0=c.getBoundingClientRect(), lim=Math.min(cue?cue.getBoundingClientRect().left-20:innerWidth, ir.right-24);
       if(cr0.right>lim){ c.style.maxWidth=((lim-cr0.left)/k0)+'px'; c.style.flexWrap='wrap'; c.style.whiteSpace='normal'; c.style.rowGap='6px'; } }
-    /* when it wraps, it breaks at a divider (never mid-group), first divider first, until every group sits on one line */
-    if(c){ var bs=[].slice.call(c.querySelectorAll('b')); bs.forEach(function(x){ x.removeAttribute('style'); });
-      function rows(){ var t={}; [].forEach.call(c.querySelectorAll('span'),function(x){ t[Math.round(x.getBoundingClientRect().top)]=1; }); return Object.keys(t).length; }
-      if(c.style.flexWrap==='wrap'){ var nb=0; for(var j=0;j<bs.length && rows()>nb+1;j++){ bs[j].style.cssText='flex-basis:100%;width:0;height:0;margin:0;padding:0;border:0;background:none;opacity:0'; nb++; } } }
-    if(innerWidth>760 && c){ var cr=c.getBoundingClientRect(), cw=(cr.right-cr.left)/k0, W=Math.min(460, cw*.72); b.style.right='auto'; b.style.width=W+'px'; var sr=sh.getBoundingClientRect(), cu=cue?cue.getBoundingClientRect().left:sr.right, R=(Math.min(sr.right - 96*k0, cu - 24*k0) - ir.left)/k0, Lmin=(sr.left - ir.left)/k0 + 48; W=Math.min(W, R-Lmin); b.style.width=W+'px';   /* always inside the white sheet's edges, clear of its rounded corner */
-      var L0=(cr.left - ir.left)/k0 + cw*.43 + 4; b.style.left=Math.max(Lmin, Math.min(L0, R - W))+'px';   /* under the right part of the credits line, running a little past XLRI */ b.classList.add('under'); }
-    else { var sr2=sh.getBoundingClientRect(), W2=Math.min(220,(sr2.right-sr2.left)/k0-64); b.style.right='auto'; b.style.width=W2+'px'; b.style.left=((sr2.right - ir.left)/k0 - 40 - W2)+'px'; b.classList.add('under'); }   /* phone: inside the sheet's right corner too */
-    var k=b.getBoundingClientRect().height/(b.offsetHeight||1)||1, d=sh.getBoundingClientRect().top - b.getBoundingClientRect().bottom;
-    b.style.top=(parseFloat(b.style.top)||0)+(d/k)+'px';
-    if(c){ var lift=c.getBoundingClientRect().bottom - (b.getBoundingClientRect().top - 6*k); if(lift>0) c.style.translate='0 -'+(lift/k)+'px'; } }
-  if(b.complete) place(); else b.addEventListener('load',place); addEventListener('load',place); addEventListener('resize',place); setTimeout(place,1200); })();</script>
+    var bs=[].slice.call(c.querySelectorAll('b')); bs.forEach(function(x){ x.removeAttribute('style'); });
+    function rows(){ var t={}; [].forEach.call(c.querySelectorAll('span'),function(x){ t[Math.round(x.getBoundingClientRect().top)]=1; }); return Object.keys(t).length; }
+    if(c.style.flexWrap==='wrap'){ var nb=0; for(var j=0;j<bs.length && rows()>nb+1;j++){ bs[j].style.cssText='flex-basis:100%;width:0;height:0;margin:0;padding:0;border:0;background:none;opacity:0'; nb++; } } }
+  addEventListener('load',place); addEventListener('resize',place); setTimeout(place,1200); place(); })();</script>
 </body>
 </html>
