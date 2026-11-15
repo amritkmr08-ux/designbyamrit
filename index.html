@@ -2202,11 +2202,82 @@ html body .ex-btn.ex-btn.ex-btn{background:rgba(25,26,24,.075) !important}
 html body #chapters#chapters.lay-rows > .piece{background:#FDFDFB !important}
 html body .ex-btn.ex-btn.ex-btn:hover{background:rgba(25,26,24,.12) !important; color:#191A18 !important}
 </style>
+<style>
+/* landing: a video of a bird on a treetop instead of the dark drawing */
+html body .intro#intro{background:#0B0B0A !important; background-image:none !important}
+html body .intro#intro::before, html body .intro#intro::after{display:none !important}
+html body .intro#intro .intro-sky{opacity:0 !important; visibility:hidden !important}
+.intro-vid{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none}
+/* a soft dark wash so the light text stays readable over the bright flowers */
+.intro-vshade{position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:linear-gradient(90deg, rgba(10,10,9,.2) 0%, rgba(10,10,9,.5) 45%, rgba(10,10,9,.72) 100%), linear-gradient(to top, rgba(10,10,9,.85) 0%, rgba(10,10,9,.5) 22%, rgba(10,10,9,0) 50%)}
+@media (max-width:760px){ .intro-vshade{background:linear-gradient(to top, rgba(10,10,9,.8) 0%, rgba(10,10,9,.45) 55%, rgba(10,10,9,.3) 100%)} }
+@media (prefers-reduced-motion:reduce){ .intro-vid{display:none} html body .intro#intro{background:#0B0B0A url(intro-bird-poster.jpg) center/cover no-repeat !important} }
+</style>
+<style>
+/* landing text stays readable over the video: a darker wash behind the heading and the credits, and a soft shadow on the words */
+@media (min-width:761px){
+  html body .intro-vshade{background:
+    radial-gradient(60% 70% at 72% 45%, rgba(10,10,9,.62) 0%, rgba(10,10,9,.35) 55%, rgba(10,10,9,0) 100%),
+    linear-gradient(90deg, rgba(10,10,9,.08) 0%, rgba(10,10,9,.35) 45%, rgba(10,10,9,.6) 100%),
+    linear-gradient(to top, rgba(10,10,9,.9) 0%, rgba(10,10,9,.6) 28%, rgba(10,10,9,0) 55%) !important}
+}
+/* heading over the video: no shadow; words not yet written are a faint light grey, written words near white */
+html body #intro-t .intro-t i, html body .intro-t i{color:rgba(236,235,230,.22) !important; text-shadow:none !important}
+html body #intro-t.intro-t i.on, html body .intro-t i.on{color:#F1F0EC !important}
+html body #intro-creds span{color:#E2E1DC !important; text-shadow:0 1px 10px rgba(0,0,0,.8), 0 0 2px rgba(0,0,0,.6) !important}
+html body .intro-cue, html body #intro-cue{text-shadow:0 1px 8px rgba(0,0,0,.7)}
+</style>
+<style>
+/* the line drawing of plants moves from above the footer to the landing: light strokes over the video, standing on the white sheet's top edge */
+.intro-strokes{position:absolute; z-index:1; pointer-events:none; user-select:none; height:auto; opacity:0; transition:opacity 1.2s cubic-bezier(.22,.61,.36,1)}
+html.art-in .intro-strokes, .intro-strokes.on{opacity:.9}
+/* the closing strip above the footer no longer holds a drawing */
+@media (min-width:761px){ html body section.closing{min-height:0 !important; height:72px !important; padding:0 !important} }
+@media (max-width:760px){ html body section.closing{min-height:0 !important; height:40px !important; padding:0 !important} }
+</style>
+<style>
+/* landing, light mood: the video stays bright; the words go dark instead of the picture */
+html body .intro-vshade{background:linear-gradient(90deg, rgba(240,242,240,0) 35%, rgba(240,242,240,.18) 100%) !important}
+@media (max-width:760px){ html body .intro-vshade{background:linear-gradient(to top, rgba(235,238,236,.75) 0%, rgba(235,238,236,.35) 30%, rgba(235,238,236,0) 55%), linear-gradient(to bottom, rgba(235,238,236,.45) 0%, rgba(235,238,236,0) 45%) !important} }
+html body #intro-t .intro-t i, html body .intro-t i{color:rgba(24,28,25,.16) !important; text-shadow:none !important}
+html body #intro-t.intro-t i.on, html body .intro-t i.on{color:#2C332E !important}
+html body #intro-creds span{color:#F1F0EC !important; text-shadow:0 1px 6px rgba(0,0,0,.25) !important}
+html body #intro-creds b{background:rgba(241,240,236,.55) !important}
+html body .intro-cue, html body #intro-cue{color:#F1F0EC !important; text-shadow:none !important}
+html body .intro-cue i{background:linear-gradient(#F1F0EC,#F1F0EC) 0 0/1px 12px no-repeat !important; background-color:rgba(241,240,236,.3) !important}
+html body .intro-chip{background:rgba(255,255,255,.5) !important; border-color:rgba(24,28,25,.1) !important; color:#7A2E48 !important}
+html.art-in .intro-strokes, .intro-strokes.on{opacity:.95 !important}
+html body #intro-creds::before{display:none !important}
+</style>
+<style>
+/* behind the video: the same picture, heavily blurred and stretched, so the video's edges melt into its own colours instead of a flat fill */
+.intro-vbg{position:absolute; inset:0; z-index:0; pointer-events:none; background:url(intro-bird-poster.jpg) center/100% 100% no-repeat; filter:blur(70px) brightness(.88) saturate(1.05); opacity:1}
+html body .intro-vshade{background:none !important}
+@media (max-width:760px){ .intro-vbg{display:none} }
+</style>
+<style>
+/* a soft dark pool only behind the heading, so the light words read; the rest of the picture stays as it is */
+.intro-tshade{position:absolute; z-index:1; pointer-events:none; border-radius:50%;
+  background:radial-gradient(closest-side, rgba(12,14,12,.34), rgba(12,14,12,.14) 60%, rgba(12,14,12,0) 100%)}
+</style>
+<style>
+/* the white card casts its own shadow: soft, wide, spreading out from its top edge and both sides onto the video */
+html body #sheet.sheet{box-shadow:none !important}
+</style>
+<style>
+/* the credits row and the drawing sit on the scrim: full white so they read */
+html body #intro-creds, html body #intro-creds span{opacity:1 !important; color:#FFFFFF !important; text-shadow:0 1px 8px rgba(0,0,0,.35) !important}
+@media (min-width:761px){ html body #intro-creds, html body #intro-creds span{font-size:15px !important} }
+/* phone: the same soft dark shadow at the foot of the video, and the text rail lifted clear of the grass drawing */
+@media (max-width:760px){ html body .intro-vshade{background:linear-gradient(to bottom, rgba(0,0,0,0) 48%, rgba(0,0,0,.22) 70%, rgba(0,0,0,.6) 100%) !important} html body #intro-creds{translate:0 -46px} }
+html body #intro-creds b{background:rgba(255,255,255,.6) !important}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="tone-hi" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncG type="table" tableValues="0 0.25 0.45 0.58 0.66"/><feFuncB type="table" tableValues="0 0.25 0.45 0.58 0.66"/></feComponentTransfer></filter></svg>
 
-<div class="intro" id="intro" aria-label="Introduction"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
+<div class="intro" id="intro" aria-label="Introduction"><video class="intro-vid" src="intro-bird.mp4" poster="intro-bird-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video><i class="intro-vshade" aria-hidden="true"></i><img class="intro-strokes" src="intro-strokes.png" alt="" aria-hidden="true"><i class="intro-dim" aria-hidden="true"></i><canvas class="intro-sky" id="intro-sky" aria-hidden="true"></canvas><p class="intro-t" id="intro-t">I watch how people decide what to do with an AI answer. Then I design for that moment.<span class="intro-chip"><i aria-hidden="true"></i>Available for Lead and Staff roles</span></p><span class="intro-cue" id="intro-cue" aria-hidden="true">Scroll<i></i></span><p class="intro-creds" id="intro-creds"><span>Selected for a Lightning Talk, UX India 2023</span><b aria-hidden="true"></b><span>Sirion</span><span>Bharti Airtel</span><b aria-hidden="true"></b><span>NIFT</span><span>XLRI</span></p></div>
 
 
 
@@ -2333,7 +2404,7 @@ html body .ex-btn.ex-btn.ex-btn:hover{background:rgba(25,26,24,.12) !important; 
   </section>
     <section class="closing r" aria-label="Closing">
     
-    <img class="closing-bush" src="closing-bush.webp" alt="" aria-hidden="true" loading="lazy">
+    
   </section>
   </main>
 
@@ -2978,7 +3049,7 @@ function onWidth(fn){
   (document.fonts?document.fonts.ready:Promise.resolve()).then(size);
   /* once the sentence has finished writing, wait a second, then glide the white page up over the intro */
   /* once the sentence has written itself, a pause, then the white page glides up on its own (any scroll or touch cancels it) */
-  var AUTO_SLIDE=true;
+  var AUTO_SLIDE=false;   /* the landing holds until the visitor scrolls */
   if(AUTO_SLIDE) (function(){
     var n=t.querySelectorAll('i').length, STEPW=Math.max(110, Math.min(300, Math.round(5200/Math.max(n,1))));
     var done=(calm?0:500+n*STEPW)+1400, moved=false;
@@ -5535,5 +5606,51 @@ document.querySelectorAll('.ch > p.ch-n').forEach(function(n){ var h=n.nextEleme
     function rows(){ var t={}; [].forEach.call(c.querySelectorAll('span'),function(x){ t[Math.round(x.getBoundingClientRect().top)]=1; }); return Object.keys(t).length; }
     if(c.style.flexWrap==='wrap'){ var nb=0; for(var j=0;j<bs.length && rows()>nb+1;j++){ bs[j].style.cssText='flex-basis:100%;width:0;height:0;margin:0;padding:0;border:0;background:none;opacity:0'; nb++; } } }
   addEventListener('load',place); addEventListener('resize',place); setTimeout(place,1200); place(); })();</script>
+<script>/* landing video, desktop: zoomed out, the bird high in the open space at the upper left. The video keeps its light mood:
+   wherever it doesn't reach, the landing is filled with its own sky colour and every edge fades into that colour */
+(function(){ var v=document.querySelector('.intro-vid'), sh=document.getElementById('sheet'), it=document.getElementById('intro'); if(!v||!sh||!it) return;
+  var BX=.51, BY=.50, SKY='#7D9592';
+  function fit(){ if(scrollY>2) return;
+    if(innerWidth<=760){ ['width','height','left','top','right','bottom','objectFit','webkitMaskImage','maskImage'].forEach(function(p){ v.style[p]=''; }); it.style.setProperty('background',SKY,'important'); return; }
+    var ir=it.getBoundingClientRect(), k=ir.width/(it.offsetWidth||1)||1, Wc=it.offsetWidth, Hc=(sh.getBoundingClientRect().top - ir.top)/k;
+    var vh=Hc*1.12, vw=vh*16/9, L=.30*Wc-BX*vw, T=.47*Hc-BY*vh, BE=T+vh;   /* zoomed out, bird high; the leaves' lower edge fades into the dark below */   /* the leaves run down to the white sheet */   /* close to the clip's own size so it stays sharp */   /* a little bigger: the leaves reach in around the heading */
+    v.style.objectFit='fill'; v.style.right='auto'; v.style.bottom='auto';
+    v.style.width=vw+'px'; v.style.height=vh+'px'; v.style.left=L+'px'; v.style.top=T+'px';
+    var F=Math.round(vw*.34), m=[];
+    m.push(L>0 ? 'linear-gradient(to right,transparent 0,#000 '+F+'px)' : 'linear-gradient(#000,#000)');
+    m.push(L+vw<Wc ? 'linear-gradient(to left,transparent 0,#000 '+F+'px)' : 'linear-gradient(#000,#000)');
+    m.push(T>0 ? 'linear-gradient(to bottom,transparent 0,#000 '+F+'px)' : 'linear-gradient(#000,#000)');
+       /* the bottom of the trees melts into the sky colour */
+       /* the bottom of the clip melts into the dark green below it */
+    
+    m.push('linear-gradient(to top,transparent 0,#000 46px)');   /* only the last sliver melts into the dark green fill under it */   /* the clip's lower edge melts into the dark fill under it */
+    var ms=m.join(','); v.style.webkitMaskImage=ms; v.style.maskImage=ms; v.style.webkitMaskComposite='source-in'; v.style.maskComposite='intersect';
+    /* light sky at the top, deepening to dark just above the white sheet */
+    /* the fill to the right of the video is the video's own right-edge colours, top to bottom, so the edge meets the same colour it fades into */
+    var RC=['#8FA6A5','#93AAA8','#96ACAB','#99AEAC','#9AAFAD','#9AAFAD','#9AAFAD','#97ABA9','#94A9A7','#90A5A0','#8CA19C'], st=RC.map(function(c,i){ return c+' '+Math.round(T+vh*i/10)+'px'; }).join(',')+', '+RC[RC.length-1]+' 100%';   /* the background is the video's own sky colour all the way down */   /* under the leaves the fill is dark, so nothing pale or green shows as they fade */   /* the fill is only sky; all darkening comes from the one shadow below, so nothing meets in a line */   /* below the leaves: dark, not a pale sky */   /* sky all the way down; the darkening below comes only from the shade near the sheet */
+    it.style.setProperty('background','linear-gradient(to bottom,'+st+')','important');
+    /* dark leaf green under the video's footprint, below its lower edge, faded in on every side, so the leaves never end on a pale band */
+    var gf=it.querySelector('.intro-gfill'); if(!gf){ gf=document.createElement('i'); gf.className='intro-gfill'; gf.setAttribute('aria-hidden','true'); gf.style.cssText='position:absolute;pointer-events:none;background:#27301F'; it.insertBefore(gf,v); }
+    var gm='linear-gradient(to bottom,transparent 0,#000 70px),linear-gradient(to left,transparent 0,#000 '+F+'px)';
+    gf.style.left='0'; gf.style.top=Math.round(BE-80)+'px'; gf.style.width=Math.round(L+vw)+'px'; gf.style.bottom='0';
+    gf.style.webkitMaskImage=gm; gf.style.maskImage=gm; gf.style.webkitMaskComposite='source-in'; gf.style.maskComposite='intersect';
+    /* one smooth darkening laid over the video and the sky alike, so they darken together with no seam */
+    var sd=document.querySelector('.intro-vshade'); if(sd){ var st2=[]; for(var q=0;q<=28;q++){ var f=q/28, e=Math.pow(f,2); st2.push('rgba(0,0,0,'+(.53*e).toFixed(3)+') '+Math.round(Hc*.44+Hc*.56*f)+'px'); }
+      /* the shadow: nothing over the video until its lower part, dark at the sheet's top edge, black behind the sheet */
+      sd.style.setProperty('background','linear-gradient(to bottom, rgba(0,0,0,0) 0, '+st2.join(', ')+', '+[.2,.4,.6,.8,1].map(function(g){ var e2=g*g*(3-2*g); return 'rgba(0,0,0,'+(.53+.47*e2).toFixed(3)+') '+Math.round(Hc+250*g)+'px'; }).join(', ')+', rgba(0,0,0,1) 100%)','important'); } }
+  fit(); addEventListener('load',fit); addEventListener('resize',fit); setTimeout(fit,600); setTimeout(fit,1500); })();</script>
+<script>/* landing strokes: bottom on the sheet's top edge, starting near the sheet's left edge, never past the middle */
+(function(){ var g=document.querySelector('.intro-strokes'), sh=document.getElementById('sheet'), it=document.getElementById('intro'); if(!g||!sh||!it) return;
+  function place(){ if(scrollY>2) return; var ir=it.getBoundingClientRect(), k=ir.width/(it.offsetWidth||1)||1, sr=sh.getBoundingClientRect();
+    var sw=(sr.right-sr.left)/k, w=innerWidth>760 ? Math.min(620, sw*.46) : Math.min(300, sw*.8);
+    g.style.width=w+'px'; g.style.left=((sr.left-ir.left)/k + (innerWidth>760?40:16))+'px';
+    var h=g.offsetHeight||w*356/1600; g.style.top=((sr.top-ir.top)/k - h + 2)+'px'; g.classList.add('on'); }
+  if(g.complete) place(); else g.addEventListener('load',place); addEventListener('load',place); addEventListener('resize',place); setTimeout(place,800); setTimeout(place,1600); })();</script>
+<script>/* the dark pool follows the heading */
+(function(){ var d=document.querySelector('.intro-tshade'), t=document.getElementById('intro-t'), it=document.getElementById('intro'); if(!d||!t||!it) return;
+  function p(){ if(scrollY>2) return; var ir=it.getBoundingClientRect(), k=ir.width/(it.offsetWidth||1)||1, r=t.getBoundingClientRect();
+    var w=r.width/k*1.35, h=r.height/k*1.45; d.style.width=w+'px'; d.style.height=h+'px';
+    d.style.left=((r.left+r.right)/2-ir.left)/k-w/2+'px'; d.style.top=((r.top+r.bottom)/2-ir.top)/k-h/2+'px'; }
+  p(); addEventListener('load',p); addEventListener('resize',p); setTimeout(p,800); setTimeout(p,2000); })();</script>
 </body>
 </html>
