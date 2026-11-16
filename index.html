@@ -4482,7 +4482,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
     var w=document.createElement('div'); w.className='ptxt';
     [].slice.call(p.children).forEach(function(c){ if(c!==f && (c.compareDocumentPosition(f) & Node.DOCUMENT_POSITION_FOLLOWING)) w.appendChild(c); });
     p.insertBefore(w, f); });
-  function set(l, save){ ch.classList.toggle('lay-rows', l==='rows'); var cb=document.getElementById('chbar'); if(cb) cb.classList.toggle('slim', l==='rows');
+  function set(l, save){ ch.classList.toggle('lay-rows', l==='rows'); var cb=document.getElementById('chbar'); if(cb) cb.classList.add('slim');   /* the bar stays small in both views: My work and the view switch, no chapter tabs */
     box.querySelectorAll('button').forEach(function(b){ var on=b.dataset.lay===l; b.classList.toggle('on',on); b.setAttribute('aria-pressed', String(on)); });
     requestAnimationFrame(function(){ if(typeof fit==='function') fit(); dispatchEvent(new Event('resize')); }); }
   /* switching layout changes the page height, so the reader could land in the footer. fade the work out, switch,
@@ -4502,7 +4502,7 @@ readAloud('tbar4','w4'); readAloud('tbar5','w5');
         setTimeout(function(){ ch.style.transition=''; ch.style.opacity=''; ch.style.transform=''; busy=false; }, 480); });
     }, 210); });
   /* every load starts on the side-by-side cards; the visitor can switch to full width, and the choice only lasts for the visit */
-  try{ localStorage.removeItem('work-layout'); }catch(e){} set('rows', false);   /* every screen opens on the grid of cards */
+  try{ localStorage.removeItem('work-layout'); }catch(e){} set(innerWidth>900 ? 'stack' : 'rows', false);   /* laptops open on the full-width chapters with their prototypes; phones keep the cards */
 })();
 </script>
 <script>
